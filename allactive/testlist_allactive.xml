@@ -49,14 +49,6 @@
       <option name="wallclock"> 04:00 </option>
     </options>
   </test>
-  <test name="SMS_D" grid="f09_g16" compset="B1850" testmods="allactive/defaultio">
-    <machines>
-      <machine name="yellowstone" compiler="intel" category="prealpha"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 02:00 </option>
-    </options>
-  </test>
   <test name="ERS" grid="f19_g16" compset="B1850C4L45BGCRBPRPWs" testmods="allactive/defaultio">
     <machines>
       <machine name="bluewaters" compiler="pgi" category="prebeta"/>

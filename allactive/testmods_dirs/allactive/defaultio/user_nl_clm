@@ -2,3 +2,4 @@
  hist_ndens     = 1
  hist_nhtfrq    =-24
  hist_mfilt     = 1
+ for_testing_allow_non_annual_changes = .true.
