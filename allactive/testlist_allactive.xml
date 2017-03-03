@@ -287,6 +287,24 @@
       <option name="wallclock"> 00:40 </option>
     </options>
   </test>
+
+  <test name="PFS" grid="f09_g16" compset="B1850" testmods="allactive/maxthroughputb">
+    <machines>
+      <machine name="yellowstone" compiler="intel" category="aux_perf"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:40 </option>
+    </options>
+  </test>
+  <test compset="FW1850" grid="f09_f09" name="PFS" testmods="allactive/maxthroughputfw">
+    <machines>
+      <machine name="yellowstone" compiler="intel" category="aux_perf"/>
+    </machines>
+  </test>
+
+
+
+
   <test name="PFS" grid="ne30_g16" compset="B1850" testmods="allactive/default">
     <machines>
       <machine name="yellowstone" compiler="intel" category="prealpha"/>
@@ -296,6 +314,7 @@
       <option name="wallclock"> 00:20 </option>
     </options>
   </test>
+
   <test name="SMS_D" grid="f19_g16" compset="B1850" testmods="allactive/defaultio">
     <machines>
       <machine name="edison" compiler="intel" category="prebeta"/>
