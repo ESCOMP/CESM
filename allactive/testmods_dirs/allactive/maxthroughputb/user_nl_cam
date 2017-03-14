@@ -1,0 +1,3 @@
+! Users should add all user specific namelist changes below in the form of 
+! namelist_var = new_namelist_value 
+npr_yz= 64,18,18,64 
