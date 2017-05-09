@@ -51,13 +51,9 @@
   </compset>
 
   <compset>
-    <alias>B1850CwWs</alias>
-    <lname>1850_CAM60%WTSM_CLM50%BGC_CICE_POP2%ECO_MOSART_SGLC_SWAV</lname>
-  </compset>
-
-  <compset>
-    <alias>B1850Cw</alias>
-    <lname>1850_CAM60%WTSM_CLM50%BGC_CICE_POP2%ECO_MOSART_SGLC_WW3</lname>
+    <alias>BW1850</alias>
+    <lname>1850_CAM60%WCTS_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <science_support grid="f09_g16"/>
   </compset>
 
   <!--
