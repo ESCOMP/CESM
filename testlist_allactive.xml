@@ -116,14 +116,14 @@
       <option name="wallclock"> 00:20 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="f09_g16" compset="BW1850" testmods="allactive/default">
+  <test name="SMS_Ld5" grid="f09_g16" compset="B1850Cw" testmods="allactive/default">
     <machines>
       <machine name="yellowstone" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="waccm"/>
     </machines>
     <options>
-      <option name="wallclock"> 02:00 </option>
+      <option name="wallclock"> 01:00 </option>
     </options>
   </test>
   <test name="ERS_Ld5" grid="T31_g37" compset="B1850C5L45BGCR" testmods="allactive/defaultio">
