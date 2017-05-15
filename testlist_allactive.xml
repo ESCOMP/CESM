@@ -116,7 +116,7 @@
       <option name="wallclock"> 00:20 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="f09_g16" compset="B1850Cw" testmods="allactive/default">
+  <test name="SMS_Ld5" grid="f09_g16" compset="BW1850" testmods="allactive/default">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="waccm"/>
