@@ -296,7 +296,7 @@
       <option name="wallclock"> 00:40 </option>
     </options>
   </test>
-  <test compset="FW1850" grid="f09_f09" name="PFS" testmods="allactive/maxthroughputfw">
+  <test compset="FW1850" grid="f09_f09_mg16" name="PFS" testmods="allactive/maxthroughputfw">
     <machines>
       <machine name="cheyenne" compiler="intel" category="aux_perf"/>
     </machines>
@@ -382,7 +382,7 @@
       <option name="wallclock">  00:20 </option>
     </options>
   </test>
-  <test name="PRE" grid="f19_f19" compset="ADESP_TEST">
+  <test name="PRE" grid="f19_f19_mg16" compset="ADESP_TEST">
     <machines>
       <machine name="hobart" compiler="nag" category="prealpha"/>
     </machines>
