@@ -194,7 +194,7 @@
       <option name="wallclock"> 00:20 </option>
     </options>
   </test>
-  <test name="PEA_P1" grid="f45_g37" compset="B1850" testmods="allactive/defaultio">
+  <test name="PEA_P1" grid="f19_g17" compset="B1850" testmods="allactive/defaultio">
     <machines>
       <machine name="hobart" compiler="intel" category="prebeta"/>
       <machine name="hobart" compiler="pgi" category="prebeta"/>
@@ -338,14 +338,6 @@
     </machines>
     <options>
       <option name="wallclock">  00:20 </option>
-    </options>
-  </test>
-  <test name="PRE" grid="f19_f19_mg16" compset="ADESP_TEST">
-    <machines>
-      <machine name="hobart" compiler="nag" category="prealpha"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 00:20 </option>
     </options>
   </test>
 </testlist>
