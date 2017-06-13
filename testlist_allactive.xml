@@ -185,7 +185,7 @@
       <option name="wallclock"> 00:20 </option>
     </options>
   </test>
-  <test name="NCK_Ld5" grid="f19_g17" compset="BC5L45BGCRG" testmods="allactive/defaultio">
+  <test name="NCK_Ld5" grid="f19_g17" compset="B1850G" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
@@ -289,7 +289,7 @@
       <option name="wallclock"> 00:20 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="T31_g37_gl20" compset="B1850C5L45BGCRG" testmods="allactive/defaultio">
+  <test name="SMS_Ld5" grid="T31_g37_gl20" compset="B1850G" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
@@ -298,7 +298,7 @@
       <option name="wallclock"> 00:20 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="T31_g37_gl20" compset="B1850C5L45BGCRG1" testmods="allactive/defaultio">
+  <test name="SMS_Ld5" grid="T31_g37_gl20" compset="B1850G1" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="gnu" category="prebeta">
         <options>
@@ -308,7 +308,7 @@
       </machine>
     </machines>
   </test>
-  <test name="SMS_Ld5" grid="T31_g37_gl20" compset="BC5L45BGCRG" testmods="allactive/defaultio">
+  <test name="SMS_Ld5" grid="T31_g37_gl20" compset="B1850G" testmods="allactive/defaultio">
     <machines>
       <machine name="hobart" compiler="nag" category="prebeta"/>
     </machines>

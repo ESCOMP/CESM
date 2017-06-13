@@ -205,6 +205,11 @@
     <lname>RCP8_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
   </compset>
 
+  <compset>
+    <alias>BC5L45BGCR</alias>
+    <lname>2000_CAM50_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
+  </compset>
+
   <!-- Climate Simulation Lab compsets for Keith Lindsay -->
 
   <compset>
@@ -227,29 +232,19 @@
 <!--    <lname>HIST_CAM40_CLM40%CN_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BDRD</lname> -->
 <!--  </compset> -->
 
-  <!-- BG compsets -->
+  <!-- BG compsets: evolving ice sheet -->
 
   <compset>
-    <alias>BC5L45BGCRG</alias>
-    <lname>2000_CAM50_CLM45%BGC_CICE_POP2_RTM_CISM2%EVOLVE_SWAV</lname>
-  </compset>
-
-  <compset>
-    <alias>BC5L45BGCR</alias>
-    <lname>2000_CAM50_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
-  </compset>
-
-  <compset>
-    <alias>B1850C5L45BGCRG</alias>
-    <lname>1850_CAM50_CLM45%BGC_CICE_POP2_RTM_CISM2%EVOLVE_SWAV</lname>
+    <alias>B1850G</alias>
+    <lname>1850_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM2%EVOLVE_WW3_BGC%BDRD</lname>
   </compset>
 
   <!-- Include one CISM1 compset, mainly for testing purposes, to make sure that
        CISM1 can operate in a fully-coupled configuration. Main point is to
        check the PE layout. -->
   <compset>
-    <alias>B1850C5L45BGCRG1</alias>
-    <lname>1850_CAM50_CLM45%BGC_CICE_POP2_RTM_CISM1%EVOLVE_SWAV</lname>
+    <alias>B1850G1</alias>
+    <lname>1850_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM1%EVOLVE_WW3_BGC%BDRD</lname>
   </compset>
 
   <!-- Prognostic wave -->
