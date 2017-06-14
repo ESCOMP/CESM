@@ -41,18 +41,18 @@
 
   <compset>
     <alias>B1850Ws</alias>
-    <lname>1850_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
   </compset>
 
   <compset>
     <alias>B1850</alias>
-    <lname>1850_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
     <science_support grid="f09_g16"/>
   </compset>
 
   <compset>
     <alias>BW1850</alias>
-    <lname>1850_CAM60%WCTS_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
     <science_support grid="f09_g16"/>
   </compset>
 
@@ -100,12 +100,12 @@
 
   <compset>
     <alias>BHIST</alias>
-    <lname>HIST_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
   </compset>
 
   <compset>
     <alias>BHISTWs</alias>
-    <lname>HIST_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
+    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
   </compset>
 
   <!-- <compset> -->
@@ -236,7 +236,7 @@
 
   <compset>
     <alias>B1850G</alias>
-    <lname>1850_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM2%EVOLVE_WW3_BGC%BDRD</lname>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%EVOLVE_WW3_BGC%BDRD</lname>
   </compset>
 
   <!-- Include one CISM1 compset, mainly for testing purposes, to make sure that
@@ -244,7 +244,7 @@
        check the PE layout. -->
   <compset>
     <alias>B1850G1</alias>
-    <lname>1850_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM1%EVOLVE_WW3_BGC%BDRD</lname>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%EVOLVE_WW3_BGC%BDRD</lname>
   </compset>
 
   <!-- Prognostic wave -->
@@ -273,24 +273,24 @@
 
   <compset>
      <alias>J1850G</alias>
-     <lname>1850_DATM%CRU_CLM50%BGC_CICE_POP2_MOSART_CISM2%EVOLVE_SWAV</lname>
+     <lname>1850_DATM%CRU_CLM50%BGC-CROP_CICE_POP2_MOSART_CISM2%EVOLVE_SWAV</lname>
   </compset>
 
   <entries>
 
   <entry id="RUN_TYPE">
     <values>
-      <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v6_r%r05_m%gx1v6_g%gland5UM_w%null"	compset="1850_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM1%NOEVOLVE_SWAV_BGC%BDRD"	   >hybrid</value>
+      <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v6_r%r05_m%gx1v6_g%gland5UM_w%null"	compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%NOEVOLVE_SWAV_BGC%BDRD"	   >hybrid</value>
     </values>
     </entry>
     <entry id="RUN_REFCASE">
       <values>
-	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v6_r%r05_m%gx1v6_g%gland5UM_w%null"   compset="1850_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM1%NOEVOLVE_SWAV_BGC%BDRD">b.e15.B1850G.f09_g16.pi_control.25</value>
+	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v6_r%r05_m%gx1v6_g%gland5UM_w%null"   compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%NOEVOLVE_SWAV_BGC%BDRD">b.e15.B1850G.f09_g16.pi_control.25</value>
       </values>
     </entry>
     <entry id="RUN_REFDATE">
       <values>
-	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v6_r%r05_m%gx1v6_g%gland5UM_w%null"   compset="1850_CAM60_CLM50%BGC_CICE_POP2%ECO_MOSART_CISM1%NOEVOLVE_SWAV_BGC%BDRD"			   >0041-01-01</value>
+	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v6_r%r05_m%gx1v6_g%gland5UM_w%null"   compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%NOEVOLVE_SWAV_BGC%BDRD"			   >0041-01-01</value>
       </values>
     </entry>
     <entry id="RUN_STARTDATE">
