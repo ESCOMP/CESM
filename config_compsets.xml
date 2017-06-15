@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+?xml version="1.0"?>
 
 <compsets version="2.0">
 
@@ -277,30 +277,19 @@
   </compset>
 
   <entries>
-
-  <entry id="RUN_TYPE">
-    <values>
-      <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v6_r%r05_m%gx1v6_g%gland5UM_w%null"	compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%NOEVOLVE_SWAV_BGC%BDRD"	   >hybrid</value>
-    </values>
-    </entry>
-    <entry id="RUN_REFCASE">
+    <entry id="RUN_TYPE">
       <values>
-	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v6_r%r05_m%gx1v6_g%gland5UM_w%null"   compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%NOEVOLVE_SWAV_BGC%BDRD">b.e15.B1850G.f09_g16.pi_control.25</value>
-      </values>
-    </entry>
-    <entry id="RUN_REFDATE">
-      <values>
-	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v6_r%r05_m%gx1v6_g%gland5UM_w%null"   compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%NOEVOLVE_SWAV_BGC%BDRD"			   >0041-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"   compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"   >hybrid</value>
       </values>
     </entry>
     <entry id="RUN_STARTDATE">
       <values>
-	<value compset="1850_"     >0001-01-01</value>
-	<value compset="2000_"     >0001-01-01</value>
-	<value compset="HIST_"     >1850-01-01</value>
-	<value compset="5505_"     >1955-01-01</value>
-	<value compset="RCP[2468]_">2005-01-01</value>
-	<value compset="2013_"     >2013-01-01</value>
+        <value compset="1850_"     >0001-01-01</value>
+        <value compset="2000_"     >0001-01-01</value>
+        <value compset="HIST_"     >1850-01-01</value>
+        <value compset="5505_"     >1955-01-01</value>
+        <value compset="RCP[2468]_">2005-01-01</value>
+        <value compset="2013_"     >2013-01-01</value>
       </values>
     </entry>
   </entries>
