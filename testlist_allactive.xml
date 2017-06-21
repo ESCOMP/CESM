@@ -185,13 +185,14 @@
       <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="NCK_Ld5" grid="f19_g17" compset="B1850G" testmods="allactive/defaultio">
+  <test name="NCK_Ld5" grid="f19_g17" compset="B1850GWs" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30 </option>
+      <option name="comment">Needs to be B1850GWs rather than B1850G because WW3 currently does not support multi-instance</option>
     </options>
   </test>
   <test name="PEA_P1" grid="f19_g17" compset="B1850" testmods="allactive/defaultio">
