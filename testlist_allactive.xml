@@ -191,7 +191,7 @@
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:30 </option>
+      <option name="wallclock"> 01:30 </option>
       <option name="comment">Needs to be B1850GWs rather than B1850G because WW3 currently does not support multi-instance</option>
     </options>
   </test>
