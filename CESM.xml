@@ -2,84 +2,83 @@
 
 <config_sourcetree version="1.0">
   <source name="CIME">
-    <TREE_PATH>"cime"</TREE_PATH>
+    <TREE_PATH>cime</TREE_PATH>
     <repo protocol="git">
-      <ROOT>"https://github.com/ESMCI/cime.git"</ROOT>
-      <TAG>"pause_resume_v1.0.0_alpha01"</TAG>
+      <ROOT>https://github.com/ESMCI/cime.git</ROOT>
+      <TAG>pause_resume_v1.0.0_alpha01</TAG>
     </repo>
   </source>
   <source name="CIME_CONFIG">
     <TREE_PATH>cime_config</TREE_PATH>
     <repo protocol="svn">
-      <ROOT>"https://github.com/CESM-Development/cime_config.git"</ROOT>
-      <TAG>"cime_config0.0.1.alpha.14"</TAG>
+      <ROOT>https://github.com/CESM-Development/cime_config.git</ROOT>
+      <TAG>cime_config0.0.1.alpha.14</TAG>
     </repo>
   </source>
   <source name="CAM">
-    <TREE_PATH>"components/cam"</TREE_PATH>
+    <TREE_PATH>components/cam</TREE_PATH>
     <repo protocol="svn">
-      <ROOT>"https://svn-ccsm-models.cgd.ucar.edu/cam1"</ROOT>
-      <TAG>"trunk_tags/cam5_4_137/components/cam"</TAG>
+      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/cam1</ROOT>
+      <TAG>trunk_tags/cam5_4_137/components/cam</TAG>
     </repo>
   </source>
   <source name="CLM">
-    <TREE_PATH>"components/clm"</TREE_PATH>
+    <TREE_PATH>components/clm</TREE_PATH>
     <repo protocol="svn">
-      <ROOT>"https://svn-ccsm-models.cgd.ucar.edu/clm2"</ROOT>
-      <TAG>"trunk_tags/clm4_5_16_r249/components/clm"</TAG>
+      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/clm2</ROOT>
+      <TAG>trunk_tags/clm4_5_16_r249/components/clm</TAG>
     </repo>
   </source>
   <source name="CICE">
-    <TREE_PATH>"components/cice"</TREE_PATH>
+    <TREE_PATH>components/cice</TREE_PATH>
     <repo protocol="svn">
-      <ROOT>"https://svn-ccsm-models.cgd.ucar.edu/cice"</ROOT>
-      <TAG>"trunk_tags/cice5_20170627"</TAG>
+      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/cice</ROOT>
+      <TAG>trunk_tags/cice5_20170627</TAG>
     </repo>
   </source>
   <source name="DART">
-    <TREE_PATH>"components/dart"</TREE_PATH>
+    <TREE_PATH>components/dart</TREE_PATH>
     <repo protocol="git">
-      <ROOT>"https://github.com/NCAR/DART_PR.git"</ROOT>
-      <TAG>"dart_pr_v1.0.0_alpha01"</TAG>
+      <ROOT>https://github.com/NCAR/DART_PR.git</ROOT>
+      <TAG>dart_pr_v1.0.0_alpha01</TAG>
     </repo>
   </source>
   <source name="POP">
-    <TREE_PATH>"components/pop"</TREE_PATH>
+    <TREE_PATH>components/pop</TREE_PATH>
     <repo protocol="svn">
-      <ROOT>"https://svn-ccsm-models.cgd.ucar.edu/pop2"</ROOT>
-      <TAG>"trunk_tags/cesm_pop_2_1_20170703"</TAG>
+      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/pop2</ROOT>
+      <TAG>trunk_tags/cesm_pop_2_1_20170703</TAG>
     </repo>
   </source>
   <source name="CISM">
-    <TREE_PATH>"components/cism"</TREE_PATH>
+    <TREE_PATH>components/cism</TREE_PATH>
     <repo protocol="svn">
-      <ROOT>"https://svn-ccsm-models.cgd.ucar.edu/glc"</ROOT>
-      <TAG>"trunk_tags/cism2_1_37"</TAG>
+      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/glc</ROOT>
+      <TAG>trunk_tags/cism2_1_37</TAG>
     </repo>
   </source>
   <source name="RTM">
-    <TREE_PATH>"components/rtm"</TREE_PATH>
+    <TREE_PATH>components/rtm</TREE_PATH>
     <repo protocol="svn">
-      <ROOT>"https://svn-ccsm-models.cgd.ucar.edu/rivrtm"</ROOT>
-      <TAG>"trunk_tags/rtm1_0_62"</TAG>
+      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/rivrtm</ROOT>
+      <TAG>trunk_tags/rtm1_0_62</TAG>
     </repo>
   </source>
   <source name="WW3">
-    <TREE_PATH>"components/ww3"</TREE_PATH>
+    <TREE_PATH>components/ww3</TREE_PATH>
     <repo protocol="svn">
-      <ROOT>"https://svn-ccsm-models.cgd.ucar.edu/ww3"</ROOT>
-      <TAG>"trunk_tags/ww3_170630"</TAG>
+      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/ww3</ROOT>
+      <TAG>trunk_tags/ww3_170630</TAG>
     </repo>
   </source>
   <source name="MOSART">
-    <TREE_PATH>"components/mosart"</TREE_PATH>
+    <TREE_PATH>components/mosart</TREE_PATH>
     <repo protocol="svn">
-      <ROOT>"https://svn-ccsm-models.cgd.ucar.edu/mosart"</ROOT>
-      <TAG>"trunk_tags/mosart1_0_26"</TAG>
+      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/mosart</ROOT>
+      <TAG>trunk_tags/mosart1_0_26</TAG>
     </repo>
   </source>
   <required>
-    <REQ_SOURCE>"CIME"</REQ_SOURCE>
-    <REQ_SOURCE>"CIME_CONFIG"</REQ_SOURCE>
+    <REQ_SOURCE>CIME</REQ_SOURCE>
   </required>
 </config_sourcetree>

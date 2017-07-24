@@ -3,6 +3,7 @@
 import sys
 import os
 import os.path
+import errno
 import inspect
 import re
 import xml.etree.ElementTree as ET
@@ -20,398 +21,415 @@ urlLine      = re.compile("^URL:")
 gitHash      = re.compile("\A([a-fA-F0-9]+)\Z")
 remoteBranch = re.compile("\s*origin/(\S+)")
 
-## Enumerate git ref types
-class gitRef():
-  unknown      = 0
-  localBranch  = 1
-  remoteBranch = 2
-  tag          = 3
-  sha1         = 4
-# End class gitRef
-
-##
-## General syntax help function
-## Usage: help <exit status>
-##
-def help (errcode=0):
-  hname="Usage: %s"%os.path.basename(thisFile)
-#  hprefix="`echo ${hname} | tr '[!-~]' ' '`"
-  print "%s [ <checkout directories file> ]"%hname
-  exit(errcode)
-#End help
-
 ##
 ## Error output function (should be handed a string)
 ##
 def perr(errstr):
-  print "%sERROR: %s"%(os.linesep, errstr)
-  help(1)
-# End perr
+    print "{0}ERROR: {1}".format(os.linesep, errstr)
+    exit(-1)
 
+###
+## Process execution helper functions -- don't really belong here
 def checkOutput(commands):
-  try:
-    outstr = subprocess.check_output(commands)
-  except OSError as e:
-    print >>sys.stderr, "Execution of '%s' failed:"%(' '.join(commands)), e
-  except ValueError as e:
-    print >>sys.stderr, "ValueError in '%s':"%(' '.join(commands)), e
-    outstr = None
-  except subprocess.CalledProcessError as e:
-    print >>sys.stderr, "CalledProcessError in '%s':"%(' '.join(commands)), e
-    outstr = None
-  # End of try
-  return outstr
-# End of checkOutput
+    try:
+        outstr = subprocess.check_output(commands)
+    except OSError as e:
+        print >>sys.stderr, "Execution of '{}' failed:".format((' '.join(commands)), e)
+    except ValueError as e:
+        print >>sys.stderr, "ValueError in '{}':".format((' '.join(commands)), e)
+        outstr = None
+    except subprocess.CalledProcessError as e:
+        print >>sys.stderr, "CalledProcessError in '{}':".format((' '.join(commands)), e)
+        outstr = None
+
+    return outstr
+
 
 def scall(commands):
-  try:
-    retcode = subprocess.check_call(commands)
-  except OSError as e:
-    print >>sys.stderr, "Execution of '%s' failed"%(' '.join(commands))
-    print >>sys.stderr,  e
-    retcode = -1
-  except ValueError as e:
-    print >>sys.stderr, "ValueError in '%s'"%(' '.join(commands))
-    print >>sys.stderr,  e
-    retcode = -1
-  except subprocess.CalledProcessError as e:
-    print >>sys.stderr, "CalledProcessError in '%s'"%(' '.join(commands))
-    print >>sys.stderr,  e
-    retcode = -1
-  # End of try
-  return retcode
-# End of scall
+    try:
+        retcode = subprocess.check_call(commands)
+    except OSError as e:
+        print >>sys.stderr, "Execution of '{}' failed".format((' '.join(commands)))
+        print >>sys.stderr,  e
+        retcode = -1
+    except ValueError as e:
+        print >>sys.stderr, "ValueError in '{}'".format((' '.join(commands)))
+        print >>sys.stderr,  e
+        retcode = -1
+    except subprocess.CalledProcessError as e:
+        print >>sys.stderr, "CalledProcessError in '{}'".format((' '.join(commands)))
+        print >>sys.stderr,  e
+        retcode = -1
+
+    return retcode
+
 
 def retcall(commands):
-  FNULL = open(os.devnull, 'w')
-  try:
-    retcode = subprocess.call(commands, stdout=FNULL, stderr=subprocess.STDOUT)
-  except OSError as e:
-    print >>sys.stderr, "Execution of '%s' failed"%(' '.join(commands))
-    print >>sys.stderr,  e
-  except ValueError as e:
-    print >>sys.stderr, "ValueError in '%s'"%(' '.join(commands))
-    print >>sys.stderr,  e
-  except subprocess.CalledProcessError as e:
-    print >>sys.stderr, "CalledProcessError in '%s'"%(' '.join(commands))
-    print >>sys.stderr,  e
-  # End of try
-  return retcode
-# End of retcall
+    FNULL = open(os.devnull, 'w')
+    try:
+        retcode = subprocess.call(commands, stdout=FNULL, stderr=subprocess.STDOUT)
+    except OSError as e:
+        print >>sys.stderr, "Execution of '%s' failed"%(' '.join(commands))
+        print >>sys.stderr,  e
+    except ValueError as e:
+        print >>sys.stderr, "ValueError in '%s'"%(' '.join(commands))
+        print >>sys.stderr,  e
+    except subprocess.CalledProcessError as e:
+        print >>sys.stderr, "CalledProcessError in '%s'"%(' '.join(commands))
+        print >>sys.stderr,  e
+
+    return retcode
+
 
 def quitOnFail(retcode, caller):
-  if retcode != 0:
-    print >>sys.stderr, "%s failed with return code %d"%(caller, retcode)
-    exit(retcode)
-  # End if
-# End quitOnFail
-
-def svnCheckout(checkoutDir, repoURL):
-  caller = "svnCheckout %s %s"%(checkoutDir, repoURL)
-  retcode = scall(["svn", "checkout", repoURL, checkoutDir])
-  quitOnFail(retcode, caller)
-# End svnCheckout
-
-def svnUpdate(updir):
-  caller = "svnUpdate %s"%(updir)
-  mycurrdir = os.path.abspath(".")
-  os.chdir(updir)
-  retcode = scall(["svn update"])
-  quitOnFail(retcode, caller)
-  os.chdir(mycurrdir)
-# End svnUpdate
-
-# Check to see if directory (chkdir) exists and is the correct version (ver)
-# returns True (correct), False (incorrect) or None (chkdir not found)
-def svnCheckDir(chkdir, ver):
-  caller = "svnCheckDir %s %s"%(chkdir, ver)
-  if os.path.exists(chkdir):
-    svnout = checkOutput(["svn", "info", chkdir])
-    if svnout is not None:
-      url = None
-      for line in svnout.splitlines():
-        if urlLine.match(line):
-          url = line.split(': ')[1]
-          break
-        # End if
-      # End for
-      retVal = (url == ver)
-    else:
-      retVal = None
-    # End if
-  else:
-    retVal = None
-  # End if
-  return retVal
-# End svnCheckDir
-
-# Determine if 'ref' is a local branch, a remote branch, a tag, or a commit
-# Should probably use this command instead
-#git show-ref --verify --quiet refs/heads/<branch-name>
-def gitRefType(ref):
-  caller = "gitRefType %s"%(ref)
-  refType = gitRef.unknown
-  # First check for local branch
-  gitout = checkOutput(["git", "branch"])
-  if gitout is not None:
-    branches = [ x.lstrip('* ') for x in gitout.splitlines() ]
-    for branch in branches:
-      if branch == ref:
-        refType = gitRef.localBranch
-        break
-      # End if
-    # End for
-  # End if
-  # Next, check for remote branch
-  if refType == gitRef.unknown:
-    gitout = checkOutput(["git", "branch", "-r"])
-    if gitout is not None:
-      for branch in gitout.splitlines():
-        match = remoteBranch.match(branch)
-        if (match is not None) and (match.group(1) == ref):
-          refType = gitRef.remoteBranch
-          break
-        # End if
-      # End for
-    # End if
-  # End if
-  # Next, check for a tag
-  if refType == gitRef.unknown:
-    gitout = checkOutput(["git", "tag"])
-    if gitout is not None:
-      for tag in gitout.splitlines():
-        if tag == ref:
-          refType = gitRef.tag
-          break
-        # End if
-      # End for
-    # End if
-  # End if
-  # Finally, see if it just looks like a commit hash
-  if (refType == gitRef.unknown) and gitHash.match(ref):
-    refType = gitRef.sha1
-  # End if
-
-  # Return what we've come up with
-  return refType
-# End gitRefType
-
-# Return the (current branch, sha1 hash) of working copy in wdir
-def gitCurrentBranch(wdir):
-  caller = "gitCurrentBranch %s"%(wdir)
-  branch = checkOutput(["git", "-C", wdir, "rev-parse", "--abbrev-ref", "HEAD"])
-  hash = checkOutput(["git", "-C", wdir, "rev-parse", "HEAD"])
-  if branch is not None:
-    branch = branch.rstrip()
-  # End if
-  if hash is not None:
-    hash = hash.rstrip()
-  # End if
-  return (branch, hash)
-# End gitCurrentBranch
-
-# Check to see if directory (chkdir) exists and is the correct version (ver)
-# returns True (correct), False (incorrect) or None (chkdir not found)
-def gitCheckDir(chkdir, ref):
-  caller = "gitCheckDir %s %s"%(chkdir, ref)
-  if os.path.exists(chkdir):
-    if os.path.exists(os.path.join(chkdir, ".git")):
-      head = checkOutput(["git", "-C", chkdir, "rev-parse", "HEAD"])
-    else:
-      head = None
-    # End if
-    if ref is None:
-      refchk = None
-    else:
-      refchk = checkOutput(["git", "-C", chkdir, "rev-parse", ref])
-    # End if
-    if ref is None:
-      retVal = head is not None
-    elif refchk is None:
-      retVal = None
-    else:
-      retVal = (head == refchk)
-    # End if
-  else:
-    retVal = None
-  # End if
-  return retVal
-# End gitCheckDir
-
-def gitWdirClean(wdir):
-  caller = "getWdirClean %s"%(wdir)
-  gitcmd = ["git", "-C", wdir]
-  retcode = retcall(gitcmd + ["diff", "--quiet", "--exit-code"])
-  return (retcode == 0)
-# End def gitWdirClean
-
-# Need to decide how to do this. Just doing pull for now
-def gitUpdate(repoDir):
-  caller = "gitUpdate %s"%(repoDir)
-  retcode = scall(["git", "-C", repoDir, "pull"])
-  quitOnFail(retcode, caller)
-# End gitUpdate
-
-def gitCheckout(checkoutDir, repoURL, ref=None):
-  caller = "gitCheckout %s %s"%(checkoutDir, repoURL)
-  gitcmd = ["git", "-C", checkoutDir]
-  retcode = 0
-  if os.path.exists(checkoutDir):
-    # We can't do a clone. See what we have here
-    if gitCheckDir(checkoutDir, None):
-      # We have a git repo, is it from the correct URL?
-      chkURL = checkOutput(gitcmd + ["config", "remote.origin.url"])
-      print chkURL
-      if chkURL is not None:
-        chkURL = chkURL.rstrip()
-      # End if
-      if chkURL != repoURL:
-        print >>sys.stderr, "Invalid repository in %s"%(checkoutDir)
-        print >>sys.stderr, "url = %s, should be %s"%(chkURL, repoURL)
-        exit(-1)
-      # End if
-    # End if
-  else:
-    print "Calling git clone %s %s"%(repoURL, checkoutDir)
-    retcode = scall(["git", "clone", repoURL, checkoutDir])
-    quitOnFail(retcode, caller)
-  # End if
-
-  if ref is not None:
-    (branch, chash) = gitCurrentBranch(checkoutDir)
-    refType = gitRefType(ref)
-    if refType == gitRef.remoteBranch:
-      retcode = scall(gitcmd + ["checkout", "--track", "origin/"+ref])
-    elif refType == gitRef.localBranch:
-      if branch != ref:
-        if not gitWdirClean(checkoutDir):
-          print >>sys.stderr, "Working directory (%s) not clean, aborting"%(checkoutDir)
-          exit(-1)
-        else:
-          retcode = scall(gitcmd + ["checkout", ref])
-        # End if
-    else:
-      # For now, do a hail mary and hope ref can be checked out
-      retcode = scall(gitcmd + ["checkout", ref])
-    # End if
-    quitOnFail(retcode, caller)
-  # End if
-# End gitCheckout
+    if retcode != 0:
+        print >>sys.stderr, "%s failed with return code %d"%(caller, retcode)
+        exit(retcode)
 
 def stripNamespace(tag):
-  match = reNamespace.match(tag)
-  if match is None:
-    strippedTag =  tag
-  else:
-    strippedTag = tag[len(match.group(0)):]
-  # End if
-  return strippedTag
-# End stripNamespace
-
-def printElement(element, prefix = None):
-  if prefix is None:
-    print element.tag, element.attrib
-  else:
-    print prefix, element.tag, element.attrib
-  # End if
-# End printElement
-
-def getSourceRepos(element):
-  repos = list()
-  for child in element:
-    ctag = stripNamespace(child.tag)
-    if ctag == 'repo':
-      repos.append(child)
+    match = reNamespace.match(tag)
+    if match is None:
+        strippedTag =  tag
     else:
-      perr("Unknown source child type, %s"%child.tag)
-    # End if
-  # End for
-  return repos
-# End getSourceRepos
+        strippedTag = tag[len(match.group(0)):]
 
-def handleSource(element, treeRoot):
-  # Make sure we are in correct location
-  ###################################
-  name = element.get('name')
-  print "source %s found"%name
-  repoLoc = element.get('tree_path')
-  repos = getSourceRepos(element)
-  if len(repos) == 0:
-    perr("No repo element for source %s"%name)
-  else:
-    repoLoaded = False
-    while not repoLoaded:
-      repo = repos.pop(0)
-      protocol = repo.get('protocol')
-      repoURL  = repo.get('root')
-      repoRef = repo.get('ref')
-      print "    repo protocol is %s"%protocol
-      print "    repo url is %s"%repoURL
-      if repoRef is not None:
-        print "    repo ref is %s"%repoRef
-      # End if
-      if (protocol == 'svn'):
-        svnCheckout(repoLoc, repoURL)
-      elif (protocol == 'git'):
-        gitCheckout(repoLoc, repoURL, repoRef)
-      # End if
-      if (len(repos) == 0) and (not repoLoaded):
-        ##XXgoldyXX: This should be an error
-        repoLoaded = True
-      # End if
-    # End while
-  # End if
-# End handleSource
+    return strippedTag
 
-def handleStaging(element, treeRoot):
-  perr("handleStaging not implemented")
-# End handleStaging
 
-## Beginning of main program
-if __name__ == "__main__":
+## Enumerate git ref types
+class _gitRef():
+    unknown      = 0
+    localBranch  = 1
+    remoteBranch = 2
+    tag          = 3
+    sha1         = 4
+
+class _repo(object):
+    def __init__(self, repo):
+        self._protocol = repo.get('protocol')
+        self._tag = None
+        self._branch = None
+        self._URL = None
+        for element in repo:
+            ctag = stripNamespace(element.tag)
+            if ctag == 'ROOT':
+                self._URL  = element.text
+            elif ctag == 'TAG':
+                self._tag = element.text
+            elif ctag == 'BRANCH':
+                self._branch = element.text
+            else:
+                perr("Unknown repo element type, {}".format(element.tag))
+
+        if self._URL is None:
+            perr("repo must have a URL")
+
+        if self._tag is None and self._branch is None:
+            perr("repo must have either a BRANCH or a TAG element")
+
+        if self._tag is not None and self._branch is not None:
+            perr("repo cannot have both a BRANCH and a TAG element")
+
+        if self._protocol is None:
+            perr("repo must have a protocol")
+        elif self._protocol == 'svn':
+            if self._branch is not None:
+                self._URL = os.path.join(self._URL, self._branch)
+            else:
+                self._URL = os.path.join(self._URL, self._tag)
+
+        elif self._protocol == 'git':
+            pass
+        else:
+            perr("Unknown repo protocol, {}".format(self._protocol))
+
+    def load(self, repo_dir):
+        if self._protocol == 'svn':
+            self.svnCheckout(repo_dir, self._URL)
+        elif self._protocol == 'git':
+            self.gitCheckout(repo_dir, self._URL, self._branch, self._tag)
+
+        return True
+
+
+    def svnCheckout(self, checkoutDir, repoURL):
+        caller = "svnCheckout %s %s"%(checkoutDir, repoURL)
+        retcode = scall(["svn", "checkout", repoURL, checkoutDir])
+        quitOnFail(retcode, caller)
+
+
+    def svnUpdate(self, updir):
+        caller = "svnUpdate %s"%(updir)
+        mycurrdir = os.path.abspath(".")
+        os.chdir(updir)
+        retcode = scall(["svn update"])
+        quitOnFail(retcode, caller)
+        os.chdir(mycurrdir)
+
+
+    # Check to see if directory (chkdir) exists and is the correct version (ver)
+    # returns True (correct), False (incorrect) or None (chkdir not found)
+    def svnCheckDir(self, chkdir, ver):
+        caller = "svnCheckDir %s %s"%(chkdir, ver)
+        if os.path.exists(chkdir):
+            svnout = checkOutput(["svn", "info", chkdir])
+            if svnout is not None:
+                url = None
+                for line in svnout.splitlines():
+                    if urlLine.match(line):
+                        url = line.split(': ')[1]
+                        break
+                retVal = (url == ver)
+            else:
+                retVal = None
+        else:
+            retVal = None
+
+        return retVal
+
+
+    # Determine if 'ref' is a local branch, a remote branch, a tag, or a commit
+    # Should probably use this command instead
+    #git show-ref --verify --quiet refs/heads/<branch-name>
+    def gitRefType(self, ref):
+        caller = "gitRefType %s"%(ref)
+        refType = _gitRef.unknown
+        # First check for local branch
+        gitout = checkOutput(["git", "branch"])
+        if gitout is not None:
+            branches = [ x.lstrip('* ') for x in gitout.splitlines() ]
+            for branch in branches:
+                if branch == ref:
+                    refType = _gitRef.localBranch
+                    break
+
+        # Next, check for remote branch
+        if refType == _gitRef.unknown:
+            gitout = checkOutput(["git", "branch", "-r"])
+            if gitout is not None:
+                for branch in gitout.splitlines():
+                    match = remoteBranch.match(branch)
+                    if (match is not None) and (match.group(1) == ref):
+                        refType = _gitRef.remoteBranch
+                        break
+
+        # Next, check for a tag
+        if refType == _gitRef.unknown:
+            gitout = checkOutput(["git", "tag"])
+            if gitout is not None:
+                for tag in gitout.splitlines():
+                    if tag == ref:
+                        refType = _gitRef.tag
+                        break
+
+        # Finally, see if it just looks like a commit hash
+        if (refType == _gitRef.unknown) and gitHash.match(ref):
+            refType = _gitRef.sha1
+
+        # Return what we've come up with
+        return refType
+
+
+    # Return the (current branch, sha1 hash) of working copy in wdir
+    def gitCurrentBranch(self, wdir):
+        caller = "gitCurrentBranch %s"%(wdir)
+        branch = checkOutput(["git", "-C", wdir, "rev-parse", "--abbrev-ref", "HEAD"])
+        hash = checkOutput(["git", "-C", wdir, "rev-parse", "HEAD"])
+        if branch is not None:
+            branch = branch.rstrip()
+
+        if hash is not None:
+            hash = hash.rstrip()
+        return (branch, hash)
+
+
+    # Check to see if directory (chkdir) exists and is the correct version (ver)
+    # returns True (correct), False (incorrect) or None (chkdir not found)
+    def gitCheckDir(self, chkdir, ref):
+        caller = "gitCheckDir %s %s"%(chkdir, ref)
+        if os.path.exists(chkdir):
+            if os.path.exists(os.path.join(chkdir, ".git")):
+                head = checkOutput(["git", "-C", chkdir, "rev-parse", "HEAD"])
+            else:
+                head = None
+
+            if ref is None:
+                refchk = None
+            else:
+                refchk = checkOutput(["git", "-C", chkdir, "rev-parse", ref])
+
+            if ref is None:
+                retVal = head is not None
+            elif refchk is None:
+                retVal = None
+            else:
+                retVal = (head == refchk)
+        else:
+            retVal = None
+
+        return retVal
+
+
+    def gitWdirClean(self, wdir):
+        caller = "getWdirClean %s"%(wdir)
+        gitcmd = ["git", "-C", wdir]
+        retcode = retcall(gitcmd + ["diff", "--quiet", "--exit-code"])
+        return (retcode == 0)
+
+
+    # Need to decide how to do this. Just doing pull for now
+    def gitUpdate(self, repoDir):
+        caller = "gitUpdate %s"%(repoDir)
+        retcode = scall(["git", "-C", repoDir, "pull"])
+        quitOnFail(retcode, caller)
+
+
+    def gitCheckout(self, checkoutDir, repoURL, branch, tag):
+        caller = "gitCheckout %s %s"%(checkoutDir, repoURL)
+        gitcmd = ["git", "-C", checkoutDir]
+        retcode = 0
+        if os.path.exists(checkoutDir):
+            # We can't do a clone. See what we have here
+            if gitCheckDir(checkoutDir, None):
+                # We have a git repo, is it from the correct URL?
+                chkURL = checkOutput(gitcmd + ["config", "remote.origin.url"])
+                if chkURL is not None:
+                    chkURL = chkURL.rstrip()
+
+                if chkURL != repoURL:
+                    perr("Invalid repository in {0}, url = {0}, should be {1}".format(checkoutDir, chkURL, repoURL))
+
+        else:
+            print "Calling git clone %s %s"%(repoURL, checkoutDir)
+            retcode = scall(["git", "clone", repoURL, checkoutDir])
+            quitOnFail(retcode, caller)
+
+        if branch is not None:
+            (curr_branch, chash) = gitCurrentBranch(checkoutDir)
+            refType = gitRefType(branch)
+            if refType == _gitRef.remoteBranch:
+                retcode = scall(gitcmd + ["checkout", "--track", "origin/"+ref])
+                quitOnFail(retcode, caller)
+            elif refType == _gitRef.localBranch:
+                if curr_branch != branch:
+                    if not gitWdirClean(checkoutDir):
+                        perr("Working directory ({0}) not clean, aborting".format(checkoutDir))
+                    else:
+                        retcode = scall(gitcmd + ["checkout", ref])
+                        quitOnFail(retcode, caller)
+
+            else:
+                perr("Unable to check out branch, {}".format(branch))
+
+        elif tag is not None:
+            # For now, do a hail mary and hope tag can be checked out
+            retcode = scall(gitcmd + ["checkout", tag])
+            quitOnFail(retcode, caller)
+
+
+class _source(object):
+    def __init__(self, node):
+        self._name = node.get('name')
+        self._repos = list()
+        self._loaded = False
+        # Parse the sub-elements
+        for child in node:
+            ctag = stripNamespace(child.tag)
+            if ctag == 'repo':
+                self._repos.append(_repo(child))
+            elif ctag == 'TREE_PATH':
+                self._path = child.text
+                self._repo_dir = os.path.basename(self._path)
+            else:
+                perr("Unknown source element type, {}".format(child.tag))
+        if len(self._repos) == 0:
+            perr("No repo element for source {}".format(name))
+
+
+    def get_name(self):
+        return self._name
+
+    def load(self, tree_root):
+        # Make sure we are in correct location
+        ###################################
+        mycurrdir = os.path.abspath(".")
+        pdir = os.path.join(tree_root, os.path.dirname(self._path))
+        if not os.path.exists(pdir):
+            try:
+                os.makedirs(pdir)
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise
+
+        os.chdir(pdir)
+
+        repoLoaded = self._loaded
+        if not repoLoaded:
+            for repo in self._repos:
+                repoLoaded = repo.load(self._repo_dir)
+                if repoLoaded:
+                    break
+
+        self._loaded = repoLoaded
+        os.chdir(mycurrdir)
+        return repoLoaded
+
+
+## An object representing a source tree XML file
+class SourceTree(object):
+    def __init__(self, model_file, tree_root="."):
+        self._tree_root = os.path.abspath(tree_root)
+
+        file = open(model_file)
+        self._tree = ET.parse(file)
+        self._root = self._tree.getroot()
+        file.close()
+
+        self._all_components = {}
+        self._required_compnames = []
+        for child in self._root:
+            if child.tag == "source":
+                s = _source(child)
+                self._all_components[s.get_name()] = s
+            elif child.tag == "required":
+                for req in child:
+                    self._required_compnames.append(req.text)
+
+    def load(self, all=False):
+        if all:
+            load_comps = [ x.get_name() for x in self._all_components ]
+        else:
+            load_comps = self._required_compnames
+
+        if load_comps is not None:
+            print "Loading these components: {}".format(load_comps)
+
+        for comp in load_comps:
+            self._all_components[comp].load(self._tree_root)
+
+
+def _main_func(command, args_in):
     help_str = \
 """
 {0} <MODEL.xml> [--all]
 OR
 {0} --help
-""".format(os.path.basename(sys.argv[0]))
+""".format(os.path.basename(command))
     parser = argparse.ArgumentParser(usage=help_str)
     parser.add_argument("model", help="The model xml filename (e.g., CESM.xml).")
     parser.add_argument("--all", default=False,
                         help="Load all components in model file (default only loads required components)")
-    args = parser.parse_args()
+    args = parser.parse_args(args=args_in)
 
     if not os.path.exists(args.model):
         print "ERROR: Model file, '{0}', does not exist".format(args.model)
         sys.exit(1)
 
-    treeRoot = "CESM"
+    source_tree = SourceTree(args.model)
+    source_tree.load(args.all)
 
-    file = open(args.model)
-    tree = ET.parse(file)
-    root = tree.getroot()
-    file.close()
 
-    all_components = []
-    required_components = []
-    for child in root:
-        if child.tag == "source":
-            all_components.append(child)
-        elif child.tag == "required":
-            for req in child:
-                required_components.append(req.text)
-
-    print [ x.get('name') for x in all_components ]
-    print required_components
-        # # Fix this
-        # pos = child.tag.index('}') + 1
-        # tagname = child.tag[pos:]
-        # if tagname == 'source':
-        #     handleSource(child, treeRoot)
-        # elif tagname == 'staging':
-        #     handleStaging(child, treeRoot)
-        # else:
-        #     print 'ERROR: Unknown element, %s'%tagname
-        #     exit(1)
-
+## Beginning of main program
+if __name__ == "__main__":
+    _main_func(sys.argv[0], sys.argv[1:])
 ## End of main program
