@@ -1,0 +1,102 @@
+March 2016
+
+The CESM testing and porting database records all changes to CESM tags in 
+development and their associated regression tests. The ChangeLogs generated
+by the testdb can be used as the SVN ChangeLog and replace this template.
+
+The testdb can be viewed by CESM SVN developers at:
+
+https://csegweb.cgd.ucar.edu/testdb
+
+Old template format for reference:
+===============================================================
+ 
+Tag name: 
+Originator(s): 
+Date: 
+One-line Summary:
+
+List all component tags that were used to create cesm tag:
+
+  scripts  
+  drv
+  share     
+  cam
+  clm     
+  cice     
+  cism        
+  pop     
+  datm       
+  dlnd    
+  dice    
+  docn
+  dead  
+  stubs
+  timing  
+  esmf_wrf_timemgr
+  mct     
+  pio     
+
+
+Describe the changes for each component above that was changed relative 
+to the previous cesm tag in this sequence (this includes description
+of new functionality and how user can use it):
+
+Bugs fixed: 
+
+Describe any changes made to scripts/build system:
+
+Describe any substantial timing or memory changes:
+
+Code reviewed by:
+
+Summary of pre-tag testing:
+
+  Regression tests:
+  regression test suite only tests original capability 
+  regression test status of FAIL1 implies non-bfb
+  regression test status of FAIL2 implies restart failure
+  DO NOT create tag if FAIL2 status is obtained in any of the
+  following regression tests
+
+  Restart tests:
+  Restart test suite tests both new and old capability 
+  DO NOT create tag if FAIL status is obtained in any of the
+  following restart tests
+
+  Machine (bluefire):
+    Restart tests:
+    Regression tests:
+
+  Machine (lynx_pgi):
+    Restart tests:
+    Regression tests:
+
+  Machine (edinburgh_lahey):
+    Restart tests:
+    Regression tests:
+
+  Machine (lynx_gnu):
+    Restart tests:
+    Regression tests:
+
+
+Summarize any change to answers (regressions tests status is FAIL1)
+
+  - what code configurations:
+  - what platforms/compilers:
+  - nature of change (roundoff; larger than roundoff but same climate; new
+    climate): 
+
+If bitwise differences were observed, how did you show they were no worse
+than roundoff?
+
+If this tag changes climate describe the run(s) done to evaluate the new
+climate in enough detail that it(they) could be reproduced, i.e.,
+
+  - platform/compilers:
+  - MSS location of output:
+
+MSS location of control simulations used to validate new climate:
+
+===============================================================

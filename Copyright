@@ -1,0 +1,74 @@
+CESM1.5: Copyright Notice and Disclaimer
+
+The Community Earth System Model (CESM was developed in cooperation with 
+the National Science Foundation, the Department of Energy, 
+the National Aeronautics and Space Administration, and 
+the University Corporation for Atmospheric Research National Center for Atmospheric Research.
+
+Except for the segregable components listed below, CESM is public domain software. 
+There may be other third party tools and libraries that are embedded, and 
+they may have their own copyright notices and terms.
+
+The following components are copyrighted and may only be used, modified, 
+or redistributed under the terms indicated below.
+
+Code		 Institution		Copyright	Terms of Use/Disclaimer
+----		 -----------	 	---------	-----------------------
+ESMF		 University of 		Copyright 	University of Illinois/NCSA Open Source License
+		 Illinois/NCSA 		2002-2009, 
+					University of 
+					Illinois/NCSA 
+					Open Source 
+					License
+		 	
+POP,SCRIP,CICE	Los Alamos National	Copyright 2008	Los Alamos National Security, LLC 
+		Laboratory   		Los Alamos 
+					National 
+					Security, LLC
+		
+Glimmer-CISM 	LANL/U.			Copyright	GNU General Public License
+		Bristol/U.		2004-2010, 
+		Edinburgh/U.		GNU General 
+		Montana/U.		Public License 
+		Swansea 
+		 
+AER RRTMG	Atmospheric		Copyright	AER RRTMG Copyright
+    		and			2002-2010, 
+		Environmental 		Atmospheric 
+		Research, Inc.		and 
+					Environmental 
+					Research, Inc.
+		
+MCT		Argonne			Copyright 2000,	MCT Copyright
+		National		2010, 
+		Laboratory		University of 
+					Chicago.
+		 
+ICSSP		 N/A			Copyright 2003, ISCCP Simulator Software
+		 			2010, Steve 
+					Klein and Mark 
+					Webb
+					
+XML/Lite	Wadsack-Allen		Copyright 2001, The documentation for the Perl XML-Lite 
+		Digital Group		2010 	  	module is no longer available on-line. 
+					Wadsack-Allen 
+					Digital Group
+		
+Inf_NaN		Lahey			Copyright(c)	Copies of this source code, or standalone compiled 
+_Detection 	Computer		2003, Lahey	files derived from this source may not be sold 
+module		Systems, Inc.		Computer	without permission from Lahey Computers Systems. 
+					Systems, Inc.	All or part of this module may be freely incorporated 
+							into executable programs which are offered for sale. 
+							Otherwise, distribution of all or part of this file is 
+							permitted, provided this copyright notice and header 
+							are included.
+					 
+
+THIS SOFTWARE IS PROVIDED BY UCAR AND ANY CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL UCAR OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
