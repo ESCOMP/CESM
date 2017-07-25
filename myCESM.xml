@@ -5,7 +5,7 @@
     <TREE_PATH>cime</TREE_PATH>
     <repo protocol="git">
       <ROOT>https://github.com/gold2718/cime.git</ROOT>
-      <TAG>pause_resume_v1.0.0_alpha01</TAG>
+      <BRANCH>dart_pr</BRANCH>
     </repo>
   </source>
   <source name="CAM">
@@ -40,7 +40,7 @@
     <TREE_PATH>components/pop</TREE_PATH>
     <repo protocol="svn">
       <ROOT>https://svn-ccsm-models.cgd.ucar.edu/pop2</ROOT>
-      <TAG>trunk_tags/cesm_pop_2_1_20170703</TAG>
+      <BRANCH>branches/PauseResume</BRANCH>
     </repo>
   </source>
   <source name="CISM">
