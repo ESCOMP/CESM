@@ -231,10 +231,8 @@ class _repo(object):
 
 
     # Return the (current branch, sha1 hash) of working copy in wdir
-    def gitCurrentBranch(self, wdir):
-        caller = "gitCurrentBranch {}".format(wdir)
-        mycurrdir = os.path.abspath(".")
-        os.chdir(wdir)
+    def gitCurrentBranch(self):
+        caller = "gitCurrentBranch"
         branch = checkOutput(["git", "rev-parse", "--abbrev-ref", "HEAD"])
         hash = checkOutput(["git", "rev-parse", "HEAD"])
         if branch is not None:
@@ -243,7 +241,6 @@ class _repo(object):
         if hash is not None:
             hash = hash.rstrip()
 
-        os.chdir(mycurrdir)
         return (branch, hash)
 
 
@@ -318,14 +315,14 @@ class _repo(object):
             os.chdir(checkoutDir)
 
         if branch is not None:
-            (curr_branch, chash) = gitCurrentBranch(checkoutDir)
-            refType = gitRefType(branch)
+            (curr_branch, chash) = self.gitCurrentBranch()
+            refType = self.gitRefType(branch)
             if refType == _gitRef.remoteBranch:
                 retcode = scall(["git", "checkout", "--track", "origin/"+ref])
                 quitOnFail(retcode, caller)
             elif refType == _gitRef.localBranch:
                 if curr_branch != branch:
-                    if not gitWdirClean(checkoutDir):
+                    if not self.gitWdirClean(checkoutDir):
                         perr("Working directory ({0}) not clean, aborting".format(checkoutDir))
                     else:
                         retcode = scall(["git", "checkout", ref])
@@ -410,9 +407,11 @@ class SourceTree(object):
                 for req in child:
                     self._required_compnames.append(req.text)
 
-    def load(self, all=False):
+    def load(self, all=False, load_comp=None):
         if all:
             load_comps = self._all_components.keys()
+        elif load_comp is not None:
+            self._all_components[load_comp].load(self._tree_root)
         else:
             load_comps = self._required_compnames
 

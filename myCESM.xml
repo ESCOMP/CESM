@@ -33,7 +33,7 @@
     <TREE_PATH>components/dart</TREE_PATH>
     <repo protocol="git">
       <ROOT>https://github.com/NCAR/DART_PR.git</ROOT>
-      <TAG>dart_pr_v1.0.0_alpha01</TAG>
+      <BRANCH>master</BRANCH>
     </repo>
   </source>
   <source name="POP">
