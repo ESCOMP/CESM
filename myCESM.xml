@@ -4,8 +4,8 @@
   <source name="CIME">
     <TREE_PATH>cime</TREE_PATH>
     <repo protocol="git">
-      <ROOT>https://github.com/ESMCI/cime.git</ROOT>
-      <TAG>cime5.3.0-alpha.29</TAG>
+      <ROOT>https://github.com/gold2718/cime.git</ROOT>
+      <TAG>pause_resume_v1.0.0_alpha01</TAG>
     </repo>
   </source>
   <source name="CAM">

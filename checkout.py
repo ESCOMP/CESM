@@ -232,14 +232,18 @@ class _repo(object):
 
     # Return the (current branch, sha1 hash) of working copy in wdir
     def gitCurrentBranch(self, wdir):
-        caller = "gitCurrentBranch %s"%(wdir)
-        branch = checkOutput(["git", "-C", wdir, "rev-parse", "--abbrev-ref", "HEAD"])
-        hash = checkOutput(["git", "-C", wdir, "rev-parse", "HEAD"])
+        caller = "gitCurrentBranch {}".format(wdir)
+        mycurrdir = os.path.abspath(".")
+        os.chdir(wdir)
+        branch = checkOutput(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+        hash = checkOutput(["git", "rev-parse", "HEAD"])
         if branch is not None:
             branch = branch.rstrip()
 
         if hash is not None:
             hash = hash.rstrip()
+
+        os.chdir(mycurrdir)
         return (branch, hash)
 
 
@@ -247,16 +251,17 @@ class _repo(object):
     # returns True (correct), False (incorrect) or None (chkdir not found)
     def gitCheckDir(self, chkdir, ref):
         caller = "gitCheckDir %s %s"%(chkdir, ref)
+        refchk = None
         if os.path.exists(chkdir):
             if os.path.exists(os.path.join(chkdir, ".git")):
-                head = checkOutput(["git", "-C", chkdir, "rev-parse", "HEAD"])
+                mycurrdir = os.path.abspath(".")
+                os.chdir(chkdir)
+                head = checkOutput(["git", "rev-parse", "HEAD"])
+                if ref is not None:
+                    refchk = checkOutput(["git", "rev-parse", ref])
+
             else:
                 head = None
-
-            if ref is None:
-                refchk = None
-            else:
-                refchk = checkOutput(["git", "-C", chkdir, "rev-parse", ref])
 
             if ref is None:
                 retVal = head is not None
@@ -267,32 +272,39 @@ class _repo(object):
         else:
             retVal = None
 
+        os.chdir(mycurrdir)
         return retVal
 
 
     def gitWdirClean(self, wdir):
         caller = "getWdirClean %s"%(wdir)
-        gitcmd = ["git", "-C", wdir]
-        retcode = retcall(gitcmd + ["diff", "--quiet", "--exit-code"])
+        mycurrdir = os.path.abspath(".")
+        os.chdir(wdir)
+        retcode = retcall(["git", "diff", "--quiet", "--exit-code"])
+        os.chdir(mycurrdir)
         return (retcode == 0)
 
 
     # Need to decide how to do this. Just doing pull for now
     def gitUpdate(self, repoDir):
         caller = "gitUpdate %s"%(repoDir)
-        retcode = scall(["git", "-C", repoDir, "pull"])
+        mycurrdir = os.path.abspath(".")
+        os.chdir(repoDir)
+        retcode = scall(["git", "pull"])
+        os.chdir(mycurrdir)
         quitOnFail(retcode, caller)
 
 
     def gitCheckout(self, checkoutDir, repoURL, branch, tag):
         caller = "gitCheckout %s %s"%(checkoutDir, repoURL)
-        gitcmd = ["git", "-C", checkoutDir]
         retcode = 0
+        mycurrdir = os.path.abspath(".")
         if os.path.exists(checkoutDir):
             # We can't do a clone. See what we have here
-            if gitCheckDir(checkoutDir, None):
+            if self.gitCheckDir(checkoutDir, None):
+                os.chdir(checkoutDir)
                 # We have a git repo, is it from the correct URL?
-                chkURL = checkOutput(gitcmd + ["config", "remote.origin.url"])
+                chkURL = checkOutput(["git", "config", "remote.origin.url"])
                 if chkURL is not None:
                     chkURL = chkURL.rstrip()
 
@@ -303,19 +315,20 @@ class _repo(object):
             print "Calling git clone %s %s"%(repoURL, checkoutDir)
             retcode = scall(["git", "clone", repoURL, checkoutDir])
             quitOnFail(retcode, caller)
+            os.chdir(checkoutDir)
 
         if branch is not None:
             (curr_branch, chash) = gitCurrentBranch(checkoutDir)
             refType = gitRefType(branch)
             if refType == _gitRef.remoteBranch:
-                retcode = scall(gitcmd + ["checkout", "--track", "origin/"+ref])
+                retcode = scall(["git", "checkout", "--track", "origin/"+ref])
                 quitOnFail(retcode, caller)
             elif refType == _gitRef.localBranch:
                 if curr_branch != branch:
                     if not gitWdirClean(checkoutDir):
                         perr("Working directory ({0}) not clean, aborting".format(checkoutDir))
                     else:
-                        retcode = scall(gitcmd + ["checkout", ref])
+                        retcode = scall(["git", "checkout", ref])
                         quitOnFail(retcode, caller)
 
             else:
@@ -323,8 +336,10 @@ class _repo(object):
 
         elif tag is not None:
             # For now, do a hail mary and hope tag can be checked out
-            retcode = scall(gitcmd + ["checkout", tag])
+            retcode = scall(["git", "checkout", tag])
             quitOnFail(retcode, caller)
+
+        os.chdir(mycurrdir)
 
 
 class _source(object):
@@ -397,7 +412,7 @@ class SourceTree(object):
 
     def load(self, all=False):
         if all:
-            load_comps = [ x.get_name() for x in self._all_components ]
+            load_comps = self._all_components.keys()
         else:
             load_comps = self._required_compnames
 
@@ -417,7 +432,7 @@ OR
 """.format(os.path.basename(command))
     parser = argparse.ArgumentParser(usage=help_str)
     parser.add_argument("model", help="The model xml filename (e.g., CESM.xml).")
-    parser.add_argument("--all", default=False,
+    parser.add_argument("--all",  action="store_true",
                         help="Load all components in model file (default only loads required components)")
     args = parser.parse_args(args=args_in)
 
