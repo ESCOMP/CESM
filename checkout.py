@@ -411,7 +411,7 @@ class SourceTree(object):
         if all:
             load_comps = self._all_components.keys()
         elif load_comp is not None:
-            self._all_components[load_comp].load(self._tree_root)
+            load_comps = [ load_comp ]
         else:
             load_comps = self._required_compnames
 
