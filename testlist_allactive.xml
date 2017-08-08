@@ -29,7 +29,7 @@
       <machine name="edison" compiler="intel" category="prealpha"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="NCK" grid="f19_g17" compset="B1850Ws" testmods="allactive/defaultio">
@@ -53,7 +53,7 @@
     <machines>
       <machine name="bluewaters" compiler="pgi" category="prebeta"/>
       <options>
-	<option name="wallclock"> 00:20 </option>
+	<option name="wallclock"> 00:30 </option>
       </options>
     </machines>
   </test>
@@ -80,7 +80,7 @@
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="ERS_Ld7" grid="ne30_g17" compset="B1850" testmods="allactive/defaultio">
@@ -88,7 +88,7 @@
       <machine name="cheyenne" compiler="gnu" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="ERS_Ld7" grid="f09_g17" compset="BHIST" testmods="allactive/defaultio">
@@ -97,7 +97,7 @@
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="SMS_Ld5" grid="f09_g17" compset="BW1850" testmods="allactive/default">
@@ -122,7 +122,7 @@
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="ERS_Ld7" grid="f19_g17" compset="B1850" testmods="allactive/defaultio">
@@ -131,7 +131,7 @@
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="ERS_Ld7" grid="ne30_g17" compset="B1850" testmods="allactive/defaultio">
@@ -140,7 +140,7 @@
       <machine name="cheyenne" compiler="gnu" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="ERS_Ld7" grid="f09_g17" compset="BHISTC5L45BGCR" testmods="allactive/defaultio">
@@ -148,7 +148,7 @@
       <machine name="bluewaters" compiler="pgi" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="ERS_Ld9" grid="ne120_g17" compset="B1850" testmods="allactive/defaultio">
@@ -156,7 +156,7 @@
       <machine name="edison" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="ERS_N3_Ld7" grid="f19_g17" compset="BHISTWs" testmods="allactive/defaultio">
@@ -174,7 +174,7 @@
       <machine name="edison" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="NCK_Ld5" grid="f19_g17" compset="BC5L45BGCR" testmods="allactive/defaultio">
@@ -182,16 +182,17 @@
       <machine name="cheyenne" compiler="gnu" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="NCK_Ld5" grid="f19_g17" compset="B1850G" testmods="allactive/defaultio">
+  <test name="NCK_Ld5" grid="f19_g17" compset="B1850GWs" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 01:30 </option>
+      <option name="comment">Needs to be B1850GWs rather than B1850G because WW3 currently does not support multi-instance</option>
     </options>
   </test>
   <test name="PEA_P1" grid="f19_g17" compset="B1850" testmods="allactive/defaultio">
@@ -200,7 +201,7 @@
       <machine name="hobart" compiler="pgi" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="PET" grid="f19_g17" compset="B1850" testmods="allactive/defaultio">
@@ -208,7 +209,7 @@
       <machine name="cheyenne" compiler="gnu" category="prealpha"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="PET" grid="ne30_g17" compset="B1850" testmods="allactive/defaultio">
@@ -216,7 +217,7 @@
       <machine name="edison" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <!-- <test name="PET" grid="f19_g17" compset="B1850C5L40SPRWs" testmods="allactive/defaultio"> -->
@@ -224,7 +225,7 @@
   <!--     <machine name="bluewaters" compiler="pgi" category="prebeta"/> -->
   <!--   </machines> -->
   <!--   <options> -->
-  <!--     <option name="wallclock"> 00:20 </option> -->
+  <!--     <option name="wallclock"> 00:30 </option> -->
   <!--   </options> -->
   <!-- </test> -->
   <test name="PFS" grid="f09_g17" compset="B1850" testmods="allactive/default">
@@ -269,7 +270,7 @@
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
 
@@ -278,7 +279,7 @@
       <machine name="edison" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="SMS_D" grid="f09_g17" compset="BHIST" testmods="allactive/defaultio">
@@ -286,34 +287,41 @@
       <machine name="edison" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="T31_g37_gl20" compset="B1850G" testmods="allactive/defaultio">
+  <test name="SMS_Ld5" grid="f19_g17" compset="B1850G" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30 </option>
+    </options>
+  </test>
+  <test name="SMS_Ld5" grid="f09_g17" compset="B1850G" testmods="allactive/defaultio">
+    <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="T31_g37_gl20" compset="B1850G1" testmods="allactive/defaultio">
+  <test name="SMS_Ld5" grid="f19_g17" compset="B1850G1" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="gnu" category="prebeta">
         <options>
-          <option name="wallclock">0:20</option>
+          <option name="wallclock">0:30</option>
           <option name="comment">Include a fully-coupled test with CISM1, mainly to make sure the PE layout works</option>
         </options>
       </machine>
     </machines>
   </test>
-  <test name="SMS_Ld5" grid="T31_g37_gl20" compset="B1850G" testmods="allactive/defaultio">
+  <test name="SMS_Ld1" grid="f19_g17" compset="B1850G" testmods="allactive/defaultio">
     <machines>
       <machine name="hobart" compiler="nag" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:45 </option>
     </options>
   </test>
   <!-- <test name="SMS_Ld5" grid="f09_g17" compset="BRCP85C4L40CNRBPRP" testmods="allactive/defaultio"> -->
@@ -321,7 +329,7 @@
   <!--     <machine name="edison" compiler="intel" category="prebeta"/> -->
   <!--   </machines> -->
   <!--   <options> -->
-  <!--     <option name="wallclock"> 00:20 </option> -->
+  <!--     <option name="wallclock"> 00:30 </option> -->
   <!--   </options> -->
   <!-- </test> -->
   <test name="SMS_Ld5" grid="f09_g17_gl4" compset="J1850G" testmods="allactive/defaultio">
@@ -329,7 +337,7 @@
       <machine name="cheyenne" compiler="gnu" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:20 </option>
+      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="SMS_Ld7" grid="f09_g17" compset="B1850" testmods="allactive/defaultio">
@@ -337,7 +345,7 @@
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
     </machines>
     <options>
-      <option name="wallclock">  00:20 </option>
+      <option name="wallclock">  00:30 </option>
     </options>
   </test>
 </testlist>
