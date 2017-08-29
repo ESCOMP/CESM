@@ -26,7 +26,7 @@
     <TREE_PATH>components/cice</TREE_PATH>
     <repo protocol="svn">
       <ROOT>https://svn-ccsm-models.cgd.ucar.edu/cice</ROOT>
-      <TAG>trunk_tags/cice5_20170627</TAG>
+      <TAG>trunk_tags/cice5_20170727</TAG>
     </repo>
   </source>
   <source name="DART">

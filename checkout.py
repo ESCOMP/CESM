@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+"""
+Tool to assemble respositories represented in a model-description file.
+
+If loaded as a module (e.g., in a component's buildcpp), it can be used
+to check the validity of existing subdirectories and load missing sources.
+"""
+
 import sys
 import os
 import os.path
@@ -11,26 +18,32 @@ import subprocess
 import urllib
 import argparse
 
-## Important paths
-thisFile = os.path.realpath(inspect.getfile(inspect.currentframe()))
-currDir = os.path.dirname(thisFile)
-
 ## Common regular expressions
-reNamespace  = re.compile("{[^}]*}")
-urlLine      = re.compile("^URL:")
-gitHash      = re.compile("\A([a-fA-F0-9]+)\Z")
-remoteBranch = re.compile("\s*origin/(\S+)")
+reNamespace    = re.compile("{[^}]*}")
+reUrlLine      = re.compile("^URL:")
+reGitHash      = re.compile("\A([a-fA-F0-9]+)\Z")
+reRemoteBranch = re.compile("\s*origin/(\S+)")
 
-##
-## Error output function (should be handed a string)
-##
+###############################################################################
 def perr(errstr):
+###############################################################################
+    """
+    Error output function
+    """
     print "{0}ERROR: {1}".format(os.linesep, errstr)
     exit(-1)
 
 ###
 ## Process execution helper functions -- don't really belong here
+###
+###############################################################################
 def checkOutput(commands):
+###############################################################################
+    """
+    Wrapper around subprocess.check_output to handle common exceptions.
+    check_output runs a command with arguments and returns its output.
+    On successful completion, checkOutput returns the command's output.
+    """
     try:
         outstr = subprocess.check_output(commands)
     except OSError as e:
@@ -45,26 +58,41 @@ def checkOutput(commands):
     return outstr
 
 
+###############################################################################
 def scall(commands):
+###############################################################################
+    """
+    Wrapper around subprocess.check_call to handle common exceptions.
+    check_call runs a command with arguments and waits for it to complete.
+    check_call raises an exception on a nonzero return code.
+    scall returns the return code of the command (zero) or -1 on error.
+    """
+    retcode = -1
     try:
         retcode = subprocess.check_call(commands)
     except OSError as e:
         print >>sys.stderr, "Execution of '{}' failed".format((' '.join(commands)))
         print >>sys.stderr,  e
-        retcode = -1
     except ValueError as e:
         print >>sys.stderr, "ValueError in '{}'".format((' '.join(commands)))
         print >>sys.stderr,  e
-        retcode = -1
     except subprocess.CalledProcessError as e:
         print >>sys.stderr, "CalledProcessError in '{}'".format((' '.join(commands)))
         print >>sys.stderr,  e
-        retcode = -1
 
     return retcode
 
 
+###############################################################################
 def retcall(commands):
+###############################################################################
+    """
+    Wrapper around subprocess.call to handle common exceptions.
+    call runs a command with arguments, waits for it to complete, and returns
+    the command's return code.
+    retcall sends all error output to /dev/null and is used when just the
+    return code is desired.
+    """
     FNULL = open(os.devnull, 'w')
     try:
         retcode = subprocess.call(commands, stdout=FNULL, stderr=subprocess.STDOUT)
@@ -78,15 +106,26 @@ def retcall(commands):
         print >>sys.stderr, "CalledProcessError in '%s'"%(' '.join(commands))
         print >>sys.stderr,  e
 
+    FNULL.close()
     return retcode
 
 
+###############################################################################
 def quitOnFail(retcode, caller):
+###############################################################################
+    """
+    Check a return code and exit if non-zero.
+    """
     if retcode != 0:
         print >>sys.stderr, "%s failed with return code %d"%(caller, retcode)
         exit(retcode)
 
+###############################################################################
 def stripNamespace(tag):
+###############################################################################
+    """
+    Remove a curly brace-encased namespace, if any.
+    """
     match = reNamespace.match(tag)
     if match is None:
         strippedTag =  tag
@@ -96,16 +135,28 @@ def stripNamespace(tag):
     return strippedTag
 
 
-## Enumerate git ref types
+###############################################################################
 class _gitRef():
-    unknown      = 0
-    localBranch  = 1
-    remoteBranch = 2
-    tag          = 3
-    sha1         = 4
+###############################################################################
+    """
+    Class to enumerate git ref types
+    """
+    unknown      = 'unknown'
+    localBranch  = 'localBranch'
+    remoteBranch = 'remoteBranch'
+    tag          = 'gitTag'
+    sha1         = 'gitSHA1'
 
+###############################################################################
 class _repo(object):
+###############################################################################
+    """
+    Class to represent and operate on a repository description.
+    """
     def __init__(self, repo):
+        """
+        Parse repo (a <repo> XML element).
+        """
         self._protocol = repo.get('protocol')
         self._tag = None
         self._branch = None
@@ -144,6 +195,12 @@ class _repo(object):
             perr("Unknown repo protocol, {}".format(self._protocol))
 
     def load(self, repo_dir):
+        """
+        If the repo destination directory exists, ensure it is correct (from
+        correct URL, correct branch or tag), and possibly update the source.
+        If the repo destination directory does not exist, checkout the correce
+        branch or tag.
+        """
         if self._protocol == 'svn':
             self.svnCheckout(repo_dir, self._URL)
         elif self._protocol == 'git':
@@ -153,12 +210,18 @@ class _repo(object):
 
 
     def svnCheckout(self, checkoutDir, repoURL):
+        """
+        Checkout a subversion repository (repoURL) to checkoutDir.
+        """
         caller = "svnCheckout %s %s"%(checkoutDir, repoURL)
         retcode = scall(["svn", "checkout", repoURL, checkoutDir])
         quitOnFail(retcode, caller)
 
 
     def svnUpdate(self, updir):
+        """
+        Refresh a subversion sandbox (updir)
+        """
         caller = "svnUpdate %s"%(updir)
         mycurrdir = os.path.abspath(".")
         os.chdir(updir)
@@ -167,16 +230,20 @@ class _repo(object):
         os.chdir(mycurrdir)
 
 
-    # Check to see if directory (chkdir) exists and is the correct version (ver)
-    # returns True (correct), False (incorrect) or None (chkdir not found)
     def svnCheckDir(self, chkdir, ver):
+        """
+        Check to see if directory (chkdir) exists and is the correct
+        version (ver).
+        Return True (correct), False (incorrect) or None (chkdir not found)
+
+        """
         caller = "svnCheckDir %s %s"%(chkdir, ver)
         if os.path.exists(chkdir):
             svnout = checkOutput(["svn", "info", chkdir])
             if svnout is not None:
                 url = None
                 for line in svnout.splitlines():
-                    if urlLine.match(line):
+                    if reUrlLine.match(line):
                         url = line.split(': ')[1]
                         break
                 retVal = (url == ver)
@@ -188,10 +255,13 @@ class _repo(object):
         return retVal
 
 
-    # Determine if 'ref' is a local branch, a remote branch, a tag, or a commit
-    # Should probably use this command instead
-    #git show-ref --verify --quiet refs/heads/<branch-name>
     def gitRefType(self, ref):
+        """
+        Determine if 'ref' is a local branch, a remote branch, a tag, or a
+        commit.
+        Should probably use this command instead:
+        git show-ref --verify --quiet refs/heads/<branch-name>
+        """
         caller = "gitRefType %s"%(ref)
         refType = _gitRef.unknown
         # First check for local branch
@@ -208,7 +278,7 @@ class _repo(object):
             gitout = checkOutput(["git", "branch", "-r"])
             if gitout is not None:
                 for branch in gitout.splitlines():
-                    match = remoteBranch.match(branch)
+                    match = reRemoteBranch.match(branch)
                     if (match is not None) and (match.group(1) == ref):
                         refType = _gitRef.remoteBranch
                         break
@@ -223,15 +293,17 @@ class _repo(object):
                         break
 
         # Finally, see if it just looks like a commit hash
-        if (refType == _gitRef.unknown) and gitHash.match(ref):
+        if (refType == _gitRef.unknown) and reGitHash.match(ref):
             refType = _gitRef.sha1
 
         # Return what we've come up with
         return refType
 
 
-    # Return the (current branch, sha1 hash) of working copy in wdir
     def gitCurrentBranch(self):
+        """
+        Return the (current branch, sha1 hash) of working copy in wdir
+        """
         caller = "gitCurrentBranch"
         branch = checkOutput(["git", "rev-parse", "--abbrev-ref", "HEAD"])
         hash = checkOutput(["git", "rev-parse", "HEAD"])
@@ -243,10 +315,12 @@ class _repo(object):
 
         return (branch, hash)
 
-
-    # Check to see if directory (chkdir) exists and is the correct version (ver)
-    # returns True (correct), False (incorrect) or None (chkdir not found)
     def gitCheckDir(self, chkdir, ref):
+        """
+        Check to see if directory (chkdir) exists and is the correct
+        treeish (ref)
+        Return True (correct), False (incorrect) or None (chkdir not found)
+        """
         caller = "gitCheckDir %s %s"%(chkdir, ref)
         refchk = None
         if os.path.exists(chkdir):
@@ -274,6 +348,9 @@ class _repo(object):
 
 
     def gitWdirClean(self, wdir):
+        """
+        Return True if wdir is clean or False if there are modifications
+        """
         caller = "getWdirClean %s"%(wdir)
         mycurrdir = os.path.abspath(".")
         os.chdir(wdir)
@@ -282,17 +359,46 @@ class _repo(object):
         return (retcode == 0)
 
 
+    def gitRemote(self, repoDir):
+        """
+        Return the remote for the current branch or tag
+        """
+        caller = "gitRemote %s"%(repoDir)
+        mycurrdir = os.path.abspath(".")
+        os.chdir(repoDir)
+        # Make sure we are on a remote-tracking branch
+        (curr_branch, chash) = self.gitCurrentBranch()
+        refType = self.gitRefType(curr_branch)
+        if refType == _gitRef.remoteBranch:
+            remote = checkOutput(["git", "config", "branch.{}.remote".format(cur_branch)])
+        else:
+            remote = None
+
+        os.chdir(mycurrdir)
+        return remote
+
+
     # Need to decide how to do this. Just doing pull for now
     def gitUpdate(self, repoDir):
+        """
+        Do an update and a FF merge if possible
+        """
         caller = "gitUpdate %s"%(repoDir)
         mycurrdir = os.path.abspath(".")
         os.chdir(repoDir)
-        retcode = scall(["git", "pull"])
+        remote = self.gitRemote(repoDir)
+        if remote is not None:
+            retcode = scall(["git", "remote", "update", "--prune", remote])
+            quitOnFail(retcode, caller)
+
+        retcode = scall(["git", "merge", "--ff-only", "@{u}"])
         os.chdir(mycurrdir)
         quitOnFail(retcode, caller)
 
-
     def gitCheckout(self, checkoutDir, repoURL, branch, tag):
+        """
+        Checkout 'branch' or 'tag' from 'repoURL'
+        """
         caller = "gitCheckout %s %s"%(checkoutDir, repoURL)
         retcode = 0
         mycurrdir = os.path.abspath(".")
@@ -306,7 +412,7 @@ class _repo(object):
                     chkURL = chkURL.rstrip()
 
                 if chkURL != repoURL:
-                    perr("Invalid repository in {0}, url = {0}, should be {1}".format(checkoutDir, chkURL, repoURL))
+                    perr("Invalid repository in {0}, url = {1}, should be {2}".format(checkoutDir, chkURL, repoURL))
 
         else:
             print "Calling git clone %s %s"%(repoURL, checkoutDir)
@@ -318,7 +424,7 @@ class _repo(object):
             (curr_branch, chash) = self.gitCurrentBranch()
             refType = self.gitRefType(branch)
             if refType == _gitRef.remoteBranch:
-                retcode = scall(["git", "checkout", "--track", "origin/"+ref])
+                retcode = scall(["git", "checkout", "--track", "origin/"+branch])
                 quitOnFail(retcode, caller)
             elif refType == _gitRef.localBranch:
                 if curr_branch != branch:
@@ -339,8 +445,16 @@ class _repo(object):
         os.chdir(mycurrdir)
 
 
+###############################################################################
 class _source(object):
+###############################################################################
+    """
+    _source represents a <source> object in a <config_sourcetree>
+    """
     def __init__(self, node):
+        """
+        Parse an XML node for a <source> tag
+        """
         self._name = node.get('name')
         self._repos = list()
         self._loaded = False
@@ -359,9 +473,19 @@ class _source(object):
 
 
     def get_name(self):
+        """
+        Return the source object's name
+        """
         return self._name
 
-    def load(self, tree_root):
+    def load(self, tree_root, all=False):
+        """
+        If the repo destination directory exists, ensure it is correct (from
+        correct URL, correct branch or tag), and possibly update the source.
+        If the repo destination directory does not exist, checkout the correce
+        branch or tag.
+        If all is True, also load all of the the sources sub-sources.
+        """
         # Make sure we are in correct location
         ###################################
         mycurrdir = os.path.abspath(".")
@@ -388,8 +512,16 @@ class _source(object):
 
 
 ## An object representing a source tree XML file
+###############################################################################
 class SourceTree(object):
+###############################################################################
+    """
+    SourceTree represents a <config_sourcetree> object
+    """
     def __init__(self, model_file, tree_root="."):
+        """
+        Parse a model file into a SourceTree object
+        """
         self._tree_root = os.path.abspath(tree_root)
 
         file = open(model_file)
@@ -408,6 +540,12 @@ class SourceTree(object):
                     self._required_compnames.append(req.text)
 
     def load(self, all=False, load_comp=None):
+        """
+        Checkout or update indicated components into the the configured subdirs.
+        If all is True, recursively checkout all sources.
+        If all is False, load_comp is an optional set of components to load.
+        If all is False and load_comp is None, only load the required sources.
+        """
         if all:
             load_comps = self._all_components.keys()
         elif load_comp is not None:
@@ -419,10 +557,17 @@ class SourceTree(object):
             print "Loading these components: {}".format(load_comps)
 
         for comp in load_comps:
-            self._all_components[comp].load(self._tree_root)
+            self._all_components[comp].load(self._tree_root, all)
 
 
+###############################################################################
 def _main_func(command, args_in):
+###############################################################################
+    """
+    Function to call when module is called from the command line.
+    Parse model file and load required repositories or all repositories if
+    the --all option is passed.
+    """
     help_str = \
 """
 {0} <MODEL.xml> [--all]
@@ -443,7 +588,9 @@ OR
     source_tree.load(args.all)
 
 
+###############################################################################
 ## Beginning of main program
+###############################################################################
 if __name__ == "__main__":
     _main_func(sys.argv[0], sys.argv[1:])
 ## End of main program
