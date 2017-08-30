@@ -127,8 +127,9 @@
   </test>
   <test name="ERS_Ld7" grid="f19_g17" compset="B1850" testmods="allactive/defaultio">
     <machines>
-      <machine name="bluewaters" compiler="pgi" category="prebeta"/>
-      <machine name="cheyenne" compiler="intel" category="prealpha"/>
+      <machine name="bluewaters" compiler="pgi"   category="prebeta"/>
+      <machine name="cheyenne"   compiler="intel" category="prealpha"/>
+      <machine name="hobart"     compiler="pgi"   category="prealpha"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30 </option>
@@ -204,9 +205,10 @@
       <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="PET" grid="f19_g17" compset="B1850" testmods="allactive/defaultio">
+  <test name="PET_PM" grid="f19_g17" compset="B1850" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="gnu" category="prealpha"/>
+      <machine name="cheyenne" compiler="intel" category="prealpha"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30 </option>
