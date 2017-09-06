@@ -12,11 +12,9 @@ import sys
 import os
 import os.path
 import errno
-import inspect
 import re
 import xml.etree.ElementTree as ET
 import subprocess
-import urllib
 import argparse
 
 # ---------------------------------------------------------------------
@@ -248,7 +246,6 @@ class _repo(object):
         Return True (correct), False (incorrect) or None (chkdir not found)
 
         """
-        caller = "svnCheckDir {0} {1}".format(chkdir, ver)
         if os.path.exists(chkdir):
             svnout = checkOutput(["svn", "info", chkdir])
             if svnout is not None:
@@ -272,7 +269,6 @@ class _repo(object):
         Should probably use this command instead:
         git show-ref --verify --quiet refs/heads/<branch-name>
         """
-        caller = "gitRefType {0}".format(ref)
         refType = _gitRef.unknown
         # First check for local branch
         gitout = checkOutput(["git", "branch"])
@@ -313,7 +309,6 @@ class _repo(object):
         """
         Return the (current branch, sha1 hash) of working copy in wdir
         """
-        caller = "gitCurrentBranch"
         branch = checkOutput(["git", "rev-parse", "--abbrev-ref", "HEAD"])
         hash = checkOutput(["git", "rev-parse", "HEAD"])
         if branch is not None:
@@ -330,7 +325,6 @@ class _repo(object):
         treeish (ref)
         Return True (correct), False (incorrect) or None (chkdir not found)
         """
-        caller = "gitCheckDir {0} {1}".format(chkdir, ref)
         refchk = None
         if os.path.exists(chkdir):
             if os.path.exists(os.path.join(chkdir, ".git")):
@@ -359,7 +353,6 @@ class _repo(object):
         """
         Return True if wdir is clean or False if there are modifications
         """
-        caller = "getWdirClean {0}".format(wdir)
         mycurrdir = os.path.abspath(".")
         os.chdir(wdir)
         retcode = retcall(["git", "diff", "--quiet", "--exit-code"])
@@ -370,7 +363,6 @@ class _repo(object):
         """
         Return the remote for the current branch or tag
         """
-        caller = "gitRemote {0}".format(repoDir)
         mycurrdir = os.path.abspath(".")
         os.chdir(repoDir)
         # Make sure we are on a remote-tracking branch
@@ -419,8 +411,9 @@ class _repo(object):
                     chkURL = chkURL.rstrip()
 
                 if chkURL != repoURL:
-                    perr("Invalid repository in {0}, url = {1}, should be {2}".format(
-                        checkoutDir, chkURL, repoURL))
+                    perr("Invalid repository in {0}, url = {1}, "
+                         "should be {2}".format(checkoutDir, chkURL,
+                                                repoURL))
 
         else:
             print("Calling git clone {0} {1}".format(repoURL, checkoutDir))
@@ -438,8 +431,8 @@ class _repo(object):
             elif refType == _gitRef.localBranch:
                 if curr_branch != branch:
                     if not self.gitWdirClean(checkoutDir):
-                        perr("Working directory ({0}) not clean, aborting".format(
-                            checkoutDir))
+                        perr("Working directory ({0}) not clean, "
+                             "aborting".format(checkoutDir))
                     else:
                         retcode = scall(["git", "checkout", ref])
                         quitOnFail(retcode, caller)
@@ -547,7 +540,9 @@ class SourceTree(object):
 
     def load(self, all=False, load_comp=None):
         """
-        Checkout or update indicated components into the the configured subdirs.
+        Checkout or update indicated components into the the configured
+        subdirs.
+
         If all is True, recursively checkout all sources.
         If all is False, load_comp is an optional set of components to load.
         If all is False and load_comp is None, only load the required sources.
@@ -587,7 +582,8 @@ OR
     parser.add_argument(
         "model", help="The model xml filename (e.g., CESM.xml).")
     parser.add_argument("--all",  action="store_true",
-                        help="Load all components in model file (default only loads required components)")
+                        help="Load all components in model file "
+                        "(default only loads required components)")
     args = parser.parse_args(args=args_in)
 
     if not os.path.exists(args.model):
