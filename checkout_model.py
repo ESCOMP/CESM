@@ -15,6 +15,7 @@ import errno
 import re
 import xml.etree.ElementTree as ET
 import subprocess
+import traceback
 import argparse
 
 # ---------------------------------------------------------------------
@@ -28,6 +29,37 @@ reNamespace = re.compile("{[^}]*}")
 reUrlLine = re.compile("^URL:")
 reGitHash = re.compile("\A([a-fA-F0-9]+)\Z")
 reRemoteBranch = re.compile("\s*origin/(\S+)")
+
+
+# ---------------------------------------------------------------------
+#
+# User input
+#
+# ---------------------------------------------------------------------
+def commandline_arguments():
+    """Process the command line arguments
+    """
+    description = """Tool to manage checking out CESM from revision control based on a
+model description file.
+
+By default only the required components of the model are checkout out.
+"""
+    parser = argparse.ArgumentParser(description=description)
+
+    parser.add_argument("--all", action="store_true", default=False,
+                        help="Load only all components in the model file "
+                        "(default loads all components)")
+
+    parser.add_argument('--backtrace', action='store_true',
+                        help='show exception backtraces as extra debugging '
+                        'output')
+
+    parser.add_argument("--model", nargs='?', default='CESM.xml',
+                        help="The model description xml filename. "
+                        "Default: %(default)s.")
+
+    arguments = parser.parse_args()
+    return arguments
 
 
 # ---------------------------------------------------------------------
@@ -569,29 +601,24 @@ class SourceTree(object):
 # main
 #
 # ---------------------------------------------------------------------
-def _main_func(command, args_in):
+def _main(arguments):
     """
     Function to call when module is called from the command line.
     Parse model file and load required repositories or all repositories if
     the --all option is passed.
     """
-    help_str = \
-        """
-{0} <MODEL.xml> [--all]
-OR
-{0} --help
-""".format(os.path.basename(command))
-    parser = argparse.ArgumentParser(usage=help_str)
-    parser.add_argument(
-        "model", help="The model xml filename (e.g., CESM.xml).")
-    parser.add_argument("--all",  action="store_true",
-                        help="Load all components in model file "
-                        "(default only loads required components)")
-    args = parser.parse_args(args=args_in)
 
-    source_tree = SourceTree(args.model)
-    source_tree.load(args.all)
+    source_tree = SourceTree(arguments.model)
+    source_tree.load(arguments.all)
 
 
 if __name__ == "__main__":
-    _main_func(sys.argv[0], sys.argv[1:])
+    arguments = commandline_arguments()
+    try:
+        status = _main(arguments)
+        sys.exit(status)
+    except Exception as error:
+        # print(str(error))
+        if arguments.backtrace:
+            traceback.print_exc()
+        sys.exit(1)
