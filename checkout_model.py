@@ -523,10 +523,13 @@ class SourceTree(object):
         """
         self._tree_root = os.path.abspath(tree_root)
 
-        file = open(model_file)
-        self._tree = ET.parse(file)
-        self._root = self._tree.getroot()
-        file.close()
+        if not os.path.exists(model_file):
+            raise RuntimeError("ERROR: Model file, '{0}', does not "
+                               "exist".format(model_file))
+
+        with open(model_file, 'r') as xml_file:
+            self._tree = ET.parse(xml_file)
+            self._root = self._tree.getroot()
 
         self._all_components = {}
         self._required_compnames = []
@@ -585,10 +588,6 @@ OR
                         help="Load all components in model file "
                         "(default only loads required components)")
     args = parser.parse_args(args=args_in)
-
-    if not os.path.exists(args.model):
-        print("ERROR: Model file, '{0}', does not exist".format(args.model))
-        sys.exit(1)
 
     source_tree = SourceTree(args.model)
     source_tree.load(args.all)
