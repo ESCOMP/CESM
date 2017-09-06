@@ -48,12 +48,12 @@ def checkOutput(commands):
     try:
         outstr = subprocess.check_output(commands)
     except OSError as e:
-        print("Execution of '{}' failed:".format((' '.join(commands)), e), file=sys.stderr)
+        print("Execution of '{0}' failed:".format((' '.join(commands)), e), file=sys.stderr)
     except ValueError as e:
-        print("ValueError in '{}':".format((' '.join(commands)), e), file=sys.stderr)
+        print("ValueError in '{0}':".format((' '.join(commands)), e), file=sys.stderr)
         outstr = None
     except subprocess.CalledProcessError as e:
-        print("CalledProcessError in '{}':".format((' '.join(commands)), e), file=sys.stderr)
+        print("CalledProcessError in '{0}':".format((' '.join(commands)), e), file=sys.stderr)
         outstr = None
 
     return outstr
@@ -72,13 +72,13 @@ def scall(commands):
     try:
         retcode = subprocess.check_call(commands)
     except OSError as e:
-        print("Execution of '{}' failed".format((' '.join(commands))), file=sys.stderr)
+        print("Execution of '{0}' failed".format((' '.join(commands))), file=sys.stderr)
         print(e, file=sys.stderr)
     except ValueError as e:
-        print("ValueError in '{}'".format((' '.join(commands))), file=sys.stderr)
+        print("ValueError in '{0}'".format((' '.join(commands))), file=sys.stderr)
         print(e, file=sys.stderr)
     except subprocess.CalledProcessError as e:
-        print("CalledProcessError in '{}'".format((' '.join(commands))), file=sys.stderr)
+        print("CalledProcessError in '{0}'".format((' '.join(commands))), file=sys.stderr)
         print(e, file=sys.stderr)
 
     return retcode
@@ -98,13 +98,13 @@ def retcall(commands):
     try:
         retcode = subprocess.call(commands, stdout=FNULL, stderr=subprocess.STDOUT)
     except OSError as e:
-        print("Execution of '%s' failed"%(' '.join(commands)), file=sys.stderr)
+        print("Execution of '{0}' failed".format(' '.join(commands)), file=sys.stderr)
         print(e, file=sys.stderr)
     except ValueError as e:
-        print("ValueError in '%s'"%(' '.join(commands)), file=sys.stderr)
+        print("ValueError in '{0}'".format(' '.join(commands)), file=sys.stderr)
         print(e, file=sys.stderr)
     except subprocess.CalledProcessError as e:
-        print("CalledProcessError in '%s'"%(' '.join(commands)), file=sys.stderr)
+        print("CalledProcessError in '{0}'".format(' '.join(commands)), file=sys.stderr)
         print(e, file=sys.stderr)
 
     FNULL.close()
@@ -118,7 +118,7 @@ def quitOnFail(retcode, caller):
     Check a return code and exit if non-zero.
     """
     if retcode != 0:
-        print("%s failed with return code %d"%(caller, retcode), file=sys.stderr)
+        print("{0} failed with return code {1}".format(caller, retcode), file=sys.stderr)
         exit(retcode)
 
 ###############################################################################
@@ -214,7 +214,7 @@ class _repo(object):
         """
         Checkout a subversion repository (repoURL) to checkoutDir.
         """
-        caller = "svnCheckout %s %s"%(checkoutDir, repoURL)
+        caller = "svnCheckout {0} {1}".format(checkoutDir, repoURL)
         retcode = scall(["svn", "checkout", repoURL, checkoutDir])
         quitOnFail(retcode, caller)
 
@@ -223,7 +223,7 @@ class _repo(object):
         """
         Refresh a subversion sandbox (updir)
         """
-        caller = "svnUpdate %s"%(updir)
+        caller = "svnUpdate {0}".format(updir)
         mycurrdir = os.path.abspath(".")
         os.chdir(updir)
         retcode = scall(["svn update"])
@@ -238,7 +238,7 @@ class _repo(object):
         Return True (correct), False (incorrect) or None (chkdir not found)
 
         """
-        caller = "svnCheckDir %s %s"%(chkdir, ver)
+        caller = "svnCheckDir {0} {1}".format(chkdir, ver)
         if os.path.exists(chkdir):
             svnout = checkOutput(["svn", "info", chkdir])
             if svnout is not None:
@@ -263,7 +263,7 @@ class _repo(object):
         Should probably use this command instead:
         git show-ref --verify --quiet refs/heads/<branch-name>
         """
-        caller = "gitRefType %s"%(ref)
+        caller = "gitRefType {0}".format(ref)
         refType = _gitRef.unknown
         # First check for local branch
         gitout = checkOutput(["git", "branch"])
@@ -322,7 +322,7 @@ class _repo(object):
         treeish (ref)
         Return True (correct), False (incorrect) or None (chkdir not found)
         """
-        caller = "gitCheckDir %s %s"%(chkdir, ref)
+        caller = "gitCheckDir {0} {1}".format(chkdir, ref)
         refchk = None
         if os.path.exists(chkdir):
             if os.path.exists(os.path.join(chkdir, ".git")):
@@ -352,7 +352,7 @@ class _repo(object):
         """
         Return True if wdir is clean or False if there are modifications
         """
-        caller = "getWdirClean %s"%(wdir)
+        caller = "getWdirClean {0}".format(wdir)
         mycurrdir = os.path.abspath(".")
         os.chdir(wdir)
         retcode = retcall(["git", "diff", "--quiet", "--exit-code"])
@@ -364,7 +364,7 @@ class _repo(object):
         """
         Return the remote for the current branch or tag
         """
-        caller = "gitRemote %s"%(repoDir)
+        caller = "gitRemote {0}".format(repoDir)
         mycurrdir = os.path.abspath(".")
         os.chdir(repoDir)
         # Make sure we are on a remote-tracking branch
@@ -384,7 +384,7 @@ class _repo(object):
         """
         Do an update and a FF merge if possible
         """
-        caller = "gitUpdate %s"%(repoDir)
+        caller = "gitUpdate {0}".format(repoDir)
         mycurrdir = os.path.abspath(".")
         os.chdir(repoDir)
         remote = self.gitRemote(repoDir)
@@ -400,7 +400,7 @@ class _repo(object):
         """
         Checkout 'branch' or 'tag' from 'repoURL'
         """
-        caller = "gitCheckout %s %s"%(checkoutDir, repoURL)
+        caller = "gitCheckout {0} {1}".format(checkoutDir, repoURL)
         retcode = 0
         mycurrdir = os.path.abspath(".")
         if os.path.exists(checkoutDir):
@@ -416,7 +416,7 @@ class _repo(object):
                     perr("Invalid repository in {0}, url = {1}, should be {2}".format(checkoutDir, chkURL, repoURL))
 
         else:
-            print("Calling git clone %s %s"%(repoURL, checkoutDir))
+            print("Calling git clone {0} {1}".format(repoURL, checkoutDir))
             retcode = scall(["git", "clone", repoURL, checkoutDir])
             quitOnFail(retcode, caller)
             os.chdir(checkoutDir)
@@ -555,7 +555,7 @@ class SourceTree(object):
             load_comps = self._required_compnames
 
         if load_comps is not None:
-            print("Loading these components: {}".format(load_comps))
+            print("Loading these components: {0}".format(load_comps))
 
         for comp in load_comps:
             self._all_components[comp].load(self._tree_root, all)
