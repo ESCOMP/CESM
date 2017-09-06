@@ -19,31 +19,33 @@ import subprocess
 import urllib
 import argparse
 
+# ---------------------------------------------------------------------
+#
+# Global variables
+#
+# ---------------------------------------------------------------------
+
 # Common regular expressions
 reNamespace = re.compile("{[^}]*}")
 reUrlLine = re.compile("^URL:")
 reGitHash = re.compile("\A([a-fA-F0-9]+)\Z")
 reRemoteBranch = re.compile("\s*origin/(\S+)")
 
-###############################################################################
 
-
+# ---------------------------------------------------------------------
+#
+# Utility functions
+#
+# ---------------------------------------------------------------------
 def perr(errstr):
-    ###############################################################################
     """
     Error output function
     """
     print("{0}ERROR: {1}".format(os.linesep, errstr))
     exit(-1)
 
-###
-# Process execution helper functions -- don't really belong here
-###
-###############################################################################
-
 
 def checkOutput(commands):
-    ###############################################################################
     """
     Wrapper around subprocess.check_output to handle common exceptions.
     check_output runs a command with arguments and returns its output.
@@ -66,9 +68,7 @@ def checkOutput(commands):
     return outstr
 
 
-###############################################################################
 def scall(commands):
-    ###############################################################################
     """
     Wrapper around subprocess.check_call to handle common exceptions.
     check_call runs a command with arguments and waits for it to complete.
@@ -94,9 +94,7 @@ def scall(commands):
     return retcode
 
 
-###############################################################################
 def retcall(commands):
-    ###############################################################################
     """
     Wrapper around subprocess.call to handle common exceptions.
     call runs a command with arguments, waits for it to complete, and returns
@@ -125,9 +123,7 @@ def retcall(commands):
     return retcode
 
 
-###############################################################################
 def quitOnFail(retcode, caller):
-    ###############################################################################
     """
     Check a return code and exit if non-zero.
     """
@@ -136,11 +132,8 @@ def quitOnFail(retcode, caller):
             caller, retcode), file=sys.stderr)
         exit(retcode)
 
-###############################################################################
-
 
 def stripNamespace(tag):
-    ###############################################################################
     """
     Remove a curly brace-encased namespace, if any.
     """
@@ -153,9 +146,12 @@ def stripNamespace(tag):
     return strippedTag
 
 
-###############################################################################
+# ---------------------------------------------------------------------
+#
+# Worker classes
+#
+# ---------------------------------------------------------------------
 class _gitRef(object):
-    ###############################################################################
     """
     Class to enumerate git ref types
     """
@@ -165,11 +161,8 @@ class _gitRef(object):
     tag = 'gitTag'
     sha1 = 'gitSHA1'
 
-###############################################################################
-
 
 class _repo(object):
-    ###############################################################################
     """
     Class to represent and operate on a repository description.
     """
@@ -462,9 +455,7 @@ class _repo(object):
         os.chdir(mycurrdir)
 
 
-###############################################################################
 class _source(object):
-    ###############################################################################
     """
     _source represents a <source> object in a <config_sourcetree>
     """
@@ -528,10 +519,7 @@ class _source(object):
         return repoLoaded
 
 
-# An object representing a source tree XML file
-###############################################################################
 class SourceTree(object):
-    ###############################################################################
     """
     SourceTree represents a <config_sourcetree> object
     """
@@ -578,9 +566,12 @@ class SourceTree(object):
             self._all_components[comp].load(self._tree_root, all)
 
 
-###############################################################################
+# ---------------------------------------------------------------------
+#
+# main
+#
+# ---------------------------------------------------------------------
 def _main_func(command, args_in):
-    ###############################################################################
     """
     Function to call when module is called from the command line.
     Parse model file and load required repositories or all repositories if
@@ -607,9 +598,5 @@ OR
     source_tree.load(args.all)
 
 
-###############################################################################
-# Beginning of main program
-###############################################################################
 if __name__ == "__main__":
     _main_func(sys.argv[0], sys.argv[1:])
-# End of main program
