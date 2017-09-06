@@ -6,6 +6,7 @@ Tool to assemble respositories represented in a model-description file.
 If loaded as a module (e.g., in a component's buildcpp), it can be used
 to check the validity of existing subdirectories and load missing sources.
 """
+from __future__ import print_function
 
 import sys
 import os
@@ -30,7 +31,7 @@ def perr(errstr):
     """
     Error output function
     """
-    print "{0}ERROR: {1}".format(os.linesep, errstr)
+    print("{0}ERROR: {1}".format(os.linesep, errstr))
     exit(-1)
 
 ###
@@ -47,12 +48,12 @@ def checkOutput(commands):
     try:
         outstr = subprocess.check_output(commands)
     except OSError as e:
-        print >>sys.stderr, "Execution of '{}' failed:".format((' '.join(commands)), e)
+        print("Execution of '{}' failed:".format((' '.join(commands)), e), file=sys.stderr)
     except ValueError as e:
-        print >>sys.stderr, "ValueError in '{}':".format((' '.join(commands)), e)
+        print("ValueError in '{}':".format((' '.join(commands)), e), file=sys.stderr)
         outstr = None
     except subprocess.CalledProcessError as e:
-        print >>sys.stderr, "CalledProcessError in '{}':".format((' '.join(commands)), e)
+        print("CalledProcessError in '{}':".format((' '.join(commands)), e), file=sys.stderr)
         outstr = None
 
     return outstr
@@ -71,14 +72,14 @@ def scall(commands):
     try:
         retcode = subprocess.check_call(commands)
     except OSError as e:
-        print >>sys.stderr, "Execution of '{}' failed".format((' '.join(commands)))
-        print >>sys.stderr,  e
+        print("Execution of '{}' failed".format((' '.join(commands))), file=sys.stderr)
+        print(e, file=sys.stderr)
     except ValueError as e:
-        print >>sys.stderr, "ValueError in '{}'".format((' '.join(commands)))
-        print >>sys.stderr,  e
+        print("ValueError in '{}'".format((' '.join(commands))), file=sys.stderr)
+        print(e, file=sys.stderr)
     except subprocess.CalledProcessError as e:
-        print >>sys.stderr, "CalledProcessError in '{}'".format((' '.join(commands)))
-        print >>sys.stderr,  e
+        print("CalledProcessError in '{}'".format((' '.join(commands))), file=sys.stderr)
+        print(e, file=sys.stderr)
 
     return retcode
 
@@ -97,14 +98,14 @@ def retcall(commands):
     try:
         retcode = subprocess.call(commands, stdout=FNULL, stderr=subprocess.STDOUT)
     except OSError as e:
-        print >>sys.stderr, "Execution of '%s' failed"%(' '.join(commands))
-        print >>sys.stderr,  e
+        print("Execution of '%s' failed"%(' '.join(commands)), file=sys.stderr)
+        print(e, file=sys.stderr)
     except ValueError as e:
-        print >>sys.stderr, "ValueError in '%s'"%(' '.join(commands))
-        print >>sys.stderr,  e
+        print("ValueError in '%s'"%(' '.join(commands)), file=sys.stderr)
+        print(e, file=sys.stderr)
     except subprocess.CalledProcessError as e:
-        print >>sys.stderr, "CalledProcessError in '%s'"%(' '.join(commands))
-        print >>sys.stderr,  e
+        print("CalledProcessError in '%s'"%(' '.join(commands)), file=sys.stderr)
+        print(e, file=sys.stderr)
 
     FNULL.close()
     return retcode
@@ -117,7 +118,7 @@ def quitOnFail(retcode, caller):
     Check a return code and exit if non-zero.
     """
     if retcode != 0:
-        print >>sys.stderr, "%s failed with return code %d"%(caller, retcode)
+        print("%s failed with return code %d"%(caller, retcode), file=sys.stderr)
         exit(retcode)
 
 ###############################################################################
@@ -415,7 +416,7 @@ class _repo(object):
                     perr("Invalid repository in {0}, url = {1}, should be {2}".format(checkoutDir, chkURL, repoURL))
 
         else:
-            print "Calling git clone %s %s"%(repoURL, checkoutDir)
+            print("Calling git clone %s %s"%(repoURL, checkoutDir))
             retcode = scall(["git", "clone", repoURL, checkoutDir])
             quitOnFail(retcode, caller)
             os.chdir(checkoutDir)
@@ -554,7 +555,7 @@ class SourceTree(object):
             load_comps = self._required_compnames
 
         if load_comps is not None:
-            print "Loading these components: {}".format(load_comps)
+            print("Loading these components: {}".format(load_comps))
 
         for comp in load_comps:
             self._all_components[comp].load(self._tree_root, all)
@@ -581,7 +582,7 @@ OR
     args = parser.parse_args(args=args_in)
 
     if not os.path.exists(args.model):
-        print "ERROR: Model file, '{0}', does not exist".format(args.model)
+        print("ERROR: Model file, '{0}', does not exist".format(args.model))
         sys.exit(1)
 
     source_tree = SourceTree(args.model)
