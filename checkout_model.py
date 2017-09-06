@@ -8,15 +8,24 @@ to check the validity of existing subdirectories and load missing sources.
 """
 from __future__ import print_function
 
-import sys
+import argparse
+import errno
 import os
 import os.path
-import errno
 import re
-import xml.etree.ElementTree as ET
 import subprocess
+import sys
 import traceback
-import argparse
+import xml.etree.ElementTree as ET
+
+if sys.hexversion < 0x02070000:
+    print(70 * "*")
+    print("ERROR: {0} requires python >= 2.7.x. ".format(sys.argv[0]))
+    print("It appears that you are running python {0}".format(
+        ".".join(str(x) for x in sys.version_info[0:3])))
+    print(70 * "*")
+    sys.exit(1)
+
 
 # ---------------------------------------------------------------------
 #
