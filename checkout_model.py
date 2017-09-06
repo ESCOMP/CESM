@@ -19,15 +19,17 @@ import subprocess
 import urllib
 import argparse
 
-## Common regular expressions
-reNamespace    = re.compile("{[^}]*}")
-reUrlLine      = re.compile("^URL:")
-reGitHash      = re.compile("\A([a-fA-F0-9]+)\Z")
+# Common regular expressions
+reNamespace = re.compile("{[^}]*}")
+reUrlLine = re.compile("^URL:")
+reGitHash = re.compile("\A([a-fA-F0-9]+)\Z")
 reRemoteBranch = re.compile("\s*origin/(\S+)")
 
 ###############################################################################
+
+
 def perr(errstr):
-###############################################################################
+    ###############################################################################
     """
     Error output function
     """
@@ -35,11 +37,13 @@ def perr(errstr):
     exit(-1)
 
 ###
-## Process execution helper functions -- don't really belong here
+# Process execution helper functions -- don't really belong here
 ###
 ###############################################################################
+
+
 def checkOutput(commands):
-###############################################################################
+    ###############################################################################
     """
     Wrapper around subprocess.check_output to handle common exceptions.
     check_output runs a command with arguments and returns its output.
@@ -48,12 +52,15 @@ def checkOutput(commands):
     try:
         outstr = subprocess.check_output(commands)
     except OSError as e:
-        print("Execution of '{0}' failed:".format((' '.join(commands)), e), file=sys.stderr)
+        print("Execution of '{0}' failed:".format(
+            (' '.join(commands)), e), file=sys.stderr)
     except ValueError as e:
-        print("ValueError in '{0}':".format((' '.join(commands)), e), file=sys.stderr)
+        print("ValueError in '{0}':".format(
+            (' '.join(commands)), e), file=sys.stderr)
         outstr = None
     except subprocess.CalledProcessError as e:
-        print("CalledProcessError in '{0}':".format((' '.join(commands)), e), file=sys.stderr)
+        print("CalledProcessError in '{0}':".format(
+            (' '.join(commands)), e), file=sys.stderr)
         outstr = None
 
     return outstr
@@ -61,7 +68,7 @@ def checkOutput(commands):
 
 ###############################################################################
 def scall(commands):
-###############################################################################
+    ###############################################################################
     """
     Wrapper around subprocess.check_call to handle common exceptions.
     check_call runs a command with arguments and waits for it to complete.
@@ -72,13 +79,16 @@ def scall(commands):
     try:
         retcode = subprocess.check_call(commands)
     except OSError as e:
-        print("Execution of '{0}' failed".format((' '.join(commands))), file=sys.stderr)
+        print("Execution of '{0}' failed".format(
+            (' '.join(commands))), file=sys.stderr)
         print(e, file=sys.stderr)
     except ValueError as e:
-        print("ValueError in '{0}'".format((' '.join(commands))), file=sys.stderr)
+        print("ValueError in '{0}'".format(
+            (' '.join(commands))), file=sys.stderr)
         print(e, file=sys.stderr)
     except subprocess.CalledProcessError as e:
-        print("CalledProcessError in '{0}'".format((' '.join(commands))), file=sys.stderr)
+        print("CalledProcessError in '{0}'".format(
+            (' '.join(commands))), file=sys.stderr)
         print(e, file=sys.stderr)
 
     return retcode
@@ -86,7 +96,7 @@ def scall(commands):
 
 ###############################################################################
 def retcall(commands):
-###############################################################################
+    ###############################################################################
     """
     Wrapper around subprocess.call to handle common exceptions.
     call runs a command with arguments, waits for it to complete, and returns
@@ -96,15 +106,19 @@ def retcall(commands):
     """
     FNULL = open(os.devnull, 'w')
     try:
-        retcode = subprocess.call(commands, stdout=FNULL, stderr=subprocess.STDOUT)
+        retcode = subprocess.call(
+            commands, stdout=FNULL, stderr=subprocess.STDOUT)
     except OSError as e:
-        print("Execution of '{0}' failed".format(' '.join(commands)), file=sys.stderr)
+        print("Execution of '{0}' failed".format(
+            ' '.join(commands)), file=sys.stderr)
         print(e, file=sys.stderr)
     except ValueError as e:
-        print("ValueError in '{0}'".format(' '.join(commands)), file=sys.stderr)
+        print("ValueError in '{0}'".format(
+            ' '.join(commands)), file=sys.stderr)
         print(e, file=sys.stderr)
     except subprocess.CalledProcessError as e:
-        print("CalledProcessError in '{0}'".format(' '.join(commands)), file=sys.stderr)
+        print("CalledProcessError in '{0}'".format(
+            ' '.join(commands)), file=sys.stderr)
         print(e, file=sys.stderr)
 
     FNULL.close()
@@ -113,23 +127,26 @@ def retcall(commands):
 
 ###############################################################################
 def quitOnFail(retcode, caller):
-###############################################################################
+    ###############################################################################
     """
     Check a return code and exit if non-zero.
     """
     if retcode != 0:
-        print("{0} failed with return code {1}".format(caller, retcode), file=sys.stderr)
+        print("{0} failed with return code {1}".format(
+            caller, retcode), file=sys.stderr)
         exit(retcode)
 
 ###############################################################################
+
+
 def stripNamespace(tag):
-###############################################################################
+    ###############################################################################
     """
     Remove a curly brace-encased namespace, if any.
     """
     match = reNamespace.match(tag)
     if match is None:
-        strippedTag =  tag
+        strippedTag = tag
     else:
         strippedTag = tag[len(match.group(0)):]
 
@@ -138,22 +155,25 @@ def stripNamespace(tag):
 
 ###############################################################################
 class _gitRef(object):
-###############################################################################
+    ###############################################################################
     """
     Class to enumerate git ref types
     """
-    unknown      = 'unknown'
-    localBranch  = 'localBranch'
+    unknown = 'unknown'
+    localBranch = 'localBranch'
     remoteBranch = 'remoteBranch'
-    tag          = 'gitTag'
-    sha1         = 'gitSHA1'
+    tag = 'gitTag'
+    sha1 = 'gitSHA1'
 
 ###############################################################################
+
+
 class _repo(object):
-###############################################################################
+    ###############################################################################
     """
     Class to represent and operate on a repository description.
     """
+
     def __init__(self, repo):
         """
         Parse repo (a <repo> XML element).
@@ -165,7 +185,7 @@ class _repo(object):
         for element in repo:
             ctag = stripNamespace(element.tag)
             if ctag == 'ROOT':
-                self._URL  = element.text
+                self._URL = element.text
             elif ctag == 'TAG':
                 self._tag = element.text
             elif ctag == 'BRANCH':
@@ -209,7 +229,6 @@ class _repo(object):
 
         return True
 
-
     def svnCheckout(self, checkoutDir, repoURL):
         """
         Checkout a subversion repository (repoURL) to checkoutDir.
@@ -217,7 +236,6 @@ class _repo(object):
         caller = "svnCheckout {0} {1}".format(checkoutDir, repoURL)
         retcode = scall(["svn", "checkout", repoURL, checkoutDir])
         quitOnFail(retcode, caller)
-
 
     def svnUpdate(self, updir):
         """
@@ -229,7 +247,6 @@ class _repo(object):
         retcode = scall(["svn update"])
         quitOnFail(retcode, caller)
         os.chdir(mycurrdir)
-
 
     def svnCheckDir(self, chkdir, ver):
         """
@@ -255,7 +272,6 @@ class _repo(object):
 
         return retVal
 
-
     def gitRefType(self, ref):
         """
         Determine if 'ref' is a local branch, a remote branch, a tag, or a
@@ -268,7 +284,7 @@ class _repo(object):
         # First check for local branch
         gitout = checkOutput(["git", "branch"])
         if gitout is not None:
-            branches = [ x.lstrip('* ') for x in gitout.splitlines() ]
+            branches = [x.lstrip('* ') for x in gitout.splitlines()]
             for branch in branches:
                 if branch == ref:
                     refType = _gitRef.localBranch
@@ -299,7 +315,6 @@ class _repo(object):
 
         # Return what we've come up with
         return refType
-
 
     def gitCurrentBranch(self):
         """
@@ -347,7 +362,6 @@ class _repo(object):
         os.chdir(mycurrdir)
         return retVal
 
-
     def gitWdirClean(self, wdir):
         """
         Return True if wdir is clean or False if there are modifications
@@ -358,7 +372,6 @@ class _repo(object):
         retcode = retcall(["git", "diff", "--quiet", "--exit-code"])
         os.chdir(mycurrdir)
         return (retcode == 0)
-
 
     def gitRemote(self, repoDir):
         """
@@ -371,13 +384,13 @@ class _repo(object):
         (curr_branch, chash) = self.gitCurrentBranch()
         refType = self.gitRefType(curr_branch)
         if refType == _gitRef.remoteBranch:
-            remote = checkOutput(["git", "config", "branch.{}.remote".format(cur_branch)])
+            remote = checkOutput(
+                ["git", "config", "branch.{}.remote".format(cur_branch)])
         else:
             remote = None
 
         os.chdir(mycurrdir)
         return remote
-
 
     # Need to decide how to do this. Just doing pull for now
     def gitUpdate(self, repoDir):
@@ -413,7 +426,8 @@ class _repo(object):
                     chkURL = chkURL.rstrip()
 
                 if chkURL != repoURL:
-                    perr("Invalid repository in {0}, url = {1}, should be {2}".format(checkoutDir, chkURL, repoURL))
+                    perr("Invalid repository in {0}, url = {1}, should be {2}".format(
+                        checkoutDir, chkURL, repoURL))
 
         else:
             print("Calling git clone {0} {1}".format(repoURL, checkoutDir))
@@ -425,12 +439,14 @@ class _repo(object):
             (curr_branch, chash) = self.gitCurrentBranch()
             refType = self.gitRefType(branch)
             if refType == _gitRef.remoteBranch:
-                retcode = scall(["git", "checkout", "--track", "origin/"+branch])
+                retcode = scall(
+                    ["git", "checkout", "--track", "origin/" + branch])
                 quitOnFail(retcode, caller)
             elif refType == _gitRef.localBranch:
                 if curr_branch != branch:
                     if not self.gitWdirClean(checkoutDir):
-                        perr("Working directory ({0}) not clean, aborting".format(checkoutDir))
+                        perr("Working directory ({0}) not clean, aborting".format(
+                            checkoutDir))
                     else:
                         retcode = scall(["git", "checkout", ref])
                         quitOnFail(retcode, caller)
@@ -448,10 +464,11 @@ class _repo(object):
 
 ###############################################################################
 class _source(object):
-###############################################################################
+    ###############################################################################
     """
     _source represents a <source> object in a <config_sourcetree>
     """
+
     def __init__(self, node):
         """
         Parse an XML node for a <source> tag
@@ -471,7 +488,6 @@ class _source(object):
                 perr("Unknown source element type, {}".format(child.tag))
         if len(self._repos) == 0:
             perr("No repo element for source {}".format(name))
-
 
     def get_name(self):
         """
@@ -512,13 +528,14 @@ class _source(object):
         return repoLoaded
 
 
-## An object representing a source tree XML file
+# An object representing a source tree XML file
 ###############################################################################
 class SourceTree(object):
-###############################################################################
+    ###############################################################################
     """
     SourceTree represents a <config_sourcetree> object
     """
+
     def __init__(self, model_file, tree_root="."):
         """
         Parse a model file into a SourceTree object
@@ -550,7 +567,7 @@ class SourceTree(object):
         if all:
             load_comps = self._all_components.keys()
         elif load_comp is not None:
-            load_comps = [ load_comp ]
+            load_comps = [load_comp]
         else:
             load_comps = self._required_compnames
 
@@ -563,20 +580,21 @@ class SourceTree(object):
 
 ###############################################################################
 def _main_func(command, args_in):
-###############################################################################
+    ###############################################################################
     """
     Function to call when module is called from the command line.
     Parse model file and load required repositories or all repositories if
     the --all option is passed.
     """
     help_str = \
-"""
+        """
 {0} <MODEL.xml> [--all]
 OR
 {0} --help
 """.format(os.path.basename(command))
     parser = argparse.ArgumentParser(usage=help_str)
-    parser.add_argument("model", help="The model xml filename (e.g., CESM.xml).")
+    parser.add_argument(
+        "model", help="The model xml filename (e.g., CESM.xml).")
     parser.add_argument("--all",  action="store_true",
                         help="Load all components in model file (default only loads required components)")
     args = parser.parse_args(args=args_in)
@@ -590,8 +608,8 @@ OR
 
 
 ###############################################################################
-## Beginning of main program
+# Beginning of main program
 ###############################################################################
 if __name__ == "__main__":
     _main_func(sys.argv[0], sys.argv[1:])
-## End of main program
+# End of main program
