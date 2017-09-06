@@ -370,7 +370,7 @@ class _repo(object):
         refType = self.gitRefType(curr_branch)
         if refType == _gitRef.remoteBranch:
             remote = checkOutput(
-                ["git", "config", "branch.{}.remote".format(cur_branch)])
+                ["git", "config", "branch.{}.remote".format(curr_branch)])
         else:
             remote = None
 
@@ -434,7 +434,7 @@ class _repo(object):
                         perr("Working directory ({0}) not clean, "
                              "aborting".format(checkoutDir))
                     else:
-                        retcode = scall(["git", "checkout", ref])
+                        retcode = scall(["git", "checkout", branch])
                         quitOnFail(retcode, caller)
 
             else:
@@ -471,7 +471,7 @@ class _source(object):
             else:
                 perr("Unknown source element type, {}".format(child.tag))
         if len(self._repos) == 0:
-            perr("No repo element for source {}".format(name))
+            perr("No repo element for source {0}".format(self._name))
 
     def get_name(self):
         """
