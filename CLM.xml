@@ -8,6 +8,13 @@
       <TAG>cime5.3.0-alpha.29</TAG>
     </repo>
   </source>
+  <source name="CIME_CONFIG">
+    <TREE_PATH>cime_config</TREE_PATH>
+    <repo protocol="git">
+      <ROOT>https://github.com/CESM-Development/cime_config.git</ROOT>
+      <TAG>cime_config0.0.1.alpha.14</TAG>
+    </repo>
+  </source>
   <source name="CAM">
     <TREE_PATH>components/cam</TREE_PATH>
     <repo protocol="svn">

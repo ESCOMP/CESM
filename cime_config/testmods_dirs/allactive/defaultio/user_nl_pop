@@ -1,6 +1,0 @@
-& tavg_nml
-    ltavg_ignore_extra_streams = .true.
-    n_tavg_streams = 1
-    tavg_freq_opt = 'nday'
-    tavg_file_freq_opt = 'nday'
-/
