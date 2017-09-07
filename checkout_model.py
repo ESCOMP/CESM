@@ -183,24 +183,27 @@ def strip_namespace(tag):
 # Worker classes
 #
 # ---------------------------------------------------------------------
-class _gitRef(object):
+def create_repository(repo_info):
+    """Determine what type of repository we have, i.e. git or svn, and
+    create the appropriate object.
+
     """
-    Class to enumerate git ref types
-    """
-    unknown = 'unknown'
-    localBranch = 'localBranch'
-    remoteBranch = 'remoteBranch'
-    tag = 'gitTag'
-    sha1 = 'gitSHA1'
+    protocol = repo_info.get('protocol')
+    if protocol == 'git':
+        repo = _GitRepository(repo_info)
+    elif protocol == 'svn':
+        repo = _SvnRepository(repo_info)
+    elif protocol is None:
+        perr("repo must have a protocol")
+    else:
+        perr("Unknown repo protocol, {0}".format(protocol))
+    return repo
 
 
 class _Repository(object):
     """
     Class to represent and operate on a repository description.
     """
-    RE_URLLINE = re.compile(r"^URL:")
-    RE_GITHASH = re.compile(r"\A([a-fA-F0-9]+)\Z")
-    RE_REMOTEBRANCH = re.compile(r"\s*origin/(\S+)")
 
     def __init__(self, repo):
         """
@@ -230,18 +233,34 @@ class _Repository(object):
         if self._tag is not None and self._branch is not None:
             perr("repo cannot have both a BRANCH and a TAG element")
 
-        if self._protocol is None:
-            perr("repo must have a protocol")
-        elif self._protocol == 'svn':
-            if self._branch is not None:
-                self._url = os.path.join(self._url, self._branch)
-            else:
-                self._url = os.path.join(self._url, self._tag)
-
-        elif self._protocol == 'git':
+    def load(self, repo_dir):
+        """
+        If the repo destination directory exists, ensure it is correct (from
+        correct URL, correct branch or tag), and possibly update the source.
+        If the repo destination directory does not exist, checkout the correce
+        branch or tag.
+        """
+        if repo_dir or self._protocol:
             pass
+        raise RuntimeError("DEV_ERROR: this method must be implemented in all "
+                           "child classes!")
+
+
+class _SvnRepository(_Repository):
+    """
+    Class to represent and operate on a repository description.
+    """
+    RE_URLLINE = re.compile(r"^URL:")
+
+    def __init__(self, repo):
+        """
+        Parse repo (a <repo> XML element).
+        """
+        _Repository.__init__(self, repo)
+        if self._branch is not None:
+            self._url = os.path.join(self._url, self._branch)
         else:
-            perr("Unknown repo protocol, {0}".format(self._protocol))
+            self._url = os.path.join(self._url, self._tag)
 
     def load(self, repo_dir):
         """
@@ -250,19 +269,16 @@ class _Repository(object):
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
         """
-        if self._protocol == 'svn':
-            self._svn_checkout(repo_dir, self._url)
-        elif self._protocol == 'git':
-            self._git_checkout(repo_dir, self._url, self._branch, self._tag)
+        self._svn_checkout(repo_dir)
 
         return True
 
-    def _svn_checkout(self, checkout_dir, repo_url):
+    def _svn_checkout(self, checkout_dir):
         """
         Checkout a subversion repository (repo_url) to checkout_dir.
         """
-        caller = "svn_checkout {0} {1}".format(checkout_dir, repo_url)
-        retcode = scall(["svn", "checkout", repo_url, checkout_dir])
+        caller = "svn_checkout {0} {1}".format(checkout_dir, self._url)
+        retcode = scall(["svn", "checkout", self._url, checkout_dir])
         quit_on_fail(retcode, caller)
 
     def _svn_update(self, updir):
@@ -288,7 +304,7 @@ class _Repository(object):
             if svnout is not None:
                 url = None
                 for line in svnout.splitlines():
-                    if _Repository.RE_URLLINE.match(line):
+                    if _SvnRepository.RE_URLLINE.match(line):
                         url = line.split(': ')[1]
                         break
                 status = (url == ver)
@@ -299,6 +315,38 @@ class _Repository(object):
 
         return status
 
+
+class _GitRepository(_Repository):
+    """
+    Class to represent and operate on a repository description.
+    """
+
+    GIT_REF_UNKNOWN = 'unknown'
+    GIT_REF_LOCAL_BRANCH = 'localBranch'
+    GIT_REF_REMOTE_BRANCH = 'remoteBranch'
+    GIT_REF_TAG = 'gitTag'
+    GIT_REF_SHA1 = 'gitSHA1'
+
+    RE_GITHASH = re.compile(r"\A([a-fA-F0-9]+)\Z")
+    RE_REMOTEBRANCH = re.compile(r"\s*origin/(\S+)")
+
+    def __init__(self, repo):
+        """
+        Parse repo (a <repo> XML element).
+        """
+        _Repository.__init__(self, repo)
+
+    def load(self, repo_dir):
+        """
+        If the repo destination directory exists, ensure it is correct (from
+        correct URL, correct branch or tag), and possibly update the source.
+        If the repo destination directory does not exist, checkout the correce
+        branch or tag.
+        """
+        self._git_checkout(repo_dir)
+
+        return True
+
     def _git_ref_type(self, ref):
         """
         Determine if 'ref' is a local branch, a remote branch, a tag, or a
@@ -306,38 +354,39 @@ class _Repository(object):
         Should probably use this command instead:
         git show-ref --verify --quiet refs/heads/<branch-name>
         """
-        ref_type = _gitRef.unknown
+        ref_type = self.GIT_REF_UNKNOWN
         # First check for local branch
         gitout = check_output(["git", "branch"])
         if gitout is not None:
             branches = [x.lstrip('* ') for x in gitout.splitlines()]
             for branch in branches:
                 if branch == ref:
-                    ref_type = _gitRef.localBranch
+                    ref_type = self.GIT_REF_LOCAL_BRANCH
                     break
 
         # Next, check for remote branch
-        if ref_type == _gitRef.unknown:
+        if ref_type == self.GIT_REF_UNKNOWN:
             gitout = check_output(["git", "branch", "-r"])
             if gitout is not None:
                 for branch in gitout.splitlines():
-                    match = _Repository.RE_REMOTEBRANCH.match(branch)
+                    match = _GitRepository.RE_REMOTEBRANCH.match(branch)
                     if (match is not None) and (match.group(1) == ref):
-                        ref_type = _gitRef.remoteBranch
+                        ref_type = self.GIT_REF_REMOTE_BRANCH
                         break
 
         # Next, check for a tag
-        if ref_type == _gitRef.unknown:
+        if ref_type == self.GIT_REF_UNKNOWN:
             gitout = check_output(["git", "tag"])
             if gitout is not None:
                 for tag in gitout.splitlines():
                     if tag == ref:
-                        ref_type = _gitRef.tag
+                        ref_type = self.GIT_REF_TAG
                         break
 
         # Finally, see if it just looks like a commit hash
-        if (ref_type == _gitRef.unknown) and _Repository.RE_GITHASH.match(ref):
-            ref_type = _gitRef.sha1
+        if ((ref_type == self.GIT_REF_UNKNOWN) and
+                _GitRepository.RE_GITHASH.match(ref)):
+            ref_type = self.GIT_REF_SHA1
 
         # Return what we've come up with
         return ref_type
@@ -405,7 +454,7 @@ class _Repository(object):
         # Make sure we are on a remote-tracking branch
         (curr_branch, _) = self._git_current_branch()
         ref_type = self._git_ref_type(curr_branch)
-        if ref_type == _gitRef.remoteBranch:
+        if ref_type == self.GIT_REF_REMOTE_BRANCH:
             remote = check_output(
                 ["git", "config", "branch.{0}.remote".format(curr_branch)])
         else:
@@ -431,11 +480,11 @@ class _Repository(object):
         os.chdir(mycurrdir)
         quit_on_fail(retcode, caller)
 
-    def _git_checkout(self, checkout_dir, repo_url, branch, tag):
+    def _git_checkout(self, checkout_dir):
         """
         Checkout 'branch' or 'tag' from 'repo_url'
         """
-        caller = "_git_checkout {0} {1}".format(checkout_dir, repo_url)
+        caller = "_git_checkout {0} {1}".format(checkout_dir, self._url)
         retcode = 0
         mycurrdir = os.path.abspath(".")
         if os.path.exists(checkout_dir):
@@ -443,43 +492,47 @@ class _Repository(object):
             if self._git_check_dir(checkout_dir, None):
                 os.chdir(checkout_dir)
                 # We have a git repo, is it from the correct URL?
-                check_url = check_output(["git", "config", "remote.origin.url"])
+                cmd = ["git", "config", "remote.origin.url"]
+                check_url = check_output(cmd)
                 if check_url is not None:
                     check_url = check_url.rstrip()
 
-                if check_url != repo_url:
+                if check_url != self._url:
                     perr("Invalid repository in {0}, url = {1}, "
                          "should be {2}".format(checkout_dir, check_url,
-                                                repo_url))
+                                                self._url))
+                # FIXME(bja, 2017-09) we are updating an existing
+                # clone. Need to do a fetch here to ensure that the
+                # branch or tag checkout will work
 
         else:
-            print("Calling git clone {0} {1}".format(repo_url, checkout_dir))
-            retcode = scall(["git", "clone", repo_url, checkout_dir])
+            print("Calling git clone {0} {1}".format(self._url, checkout_dir))
+            retcode = scall(["git", "clone", self._url, checkout_dir])
             quit_on_fail(retcode, caller)
             os.chdir(checkout_dir)
 
-        if branch is not None:
+        if self._branch is not None:
             (curr_branch, _) = self._git_current_branch()
-            ref_type = self._git_ref_type(branch)
-            if ref_type == _gitRef.remoteBranch:
+            ref_type = self._git_ref_type(self._branch)
+            if ref_type == self.GIT_REF_REMOTE_BRANCH:
                 retcode = scall(
-                    ["git", "checkout", "--track", "origin/" + branch])
+                    ["git", "checkout", "--track", "origin/" + self._branch])
                 quit_on_fail(retcode, caller)
-            elif ref_type == _gitRef.localBranch:
-                if curr_branch != branch:
+            elif ref_type == self.GIT_REF_LOCAL_BRANCH:
+                if curr_branch != self._branch:
                     if not self._git_working_dir_clean(checkout_dir):
                         perr("Working directory ({0}) not clean, "
                              "aborting".format(checkout_dir))
                     else:
-                        retcode = scall(["git", "checkout", branch])
+                        retcode = scall(["git", "checkout", self._branch])
                         quit_on_fail(retcode, caller)
 
             else:
-                perr("Unable to check out branch, {0}".format(branch))
+                perr("Unable to check out branch, {0}".format(self._branch))
 
-        elif tag is not None:
+        elif self._tag is not None:
             # For now, do a hail mary and hope tag can be checked out
-            retcode = scall(["git", "checkout", tag])
+            retcode = scall(["git", "checkout", self._tag])
             quit_on_fail(retcode, caller)
 
         os.chdir(mycurrdir)
@@ -501,7 +554,8 @@ class _Source(object):
         for child in node:
             ctag = strip_namespace(child.tag)
             if ctag == 'repo':
-                self._repos.append(_Repository(child))
+                repo = create_repository(child)
+                self._repos.append(repo)
             elif ctag == 'TREE_PATH':
                 self._path = child.text
                 self._repo_dir = os.path.basename(self._path)
@@ -524,6 +578,8 @@ class _Source(object):
         branch or tag.
         If load_all is True, also load all of the the sources sub-sources.
         """
+        if load_all:
+            pass
         # Make sure we are in correct location
         mycurrdir = os.path.abspath(".")
         pdir = os.path.join(tree_root, os.path.dirname(self._path))
