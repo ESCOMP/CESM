@@ -102,7 +102,7 @@ def check_output(commands):
     return outstr
 
 
-def scall(commands):
+def scall(commands, log_filename=None):
     """
     Wrapper around subprocess.check_call to handle common exceptions.
     check_call runs a command with arguments and waits for it to complete.
@@ -111,7 +111,13 @@ def scall(commands):
     """
     retcode = -1
     try:
-        retcode = subprocess.check_call(commands)
+        if log_filename:
+            with open(log_filename, 'w') as logfile:
+                print(" ".join(commands), file=logfile)
+                retcode = subprocess.check_call(commands, stdout=logfile,
+                                                stderr=subprocess.STDOUT)
+        else:
+            retcode = subprocess.check_call(commands)
     except OSError as error:
         print("Execution of '{0}' failed".format(
             (' '.join(commands))), file=sys.stderr)
@@ -183,16 +189,16 @@ def strip_namespace(tag):
 # Worker classes
 #
 # ---------------------------------------------------------------------
-def create_repository(repo_info):
+def create_repository(component_name, repo_info):
     """Determine what type of repository we have, i.e. git or svn, and
     create the appropriate object.
 
     """
     protocol = repo_info.get('protocol')
     if protocol == 'git':
-        repo = _GitRepository(repo_info)
+        repo = _GitRepository(component_name, repo_info)
     elif protocol == 'svn':
-        repo = _SvnRepository(repo_info)
+        repo = _SvnRepository(component_name, repo_info)
     elif protocol is None:
         perr("repo must have a protocol")
     else:
@@ -205,10 +211,11 @@ class _Repository(object):
     Class to represent and operate on a repository description.
     """
 
-    def __init__(self, repo):
+    def __init__(self, component_name, repo):
         """
         Parse repo (a <repo> XML element).
         """
+        self._name = component_name
         self._protocol = repo.get('protocol')
         self._tag = None
         self._branch = None
@@ -252,11 +259,11 @@ class _SvnRepository(_Repository):
     """
     RE_URLLINE = re.compile(r"^URL:")
 
-    def __init__(self, repo):
+    def __init__(self, component_name, repo):
         """
         Parse repo (a <repo> XML element).
         """
-        _Repository.__init__(self, repo)
+        _Repository.__init__(self, component_name, repo)
         if self._branch is not None:
             self._url = os.path.join(self._url, self._branch)
         else:
@@ -278,7 +285,10 @@ class _SvnRepository(_Repository):
         Checkout a subversion repository (repo_url) to checkout_dir.
         """
         caller = "svn_checkout {0} {1}".format(checkout_dir, self._url)
-        retcode = scall(["svn", "checkout", self._url, checkout_dir])
+        cmd = ["svn", "checkout", self._url, checkout_dir]
+        print("    {0}\n".format(' '.join(cmd)))
+        log_filename = "svn-{0}.log".format(self._name)
+        retcode = scall(cmd, log_filename)
         quit_on_fail(retcode, caller)
 
     def _svn_update(self, updir):
@@ -330,11 +340,11 @@ class _GitRepository(_Repository):
     RE_GITHASH = re.compile(r"\A([a-fA-F0-9]+)\Z")
     RE_REMOTEBRANCH = re.compile(r"\s*origin/(\S+)")
 
-    def __init__(self, repo):
+    def __init__(self, component_name, repo):
         """
         Parse repo (a <repo> XML element).
         """
-        _Repository.__init__(self, repo)
+        _Repository.__init__(self, component_name, repo)
 
     def load(self, repo_dir):
         """
@@ -506,33 +516,38 @@ class _GitRepository(_Repository):
                 # branch or tag checkout will work
 
         else:
-            print("Calling git clone {0} {1}".format(self._url, checkout_dir))
-            retcode = scall(["git", "clone", self._url, checkout_dir])
+            cmd = ["git", "clone", self._url, checkout_dir]
+            print("    {0}\n".format(' '.join(cmd)))
+            log_filename = "git-{0}-clone.log".format(self._name)
+            retcode = scall(cmd, log_filename)
             quit_on_fail(retcode, caller)
             os.chdir(checkout_dir)
 
+        cmd = []
         if self._branch is not None:
             (curr_branch, _) = self._git_current_branch()
             ref_type = self._git_ref_type(self._branch)
             if ref_type == self.GIT_REF_REMOTE_BRANCH:
-                retcode = scall(
-                    ["git", "checkout", "--track", "origin/" + self._branch])
-                quit_on_fail(retcode, caller)
+                cmd = ["git", "checkout", "--track", "origin/" + self._branch]
             elif ref_type == self.GIT_REF_LOCAL_BRANCH:
                 if curr_branch != self._branch:
                     if not self._git_working_dir_clean(checkout_dir):
                         perr("Working directory ({0}) not clean, "
                              "aborting".format(checkout_dir))
                     else:
-                        retcode = scall(["git", "checkout", self._branch])
-                        quit_on_fail(retcode, caller)
+                        cmd = ["git", "checkout", self._branch]
 
             else:
                 perr("Unable to check out branch, {0}".format(self._branch))
 
         elif self._tag is not None:
             # For now, do a hail mary and hope tag can be checked out
-            retcode = scall(["git", "checkout", self._tag])
+            cmd = ["git", "checkout", self._tag]
+
+        if cmd:
+            print("    {0}\n".format(' '.join(cmd)))
+            log_filename = "git-{0}-checkout.log".format(self._name)
+            retcode = scall(cmd, log_filename)
             quit_on_fail(retcode, caller)
 
         os.chdir(mycurrdir)
@@ -554,7 +569,7 @@ class _Source(object):
         for child in node:
             ctag = strip_namespace(child.tag)
             if ctag == 'repo':
-                repo = create_repository(child)
+                repo = create_repository(self._name, child)
                 self._repos.append(repo)
             elif ctag == 'TREE_PATH':
                 self._path = child.text
