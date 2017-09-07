@@ -367,9 +367,9 @@ class _repo(object):
         Return True (correct), False (incorrect) or None (chkdir not found)
         """
         refchk = None
+        mycurrdir = os.path.abspath(".")
         if os.path.exists(chkdir):
             if os.path.exists(os.path.join(chkdir, ".git")):
-                mycurrdir = os.path.abspath(".")
                 os.chdir(chkdir)
                 head = checkOutput(["git", "rev-parse", "HEAD"])
                 if ref is not None:
