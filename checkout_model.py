@@ -80,8 +80,7 @@ def perr(errstr):
     """
     Error output function
     """
-    print("{0}ERROR: {1}".format(os.linesep, errstr))
-    exit(-1)
+    raise RuntimeError("{0}ERROR: {1}".format(os.linesep, errstr))
 
 
 def checkOutput(commands):
@@ -141,24 +140,23 @@ def retcall(commands):
     retcall sends all error output to /dev/null and is used when just the
     return code is desired.
     """
-    FNULL = open(os.devnull, 'w')
-    try:
-        retcode = subprocess.call(
-            commands, stdout=FNULL, stderr=subprocess.STDOUT)
-    except OSError as e:
-        print("Execution of '{0}' failed".format(
-            ' '.join(commands)), file=sys.stderr)
-        print(e, file=sys.stderr)
-    except ValueError as e:
-        print("ValueError in '{0}'".format(
-            ' '.join(commands)), file=sys.stderr)
-        print(e, file=sys.stderr)
-    except subprocess.CalledProcessError as e:
-        print("CalledProcessError in '{0}'".format(
-            ' '.join(commands)), file=sys.stderr)
-        print(e, file=sys.stderr)
+    with open(os.devnull, 'w') as FNULL:
+        try:
+            retcode = subprocess.call(
+                commands, stdout=FNULL, stderr=subprocess.STDOUT)
+        except OSError as e:
+            print("Execution of '{0}' failed".format(
+                ' '.join(commands)), file=sys.stderr)
+            print(e, file=sys.stderr)
+        except ValueError as e:
+            print("ValueError in '{0}'".format(
+                ' '.join(commands)), file=sys.stderr)
+            print(e, file=sys.stderr)
+        except subprocess.CalledProcessError as e:
+            print("CalledProcessError in '{0}'".format(
+                ' '.join(commands)), file=sys.stderr)
+            print(e, file=sys.stderr)
 
-    FNULL.close()
     return retcode
 
 
@@ -167,9 +165,8 @@ def quitOnFail(retcode, caller):
     Check a return code and exit if non-zero.
     """
     if retcode != 0:
-        print("{0} failed with return code {1}".format(
-            caller, retcode), file=sys.stderr)
-        exit(retcode)
+        raise RuntimeError("{0} failed with return code {1}".format(
+            caller, retcode))
 
 
 def stripNamespace(tag):
@@ -223,7 +220,7 @@ class _repo(object):
             elif ctag == 'BRANCH':
                 self._branch = element.text
             else:
-                perr("Unknown repo element type, {}".format(element.tag))
+                perr("Unknown repo element type, {0}".format(element.tag))
 
         if self._URL is None:
             perr("repo must have a URL")
@@ -245,7 +242,7 @@ class _repo(object):
         elif self._protocol == 'git':
             pass
         else:
-            perr("Unknown repo protocol, {}".format(self._protocol))
+            perr("Unknown repo protocol, {0}".format(self._protocol))
 
     def load(self, repo_dir):
         """
@@ -411,7 +408,7 @@ class _repo(object):
         refType = self.gitRefType(curr_branch)
         if refType == _gitRef.remoteBranch:
             remote = checkOutput(
-                ["git", "config", "branch.{}.remote".format(curr_branch)])
+                ["git", "config", "branch.{0}.remote".format(curr_branch)])
         else:
             remote = None
 
@@ -479,7 +476,7 @@ class _repo(object):
                         quitOnFail(retcode, caller)
 
             else:
-                perr("Unable to check out branch, {}".format(branch))
+                perr("Unable to check out branch, {0}".format(branch))
 
         elif tag is not None:
             # For now, do a hail mary and hope tag can be checked out
@@ -510,7 +507,7 @@ class _source(object):
                 self._path = child.text
                 self._repo_dir = os.path.basename(self._path)
             else:
-                perr("Unknown source element type, {}".format(child.tag))
+                perr("Unknown source element type, {0}".format(child.tag))
         if len(self._repos) == 0:
             perr("No repo element for source {0}".format(self._name))
 
@@ -529,7 +526,6 @@ class _source(object):
         If all is True, also load all of the the sources sub-sources.
         """
         # Make sure we are in correct location
-        ###################################
         mycurrdir = os.path.abspath(".")
         pdir = os.path.join(tree_root, os.path.dirname(self._path))
         if not os.path.exists(pdir):
@@ -558,12 +554,13 @@ class SourceTree(object):
     SourceTree represents a <config_sourcetree> object
     """
 
-    def __init__(self, model_file, tree_root="."):
+    def __init__(self, model_file, root_dir="."):
         """
         Parse a model file into a SourceTree object
         """
-        self._tree_root = os.path.abspath(tree_root)
+        self._root_dir = os.path.abspath(root_dir)
 
+        print("Processing model description file: {0}".format(model_file))
         if not os.path.exists(model_file):
             raise RuntimeError("ERROR: Model file, '{0}', does not "
                                "exist".format(model_file))
@@ -602,7 +599,7 @@ class SourceTree(object):
             print("Loading these components: {0}".format(load_comps))
 
         for comp in load_comps:
-            self._all_components[comp].load(self._tree_root, all)
+            self._all_components[comp].load(self._root_dir, all)
 
 
 # ---------------------------------------------------------------------
@@ -619,6 +616,7 @@ def _main(arguments):
 
     source_tree = SourceTree(arguments.model)
     source_tree.load(arguments.all)
+    return 0
 
 
 if __name__ == "__main__":
