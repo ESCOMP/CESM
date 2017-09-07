@@ -33,11 +33,7 @@ if sys.hexversion < 0x02070000:
 #
 # ---------------------------------------------------------------------
 
-# Common regular expressions
-reNamespace = re.compile("{[^}]*}")
-reUrlLine = re.compile("^URL:")
-reGitHash = re.compile("\A([a-fA-F0-9]+)\Z")
-reRemoteBranch = re.compile("\s*origin/(\S+)")
+RE_NAMESPACE = re.compile(r"{[^}]*}")
 
 
 # ---------------------------------------------------------------------
@@ -67,8 +63,8 @@ By default only the required components of the model are checkout out.
                         help="The model description xml filename. "
                         "Default: %(default)s.")
 
-    arguments = parser.parse_args()
-    return arguments
+    options = parser.parse_args()
+    return options
 
 
 # ---------------------------------------------------------------------
@@ -83,24 +79,24 @@ def perr(errstr):
     raise RuntimeError("{0}ERROR: {1}".format(os.linesep, errstr))
 
 
-def checkOutput(commands):
+def check_output(commands):
     """
     Wrapper around subprocess.check_output to handle common exceptions.
     check_output runs a command with arguments and returns its output.
-    On successful completion, checkOutput returns the command's output.
+    On successful completion, check_output returns the command's output.
     """
     try:
         outstr = subprocess.check_output(commands)
-    except OSError as e:
-        print("Execution of '{0}' failed:".format(
-            (' '.join(commands)), e), file=sys.stderr)
-    except ValueError as e:
-        print("ValueError in '{0}':".format(
-            (' '.join(commands)), e), file=sys.stderr)
+    except OSError as error:
+        print("Execution of '{0}' failed: {1}".format(
+            (' '.join(commands)), error), file=sys.stderr)
+    except ValueError as error:
+        print("ValueError in '{0}': {1}".format(
+            (' '.join(commands)), error), file=sys.stderr)
         outstr = None
-    except subprocess.CalledProcessError as e:
-        print("CalledProcessError in '{0}':".format(
-            (' '.join(commands)), e), file=sys.stderr)
+    except subprocess.CalledProcessError as error:
+        print("CalledProcessError in '{0}': {1}".format(
+            (' '.join(commands)), error), file=sys.stderr)
         outstr = None
 
     return outstr
@@ -116,18 +112,18 @@ def scall(commands):
     retcode = -1
     try:
         retcode = subprocess.check_call(commands)
-    except OSError as e:
+    except OSError as error:
         print("Execution of '{0}' failed".format(
             (' '.join(commands))), file=sys.stderr)
-        print(e, file=sys.stderr)
-    except ValueError as e:
+        print(error, file=sys.stderr)
+    except ValueError as error:
         print("ValueError in '{0}'".format(
             (' '.join(commands))), file=sys.stderr)
-        print(e, file=sys.stderr)
-    except subprocess.CalledProcessError as e:
+        print(error, file=sys.stderr)
+    except subprocess.CalledProcessError as error:
         print("CalledProcessError in '{0}'".format(
             (' '.join(commands))), file=sys.stderr)
-        print(e, file=sys.stderr)
+        print(error, file=sys.stderr)
 
     return retcode
 
@@ -140,27 +136,27 @@ def retcall(commands):
     retcall sends all error output to /dev/null and is used when just the
     return code is desired.
     """
-    with open(os.devnull, 'w') as FNULL:
+    with open(os.devnull, 'w') as null_file:
         try:
             retcode = subprocess.call(
-                commands, stdout=FNULL, stderr=subprocess.STDOUT)
-        except OSError as e:
+                commands, stdout=null_file, stderr=subprocess.STDOUT)
+        except OSError as error:
             print("Execution of '{0}' failed".format(
                 ' '.join(commands)), file=sys.stderr)
-            print(e, file=sys.stderr)
-        except ValueError as e:
+            print(error, file=sys.stderr)
+        except ValueError as error:
             print("ValueError in '{0}'".format(
                 ' '.join(commands)), file=sys.stderr)
-            print(e, file=sys.stderr)
-        except subprocess.CalledProcessError as e:
+            print(error, file=sys.stderr)
+        except subprocess.CalledProcessError as error:
             print("CalledProcessError in '{0}'".format(
                 ' '.join(commands)), file=sys.stderr)
-            print(e, file=sys.stderr)
+            print(error, file=sys.stderr)
 
     return retcode
 
 
-def quitOnFail(retcode, caller):
+def quit_on_fail(retcode, caller):
     """
     Check a return code and exit if non-zero.
     """
@@ -169,17 +165,17 @@ def quitOnFail(retcode, caller):
             caller, retcode))
 
 
-def stripNamespace(tag):
+def strip_namespace(tag):
     """
     Remove a curly brace-encased namespace, if any.
     """
-    match = reNamespace.match(tag)
+    match = RE_NAMESPACE.match(tag)
     if match is None:
-        strippedTag = tag
+        stripped_tag = tag
     else:
-        strippedTag = tag[len(match.group(0)):]
+        stripped_tag = tag[len(match.group(0)):]
 
-    return strippedTag
+    return stripped_tag
 
 
 # ---------------------------------------------------------------------
@@ -198,10 +194,13 @@ class _gitRef(object):
     sha1 = 'gitSHA1'
 
 
-class _repo(object):
+class _Repository(object):
     """
     Class to represent and operate on a repository description.
     """
+    RE_URLLINE = re.compile(r"^URL:")
+    RE_GITHASH = re.compile(r"\A([a-fA-F0-9]+)\Z")
+    RE_REMOTEBRANCH = re.compile(r"\s*origin/(\S+)")
 
     def __init__(self, repo):
         """
@@ -210,11 +209,11 @@ class _repo(object):
         self._protocol = repo.get('protocol')
         self._tag = None
         self._branch = None
-        self._URL = None
+        self._url = None
         for element in repo:
-            ctag = stripNamespace(element.tag)
+            ctag = strip_namespace(element.tag)
             if ctag == 'ROOT':
-                self._URL = element.text
+                self._url = element.text
             elif ctag == 'TAG':
                 self._tag = element.text
             elif ctag == 'BRANCH':
@@ -222,7 +221,7 @@ class _repo(object):
             else:
                 perr("Unknown repo element type, {0}".format(element.tag))
 
-        if self._URL is None:
+        if self._url is None:
             perr("repo must have a URL")
 
         if self._tag is None and self._branch is None:
@@ -235,9 +234,9 @@ class _repo(object):
             perr("repo must have a protocol")
         elif self._protocol == 'svn':
             if self._branch is not None:
-                self._URL = os.path.join(self._URL, self._branch)
+                self._url = os.path.join(self._url, self._branch)
             else:
-                self._URL = os.path.join(self._URL, self._tag)
+                self._url = os.path.join(self._url, self._tag)
 
         elif self._protocol == 'git':
             pass
@@ -252,32 +251,32 @@ class _repo(object):
         branch or tag.
         """
         if self._protocol == 'svn':
-            self.svnCheckout(repo_dir, self._URL)
+            self._svn_checkout(repo_dir, self._url)
         elif self._protocol == 'git':
-            self.gitCheckout(repo_dir, self._URL, self._branch, self._tag)
+            self._git_checkout(repo_dir, self._url, self._branch, self._tag)
 
         return True
 
-    def svnCheckout(self, checkoutDir, repoURL):
+    def _svn_checkout(self, checkout_dir, repo_url):
         """
-        Checkout a subversion repository (repoURL) to checkoutDir.
+        Checkout a subversion repository (repo_url) to checkout_dir.
         """
-        caller = "svnCheckout {0} {1}".format(checkoutDir, repoURL)
-        retcode = scall(["svn", "checkout", repoURL, checkoutDir])
-        quitOnFail(retcode, caller)
+        caller = "svn_checkout {0} {1}".format(checkout_dir, repo_url)
+        retcode = scall(["svn", "checkout", repo_url, checkout_dir])
+        quit_on_fail(retcode, caller)
 
-    def svnUpdate(self, updir):
+    def _svn_update(self, updir):
         """
         Refresh a subversion sandbox (updir)
         """
-        caller = "svnUpdate {0}".format(updir)
+        caller = "svn_update {0}".format(updir)
         mycurrdir = os.path.abspath(".")
         os.chdir(updir)
         retcode = scall(["svn update"])
-        quitOnFail(retcode, caller)
+        quit_on_fail(retcode, caller)
         os.chdir(mycurrdir)
 
-    def svnCheckDir(self, chkdir, ver):
+    def _svn_check_dir(self, chkdir, ver):
         """
         Check to see if directory (chkdir) exists and is the correct
         version (ver).
@@ -285,79 +284,79 @@ class _repo(object):
 
         """
         if os.path.exists(chkdir):
-            svnout = checkOutput(["svn", "info", chkdir])
+            svnout = check_output(["svn", "info", chkdir])
             if svnout is not None:
                 url = None
                 for line in svnout.splitlines():
-                    if reUrlLine.match(line):
+                    if _Repository.RE_URLLINE.match(line):
                         url = line.split(': ')[1]
                         break
-                retVal = (url == ver)
+                status = (url == ver)
             else:
-                retVal = None
+                status = None
         else:
-            retVal = None
+            status = None
 
-        return retVal
+        return status
 
-    def gitRefType(self, ref):
+    def _git_ref_type(self, ref):
         """
         Determine if 'ref' is a local branch, a remote branch, a tag, or a
         commit.
         Should probably use this command instead:
         git show-ref --verify --quiet refs/heads/<branch-name>
         """
-        refType = _gitRef.unknown
+        ref_type = _gitRef.unknown
         # First check for local branch
-        gitout = checkOutput(["git", "branch"])
+        gitout = check_output(["git", "branch"])
         if gitout is not None:
             branches = [x.lstrip('* ') for x in gitout.splitlines()]
             for branch in branches:
                 if branch == ref:
-                    refType = _gitRef.localBranch
+                    ref_type = _gitRef.localBranch
                     break
 
         # Next, check for remote branch
-        if refType == _gitRef.unknown:
-            gitout = checkOutput(["git", "branch", "-r"])
+        if ref_type == _gitRef.unknown:
+            gitout = check_output(["git", "branch", "-r"])
             if gitout is not None:
                 for branch in gitout.splitlines():
-                    match = reRemoteBranch.match(branch)
+                    match = _Repository.RE_REMOTEBRANCH.match(branch)
                     if (match is not None) and (match.group(1) == ref):
-                        refType = _gitRef.remoteBranch
+                        ref_type = _gitRef.remoteBranch
                         break
 
         # Next, check for a tag
-        if refType == _gitRef.unknown:
-            gitout = checkOutput(["git", "tag"])
+        if ref_type == _gitRef.unknown:
+            gitout = check_output(["git", "tag"])
             if gitout is not None:
                 for tag in gitout.splitlines():
                     if tag == ref:
-                        refType = _gitRef.tag
+                        ref_type = _gitRef.tag
                         break
 
         # Finally, see if it just looks like a commit hash
-        if (refType == _gitRef.unknown) and reGitHash.match(ref):
-            refType = _gitRef.sha1
+        if (ref_type == _gitRef.unknown) and _Repository.RE_GITHASH.match(ref):
+            ref_type = _gitRef.sha1
 
         # Return what we've come up with
-        return refType
+        return ref_type
 
-    def gitCurrentBranch(self):
+    def _git_current_branch(self):
         """
         Return the (current branch, sha1 hash) of working copy in wdir
         """
-        branch = checkOutput(["git", "rev-parse", "--abbrev-ref", "HEAD"])
-        hash = checkOutput(["git", "rev-parse", "HEAD"])
+        branch = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+        git_hash = check_output(["git", "rev-parse", "HEAD"])
         if branch is not None:
             branch = branch.rstrip()
 
-        if hash is not None:
-            hash = hash.rstrip()
+        if git_hash is not None:
+            git_hash = git_hash.rstrip()
 
-        return (branch, hash)
+        return (branch, git_hash)
 
-    def gitCheckDir(self, chkdir, ref):
+    def _git_check_dir(self, chkdir, ref):
         """
         Check to see if directory (chkdir) exists and is the correct
         treeish (ref)
@@ -368,26 +367,26 @@ class _repo(object):
         if os.path.exists(chkdir):
             if os.path.exists(os.path.join(chkdir, ".git")):
                 os.chdir(chkdir)
-                head = checkOutput(["git", "rev-parse", "HEAD"])
+                head = check_output(["git", "rev-parse", "HEAD"])
                 if ref is not None:
-                    refchk = checkOutput(["git", "rev-parse", ref])
+                    refchk = check_output(["git", "rev-parse", ref])
 
             else:
                 head = None
 
             if ref is None:
-                retVal = head is not None
+                status = head is not None
             elif refchk is None:
-                retVal = None
+                status = None
             else:
-                retVal = (head == refchk)
+                status = (head == refchk)
         else:
-            retVal = None
+            status = None
 
         os.chdir(mycurrdir)
-        return retVal
+        return status
 
-    def gitWdirClean(self, wdir):
+    def _git_working_dir_clean(self, wdir):
         """
         Return True if wdir is clean or False if there are modifications
         """
@@ -395,19 +394,19 @@ class _repo(object):
         os.chdir(wdir)
         retcode = retcall(["git", "diff", "--quiet", "--exit-code"])
         os.chdir(mycurrdir)
-        return (retcode == 0)
+        return retcode == 0
 
-    def gitRemote(self, repoDir):
+    def _git_remote(self, repo_dir):
         """
         Return the remote for the current branch or tag
         """
         mycurrdir = os.path.abspath(".")
-        os.chdir(repoDir)
+        os.chdir(repo_dir)
         # Make sure we are on a remote-tracking branch
-        (curr_branch, chash) = self.gitCurrentBranch()
-        refType = self.gitRefType(curr_branch)
-        if refType == _gitRef.remoteBranch:
-            remote = checkOutput(
+        (curr_branch, _) = self._git_current_branch()
+        ref_type = self._git_ref_type(curr_branch)
+        if ref_type == _gitRef.remoteBranch:
+            remote = check_output(
                 ["git", "config", "branch.{0}.remote".format(curr_branch)])
         else:
             remote = None
@@ -416,64 +415,64 @@ class _repo(object):
         return remote
 
     # Need to decide how to do this. Just doing pull for now
-    def gitUpdate(self, repoDir):
+    def _git_update(self, repo_dir):
         """
         Do an update and a FF merge if possible
         """
-        caller = "gitUpdate {0}".format(repoDir)
+        caller = "_git_update {0}".format(repo_dir)
         mycurrdir = os.path.abspath(".")
-        os.chdir(repoDir)
-        remote = self.gitRemote(repoDir)
+        os.chdir(repo_dir)
+        remote = self._git_remote(repo_dir)
         if remote is not None:
             retcode = scall(["git", "remote", "update", "--prune", remote])
-            quitOnFail(retcode, caller)
+            quit_on_fail(retcode, caller)
 
         retcode = scall(["git", "merge", "--ff-only", "@{u}"])
         os.chdir(mycurrdir)
-        quitOnFail(retcode, caller)
+        quit_on_fail(retcode, caller)
 
-    def gitCheckout(self, checkoutDir, repoURL, branch, tag):
+    def _git_checkout(self, checkout_dir, repo_url, branch, tag):
         """
-        Checkout 'branch' or 'tag' from 'repoURL'
+        Checkout 'branch' or 'tag' from 'repo_url'
         """
-        caller = "gitCheckout {0} {1}".format(checkoutDir, repoURL)
+        caller = "_git_checkout {0} {1}".format(checkout_dir, repo_url)
         retcode = 0
         mycurrdir = os.path.abspath(".")
-        if os.path.exists(checkoutDir):
+        if os.path.exists(checkout_dir):
             # We can't do a clone. See what we have here
-            if self.gitCheckDir(checkoutDir, None):
-                os.chdir(checkoutDir)
+            if self._git_check_dir(checkout_dir, None):
+                os.chdir(checkout_dir)
                 # We have a git repo, is it from the correct URL?
-                chkURL = checkOutput(["git", "config", "remote.origin.url"])
-                if chkURL is not None:
-                    chkURL = chkURL.rstrip()
+                check_url = check_output(["git", "config", "remote.origin.url"])
+                if check_url is not None:
+                    check_url = check_url.rstrip()
 
-                if chkURL != repoURL:
+                if check_url != repo_url:
                     perr("Invalid repository in {0}, url = {1}, "
-                         "should be {2}".format(checkoutDir, chkURL,
-                                                repoURL))
+                         "should be {2}".format(checkout_dir, check_url,
+                                                repo_url))
 
         else:
-            print("Calling git clone {0} {1}".format(repoURL, checkoutDir))
-            retcode = scall(["git", "clone", repoURL, checkoutDir])
-            quitOnFail(retcode, caller)
-            os.chdir(checkoutDir)
+            print("Calling git clone {0} {1}".format(repo_url, checkout_dir))
+            retcode = scall(["git", "clone", repo_url, checkout_dir])
+            quit_on_fail(retcode, caller)
+            os.chdir(checkout_dir)
 
         if branch is not None:
-            (curr_branch, chash) = self.gitCurrentBranch()
-            refType = self.gitRefType(branch)
-            if refType == _gitRef.remoteBranch:
+            (curr_branch, _) = self._git_current_branch()
+            ref_type = self._git_ref_type(branch)
+            if ref_type == _gitRef.remoteBranch:
                 retcode = scall(
                     ["git", "checkout", "--track", "origin/" + branch])
-                quitOnFail(retcode, caller)
-            elif refType == _gitRef.localBranch:
+                quit_on_fail(retcode, caller)
+            elif ref_type == _gitRef.localBranch:
                 if curr_branch != branch:
-                    if not self.gitWdirClean(checkoutDir):
+                    if not self._git_working_dir_clean(checkout_dir):
                         perr("Working directory ({0}) not clean, "
-                             "aborting".format(checkoutDir))
+                             "aborting".format(checkout_dir))
                     else:
                         retcode = scall(["git", "checkout", branch])
-                        quitOnFail(retcode, caller)
+                        quit_on_fail(retcode, caller)
 
             else:
                 perr("Unable to check out branch, {0}".format(branch))
@@ -481,14 +480,14 @@ class _repo(object):
         elif tag is not None:
             # For now, do a hail mary and hope tag can be checked out
             retcode = scall(["git", "checkout", tag])
-            quitOnFail(retcode, caller)
+            quit_on_fail(retcode, caller)
 
         os.chdir(mycurrdir)
 
 
-class _source(object):
+class _Source(object):
     """
-    _source represents a <source> object in a <config_sourcetree>
+    _Source represents a <source> object in a <config_sourcetree>
     """
 
     def __init__(self, node):
@@ -500,15 +499,15 @@ class _source(object):
         self._loaded = False
         # Parse the sub-elements
         for child in node:
-            ctag = stripNamespace(child.tag)
+            ctag = strip_namespace(child.tag)
             if ctag == 'repo':
-                self._repos.append(_repo(child))
+                self._repos.append(_Repository(child))
             elif ctag == 'TREE_PATH':
                 self._path = child.text
                 self._repo_dir = os.path.basename(self._path)
             else:
                 perr("Unknown source element type, {0}".format(child.tag))
-        if len(self._repos) == 0:
+        if not self._repos:
             perr("No repo element for source {0}".format(self._name))
 
     def get_name(self):
@@ -517,13 +516,13 @@ class _source(object):
         """
         return self._name
 
-    def load(self, tree_root, all=False):
+    def load(self, tree_root, load_all=False):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
-        If all is True, also load all of the the sources sub-sources.
+        If load_all is True, also load all of the the sources sub-sources.
         """
         # Make sure we are in correct location
         mycurrdir = os.path.abspath(".")
@@ -531,22 +530,22 @@ class _source(object):
         if not os.path.exists(pdir):
             try:
                 os.makedirs(pdir)
-            except OSError as e:
-                if e.errno != errno.EEXIST:
+            except OSError as error:
+                if error.errno != errno.EEXIST:
                     raise
 
         os.chdir(pdir)
 
-        repoLoaded = self._loaded
-        if not repoLoaded:
+        repo_loaded = self._loaded
+        if not repo_loaded:
             for repo in self._repos:
-                repoLoaded = repo.load(self._repo_dir)
-                if repoLoaded:
+                repo_loaded = repo.load(self._repo_dir)
+                if repo_loaded:
                     break
 
-        self._loaded = repoLoaded
+        self._loaded = repo_loaded
         os.chdir(mycurrdir)
-        return repoLoaded
+        return repo_loaded
 
 
 class SourceTree(object):
@@ -573,13 +572,13 @@ class SourceTree(object):
         self._required_compnames = []
         for child in self._root:
             if child.tag == "source":
-                s = _source(child)
-                self._all_components[s.get_name()] = s
+                src = _Source(child)
+                self._all_components[src.get_name()] = src
             elif child.tag == "required":
                 for req in child:
                     self._required_compnames.append(req.text)
 
-    def load(self, all=False, load_comp=None):
+    def load(self, load_all=False, load_comp=None):
         """
         Checkout or update indicated components into the the configured
         subdirs.
@@ -588,7 +587,7 @@ class SourceTree(object):
         If all is False, load_comp is an optional set of components to load.
         If all is False and load_comp is None, only load the required sources.
         """
-        if all:
+        if load_all:
             load_comps = self._all_components.keys()
         elif load_comp is not None:
             load_comps = [load_comp]
@@ -599,7 +598,7 @@ class SourceTree(object):
             print("Loading these components: {0}".format(load_comps))
 
         for comp in load_comps:
-            self._all_components[comp].load(self._root_dir, all)
+            self._all_components[comp].load(self._root_dir, load_all)
 
 
 # ---------------------------------------------------------------------
@@ -607,23 +606,23 @@ class SourceTree(object):
 # main
 #
 # ---------------------------------------------------------------------
-def _main(arguments):
+def _main(args):
     """
     Function to call when module is called from the command line.
     Parse model file and load required repositories or all repositories if
     the --all option is passed.
     """
 
-    source_tree = SourceTree(arguments.model)
-    source_tree.load(arguments.all)
+    source_tree = SourceTree(args.model)
+    source_tree.load(args.all)
     return 0
 
 
 if __name__ == "__main__":
     arguments = commandline_arguments()
     try:
-        status = _main(arguments)
-        sys.exit(status)
+        return_status = _main(arguments)
+        sys.exit(return_status)
     except Exception as error:
         # print(str(error))
         if arguments.backtrace:
