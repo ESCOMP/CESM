@@ -61,9 +61,9 @@
   </source>
   <source name="RTM">
     <TREE_PATH>components/rtm</TREE_PATH>
-    <repo protocol="svn">
-      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/rivrtm</ROOT>
-      <TAG>trunk_tags/rtm1_0_62</TAG>
+    <repo protocol="git">
+      <ROOT>git@github.com:bandre-ucar/rtm-experimental.git</ROOT>
+      <TAG>rtm1_0_62</TAG>
     </repo>
   </source>
   <source name="WW3">
