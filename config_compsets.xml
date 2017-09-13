@@ -55,6 +55,10 @@
     <lname>1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
     <science_support grid="f09_g16"/>
   </compset>
+  <compset>
+    <alias>BWma1850</alias>
+    <lname>1850_CAM60%WCCM_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
+  </compset>
 
   <!--
        Other B water isotope compsets that are only relevant for clm water isotope branches
