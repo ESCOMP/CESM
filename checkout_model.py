@@ -51,10 +51,6 @@ By default only the required components of the model are checkout out.
 """
     parser = argparse.ArgumentParser(description=description)
 
-    parser.add_argument("--all", action="store_true", default=False,
-                        help="Load only all components in the model file "
-                        "(default loads all components)")
-
     parser.add_argument('--backtrace', action='store_true',
                         help='show exception backtraces as extra debugging '
                         'output')
@@ -62,6 +58,12 @@ By default only the required components of the model are checkout out.
     parser.add_argument("--model", nargs='?', default='CESM.xml',
                         help="The model description xml filename. "
                         "Default: %(default)s.")
+
+    parser.add_argument('-r', '--required', action='store_true', default=False,
+                        help="NOT IMPLEMENTED! Only checkout the required "
+                        "components of the model, e.g. cime. Optional science "
+                        "components will be checked out as needed by the "
+                        "build system.")
 
     options = parser.parse_args()
     return options
@@ -585,7 +587,7 @@ class _Source(object):
         """
         return self._name
 
-    def load(self, tree_root, load_all=False):
+    def load(self, tree_root, load_all):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -649,14 +651,14 @@ class SourceTree(object):
                 for req in child:
                     self._required_compnames.append(req.text)
 
-    def load(self, load_all=False, load_comp=None):
+    def load(self, load_all, load_comp=None):
         """
         Checkout or update indicated components into the the configured
         subdirs.
 
-        If all is True, recursively checkout all sources.
-        If all is False, load_comp is an optional set of components to load.
-        If all is False and load_comp is None, only load the required sources.
+        If load_all is True, recursively checkout all sources.
+        If load_all is False, load_comp is an optional set of components to load.
+        If load_all is True and load_comp is None, only load the required sources.
         """
         if load_all:
             load_comps = self._all_components.keys()
@@ -683,9 +685,14 @@ def _main(args):
     Parse model file and load required repositories or all repositories if
     the --all option is passed.
     """
+    load_all = True
+    if args.required:
+        load_all = False
+        msg = 'The required only option to checkout has not been implemented'
+        raise NotImplementedError(msg)
 
     source_tree = SourceTree(args.model)
-    source_tree.load(args.all)
+    source_tree.load(load_all)
     return 0
 
 
