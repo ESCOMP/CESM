@@ -24,9 +24,9 @@
   </source>
   <source name="CLM">
     <TREE_PATH>components/clm</TREE_PATH>
-    <repo protocol="svn">
-      <ROOT>https://svn-ccsm-models.cgd.ucar.edu/clm2</ROOT>
-      <TAG>trunk_tags/clm4_5_16_r249/components/clm</TAG>
+    <repo protocol="git">
+      <ROOT>git@github.com:NCAR/clm-experimental.git</ROOT>
+      <TAG>clm4_5_16_r254</TAG>
     </repo>
   </source>
   <source name="CICE">
