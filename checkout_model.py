@@ -114,7 +114,8 @@ def scall(commands, log_filename=None):
     retcode = -1
     try:
         if log_filename:
-            with open(log_filename, 'w') as logfile:
+            fpath = os.path.join(os.path.abspath('.'), log_filename)
+            with open(fpath, 'w') as logfile:
                 print(" ".join(commands), file=logfile)
                 retcode = subprocess.check_call(commands, stdout=logfile,
                                                 stderr=subprocess.STDOUT)
@@ -223,12 +224,12 @@ class _Repository(object):
         self._branch = None
         self._url = None
         for element in repo:
-            ctag = strip_namespace(element.tag)
-            if ctag == 'ROOT':
+            ctag = strip_namespace(element.tag).lower()
+            if ctag == 'root':
                 self._url = element.text
-            elif ctag == 'TAG':
+            elif ctag == 'tag':
                 self._tag = element.text
-            elif ctag == 'BRANCH':
+            elif ctag == 'branch':
                 self._branch = element.text
             else:
                 perr("Unknown repo element type, {0}".format(element.tag))
@@ -567,15 +568,19 @@ class _Source(object):
         self._name = node.get('name')
         self._repos = list()
         self._loaded = False
+        self._externals = ''
+        self._externals_sourcetree = None
         # Parse the sub-elements
         for child in node:
-            ctag = strip_namespace(child.tag)
+            ctag = strip_namespace(child.tag).lower()
             if ctag == 'repo':
                 repo = create_repository(self._name, child)
                 self._repos.append(repo)
-            elif ctag == 'TREE_PATH':
+            elif ctag == 'tree_path':
                 self._path = child.text
                 self._repo_dir = os.path.basename(self._path)
+            elif ctag == 'externals_description':
+                self._externals = child.text
             else:
                 perr("Unknown source element type, {0}".format(child.tag))
         if not self._repos:
@@ -617,6 +622,20 @@ class _Source(object):
                     break
 
         self._loaded = repo_loaded
+
+        if self._externals:
+            comp_dir = os.path.join(tree_root, self._path)
+            os.chdir(comp_dir)
+            if not os.path.exists(self._externals):
+                raise RuntimeError("External model description file '{0}' "
+                                   "does not exist!".format(self._externals))
+            # FIXME(bja, 2017-09) temp fix to demo externals checkout.
+            # ext_root = comp_dir
+            ext_root = os.path.join(comp_dir, 'tmp')
+            os.makedirs(ext_root)
+            self._externals_sourcetree = SourceTree(self._externals, ext_root)
+            self._externals_sourcetree.load(load_all)
+
         os.chdir(mycurrdir)
         return repo_loaded
 
@@ -632,7 +651,8 @@ class SourceTree(object):
         """
         self._root_dir = os.path.abspath(root_dir)
 
-        print("Processing model description file: {0}".format(model_file))
+        print("Processing model description file '{0}'".format(model_file))
+        print("in directory : {0}".format(self._root_dir))
         if not os.path.exists(model_file):
             raise RuntimeError("ERROR: Model file, '{0}', does not "
                                "exist".format(model_file))

@@ -28,6 +28,7 @@
       <ROOT>git@github.com:NCAR/clm-experimental.git</ROOT>
       <TAG>clm4_5_16_r254</TAG>
     </repo>
+    <externals_description>CLM.xml</externals_description>
   </source>
   <source name="CICE">
     <TREE_PATH>components/cice</TREE_PATH>
