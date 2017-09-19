@@ -629,10 +629,7 @@ class _Source(object):
             if not os.path.exists(self._externals):
                 raise RuntimeError("External model description file '{0}' "
                                    "does not exist!".format(self._externals))
-            # FIXME(bja, 2017-09) temp fix to demo externals checkout.
-            # ext_root = comp_dir
-            ext_root = os.path.join(comp_dir, 'tmp')
-            os.makedirs(ext_root)
+            ext_root = comp_dir
             self._externals_sourcetree = SourceTree(self._externals, ext_root)
             self._externals_sourcetree.load(load_all)
 

@@ -26,7 +26,7 @@
     <TREE_PATH>components/clm</TREE_PATH>
     <repo protocol="git">
       <ROOT>git@github.com:NCAR/clm-experimental.git</ROOT>
-      <TAG>clm4_5_16_r254</TAG>
+      <TAG>clm4_5_16_r255</TAG>
     </repo>
     <externals_description>CLM.xml</externals_description>
   </source>
