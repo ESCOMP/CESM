@@ -23,8 +23,9 @@ class TestCheckoutModel_create_repository(unittest.TestCase):
 
     """
     def setUp(self):
+        """Common data needed for all tests in this class
         """
-        """
+        self._name = 'test_name'
         self._xml_protocol = string.Template(
             """
             <repo protocol="$protocol">
@@ -33,41 +34,41 @@ class TestCheckoutModel_create_repository(unittest.TestCase):
             </repo>
             """)
 
-    def test_create_repo_git(self):
-        """
-        """
-        name = 'test_name'
-        protocol = 'git'
-        xml = etree.fromstring(self._xml_protocol.substitute(protocol=protocol))
-        repo = checkout_model.create_repository(name, xml)
-        self.assertIsInstance(repo, checkout_model._GitRepository)
+    def tearDown(self):
+        pass
 
-    def test_create_repo_git_upper(self):
+    def test_create_repo_git(self):
+        """Verify that several possible names for the 'git' protocol
+        create git repository objects.
+
         """
-        """
-        name = 'test_name'
-        protocol = 'GIT'
-        xml = etree.fromstring(self._xml_protocol.substitute(protocol=protocol))
-        repo = checkout_model.create_repository(name, xml)
-        self.assertIsInstance(repo, checkout_model._GitRepository)
+        protocols = ['git', 'GIT', 'Git', ]
+        for protocol in protocols:
+            xml = etree.fromstring(
+                self._xml_protocol.substitute(protocol=protocol))
+            repo = checkout_model.create_repository(self._name, xml)
+            self.assertIsInstance(repo, checkout_model._GitRepository)
 
     def test_create_repo_svn(self):
+        """Verify that several possible names for the 'svn' protocol
+        create svn repository objects.
         """
-        """
-        name = 'test_name'
-        protocol = 'svn'
-        xml = etree.fromstring(self._xml_protocol.substitute(protocol=protocol))
-        repo = checkout_model.create_repository(name, xml)
-        self.assertIsInstance(repo, checkout_model._SvnRepository)
+        protocols = ['svn', 'SVN', 'Svn', ]
+        for protocol in protocols:
+            xml = etree.fromstring(
+                self._xml_protocol.substitute(protocol=protocol))
+            repo = checkout_model.create_repository(self._name, xml)
+            self.assertIsInstance(repo, checkout_model._SvnRepository)
 
-    def test_create_repo_svn_upper(self):
+    def test_create_repo_unsupported(self):
+        """Verify that an unsupported protocol generates a runtime error.
         """
-        """
-        name = 'test_name'
-        protocol = 'svn'
-        xml = etree.fromstring(self._xml_protocol.substitute(protocol=protocol))
-        repo = checkout_model.create_repository(name, xml)
-        self.assertIsInstance(repo, checkout_model._SvnRepository)
+        protocols = ['not_a_supported_protocol', ]
+        for protocol in protocols:
+            xml = etree.fromstring(
+                self._xml_protocol.substitute(protocol=protocol))
+            with self.assertRaises(RuntimeError):
+                checkout_model.create_repository(self._name, xml)
 
 
 class TestCheckoutModel_Repository_XML(unittest.TestCase):
