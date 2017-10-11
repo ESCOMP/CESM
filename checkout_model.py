@@ -197,10 +197,10 @@ def create_repository(component_name, repo_info):
     create the appropriate object.
 
     """
-    protocol = repo_info.get('protocol')
-    if protocol == 'git':
+    protocol = repo_info.get('protocol').lower()
+    if 'git' == protocol:
         repo = _GitRepository(component_name, repo_info)
-    elif protocol == 'svn':
+    elif 'svn' == protocol:
         repo = _SvnRepository(component_name, repo_info)
     elif protocol is None:
         perr("repo must have a protocol")
