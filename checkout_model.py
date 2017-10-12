@@ -10,6 +10,7 @@ from __future__ import print_function
 
 import argparse
 import errno
+import json
 import os
 import os.path
 import pprint
@@ -26,6 +27,12 @@ if sys.hexversion < 0x02070000:
         ".".join(str(x) for x in sys.version_info[0:3])))
     print(70 * "*")
     sys.exit(1)
+
+if sys.version_info[0] == 2:
+    from ConfigParser import SafeConfigParser as config_parser
+    import ConfigParser
+else:
+    from configparser import ConfigParser as config_parser
 
 
 # ---------------------------------------------------------------------
@@ -210,7 +217,7 @@ def create_repository(component_name, repo_info):
     return repo
 
 
-def read_xml_file(root_dir, file_name):
+def read_model_description_file(root_dir, file_name):
     """
     """
     root_dir = os.path.abspath(root_dir)
@@ -223,50 +230,90 @@ def read_xml_file(root_dir, file_name):
                "exist at {1}".format(file_name, file_path))
         raise RuntimeError(msg)
 
-    xml_root = None
-    with open(file_path, 'r') as xml_file:
-        xml_tree = ET.parse(xml_file)
-        xml_root = xml_tree.getroot()
-    return xml_root
+    model_description = None
+    model_format = None
+    with open(file_path, 'r') as filehandle:
+        try:
+            xml_tree = ET.parse(filehandle)
+            model_description = xml_tree.getroot()
+            model_format = 'xml'
+        except ET.ParseError:
+            # not an xml file.
+            pass
+
+    if not model_description:
+        with open(file_path, 'r') as filehandle:
+            try:
+                json_data = json.loads(filehandle.read())
+                model_description = json_data
+                model_format = 'json'
+            except ValueError as e:
+                # not a json file
+                print(e)
+
+    if not model_description:
+        try:
+            config = config_parser()
+            config.read(file_path)
+            # insert cfg2dict here
+            model_description = config
+            model_format = 'cfg'
+        except ConfigParser.MissingSectionHeaderError:
+            # not a cfg file
+            pass
+
+    if not model_description:
+        msg = "Unknown file format!"
+        raise RuntimeError(msg)
+
+    return model_format, model_description
 
 
 class ModelDescription(dict):
     """
     """
-    # keywords
-    _EXTERNALS = 'externals'
-    _BRANCH = 'branch'
-    _REPO = 'repo'
-    _REQUIRED = 'required'
-    _TAG = 'tag'
-    _PATH = 'path'
-    _PROTOCOL = 'protocol'
-    _URL = 'url'
-    _NAME = 'name'
+    # keywords defining the interface into the model description data
+    _EXTERNALS = u'externals'
+    _BRANCH = u'branch'
+    _REPO = u'repo'
+    _REQUIRED = u'required'
+    _TAG = u'tag'
+    _PATH = u'path'
+    _PROTOCOL = u'protocol'
+    _URL = u'url'
+    _NAME = u'name'
 
     # v1 xml keywords
-    _V1_TREE_PATH = 'TREE_PATH'
-    _V1_ROOT = 'ROOT'
-    _V1_TAG = 'TAG'
-    _V1_BRANCH = 'BRANCH'
-    _V1_REQ_SOURCE = 'REQ_SOURCE'
+    _V1_TREE_PATH = u'TREE_PATH'
+    _V1_ROOT = u'ROOT'
+    _V1_TAG = u'TAG'
+    _V1_BRANCH = u'BRANCH'
+    _V1_REQ_SOURCE = u'REQ_SOURCE'
 
     _source_schema = {_REQUIRED: True,
-                      _PATH: 'string',
-                      _EXTERNALS: 'string',
-                      _REPO: {_PROTOCOL: 'string',
-                              _URL: 'string',
-                              _TAG: 'string',
-                              _BRANCH: 'string',
+                      _PATH: u'string',
+                      _EXTERNALS: u'string',
+                      _REPO: {_PROTOCOL: u'string',
+                              _URL: u'string',
+                              _TAG: u'string',
+                              _BRANCH: u'string',
                               }
                       }
 
-    def __init__(self, xml_root):
+    def __init__(self, model_format, model_data):
         """Convert the xml into a standardized dict that can be used to
         construct the source objects
 
         """
-        self._parse(xml_root)
+        if 'xml' == model_format:
+            self._parse_xml(model_data)
+        elif 'cfg' == model_format:
+            self._parse_cfg(model_data)
+        elif 'json' == model_format:
+            self._parse_json(model_data)
+        else:
+            msg = "Unknown model data format '{0}'".format(model_format)
+            raise RuntimeError(msg)
 
     def _validate(self):
         """
@@ -278,6 +325,7 @@ class ModelDescription(dict):
             if isinstance(reference, dict) and isinstance(data, dict):
                 for k in data:
                     in_ref = in_ref and (k in reference)
+                    print(in_ref)
                     valid = valid and (
                         validate_data_struct(reference[k], data[k]))
                 is_valid = in_ref and valid
@@ -293,23 +341,29 @@ class ModelDescription(dict):
                 raise RuntimeError(
                     "ERROR: source for '{0}' did not validate".format(m))
 
-    def _parse(self, xml_root):
+    def _parse_json(self, json_data):
+        """
+        """
+        self.update(json_data)
+        self._validate()
+
+    def _parse_xml(self, xml_root):
         """
         """
         xml_root = self._get_xml_config_sourcetree(xml_root)
         version = self._get_xml_schema_version(xml_root)
         major_version = version[0]
         if '1' == major_version:
-            self._parse_v1(xml_root)
+            self._parse_xml_v1(xml_root)
         elif '2' == major_version:
-            self._parse_v2(xml_root)
+            self._parse_xml_v2(xml_root)
         else:
             msg = ("ERROR: unknown xml schema version '{0}'".format(
                 major_version))
             raise RuntimeError(msg)
         self._validate()
 
-    def _parse_v1(self, xml_root):
+    def _parse_xml_v1(self, xml_root):
         """
         """
         for src in xml_root.findall('./source'):
@@ -340,7 +394,7 @@ class ModelDescription(dict):
                     name = src.text.lower()
                     self[name][self._REQUIRED] = True
 
-    def _parse_v2(self, xml_root):
+    def _parse_xml_v2(self, xml_root):
         """
         """
         for src in xml_root.findall('./source'):
@@ -820,8 +874,9 @@ class _Source(object):
                 raise RuntimeError("External model description file '{0}' "
                                    "does not exist!".format(self._externals))
             ext_root = comp_dir
-            xml_root = read_xml_file(ext_root, self._externals)
-            externals = ModelDescription(xml_root)
+            model_format, model_data = read_model_description_file(
+                ext_root, self._externals)
+            externals = ModelDescription(model_format, model_data)
             self._externals_sourcetree = SourceTree(ext_root, externals)
             self._externals_sourcetree.load(load_all)
 
@@ -888,8 +943,9 @@ def _main(args):
         raise NotImplementedError(msg)
 
     root_dir = os.path.abspath('.')
-    xml_root = read_xml_file(root_dir, args.model)
-    model = ModelDescription(xml_root)
+    model_format, model_data = read_model_description_file(
+        root_dir, args.model)
+    model = ModelDescription(model_format, model_data)
     if False:
         pretty_printer.pprint(model)
     source_tree = SourceTree(root_dir, model)
@@ -903,7 +959,7 @@ if __name__ == "__main__":
         return_status = _main(arguments)
         sys.exit(return_status)
     except Exception as error:
-        # print(str(error))
+        print(str(error))
         if arguments.backtrace:
             traceback.print_exc()
         sys.exit(1)
