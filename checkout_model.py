@@ -12,6 +12,7 @@ import argparse
 import errno
 import os
 import os.path
+import pprint
 import re
 import subprocess
 import sys
@@ -32,7 +33,7 @@ if sys.hexversion < 0x02070000:
 # Global variables
 #
 # ---------------------------------------------------------------------
-
+pretty_printer = pprint.PrettyPrinter(indent=4)
 RE_NAMESPACE = re.compile(r"{[^}]*}")
 
 
@@ -189,7 +190,7 @@ def strip_namespace(tag):
 
 # ---------------------------------------------------------------------
 #
-# Worker classes
+# Worker utilities
 #
 # ---------------------------------------------------------------------
 def create_repository(component_name, repo_info):
@@ -197,18 +198,218 @@ def create_repository(component_name, repo_info):
     create the appropriate object.
 
     """
-    protocol = repo_info.get('protocol').lower()
+    protocol = repo_info['protocol'].lower()
     if 'git' == protocol:
         repo = _GitRepository(component_name, repo_info)
     elif 'svn' == protocol:
         repo = _SvnRepository(component_name, repo_info)
-    elif protocol is None:
-        perr("repo must have a protocol")
+    elif 'externals_only' == protocol:
+        repo = None
     else:
-        perr("Unknown repo protocol, {0}".format(protocol))
+        raise RuntimeError("Unknown repo protocol, {0}".format(protocol))
     return repo
 
 
+def read_xml_file(root_dir, file_name):
+    """
+    """
+    root_dir = os.path.abspath(root_dir)
+
+    print("Processing model description file '{0}'".format(file_name))
+    print("in directory : {0}".format(root_dir))
+    file_path = os.path.join(root_dir, file_name)
+    if not os.path.exists(file_name):
+        msg = ("ERROR: Model description file, '{0}', does not "
+               "exist at {1}".format(file_name, file_path))
+        raise RuntimeError(msg)
+
+    xml_root = None
+    with open(file_path, 'r') as xml_file:
+        xml_tree = ET.parse(xml_file)
+        xml_root = xml_tree.getroot()
+    return xml_root
+
+
+class ModelDescription(dict):
+    """
+    """
+    # keywords
+    _EXTERNALS = 'externals'
+    _BRANCH = 'branch'
+    _REPO = 'repo'
+    _REQUIRED = 'required'
+    _TAG = 'tag'
+    _PATH = 'path'
+    _PROTOCOL = 'protocol'
+    _URL = 'url'
+    _NAME = 'name'
+
+    # v1 xml keywords
+    _V1_TREE_PATH = 'TREE_PATH'
+    _V1_ROOT = 'ROOT'
+    _V1_TAG = 'TAG'
+    _V1_BRANCH = 'BRANCH'
+    _V1_REQ_SOURCE = 'REQ_SOURCE'
+
+    _source_schema = {_REQUIRED: True,
+                      _PATH: 'string',
+                      _EXTERNALS: 'string',
+                      _REPO: {_PROTOCOL: 'string',
+                              _URL: 'string',
+                              _TAG: 'string',
+                              _BRANCH: 'string',
+                              }
+                      }
+
+    def __init__(self, xml_root):
+        """Convert the xml into a standardized dict that can be used to
+        construct the source objects
+
+        """
+        self._parse(xml_root)
+
+    def _validate(self):
+        """
+        """
+        def validate_data_struct(reference, data):
+            is_valid = False
+            in_ref = True
+            valid = True
+            if isinstance(reference, dict) and isinstance(data, dict):
+                for k in data:
+                    in_ref = in_ref and (k in reference)
+                    valid = valid and (
+                        validate_data_struct(reference[k], data[k]))
+                is_valid = in_ref and valid
+            else:
+                is_valid = isinstance(data, type(reference))
+            return is_valid
+
+        for m in self:
+            valid = validate_data_struct(self._source_schema, self[m])
+            if not valid:
+                pretty_printer.pprint(self._source_schema)
+                pretty_printer.pprint(self[m])
+                raise RuntimeError(
+                    "ERROR: source for '{0}' did not validate".format(m))
+
+    def _parse(self, xml_root):
+        """
+        """
+        xml_root = self._get_xml_config_sourcetree(xml_root)
+        version = self._get_xml_schema_version(xml_root)
+        major_version = version[0]
+        if '1' == major_version:
+            self._parse_v1(xml_root)
+        elif '2' == major_version:
+            self._parse_v2(xml_root)
+        else:
+            msg = ("ERROR: unknown xml schema version '{0}'".format(
+                major_version))
+            raise RuntimeError(msg)
+        self._validate()
+
+    def _parse_v1(self, xml_root):
+        """
+        """
+        for src in xml_root.findall('./source'):
+            source = {}
+            source[self._EXTERNALS] = ''
+            source[self._REQUIRED] = False
+            source[self._PATH] = src.find(self._V1_TREE_PATH).text
+            repo = {}
+            xml_repo = src.find(self._REPO)
+            repo[self._PROTOCOL] = xml_repo.get(self._PROTOCOL)
+            repo[self._URL] = xml_repo.find(self._V1_ROOT).text
+            repo[self._TAG] = xml_repo.find(self._V1_TAG)
+            if repo[self._TAG] is not None:
+                repo[self._TAG] = repo[self._TAG].text
+            else:
+                repo[self._TAG] = ''
+            repo[self._BRANCH] = xml_repo.find(self._V1_BRANCH)
+            if repo[self._BRANCH] is not None:
+                repo[self._BRANCH] = repo[self._BRANCH].text
+            else:
+                repo[self._BRANCH] = ''
+            source[self._REPO] = repo
+            name = src.get(self._NAME).lower()
+            self[name] = source
+            required = xml_root.find(self._REQUIRED)
+            if required is not None:
+                for src in required.findall(self._V1_REQ_SOURCE):
+                    name = src.text.lower()
+                    self[name][self._REQUIRED] = True
+
+    def _parse_v2(self, xml_root):
+        """
+        """
+        for src in xml_root.findall('./source'):
+            source = {}
+            source[self._PATH] = src.find(self._PATH).text
+            repo = {}
+            xml_repo = src.find(self._REPO)
+            repo[self._PROTOCOL] = xml_repo.get(self._PROTOCOL)
+            repo[self._URL] = xml_repo.find(self._URL).text
+            repo[self._TAG] = xml_repo.find(self._TAG)
+            if repo[self._TAG] is not None:
+                repo[self._TAG] = repo[self._TAG].text
+            else:
+                repo[self._TAG] = ''
+            repo[self._BRANCH] = xml_repo.find(self._BRANCH)
+            if repo[self._BRANCH] is not None:
+                repo[self._BRANCH] = repo[self._BRANCH].text
+            else:
+                repo[self._BRANCH] = ''
+            source[self._REPO] = repo
+            source[self._EXTERNALS] = src.find(self._EXTERNALS)
+            if source[self._EXTERNALS] is not None:
+                source[self._EXTERNALS] = source[self._EXTERNALS].text
+            else:
+                source[self._EXTERNALS] = ''
+            required = src.get(self._REQUIRED).lower()
+            if 'false' == required:
+                source[self._REQUIRED] = False
+            elif 'true' == required:
+                source[self._REQUIRED] = True
+            else:
+                msg = "ERROR: unknown value for attribute 'required' = {0} ".format(
+                    required)
+                raise RuntimeError(msg)
+            name = src.get(self._NAME).lower()
+            self[name] = source
+
+    @staticmethod
+    def _get_xml_config_sourcetree(xml_root):
+        """
+        """
+        st_str = 'config_sourcetree'
+        xml_st = None
+        if xml_root.tag == st_str:
+            xml_st = xml_root
+        else:
+            xml_st = xml_root.find('./config_sourcetree')
+        if xml_st is None:
+            msg = "ERROR: xml does not contain a 'config_sourcetree' element."
+            raise RuntimeError(msg)
+        return xml_st
+
+    @staticmethod
+    def _get_xml_schema_version(xml_st):
+        """
+        """
+        version = xml_st.get('version', None)
+        if not version:
+            msg = ("ERROR: xml config_sourcetree element must contain "
+                   "a 'version' attribute.")
+            raise RuntimeError(msg)
+        return version.split('.')
+
+
+# ---------------------------------------------------------------------
+#
+# Worker classes
+#
+# ---------------------------------------------------------------------
 class _Repository(object):
     """
     Class to represent and operate on a repository description.
@@ -219,29 +420,19 @@ class _Repository(object):
         Parse repo (a <repo> XML element).
         """
         self._name = component_name
-        self._protocol = repo.get('protocol')
-        self._tag = None
-        self._branch = None
-        self._url = None
-        for element in repo:
-            ctag = strip_namespace(element.tag).lower()
-            if ctag == 'root':
-                self._url = element.text
-            elif ctag == 'tag':
-                self._tag = element.text
-            elif ctag == 'branch':
-                self._branch = element.text
-            else:
-                perr("Unknown repo element type, {0}".format(element.tag))
+        self._protocol = repo['protocol']
+        self._tag = repo['tag']
+        self._branch = repo['branch']
+        self._url = repo['url']
 
-        if self._url is None:
+        if self._url is '':
             perr("repo must have a URL")
 
-        if self._tag is None and self._branch is None:
-            perr("repo must have either a BRANCH or a TAG element")
+        if self._tag is '' and self._branch is '':
+            perr("repo must have either a branch or a tag element")
 
-        if self._tag is not None and self._branch is not None:
-            perr("repo cannot have both a BRANCH and a TAG element")
+        if self._tag is not '' and self._branch is not '':
+            perr("repo cannot have both a tag and a tag element")
 
     def load(self, repo_dir):
         """
@@ -267,10 +458,13 @@ class _SvnRepository(_Repository):
         Parse repo (a <repo> XML element).
         """
         _Repository.__init__(self, component_name, repo)
-        if self._branch is not None:
+        if len(self._branch) > 0:
             self._url = os.path.join(self._url, self._branch)
-        else:
+        elif len(self._tag) > 0:
             self._url = os.path.join(self._url, self._tag)
+        else:
+            raise RuntimeError(
+                "DEV_ERROR in svn repository. Shouldn't be here!")
 
     def load(self, repo_dir):
         """
@@ -527,7 +721,7 @@ class _GitRepository(_Repository):
             os.chdir(checkout_dir)
 
         cmd = []
-        if self._branch is not None:
+        if len(self._branch) > 0:
             (curr_branch, _) = self._git_current_branch()
             ref_type = self._git_ref_type(self._branch)
             if ref_type == self.GIT_REF_REMOTE_BRANCH:
@@ -543,9 +737,11 @@ class _GitRepository(_Repository):
             else:
                 perr("Unable to check out branch, {0}".format(self._branch))
 
-        elif self._tag is not None:
+        elif len(self._tag) > 0:
             # For now, do a hail mary and hope tag can be checked out
             cmd = ["git", "checkout", self._tag]
+        else:
+            raise RuntimeError("DEV_ERROR: in git repo. Shouldn't be here!")
 
         if cmd:
             print("    {0}\n".format(' '.join(cmd)))
@@ -561,30 +757,24 @@ class _Source(object):
     _Source represents a <source> object in a <config_sourcetree>
     """
 
-    def __init__(self, node):
+    def __init__(self, name, source):
         """
         Parse an XML node for a <source> tag
         """
-        self._name = node.get('name')
-        self._repos = list()
+        self._name = name
+        self._repos = []
         self._loaded = False
         self._externals = ''
         self._externals_sourcetree = None
         # Parse the sub-elements
-        for child in node:
-            ctag = strip_namespace(child.tag).lower()
-            if ctag == 'repo':
-                repo = create_repository(self._name, child)
-                self._repos.append(repo)
-            elif ctag == 'tree_path':
-                self._path = child.text
-                self._repo_dir = os.path.basename(self._path)
-            elif ctag == 'externals_description':
-                self._externals = child.text
-            else:
-                perr("Unknown source element type, {0}".format(child.tag))
-        if not self._repos:
-            perr("No repo element for source {0}".format(self._name))
+        self._path = source['path']
+        self._repo_dir = os.path.basename(self._path)
+        self._externals = source['externals']
+        repo = create_repository(name, source['repo'])
+        if repo is None:
+            self._loaded = True
+        else:
+            self._repos.append(repo)
 
     def get_name(self):
         """
@@ -623,14 +813,16 @@ class _Source(object):
 
         self._loaded = repo_loaded
 
-        if self._externals:
+        if len(self._externals) > 0:
             comp_dir = os.path.join(tree_root, self._path)
             os.chdir(comp_dir)
             if not os.path.exists(self._externals):
                 raise RuntimeError("External model description file '{0}' "
                                    "does not exist!".format(self._externals))
             ext_root = comp_dir
-            self._externals_sourcetree = SourceTree(self._externals, ext_root)
+            xml_root = read_xml_file(ext_root, self._externals)
+            externals = ModelDescription(xml_root)
+            self._externals_sourcetree = SourceTree(ext_root, externals)
             self._externals_sourcetree.load(load_all)
 
         os.chdir(mycurrdir)
@@ -642,31 +834,18 @@ class SourceTree(object):
     SourceTree represents a <config_sourcetree> object
     """
 
-    def __init__(self, model_file, root_dir="."):
+    def __init__(self, root_dir, model):
         """
         Parse a model file into a SourceTree object
         """
-        self._root_dir = os.path.abspath(root_dir)
-
-        print("Processing model description file '{0}'".format(model_file))
-        print("in directory : {0}".format(self._root_dir))
-        if not os.path.exists(model_file):
-            raise RuntimeError("ERROR: Model file, '{0}', does not "
-                               "exist".format(model_file))
-
-        with open(model_file, 'r') as xml_file:
-            self._tree = ET.parse(xml_file)
-            self._root = self._tree.getroot()
-
+        self._root_dir = root_dir
         self._all_components = {}
         self._required_compnames = []
-        for child in self._root:
-            if child.tag == "source":
-                src = _Source(child)
-                self._all_components[src.get_name()] = src
-            elif child.tag == "required":
-                for req in child:
-                    self._required_compnames.append(req.text)
+        for comp in model:
+            src = _Source(comp, model[comp])
+            self._all_components[comp] = src
+            if model[comp]['required']:
+                self._required_compnames.append(comp)
 
     def load(self, load_all, load_comp=None):
         """
@@ -708,7 +887,12 @@ def _main(args):
         msg = 'The required only option to checkout has not been implemented'
         raise NotImplementedError(msg)
 
-    source_tree = SourceTree(args.model)
+    root_dir = os.path.abspath('.')
+    xml_root = read_xml_file(root_dir, args.model)
+    model = ModelDescription(xml_root)
+    if False:
+        pretty_printer.pprint(model)
+    source_tree = SourceTree(root_dir, model)
     source_tree.load(load_all)
     return 0
 
