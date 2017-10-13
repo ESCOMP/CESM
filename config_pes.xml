@@ -1321,14 +1321,14 @@
       <pes pesize="any" compset="CAM.+CLM.+CICE.+POP.+WW3">
 	<comment>about 17ypd expected</comment>
 	<ntasks>
-	  <ntasks_atm>-60</ntasks_atm>
-	  <ntasks_lnd>-34</ntasks_lnd>
-	  <ntasks_rof>-34</ntasks_rof>
-	  <ntasks_ice>-22</ntasks_ice>
+	  <ntasks_atm>-50</ntasks_atm>
+	  <ntasks_lnd>-30</ntasks_lnd>
+	  <ntasks_rof>-30</ntasks_rof>
+	  <ntasks_ice>-18</ntasks_ice>
 	  <ntasks_ocn>-20</ntasks_ocn>
-	  <ntasks_glc>-34</ntasks_glc>
-	  <ntasks_wav>-4</ntasks_wav>
-	  <ntasks_cpl>-60</ntasks_cpl>
+	  <ntasks_glc>-30</ntasks_glc>
+	  <ntasks_wav>-2</ntasks_wav>
+	  <ntasks_cpl>-50</ntasks_cpl>
 	</ntasks>
 	<nthrds>
 	  <nthrds_atm>4</nthrds_atm>
@@ -1344,10 +1344,10 @@
 	  <rootpe_atm>0</rootpe_atm>
 	  <rootpe_lnd>0</rootpe_lnd>
 	  <rootpe_rof>0</rootpe_rof>
-	  <rootpe_ice>-34</rootpe_ice>
-	  <rootpe_ocn>-60</rootpe_ocn>
+	  <rootpe_ice>-30</rootpe_ice>
+	  <rootpe_ocn>-50</rootpe_ocn>
 	  <rootpe_glc>0</rootpe_glc>
-	  <rootpe_wav>-56</rootpe_wav>
+	  <rootpe_wav>-48</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
