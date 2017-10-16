@@ -42,6 +42,7 @@ else:
 # ---------------------------------------------------------------------
 pretty_printer = pprint.PrettyPrinter(indent=4)
 RE_NAMESPACE = re.compile(r"{[^}]*}")
+EMPTY_STR = u''
 
 
 # ---------------------------------------------------------------------
@@ -241,7 +242,7 @@ def read_model_description_file(root_dir, file_name):
             # not an xml file.
             pass
 
-    if not model_description:
+    if model_description is None:
         with open(file_path, 'r') as filehandle:
             try:
                 json_data = json.loads(filehandle.read())
@@ -251,7 +252,7 @@ def read_model_description_file(root_dir, file_name):
                 # not a json file
                 print(e)
 
-    if not model_description:
+    if model_description is None:
         try:
             config = config_parser()
             config.read(file_path)
@@ -262,7 +263,7 @@ def read_model_description_file(root_dir, file_name):
             # not a cfg file
             pass
 
-    if not model_description:
+    if model_description is None:
         msg = "Unknown file format!"
         raise RuntimeError(msg)
 
@@ -280,7 +281,7 @@ class ModelDescription(dict):
     _TAG = u'tag'
     _PATH = u'path'
     _PROTOCOL = u'protocol'
-    _URL = u'url'
+    _REPO_URL = u'repo_url'
     _NAME = u'name'
 
     # v1 xml keywords
@@ -294,7 +295,7 @@ class ModelDescription(dict):
                       _PATH: u'string',
                       _EXTERNALS: u'string',
                       _REPO: {_PROTOCOL: u'string',
-                              _URL: u'string',
+                              _REPO_URL: u'string',
                               _TAG: u'string',
                               _BRANCH: u'string',
                               }
@@ -314,23 +315,33 @@ class ModelDescription(dict):
         else:
             msg = "Unknown model data format '{0}'".format(model_format)
             raise RuntimeError(msg)
+        self._validate()
 
     def _validate(self):
         """
         """
-        def validate_data_struct(reference, data):
+        def validate_data_struct(schema, data):
             is_valid = False
             in_ref = True
             valid = True
-            if isinstance(reference, dict) and isinstance(data, dict):
-                for k in data:
-                    in_ref = in_ref and (k in reference)
-                    print(in_ref)
-                    valid = valid and (
-                        validate_data_struct(reference[k], data[k]))
+            if isinstance(schema, dict) and isinstance(data, dict):
+                for k in schema:
+                    in_ref = in_ref and (k in data)
+                    if in_ref:
+                        valid = valid and (
+                            validate_data_struct(schema[k], data[k]))
                 is_valid = in_ref and valid
             else:
-                is_valid = isinstance(data, type(reference))
+                is_valid = isinstance(data, type(schema))
+            if not is_valid:
+                print("  Unmatched schema and data:")
+                if isinstance(schema, dict):
+                    for item in schema:
+                        print("    {0} schema = {1} ({2})".format(item, schema[item], type(schema[item])))
+                        print("    {0} data = {1} ({2})".format(item, data[item], type(data[item])))
+                else:
+                    print("    schema = {0} ({1})".format(schema, type(schema)))
+                    print("    data = {0} ({1})".format(data, type(data)))
             return is_valid
 
         for m in self:
@@ -345,7 +356,45 @@ class ModelDescription(dict):
         """
         """
         self.update(json_data)
-        self._validate()
+
+    def _parse_cfg(self, cfg_data):
+        """
+        """
+        def str_to_bool(bool_str):
+            value = None
+            if 'true' == bool_str.lower():
+                value = True
+            elif 'false' == bool_str.lower():
+                value = False
+            if value is None:
+                msg = ("ERROR: invalid boolean string value '{0}'. "
+                       "Must be 'true' or 'false'".format(bool_str))
+                raise RuntimeError(msg)
+            return value
+
+        def list_to_dict(input_list, convert_to_lower_case=True):
+            output_dict = {}
+            for item in input_list:
+                key = unicode(item[0].strip())
+                value = unicode(item[1].strip())
+                if convert_to_lower_case:
+                    key = key.lower()
+                output_dict[key] = value
+            return output_dict
+
+        for section in cfg_data.sections():
+            name = unicode(section.lower().strip())
+            self[name] = {}
+            self[name].update(list_to_dict(cfg_data.items(section)))
+            self[name][self._REPO] = {}
+            for item in self[name].keys():
+                if item in self._source_schema:
+                    if isinstance(self._source_schema[item], bool):
+                        print('--> {0}'.format(item))
+                        self[name][item] = str_to_bool(self[name][item])
+                if item in self._source_schema[self._REPO]:
+                    self[name][self._REPO][item] = self[name][item]
+                    del self[name][item]
 
     def _parse_xml(self, xml_root):
         """
@@ -361,30 +410,29 @@ class ModelDescription(dict):
             msg = ("ERROR: unknown xml schema version '{0}'".format(
                 major_version))
             raise RuntimeError(msg)
-        self._validate()
 
     def _parse_xml_v1(self, xml_root):
         """
         """
         for src in xml_root.findall('./source'):
             source = {}
-            source[self._EXTERNALS] = ''
+            source[self._EXTERNALS] = EMPTY_STR
             source[self._REQUIRED] = False
             source[self._PATH] = src.find(self._V1_TREE_PATH).text
             repo = {}
             xml_repo = src.find(self._REPO)
             repo[self._PROTOCOL] = xml_repo.get(self._PROTOCOL)
-            repo[self._URL] = xml_repo.find(self._V1_ROOT).text
+            repo[self._REPO_URL] = xml_repo.find(self._V1_ROOT).text
             repo[self._TAG] = xml_repo.find(self._V1_TAG)
             if repo[self._TAG] is not None:
                 repo[self._TAG] = repo[self._TAG].text
             else:
-                repo[self._TAG] = ''
+                repo[self._TAG] = EMPTY_STR
             repo[self._BRANCH] = xml_repo.find(self._V1_BRANCH)
             if repo[self._BRANCH] is not None:
                 repo[self._BRANCH] = repo[self._BRANCH].text
             else:
-                repo[self._BRANCH] = ''
+                repo[self._BRANCH] = EMPTY_STR
             source[self._REPO] = repo
             name = src.get(self._NAME).lower()
             self[name] = source
@@ -399,28 +447,30 @@ class ModelDescription(dict):
         """
         for src in xml_root.findall('./source'):
             source = {}
-            source[self._PATH] = src.find(self._PATH).text
+            source[self._PATH] = unicode(src.find(self._PATH).text)
             repo = {}
             xml_repo = src.find(self._REPO)
-            repo[self._PROTOCOL] = xml_repo.get(self._PROTOCOL)
-            repo[self._URL] = xml_repo.find(self._URL).text
+            repo[self._PROTOCOL] = unicode(xml_repo.get(self._PROTOCOL))
+            repo[self._REPO_URL] = xml_repo.find(self._REPO_URL)
+            if repo[self._REPO_URL] is not None:
+                repo[self._REPO_URL] = unicode(repo[self._REPO_URL].text)
             repo[self._TAG] = xml_repo.find(self._TAG)
             if repo[self._TAG] is not None:
-                repo[self._TAG] = repo[self._TAG].text
+                repo[self._TAG] = unicode(repo[self._TAG].text)
             else:
-                repo[self._TAG] = ''
+                repo[self._TAG] = EMPTY_STR
             repo[self._BRANCH] = xml_repo.find(self._BRANCH)
             if repo[self._BRANCH] is not None:
-                repo[self._BRANCH] = repo[self._BRANCH].text
+                repo[self._BRANCH] = unicode(repo[self._BRANCH].text)
             else:
-                repo[self._BRANCH] = ''
+                repo[self._BRANCH] = EMPTY_STR
             source[self._REPO] = repo
             source[self._EXTERNALS] = src.find(self._EXTERNALS)
             if source[self._EXTERNALS] is not None:
-                source[self._EXTERNALS] = source[self._EXTERNALS].text
+                source[self._EXTERNALS] = unicode(source[self._EXTERNALS].text)
             else:
-                source[self._EXTERNALS] = ''
-            required = src.get(self._REQUIRED).lower()
+                source[self._EXTERNALS] = EMPTY_STR
+            required = unicode(src.get(self._REQUIRED).lower())
             if 'false' == required:
                 source[self._REQUIRED] = False
             elif 'true' == required:
@@ -477,16 +527,16 @@ class _Repository(object):
         self._protocol = repo['protocol']
         self._tag = repo['tag']
         self._branch = repo['branch']
-        self._url = repo['url']
+        self._url = repo['repo_url']
 
-        if self._url is '':
+        if self._url is EMPTY_STR:
             perr("repo must have a URL")
 
-        if self._tag is '' and self._branch is '':
+        if self._tag is EMPTY_STR and self._branch is EMPTY_STR:
             perr("repo must have either a branch or a tag element")
 
-        if self._tag is not '' and self._branch is not '':
-            perr("repo cannot have both a tag and a tag element")
+        if self._tag is not EMPTY_STR and self._branch is not EMPTY_STR:
+            perr("repo cannot have both a tag and a branch element")
 
     def load(self, repo_dir):
         """
@@ -818,7 +868,7 @@ class _Source(object):
         self._name = name
         self._repos = []
         self._loaded = False
-        self._externals = ''
+        self._externals = EMPTY_STR
         self._externals_sourcetree = None
         # Parse the sub-elements
         self._path = source['path']
