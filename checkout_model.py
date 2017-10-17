@@ -11,13 +11,13 @@ from __future__ import print_function
 import argparse
 import errno
 import json
+import logging
 import os
 import os.path
 import pprint
 import re
 import subprocess
 import sys
-import textwrap
 import traceback
 import xml.etree.ElementTree as ET
 
@@ -168,11 +168,12 @@ Model description file:
 # Utility functions
 #
 # ---------------------------------------------------------------------
-def perr(errstr):
+def fatal_error(message):
     """
     Error output function
     """
-    raise RuntimeError("{0}ERROR: {1}".format(os.linesep, errstr))
+    logging.error(message)
+    raise RuntimeError("{0}ERROR: {1}".format(os.linesep, message))
 
 
 def check_output(commands):
@@ -198,74 +199,58 @@ def check_output(commands):
     return outstr
 
 
-def scall(commands, log_filename=None):
+def execute_subprocess(commands, return_status=False):
+    """Wrapper around subprocess.check_output to handle common
+    exceptions.
+
+    check_output runs a command with arguments and waits
+    for it to complete.
+
+    check_output raises an exception on a nonzero return code.  if
+    return_status is true, execute_subprocess returns the subprocess
+    return code, otherwise execute_subprocess treats non-zero return
+    status as an error and raises an exception.
+
     """
-    Wrapper around subprocess.check_call to handle common exceptions.
-    check_call runs a command with arguments and waits for it to complete.
-    check_call raises an exception on a nonzero return code.
-    scall returns the return code of the command (zero) or -1 on error.
-    """
-    retcode = -1
+    status = -1
     try:
-        if log_filename:
-            fpath = os.path.join(os.path.abspath('.'), log_filename)
-            with open(fpath, 'w') as logfile:
-                print(" ".join(commands), file=logfile)
-                retcode = subprocess.check_call(commands, stdout=logfile,
-                                                stderr=subprocess.STDOUT)
-        else:
-            retcode = subprocess.check_call(commands)
+        logging.info(' '.join(commands))
+        output = subprocess.check_output(commands, stderr=subprocess.STDOUT)
+        log_process_output(output)
+        status = 0
     except OSError as error:
-        print("Execution of '{0}' failed".format(
-            (' '.join(commands))), file=sys.stderr)
-        print(error, file=sys.stderr)
+        msg = "Execution of '{0}' failed".format(
+            ' '.join(commands))
+        logging.error(error)
+        fatal_error(msg)
     except ValueError as error:
-        print("ValueError in '{0}'".format(
-            (' '.join(commands))), file=sys.stderr)
-        print(error, file=sys.stderr)
+        msg = "ValueError in '{0}'".format(
+            ' '.join(commands))
+        logging.error(error)
+        fatal_error(msg)
     except subprocess.CalledProcessError as error:
-        print("CalledProcessError in '{0}'".format(
-            (' '.join(commands))), file=sys.stderr)
-        print(error, file=sys.stderr)
+        msg = "CalledProcessError in '{0}'".format(
+            ' '.join(commands))
+        logging.error(error)
+        status_msg = "Returned : {0}".format(error.returncode)
+        logging.error(status_msg)
+        log_process_output(error.output)
+        if not return_status:
+            fatal_error(msg)
+        status = error.returncode
+    return status
 
-    return retcode
 
+def log_process_output(output):
+    """Log each line of process output at debug level so it can be
+    filtered if necessary. By default, output is a single string, and
+    logging.debug(output) will only put log info heading on the first
+    line. This makes it hard to filter with grep.
 
-def retcall(commands):
     """
-    Wrapper around subprocess.call to handle common exceptions.
-    call runs a command with arguments, waits for it to complete, and returns
-    the command's return code.
-    retcall sends all error output to /dev/null and is used when just the
-    return code is desired.
-    """
-    with open(os.devnull, 'w') as null_file:
-        try:
-            retcode = subprocess.call(
-                commands, stdout=null_file, stderr=subprocess.STDOUT)
-        except OSError as error:
-            print("Execution of '{0}' failed".format(
-                ' '.join(commands)), file=sys.stderr)
-            print(error, file=sys.stderr)
-        except ValueError as error:
-            print("ValueError in '{0}'".format(
-                ' '.join(commands)), file=sys.stderr)
-            print(error, file=sys.stderr)
-        except subprocess.CalledProcessError as error:
-            print("CalledProcessError in '{0}'".format(
-                ' '.join(commands)), file=sys.stderr)
-            print(error, file=sys.stderr)
-
-    return retcode
-
-
-def quit_on_fail(retcode, caller):
-    """
-    Check a return code and exit if non-zero.
-    """
-    if retcode != 0:
-        raise RuntimeError("{0} failed with return code {1}".format(
-            caller, retcode))
+    output = output.split('\n')
+    for line in output:
+        logging.debug(line)
 
 
 def strip_namespace(tag):
@@ -299,7 +284,8 @@ def create_repository(component_name, repo_info):
     elif 'externals_only' == protocol:
         repo = None
     else:
-        raise RuntimeError("Unknown repo protocol, {0}".format(protocol))
+        msg = "Unknown repo protocol, {0}".format(protocol)
+        fatal_error(msg)
     return repo
 
 
@@ -314,7 +300,7 @@ def read_model_description_file(root_dir, file_name):
     if not os.path.exists(file_name):
         msg = ("ERROR: Model description file, '{0}', does not "
                "exist at {1}".format(file_name, file_path))
-        raise RuntimeError(msg)
+        fatal_error(msg)
 
     model_description = None
     model_format = None
@@ -350,7 +336,7 @@ def read_model_description_file(root_dir, file_name):
 
     if model_description is None:
         msg = "Unknown file format!"
-        raise RuntimeError(msg)
+        fatal_error(msg)
 
     return model_format, model_description
 
@@ -399,7 +385,7 @@ class ModelDescription(dict):
             self._parse_json(model_data)
         else:
             msg = "Unknown model data format '{0}'".format(model_format)
-            raise RuntimeError(msg)
+            fatal_error(msg)
         self._validate()
 
     def _validate(self):
@@ -434,8 +420,8 @@ class ModelDescription(dict):
             if not valid:
                 pretty_printer.pprint(self._source_schema)
                 pretty_printer.pprint(self[m])
-                raise RuntimeError(
-                    "ERROR: source for '{0}' did not validate".format(m))
+                msg = "ERROR: source for '{0}' did not validate".format(m)
+                fatal_error(msg)
 
     def _parse_json(self, json_data):
         """
@@ -454,7 +440,7 @@ class ModelDescription(dict):
             if value is None:
                 msg = ("ERROR: invalid boolean string value '{0}'. "
                        "Must be 'true' or 'false'".format(bool_str))
-                raise RuntimeError(msg)
+                fatal_error(msg)
             return value
 
         def list_to_dict(input_list, convert_to_lower_case=True):
@@ -494,7 +480,7 @@ class ModelDescription(dict):
         else:
             msg = ("ERROR: unknown xml schema version '{0}'".format(
                 major_version))
-            raise RuntimeError(msg)
+            fatal_error(msg)
 
     def _parse_xml_v1(self, xml_root):
         """
@@ -563,7 +549,7 @@ class ModelDescription(dict):
             else:
                 msg = "ERROR: unknown value for attribute 'required' = {0} ".format(
                     required)
-                raise RuntimeError(msg)
+                fatal_error(msg)
             name = src.get(self._NAME).lower()
             self[name] = source
 
@@ -579,7 +565,7 @@ class ModelDescription(dict):
             xml_st = xml_root.find('./config_sourcetree')
         if xml_st is None:
             msg = "ERROR: xml does not contain a 'config_sourcetree' element."
-            raise RuntimeError(msg)
+            fatal_error(msg)
         return xml_st
 
     @staticmethod
@@ -590,7 +576,7 @@ class ModelDescription(dict):
         if not version:
             msg = ("ERROR: xml config_sourcetree element must contain "
                    "a 'version' attribute.")
-            raise RuntimeError(msg)
+            fatal_error(msg)
         return version.split('.')
 
 
@@ -615,13 +601,13 @@ class _Repository(object):
         self._url = repo['repo_url']
 
         if self._url is EMPTY_STR:
-            perr("repo must have a URL")
+            fatal_error("repo must have a URL")
 
         if self._tag is EMPTY_STR and self._branch is EMPTY_STR:
-            perr("repo must have either a branch or a tag element")
+            fatal_error("repo must have either a branch or a tag element")
 
         if self._tag is not EMPTY_STR and self._branch is not EMPTY_STR:
-            perr("repo cannot have both a tag and a branch element")
+            fatal_error("repo cannot have both a tag and a branch element")
 
     def load(self, repo_dir):
         """
@@ -632,8 +618,9 @@ class _Repository(object):
         """
         if repo_dir or self._protocol:
             pass
-        raise RuntimeError("DEV_ERROR: this method must be implemented in all "
-                           "child classes!")
+        msg = ("DEV_ERROR: this method must be implemented in all "
+               "child classes!")
+        fatal_error(msg)
 
 
 class _SvnRepository(_Repository):
@@ -652,8 +639,8 @@ class _SvnRepository(_Repository):
         elif len(self._tag) > 0:
             self._url = os.path.join(self._url, self._tag)
         else:
-            raise RuntimeError(
-                "DEV_ERROR in svn repository. Shouldn't be here!")
+            msg = "DEV_ERROR in svn repository. Shouldn't be here!"
+            fatal_error(msg)
 
     def load(self, repo_dir):
         """
@@ -672,10 +659,7 @@ class _SvnRepository(_Repository):
         """
         caller = "svn_checkout {0} {1}".format(checkout_dir, self._url)
         cmd = ["svn", "checkout", self._url, checkout_dir]
-        print("    {0}\n".format(' '.join(cmd)))
-        log_filename = "svn-{0}.log".format(self._name)
-        retcode = scall(cmd, log_filename)
-        quit_on_fail(retcode, caller)
+        execute_subprocess(cmd)
 
     def _svn_update(self, updir):
         """
@@ -684,8 +668,7 @@ class _SvnRepository(_Repository):
         caller = "svn_update {0}".format(updir)
         mycurrdir = os.path.abspath(".")
         os.chdir(updir)
-        retcode = scall(["svn update"])
-        quit_on_fail(retcode, caller)
+        execute_subprocess(["svn update"])
         os.chdir(mycurrdir)
 
     def _svn_check_dir(self, chkdir, ver):
@@ -837,7 +820,8 @@ class _GitRepository(_Repository):
         """
         mycurrdir = os.path.abspath(".")
         os.chdir(wdir)
-        retcode = retcall(["git", "diff", "--quiet", "--exit-code"])
+        cmd = ["git", "diff", "--quiet", "--exit-code"]
+        retcode = execute_subprocess(cmd, return_status=True)
         os.chdir(mycurrdir)
         return retcode == 0
 
@@ -869,19 +853,18 @@ class _GitRepository(_Repository):
         os.chdir(repo_dir)
         remote = self._git_remote(repo_dir)
         if remote is not None:
-            retcode = scall(["git", "remote", "update", "--prune", remote])
-            quit_on_fail(retcode, caller)
+            cmd = ["git", "remote", "update", "--prune", remote]
+            execute_subprocess(cmd)
 
-        retcode = scall(["git", "merge", "--ff-only", "@{u}"])
+        cmd = ["git", "merge", "--ff-only", "@{u}"]
+        execute_subprocess(cmd)
         os.chdir(mycurrdir)
-        quit_on_fail(retcode, caller)
 
     def _git_checkout(self, checkout_dir):
         """
         Checkout 'branch' or 'tag' from 'repo_url'
         """
         caller = "_git_checkout {0} {1}".format(checkout_dir, self._url)
-        retcode = 0
         mycurrdir = os.path.abspath(".")
         if os.path.exists(checkout_dir):
             # We can't do a clone. See what we have here
@@ -894,19 +877,17 @@ class _GitRepository(_Repository):
                     check_url = check_url.rstrip()
 
                 if check_url != self._url:
-                    perr("Invalid repository in {0}, url = {1}, "
-                         "should be {2}".format(checkout_dir, check_url,
-                                                self._url))
+                    msg = ("Invalid repository in {0}, url = {1}, "
+                           "should be {2}".format(checkout_dir, check_url,
+                                                  self._url))
+                    fatal_error(msg)
                 # FIXME(bja, 2017-09) we are updating an existing
                 # clone. Need to do a fetch here to ensure that the
                 # branch or tag checkout will work
 
         else:
             cmd = ["git", "clone", self._url, checkout_dir]
-            print("    {0}\n".format(' '.join(cmd)))
-            log_filename = "git-{0}-clone.log".format(self._name)
-            retcode = scall(cmd, log_filename)
-            quit_on_fail(retcode, caller)
+            execute_subprocess(cmd)
             os.chdir(checkout_dir)
 
         cmd = []
@@ -918,25 +899,25 @@ class _GitRepository(_Repository):
             elif ref_type == self.GIT_REF_LOCAL_BRANCH:
                 if curr_branch != self._branch:
                     if not self._git_working_dir_clean(checkout_dir):
-                        perr("Working directory ({0}) not clean, "
-                             "aborting".format(checkout_dir))
+                        msg = ("Working directory ({0}) not clean, "
+                               "aborting".format(checkout_dir))
+                        fatal_error(msg)
                     else:
                         cmd = ["git", "checkout", self._branch]
 
             else:
-                perr("Unable to check out branch, {0}".format(self._branch))
+                msg = "Unable to check out branch, {0}".format(self._branch)
+                fatal_error(msg)
 
         elif len(self._tag) > 0:
             # For now, do a hail mary and hope tag can be checked out
             cmd = ["git", "checkout", self._tag]
         else:
-            raise RuntimeError("DEV_ERROR: in git repo. Shouldn't be here!")
+            msg = "DEV_ERROR: in git repo. Shouldn't be here!"
+            fatal_error(msg)
 
         if cmd:
-            print("    {0}\n".format(' '.join(cmd)))
-            log_filename = "git-{0}-checkout.log".format(self._name)
-            retcode = scall(cmd, log_filename)
-            quit_on_fail(retcode, caller)
+            execute_subprocess(cmd)
 
         os.chdir(mycurrdir)
 
@@ -989,7 +970,8 @@ class _Source(object):
                 os.makedirs(pdir)
             except OSError as error:
                 if error.errno != errno.EEXIST:
-                    raise
+                    msg = "Could not create directory '{0}'".format(pdir)
+                    fatal_error(msg)
 
         os.chdir(pdir)
 
@@ -1006,8 +988,9 @@ class _Source(object):
             comp_dir = os.path.join(tree_root, self._path)
             os.chdir(comp_dir)
             if not os.path.exists(self._externals):
-                raise RuntimeError("External model description file '{0}' "
-                                   "does not exist!".format(self._externals))
+                msg = ("External model description file '{0}' "
+                       "does not exist!".format(self._externals))
+                fatal_error(msg)
             ext_root = comp_dir
             model_format, model_data = read_model_description_file(
                 ext_root, self._externals)
@@ -1054,7 +1037,11 @@ class SourceTree(object):
             load_comps = self._required_compnames
 
         if load_comps is not None:
-            print("Loading these components: {0}".format(load_comps))
+            msg = "Loading these components: "
+            for comp in load_comps:
+                msg += "{0}, ".format(comp)
+            print(msg)
+            logging.info(msg)
 
         for comp in load_comps:
             self._all_components[comp].load(self._root_dir, load_all)
@@ -1071,6 +1058,11 @@ def _main(args):
     Parse model file and load required repositories or all repositories if
     the --all option is passed.
     """
+    logging.basicConfig(filename='checkout_model.log',
+                        format='%(levelname)s : %(asctime)s : %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S',
+                        level=logging.DEBUG)
+    logging.info("Begining of checkout_model")
     load_all = True
     if args.optional:
         load_all = False
@@ -1085,6 +1077,7 @@ def _main(args):
         pretty_printer.pprint(model)
     source_tree = SourceTree(root_dir, model)
     source_tree.load(load_all)
+    logging.info("checkout_model completed without exceptions.")
     return 0
 
 
