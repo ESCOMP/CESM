@@ -17,6 +17,7 @@ import pprint
 import re
 import subprocess
 import sys
+import textwrap
 import traceback
 import xml.etree.ElementTree as ET
 
@@ -53,26 +54,110 @@ EMPTY_STR = u''
 def commandline_arguments():
     """Process the command line arguments
     """
-    description = """Tool to manage checking out CESM from revision control based on a
-model description file.
+    description = '''
+%(prog)s manages checking out CESM from revision control based on a
+model description file. By default only the required components of the
+model are checkout out.
 
-By default only the required components of the model are checkout out.
-"""
-    parser = argparse.ArgumentParser(description=description)
+NOTE: %(prog)s should be run from the root of the source tree.
+
+'''
+    epilog = '''
+Supported workflows:
+
+  * Checkout all required components from default model description file:
+
+      $ ./checkout_cesm/%(prog)s
+
+  * Checkout all required components from a user specified model
+    description file:
+
+      $ ./checkout_cesm/%(prog)s --model myCESM.xml
+
+  * Status summary of the repositories managed by %(prog)s:
+
+      $ ./checkout_cesm/%(prog)s --status
+
+         cime   master
+      MM clm    my_branch
+      M  rtm    my_branch
+       M mosart my_branch
+
+    where:
+      * column one indicates whether the currently checkout branch is the
+        same as in the model description file.
+      * column two indicates whether the working copy has modified files.
+
+      * M - modified
+      * ? - unknown
+      *   - blank / space - clean or no changes
+
+  * Status details of the repositories managed by %(prog)s:
+
+      $ ./checkout_cesm/%(prog)s --status --verbose
+
+      Output of the 'status' command of the svn or git repository.
+
+Model description file:
+
+  The model description contains a list of the model components that
+  are used and their version control locations. Each component has:
+
+  * name - component name, e.g. cime, cism, clm, cam, etc.
+
+  * required - whether the component is a required checkout
+
+  * path - component path *relative* to where %(prog)s is called.
+
+  * protoctol - version protocol that is used to manage the component.
+                Valid values are 'git', 'svn', 'externals_only'
+
+  * repo_url - URL for the repository location, examples:
+    * svn - https://svn-ccsm-models.cgd.ucar.edu/glc
+    * git - git@github.com:esmci/cime.git
+    * local - /local/path/to/repository
+
+  * tag - tag to checkout
+
+  * branch - branch to checkout
+
+  * externals - external model description file that should also
+    be used. For example, the CESM model description will load
+    clm. CLM has additional externals that must be downloaded to
+    be complete. Those additional externals are managed by the
+    file pointed to by 'externals'.
+
+'''
+
+    parser = argparse.ArgumentParser(
+        description=description, epilog=epilog,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('--backtrace', action='store_true',
-                        help='show exception backtraces as extra debugging '
-                        'output')
+                        help='DEVELOPER: show exception backtraces as extra '
+                        'debugging output')
 
-    parser.add_argument("--model", nargs='?', default='CESM.xml',
-                        help="The model description xml filename. "
-                        "Default: %(default)s.")
+    parser.add_argument('-d', '--debug', action='store_true', default=False,
+                        help='DEVELOPER: output additional debugging '
+                        'information to the screen and log file.')
 
-    parser.add_argument('-r', '--required', action='store_true', default=False,
-                        help="NOT IMPLEMENTED! Only checkout the required "
-                        "components of the model, e.g. cime. Optional science "
-                        "components will be checked out as needed by the "
-                        "build system.")
+    parser.add_argument('-m', '--model', nargs='?', default='CESM.xml',
+                        help='The model description filename. '
+                        'Default: %(default)s.')
+
+    parser.add_argument('-o', '--optional', action='store_true', default=False,
+                        help='By default only the required model components '
+                        'are checked out. This flag will also checkout the '
+                        'optional componets of the model.')
+
+    parser.add_argument('-s', '--status', action='store_true', default=False,
+                        help='Output status of the repositories managed by '
+                        'checkout_model. By default only summary information '
+                        'is provided. Use verbose output to see details.')
+
+    parser.add_argument('-v', '--verbose', action='store_true', default=False,
+                        help='Output additional information to '
+                        'the screen and log file.')
 
     options = parser.parse_args()
     return options
@@ -987,9 +1072,9 @@ def _main(args):
     the --all option is passed.
     """
     load_all = True
-    if args.required:
+    if args.optional:
         load_all = False
-        msg = 'The required only option to checkout has not been implemented'
+        msg = 'The "optional" arg to checkout has not been implemented'
         raise NotImplementedError(msg)
 
     root_dir = os.path.abspath('.')
