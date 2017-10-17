@@ -319,9 +319,9 @@ def read_model_description_file(root_dir, file_name):
                 json_data = json.loads(filehandle.read())
                 model_description = json_data
                 model_format = 'json'
-            except ValueError as e:
+            except ValueError:
                 # not a json file
-                print(e)
+                pass
 
     if model_description is None:
         try:
@@ -461,7 +461,6 @@ class ModelDescription(dict):
             for item in self[name].keys():
                 if item in self._source_schema:
                     if isinstance(self._source_schema[item], bool):
-                        print('--> {0}'.format(item))
                         self[name][item] = str_to_bool(self[name][item])
                 if item in self._source_schema[self._REPO]:
                     self[name][self._REPO][item] = self[name][item]
@@ -1063,11 +1062,9 @@ def _main(args):
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.DEBUG)
     logging.info("Begining of checkout_model")
-    load_all = True
+    load_all = False
     if args.optional:
-        load_all = False
-        msg = 'The "optional" arg to checkout has not been implemented'
-        raise NotImplementedError(msg)
+        load_all = True
 
     root_dir = os.path.abspath('.')
     model_format, model_data = read_model_description_file(
