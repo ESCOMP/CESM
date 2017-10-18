@@ -60,22 +60,32 @@ model description file. By default only the required components of the
 model are checkout out.
 
 NOTE: %(prog)s should be run from the root of the source tree.
-
 '''
     epilog = '''
 Supported workflows:
 
+  NOTE: %(prog)s should be run from the root of the source tree. For
+  example, if you cloned CESM with:
+
+    $ git clone git@github.com/ncar/cesm cesm-dev
+
+  Then the root of the source tree is /path/to/cesm-dev, and will be
+  referred to as ${SRC_ROOT}.
+
   * Checkout all required components from default model description file:
 
+      $ cd ${SRC_ROOT}
       $ ./checkout_cesm/%(prog)s
 
   * Checkout all required components from a user specified model
     description file:
 
+      $ cd ${SRC_ROOT}
       $ ./checkout_cesm/%(prog)s --model myCESM.xml
 
   * Status summary of the repositories managed by %(prog)s:
 
+      $ cd ${SRC_ROOT}
       $ ./checkout_cesm/%(prog)s --status
 
          cime   master
@@ -94,6 +104,7 @@ Supported workflows:
 
   * Status details of the repositories managed by %(prog)s:
 
+      $ cd ${SRC_ROOT}
       $ ./checkout_cesm/%(prog)s --status --verbose
 
       Output of the 'status' command of the svn or git repository.
@@ -103,29 +114,35 @@ Model description file:
   The model description contains a list of the model components that
   are used and their version control locations. Each component has:
 
-  * name - component name, e.g. cime, cism, clm, cam, etc.
+  * name (string) : component name, e.g. cime, cism, clm, cam, etc.
 
-  * required - whether the component is a required checkout
+  * required (boolean) : whether the component is a required checkout
 
-  * path - component path *relative* to where %(prog)s is called.
+  * path (string) : component path *relative* to where %(prog)s
+    is called.
 
-  * protoctol - version protocol that is used to manage the component.
-                Valid values are 'git', 'svn', 'externals_only'
+  * protoctol (string) : version control protocol that is used to
+    manage the component.  'externals_only' will only process the
+    externals model description file without trying to checkout the
+    current component. This is used for retreiving externals for
+    standalone cam and clm. Valid values are 'git', 'svn',
+    'externals_only'.
 
-  * repo_url - URL for the repository location, examples:
+  * repo_url (string) : URL for the repository location, examples:
     * svn - https://svn-ccsm-models.cgd.ucar.edu/glc
     * git - git@github.com:esmci/cime.git
-    * local - /local/path/to/repository
+    * local - /path/to/local/repository
 
-  * tag - tag to checkout
+  * tag (string) : tag to checkout
 
-  * branch - branch to checkout
+  * branch (string) : branch to checkout
 
-  * externals - external model description file that should also
-    be used. For example, the CESM model description will load
-    clm. CLM has additional externals that must be downloaded to
-    be complete. Those additional externals are managed by the
-    file pointed to by 'externals'.
+  * externals (string) filename of the external model description
+    file that should also be used. It is *relative* to the component
+    path. For example, the CESM model description will load clm. CLM
+    has additional externals that must be downloaded to be
+    complete. Those additional externals are managed by the file
+    pointed to by 'externals'.
 
 '''
 
@@ -133,14 +150,9 @@ Model description file:
         description=description, epilog=epilog,
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
-    parser.add_argument('--backtrace', action='store_true',
-                        help='DEVELOPER: show exception backtraces as extra '
-                        'debugging output')
-
-    parser.add_argument('-d', '--debug', action='store_true', default=False,
-                        help='DEVELOPER: output additional debugging '
-                        'information to the screen and log file.')
-
+    #
+    # user options
+    #
     parser.add_argument('-m', '--model', nargs='?', default='CESM.xml',
                         help='The model description filename. '
                         'Default: %(default)s.')
@@ -158,6 +170,17 @@ Model description file:
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
                         help='Output additional information to '
                         'the screen and log file.')
+
+    #
+    # developer options
+    #
+    parser.add_argument('--backtrace', action='store_true',
+                        help='DEVELOPER: show exception backtraces as extra '
+                        'debugging output')
+
+    parser.add_argument('-d', '--debug', action='store_true', default=False,
+                        help='DEVELOPER: output additional debugging '
+                        'information to the screen and log file.')
 
     options = parser.parse_args()
     return options
@@ -294,8 +317,8 @@ def read_model_description_file(root_dir, file_name):
     """
     root_dir = os.path.abspath(root_dir)
 
+    print("In directory :\n    {0}".format(root_dir))
     print("Processing model description file '{0}'".format(file_name))
-    print("in directory : {0}".format(root_dir))
     file_path = os.path.join(root_dir, file_name)
     if not os.path.exists(file_name):
         msg = ("ERROR: Model description file, '{0}', does not "
