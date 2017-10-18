@@ -41,7 +41,7 @@ else:
 # Global variables
 #
 # ---------------------------------------------------------------------
-pretty_printer = pprint.PrettyPrinter(indent=4)
+PPRINTER = pprint.PrettyPrinter(indent=4)
 RE_NAMESPACE = re.compile(r"{[^}]*}")
 EMPTY_STR = u''
 
@@ -222,7 +222,7 @@ def check_output(commands):
     return outstr
 
 
-def execute_subprocess(commands, return_status=False):
+def execute_subprocess(commands, status_to_caller=False):
     """Wrapper around subprocess.check_output to handle common
     exceptions.
 
@@ -230,7 +230,7 @@ def execute_subprocess(commands, return_status=False):
     for it to complete.
 
     check_output raises an exception on a nonzero return code.  if
-    return_status is true, execute_subprocess returns the subprocess
+    status_to_caller is true, execute_subprocess returns the subprocess
     return code, otherwise execute_subprocess treats non-zero return
     status as an error and raises an exception.
 
@@ -258,7 +258,7 @@ def execute_subprocess(commands, return_status=False):
         status_msg = "Returned : {0}".format(error.returncode)
         logging.error(status_msg)
         log_process_output(error.output)
-        if not return_status:
+        if not status_to_caller:
             fatal_error(msg)
         status = error.returncode
     return status
@@ -311,12 +311,12 @@ def create_repository(component_name, repo_info):
     create the appropriate object.
 
     """
-    protocol = repo_info['protocol'].lower()
-    if 'git' == protocol:
-        repo = _GitRepository(component_name, repo_info)
-    elif 'svn' == protocol:
-        repo = _SvnRepository(component_name, repo_info)
-    elif 'externals_only' == protocol:
+    protocol = repo_info[ModelDescription.PROTOCOL].lower()
+    if protocol == 'git':
+        repo = GitRepository(component_name, repo_info)
+    elif protocol == 'svn':
+        repo = SvnRepository(component_name, repo_info)
+    elif protocol == 'externals_only':
         repo = None
     else:
         msg = "Unknown repo protocol, {0}".format(protocol)
@@ -325,7 +325,9 @@ def create_repository(component_name, repo_info):
 
 
 def read_model_description_file(root_dir, file_name):
-    """
+    """Given a file name containing a model description, determine the
+    format and read it into it's internal representation.
+
     """
     root_dir = os.path.abspath(root_dir)
 
@@ -378,18 +380,21 @@ def read_model_description_file(root_dir, file_name):
 
 
 class ModelDescription(dict):
-    """
+    """Model description that is independent of the user input format. Can
+    convert multiple input formats, xml schemas, or dictionaries into
+    a consistent represtentation for the rest of the objects.
+
     """
     # keywords defining the interface into the model description data
-    _EXTERNALS = u'externals'
-    _BRANCH = u'branch'
-    _REPO = u'repo'
-    _REQUIRED = u'required'
-    _TAG = u'tag'
-    _PATH = u'path'
-    _PROTOCOL = u'protocol'
-    _REPO_URL = u'repo_url'
-    _NAME = u'name'
+    EXTERNALS = u'externals'
+    BRANCH = u'branch'
+    REPO = u'repo'
+    REQUIRED = u'required'
+    TAG = u'tag'
+    PATH = u'path'
+    PROTOCOL = u'protocol'
+    REPO_URL = u'repo_url'
+    NAME = u'name'
 
     # v1 xml keywords
     _V1_TREE_PATH = u'TREE_PATH'
@@ -398,26 +403,27 @@ class ModelDescription(dict):
     _V1_BRANCH = u'BRANCH'
     _V1_REQ_SOURCE = u'REQ_SOURCE'
 
-    _source_schema = {_REQUIRED: True,
-                      _PATH: u'string',
-                      _EXTERNALS: u'string',
-                      _REPO: {_PROTOCOL: u'string',
-                              _REPO_URL: u'string',
-                              _TAG: u'string',
-                              _BRANCH: u'string',
-                              }
-                      }
+    _source_schema = {REQUIRED: True,
+                      PATH: u'string',
+                      EXTERNALS: u'string',
+                      REPO: {PROTOCOL: u'string',
+                             REPO_URL: u'string',
+                             TAG: u'string',
+                             BRANCH: u'string',
+                            }
+                     }
 
     def __init__(self, model_format, model_data):
         """Convert the xml into a standardized dict that can be used to
         construct the source objects
 
         """
-        if 'xml' == model_format:
+        dict.__init__(self)
+        if model_format == 'xml':
             self._parse_xml(model_data)
-        elif 'cfg' == model_format:
+        elif model_format == 'cfg':
             self._parse_cfg(model_data)
-        elif 'json' == model_format:
+        elif model_format == 'json':
             self._parse_json(model_data)
         else:
             msg = "Unknown model data format '{0}'".format(model_format)
@@ -425,9 +431,15 @@ class ModelDescription(dict):
         self._validate()
 
     def _validate(self):
-        """
+        """Validate that the parsed model description contains all necessary
+        fields.
+
         """
         def validate_data_struct(schema, data):
+            """Compare a data structure against a schema and validate all required
+            fields are present.
+
+            """
             is_valid = False
             in_ref = True
             valid = True
@@ -444,34 +456,39 @@ class ModelDescription(dict):
                 printlog("  Unmatched schema and data:")
                 if isinstance(schema, dict):
                     for item in schema:
-                        printlog("    {0} schema = {1} ({2})".format(item, schema[item], type(schema[item])))
-                        printlog("    {0} data = {1} ({2})".format(item, data[item], type(data[item])))
+                        printlog("    {0} schema = {1} ({2})".format(
+                            item, schema[item], type(schema[item])))
+                        printlog("    {0} data = {1} ({2})".format(
+                            item, data[item], type(data[item])))
                 else:
-                    printlog("    schema = {0} ({1})".format(schema, type(schema)))
+                    printlog("    schema = {0} ({1})".format(
+                        schema, type(schema)))
                     printlog("    data = {0} ({1})".format(data, type(data)))
             return is_valid
 
-        for m in self:
-            valid = validate_data_struct(self._source_schema, self[m])
+        for field in self:
+            valid = validate_data_struct(self._source_schema, self[field])
             if not valid:
-                pretty_printer.pprint(self._source_schema)
-                pretty_printer.pprint(self[m])
-                msg = "ERROR: source for '{0}' did not validate".format(m)
+                PPRINTER.pprint(self._source_schema)
+                PPRINTER.pprint(self[field])
+                msg = "ERROR: source for '{0}' did not validate".format(field)
                 fatal_error(msg)
 
     def _parse_json(self, json_data):
-        """
+        """Parse a json object, a native dictionary into a model description.
         """
         self.update(json_data)
 
     def _parse_cfg(self, cfg_data):
-        """
+        """Parse a config_parser object into a model description.
         """
         def str_to_bool(bool_str):
+            """Convert a sting representation of as boolean into a true boolean.
+            """
             value = None
-            if 'true' == bool_str.lower():
+            if bool_str == 'true'.lower():
                 value = True
-            elif 'false' == bool_str.lower():
+            elif bool_str == 'false'.lower():
                 value = False
             if value is None:
                 msg = ("ERROR: invalid boolean string value '{0}'. "
@@ -480,6 +497,8 @@ class ModelDescription(dict):
             return value
 
         def list_to_dict(input_list, convert_to_lower_case=True):
+            """Convert a list of key-value pairs into a dictionary.
+            """
             output_dict = {}
             for item in input_list:
                 key = unicode(item[0].strip())
@@ -493,24 +512,24 @@ class ModelDescription(dict):
             name = unicode(section.lower().strip())
             self[name] = {}
             self[name].update(list_to_dict(cfg_data.items(section)))
-            self[name][self._REPO] = {}
+            self[name][self.REPO] = {}
             for item in self[name].keys():
                 if item in self._source_schema:
                     if isinstance(self._source_schema[item], bool):
                         self[name][item] = str_to_bool(self[name][item])
-                if item in self._source_schema[self._REPO]:
-                    self[name][self._REPO][item] = self[name][item]
+                if item in self._source_schema[self.REPO]:
+                    self[name][self.REPO][item] = self[name][item]
                     del self[name][item]
 
     def _parse_xml(self, xml_root):
-        """
+        """Parse an xml object into a model description.
         """
         xml_root = self._get_xml_config_sourcetree(xml_root)
-        version = self._get_xml_schema_version(xml_root)
+        version = self.get_xml_schema_version(xml_root)
         major_version = version[0]
-        if '1' == major_version:
+        if major_version == '1':
             self._parse_xml_v1(xml_root)
-        elif '2' == major_version:
+        elif major_version == '2':
             self._parse_xml_v2(xml_root)
         else:
             msg = ("ERROR: unknown xml schema version '{0}'".format(
@@ -518,94 +537,94 @@ class ModelDescription(dict):
             fatal_error(msg)
 
     def _parse_xml_v1(self, xml_root):
+        """Parse the v1 xml schema
         """
-        """
-        for src in xml_root.findall('./source'):
+        for src in xml_root.findall(u'./source'):
             source = {}
-            source[self._EXTERNALS] = EMPTY_STR
-            source[self._REQUIRED] = False
-            source[self._PATH] = src.find(self._V1_TREE_PATH).text
+            source[self.EXTERNALS] = EMPTY_STR
+            source[self.REQUIRED] = False
+            source[self.PATH] = unicode(src.find(self._V1_TREE_PATH).text)
             repo = {}
-            xml_repo = src.find(self._REPO)
-            repo[self._PROTOCOL] = xml_repo.get(self._PROTOCOL)
-            repo[self._REPO_URL] = xml_repo.find(self._V1_ROOT).text
-            repo[self._TAG] = xml_repo.find(self._V1_TAG)
-            if repo[self._TAG] is not None:
-                repo[self._TAG] = repo[self._TAG].text
+            xml_repo = src.find(self.REPO)
+            repo[self.PROTOCOL] = unicode(xml_repo.get(self.PROTOCOL))
+            repo[self.REPO_URL] = unicode(xml_repo.find(self._V1_ROOT).text)
+            repo[self.TAG] = xml_repo.find(self._V1_TAG)
+            if repo[self.TAG] is not None:
+                repo[self.TAG] = unicode(repo[self.TAG].text)
             else:
-                repo[self._TAG] = EMPTY_STR
-            repo[self._BRANCH] = xml_repo.find(self._V1_BRANCH)
-            if repo[self._BRANCH] is not None:
-                repo[self._BRANCH] = repo[self._BRANCH].text
+                repo[self.TAG] = EMPTY_STR
+            repo[self.BRANCH] = xml_repo.find(self._V1_BRANCH)
+            if repo[self.BRANCH] is not None:
+                repo[self.BRANCH] = unicode(repo[self.BRANCH].text)
             else:
-                repo[self._BRANCH] = EMPTY_STR
-            source[self._REPO] = repo
-            name = src.get(self._NAME).lower()
+                repo[self.BRANCH] = EMPTY_STR
+            source[self.REPO] = repo
+            name = unicode(src.get(self.NAME).lower())
             self[name] = source
-            required = xml_root.find(self._REQUIRED)
+            required = xml_root.find(self.REQUIRED)
             if required is not None:
-                for src in required.findall(self._V1_REQ_SOURCE):
-                    name = src.text.lower()
-                    self[name][self._REQUIRED] = True
+                for comp in required.findall(self._V1_REQ_SOURCE):
+                    name = comp.text.lower()
+                    self[name][self.REQUIRED] = True
 
     def _parse_xml_v2(self, xml_root):
-        """
+        """Parse the xml v2 schema
         """
         for src in xml_root.findall('./source'):
             source = {}
-            source[self._PATH] = unicode(src.find(self._PATH).text)
+            source[self.PATH] = unicode(src.find(self.PATH).text)
             repo = {}
-            xml_repo = src.find(self._REPO)
-            repo[self._PROTOCOL] = unicode(xml_repo.get(self._PROTOCOL))
-            repo[self._REPO_URL] = xml_repo.find(self._REPO_URL)
-            if repo[self._REPO_URL] is not None:
-                repo[self._REPO_URL] = unicode(repo[self._REPO_URL].text)
-            repo[self._TAG] = xml_repo.find(self._TAG)
-            if repo[self._TAG] is not None:
-                repo[self._TAG] = unicode(repo[self._TAG].text)
+            xml_repo = src.find(self.REPO)
+            repo[self.PROTOCOL] = unicode(xml_repo.get(self.PROTOCOL))
+            repo[self.REPO_URL] = xml_repo.find(self.REPO_URL)
+            if repo[self.REPO_URL] is not None:
+                repo[self.REPO_URL] = unicode(repo[self.REPO_URL].text)
+            repo[self.TAG] = xml_repo.find(self.TAG)
+            if repo[self.TAG] is not None:
+                repo[self.TAG] = unicode(repo[self.TAG].text)
             else:
-                repo[self._TAG] = EMPTY_STR
-            repo[self._BRANCH] = xml_repo.find(self._BRANCH)
-            if repo[self._BRANCH] is not None:
-                repo[self._BRANCH] = unicode(repo[self._BRANCH].text)
+                repo[self.TAG] = EMPTY_STR
+            repo[self.BRANCH] = xml_repo.find(self.BRANCH)
+            if repo[self.BRANCH] is not None:
+                repo[self.BRANCH] = unicode(repo[self.BRANCH].text)
             else:
-                repo[self._BRANCH] = EMPTY_STR
-            source[self._REPO] = repo
-            source[self._EXTERNALS] = src.find(self._EXTERNALS)
-            if source[self._EXTERNALS] is not None:
-                source[self._EXTERNALS] = unicode(source[self._EXTERNALS].text)
+                repo[self.BRANCH] = EMPTY_STR
+            source[self.REPO] = repo
+            source[self.EXTERNALS] = src.find(self.EXTERNALS)
+            if source[self.EXTERNALS] is not None:
+                source[self.EXTERNALS] = unicode(source[self.EXTERNALS].text)
             else:
-                source[self._EXTERNALS] = EMPTY_STR
-            required = unicode(src.get(self._REQUIRED).lower())
-            if 'false' == required:
-                source[self._REQUIRED] = False
-            elif 'true' == required:
-                source[self._REQUIRED] = True
+                source[self.EXTERNALS] = EMPTY_STR
+            required = unicode(src.get(self.REQUIRED).lower())
+            if required == u'false':
+                source[self.REQUIRED] = False
+            elif required == u'true':
+                source[self.REQUIRED] = True
             else:
-                msg = "ERROR: unknown value for attribute 'required' = {0} ".format(
+                msg = u"ERROR: unknown value for attribute 'required' = {0} ".format(
                     required)
                 fatal_error(msg)
-            name = src.get(self._NAME).lower()
+            name = src.get(self.NAME).lower()
             self[name] = source
 
     @staticmethod
     def _get_xml_config_sourcetree(xml_root):
+        """Return the config_sourcetree element with error checking.
         """
-        """
-        st_str = 'config_sourcetree'
+        st_str = u'config_sourcetree'
         xml_st = None
         if xml_root.tag == st_str:
             xml_st = xml_root
         else:
-            xml_st = xml_root.find('./config_sourcetree')
+            xml_st = xml_root.find(u'./config_sourcetree')
         if xml_st is None:
-            msg = "ERROR: xml does not contain a 'config_sourcetree' element."
+            msg = u"ERROR: xml does not contain a 'config_sourcetree' element."
             fatal_error(msg)
         return xml_st
 
     @staticmethod
-    def _get_xml_schema_version(xml_st):
-        """
+    def get_xml_schema_version(xml_st):
+        """Get the xml schema version with error checking.
         """
         version = xml_st.get('version', None)
         if not version:
@@ -620,20 +639,20 @@ class ModelDescription(dict):
 # Worker classes
 #
 # ---------------------------------------------------------------------
-class _Repository(object):
+class Repository(object):
     """
     Class to represent and operate on a repository description.
     """
 
     def __init__(self, component_name, repo):
         """
-        Parse repo (a <repo> XML element).
+        Parse repo model description
         """
         self._name = component_name
-        self._protocol = repo['protocol']
-        self._tag = repo['tag']
-        self._branch = repo['branch']
-        self._url = repo['repo_url']
+        self._protocol = repo[ModelDescription.PROTOCOL]
+        self._tag = repo[ModelDescription.TAG]
+        self._branch = repo[ModelDescription.BRANCH]
+        self._url = repo[ModelDescription.REPO_URL]
 
         if self._url is EMPTY_STR:
             fatal_error("repo must have a URL")
@@ -657,8 +676,23 @@ class _Repository(object):
                "child classes!")
         fatal_error(msg)
 
+    def url(self):
+        """Public access of repo url.
+        """
+        return self._url
 
-class _SvnRepository(_Repository):
+    def tag(self):
+        """Public access of repo tag
+        """
+        return self._tag
+
+    def branch(self):
+        """Public access of repo branch.
+        """
+        return self._branch
+
+
+class SvnRepository(Repository):
     """
     Class to represent and operate on a repository description.
     """
@@ -668,10 +702,10 @@ class _SvnRepository(_Repository):
         """
         Parse repo (a <repo> XML element).
         """
-        _Repository.__init__(self, component_name, repo)
-        if len(self._branch) > 0:
+        Repository.__init__(self, component_name, repo)
+        if self._branch:
             self._url = os.path.join(self._url, self._branch)
-        elif len(self._tag) > 0:
+        elif self._tag:
             self._url = os.path.join(self._url, self._tag)
         else:
             msg = "DEV_ERROR in svn repository. Shouldn't be here!"
@@ -692,21 +726,21 @@ class _SvnRepository(_Repository):
         """
         Checkout a subversion repository (repo_url) to checkout_dir.
         """
-        caller = "svn_checkout {0} {1}".format(checkout_dir, self._url)
         cmd = ["svn", "checkout", self._url, checkout_dir]
         execute_subprocess(cmd)
 
-    def _svn_update(self, updir):
+    @staticmethod
+    def _svn_update(updir):
         """
         Refresh a subversion sandbox (updir)
         """
-        caller = "svn_update {0}".format(updir)
         mycurrdir = os.path.abspath(".")
         os.chdir(updir)
         execute_subprocess(["svn update"])
         os.chdir(mycurrdir)
 
-    def _svn_check_dir(self, chkdir, ver):
+    @staticmethod
+    def _svn_check_dir(chkdir, ver):
         """
         Check to see if directory (chkdir) exists and is the correct
         version (ver).
@@ -718,7 +752,7 @@ class _SvnRepository(_Repository):
             if svnout is not None:
                 url = None
                 for line in svnout.splitlines():
-                    if _SvnRepository.RE_URLLINE.match(line):
+                    if SvnRepository.RE_URLLINE.match(line):
                         url = line.split(': ')[1]
                         break
                 status = (url == ver)
@@ -730,7 +764,7 @@ class _SvnRepository(_Repository):
         return status
 
 
-class _GitRepository(_Repository):
+class GitRepository(Repository):
     """
     Class to represent and operate on a repository description.
     """
@@ -748,7 +782,7 @@ class _GitRepository(_Repository):
         """
         Parse repo (a <repo> XML element).
         """
-        _Repository.__init__(self, component_name, repo)
+        Repository.__init__(self, component_name, repo)
 
     def checkout(self, repo_dir):
         """
@@ -783,7 +817,7 @@ class _GitRepository(_Repository):
             gitout = check_output(["git", "branch", "-r"])
             if gitout is not None:
                 for branch in gitout.splitlines():
-                    match = _GitRepository.RE_REMOTEBRANCH.match(branch)
+                    match = GitRepository.RE_REMOTEBRANCH.match(branch)
                     if (match is not None) and (match.group(1) == ref):
                         ref_type = self.GIT_REF_REMOTE_BRANCH
                         break
@@ -799,13 +833,14 @@ class _GitRepository(_Repository):
 
         # Finally, see if it just looks like a commit hash
         if ((ref_type == self.GIT_REF_UNKNOWN) and
-                _GitRepository.RE_GITHASH.match(ref)):
+                GitRepository.RE_GITHASH.match(ref)):
             ref_type = self.GIT_REF_SHA1
 
         # Return what we've come up with
         return ref_type
 
-    def _git_current_branch(self):
+    @staticmethod
+    def _git_current_branch():
         """
         Return the (current branch, sha1 hash) of working copy in wdir
         """
@@ -819,7 +854,8 @@ class _GitRepository(_Repository):
 
         return (branch, git_hash)
 
-    def _git_check_dir(self, chkdir, ref):
+    @staticmethod
+    def _git_check_dir(chkdir, ref):
         """
         Check to see if directory (chkdir) exists and is the correct
         treeish (ref)
@@ -849,14 +885,15 @@ class _GitRepository(_Repository):
         os.chdir(mycurrdir)
         return status
 
-    def _git_working_dir_clean(self, wdir):
+    @staticmethod
+    def _git_working_dir_clean(wdir):
         """
         Return True if wdir is clean or False if there are modifications
         """
         mycurrdir = os.path.abspath(".")
         os.chdir(wdir)
         cmd = ["git", "diff", "--quiet", "--exit-code"]
-        retcode = execute_subprocess(cmd, return_status=True)
+        retcode = execute_subprocess(cmd, status_to_caller=True)
         os.chdir(mycurrdir)
         return retcode == 0
 
@@ -883,7 +920,6 @@ class _GitRepository(_Repository):
         """
         Do an update and a FF merge if possible
         """
-        caller = "_git_update {0}".format(repo_dir)
         mycurrdir = os.path.abspath(".")
         os.chdir(repo_dir)
         remote = self._git_remote(repo_dir)
@@ -899,7 +935,6 @@ class _GitRepository(_Repository):
         """
         Checkout 'branch' or 'tag' from 'repo_url'
         """
-        caller = "_git_checkout {0} {1}".format(checkout_dir, self._url)
         mycurrdir = os.path.abspath(".")
         if os.path.exists(checkout_dir):
             # We can't do a clone. See what we have here
@@ -926,7 +961,7 @@ class _GitRepository(_Repository):
             os.chdir(checkout_dir)
 
         cmd = []
-        if len(self._branch) > 0:
+        if self._branch:
             (curr_branch, _) = self._git_current_branch()
             ref_type = self._git_ref_type(self._branch)
             if ref_type == self.GIT_REF_REMOTE_BRANCH:
@@ -944,7 +979,7 @@ class _GitRepository(_Repository):
                 msg = "Unable to check out branch, {0}".format(self._branch)
                 fatal_error(msg)
 
-        elif len(self._tag) > 0:
+        elif self._tag:
             # For now, do a hail mary and hope tag can be checked out
             cmd = ["git", "checkout", self._tag]
         else:
@@ -1019,7 +1054,7 @@ class _Source(object):
 
         self._loaded = repo_loaded
 
-        if len(self._externals) > 0:
+        if self._externals:
             comp_dir = os.path.join(tree_root, self._path)
             os.chdir(comp_dir)
             if not os.path.exists(self._externals):
@@ -1105,8 +1140,8 @@ def _main(args):
     model_format, model_data = read_model_description_file(
         root_dir, args.model)
     model = ModelDescription(model_format, model_data)
-    if False:
-        pretty_printer.pprint(model)
+    if args.debug:
+        PPRINTER.pprint(model)
     source_tree = SourceTree(root_dir, model)
     source_tree.checkout(load_all)
     logging.info("checkout_model completed without exceptions.")
@@ -1116,8 +1151,8 @@ def _main(args):
 if __name__ == "__main__":
     arguments = commandline_arguments()
     try:
-        return_status = _main(arguments)
-        sys.exit(return_status)
+        RET_STATUS = _main(arguments)
+        sys.exit(RET_STATUS)
     except Exception as error:
         printlog(str(error))
         if arguments.backtrace:
