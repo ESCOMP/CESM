@@ -208,14 +208,14 @@ def check_output(commands):
     try:
         outstr = subprocess.check_output(commands)
     except OSError as error:
-        print("Execution of '{0}' failed: {1}".format(
+        printlog("Execution of '{0}' failed: {1}".format(
             (' '.join(commands)), error), file=sys.stderr)
     except ValueError as error:
-        print("ValueError in '{0}': {1}".format(
+        printlog("ValueError in '{0}': {1}".format(
             (' '.join(commands)), error), file=sys.stderr)
         outstr = None
     except subprocess.CalledProcessError as error:
-        print("CalledProcessError in '{0}': {1}".format(
+        printlog("CalledProcessError in '{0}': {1}".format(
             (' '.join(commands)), error), file=sys.stderr)
         outstr = None
 
@@ -276,6 +276,18 @@ def log_process_output(output):
         logging.debug(line)
 
 
+def printlog(msg, **kwargs):
+    """Wrapper script around print to ensure that everything printed to
+    the screen also gets logged.
+
+    """
+    logging.info(msg)
+    if kwargs:
+        print(msg, kwargs)
+    else:
+        print(msg)
+
+
 def strip_namespace(tag):
     """
     Remove a curly brace-encased namespace, if any.
@@ -317,8 +329,9 @@ def read_model_description_file(root_dir, file_name):
     """
     root_dir = os.path.abspath(root_dir)
 
-    print("In directory :\n    {0}".format(root_dir))
-    print("Processing model description file '{0}'".format(file_name))
+    printlog("In directory :\n    {0}".format(root_dir))
+    printlog("Processing model description file '{0}'".format(file_name))
+
     file_path = os.path.join(root_dir, file_name)
     if not os.path.exists(file_name):
         msg = ("ERROR: Model description file, '{0}', does not "
@@ -428,14 +441,14 @@ class ModelDescription(dict):
             else:
                 is_valid = isinstance(data, type(schema))
             if not is_valid:
-                print("  Unmatched schema and data:")
+                printlog("  Unmatched schema and data:")
                 if isinstance(schema, dict):
                     for item in schema:
-                        print("    {0} schema = {1} ({2})".format(item, schema[item], type(schema[item])))
-                        print("    {0} data = {1} ({2})".format(item, data[item], type(data[item])))
+                        printlog("    {0} schema = {1} ({2})".format(item, schema[item], type(schema[item])))
+                        printlog("    {0} data = {1} ({2})".format(item, data[item], type(data[item])))
                 else:
-                    print("    schema = {0} ({1})".format(schema, type(schema)))
-                    print("    data = {0} ({1})".format(data, type(data)))
+                    printlog("    schema = {0} ({1})".format(schema, type(schema)))
+                    printlog("    data = {0} ({1})".format(data, type(data)))
             return is_valid
 
         for m in self:
@@ -631,7 +644,7 @@ class _Repository(object):
         if self._tag is not EMPTY_STR and self._branch is not EMPTY_STR:
             fatal_error("repo cannot have both a tag and a branch element")
 
-    def load(self, repo_dir):
+    def checkout(self, repo_dir):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -664,7 +677,7 @@ class _SvnRepository(_Repository):
             msg = "DEV_ERROR in svn repository. Shouldn't be here!"
             fatal_error(msg)
 
-    def load(self, repo_dir):
+    def checkout(self, repo_dir):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -737,7 +750,7 @@ class _GitRepository(_Repository):
         """
         _Repository.__init__(self, component_name, repo)
 
-    def load(self, repo_dir):
+    def checkout(self, repo_dir):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -974,7 +987,7 @@ class _Source(object):
         """
         return self._name
 
-    def load(self, tree_root, load_all):
+    def checkout(self, tree_root, load_all):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -1000,7 +1013,7 @@ class _Source(object):
         repo_loaded = self._loaded
         if not repo_loaded:
             for repo in self._repos:
-                repo_loaded = repo.load(self._repo_dir)
+                repo_loaded = repo.checkout(self._repo_dir)
                 if repo_loaded:
                     break
 
@@ -1018,7 +1031,7 @@ class _Source(object):
                 ext_root, self._externals)
             externals = ModelDescription(model_format, model_data)
             self._externals_sourcetree = SourceTree(ext_root, externals)
-            self._externals_sourcetree.load(load_all)
+            self._externals_sourcetree.checkout(load_all)
 
         os.chdir(mycurrdir)
         return repo_loaded
@@ -1042,7 +1055,7 @@ class SourceTree(object):
             if model[comp]['required']:
                 self._required_compnames.append(comp)
 
-    def load(self, load_all, load_comp=None):
+    def checkout(self, load_all, load_comp=None):
         """
         Checkout or update indicated components into the the configured
         subdirs.
@@ -1059,14 +1072,13 @@ class SourceTree(object):
             load_comps = self._required_compnames
 
         if load_comps is not None:
-            msg = "Loading these components: "
+            msg = "Checking out these components: "
             for comp in load_comps:
                 msg += "{0}, ".format(comp)
-            print(msg)
-            logging.info(msg)
+            printlog(msg)
 
         for comp in load_comps:
-            self._all_components[comp].load(self._root_dir, load_all)
+            self._all_components[comp].checkout(self._root_dir, load_all)
 
 
 # ---------------------------------------------------------------------
@@ -1096,7 +1108,7 @@ def _main(args):
     if False:
         pretty_printer.pprint(model)
     source_tree = SourceTree(root_dir, model)
-    source_tree.load(load_all)
+    source_tree.checkout(load_all)
     logging.info("checkout_model completed without exceptions.")
     return 0
 
@@ -1107,7 +1119,7 @@ if __name__ == "__main__":
         return_status = _main(arguments)
         sys.exit(return_status)
     except Exception as error:
-        print(str(error))
+        printlog(str(error))
         if arguments.backtrace:
             traceback.print_exc()
         sys.exit(1)
