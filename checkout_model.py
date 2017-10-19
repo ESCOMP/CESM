@@ -24,7 +24,7 @@ import xml.etree.ElementTree as ET
 if sys.hexversion < 0x02070000:
     print(70 * '*')
     print('ERROR: {0} requires python >= 2.7.x. '.format(sys.argv[0]))
-    print('It appears that you are running python {0'.format(
+    print('It appears that you are running python {0}'.format(
         '.'.join(str(x) for x in sys.version_info[0:3])))
     print(70 * '*')
     sys.exit(1)
@@ -417,8 +417,8 @@ class ModelDescription(dict):
                              REPO_URL: 'string',
                              TAG: 'string',
                              BRANCH: 'string',
-                            }
-                     }
+                             }
+                      }
 
     def __init__(self, model_format, model_data):
         """Convert the xml into a standardized dict that can be used to
@@ -698,7 +698,7 @@ class Repository(object):
         branch or tag.
         """
         msg = ('DEV_ERROR: checkout method must be implemented in all '
-               'repository classes!')
+               'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
 
     def status(self, stat, repo_dir):
@@ -706,7 +706,7 @@ class Repository(object):
 
         """
         msg = ('DEV_ERROR: status method must be implemented in all '
-               'repository classes!')
+               'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
 
     def url(self):
@@ -752,7 +752,8 @@ class SvnRepository(Repository):
         branch or tag.
         """
         self.svn_check_sync(stat, repo_dir)
-        self.svn_status(stat, repo_dir)
+        if os.path.exists(repo_dir):
+            self.svn_status(stat, repo_dir)
         return stat
 
     def checkout(self, repo_dir):
@@ -784,7 +785,7 @@ class SvnRepository(Repository):
         os.chdir(mycurrdir)
 
     @staticmethod
-    def _svn_info(repo_dir):
+    def svn_info(repo_dir):
         """Return results of svn info command
         """
         cmd = ['svn', 'info', repo_dir]
@@ -822,16 +823,62 @@ class SvnRepository(Repository):
         if not os.path.exists(repo_dir):
             stat.sync_state = Status.EMPTY
         else:
-            svn_output = self._svn_info(repo_dir)
+            svn_output = self.svn_info(repo_dir)
             if not svn_output:
                 stat.sync_state = Status.UNKNOWN
             else:
                 stat.sync_state = self.svn_check_url(svn_output, self._url)
 
+    @staticmethod
+    def _svn_status_xml(repo_dir):
+        """
+        Get status of the subversion sandbox in repo_dir
+        """
+        cmd = ['svn', 'status', '--xml', repo_dir]
+        svn_output = check_output(cmd)
+        return svn_output
+
+    @staticmethod
+    def xml_status_is_dirty(svn_output):
+        """Parse svn status xml output and determine if the working copy is
+        clean or dirty. Dirty is defined as:
+
+        * modified files
+        * added files
+        * deleted files
+        * missing files
+        * unversioned files
+
+        """
+        SVN_MISSING = 'missing'
+        SVN_MODIFIED = 'modified'
+        SVN_DELETED = 'deleted'
+        SVN_UNVERSIONED = 'unversioned'
+        SVN_ADDED = 'added'
+        svn_dirty = [SVN_MISSING, SVN_MODIFIED,
+                     SVN_DELETED, SVN_UNVERSIONED, SVN_ADDED]
+        is_dirty = False
+        xml_status = ET.fromstring(svn_output)
+        xml_target = xml_status.find('./target')
+        entries = xml_target.findall('./entry')
+        for entry in entries:
+            status = entry.find('./wc-status')
+            item = status.get('item')
+            if item in svn_dirty:
+                is_dirty = True
+        return is_dirty
+
     def svn_status(self, stat, repo_dir):
+        """Report whether the svn repository is in-sync with the model
+        description and whether the sandbox is clean or dirty.
+
         """
-        """
-        stat.clean_state = Status.UNKNOWN
+        svn_output = self._svn_status_xml(repo_dir)
+        is_dirty = self.xml_status_is_dirty(svn_output)
+        if is_dirty:
+            stat.clean_state = Status.MODIFIED
+        else:
+            stat.clean_state = Status.OK
 
 
 class GitRepository(Repository):
@@ -873,7 +920,8 @@ class GitRepository(Repository):
         branch or tag.
         """
         self.git_check_sync(stat, repo_dir)
-        stat.clean_state = Status.UNKNOWN
+        if os.path.exists(repo_dir):
+            self.git_status(stat, repo_dir)
 
     def _git_ref_type(self, ref):
         """
@@ -935,7 +983,9 @@ class GitRepository(Repository):
         return (branch, git_hash)
 
     @staticmethod
-    def _git_branch():
+    def git_branch():
+        """Run the git branch command
+        """
         cmd = ['git', 'branch']
         git_output = check_output(cmd)
         return git_output
@@ -960,20 +1010,26 @@ class GitRepository(Repository):
 
         """
         lines = git_output.splitlines()
+        current_branch = None
         for line in lines:
             if line.startswith('*'):
-                break
+                current_branch = line
         ref = EMPTY_STR
-        if lines:
-            if 'detached' in line:
-                ref = line.split(' ')[-1]
+        if current_branch:
+            if 'detached' in current_branch:
+                ref = current_branch.split(' ')[-1]
                 ref = ref.strip(')')
             else:
-                ref = line.split()[-1]
+                ref = current_branch.split()[-1]
         return ref
 
     def git_check_sync(self, stat, repo_dir):
-        """
+        """Determine whether a git repository is in-sync with the model
+        description.
+
+        Because repos can have multiple remotes, the only criteria is
+        whether the branch or tag is the same.
+
         """
         current_dir = os.path.abspath('.')
         if not os.path.exists(repo_dir):
@@ -984,7 +1040,7 @@ class GitRepository(Repository):
                 stat.sync_state = Status.UNKNOWN
             else:
                 os.chdir(repo_dir)
-                git_output = self._git_branch()
+                git_output = self.git_branch()
                 ref = self.current_ref_from_branch_command(git_output)
                 if ref == EMPTY_STR:
                     stat.sync_state = Status.UNKNOWN
@@ -1136,6 +1192,65 @@ class GitRepository(Repository):
             execute_subprocess(cmd)
 
         os.chdir(mycurrdir)
+
+    @staticmethod
+    def git_status_porcelain_v1z():
+        """Run the git status command on the cwd and report results in the
+        machine parable format that is guarenteed not to change
+        between version or user configuration.
+
+        """
+        cmd = ['git', 'status', '--porcelain=v1', '-z']
+        git_output = check_output(cmd)
+        return git_output
+
+    @staticmethod
+    def git_status_v1z_is_dirty(git_output):
+        """Parse the git status output from --porcelain=v1 -z and determine if
+        the repo status is clean or dirty. Dirty means:
+
+        * modified files
+        * missing files
+        * added files
+        * untracked files
+        * removed
+        * renamed
+        * unmerged
+
+        NOTE: Based on the above definition, the porcelain status
+        should be an empty string to be considered 'clean'. Of course
+        this assumes we only get an empty string from an status
+        command on a clean checkout, and not some error condition...
+
+        GIT_DELETED = 'D'
+        GIT_MODIFIED = 'M'
+        GIT_UNTRACKED = '?'
+        GIT_RENAMED = 'R'
+        GIT_COPIED = 'C'
+        GIT_UNMERGED = 'U'
+        git_dirty[GIT_DELETED, GIT_MODIFIED, GIT_UNTRACKED, GIT_RENAMED,
+                  GIT_COPIED, GIT_UNMERGED, ]
+        git_output = git_output.split('\0')
+
+        """
+        is_dirty = False
+        if git_output:
+            is_dirty = True
+        return is_dirty
+
+    def git_status(self, stat, repo_dir):
+        """Determine the clean/dirty status of a git repository
+
+        """
+        cwd = os.getcwd()
+        os.chdir(repo_dir)
+        git_output = self.git_status_porcelain_v1z()
+        is_dirty = self.git_status_v1z_is_dirty(git_output)
+        if is_dirty:
+            stat.clean_state = Status.MODIFIED
+        else:
+            stat.clean_state = Status.OK
+        os.chdir(cwd)
 
 
 class _Source(object):

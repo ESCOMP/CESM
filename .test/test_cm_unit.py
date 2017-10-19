@@ -468,6 +468,7 @@ $source
         with self.assertRaises(RuntimeError):
             ModelDescription('xml', xml_root)
 
+
 SVN_INFO_MOSART = """Path: components/mosart
 Working Copy Root Path: /Users/andreb/projects/ncar/git-conversion/clm-dev-experimental/components/mosart
 URL: https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_26
@@ -498,7 +499,7 @@ Last Changed Date: 2017-06-15 05:59:28 -0600 (Thu, 15 Jun 2017)
 
 
 class TestSvnRepositoryCheckURL(unittest.TestCase):
-    """
+    """Verify that the svn_check_url function is working as expected.
     """
 
     def setUp(self):
@@ -511,7 +512,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
                  checkout_model.ModelDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
                  checkout_model.ModelDescription.BRANCH: ''
-        }
+                 }
 
         data = {self._name:
                 {
@@ -520,7 +521,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
                     checkout_model.ModelDescription.EXTERNALS: '',
                     checkout_model.ModelDescription.REPO: rdata,
                 },
-        }
+                }
 
         model = checkout_model.ModelDescription('json', data)
         repo = model[self._name][checkout_model.ModelDescription.REPO]
@@ -530,7 +531,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """Test that we correctly identify that the correct URL.
         """
         svn_output = SVN_INFO_MOSART
-        expected_url = self._repo._url
+        expected_url = self._repo.url()
         result = self._repo.svn_check_url(svn_output, expected_url)
         self.assertEqual(result, Status.OK)
 
@@ -538,7 +539,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """Test that we correctly reject an incorrect URL.
         """
         svn_output = SVN_INFO_CISM
-        expected_url = self._repo._url
+        expected_url = self._repo.url()
         result = self._repo.svn_check_url(svn_output, expected_url)
         self.assertEqual(result, Status.MODIFIED)
 
@@ -548,7 +549,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
 
         """
         svn_output = EMPTY_STR
-        expected_url = self._repo._url
+        expected_url = self._repo.url()
         result = self._repo.svn_check_url(svn_output, expected_url)
         self.assertEqual(result, Status.UNKNOWN)
 
@@ -558,6 +559,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
     correct.
 
     """
+
     def setUp(self):
         """Setup reusable svn repository object
         """
@@ -584,19 +586,19 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         self._repo = checkout_model.SvnRepository('test', repo)
 
     @staticmethod
-    def _svn_info_empty(repo_dir):
+    def _svn_info_empty(*_):
         """Return an empty info string. Simulates svn info failing.
         """
         return ''
 
     @staticmethod
-    def _svn_info_synced(repo_dir):
+    def _svn_info_synced(*_):
         """Return an info sting that is synced with the setUp data
         """
         return SVN_INFO_MOSART
 
     @staticmethod
-    def _svn_info_modified(repo_dir):
+    def _svn_info_modified(*_):
         """Return and info string that is modified from the setUp data
         """
         return SVN_INFO_CISM
@@ -616,7 +618,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         stat = Status()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
-        self._repo._svn_info = self._svn_info_empty
+        self._repo.svn_info = self._svn_info_empty
         self._repo.svn_check_sync(stat, '.')
         self.assertEqual(stat.sync_state, Status.UNKNOWN)
         # check_dir should only modify the sync_state, not clean_state
@@ -630,7 +632,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         stat = Status()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
-        self._repo._svn_info = self._svn_info_synced
+        self._repo.svn_info = self._svn_info_synced
         self._repo.svn_check_sync(stat, '.')
         self.assertEqual(stat.sync_state, Status.OK)
         # check_dir should only modify the sync_state, not clean_state
@@ -644,7 +646,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         stat = Status()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
-        self._repo._svn_info = self._svn_info_modified
+        self._repo.svn_info = self._svn_info_modified
         self._repo.svn_check_sync(stat, '.')
         self.assertEqual(stat.sync_state, Status.MODIFIED)
         # check_dir should only modify the sync_state, not clean_state
@@ -674,9 +676,9 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         self._name = 'component'
         rdata = {checkout_model.ModelDescription.PROTOCOL: 'git',
                  checkout_model.ModelDescription.REPO_URL:
-                     'git@git.github.com:ncar/rtm',
+                 'git@git.github.com:ncar/rtm',
                  checkout_model.ModelDescription.TAG:
-                     'rtm1_0_26',
+                 'rtm1_0_26',
                  checkout_model.ModelDescription.BRANCH: EMPTY_STR
         }
 
@@ -697,7 +699,7 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         """Test that we correctly identify that the ref is detached from a tag
         """
         git_output = self.GIT_BRANCH_OUTPUT_DETACHED_TAG
-        expected = self._repo._tag
+        expected = self._repo.tag()
         result = self._repo.current_ref_from_branch_command(
             git_output)
         self.assertEqual(result, expected)
@@ -747,9 +749,9 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._name = 'component'
         rdata = {checkout_model.ModelDescription.PROTOCOL: 'git',
                  checkout_model.ModelDescription.REPO_URL:
-                     'git@git.github.com:ncar/rtm',
+                 'git@git.github.com:ncar/rtm',
                  checkout_model.ModelDescription.TAG:
-                     'rtm1_0_26',
+                 'rtm1_0_26',
                  checkout_model.ModelDescription.BRANCH: EMPTY_STR
         }
 
@@ -827,7 +829,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         stat = Status()
         # Now we over-ride the _git_branch method on the repo to return
         # a known value without requiring access to git.
-        self._repo._git_branch = self._git_branch_empty
+        self._repo.git_branch = self._git_branch_empty
         self._repo.git_check_sync(stat, 'fake')
         self.assertEqual(stat.sync_state, Status.UNKNOWN)
         # check_sync should only modify the sync_state, not clean_state
@@ -841,7 +843,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         stat = Status()
         # Now we over-ride the _git_branch method on the repo to return
         # a known value without requiring access to svn.
-        self._repo._git_branch = self._git_branch_synced
+        self._repo.git_branch = self._git_branch_synced
         self._repo.git_check_sync(stat, 'fake')
         self.assertEqual(stat.sync_state, Status.OK)
         # check_sync should only modify the sync_state, not clean_state
@@ -855,11 +857,309 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         stat = Status()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
-        self._repo._git_branch = self._git_branch_modified
+        self._repo.git_branch = self._git_branch_modified
         self._repo.git_check_sync(stat, 'fake')
         self.assertEqual(stat.sync_state, Status.MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
+
+
+class TestSVNStatusXML(unittest.TestCase):
+    """Test parsing of svn status xml output
+    """
+    SVN_STATUS_XML_DIRTY_ALL = '''
+<status>
+<target
+   path=".">
+<entry
+   path="ChangeLog">
+<wc-status
+   item="missing"
+   revision="86711"
+   props="none">
+<commit
+   revision="85703">
+<author>sacks</author>
+<date>2017-06-15T11:59:00.355419Z</date>
+</commit>
+</wc-status>
+</entry>
+<entry
+   path="README.parallelization">
+<wc-status
+   props="none"
+   item="modified"
+   revision="86711">
+<commit
+   revision="43811">
+<author>sacks</author>
+<date>2013-02-07T16:17:56.412878Z</date>
+</commit>
+</wc-status>
+</entry>
+<entry
+   path="SVN_EXTERNAL_DIRECTORIES">
+<wc-status
+   item="deleted"
+   revision="86711"
+   props="none">
+<commit
+   revision="84725">
+<author>sacks</author>
+<date>2017-05-01T16:48:27.893741Z</date>
+</commit>
+</wc-status>
+</entry>
+<entry
+   path="glimmer-cism">
+<wc-status
+   item="external"
+   props="none">
+</wc-status>
+</entry>
+<entry
+   path="junk.txt">
+<wc-status
+   item="unversioned"
+   props="none">
+</wc-status>
+</entry>
+<entry
+   path="stuff.txt">
+<wc-status
+   props="none"
+   item="added"
+   revision="-1">
+</wc-status>
+</entry>
+</target>
+</status>'''
+
+    SVN_STATUS_XML_DIRTY_MISSING = '''
+<status>
+<target
+   path=".">
+<entry
+   path="ChangeLog">
+<wc-status
+   item="missing"
+   revision="86711"
+   props="none">
+<commit
+   revision="85703">
+<author>sacks</author>
+<date>2017-06-15T11:59:00.355419Z</date>
+</commit>
+</wc-status>
+</entry>
+<entry
+   path="glimmer-cism">
+<wc-status
+   item="external"
+   props="none">
+</wc-status>
+</entry>
+</target>
+</status>'''
+
+    SVN_STATUS_XML_DIRTY_MODIFIED = '''
+<status>
+<target
+   path=".">
+<entry
+   path="README.parallelization">
+<wc-status
+   props="none"
+   item="modified"
+   revision="86711">
+<commit
+   revision="43811">
+<author>sacks</author>
+<date>2013-02-07T16:17:56.412878Z</date>
+</commit>
+</wc-status>
+</entry>
+<entry
+   path="glimmer-cism">
+<wc-status
+   item="external"
+   props="none">
+</wc-status>
+</entry>
+</target>
+</status>'''
+
+    SVN_STATUS_XML_DIRTY_DELETED = '''
+<status>
+<target
+   path=".">
+<entry
+   path="SVN_EXTERNAL_DIRECTORIES">
+<wc-status
+   item="deleted"
+   revision="86711"
+   props="none">
+<commit
+   revision="84725">
+<author>sacks</author>
+<date>2017-05-01T16:48:27.893741Z</date>
+</commit>
+</wc-status>
+</entry>
+<entry
+   path="glimmer-cism">
+<wc-status
+   item="external"
+   props="none">
+</wc-status>
+</entry>
+</target>
+</status>'''
+
+    SVN_STATUS_XML_DIRTY_UNVERSION = '''
+<status>
+<target
+   path=".">
+<entry
+   path="glimmer-cism">
+<wc-status
+   item="external"
+   props="none">
+</wc-status>
+</entry>
+<entry
+   path="junk.txt">
+<wc-status
+   item="unversioned"
+   props="none">
+</wc-status>
+</entry>
+</target>
+</status>'''
+
+    SVN_STATUS_XML_DIRTY_ADDED = '''
+<status>
+<target
+   path=".">
+<entry
+   path="glimmer-cism">
+<wc-status
+   item="external"
+   props="none">
+</wc-status>
+</entry>
+<entry
+   path="stuff.txt">
+<wc-status
+   props="none"
+   item="added"
+   revision="-1">
+</wc-status>
+</entry>
+</target>
+</status>'''
+
+    SVN_STATUS_XML_CLEAN = '''
+<status>
+<target
+   path=".">
+<entry
+   path="glimmer-cism">
+<wc-status
+   item="external"
+   props="none">
+</wc-status>
+</entry>
+</target>
+</status>'''
+
+    def test_xml_status_dirty_missing(self):
+        """Verify that svn status output is consindered dirty when there is a
+        missing file.
+
+        """
+        svn_output = self.SVN_STATUS_XML_DIRTY_MISSING
+        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        self.assertTrue(is_dirty)
+
+    def test_xml_status_dirty_modified(self):
+        """Verify that svn status output is consindered dirty when there is a
+        modified file.
+        """
+        svn_output = self.SVN_STATUS_XML_DIRTY_MODIFIED
+        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        self.assertTrue(is_dirty)
+
+    def test_xml_status_dirty_deleted(self):
+        """Verify that svn status output is consindered dirty when there is a
+        deleted file.
+        """
+        svn_output = self.SVN_STATUS_XML_DIRTY_DELETED
+        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        self.assertTrue(is_dirty)
+
+    def test_xml_status_dirty_unversion(self):
+        """Verify that svn status output is consindered dirty when there is a
+        unversioned file.
+        """
+        svn_output = self.SVN_STATUS_XML_DIRTY_UNVERSION
+        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        self.assertTrue(is_dirty)
+
+    def test_xml_status_dirty_added(self):
+        """Verify that svn status output is consindered dirty when there is a
+        added file.
+        """
+        svn_output = self.SVN_STATUS_XML_DIRTY_ADDED
+        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        self.assertTrue(is_dirty)
+
+    def test_xml_status_dirty_all(self):
+        """Verify that svn status output is consindered dirty when there are
+        multiple dirty files..
+
+        """
+        svn_output = self.SVN_STATUS_XML_DIRTY_ALL
+        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        self.assertTrue(is_dirty)
+
+    def test_xml_status_dirty_clean(self):
+        """Verify that svn status output is consindered clean when there are
+        no dirty files.
+
+        """
+        svn_output = self.SVN_STATUS_XML_CLEAN
+        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        self.assertFalse(is_dirty)
+
+
+class TestGitStatusPorcelain(unittest.TestCase):
+    """Test parsing of output from git status --porcelain=v1 -z
+    """
+    GIT_STATUS_PORCELAIN_V1_ALL = r' D INSTALLMM Makefile M README.mdR  cmakelists.txtCMakeLists.txtD  commit-message-template.txtA  stuff.txt?? junk.txt'
+
+    GIT_STATUS_PORCELAIN_CLEAN = r''
+
+    def test_porcelain_status_dirty(self):
+        """Verify that git status output is considered dirty when there are
+        listed files.
+
+        """
+        git_output = self.GIT_STATUS_PORCELAIN_V1_ALL
+        is_dirty = checkout_model.GitRepository.git_status_v1z_is_dirty(
+            git_output)
+        self.assertTrue(is_dirty)
+
+    def test_porcelain_status_clean(self):
+        """Verify that git status output is considered clean when there are no
+        listed files.
+
+        """
+        git_output = self.GIT_STATUS_PORCELAIN_CLEAN
+        is_dirty = checkout_model.GitRepository.git_status_v1z_is_dirty(
+            git_output)
+        self.assertFalse(is_dirty)
+
 
 if __name__ == '__main__':
     unittest.main()
