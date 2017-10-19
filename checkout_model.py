@@ -18,6 +18,7 @@ import pprint
 import re
 import subprocess
 import sys
+import textwrap
 import traceback
 import xml.etree.ElementTree as ET
 
@@ -648,6 +649,19 @@ class ModelDescription(dict):
 # ---------------------------------------------------------------------
 class Status(object):
     """Class to represent the status of a given source repository or tree.
+
+    Individual repositories determine their own status in the
+    Repository objects. This object is just resposible for storing the
+    information and passing it up to a higher level for reporting or
+    global decisions.
+
+    There are two states of concern:
+
+    * If the repository is in-sync with the model description file.
+
+    * If the repostiory working copy is clean and there are no pending
+    transactions (e.g. add, remove, rename, untracked files).
+
     """
     DEFAULT = '*'
     MODIFIED = 'M'
@@ -664,6 +678,60 @@ class Status(object):
         msg = '{sync}{clean} {path}'.format(
             sync=self.sync_state, clean=self.clean_state, path=self.path)
         return msg
+
+    def safe_to_update(self):
+        """Report if it is safe to update a repository. Safe is defined as:
+
+        * If a repository is empty, it is safe to update.
+
+        * If a repository exists and has a clean working copy state
+        with no pending transactions.
+
+        """
+        safe_to_update = False
+        repo_exists = self.exists()
+        if not repo_exists:
+            safe_to_update = True
+        else:
+            # If the repo exists, it must be in ok or modified
+            # sync_state. Any other sync_state at this point
+            # represents a logic error that should have been handled
+            # before now!
+            sync_safe = ((self.sync_state == Status.OK) or
+                         (self.sync_state == Status.MODIFIED))
+            if sync_safe:
+                # The clean_state must be OK to update. Otherwise we
+                # are dirty or there was a missed error previously.
+                if self.clean_state == Status.OK:
+                    safe_to_update = True
+        return safe_to_update
+
+    def exists(self):
+        """Determine if the repo exists. This is indicated by:
+
+        * sync_state is not EMPTY
+
+            * if the sync_state is empty, then the valid states for
+              clean_state are default, empty or unknown. Anything else
+              and there was probably an internal logic error.
+
+        NOTE(bja, 2017-10) For the moment we are considering a
+        sync_state of default or unknown to require user intervention,
+        but we may want to relax this convention. This is probably a
+        result of a network error or internal logic error but more
+        testing is needed.
+
+        """
+        is_empty = (self.sync_state == Status.EMPTY)
+        clean_valid = ((self.clean_state == Status.DEFAULT) or
+                       (self.clean_state == Status.EMPTY) or
+                       (self.clean_state == Status.UNKNOWN))
+
+        if is_empty and clean_valid:
+            exists = False
+        else:
+            exists = True
+        return exists
 
 
 class Repository(object):
@@ -1309,7 +1377,6 @@ class _Source(object):
         pdir = os.path.join(tree_root, os.path.dirname(self._path))
         if not os.path.exists(pdir):
             stat.sync_state = Status.EMPTY
-            stat.clean_state = Status.EMPTY
         else:
             os.chdir(pdir)
 
@@ -1449,6 +1516,28 @@ class SourceTree(object):
             self._all_components[comp].checkout(self._root_dir, load_all)
 
 
+def check_safe_to_update_repos(tree_status, debug):
+    """Check if *ALL* repositories are in a safe state to update. We don't
+    want to do a partial update of the repositories then die, leaving
+    the model in an inconsistent state.
+
+    Note: if there is an update to do, the repositories will by
+    definiation be out of synce with the model description, so we
+    can't use that as criteria for updating.
+
+    """
+    safe_to_update = True
+    for comp in tree_status:
+        stat = tree_status[comp]
+        if debug:
+            printlog('{0} - {1} sync {2} clean {3}'.format(
+                comp, stat.safe_to_update(), stat.sync_state,
+                stat.clean_state))
+
+        safe_to_update &= stat.safe_to_update()
+    return safe_to_update
+
+
 # ---------------------------------------------------------------------
 #
 # main
@@ -1483,13 +1572,28 @@ def _main(args):
     printlog('')
 
     if args.status:
+        # user requested status-only
         for comp in tree_status:
             msg = str(tree_status[comp])
             printlog(msg)
+        if args.verbose:
+            # user requested verbose status dump of the git/svn status commands
+            printlog('-- verbose status here --')
     else:
-        printlog('Checkout components: ', end='')
-        source_tree.checkout(load_all)
-        printlog('')
+        # checkout / update the model repositories.
+        safe_to_update = check_safe_to_update_repos(tree_status, args.debug)
+        if not safe_to_update:
+            msg = textwrap.fill(
+                'Model contains repositories that are not in a clean '
+                'state. Please run with the --status flag and ensure all '
+                'repositories are clean before updating.')
+            printlog('-' * 70)
+            printlog(msg)
+            printlog('-' * 70)
+        else:
+            printlog('Checkout components: ', end='')
+            source_tree.checkout(load_all)
+            printlog('')
 
     logging.info('checkout_model completed without exceptions.')
     return 0

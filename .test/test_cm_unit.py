@@ -570,7 +570,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
                  checkout_model.ModelDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
                  checkout_model.ModelDescription.BRANCH: EMPTY_STR
-        }
+                 }
 
         data = {self._name:
                 {
@@ -579,7 +579,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
                     checkout_model.ModelDescription.EXTERNALS: EMPTY_STR,
                     checkout_model.ModelDescription.REPO: rdata,
                 },
-        }
+                }
 
         model = checkout_model.ModelDescription('json', data)
         repo = model[self._name][checkout_model.ModelDescription.REPO]
@@ -680,7 +680,7 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
                  checkout_model.ModelDescription.TAG:
                  'rtm1_0_26',
                  checkout_model.ModelDescription.BRANCH: EMPTY_STR
-        }
+                 }
 
         data = {self._name:
                 {
@@ -689,7 +689,7 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
                     checkout_model.ModelDescription.EXTERNALS: EMPTY_STR,
                     checkout_model.ModelDescription.REPO: rdata,
                 },
-        }
+                }
 
         model = checkout_model.ModelDescription('json', data)
         repo = model[self._name][checkout_model.ModelDescription.REPO]
@@ -753,7 +753,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
                  checkout_model.ModelDescription.TAG:
                  'rtm1_0_26',
                  checkout_model.ModelDescription.BRANCH: EMPTY_STR
-        }
+                 }
 
         data = {self._name:
                 {
@@ -762,7 +762,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
                     checkout_model.ModelDescription.EXTERNALS: '',
                     checkout_model.ModelDescription.REPO: rdata,
                 },
-        }
+                }
 
         model = checkout_model.ModelDescription('json', data)
         repo = model[self._name][checkout_model.ModelDescription.REPO]
@@ -1159,6 +1159,285 @@ class TestGitStatusPorcelain(unittest.TestCase):
         is_dirty = checkout_model.GitRepository.git_status_v1z_is_dirty(
             git_output)
         self.assertFalse(is_dirty)
+
+
+class TestStatusObject(unittest.TestCase):
+    """Verify that the Status object behaives as expected.
+    """
+
+    def test_exists_empty_all(self):
+        """If the repository sync-state is empty (doesn't exist), and there is no
+        clean state, then it is considered not to exist.
+
+        """
+        stat = Status()
+        stat.sync_state = Status.EMPTY
+        stat.clean_state = Status.DEFAULT
+        exists = stat.exists()
+        self.assertFalse(exists)
+
+        stat.clean_state = Status.EMPTY
+        exists = stat.exists()
+        self.assertFalse(exists)
+
+        stat.clean_state = Status.UNKNOWN
+        exists = stat.exists()
+        self.assertFalse(exists)
+
+        # this state represtens an internal logic error in how the
+        # repo status was determined.
+        stat.clean_state = Status.OK
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        # this state represtens an internal logic error in how the
+        # repo status was determined.
+        stat.clean_state = Status.MODIFIED
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+    def test_exists_default_all(self):
+        """If the repository sync-state is default, then it is considered to exist
+        regardless of clean state.
+
+        """
+        stat = Status()
+        stat.sync_state = Status.DEFAULT
+        stat.clean_state = Status.DEFAULT
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.EMPTY
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.UNKNOWN
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.OK
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.MODIFIED
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+    def test_exists_unknown_all(self):
+        """If the repository sync-state is unknown, then it is considered to exist
+        regardless of clean state.
+
+        """
+        stat = Status()
+        stat.sync_state = Status.UNKNOWN
+        stat.clean_state = Status.DEFAULT
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.EMPTY
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.UNKNOWN
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.OK
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.MODIFIED
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+    def test_exists_modified_all(self):
+        """If the repository sync-state is modified, then it is considered to exist
+        regardless of clean state.
+
+        """
+        stat = Status()
+        stat.sync_state = Status.MODIFIED
+        stat.clean_state = Status.DEFAULT
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.EMPTY
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.UNKNOWN
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.OK
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.MODIFIED
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+    def test_exists_ok_all(self):
+        """If the repository sync-state is ok, then it is considered to exist
+        regardless of clean state.
+
+        """
+        stat = Status()
+        stat.sync_state = Status.OK
+        stat.clean_state = Status.DEFAULT
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.EMPTY
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.UNKNOWN
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.OK
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+        stat.clean_state = Status.MODIFIED
+        exists = stat.exists()
+        self.assertTrue(exists)
+
+    def test_update_ok_all(self):
+        """If the repository in-sync is ok, then it is safe to
+        update only if clean state is ok
+
+        """
+        stat = Status()
+        stat.sync_state = Status.OK
+        stat.clean_state = Status.DEFAULT
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.EMPTY
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.UNKNOWN
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.OK
+        safe_to_update = stat.safe_to_update()
+        self.assertTrue(safe_to_update)
+
+        stat.clean_state = Status.MODIFIED
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+    def test_update_modified_all(self):
+        """If the repository in-sync is modified, then it is safe to
+        update only if clean state is ok
+
+        """
+        stat = Status()
+        stat.sync_state = Status.MODIFIED
+        stat.clean_state = Status.DEFAULT
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.EMPTY
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.UNKNOWN
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.OK
+        safe_to_update = stat.safe_to_update()
+        self.assertTrue(safe_to_update)
+
+        stat.clean_state = Status.MODIFIED
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+    def test_update_unknown_all(self):
+        """If the repository in-sync is unknown, then it is not safe to
+        update, regardless of the clean state.
+
+        """
+        stat = Status()
+        stat.sync_state = Status.UNKNOWN
+        stat.clean_state = Status.DEFAULT
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.EMPTY
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.UNKNOWN
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.OK
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.MODIFIED
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+    def test_update_default_all(self):
+        """If the repository in-sync is default, then it is not safe to
+        update, regardless of the clean state.
+
+        """
+        stat = Status()
+        stat.sync_state = Status.UNKNOWN
+        stat.clean_state = Status.DEFAULT
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.EMPTY
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.UNKNOWN
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.OK
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.MODIFIED
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+    def test_update_empty_all(self):
+        """If the repository in-sync is empty, then it is not safe to
+        update, regardless of the clean state.
+
+        """
+        stat = Status()
+        stat.sync_state = Status.UNKNOWN
+        stat.clean_state = Status.DEFAULT
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.EMPTY
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.UNKNOWN
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.OK
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
+
+        stat.clean_state = Status.MODIFIED
+        safe_to_update = stat.safe_to_update()
+        self.assertFalse(safe_to_update)
 
 
 if __name__ == '__main__':
