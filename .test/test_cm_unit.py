@@ -7,7 +7,7 @@ already in the python path.
 
 """
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 import string
 import os
@@ -30,10 +30,10 @@ class TestCreateRepositoryDict(unittest.TestCase):
     def setUp(self):
         """Common data needed for all tests in this class
         """
-        self._name = u'test_name'
+        self._name = 'test_name'
         self._repo = {ModelDescription.PROTOCOL: None,
-                      ModelDescription.REPO_URL: u'junk_root',
-                      ModelDescription.TAG: u'junk_tag',
+                      ModelDescription.REPO_URL: 'junk_root',
+                      ModelDescription.TAG: 'junk_tag',
                       ModelDescription.BRANCH: EMPTY_STR, }
 
     def test_create_repo_git(self):
@@ -41,17 +41,17 @@ class TestCreateRepositoryDict(unittest.TestCase):
         create git repository objects.
 
         """
-        protocols = [u'git', u'GIT', u'Git', ]
+        protocols = ['git', 'GIT', 'Git', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
             repo = checkout_model.create_repository(self._name, self._repo)
             self.assertIsInstance(repo, checkout_model.GitRepository)
 
     def test_create_repo_svn(self):
-        """Verify that several possible names for the u'svn' protocol
+        """Verify that several possible names for the 'svn' protocol
         create svn repository objects.
         """
-        protocols = [u'svn', u'SVN', u'Svn', ]
+        protocols = ['svn', 'SVN', 'Svn', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
             repo = checkout_model.create_repository(self._name, self._repo)
@@ -60,7 +60,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
     def test_create_repo_externals_only(self):
         """Verify that an externals only repo returns None.
         """
-        protocols = [u'externals_only', ]
+        protocols = ['externals_only', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
             repo = checkout_model.create_repository(self._name, self._repo)
@@ -69,7 +69,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
     def test_create_repo_unsupported(self):
         """Verify that an unsupported protocol generates a runtime error.
         """
-        protocols = [u'not_a_supported_protocol', ]
+        protocols = ['not_a_supported_protocol', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
             with self.assertRaises(RuntimeError):
@@ -85,10 +85,10 @@ class TestRepository(unittest.TestCase):
     def test_tag(self):
         """Test creation of a repository object with a tag
         """
-        name = u'test_repo'
-        protocol = u'test_protocol'
-        url = u'test_url'
-        tag = u'test_tag'
+        name = 'test_repo'
+        protocol = 'test_protocol'
+        url = 'test_url'
+        tag = 'test_tag'
         repo_info = {ModelDescription.PROTOCOL: protocol,
                      ModelDescription.REPO_URL: url,
                      ModelDescription.TAG: tag,
@@ -101,10 +101,10 @@ class TestRepository(unittest.TestCase):
     def test_branch(self):
         """Test creation of a repository object with a branch
         """
-        name = u'test_repo'
-        protocol = u'test_protocol'
-        url = u'test_url'
-        branch = u'test_branch'
+        name = 'test_repo'
+        protocol = 'test_protocol'
+        url = 'test_url'
+        branch = 'test_branch'
         repo_info = {ModelDescription.PROTOCOL: protocol,
                      ModelDescription.REPO_URL: url,
                      ModelDescription.BRANCH: branch,
@@ -119,11 +119,11 @@ class TestRepository(unittest.TestCase):
         runtimer error.
 
         """
-        name = u'test_repo'
-        protocol = u'test_protocol'
-        url = u'test_url'
-        branch = u'test_branch'
-        tag = u'test_tag'
+        name = 'test_repo'
+        protocol = 'test_protocol'
+        url = 'test_url'
+        branch = 'test_branch'
+        tag = 'test_tag'
         repo_info = {ModelDescription.PROTOCOL: protocol,
                      ModelDescription.REPO_URL: url,
                      ModelDescription.BRANCH: branch,
@@ -136,9 +136,9 @@ class TestRepository(unittest.TestCase):
         runtimer error.
 
         """
-        name = u'test_repo'
-        protocol = u'test_protocol'
-        url = u'test_url'
+        name = 'test_repo'
+        protocol = 'test_protocol'
+        url = 'test_url'
         branch = EMPTY_STR
         tag = EMPTY_STR
         repo_info = {ModelDescription.PROTOCOL: protocol,
@@ -159,7 +159,7 @@ correct results.
         """Reusable xml string
         """
         self._xml_sourcetree = string.Template(
-            u"""
+            """
             <config_sourcetree version="$version">
             </config_sourcetree>
             """)
@@ -182,7 +182,7 @@ correct results.
         a runtime error.
 
         """
-        xml_str = u'<config_sourcetree >comp1</config_sourcetree>'
+        xml_str = '<config_sourcetree >comp1</config_sourcetree>'
         xml_root = etree.fromstring(xml_str)
         with self.assertRaises(RuntimeError):
             ModelDescription.get_xml_schema_version(xml_root)
@@ -196,41 +196,41 @@ class TestModelDescritionXMLv1(unittest.TestCase):
     def setUp(self):
         """Setup reusable xml strings for tests.
         """
-        self._xml_sourcetree = string.Template(u"""<config_sourcetree version="1.0.0">
+        self._xml_sourcetree = string.Template("""<config_sourcetree version="1.0.0">
 $source
 $required
 </config_sourcetree>""")
-        self._xml_source = string.Template(u"""    <source name='$name'>
+        self._xml_source = string.Template("""    <source name='$name'>
         <TREE_PATH>$path</TREE_PATH> $repo
     </source>""")
 
-        self._xml_repo_tag = string.Template(u"""
+        self._xml_repo_tag = string.Template("""
         <repo protocol='$protocol'>
             <ROOT>$url</ROOT>
             <TAG>$tag</TAG>
         </repo>""")
 
-        self._xml_repo_branch = string.Template(u"""
+        self._xml_repo_branch = string.Template("""
         <repo protocol='$protocol'>
             <ROOT>$url</ROOT>
             <BRANCH>$branch</BRANCH>
         </repo>""")
-        self._xml_required = string.Template(u"""    <required>
+        self._xml_required = string.Template("""    <required>
 $req
     </required>""")
         self._xml_req_source = string.Template(
-            u"""        <REQ_SOURCE>$name</REQ_SOURCE>""")
+            """        <REQ_SOURCE>$name</REQ_SOURCE>""")
         self._setup_comp1()
         self._setup_comp2()
 
     def _setup_comp1(self):
         """Reusable setup of component one
         """
-        self._comp1_name = u'comp1'
-        self._comp1_path = u'path/to/comp1'
-        self._comp1_protocol = u'proto1'
-        self._comp1_url = u'/local/clone/of/comp1'
-        self._comp1_tag = u'a_nice_tag_v1'
+        self._comp1_name = 'comp1'
+        self._comp1_path = 'path/to/comp1'
+        self._comp1_protocol = 'proto1'
+        self._comp1_url = '/local/clone/of/comp1'
+        self._comp1_tag = 'a_nice_tag_v1'
         self._comp1_is_required = True
         repo = self._xml_repo_tag.substitute(protocol=self._comp1_protocol,
                                              url=self._comp1_url,
@@ -244,11 +244,11 @@ $req
     def _setup_comp2(self):
         """Reusable setup of componet two
         """
-        self._comp2_name = u'comp2'
-        self._comp2_path = u'path/to/comp2'
-        self._comp2_protocol = u'proto2'
-        self._comp2_url = u'/local/clone/of/comp2'
-        self._comp2_branch = u'a_very_nice_branch'
+        self._comp2_name = 'comp2'
+        self._comp2_path = 'path/to/comp2'
+        self._comp2_protocol = 'proto2'
+        self._comp2_url = '/local/clone/of/comp2'
+        self._comp2_branch = 'a_very_nice_branch'
         self._comp2_is_required = False
         repo = self._xml_repo_branch.substitute(protocol=self._comp2_protocol,
                                                 url=self._comp2_url,
@@ -293,7 +293,7 @@ $req
             source=self._comp1_source, required=self._comp1_required)
         print(xml_str)
         xml_root = etree.fromstring(xml_str)
-        model = ModelDescription(u'xml', xml_root)
+        model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp1(model)
 
@@ -303,7 +303,7 @@ $req
         xml_str = self._xml_sourcetree.substitute(
             source=self._comp2_source, required=self._comp2_required)
         xml_root = etree.fromstring(xml_str)
-        model = ModelDescription(u'xml', xml_root)
+        model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp2(model)
 
@@ -316,7 +316,7 @@ $req
                                                   required=req_str)
         print(xml_str)
         xml_root = etree.fromstring(xml_str)
-        model = ModelDescription(u'xml', xml_root)
+        model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp1(model)
         self._check_comp2(model)
@@ -331,39 +331,39 @@ class TestModelDescritionXMLv2(unittest.TestCase):
     def setUp(self):
         """Boiler plate construction of string containing xml for multiple components.
         """
-        self._xml_sourcetree = string.Template(u"""<config_sourcetree version="2.0.0">
+        self._xml_sourcetree = string.Template("""<config_sourcetree version="2.0.0">
 $source
 </config_sourcetree>""")
-        self._xml_source = string.Template(u"""    <source name='$name' required='$required'>
+        self._xml_source = string.Template("""    <source name='$name' required='$required'>
         <path>$path</path> $repo
         $externals
     </source>""")
 
-        self._xml_repo_tag = string.Template(u"""
+        self._xml_repo_tag = string.Template("""
         <repo protocol='$protocol'>
             <repo_url>$url</repo_url>
             <tag>$tag</tag>
         </repo>""")
 
-        self._xml_repo_branch = string.Template(u"""
+        self._xml_repo_branch = string.Template("""
         <repo protocol='$protocol'>
             <repo_url>$url</repo_url>
             <branch>$branch</branch>
         </repo>""")
 
         self._xml_externals = string.Template(
-            u"""<externals>$name</externals>""")
+            """<externals>$name</externals>""")
         self._setup_comp1()
         self._setup_comp2()
 
     def _setup_comp1(self):
         """Boiler plate construction of xml string for componet 1
         """
-        self._comp1_name = u'comp1'
-        self._comp1_path = u'path/to/comp1'
-        self._comp1_protocol = u'proto1'
-        self._comp1_url = u'/local/clone/of/comp1'
-        self._comp1_tag = u'a_nice_tag_v1'
+        self._comp1_name = 'comp1'
+        self._comp1_path = 'path/to/comp1'
+        self._comp1_protocol = 'proto1'
+        self._comp1_url = '/local/clone/of/comp1'
+        self._comp1_tag = 'a_nice_tag_v1'
         self._comp1_is_required = True
         self._comp1_externals = ''
         repo = self._xml_repo_tag.substitute(protocol=self._comp1_protocol,
@@ -377,13 +377,13 @@ $source
     def _setup_comp2(self):
         """Boiler plate construction of xml string for componet 2
         """
-        self._comp2_name = u'comp2'
-        self._comp2_path = u'path/to/comp2'
-        self._comp2_protocol = u'proto2'
-        self._comp2_url = u'/local/clone/of/comp2'
-        self._comp2_branch = u'a_very_nice_branch'
+        self._comp2_name = 'comp2'
+        self._comp2_path = 'path/to/comp2'
+        self._comp2_protocol = 'proto2'
+        self._comp2_url = '/local/clone/of/comp2'
+        self._comp2_branch = 'a_very_nice_branch'
         self._comp2_is_required = False
-        self._comp2_externals_name = u'comp2.xml'
+        self._comp2_externals_name = 'comp2.xml'
         self._comp2_externals = self._xml_externals.substitute(
             name=self._comp2_externals_name)
         repo = self._xml_repo_branch.substitute(protocol=self._comp2_protocol,
@@ -431,7 +431,7 @@ $source
         xml_str = self._xml_sourcetree.substitute(source=self._comp1_source)
         print(xml_str)
         xml_root = etree.fromstring(xml_str)
-        model = ModelDescription(u'xml', xml_root)
+        model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp1(model)
 
@@ -440,7 +440,7 @@ $source
         """
         xml_str = self._xml_sourcetree.substitute(source=self._comp2_source)
         xml_root = etree.fromstring(xml_str)
-        model = ModelDescription(u'xml', xml_root)
+        model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp2(model)
 
@@ -451,7 +451,7 @@ $source
         xml_str = self._xml_sourcetree.substitute(source=src_str)
         print(xml_str)
         xml_root = etree.fromstring(xml_str)
-        model = ModelDescription(u'xml', xml_root)
+        model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp1(model)
         self._check_comp2(model)
@@ -466,9 +466,9 @@ $source
         print(xml_str)
         xml_root = etree.fromstring(xml_str)
         with self.assertRaises(RuntimeError):
-            ModelDescription(u'xml', xml_root)
+            ModelDescription('xml', xml_root)
 
-SVN_INFO_MOSART = u"""Path: components/mosart
+SVN_INFO_MOSART = """Path: components/mosart
 Working Copy Root Path: /Users/andreb/projects/ncar/git-conversion/clm-dev-experimental/components/mosart
 URL: https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_26
 Relative URL: ^/mosart/trunk_tags/mosart1_0_26
@@ -481,7 +481,7 @@ Last Changed Author: erik
 Last Changed Rev: 86031
 Last Changed Date: 2017-07-07 12:28:10 -0600 (Fri, 07 Jul 2017)
 """
-SVN_INFO_CISM = u"""
+SVN_INFO_CISM = """
 Path: components/cism
 Working Copy Root Path: /Users/andreb/projects/ncar/git-conversion/clm-dev-experimental/components/cism
 URL: https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_37
@@ -496,6 +496,7 @@ Last Changed Rev: 85704
 Last Changed Date: 2017-06-15 05:59:28 -0600 (Thu, 15 Jun 2017)
 """
 
+
 class TestSvnRepositoryCheckURL(unittest.TestCase):
     """
     """
@@ -503,27 +504,27 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
     def setUp(self):
         """Setup reusable svn repository object
         """
-        self._name = u'component'
-        rdata = {checkout_model.ModelDescription.PROTOCOL: u'svn',
+        self._name = 'component'
+        rdata = {checkout_model.ModelDescription.PROTOCOL: 'svn',
                  checkout_model.ModelDescription.REPO_URL:
-                     u'https://svn-ccsm-models.cgd.ucar.edu/',
+                     'https://svn-ccsm-models.cgd.ucar.edu/',
                  checkout_model.ModelDescription.TAG:
-                     u'mosart/trunk_tags/mosart1_0_26',
-                 checkout_model.ModelDescription.BRANCH: u''
+                     'mosart/trunk_tags/mosart1_0_26',
+                 checkout_model.ModelDescription.BRANCH: ''
         }
 
         data = {self._name:
                 {
                     checkout_model.ModelDescription.REQUIRED: False,
-                    checkout_model.ModelDescription.PATH: u'junk',
-                    checkout_model.ModelDescription.EXTERNALS: u'',
+                    checkout_model.ModelDescription.PATH: 'junk',
+                    checkout_model.ModelDescription.EXTERNALS: '',
                     checkout_model.ModelDescription.REPO: rdata,
                 },
         }
 
-        model = checkout_model.ModelDescription(u'json', data)
+        model = checkout_model.ModelDescription('json', data)
         repo = model[self._name][checkout_model.ModelDescription.REPO]
-        self._repo = checkout_model.SvnRepository(u'test', repo)
+        self._repo = checkout_model.SvnRepository('test', repo)
 
     def test_check_url_same(self):
         """Test that we correctly identify that the correct URL.
@@ -561,18 +562,18 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         """Setup reusable svn repository object
         """
         self._name = "component"
-        rdata = {checkout_model.ModelDescription.PROTOCOL: u'svn',
+        rdata = {checkout_model.ModelDescription.PROTOCOL: 'svn',
                  checkout_model.ModelDescription.REPO_URL:
-                     u'https://svn-ccsm-models.cgd.ucar.edu/',
+                     'https://svn-ccsm-models.cgd.ucar.edu/',
                  checkout_model.ModelDescription.TAG:
-                     u'mosart/trunk_tags/mosart1_0_26',
+                     'mosart/trunk_tags/mosart1_0_26',
                  checkout_model.ModelDescription.BRANCH: EMPTY_STR
         }
 
         data = {self._name:
                 {
                     checkout_model.ModelDescription.REQUIRED: False,
-                    checkout_model.ModelDescription.PATH: u'junk',
+                    checkout_model.ModelDescription.PATH: 'junk',
                     checkout_model.ModelDescription.EXTERNALS: EMPTY_STR,
                     checkout_model.ModelDescription.REPO: rdata,
                 },
@@ -604,7 +605,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         """Test that a directory that doesn't exist returns an empty status
         """
         stat = Status()
-        self._repo.svn_check_sync(stat, u'junk')
+        self._repo.svn_check_sync(stat, 'junk')
         self.assertEqual(stat.sync_state, Status.EMPTY)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
@@ -616,7 +617,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
         self._repo._svn_info = self._svn_info_empty
-        self._repo.svn_check_sync(stat, u'.')
+        self._repo.svn_check_sync(stat, '.')
         self.assertEqual(stat.sync_state, Status.UNKNOWN)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
@@ -630,7 +631,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
         self._repo._svn_info = self._svn_info_synced
-        self._repo.svn_check_sync(stat, u'.')
+        self._repo.svn_check_sync(stat, '.')
         self.assertEqual(stat.sync_state, Status.OK)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
@@ -644,7 +645,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
         self._repo._svn_info = self._svn_info_modified
-        self._repo.svn_check_sync(stat, u'.')
+        self._repo.svn_check_sync(stat, '.')
         self.assertEqual(stat.sync_state, Status.MODIFIED)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
@@ -653,36 +654,36 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
 class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
     """test the current_ref_from_branch_command on a git repository
     """
-    GIT_BRANCH_OUTPUT_DETACHED_TAG = u'''
+    GIT_BRANCH_OUTPUT_DETACHED_TAG = '''
 * (HEAD detached at rtm1_0_26)
   a_feature_branch
   master
 '''
-    GIT_BRANCH_OUTPUT_BRANCH = u'''
+    GIT_BRANCH_OUTPUT_BRANCH = '''
 * great_new_feature_branch
   a_feature_branch
   master
 '''
-    GIT_BRANCH_OUTPUT_HASH = u'''
+    GIT_BRANCH_OUTPUT_HASH = '''
 * (HEAD detached at 0246874c)
   a_feature_branch
   master
 '''
 
     def setUp(self):
-        self._name = u'component'
-        rdata = {checkout_model.ModelDescription.PROTOCOL: u'git',
+        self._name = 'component'
+        rdata = {checkout_model.ModelDescription.PROTOCOL: 'git',
                  checkout_model.ModelDescription.REPO_URL:
-                     u'git@git.github.com:ncar/rtm',
+                     'git@git.github.com:ncar/rtm',
                  checkout_model.ModelDescription.TAG:
-                     u'rtm1_0_26',
+                     'rtm1_0_26',
                  checkout_model.ModelDescription.BRANCH: EMPTY_STR
         }
 
         data = {self._name:
                 {
                     checkout_model.ModelDescription.REQUIRED: False,
-                    checkout_model.ModelDescription.PATH: u'junk',
+                    checkout_model.ModelDescription.PATH: 'junk',
                     checkout_model.ModelDescription.EXTERNALS: EMPTY_STR,
                     checkout_model.ModelDescription.REPO: rdata,
                 },
@@ -716,7 +717,7 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
 
         """
         git_output = self.GIT_BRANCH_OUTPUT_HASH
-        expected = u'0246874c'
+        expected = '0246874c'
         result = self._repo.current_ref_from_branch_command(
             git_output)
         self.assertEqual(result, expected)
@@ -738,32 +739,32 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     correct.
 
     """
-    TMP_GIT_DIR = u'fake/.git'
+    TMP_GIT_DIR = 'fake/.git'
 
     def setUp(self):
         """Setup reusable git repository object
         """
-        self._name = u'component'
-        rdata = {checkout_model.ModelDescription.PROTOCOL: u'git',
+        self._name = 'component'
+        rdata = {checkout_model.ModelDescription.PROTOCOL: 'git',
                  checkout_model.ModelDescription.REPO_URL:
-                     u'git@git.github.com:ncar/rtm',
+                     'git@git.github.com:ncar/rtm',
                  checkout_model.ModelDescription.TAG:
-                     u'rtm1_0_26',
+                     'rtm1_0_26',
                  checkout_model.ModelDescription.BRANCH: EMPTY_STR
         }
 
         data = {self._name:
                 {
                     checkout_model.ModelDescription.REQUIRED: False,
-                    checkout_model.ModelDescription.PATH: u'fake',
-                    checkout_model.ModelDescription.EXTERNALS: u'',
+                    checkout_model.ModelDescription.PATH: 'fake',
+                    checkout_model.ModelDescription.EXTERNALS: '',
                     checkout_model.ModelDescription.REPO: rdata,
                 },
         }
 
-        model = checkout_model.ModelDescription(u'json', data)
+        model = checkout_model.ModelDescription('json', data)
         repo = model[self._name][checkout_model.ModelDescription.REPO]
-        self._repo = checkout_model.GitRepository(u'test', repo)
+        self._repo = checkout_model.GitRepository('test', repo)
         self.create_tmp_git_dir()
 
     def tearDown(self):
@@ -793,7 +794,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     def _git_branch_synced():
         """Return an info sting that is synced with the setUp data
         """
-        git_output = u'''
+        git_output = '''
 * (HEAD detached at rtm1_0_26)
   a_feature_branch
   master
@@ -804,7 +805,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     def _git_branch_modified():
         """Return and info string that is modified from the setUp data
         """
-        git_output = u'''
+        git_output = '''
 * great_new_feature_branch
   a_feature_branch
   master
@@ -815,7 +816,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         """Test that a directory that doesn't exist returns an empty status
         """
         stat = Status()
-        self._repo.git_check_sync(stat, u'junk')
+        self._repo.git_check_sync(stat, 'junk')
         self.assertEqual(stat.sync_state, Status.EMPTY)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
@@ -827,7 +828,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         # Now we over-ride the _git_branch method on the repo to return
         # a known value without requiring access to git.
         self._repo._git_branch = self._git_branch_empty
-        self._repo.git_check_sync(stat, u'fake')
+        self._repo.git_check_sync(stat, 'fake')
         self.assertEqual(stat.sync_state, Status.UNKNOWN)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
@@ -841,7 +842,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         # Now we over-ride the _git_branch method on the repo to return
         # a known value without requiring access to svn.
         self._repo._git_branch = self._git_branch_synced
-        self._repo.git_check_sync(stat, u'fake')
+        self._repo.git_check_sync(stat, 'fake')
         self.assertEqual(stat.sync_state, Status.OK)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
@@ -855,7 +856,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
         self._repo._git_branch = self._git_branch_modified
-        self._repo.git_check_sync(stat, u'fake')
+        self._repo.git_check_sync(stat, 'fake')
         self.assertEqual(stat.sync_state, Status.MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)

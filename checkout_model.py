@@ -6,7 +6,7 @@ Tool to assemble respositories represented in a model-description file.
 If loaded as a module (e.g., in a component's buildcpp), it can be used
 to check the validity of existing subdirectories and load missing sources.
 """
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 import argparse
 import errno
@@ -22,11 +22,11 @@ import traceback
 import xml.etree.ElementTree as ET
 
 if sys.hexversion < 0x02070000:
-    print(70 * "*")
-    print("ERROR: {0} requires python >= 2.7.x. ".format(sys.argv[0]))
-    print("It appears that you are running python {0}".format(
-        ".".join(str(x) for x in sys.version_info[0:3])))
-    print(70 * "*")
+    print(70 * '*')
+    print('ERROR: {0} requires python >= 2.7.x. '.format(sys.argv[0]))
+    print('It appears that you are running python {0'.format(
+        '.'.join(str(x) for x in sys.version_info[0:3])))
+    print(70 * '*')
     sys.exit(1)
 
 if sys.version_info[0] == 2:
@@ -42,8 +42,8 @@ else:
 #
 # ---------------------------------------------------------------------
 PPRINTER = pprint.PrettyPrinter(indent=4)
-RE_NAMESPACE = re.compile(r"{[^}]*}")
-EMPTY_STR = u''
+RE_NAMESPACE = re.compile(r'{[^}]*}')
+EMPTY_STR = ''
 
 
 # ---------------------------------------------------------------------
@@ -206,20 +206,20 @@ def check_output(commands):
     check_output runs a command with arguments and returns its output.
     On successful completion, check_output returns the command's output.
     """
-    logging.info("In directory: {0}".format(os.getcwd()))
-    logging.info("check_output running command:")
+    logging.info('In directory: {0}'.format(os.getcwd()))
+    logging.info('check_output running command:')
     logging.info(commands)
     try:
         outstr = subprocess.check_output(commands)
     except OSError as error:
-        printlog("Execution of '{0}' failed: {1}".format(
+        printlog('Execution of "{0}" failed: {1}'.format(
             (' '.join(commands)), error), file=sys.stderr)
     except ValueError as error:
-        printlog("ValueError in '{0}': {1}".format(
+        printlog('ValueError in "{0}": {1}'.format(
             (' '.join(commands)), error), file=sys.stderr)
         outstr = None
     except subprocess.CalledProcessError as error:
-        printlog("CalledProcessError in '{0}': {1}".format(
+        printlog('CalledProcessError in "{0}": {1}'.format(
             (' '.join(commands)), error), file=sys.stderr)
         outstr = None
 
@@ -239,8 +239,8 @@ def execute_subprocess(commands, status_to_caller=False):
     status as an error and raises an exception.
 
     """
-    logging.info("In directory: {0}".format(os.getcwd()))
-    logging.info("execute_subprocess running command:")
+    logging.info('In directory: {0}'.format(os.getcwd()))
+    logging.info('execute_subprocess running command:')
     logging.info(commands)
     status = -1
     try:
@@ -249,20 +249,20 @@ def execute_subprocess(commands, status_to_caller=False):
         log_process_output(output)
         status = 0
     except OSError as error:
-        msg = "Execution of '{0}' failed".format(
+        msg = 'Execution of "{0}" failed'.format(
             ' '.join(commands))
         logging.error(error)
         fatal_error(msg)
     except ValueError as error:
-        msg = "ValueError in '{0}'".format(
+        msg = 'ValueError in "{0}"'.format(
             ' '.join(commands))
         logging.error(error)
         fatal_error(msg)
     except subprocess.CalledProcessError as error:
-        msg = "CalledProcessError in '{0}'".format(
+        msg = 'CalledProcessError in "{0}"'.format(
             ' '.join(commands))
         logging.error(error)
-        status_msg = "Returned : {0}".format(error.returncode)
+        status_msg = 'Returned : {0}'.format(error.returncode)
         logging.error(status_msg)
         log_process_output(error.output)
         if not status_to_caller:
@@ -326,7 +326,7 @@ def create_repository(component_name, repo_info):
     elif protocol == 'externals_only':
         repo = None
     else:
-        msg = "Unknown repo protocol, {0}".format(protocol)
+        msg = 'Unknown repo protocol "{0}"'.format(protocol)
         fatal_error(msg)
     return repo
 
@@ -338,13 +338,13 @@ def read_model_description_file(root_dir, file_name):
     """
     root_dir = os.path.abspath(root_dir)
 
-    logging.info("In directory : {0}".format(root_dir))
-    printlog("Processing model description file : {0}".format(file_name))
+    logging.info('In directory : {0}'.format(root_dir))
+    printlog('Processing model description file : {0}'.format(file_name))
 
     file_path = os.path.join(root_dir, file_name)
     if not os.path.exists(file_name):
-        msg = ("ERROR: Model description file, '{0}', does not "
-               "exist at {1}".format(file_name, file_path))
+        msg = ('ERROR: Model description file, "{0}", does not '
+               'exist at {1}'.format(file_name, file_path))
         fatal_error(msg)
 
     model_description = None
@@ -380,7 +380,7 @@ def read_model_description_file(root_dir, file_name):
             pass
 
     if model_description is None:
-        msg = "Unknown file format!"
+        msg = 'Unknown file format!'
         fatal_error(msg)
 
     return model_format, model_description
@@ -393,30 +393,30 @@ class ModelDescription(dict):
 
     """
     # keywords defining the interface into the model description data
-    EXTERNALS = u'externals'
-    BRANCH = u'branch'
-    REPO = u'repo'
-    REQUIRED = u'required'
-    TAG = u'tag'
-    PATH = u'path'
-    PROTOCOL = u'protocol'
-    REPO_URL = u'repo_url'
-    NAME = u'name'
+    EXTERNALS = 'externals'
+    BRANCH = 'branch'
+    REPO = 'repo'
+    REQUIRED = 'required'
+    TAG = 'tag'
+    PATH = 'path'
+    PROTOCOL = 'protocol'
+    REPO_URL = 'repo_url'
+    NAME = 'name'
 
     # v1 xml keywords
-    _V1_TREE_PATH = u'TREE_PATH'
-    _V1_ROOT = u'ROOT'
-    _V1_TAG = u'TAG'
-    _V1_BRANCH = u'BRANCH'
-    _V1_REQ_SOURCE = u'REQ_SOURCE'
+    _V1_TREE_PATH = 'TREE_PATH'
+    _V1_ROOT = 'ROOT'
+    _V1_TAG = 'TAG'
+    _V1_BRANCH = 'BRANCH'
+    _V1_REQ_SOURCE = 'REQ_SOURCE'
 
     _source_schema = {REQUIRED: True,
-                      PATH: u'string',
-                      EXTERNALS: u'string',
-                      REPO: {PROTOCOL: u'string',
-                             REPO_URL: u'string',
-                             TAG: u'string',
-                             BRANCH: u'string',
+                      PATH: 'string',
+                      EXTERNALS: 'string',
+                      REPO: {PROTOCOL: 'string',
+                             REPO_URL: 'string',
+                             TAG: 'string',
+                             BRANCH: 'string',
                             }
                      }
 
@@ -433,7 +433,7 @@ class ModelDescription(dict):
         elif model_format == 'json':
             self._parse_json(model_data)
         else:
-            msg = "Unknown model data format '{0}'".format(model_format)
+            msg = 'Unknown model data format "{0}"'.format(model_format)
             fatal_error(msg)
         self._validate()
 
@@ -478,7 +478,7 @@ class ModelDescription(dict):
             if not valid:
                 PPRINTER.pprint(self._source_schema)
                 PPRINTER.pprint(self[field])
-                msg = "ERROR: source for '{0}' did not validate".format(field)
+                msg = 'ERROR: source for "{0}" did not validate'.format(field)
                 fatal_error(msg)
 
     def _parse_json(self, json_data):
@@ -498,8 +498,8 @@ class ModelDescription(dict):
             elif bool_str == 'false'.lower():
                 value = False
             if value is None:
-                msg = ("ERROR: invalid boolean string value '{0}'. "
-                       "Must be 'true' or 'false'".format(bool_str))
+                msg = ('ERROR: invalid boolean string value "{0}". '
+                       'Must be "true" or "false"'.format(bool_str))
                 fatal_error(msg)
             return value
 
@@ -539,14 +539,14 @@ class ModelDescription(dict):
         elif major_version == '2':
             self._parse_xml_v2(xml_root)
         else:
-            msg = ("ERROR: unknown xml schema version '{0}'".format(
+            msg = ('ERROR: unknown xml schema version "{0}"'.format(
                 major_version))
             fatal_error(msg)
 
     def _parse_xml_v1(self, xml_root):
         """Parse the v1 xml schema
         """
-        for src in xml_root.findall(u'./source'):
+        for src in xml_root.findall('./source'):
             source = {}
             source[self.EXTERNALS] = EMPTY_STR
             source[self.REQUIRED] = False
@@ -603,12 +603,12 @@ class ModelDescription(dict):
             else:
                 source[self.EXTERNALS] = EMPTY_STR
             required = unicode(src.get(self.REQUIRED).lower())
-            if required == u'false':
+            if required == 'false':
                 source[self.REQUIRED] = False
-            elif required == u'true':
+            elif required == 'true':
                 source[self.REQUIRED] = True
             else:
-                msg = u"ERROR: unknown value for attribute 'required' = {0} ".format(
+                msg = 'ERROR: unknown value for attribute "required" = "{0}" '.format(
                     required)
                 fatal_error(msg)
             name = src.get(self.NAME).lower()
@@ -618,14 +618,14 @@ class ModelDescription(dict):
     def _get_xml_config_sourcetree(xml_root):
         """Return the config_sourcetree element with error checking.
         """
-        st_str = u'config_sourcetree'
+        st_str = 'config_sourcetree'
         xml_st = None
         if xml_root.tag == st_str:
             xml_st = xml_root
         else:
-            xml_st = xml_root.find(u'./config_sourcetree')
+            xml_st = xml_root.find('./config_sourcetree')
         if xml_st is None:
-            msg = u"ERROR: xml does not contain a 'config_sourcetree' element."
+            msg = 'ERROR: xml does not contain a "config_sourcetree" element.'
             fatal_error(msg)
         return xml_st
 
@@ -635,8 +635,8 @@ class ModelDescription(dict):
         """
         version = xml_st.get('version', None)
         if not version:
-            msg = ("ERROR: xml config_sourcetree element must contain "
-                   "a 'version' attribute.")
+            msg = ('ERROR: xml config_sourcetree element must contain '
+                   'a "version" attribute.')
             fatal_error(msg)
         return version.split('.')
 
@@ -649,11 +649,11 @@ class ModelDescription(dict):
 class Status(object):
     """Class to represent the status of a given source repository or tree.
     """
-    DEFAULT = u'*'
-    MODIFIED = u'M'
-    EMPTY = u'e'
-    UNKNOWN = u'?'
-    OK = u' '
+    DEFAULT = '*'
+    MODIFIED = 'M'
+    EMPTY = 'e'
+    UNKNOWN = '?'
+    OK = ' '
 
     def __init__(self):
         self.sync_state = self.DEFAULT
@@ -661,7 +661,7 @@ class Status(object):
         self.path = EMPTY_STR
 
     def __str__(self):
-        msg = "{sync}{clean} {path}".format(
+        msg = '{sync}{clean} {path}'.format(
             sync=self.sync_state, clean=self.clean_state, path=self.path)
         return msg
 
@@ -682,13 +682,13 @@ class Repository(object):
         self._url = repo[ModelDescription.REPO_URL]
 
         if self._url is EMPTY_STR:
-            fatal_error("repo must have a URL")
+            fatal_error('repo must have a URL')
 
         if self._tag is EMPTY_STR and self._branch is EMPTY_STR:
-            fatal_error("repo must have either a branch or a tag element")
+            fatal_error('repo must have either a branch or a tag element')
 
         if self._tag is not EMPTY_STR and self._branch is not EMPTY_STR:
-            fatal_error("repo cannot have both a tag and a branch element")
+            fatal_error('repo cannot have both a tag and a branch element')
 
     def checkout(self, repo_dir):
         """
@@ -697,16 +697,16 @@ class Repository(object):
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
         """
-        msg = ("DEV_ERROR: checkout method must be implemented in all "
-               "repository classes!")
+        msg = ('DEV_ERROR: checkout method must be implemented in all '
+               'repository classes!')
         fatal_error(msg)
 
     def status(self, stat, repo_dir):
         """Report the status of the repo
 
         """
-        msg = ("DEV_ERROR: status method must be implemented in all "
-               "repository classes!")
+        msg = ('DEV_ERROR: status method must be implemented in all '
+               'repository classes!')
         fatal_error(msg)
 
     def url(self):
@@ -729,7 +729,7 @@ class SvnRepository(Repository):
     """
     Class to represent and operate on a repository description.
     """
-    RE_URLLINE = re.compile(r"^URL:")
+    RE_URLLINE = re.compile(r'^URL:')
 
     def __init__(self, component_name, repo):
         """
@@ -770,7 +770,7 @@ class SvnRepository(Repository):
         """
         Checkout a subversion repository (repo_url) to checkout_dir.
         """
-        cmd = ["svn", "checkout", self._url, checkout_dir]
+        cmd = ['svn', 'checkout', self._url, checkout_dir]
         execute_subprocess(cmd)
 
     @staticmethod
@@ -778,16 +778,16 @@ class SvnRepository(Repository):
         """
         Refresh a subversion sandbox (updir)
         """
-        mycurrdir = os.path.abspath(".")
+        mycurrdir = os.path.abspath('.')
         os.chdir(updir)
-        execute_subprocess(["svn update"])
+        execute_subprocess(['svn', 'update'])
         os.chdir(mycurrdir)
 
     @staticmethod
     def _svn_info(repo_dir):
         """Return results of svn info command
         """
-        cmd = ["svn", "info", repo_dir]
+        cmd = ['svn', 'info', repo_dir]
         try:
             output = check_output(cmd)
         except subprocess.CalledProcessError as e:
@@ -884,7 +884,7 @@ class GitRepository(Repository):
         """
         ref_type = self.GIT_REF_UNKNOWN
         # First check for local branch
-        gitout = check_output(["git", "branch"])
+        gitout = check_output(['git', 'branch'])
         if gitout is not None:
             branches = [x.lstrip('* ') for x in gitout.splitlines()]
             for branch in branches:
@@ -894,7 +894,7 @@ class GitRepository(Repository):
 
         # Next, check for remote branch
         if ref_type == self.GIT_REF_UNKNOWN:
-            gitout = check_output(["git", "branch", "-r"])
+            gitout = check_output(['git', 'branch', '-r'])
             if gitout is not None:
                 for branch in gitout.splitlines():
                     match = GitRepository.RE_REMOTEBRANCH.match(branch)
@@ -904,7 +904,7 @@ class GitRepository(Repository):
 
         # Next, check for a tag
         if ref_type == self.GIT_REF_UNKNOWN:
-            gitout = check_output(["git", "tag"])
+            gitout = check_output(['git', 'tag'])
             if gitout is not None:
                 for tag in gitout.splitlines():
                     if tag == ref:
@@ -924,8 +924,8 @@ class GitRepository(Repository):
         """
         Return the (current branch, sha1 hash) of working copy in wdir
         """
-        branch = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
-        git_hash = check_output(["git", "rev-parse", "HEAD"])
+        branch = check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])
+        git_hash = check_output(['git', 'rev-parse', 'HEAD'])
         if branch is not None:
             branch = branch.rstrip()
 
@@ -936,7 +936,7 @@ class GitRepository(Repository):
 
     @staticmethod
     def _git_branch():
-        cmd = [u'git', u'branch']
+        cmd = ['git', 'branch']
         git_output = check_output(cmd)
         return git_output
 
@@ -961,13 +961,13 @@ class GitRepository(Repository):
         """
         lines = git_output.splitlines()
         for line in lines:
-            if line.startswith(u'*'):
+            if line.startswith('*'):
                 break
         ref = EMPTY_STR
         if lines:
-            if u'detached' in line:
-                ref = line.split(u' ')[-1]
-                ref = ref.strip(u')')
+            if 'detached' in line:
+                ref = line.split(' ')[-1]
+                ref = ref.strip(')')
             else:
                 ref = line.split()[-1]
         return ref
@@ -975,11 +975,11 @@ class GitRepository(Repository):
     def git_check_sync(self, stat, repo_dir):
         """
         """
-        current_dir = os.path.abspath(u'.')
+        current_dir = os.path.abspath('.')
         if not os.path.exists(repo_dir):
             stat.sync_state = Status.EMPTY
         else:
-            git_dir = os.path.join(repo_dir, u'.git')
+            git_dir = os.path.join(repo_dir, '.git')
             if not os.path.exists(git_dir):
                 stat.sync_state = Status.UNKNOWN
             else:
@@ -1008,13 +1008,13 @@ class GitRepository(Repository):
         Return True (correct), False (incorrect) or None (chkdir not found)
         """
         refchk = None
-        mycurrdir = os.path.abspath(".")
+        mycurrdir = os.path.abspath('.')
         if os.path.exists(chkdir):
-            if os.path.exists(os.path.join(chkdir, ".git")):
+            if os.path.exists(os.path.join(chkdir, '.git')):
                 os.chdir(chkdir)
-                head = check_output(["git", "rev-parse", "HEAD"])
+                head = check_output(['git', 'rev-parse', 'HEAD'])
                 if ref is not None:
-                    refchk = check_output(["git", "rev-parse", ref])
+                    refchk = check_output(['git', 'rev-parse', ref])
 
             else:
                 head = None
@@ -1036,9 +1036,9 @@ class GitRepository(Repository):
         """
         Return True if wdir is clean or False if there are modifications
         """
-        mycurrdir = os.path.abspath(".")
+        mycurrdir = os.path.abspath('.')
         os.chdir(wdir)
-        cmd = ["git", "diff", "--quiet", "--exit-code"]
+        cmd = ['git', 'diff', '--quiet', '--exit-code']
         retcode = execute_subprocess(cmd, status_to_caller=True)
         os.chdir(mycurrdir)
         return retcode == 0
@@ -1054,7 +1054,7 @@ class GitRepository(Repository):
         ref_type = self._git_ref_type(curr_branch)
         if ref_type == self.GIT_REF_REMOTE_BRANCH:
             remote = check_output(
-                ["git", "config", "branch.{0}.remote".format(curr_branch)])
+                ['git', 'config', 'branch.{0}.remote'.format(curr_branch)])
         else:
             remote = None
 
@@ -1066,14 +1066,14 @@ class GitRepository(Repository):
         """
         Do an update and a FF merge if possible
         """
-        mycurrdir = os.path.abspath(".")
+        mycurrdir = os.path.abspath('.')
         os.chdir(repo_dir)
         remote = self._git_remote(repo_dir)
         if remote is not None:
-            cmd = ["git", "remote", "update", "--prune", remote]
+            cmd = ['git', 'remote', 'update', '--prune', remote]
             execute_subprocess(cmd)
 
-        cmd = ["git", "merge", "--ff-only", "@{u}"]
+        cmd = ['git', 'merge', '--ff-only', '@{u}']
         execute_subprocess(cmd)
         os.chdir(mycurrdir)
 
@@ -1081,13 +1081,13 @@ class GitRepository(Repository):
         """
         Checkout 'branch' or 'tag' from 'repo_url'
         """
-        mycurrdir = os.path.abspath(".")
+        mycurrdir = os.path.abspath('.')
         if os.path.exists(checkout_dir):
             # We can't do a clone. See what we have here
             if self._git_check_dir(checkout_dir, None):
                 os.chdir(checkout_dir)
                 # We have a git repo, is it from the correct URL?
-                cmd = ["git", "config", "remote.origin.url"]
+                cmd = ['git', 'config', 'remote.origin.url']
                 check_url = check_output(cmd)
                 if check_url is not None:
                     check_url = check_url.rstrip()
@@ -1102,7 +1102,7 @@ class GitRepository(Repository):
                 # branch or tag checkout will work
 
         else:
-            cmd = ["git", "clone", self._url, checkout_dir]
+            cmd = ['git', 'clone', self._url, checkout_dir]
             execute_subprocess(cmd)
             os.chdir(checkout_dir)
 
@@ -1111,23 +1111,23 @@ class GitRepository(Repository):
             (curr_branch, _) = self._git_current_branch()
             ref_type = self._git_ref_type(self._branch)
             if ref_type == self.GIT_REF_REMOTE_BRANCH:
-                cmd = ["git", "checkout", "--track", "origin/" + self._branch]
+                cmd = ['git', 'checkout', '--track', 'origin/' + self._branch]
             elif ref_type == self.GIT_REF_LOCAL_BRANCH:
                 if curr_branch != self._branch:
                     if not self._git_working_dir_clean(checkout_dir):
-                        msg = ("Working directory ({0}) not clean, "
-                               "aborting".format(checkout_dir))
+                        msg = ('Working directory "{0}" not clean, '
+                               'aborting'.format(checkout_dir))
                         fatal_error(msg)
                     else:
-                        cmd = ["git", "checkout", self._branch]
+                        cmd = ['git', 'checkout', self._branch]
 
             else:
-                msg = "Unable to check out branch, {0}".format(self._branch)
+                msg = 'Unable to check out branch, "{0}"'.format(self._branch)
                 fatal_error(msg)
 
         elif self._tag:
             # For now, do a hail mary and hope tag can be checked out
-            cmd = ["git", "checkout", self._tag]
+            cmd = ['git', 'checkout', self._tag]
         else:
             msg = "DEV_ERROR: in git repo. Shouldn't be here!"
             fatal_error(msg)
@@ -1153,12 +1153,12 @@ class _Source(object):
         self._externals = EMPTY_STR
         self._externals_sourcetree = None
         # Parse the sub-elements
-        self._path = source['path']
+        self._path = source[ModelDescription.PATH]
         self._repo_dir = os.path.basename(self._path)
-        self._externals = source['externals']
+        self._externals = source[ModelDescription.EXTERNALS]
         if self._externals:
             self._create_externals_sourcetree()
-        repo = create_repository(name, source['repo'])
+        repo = create_repository(name, source[ModelDescription.REPO])
         self._loaded = False
         if repo is None:
             self._loaded = True
@@ -1190,7 +1190,7 @@ class _Source(object):
         stat.path = self.get_path()
         ext_stats = {}
         # Make sure we are in correct location
-        mycurrdir = os.path.abspath(u'.')
+        mycurrdir = os.path.abspath('.')
         pdir = os.path.join(tree_root, os.path.dirname(self._path))
         if not os.path.exists(pdir):
             stat.sync_state = Status.EMPTY
@@ -1211,7 +1211,7 @@ class _Source(object):
             os.chdir(mycurrdir)
 
         all_stats = {}
-        if self._path != u'.':
+        if self._path != '.':
             # '.' paths are standalone component directories that are
             # not managed by checkout_model.
             all_stats[self._name] = stat
@@ -1231,14 +1231,14 @@ class _Source(object):
         if load_all:
             pass
         # Make sure we are in correct location
-        mycurrdir = os.path.abspath(".")
+        mycurrdir = os.path.abspath('.')
         pdir = os.path.join(tree_root, os.path.dirname(self._path))
         if not os.path.exists(pdir):
             try:
                 os.makedirs(pdir)
             except OSError as error:
                 if error.errno != errno.EEXIST:
-                    msg = "Could not create directory '{0}'".format(pdir)
+                    msg = 'Could not create directory "{0}"'.format(pdir)
                     fatal_error(msg)
 
         os.chdir(pdir)
@@ -1264,8 +1264,8 @@ class _Source(object):
         """
         """
         if not os.path.exists(self._externals):
-            msg = ("External model description file '{0}' "
-                   "does not exist!".format(self._externals))
+            msg = ('External model description file "{0}" '
+                   'does not exist!'.format(self._externals))
             fatal_error(msg)
         ext_root = self._path
         model_format, model_data = read_model_description_file(
@@ -1289,7 +1289,7 @@ class SourceTree(object):
         for comp in model:
             src = _Source(comp, model[comp])
             self._all_components[comp] = src
-            if model[comp]['required']:
+            if model[comp][ModelDescription.REQUIRED]:
                 self._required_compnames.append(comp)
 
     def status(self):
@@ -1307,7 +1307,7 @@ class SourceTree(object):
 
         summary = {}
         for comp in load_comps:
-            printlog(u'{0}, '.format(comp), end=u'')
+            printlog('{0}, '.format(comp), end='')
             stat = self._all_components[comp].status(self._root_dir)
             summary.update(stat)
 
@@ -1330,7 +1330,7 @@ class SourceTree(object):
             load_comps = self._required_compnames
 
         for comp in load_comps:
-            printlog(u'{0}, '.format(comp), end=u'')
+            printlog('{0}, '.format(comp), end='')
             self._all_components[comp].checkout(self._root_dir, load_all)
 
 
@@ -1349,7 +1349,7 @@ def _main(args):
                         format='%(levelname)s : %(asctime)s : %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.DEBUG)
-    logging.info("Begining of checkout_model")
+    logging.info('Begining of checkout_model')
 
     load_all = False
     if args.optional:
@@ -1363,7 +1363,7 @@ def _main(args):
         PPRINTER.pprint(model)
 
     source_tree = SourceTree(root_dir, model)
-    printlog(u'Checking status of components: ', end=u'')
+    printlog('Checking status of components: ', end='')
     tree_status = source_tree.status()
     printlog('')
 
@@ -1372,15 +1372,15 @@ def _main(args):
             msg = str(tree_status[comp])
             printlog(msg)
     else:
-        printlog(u'Checkout components: ', end=u'')
+        printlog('Checkout components: ', end='')
         source_tree.checkout(load_all)
         printlog('')
 
-    logging.info("checkout_model completed without exceptions.")
+    logging.info('checkout_model completed without exceptions.')
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     arguments = commandline_arguments()
     try:
         RET_STATUS = _main(arguments)
