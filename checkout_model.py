@@ -668,15 +668,18 @@ class Status(object):
     EMPTY = 'e'
     UNKNOWN = '?'
     OK = ' '
+    OPTIONAL = 'o'
 
     def __init__(self):
         self.sync_state = self.DEFAULT
         self.clean_state = self.DEFAULT
         self.path = EMPTY_STR
+        self.optional = self.OK
 
     def __str__(self):
-        msg = '{sync}{clean} {path}'.format(
-            sync=self.sync_state, clean=self.clean_state, path=self.path)
+        msg = '{sync}{clean}{optional} {path}'.format(
+            sync=self.sync_state, clean=self.clean_state,
+            optional=self.optional, path=self.path)
         return msg
 
     def safe_to_update(self):
@@ -1412,6 +1415,7 @@ class _Source(object):
         # Parse the sub-elements
         self._path = source[ModelDescription.PATH]
         self._repo_dir = os.path.basename(self._path)
+        self._required = source[ModelDescription.REQUIRED]
         self._externals = source[ModelDescription.EXTERNALS]
         if self._externals:
             self._create_externals_sourcetree()
@@ -1445,6 +1449,8 @@ class _Source(object):
 
         stat = Status()
         stat.path = self.get_path()
+        if not self._required:
+            stat.optional = Status.OPTIONAL
         ext_stats = {}
         # Make sure we are in correct location
         mycurrdir = os.path.abspath('.')
