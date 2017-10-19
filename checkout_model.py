@@ -206,6 +206,7 @@ def check_output(commands):
     check_output runs a command with arguments and returns its output.
     On successful completion, check_output returns the command's output.
     """
+    logging.info("In directory: {0}".format(os.getcwd()))
     logging.info("check_output running command:")
     logging.info(commands)
     try:
@@ -238,6 +239,9 @@ def execute_subprocess(commands, status_to_caller=False):
     status as an error and raises an exception.
 
     """
+    logging.info("In directory: {0}".format(os.getcwd()))
+    logging.info("execute_subprocess running command:")
+    logging.info(commands)
     status = -1
     try:
         logging.info(' '.join(commands))
@@ -286,7 +290,7 @@ def printlog(msg, **kwargs):
     """
     logging.info(msg)
     if kwargs:
-        print(msg, kwargs)
+        print(msg, **kwargs)
     else:
         print(msg)
 
@@ -334,8 +338,8 @@ def read_model_description_file(root_dir, file_name):
     """
     root_dir = os.path.abspath(root_dir)
 
-    printlog("In directory :\n    {0}".format(root_dir))
-    printlog("Processing model description file '{0}'".format(file_name))
+    logging.info("In directory : {0}".format(root_dir))
+    printlog("Processing model description file : {0}".format(file_name))
 
     file_path = os.path.join(root_dir, file_name)
     if not os.path.exists(file_name):
@@ -1152,6 +1156,8 @@ class _Source(object):
         self._path = source['path']
         self._repo_dir = os.path.basename(self._path)
         self._externals = source['externals']
+        if self._externals:
+            self._create_externals_sourcetree()
         repo = create_repository(name, source['repo'])
         self._loaded = False
         if repo is None:
@@ -1200,8 +1206,6 @@ class _Source(object):
             if self._externals:
                 comp_dir = os.path.join(tree_root, self._path)
                 os.chdir(comp_dir)
-                if not self._externals_sourcetree:
-                    self._create_externals_sourcetree(comp_dir)
                 ext_stats = self._externals_sourcetree.status()
 
             os.chdir(mycurrdir)
@@ -1251,21 +1255,19 @@ class _Source(object):
         if self._externals:
             comp_dir = os.path.join(tree_root, self._path)
             os.chdir(comp_dir)
-            if not self._externals_sourcetree:
-                self._create_externals_sourcetree(comp_dir)
             self._externals_sourcetree.checkout(load_all)
 
         os.chdir(mycurrdir)
         return repo_loaded
 
-    def _create_externals_sourcetree(self, comp_dir):
+    def _create_externals_sourcetree(self):
         """
         """
         if not os.path.exists(self._externals):
             msg = ("External model description file '{0}' "
                    "does not exist!".format(self._externals))
             fatal_error(msg)
-        ext_root = comp_dir
+        ext_root = self._path
         model_format, model_data = read_model_description_file(
             ext_root, self._externals)
         externals = ModelDescription(model_format, model_data)
@@ -1303,13 +1305,9 @@ class SourceTree(object):
         """
         load_comps = self._all_components.keys()
 
-        msg = "Status of these components: "
-        for comp in load_comps:
-            msg += "{0}, ".format(comp)
-        printlog(msg)
-
         summary = {}
         for comp in load_comps:
+            printlog(u'{0}, '.format(comp), end=u'')
             stat = self._all_components[comp].status(self._root_dir)
             summary.update(stat)
 
@@ -1331,13 +1329,8 @@ class SourceTree(object):
         else:
             load_comps = self._required_compnames
 
-        if load_comps is not None:
-            msg = "Checking out these components: "
-            for comp in load_comps:
-                msg += "{0}, ".format(comp)
-            printlog(msg)
-
         for comp in load_comps:
+            printlog(u'{0}, '.format(comp), end=u'')
             self._all_components[comp].checkout(self._root_dir, load_all)
 
 
@@ -1370,14 +1363,18 @@ def _main(args):
         PPRINTER.pprint(model)
 
     source_tree = SourceTree(root_dir, model)
+    printlog(u'Checking status of components: ', end=u'')
     tree_status = source_tree.status()
+    printlog('')
 
     if args.status:
         for comp in tree_status:
             msg = str(tree_status[comp])
             printlog(msg)
     else:
+        printlog(u'Checkout components: ', end=u'')
         source_tree.checkout(load_all)
+        printlog('')
 
     logging.info("checkout_model completed without exceptions.")
     return 0
