@@ -98,9 +98,10 @@ Supported workflows:
         same as in the model description file.
       * column two indicates whether the working copy has modified files.
 
-      * M - modified
-      * ? - unknown
-      *   - blank / space - clean or no changes
+      * M - modified : untracked or modified files exist
+      * e - empty : directory does not exist - checkout_model has not been run
+      * ? - unknown : directory exists but .git or .svn directories are missing
+      *   - blank / space : clean or no changes
 
   * Status details of the repositories managed by %(prog)s:
 
@@ -205,6 +206,8 @@ def check_output(commands):
     check_output runs a command with arguments and returns its output.
     On successful completion, check_output returns the command's output.
     """
+    logging.info("check_output running command:")
+    logging.info(commands)
     try:
         outstr = subprocess.check_output(commands)
     except OSError as error:
@@ -639,6 +642,26 @@ class ModelDescription(dict):
 # Worker classes
 #
 # ---------------------------------------------------------------------
+class Status(object):
+    """Class to represent the status of a given source repository or tree.
+    """
+    DEFAULT = u'*'
+    MODIFIED = u'M'
+    EMPTY = u'e'
+    UNKNOWN = u'?'
+    OK = u' '
+
+    def __init__(self):
+        self.sync_state = self.DEFAULT
+        self.clean_state = self.DEFAULT
+        self.path = EMPTY_STR
+
+    def __str__(self):
+        msg = "{sync}{clean} {path}".format(
+            sync=self.sync_state, clean=self.clean_state, path=self.path)
+        return msg
+
+
 class Repository(object):
     """
     Class to represent and operate on a repository description.
@@ -670,10 +693,16 @@ class Repository(object):
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
         """
-        if repo_dir or self._protocol:
-            pass
-        msg = ("DEV_ERROR: this method must be implemented in all "
-               "child classes!")
+        msg = ("DEV_ERROR: checkout method must be implemented in all "
+               "repository classes!")
+        fatal_error(msg)
+
+    def status(self, stat, repo_dir):
+        """Report the status of the repo
+
+        """
+        msg = ("DEV_ERROR: status method must be implemented in all "
+               "repository classes!")
         fatal_error(msg)
 
     def url(self):
@@ -711,6 +740,17 @@ class SvnRepository(Repository):
             msg = "DEV_ERROR in svn repository. Shouldn't be here!"
             fatal_error(msg)
 
+    def status(self, stat, repo_dir):
+        """
+        If the repo destination directory exists, ensure it is correct (from
+        correct URL, correct branch or tag), and possibly update the source.
+        If the repo destination directory does not exist, checkout the correce
+        branch or tag.
+        """
+        self.svn_check_sync(stat, repo_dir)
+        self.svn_status(stat, repo_dir)
+        return stat
+
     def checkout(self, repo_dir):
         """
         If the repo destination directory exists, ensure it is correct (from
@@ -740,28 +780,54 @@ class SvnRepository(Repository):
         os.chdir(mycurrdir)
 
     @staticmethod
-    def _svn_check_dir(chkdir, ver):
+    def _svn_info(repo_dir):
+        """Return results of svn info command
         """
-        Check to see if directory (chkdir) exists and is the correct
-        version (ver).
-        Return True (correct), False (incorrect) or None (chkdir not found)
+        cmd = ["svn", "info", repo_dir]
+        try:
+            output = check_output(cmd)
+        except subprocess.CalledProcessError as e:
+            logging.info(e)
+            output = ''
+        return output
+
+    @staticmethod
+    def svn_check_url(svn_output, expected_url):
+        """Determine the svn url from svn info output and return whether it
+        matches the expected value.
 
         """
-        if os.path.exists(chkdir):
-            svnout = check_output(["svn", "info", chkdir])
-            if svnout is not None:
-                url = None
-                for line in svnout.splitlines():
-                    if SvnRepository.RE_URLLINE.match(line):
-                        url = line.split(': ')[1]
-                        break
-                status = (url == ver)
-            else:
-                status = None
+        url = None
+        for line in svn_output.splitlines():
+            if SvnRepository.RE_URLLINE.match(line):
+                url = line.split(': ')[1].strip()
+                break
+        if not url:
+            status = Status.UNKNOWN
+        elif url == expected_url:
+            status = Status.OK
         else:
-            status = None
-
+            status = Status.MODIFIED
         return status
+
+    def svn_check_sync(self, stat, repo_dir):
+        """Check to see if repository directory exists and is at the expected
+        url.  Return: status object
+
+        """
+        if not os.path.exists(repo_dir):
+            stat.sync_state = Status.EMPTY
+        else:
+            svn_output = self._svn_info(repo_dir)
+            if not svn_output:
+                stat.sync_state = Status.UNKNOWN
+            else:
+                stat.sync_state = self.svn_check_url(svn_output, self._url)
+
+    def svn_status(self, stat, repo_dir):
+        """
+        """
+        stat.clean_state = Status.UNKNOWN
 
 
 class GitRepository(Repository):
@@ -794,6 +860,16 @@ class GitRepository(Repository):
         self._git_checkout(repo_dir)
 
         return True
+
+    def status(self, stat, repo_dir):
+        """
+        If the repo destination directory exists, ensure it is correct (from
+        correct URL, correct branch or tag), and possibly update the source.
+        If the repo destination directory does not exist, checkout the correce
+        branch or tag.
+        """
+        self.git_check_sync(stat, repo_dir)
+        stat.clean_state = Status.UNKNOWN
 
     def _git_ref_type(self, ref):
         """
@@ -853,6 +929,72 @@ class GitRepository(Repository):
             git_hash = git_hash.rstrip()
 
         return (branch, git_hash)
+
+    @staticmethod
+    def _git_branch():
+        cmd = [u'git', u'branch']
+        git_output = check_output(cmd)
+        return git_output
+
+    @staticmethod
+    def current_ref_from_branch_command(git_output):
+        """Parse output of the 'git branch' command to determine the current branch.
+        The line starting with '*' is the current branch. It can be one of:
+
+        On a branch:
+        * cm-testing
+
+        Detached head from a tag:
+        * (HEAD detached at junk-tag)
+
+        Detached head from a hash
+        * (HEAD detached at 0246874c)
+
+        NOTE: Parsing the output of the porcelain is probably not a
+        great idea, but there doesn't appear to be a single plumbing
+        command that will return the same info.
+
+        """
+        lines = git_output.splitlines()
+        for line in lines:
+            if line.startswith(u'*'):
+                break
+        ref = EMPTY_STR
+        if lines:
+            if u'detached' in line:
+                ref = line.split(u' ')[-1]
+                ref = ref.strip(u')')
+            else:
+                ref = line.split()[-1]
+        return ref
+
+    def git_check_sync(self, stat, repo_dir):
+        """
+        """
+        current_dir = os.path.abspath(u'.')
+        if not os.path.exists(repo_dir):
+            stat.sync_state = Status.EMPTY
+        else:
+            git_dir = os.path.join(repo_dir, u'.git')
+            if not os.path.exists(git_dir):
+                stat.sync_state = Status.UNKNOWN
+            else:
+                os.chdir(repo_dir)
+                git_output = self._git_branch()
+                ref = self.current_ref_from_branch_command(git_output)
+                if ref == EMPTY_STR:
+                    stat.sync_state = Status.UNKNOWN
+                elif self._tag:
+                    if self._tag == ref:
+                        stat.sync_state = Status.OK
+                    else:
+                        stat.sync_state = Status.MODIFIED
+                else:
+                    if self._branch == ref:
+                        stat.sync_state = Status.OK
+                    else:
+                        stat.sync_state = Status.MODIFIED
+        os.chdir(current_dir)
 
     @staticmethod
     def _git_check_dir(chkdir, ref):
@@ -1011,6 +1153,7 @@ class _Source(object):
         self._repo_dir = os.path.basename(self._path)
         self._externals = source['externals']
         repo = create_repository(name, source['repo'])
+        self._loaded = False
         if repo is None:
             self._loaded = True
         else:
@@ -1021,6 +1164,57 @@ class _Source(object):
         Return the source object's name
         """
         return self._name
+
+    def get_path(self):
+        """
+        Return the source object's path
+        """
+        return self._path
+
+    def status(self, tree_root):
+        """
+        If the repo destination directory exists, ensure it is correct (from
+        correct URL, correct branch or tag), and possibly update the source.
+        If the repo destination directory does not exist, checkout the correce
+        branch or tag.
+        If load_all is True, also load all of the the sources sub-sources.
+        """
+
+        stat = Status()
+        stat.path = self.get_path()
+        ext_stats = {}
+        # Make sure we are in correct location
+        mycurrdir = os.path.abspath(u'.')
+        pdir = os.path.join(tree_root, os.path.dirname(self._path))
+        if not os.path.exists(pdir):
+            stat.sync_state = Status.EMPTY
+            stat.clean_state = Status.EMPTY
+        else:
+            os.chdir(pdir)
+
+            repo_loaded = self._loaded
+            if not repo_loaded:
+                for repo in self._repos:
+                    repo.status(stat, self._repo_dir)
+
+            if self._externals:
+                comp_dir = os.path.join(tree_root, self._path)
+                os.chdir(comp_dir)
+                if not self._externals_sourcetree:
+                    self._create_externals_sourcetree(comp_dir)
+                ext_stats = self._externals_sourcetree.status()
+
+            os.chdir(mycurrdir)
+
+        all_stats = {}
+        if self._path != u'.':
+            # '.' paths are standalone component directories that are
+            # not managed by checkout_model.
+            all_stats[self._name] = stat
+        if ext_stats:
+            all_stats.update(ext_stats)
+
+        return all_stats
 
     def checkout(self, tree_root, load_all):
         """
@@ -1057,19 +1251,25 @@ class _Source(object):
         if self._externals:
             comp_dir = os.path.join(tree_root, self._path)
             os.chdir(comp_dir)
-            if not os.path.exists(self._externals):
-                msg = ("External model description file '{0}' "
-                       "does not exist!".format(self._externals))
-                fatal_error(msg)
-            ext_root = comp_dir
-            model_format, model_data = read_model_description_file(
-                ext_root, self._externals)
-            externals = ModelDescription(model_format, model_data)
-            self._externals_sourcetree = SourceTree(ext_root, externals)
+            if not self._externals_sourcetree:
+                self._create_externals_sourcetree(comp_dir)
             self._externals_sourcetree.checkout(load_all)
 
         os.chdir(mycurrdir)
         return repo_loaded
+
+    def _create_externals_sourcetree(self, comp_dir):
+        """
+        """
+        if not os.path.exists(self._externals):
+            msg = ("External model description file '{0}' "
+                   "does not exist!".format(self._externals))
+            fatal_error(msg)
+        ext_root = comp_dir
+        model_format, model_data = read_model_description_file(
+            ext_root, self._externals)
+        externals = ModelDescription(model_format, model_data)
+        self._externals_sourcetree = SourceTree(ext_root, externals)
 
 
 class SourceTree(object):
@@ -1089,6 +1289,31 @@ class SourceTree(object):
             self._all_components[comp] = src
             if model[comp]['required']:
                 self._required_compnames.append(comp)
+
+    def status(self):
+        """Report the status components
+
+        FIXME(bja, 2017-10) what do we do about situations where the
+        user checked out the optional components, but didn't add
+        optional for running status? What do we do where the user
+        didn't add optional to the checkout but did add it to the
+        status. -- For now, we run status on all components, and try
+        to do the right thing based on the results....
+
+        """
+        load_comps = self._all_components.keys()
+
+        msg = "Status of these components: "
+        for comp in load_comps:
+            msg += "{0}, ".format(comp)
+        printlog(msg)
+
+        summary = {}
+        for comp in load_comps:
+            stat = self._all_components[comp].status(self._root_dir)
+            summary.update(stat)
+
+        return summary
 
     def checkout(self, load_all, load_comp=None):
         """
@@ -1132,6 +1357,7 @@ def _main(args):
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.DEBUG)
     logging.info("Begining of checkout_model")
+
     load_all = False
     if args.optional:
         load_all = True
@@ -1142,8 +1368,17 @@ def _main(args):
     model = ModelDescription(model_format, model_data)
     if args.debug:
         PPRINTER.pprint(model)
+
     source_tree = SourceTree(root_dir, model)
-    source_tree.checkout(load_all)
+    tree_status = source_tree.status()
+
+    if args.status:
+        for comp in tree_status:
+            msg = str(tree_status[comp])
+            printlog(msg)
+    else:
+        source_tree.checkout(load_all)
+
     logging.info("checkout_model completed without exceptions.")
     return 0
 

@@ -10,12 +10,14 @@ already in the python path.
 from __future__ import print_function
 
 import string
+import os
+import shutil
 import unittest
 import xml.etree.ElementTree as etree
 
 import checkout_model
 
-from checkout_model import ModelDescription, EMPTY_STR
+from checkout_model import ModelDescription, Status, EMPTY_STR
 
 
 class TestCreateRepositoryDict(unittest.TestCase):
@@ -466,6 +468,397 @@ $source
         with self.assertRaises(RuntimeError):
             ModelDescription(u'xml', xml_root)
 
+SVN_INFO_MOSART = u"""Path: components/mosart
+Working Copy Root Path: /Users/andreb/projects/ncar/git-conversion/clm-dev-experimental/components/mosart
+URL: https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_26
+Relative URL: ^/mosart/trunk_tags/mosart1_0_26
+Repository Root: https://svn-ccsm-models.cgd.ucar.edu
+Repository UUID: fe37f545-8307-0410-aea5-b40df96820b5
+Revision: 86711
+Node Kind: directory
+Schedule: normal
+Last Changed Author: erik
+Last Changed Rev: 86031
+Last Changed Date: 2017-07-07 12:28:10 -0600 (Fri, 07 Jul 2017)
+"""
+SVN_INFO_CISM = u"""
+Path: components/cism
+Working Copy Root Path: /Users/andreb/projects/ncar/git-conversion/clm-dev-experimental/components/cism
+URL: https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_37
+Relative URL: ^/glc/trunk_tags/cism2_1_37
+Repository Root: https://svn-ccsm-models.cgd.ucar.edu
+Repository UUID: fe37f545-8307-0410-aea5-b40df96820b5
+Revision: 86711
+Node Kind: directory
+Schedule: normal
+Last Changed Author: sacks
+Last Changed Rev: 85704
+Last Changed Date: 2017-06-15 05:59:28 -0600 (Thu, 15 Jun 2017)
+"""
+
+class TestSvnRepositoryCheckURL(unittest.TestCase):
+    """
+    """
+
+    def setUp(self):
+        """Setup reusable svn repository object
+        """
+        self._name = u'component'
+        rdata = {checkout_model.ModelDescription.PROTOCOL: u'svn',
+                 checkout_model.ModelDescription.REPO_URL:
+                     u'https://svn-ccsm-models.cgd.ucar.edu/',
+                 checkout_model.ModelDescription.TAG:
+                     u'mosart/trunk_tags/mosart1_0_26',
+                 checkout_model.ModelDescription.BRANCH: u''
+        }
+
+        data = {self._name:
+                {
+                    checkout_model.ModelDescription.REQUIRED: False,
+                    checkout_model.ModelDescription.PATH: u'junk',
+                    checkout_model.ModelDescription.EXTERNALS: u'',
+                    checkout_model.ModelDescription.REPO: rdata,
+                },
+        }
+
+        model = checkout_model.ModelDescription(u'json', data)
+        repo = model[self._name][checkout_model.ModelDescription.REPO]
+        self._repo = checkout_model.SvnRepository(u'test', repo)
+
+    def test_check_url_same(self):
+        """Test that we correctly identify that the correct URL.
+        """
+        svn_output = SVN_INFO_MOSART
+        expected_url = self._repo._url
+        result = self._repo.svn_check_url(svn_output, expected_url)
+        self.assertEqual(result, Status.OK)
+
+    def test_check_url_different(self):
+        """Test that we correctly reject an incorrect URL.
+        """
+        svn_output = SVN_INFO_CISM
+        expected_url = self._repo._url
+        result = self._repo.svn_check_url(svn_output, expected_url)
+        self.assertEqual(result, Status.MODIFIED)
+
+    def test_check_url_none(self):
+        """Test that we can handle an empty string for output, e.g. not an svn
+        repo.
+
+        """
+        svn_output = EMPTY_STR
+        expected_url = self._repo._url
+        result = self._repo.svn_check_url(svn_output, expected_url)
+        self.assertEqual(result, Status.UNKNOWN)
+
+
+class TestSvnRepositoryCheckSync(unittest.TestCase):
+    """Test whether the SvnRepository svn_check_sync functionality is
+    correct.
+
+    """
+    def setUp(self):
+        """Setup reusable svn repository object
+        """
+        self._name = "component"
+        rdata = {checkout_model.ModelDescription.PROTOCOL: u'svn',
+                 checkout_model.ModelDescription.REPO_URL:
+                     u'https://svn-ccsm-models.cgd.ucar.edu/',
+                 checkout_model.ModelDescription.TAG:
+                     u'mosart/trunk_tags/mosart1_0_26',
+                 checkout_model.ModelDescription.BRANCH: EMPTY_STR
+        }
+
+        data = {self._name:
+                {
+                    checkout_model.ModelDescription.REQUIRED: False,
+                    checkout_model.ModelDescription.PATH: u'junk',
+                    checkout_model.ModelDescription.EXTERNALS: EMPTY_STR,
+                    checkout_model.ModelDescription.REPO: rdata,
+                },
+        }
+
+        model = checkout_model.ModelDescription('json', data)
+        repo = model[self._name][checkout_model.ModelDescription.REPO]
+        self._repo = checkout_model.SvnRepository('test', repo)
+
+    @staticmethod
+    def _svn_info_empty(repo_dir):
+        """Return an empty info string. Simulates svn info failing.
+        """
+        return ''
+
+    @staticmethod
+    def _svn_info_synced(repo_dir):
+        """Return an info sting that is synced with the setUp data
+        """
+        return SVN_INFO_MOSART
+
+    @staticmethod
+    def _svn_info_modified(repo_dir):
+        """Return and info string that is modified from the setUp data
+        """
+        return SVN_INFO_CISM
+
+    def test_repo_dir_not_exist(self):
+        """Test that a directory that doesn't exist returns an empty status
+        """
+        stat = Status()
+        self._repo.svn_check_sync(stat, u'junk')
+        self.assertEqual(stat.sync_state, Status.EMPTY)
+        # check_dir should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, Status.DEFAULT)
+
+    def test_repo_dir_exist_no_svn_info(self):
+        """Test that an empty info string returns an unknown status
+        """
+        stat = Status()
+        # Now we over-ride the _svn_info method on the repo to return
+        # a known value without requiring access to svn.
+        self._repo._svn_info = self._svn_info_empty
+        self._repo.svn_check_sync(stat, u'.')
+        self.assertEqual(stat.sync_state, Status.UNKNOWN)
+        # check_dir should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, Status.DEFAULT)
+
+    def test_repo_dir_synced(self):
+        """Test that a valid info string that is synced to the repo in the
+        model description returns an ok status.
+
+        """
+        stat = Status()
+        # Now we over-ride the _svn_info method on the repo to return
+        # a known value without requiring access to svn.
+        self._repo._svn_info = self._svn_info_synced
+        self._repo.svn_check_sync(stat, u'.')
+        self.assertEqual(stat.sync_state, Status.OK)
+        # check_dir should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, Status.DEFAULT)
+
+    def test_repo_dir_modified(self):
+        """Test that a valid svn info string that is out of sync with the
+        model description returns a modified status.
+
+        """
+        stat = Status()
+        # Now we over-ride the _svn_info method on the repo to return
+        # a known value without requiring access to svn.
+        self._repo._svn_info = self._svn_info_modified
+        self._repo.svn_check_sync(stat, u'.')
+        self.assertEqual(stat.sync_state, Status.MODIFIED)
+        # check_dir should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, Status.DEFAULT)
+
+
+class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
+    """test the current_ref_from_branch_command on a git repository
+    """
+    GIT_BRANCH_OUTPUT_DETACHED_TAG = u'''
+* (HEAD detached at rtm1_0_26)
+  a_feature_branch
+  master
+'''
+    GIT_BRANCH_OUTPUT_BRANCH = u'''
+* great_new_feature_branch
+  a_feature_branch
+  master
+'''
+    GIT_BRANCH_OUTPUT_HASH = u'''
+* (HEAD detached at 0246874c)
+  a_feature_branch
+  master
+'''
+
+    def setUp(self):
+        self._name = u'component'
+        rdata = {checkout_model.ModelDescription.PROTOCOL: u'git',
+                 checkout_model.ModelDescription.REPO_URL:
+                     u'git@git.github.com:ncar/rtm',
+                 checkout_model.ModelDescription.TAG:
+                     u'rtm1_0_26',
+                 checkout_model.ModelDescription.BRANCH: EMPTY_STR
+        }
+
+        data = {self._name:
+                {
+                    checkout_model.ModelDescription.REQUIRED: False,
+                    checkout_model.ModelDescription.PATH: u'junk',
+                    checkout_model.ModelDescription.EXTERNALS: EMPTY_STR,
+                    checkout_model.ModelDescription.REPO: rdata,
+                },
+        }
+
+        model = checkout_model.ModelDescription('json', data)
+        repo = model[self._name][checkout_model.ModelDescription.REPO]
+        self._repo = checkout_model.GitRepository('test', repo)
+
+    def test_ref_detached_from_tag(self):
+        """Test that we correctly identify that the ref is detached from a tag
+        """
+        git_output = self.GIT_BRANCH_OUTPUT_DETACHED_TAG
+        expected = self._repo._tag
+        result = self._repo.current_ref_from_branch_command(
+            git_output)
+        self.assertEqual(result, expected)
+
+    def test_ref_branch(self):
+        """Test that we correctly identify we are on a branch
+        """
+        git_output = self.GIT_BRANCH_OUTPUT_BRANCH
+        expected = 'great_new_feature_branch'
+        result = self._repo.current_ref_from_branch_command(
+            git_output)
+        self.assertEqual(result, expected)
+
+    def test_ref_detached_hash(self):
+        """Test that we can handle an empty string for output, e.g. not an git
+        repo.
+
+        """
+        git_output = self.GIT_BRANCH_OUTPUT_HASH
+        expected = u'0246874c'
+        result = self._repo.current_ref_from_branch_command(
+            git_output)
+        self.assertEqual(result, expected)
+
+    def test_ref_none(self):
+        """Test that we can handle an empty string for output, e.g. not an git
+        repo.
+
+        """
+        git_output = EMPTY_STR
+        expected = EMPTY_STR
+        result = self._repo.current_ref_from_branch_command(
+            git_output)
+        self.assertEqual(result, expected)
+
+
+class TestGitRepositoryCheckSync(unittest.TestCase):
+    """Test whether the GitRepository git_check_sync functionality is
+    correct.
+
+    """
+    TMP_GIT_DIR = u'fake/.git'
+
+    def setUp(self):
+        """Setup reusable git repository object
+        """
+        self._name = u'component'
+        rdata = {checkout_model.ModelDescription.PROTOCOL: u'git',
+                 checkout_model.ModelDescription.REPO_URL:
+                     u'git@git.github.com:ncar/rtm',
+                 checkout_model.ModelDescription.TAG:
+                     u'rtm1_0_26',
+                 checkout_model.ModelDescription.BRANCH: EMPTY_STR
+        }
+
+        data = {self._name:
+                {
+                    checkout_model.ModelDescription.REQUIRED: False,
+                    checkout_model.ModelDescription.PATH: u'fake',
+                    checkout_model.ModelDescription.EXTERNALS: u'',
+                    checkout_model.ModelDescription.REPO: rdata,
+                },
+        }
+
+        model = checkout_model.ModelDescription(u'json', data)
+        repo = model[self._name][checkout_model.ModelDescription.REPO]
+        self._repo = checkout_model.GitRepository(u'test', repo)
+        self.create_tmp_git_dir()
+
+    def tearDown(self):
+        """Cleanup tmp stuff on the file system
+        """
+        self.remove_tmp_git_dir()
+
+    def create_tmp_git_dir(self):
+        """Create a temporary fake git directory for testing purposes.
+        """
+        if not os.path.exists(self.TMP_GIT_DIR):
+            os.makedirs(self.TMP_GIT_DIR)
+
+    def remove_tmp_git_dir(self):
+        """Remove the temporary fake git directory
+        """
+        if os.path.exists(self.TMP_GIT_DIR):
+            shutil.rmtree(self.TMP_GIT_DIR)
+
+    @staticmethod
+    def _git_branch_empty():
+        """Return an empty info string. Simulates svn info failing.
+        """
+        return ''
+
+    @staticmethod
+    def _git_branch_synced():
+        """Return an info sting that is synced with the setUp data
+        """
+        git_output = u'''
+* (HEAD detached at rtm1_0_26)
+  a_feature_branch
+  master
+'''
+        return git_output
+
+    @staticmethod
+    def _git_branch_modified():
+        """Return and info string that is modified from the setUp data
+        """
+        git_output = u'''
+* great_new_feature_branch
+  a_feature_branch
+  master
+'''
+        return git_output
+
+    def test_repo_dir_not_exist(self):
+        """Test that a directory that doesn't exist returns an empty status
+        """
+        stat = Status()
+        self._repo.git_check_sync(stat, u'junk')
+        self.assertEqual(stat.sync_state, Status.EMPTY)
+        # check_dir should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, Status.DEFAULT)
+
+    def test_repo_dir_exist_no_git_info(self):
+        """Test that an empty info string returns an unknown status
+        """
+        stat = Status()
+        # Now we over-ride the _git_branch method on the repo to return
+        # a known value without requiring access to git.
+        self._repo._git_branch = self._git_branch_empty
+        self._repo.git_check_sync(stat, u'fake')
+        self.assertEqual(stat.sync_state, Status.UNKNOWN)
+        # check_sync should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, Status.DEFAULT)
+
+    def test_repo_dir_synced(self):
+        """Test that a valid info string that is synced to the repo in the
+        model description returns an ok status.
+
+        """
+        stat = Status()
+        # Now we over-ride the _git_branch method on the repo to return
+        # a known value without requiring access to svn.
+        self._repo._git_branch = self._git_branch_synced
+        self._repo.git_check_sync(stat, u'fake')
+        self.assertEqual(stat.sync_state, Status.OK)
+        # check_sync should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, Status.DEFAULT)
+
+    def test_repo_dir_modified(self):
+        """Test that a valid svn info string that is out of sync with the
+        model description returns a modified status.
+
+        """
+        stat = Status()
+        # Now we over-ride the _svn_info method on the repo to return
+        # a known value without requiring access to svn.
+        self._repo._git_branch = self._git_branch_modified
+        self._repo.git_check_sync(stat, u'fake')
+        self.assertEqual(stat.sync_state, Status.MODIFIED)
+        # check_sync should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, Status.DEFAULT)
 
 if __name__ == '__main__':
     unittest.main()
