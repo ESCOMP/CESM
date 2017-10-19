@@ -777,6 +777,14 @@ class Repository(object):
                'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
 
+    def verbose_status(self, repo_dir):
+        """Display the raw repo status to the user.
+
+        """
+        msg = ('DEV_ERROR: status method must be implemented in all '
+               'repository classes! {0}'.format(self.__class__.__name__))
+        fatal_error(msg)
+
     def url(self):
         """Public access of repo url.
         """
@@ -823,6 +831,14 @@ class SvnRepository(Repository):
         if os.path.exists(repo_dir):
             self.svn_status(stat, repo_dir)
         return stat
+
+    def verbose_status(self, repo_dir):
+        """Display the raw repo status to the user.
+
+        """
+        repo_path = os.path.join(repo_dir, self._name)
+        if os.path.exists(repo_path):
+            self.svn_status_verbose(repo_path)
 
     def checkout(self, repo_dir):
         """
@@ -948,6 +964,22 @@ class SvnRepository(Repository):
         else:
             stat.clean_state = Status.OK
 
+    @staticmethod
+    def _svn_status_verbose(repo_dir):
+        """capture the full svn status output
+        """
+        cmd = ['svn', 'status', repo_dir]
+        svn_output = check_output(cmd)
+        return svn_output
+
+    def svn_status_verbose(self, repo_dir):
+        """Display the raw svn status output to the user.
+
+        """
+        svn_output = self._svn_status_verbose(repo_dir)
+        log_process_output(svn_output)
+        print(svn_output)
+
 
 class GitRepository(Repository):
     """
@@ -990,6 +1022,13 @@ class GitRepository(Repository):
         self.git_check_sync(stat, repo_dir)
         if os.path.exists(repo_dir):
             self.git_status(stat, repo_dir)
+
+    def verbose_status(self, repo_dir):
+        """Display the raw repo status to the user.
+
+        """
+        if os.path.exists(repo_dir):
+            self.git_status_verbose(repo_dir)
 
     def _git_ref_type(self, ref):
         """
@@ -1320,6 +1359,25 @@ class GitRepository(Repository):
             stat.clean_state = Status.OK
         os.chdir(cwd)
 
+    @staticmethod
+    def _git_status_verbose():
+        """Run the git status command and capture the output
+        """
+        cmd = ['git', 'status']
+        git_output = check_output(cmd)
+        return git_output
+
+    def git_status_verbose(self, repo_dir):
+        """Display raw git status output to the user
+
+        """
+        cwd = os.getcwd()
+        os.chdir(repo_dir)
+        git_output = self._git_status_verbose()
+        log_process_output(git_output)
+        print(git_output)
+        os.chdir(cwd)
+
 
 class _Source(object):
     """
@@ -1401,6 +1459,23 @@ class _Source(object):
             all_stats.update(ext_stats)
 
         return all_stats
+
+    def verbose_status(self, tree_root):
+        """Display the verbose status to the user. This is just the raw output
+        from the repository 'status' command.
+
+        """
+        repo_dir = os.path.join(tree_root, os.path.dirname(self.get_path()))
+        if not os.path.exists(repo_dir):
+            msg = ('Repository directory for "{0}" is empty or does not '
+                   'exist!'.format(self._name))
+            printlog(msg)
+        else:
+            cwd = os.getcwd()
+            os.chdir(repo_dir)
+            for repo in self._repos:
+                repo.verbose_status(repo_dir)
+            os.chdir(cwd)
 
     def checkout(self, tree_root, load_all):
         """
@@ -1495,6 +1570,15 @@ class SourceTree(object):
 
         return summary
 
+    def verbose_status(self):
+        """Display verbose status to the user. This is just the raw output of
+        the git and svn status commands.
+
+        """
+        load_comps = self._all_components.keys()
+        for comp in load_comps:
+            self._all_components[comp].verbose_status(self._root_dir)
+
     def checkout(self, load_all, load_comp=None):
         """
         Checkout or update indicated components into the the configured
@@ -1578,7 +1662,7 @@ def _main(args):
             printlog(msg)
         if args.verbose:
             # user requested verbose status dump of the git/svn status commands
-            printlog('-- verbose status here --')
+            source_tree.verbose_status()
     else:
         # checkout / update the model repositories.
         safe_to_update = check_safe_to_update_repos(tree_status, args.debug)
