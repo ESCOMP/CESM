@@ -841,13 +841,19 @@ class SvnRepository(Repository):
             self.svn_status_verbose(repo_path)
 
     def checkout(self, repo_dir):
+        """Checkout or update the working copy
+
+        If the repo destination directory exists, switch the sandbox to
+        match the model description.
+
+        If the repo destination directory does not exist, checkout the
+        correct branch or tag.
+
         """
-        If the repo destination directory exists, ensure it is correct (from
-        correct URL, correct branch or tag), and possibly update the source.
-        If the repo destination directory does not exist, checkout the correce
-        branch or tag.
-        """
-        self._svn_checkout(repo_dir)
+        if os.path.exists(repo_dir):
+            self._svn_switch(repo_dir)
+        else:
+            self._svn_checkout(repo_dir)
 
         return True
 
@@ -857,6 +863,16 @@ class SvnRepository(Repository):
         """
         cmd = ['svn', 'checkout', self._url, checkout_dir]
         execute_subprocess(cmd)
+
+    def _svn_switch(self, repo_dir):
+        """
+        Switch branches for in an svn sandbox
+        """
+        cwd = os.getcwd()
+        os.chdir(repo_dir)
+        cmd = ['svn', 'switch', self._url]
+        execute_subprocess(cmd)
+        os.chdir(cwd)
 
     @staticmethod
     def _svn_update(updir):
