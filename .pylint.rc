@@ -78,7 +78,7 @@ msg-template={msg_id}:{line:3d},{column:2d}: {msg} ({symbol})
 output-format=text
 
 # Tells whether to display a full report or only the messages
-reports=yes
+#reports=yes
 
 # Activate the evaluation score.
 score=yes

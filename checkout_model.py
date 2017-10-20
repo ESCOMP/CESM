@@ -241,8 +241,9 @@ def check_output(commands):
     check_output runs a command with arguments and returns its output.
     On successful completion, check_output returns the command's output.
     """
-    logging.info('In directory: {0}'.format(os.getcwd()))
-    logging.info('check_output running command:')
+    msg = 'In directory: {0}\ncheck_output running command:'.format(
+        os.getcwd())
+    logging.info(msg)
     logging.info(commands)
     try:
         outstr = subprocess.check_output(commands)
@@ -274,8 +275,9 @@ def execute_subprocess(commands, status_to_caller=False):
     status as an error and raises an exception.
 
     """
-    logging.info('In directory: {0}'.format(os.getcwd()))
-    logging.info('execute_subprocess running command:')
+    msg = 'In directory: {0}\nexecute_subprocess running command:'.format(
+        os.getcwd())
+    logging.info(msg)
     logging.info(commands)
     status = -1
     try:
@@ -372,8 +374,8 @@ def read_model_description_file(root_dir, file_name):
 
     """
     root_dir = os.path.abspath(root_dir)
-
-    logging.info('In directory : {0}'.format(root_dir))
+    msg = 'In directory : {0}'.format(root_dir)
+    logging.info(msg)
     printlog('Processing model description file : {0}'.format(file_name))
 
     file_path = os.path.join(root_dir, file_name)
@@ -703,7 +705,7 @@ class Status(object):
     MODEL_MODIFIED = 'm'
     DIRTY = 'M'
 
-    OK = ' '
+    STATUS_OK = ' '
 
     # source types
     OPTIONAL = 'o'
@@ -740,12 +742,12 @@ class Status(object):
             # sync_state. Any other sync_state at this point
             # represents a logic error that should have been handled
             # before now!
-            sync_safe = ((self.sync_state == Status.OK) or
+            sync_safe = ((self.sync_state == Status.STATUS_OK) or
                          (self.sync_state == Status.MODEL_MODIFIED))
             if sync_safe:
-                # The clean_state must be OK to update. Otherwise we
+                # The clean_state must be STATUS_OK to update. Otherwise we
                 # are dirty or there was a missed error previously.
-                if self.clean_state == Status.OK:
+                if self.clean_state == Status.STATUS_OK:
                     safe_to_update = True
         return safe_to_update
 
@@ -801,7 +803,7 @@ class Repository(object):
         if self._tag is not EMPTY_STR and self._branch is not EMPTY_STR:
             fatal_error('repo cannot have both a tag and a branch element')
 
-    def checkout(self, repo_dir):
+    def checkout(self, repo_dir):  # pylint: disable=unused-argument
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -812,7 +814,7 @@ class Repository(object):
                'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
 
-    def status(self, stat, repo_dir):
+    def status(self, stat, repo_dir):  # pylint: disable=unused-argument
         """Report the status of the repo
 
         """
@@ -820,7 +822,7 @@ class Repository(object):
                'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
 
-    def verbose_status(self, repo_dir):
+    def verbose_status(self, repo_dir):  # pylint: disable=unused-argument
         """Display the raw repo status to the user.
 
         """
@@ -934,8 +936,8 @@ class SvnRepository(Repository):
         cmd = ['svn', 'info', repo_dir]
         try:
             output = check_output(cmd)
-        except subprocess.CalledProcessError as e:
-            logging.info(e)
+        except subprocess.CalledProcessError as error:
+            logging.info(error)
             output = ''
         return output
 
@@ -953,7 +955,7 @@ class SvnRepository(Repository):
         if not url:
             status = Status.UNKNOWN
         elif url == expected_url:
-            status = Status.OK
+            status = Status.STATUS_OK
         else:
             status = Status.MODEL_MODIFIED
         return status
@@ -993,13 +995,16 @@ class SvnRepository(Repository):
         * unversioned files
 
         """
+        # pylint: disable=invalid-name
         SVN_MISSING = 'missing'
         SVN_MODIFIED = 'modified'
         SVN_DELETED = 'deleted'
         SVN_UNVERSIONED = 'unversioned'
         SVN_ADDED = 'added'
-        svn_dirty = [SVN_MISSING, SVN_MODIFIED,
-                     SVN_DELETED, SVN_UNVERSIONED, SVN_ADDED]
+        # pylint: enable=invalid-name
+
+        svn_dirty = (SVN_MISSING, SVN_MODIFIED,
+                     SVN_DELETED, SVN_UNVERSIONED, SVN_ADDED)
         is_dirty = False
         xml_status = ET.fromstring(svn_output)
         xml_target = xml_status.find('./target')
@@ -1021,7 +1026,7 @@ class SvnRepository(Repository):
         if is_dirty:
             stat.clean_state = Status.DIRTY
         else:
-            stat.clean_state = Status.OK
+            stat.clean_state = Status.STATUS_OK
 
     @staticmethod
     def _svn_status_verbose(repo_dir):
@@ -1212,12 +1217,12 @@ class GitRepository(Repository):
                     stat.sync_state = Status.UNKNOWN
                 elif self._tag:
                     if self._tag == ref:
-                        stat.sync_state = Status.OK
+                        stat.sync_state = Status.STATUS_OK
                     else:
                         stat.sync_state = Status.MODEL_MODIFIED
                 else:
                     if self._branch == ref:
-                        stat.sync_state = Status.OK
+                        stat.sync_state = Status.STATUS_OK
                     else:
                         stat.sync_state = Status.MODEL_MODIFIED
         os.chdir(current_dir)
@@ -1415,7 +1420,7 @@ class GitRepository(Repository):
         if is_dirty:
             stat.clean_state = Status.DIRTY
         else:
-            stat.clean_state = Status.OK
+            stat.clean_state = Status.STATUS_OK
         os.chdir(cwd)
 
     @staticmethod
@@ -1753,12 +1758,12 @@ def _main(args):
 
 
 if __name__ == '__main__':
-    arguments = commandline_arguments()
+    ARGS = commandline_arguments()
     try:
-        RET_STATUS = _main(arguments)
+        RET_STATUS = _main(ARGS)
         sys.exit(RET_STATUS)
-    except Exception as error:
+    except Exception as error:  # pylint: disable=broad-except
         printlog(str(error))
-        if arguments.backtrace:
+        if ARGS.backtrace:
             traceback.print_exc()
         sys.exit(1)

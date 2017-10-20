@@ -6,7 +6,7 @@ AUTOPEP8=autopep8
 AUTOPEP8_ARGS=--aggressive --in-place 
 
 PYLINT=pylint
-PYLINT_ARGS=--rcfile=../.pylint.rc
+PYLINT_ARGS=-j 2 --rcfile=../.pylint.rc
 
 SRC = \
 	../checkout_model.py
@@ -20,7 +20,7 @@ utest : FORCE
 stest : FORCE
 	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_cm_sys*.py'
 
-test : utestx
+test : utest
 
 readme : FORCE
 	echo '-- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --\n' > ../README

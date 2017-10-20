@@ -533,7 +533,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         svn_output = SVN_INFO_MOSART
         expected_url = self._repo.url()
         result = self._repo.svn_check_url(svn_output, expected_url)
-        self.assertEqual(result, Status.OK)
+        self.assertEqual(result, Status.STATUS_OK)
 
     def test_check_url_different(self):
         """Test that we correctly reject an incorrect URL.
@@ -634,7 +634,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         # a known value without requiring access to svn.
         self._repo.svn_info = self._svn_info_synced
         self._repo.svn_check_sync(stat, '.')
-        self.assertEqual(stat.sync_state, Status.OK)
+        self.assertEqual(stat.sync_state, Status.STATUS_OK)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
 
@@ -845,7 +845,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         # a known value without requiring access to svn.
         self._repo.git_branch = self._git_branch_synced
         self._repo.git_check_sync(stat, 'fake')
-        self.assertEqual(stat.sync_state, Status.OK)
+        self.assertEqual(stat.sync_state, Status.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
 
@@ -1136,7 +1136,10 @@ class TestSVNStatusXML(unittest.TestCase):
 class TestGitStatusPorcelain(unittest.TestCase):
     """Test parsing of output from git status --porcelain=v1 -z
     """
-    GIT_STATUS_PORCELAIN_V1_ALL = r' D INSTALLMM Makefile M README.mdR  cmakelists.txtCMakeLists.txtD  commit-message-template.txtA  stuff.txt?? junk.txt'
+    GIT_STATUS_PORCELAIN_V1_ALL = (
+        r' D INSTALL\0MM Makefile\0M README.md\0R  cmakelists.txt\0'
+        r'CMakeLists.txt\0D  commit-message-template.txt\0A  stuff.txt\0'
+        r'?? junk.txt')
 
     GIT_STATUS_PORCELAIN_CLEAN = r''
 
@@ -1186,7 +1189,7 @@ class TestStatusObject(unittest.TestCase):
 
         # this state represtens an internal logic error in how the
         # repo status was determined.
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1215,7 +1218,7 @@ class TestStatusObject(unittest.TestCase):
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1242,7 +1245,7 @@ class TestStatusObject(unittest.TestCase):
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1269,7 +1272,7 @@ class TestStatusObject(unittest.TestCase):
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1283,7 +1286,7 @@ class TestStatusObject(unittest.TestCase):
 
         """
         stat = Status()
-        stat.sync_state = Status.OK
+        stat.sync_state = Status.STATUS_OK
         stat.clean_state = Status.DEFAULT
         exists = stat.exists()
         self.assertTrue(exists)
@@ -1296,7 +1299,7 @@ class TestStatusObject(unittest.TestCase):
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1310,7 +1313,7 @@ class TestStatusObject(unittest.TestCase):
 
         """
         stat = Status()
-        stat.sync_state = Status.OK
+        stat.sync_state = Status.STATUS_OK
         stat.clean_state = Status.DEFAULT
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
@@ -1323,7 +1326,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertTrue(safe_to_update)
 
@@ -1350,7 +1353,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertTrue(safe_to_update)
 
@@ -1377,7 +1380,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1404,7 +1407,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1431,7 +1434,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.OK
+        stat.clean_state = Status.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
