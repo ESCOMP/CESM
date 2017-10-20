@@ -541,7 +541,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         svn_output = SVN_INFO_CISM
         expected_url = self._repo.url()
         result = self._repo.svn_check_url(svn_output, expected_url)
-        self.assertEqual(result, Status.MODIFIED)
+        self.assertEqual(result, Status.MODEL_MODIFIED)
 
     def test_check_url_none(self):
         """Test that we can handle an empty string for output, e.g. not an svn
@@ -648,7 +648,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         # a known value without requiring access to svn.
         self._repo.svn_info = self._svn_info_modified
         self._repo.svn_check_sync(stat, '.')
-        self.assertEqual(stat.sync_state, Status.MODIFIED)
+        self.assertEqual(stat.sync_state, Status.MODEL_MODIFIED)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
 
@@ -859,7 +859,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         # a known value without requiring access to svn.
         self._repo.git_branch = self._git_branch_modified
         self._repo.git_check_sync(stat, 'fake')
-        self.assertEqual(stat.sync_state, Status.MODIFIED)
+        self.assertEqual(stat.sync_state, Status.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
 
@@ -1192,7 +1192,7 @@ class TestStatusObject(unittest.TestCase):
 
         # this state represtens an internal logic error in how the
         # repo status was determined.
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1219,7 +1219,7 @@ class TestStatusObject(unittest.TestCase):
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1246,7 +1246,7 @@ class TestStatusObject(unittest.TestCase):
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1256,7 +1256,7 @@ class TestStatusObject(unittest.TestCase):
 
         """
         stat = Status()
-        stat.sync_state = Status.MODIFIED
+        stat.sync_state = Status.MODEL_MODIFIED
         stat.clean_state = Status.DEFAULT
         exists = stat.exists()
         self.assertTrue(exists)
@@ -1273,7 +1273,7 @@ class TestStatusObject(unittest.TestCase):
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1300,7 +1300,7 @@ class TestStatusObject(unittest.TestCase):
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1327,7 +1327,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertTrue(safe_to_update)
 
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1337,7 +1337,7 @@ class TestStatusObject(unittest.TestCase):
 
         """
         stat = Status()
-        stat.sync_state = Status.MODIFIED
+        stat.sync_state = Status.MODEL_MODIFIED
         stat.clean_state = Status.DEFAULT
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
@@ -1354,7 +1354,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertTrue(safe_to_update)
 
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1381,7 +1381,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1408,7 +1408,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1435,7 +1435,7 @@ class TestStatusObject(unittest.TestCase):
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.MODIFIED
+        stat.clean_state = Status.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 

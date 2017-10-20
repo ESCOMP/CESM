@@ -56,27 +56,49 @@ def commandline_arguments():
     """Process the command line arguments
     """
     description = '''
-%(prog)s manages checking out CESM from revision control based on a
-model description file. By default only the required components of the
-model are checkout out.
+%(prog)s manages checking out CESM externals from revision control
+based on a model description file. By default only the required
+components of the model are checkout out.
 
-NOTE: %(prog)s should be run from the root of the source tree.
+NOTE: %(prog)s *MUST* be run from the root of the source tree.
+
+Running %(prog)s without the '--status' option will always attempt to
+synchronize the working copy with the model description.
 '''
+
     epilog = '''
-Supported workflows:
+NOTE: %(prog)s *MUST* be run from the root of the source tree it
+is managing. For example, if you cloned CLM with:
 
-  NOTE: %(prog)s should be run from the root of the source tree. For
-  example, if you cloned CESM with:
+    $ git clone git@github.com/ncar/clm clm-dev
 
-    $ git clone git@github.com/ncar/cesm cesm-dev
+Then the root of the source tree is /path/to/cesm-dev. If you obtained
+CLM via an svn checkout of CESM and you need to checkout the CLM
+externals, then the root of the source tree for CLM is:
 
-  Then the root of the source tree is /path/to/cesm-dev, and will be
-  referred to as ${SRC_ROOT}.
+    /path/to/cesm-dev/components/clm
 
-  * Checkout all required components from default model description file:
+The root of the source tree will be referred to as ${SRC_ROOT} below.
+
+
+# Supported workflows:
+
+  * Checkout all required components from the default model
+    description file:
 
       $ cd ${SRC_ROOT}
       $ ./checkout_cesm/%(prog)s
+
+  * To update all required components to the current values in the
+    model description file, re-run $(prog)s:
+
+      $ cd ${SRC_ROOT}
+      $ ./checkout_cesm/%(prog)s
+
+    If there are *any* modifications to *any* working copy according
+    to the git or svn 'status' command, $(prog)s will not update any
+    repositories in the model. Modifications include: modified files,
+    added files, removed files, missing files or untracked files,
 
   * Checkout all required components from a user specified model
     description file:
@@ -89,29 +111,39 @@ Supported workflows:
       $ cd ${SRC_ROOT}
       $ ./checkout_cesm/%(prog)s --status
 
-         cime   master
-      MM clm    my_branch
-      M  rtm    my_branch
-       M mosart my_branch
+      m   components/cism
+       M  src/fates
+      e-o components/mosart
+          cime
+          components/rtm
+      e-o tools/PTCLM
 
     where:
-      * column one indicates whether the currently checkout branch is the
-        same as in the model description file.
+      * column one indicates the status of the repository in relation
+        to the model description file.
       * column two indicates whether the working copy has modified files.
+      * column three shows how the repository is managed, optional or required
 
-      * M - modified : untracked or modified files exist
-      * e - empty : directory does not exist - checkout_model has not been run
-      * ? - unknown : directory exists but .git or .svn directories are missing
-      *   - blank / space : clean or no changes
+    Colunm one will be one of these values:
+      * m : modified : repository is modefied compared to the model description
+      * e : empty : directory does not exist - %(prog)s has not been run
+      * ? : unknown : directory exists but .git or .svn directories are missing
 
-  * Status details of the repositories managed by %(prog)s:
+    Colunm two will be one of these values:
+      * M : Modified : untracked, modified, added, deleted or missing files
+      *   : blank / space : clean
+      * - : dash : no meaningful state, for empty repositories
+
+    Colunm three will be one of these values:
+      * o : optional : optionally repository
+      *   : blank / space : required repository
+
+  * Detailed git or svn status of the repositories managed by %(prog)s:
 
       $ cd ${SRC_ROOT}
       $ ./checkout_cesm/%(prog)s --status --verbose
 
-      Output of the 'status' command of the svn or git repository.
-
-Model description file:
+# Model description file:
 
   The model description contains a list of the model components that
   are used and their version control locations. Each component has:
@@ -124,11 +156,13 @@ Model description file:
     is called.
 
   * protoctol (string) : version control protocol that is used to
-    manage the component.  'externals_only' will only process the
-    externals model description file without trying to checkout the
-    current component. This is used for retreiving externals for
-    standalone cam and clm. Valid values are 'git', 'svn',
+    manage the component.  Valid values are 'git', 'svn',
     'externals_only'.
+
+    Note: 'externals_only' will only process the externals model
+    description file without trying to manage a repositor for the
+    component. This is used for retreiving externals for standalone
+    components like cam and clm.
 
   * repo_url (string) : URL for the repository location, examples:
     * svn - https://svn-ccsm-models.cgd.ucar.edu/glc
@@ -139,12 +173,12 @@ Model description file:
 
   * branch (string) : branch to checkout
 
-  * externals (string) filename of the external model description
-    file that should also be used. It is *relative* to the component
-    path. For example, the CESM model description will load clm. CLM
-    has additional externals that must be downloaded to be
-    complete. Those additional externals are managed by the file
-    pointed to by 'externals'.
+  * externals (string) : relative path to the external model
+    description file that should also be used. It is *relative* to the
+    component path. For example, the CESM model description will load
+    clm. CLM has additional externals that must be downloaded to be
+    complete. Those additional externals are managed from the clm
+    source root by the file pointed to by 'externals'.
 
 '''
 
@@ -663,23 +697,29 @@ class Status(object):
     transactions (e.g. add, remove, rename, untracked files).
 
     """
-    DEFAULT = '*'
-    MODIFIED = 'M'
-    EMPTY = 'e'
+    DEFAULT = '-'
     UNKNOWN = '?'
+    EMPTY = 'e'
+    MODEL_MODIFIED = 'm'
+    DIRTY = 'M'
+
     OK = ' '
+
+    # source types
     OPTIONAL = 'o'
+    STANDALONE = 's'
+    MANAGED = ' '
 
     def __init__(self):
         self.sync_state = self.DEFAULT
         self.clean_state = self.DEFAULT
+        self.source_type = self.DEFAULT
         self.path = EMPTY_STR
-        self.optional = self.OK
 
     def __str__(self):
-        msg = '{sync}{clean}{optional} {path}'.format(
+        msg = '{sync}{clean}{src_type} {path}'.format(
             sync=self.sync_state, clean=self.clean_state,
-            optional=self.optional, path=self.path)
+            src_type=self.source_type, path=self.path)
         return msg
 
     def safe_to_update(self):
@@ -701,7 +741,7 @@ class Status(object):
             # represents a logic error that should have been handled
             # before now!
             sync_safe = ((self.sync_state == Status.OK) or
-                         (self.sync_state == Status.MODIFIED))
+                         (self.sync_state == Status.MODEL_MODIFIED))
             if sync_safe:
                 # The clean_state must be OK to update. Otherwise we
                 # are dirty or there was a missed error previously.
@@ -915,7 +955,7 @@ class SvnRepository(Repository):
         elif url == expected_url:
             status = Status.OK
         else:
-            status = Status.MODIFIED
+            status = Status.MODEL_MODIFIED
         return status
 
     def svn_check_sync(self, stat, repo_dir):
@@ -979,7 +1019,7 @@ class SvnRepository(Repository):
         svn_output = self._svn_status_xml(repo_dir)
         is_dirty = self.xml_status_is_dirty(svn_output)
         if is_dirty:
-            stat.clean_state = Status.MODIFIED
+            stat.clean_state = Status.DIRTY
         else:
             stat.clean_state = Status.OK
 
@@ -1174,12 +1214,12 @@ class GitRepository(Repository):
                     if self._tag == ref:
                         stat.sync_state = Status.OK
                     else:
-                        stat.sync_state = Status.MODIFIED
+                        stat.sync_state = Status.MODEL_MODIFIED
                 else:
                     if self._branch == ref:
                         stat.sync_state = Status.OK
                     else:
-                        stat.sync_state = Status.MODIFIED
+                        stat.sync_state = Status.MODEL_MODIFIED
         os.chdir(current_dir)
 
     @staticmethod
@@ -1373,7 +1413,7 @@ class GitRepository(Repository):
         git_output = self.git_status_porcelain_v1z()
         is_dirty = self.git_status_v1z_is_dirty(git_output)
         if is_dirty:
-            stat.clean_state = Status.MODIFIED
+            stat.clean_state = Status.DIRTY
         else:
             stat.clean_state = Status.OK
         os.chdir(cwd)
@@ -1450,7 +1490,14 @@ class _Source(object):
         stat = Status()
         stat.path = self.get_path()
         if not self._required:
-            stat.optional = Status.OPTIONAL
+            stat.source_type = Status.OPTIONAL
+        elif self._path == '.':
+            # '.' paths are standalone component directories that are
+            # not managed by checkout_model.
+            stat.source_type = Status.STANDALONE
+        else:
+            # managed by checkout_model
+            stat.source_type = Status.MANAGED
         ext_stats = {}
         # Make sure we are in correct location
         mycurrdir = os.path.abspath('.')
@@ -1474,8 +1521,8 @@ class _Source(object):
 
         all_stats = {}
         if self._path != '.':
-            # '.' paths are standalone component directories that are
-            # not managed by checkout_model.
+            # don't add the root component because we don't manage it
+            # and can't provide useful info about it.
             all_stats[self._name] = stat
         if ext_stats:
             all_stats.update(ext_stats)
