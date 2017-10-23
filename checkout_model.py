@@ -6,7 +6,8 @@ Tool to assemble respositories represented in a model-description file.
 If loaded as a module (e.g., in a component's buildcpp), it can be used
 to check the validity of existing subdirectories and load missing sources.
 """
-from __future__ import print_function, unicode_literals
+from __future__ import absolute_import
+from __future__ import print_function
 
 import argparse
 import errno
@@ -22,6 +23,14 @@ import textwrap
 import traceback
 import xml.etree.ElementTree as ET
 
+try:
+    # python2
+    from ConfigParser import SafeConfigParser as config_parser
+    import ConfigParser
+except ImportError:
+    # python3
+    from configparser import ConfigParser as config_parser
+
 if sys.hexversion < 0x02070000:
     print(70 * '*')
     print('ERROR: {0} requires python >= 2.7.x. '.format(sys.argv[0]))
@@ -29,13 +38,6 @@ if sys.hexversion < 0x02070000:
         '.'.join(str(x) for x in sys.version_info[0:3])))
     print(70 * '*')
     sys.exit(1)
-
-if sys.version_info[0] == 2:
-    from ConfigParser import SafeConfigParser as config_parser
-    import ConfigParser
-else:
-    from configparser import ConfigParser as config_parser
-
 
 # ---------------------------------------------------------------------
 #
@@ -246,7 +248,9 @@ def check_output(commands):
     logging.info(msg)
     logging.info(commands)
     try:
-        outstr = subprocess.check_output(commands)
+        output = subprocess.check_output(commands)
+        output = output.decode('ascii')
+        log_process_output(output)
     except OSError as error:
         printlog('Execution of "{0}" failed: {1}'.format(
             (' '.join(commands)), error), file=sys.stderr)
@@ -259,7 +263,7 @@ def check_output(commands):
             (' '.join(commands)), error), file=sys.stderr)
         outstr = None
 
-    return outstr
+    return output
 
 
 def execute_subprocess(commands, status_to_caller=False):
@@ -283,6 +287,7 @@ def execute_subprocess(commands, status_to_caller=False):
     try:
         logging.info(' '.join(commands))
         output = subprocess.check_output(commands, stderr=subprocess.STDOUT)
+        output = output.decode('ascii')
         log_process_output(output)
         status = 0
     except OSError as error:
@@ -545,15 +550,15 @@ class ModelDescription(dict):
             """
             output_dict = {}
             for item in input_list:
-                key = unicode(item[0].strip())
-                value = unicode(item[1].strip())
+                key = item[0].strip()
+                value = item[1].strip()
                 if convert_to_lower_case:
                     key = key.lower()
                 output_dict[key] = value
             return output_dict
 
         for section in cfg_data.sections():
-            name = unicode(section.lower().strip())
+            name = section.lower().strip()
             self[name] = {}
             self[name].update(list_to_dict(cfg_data.items(section)))
             self[name][self.REPO] = {}
@@ -587,23 +592,23 @@ class ModelDescription(dict):
             source = {}
             source[self.EXTERNALS] = EMPTY_STR
             source[self.REQUIRED] = False
-            source[self.PATH] = unicode(src.find(self._V1_TREE_PATH).text)
+            source[self.PATH] = src.find(self._V1_TREE_PATH).text
             repo = {}
             xml_repo = src.find(self.REPO)
-            repo[self.PROTOCOL] = unicode(xml_repo.get(self.PROTOCOL))
-            repo[self.REPO_URL] = unicode(xml_repo.find(self._V1_ROOT).text)
+            repo[self.PROTOCOL] = xml_repo.get(self.PROTOCOL)
+            repo[self.REPO_URL] = xml_repo.find(self._V1_ROOT).text
             repo[self.TAG] = xml_repo.find(self._V1_TAG)
             if repo[self.TAG] is not None:
-                repo[self.TAG] = unicode(repo[self.TAG].text)
+                repo[self.TAG] = repo[self.TAG].text
             else:
                 repo[self.TAG] = EMPTY_STR
             repo[self.BRANCH] = xml_repo.find(self._V1_BRANCH)
             if repo[self.BRANCH] is not None:
-                repo[self.BRANCH] = unicode(repo[self.BRANCH].text)
+                repo[self.BRANCH] = repo[self.BRANCH].text
             else:
                 repo[self.BRANCH] = EMPTY_STR
             source[self.REPO] = repo
-            name = unicode(src.get(self.NAME).lower())
+            name = src.get(self.NAME).lower()
             self[name] = source
             required = xml_root.find(self.REQUIRED)
             if required is not None:
@@ -616,30 +621,30 @@ class ModelDescription(dict):
         """
         for src in xml_root.findall('./source'):
             source = {}
-            source[self.PATH] = unicode(src.find(self.PATH).text)
+            source[self.PATH] = src.find(self.PATH).text
             repo = {}
             xml_repo = src.find(self.REPO)
-            repo[self.PROTOCOL] = unicode(xml_repo.get(self.PROTOCOL))
+            repo[self.PROTOCOL] = xml_repo.get(self.PROTOCOL)
             repo[self.REPO_URL] = xml_repo.find(self.REPO_URL)
             if repo[self.REPO_URL] is not None:
-                repo[self.REPO_URL] = unicode(repo[self.REPO_URL].text)
+                repo[self.REPO_URL] = repo[self.REPO_URL].text
             repo[self.TAG] = xml_repo.find(self.TAG)
             if repo[self.TAG] is not None:
-                repo[self.TAG] = unicode(repo[self.TAG].text)
+                repo[self.TAG] = repo[self.TAG].text
             else:
                 repo[self.TAG] = EMPTY_STR
             repo[self.BRANCH] = xml_repo.find(self.BRANCH)
             if repo[self.BRANCH] is not None:
-                repo[self.BRANCH] = unicode(repo[self.BRANCH].text)
+                repo[self.BRANCH] = repo[self.BRANCH].text
             else:
                 repo[self.BRANCH] = EMPTY_STR
             source[self.REPO] = repo
             source[self.EXTERNALS] = src.find(self.EXTERNALS)
             if source[self.EXTERNALS] is not None:
-                source[self.EXTERNALS] = unicode(source[self.EXTERNALS].text)
+                source[self.EXTERNALS] = source[self.EXTERNALS].text
             else:
                 source[self.EXTERNALS] = EMPTY_STR
-            required = unicode(src.get(self.REQUIRED).lower())
+            required = src.get(self.REQUIRED).lower()
             if required == 'false':
                 source[self.REQUIRED] = False
             elif required == 'true':
@@ -936,6 +941,7 @@ class SvnRepository(Repository):
         cmd = ['svn', 'info', repo_dir]
         try:
             output = check_output(cmd)
+            log_process_output(output)
         except subprocess.CalledProcessError as error:
             logging.info(error)
             output = ''
