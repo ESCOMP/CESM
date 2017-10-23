@@ -1,0 +1,12 @@
+
+ ! This is needed to tell CLM to allow the non-annual-boundary glacier changes that arise
+ ! with this testmod.
+ for_testing_allow_non_annual_changes = .true.
+
+ ! When we have daily rather than annual glacier dynamics (as we do in this testmod, due
+ ! to having test_coupling in user_nl_cism), CLM applies the dynbal adjustments in a
+ ! single time step rather than spreading them throughout the year. This can cause
+ ! sensible heat fluxes of thousands of W m-2, which causes CAM's PBL scheme to blow up.
+ ! So force these fluxes to zero for this testmod; this breaks water and energy
+ ! conservation in CLM, but should allow the test to pass.
+ for_testing_zero_dynbal_fluxes = .true.

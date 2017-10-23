@@ -195,7 +195,7 @@
       <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="NCK_Ld5" grid="f19_g17" compset="B1850GWs" testmods="allactive/defaultio">
+  <test name="NCK_Ld5" grid="f19_g17" compset="B1850GWs" testmods="allactive/cism/test_coupling">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
@@ -292,7 +292,7 @@
       <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="f19_g17" compset="B1850G" testmods="allactive/defaultio">
+  <test name="SMS_Ld5" grid="f19_g17" compset="B1850G" testmods="allactive/cism/test_coupling">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
     </machines>
@@ -300,7 +300,7 @@
       <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="f09_g17" compset="B1850G" testmods="allactive/defaultio">
+  <test name="SMS_Ld5" grid="f09_g17" compset="B1850G" testmods="allactive/cism/test_coupling">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
@@ -308,7 +308,7 @@
       <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="f19_g17" compset="B1850G1" testmods="allactive/defaultio">
+  <test name="SMS_Ld5" grid="f19_g17" compset="B1850G1" testmods="allactive/cism/test_coupling">
     <machines>
       <machine name="cheyenne" compiler="gnu" category="prebeta">
         <options>
@@ -318,7 +318,7 @@
       </machine>
     </machines>
   </test>
-  <test name="SMS_Ld1" grid="f19_g17" compset="B1850G" testmods="allactive/defaultio">
+  <test name="SMS_Ld1" grid="f19_g17" compset="B1850G" testmods="allactive/cism/test_coupling">
     <machines>
       <machine name="hobart" compiler="nag" category="prebeta"/>
     </machines>
@@ -334,7 +334,7 @@
   <!--     <option name="wallclock"> 00:30 </option> -->
   <!--   </options> -->
   <!-- </test> -->
-  <test name="SMS_Ld5" grid="f09_g17_gl4" compset="J1850G" testmods="allactive/defaultio">
+  <test name="SMS_Ld5" grid="f09_g17_gl4" compset="J1850G" testmods="allactive/cism/test_coupling">
     <machines>
       <machine name="cheyenne" compiler="gnu" category="prebeta"/>
     </machines>
