@@ -63,7 +63,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
             repo = checkout_model.create_repository(self._name, self._repo)
             self.assertIsInstance(repo, checkout_model.GitRepository)
 
-    def test_create_repo_svn(self):b
+    def test_create_repo_svn(self):
         """Verify that several possible names for the 'svn' protocol
         create svn repository objects.
         """
