@@ -479,10 +479,15 @@ class ModelDescription(dict):
     REPO = 'repo'
     REQUIRED = 'required'
     TAG = 'tag'
-    PATH = 'path'
+    PATH = 'local_path'
     PROTOCOL = 'protocol'
     REPO_URL = 'repo_url'
     NAME = 'name'
+
+    PROTOCOL_EXTERNALS_ONLY = 'externals_only'
+    PROTOCOL_GIT = 'git'
+    PROTOCOL_SVN = 'svn'
+    KNOWN_PRROTOCOLS = [PROTOCOL_GIT, PROTOCOL_SVN, PROTOCOL_EXTERNALS_ONLY]
 
     # v1 xml keywords
     _V1_TREE_PATH = 'TREE_PATH'
@@ -518,7 +523,62 @@ class ModelDescription(dict):
         else:
             msg = 'Unknown model data format "{0}"'.format(model_format)
             fatal_error(msg)
+        self._check_optional()
         self._validate()
+        self._check_data()
+
+    def _check_data(self):
+        """Check user supplied data is valid where possible.
+        """
+        for field in self.keys():
+            if (self[field][self.REPO][self.PROTOCOL]
+                not in self.KNOWN_PRROTOCOLS):
+                msg = 'Unknown repository protocol "{0}" in "{1}".'.format(
+                    self[field][self.REPO][self.PROTOCOL], field)
+                fatal_error(msg)
+
+            if (self[field][self.REPO][self.PROTOCOL]
+                != self.PROTOCOL_EXTERNALS_ONLY):
+                if (self[field][self.REPO][self.TAG] and
+                    self[field][self.REPO][self.BRANCH]):
+                    msg = ('Model description is over specified! Can not '
+                           'have both "tag" and "branch" in repo '
+                           'description for "{0}"'.format())
+                    fatal_error(msg)
+
+                if (not self[field][self.REPO][self.TAG] and
+                    not self[field][self.REPO][self.BRANCH]):
+                    msg = ('Model description is under specified! Must have '
+                           'either "tag" or "branch" in repo '
+                           'description for "{0}"'.format(field))
+                    fatal_error(msg)
+
+                if not self[field][self.REPO][self.REPO_URL]:
+                    msg = ('Model description is under specified! Must have '
+                           'either "repo_url" in repo '
+                           'description for "{0}"'.format(field))
+                    fatal_error(msg)
+
+    def _check_optional(self):
+        """Some fields like externals, repo:tag repo:branch are
+        (conditionally) optional. We don't want the user to be
+        required to enter them in every model description file, but
+        still want to validate the input. Check conditions and add
+        default values if appropriate.
+
+        """
+        for field in self:
+            # truely optional
+            if self.EXTERNALS not in self[field]:
+                self[field][self.EXTERNALS] = EMPTY_STR
+
+            # git and svn repos must tags and branches for validation purposes.
+            if self.TAG not in self[field][self.REPO]:
+                self[field][self.REPO][self.TAG] = EMPTY_STR
+            if self.BRANCH not in self[field][self.REPO]:
+                self[field][self.REPO][self.BRANCH] = EMPTY_STR
+            if self.REPO_URL not in self[field][self.REPO]:
+                self[field][self.REPO][self.REPO_URL] = EMPTY_STR
 
     def _validate(self):
         """Validate that the parsed model description contains all necessary
@@ -576,7 +636,9 @@ class ModelDescription(dict):
 
         """
         def dict_convert_str(input_dict, convert_to_lower_case=True):
-            """Convert a dictionary to use unicode for all key-value pairs.
+            """Convert a dictionary to use unicode for all strings in key-value
+            pairs.
+
             """
             output_dict = {}
             for key in input_dict:
@@ -659,12 +721,12 @@ class ModelDescription(dict):
             if repo[self.TAG] is not None:
                 repo[self.TAG] = repo[self.TAG].text
             else:
-                repo[self.TAG] = EMPTY_STR
+                del repo[self.TAG]
             repo[self.BRANCH] = xml_repo.find(self._V1_BRANCH)
             if repo[self.BRANCH] is not None:
                 repo[self.BRANCH] = repo[self.BRANCH].text
             else:
-                repo[self.BRANCH] = EMPTY_STR
+                del repo[self.BRANCH]
             source[self.REPO] = repo
             name = src.get(self.NAME).lower()
             self[name] = source
@@ -686,22 +748,24 @@ class ModelDescription(dict):
             repo[self.REPO_URL] = xml_repo.find(self.REPO_URL)
             if repo[self.REPO_URL] is not None:
                 repo[self.REPO_URL] = repo[self.REPO_URL].text
+            else:
+                del repo[self.REPO_URL]
             repo[self.TAG] = xml_repo.find(self.TAG)
             if repo[self.TAG] is not None:
                 repo[self.TAG] = repo[self.TAG].text
             else:
-                repo[self.TAG] = EMPTY_STR
+                del repo[self.TAG]
             repo[self.BRANCH] = xml_repo.find(self.BRANCH)
             if repo[self.BRANCH] is not None:
                 repo[self.BRANCH] = repo[self.BRANCH].text
             else:
-                repo[self.BRANCH] = EMPTY_STR
+                del repo[self.BRANCH]
             source[self.REPO] = repo
             source[self.EXTERNALS] = src.find(self.EXTERNALS)
             if source[self.EXTERNALS] is not None:
                 source[self.EXTERNALS] = source[self.EXTERNALS].text
             else:
-                source[self.EXTERNALS] = EMPTY_STR
+                del source[self.EXTERNALS]
             required = src.get(self.REQUIRED).lower()
             source[self.REQUIRED] = self.str_to_bool(required)
             name = src.get(self.NAME).lower()

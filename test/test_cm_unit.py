@@ -18,6 +18,23 @@ import sys
 import unittest
 import xml.etree.ElementTree as ET
 
+try:
+    # python2
+    from ConfigParser import SafeConfigParser as config_parser
+    import ConfigParser
+    def config_string_cleaner(text):
+            return text.decode('utf-8')
+except ImportError:
+    # python3
+    from configparser import ConfigParser as config_parser
+    def config_string_cleaner(text):
+        return text
+
+try:
+    import yaml
+except ImportError:
+    yaml = None
+
 import checkout_model
 
 from checkout_model import ModelDescription, Status, EMPTY_STR
@@ -244,7 +261,7 @@ $req
         """
         self._comp1_name = 'comp1'
         self._comp1_path = 'path/to/comp1'
-        self._comp1_protocol = 'proto1'
+        self._comp1_protocol = 'svn'
         self._comp1_url = '/local/clone/of/comp1'
         self._comp1_tag = 'a_nice_tag_v1'
         self._comp1_is_required = True
@@ -262,7 +279,7 @@ $req
         """
         self._comp2_name = 'comp2'
         self._comp2_path = 'path/to/comp2'
-        self._comp2_protocol = 'proto2'
+        self._comp2_protocol = 'git'
         self._comp2_url = '/local/clone/of/comp2'
         self._comp2_branch = 'a_very_nice_branch'
         self._comp2_is_required = False
@@ -351,7 +368,7 @@ class TestModelDescritionXMLv2(unittest.TestCase):
 $source
 </config_sourcetree>""")
         self._xml_source = string.Template("""    <source name='$name' required='$required'>
-        <path>$path</path> $repo
+        <local_path>$path</local_path> $repo
         $externals
     </source>""")
 
@@ -377,7 +394,7 @@ $source
         """
         self._comp1_name = 'comp1'
         self._comp1_path = 'path/to/comp1'
-        self._comp1_protocol = 'proto1'
+        self._comp1_protocol = 'svn'
         self._comp1_url = '/local/clone/of/comp1'
         self._comp1_tag = 'a_nice_tag_v1'
         self._comp1_is_required = True
@@ -395,7 +412,7 @@ $source
         """
         self._comp2_name = 'comp2'
         self._comp2_path = 'path/to/comp2'
-        self._comp2_protocol = 'proto2'
+        self._comp2_protocol = 'git'
         self._comp2_url = '/local/clone/of/comp2'
         self._comp2_branch = 'a_very_nice_branch'
         self._comp2_is_required = False
@@ -472,7 +489,6 @@ $source
         self._check_comp1(model)
         self._check_comp2(model)
 
-    @unittest.skip("Haven't figured out how to make this fail yet.")
     def test_invalid(self):
         """Test that an invalid xml string raises a runtime exception.
         """
@@ -483,6 +499,238 @@ $source
         xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         with self.assertRaises(RuntimeError):
             ModelDescription('xml', xml_root)
+
+
+class TestModelDescritionConfig(unittest.TestCase):
+    """Test that parsing config/ini fileproduces a correct dictionary
+    for the model description.
+
+    """
+
+    def setUp(self):
+        """Boiler plate construction of string containing xml for multiple components.
+        """
+        pass
+
+    def _setup_comp1(self, config):
+        """Boiler plate construction of xml string for componet 1
+        """
+        self._comp1_name = 'comp1'
+        self._comp1_path = 'path/to/comp1'
+        self._comp1_protocol = 'svn'
+        self._comp1_url = 'https://svn.somewhere.com/path/of/comp1'
+        self._comp1_tag = 'a_nice_tag_v1'
+        self._comp1_branch = ''
+        self._comp1_is_required = 'True'
+        self._comp1_externals = ''
+
+        config.add_section(self._comp1_name)
+        config.set(self._comp1_name, 'local_path', self._comp1_path)
+        config.set(self._comp1_name, 'protocol', self._comp1_protocol)
+        config.set(self._comp1_name, 'repo_url', self._comp1_url)
+        config.set(self._comp1_name, 'tag', self._comp1_tag)
+        config.set(self._comp1_name, 'required', self._comp1_is_required)
+
+    def _setup_comp2(self, config):
+        """Boiler plate construction of xml string for componet 2
+        """
+        self._comp2_name = 'comp2'
+        self._comp2_path = 'path/to/comp2'
+        self._comp2_protocol = 'git'
+        self._comp2_url = '/local/clone/of/comp2'
+        self._comp2_tag = ''
+        self._comp2_branch = 'a_very_nice_branch'
+        self._comp2_is_required = 'False'
+        self._comp2_externals = 'path/to/comp2.cfg'
+
+        config.add_section(self._comp2_name)
+        config.set(self._comp2_name, 'local_path', self._comp2_path)
+        config.set(self._comp2_name, 'protocol', self._comp2_protocol)
+        config.set(self._comp2_name, 'repo_url', self._comp2_url)
+        config.set(self._comp2_name, 'branch', self._comp2_branch)
+        config.set(self._comp2_name, 'required', self._comp2_is_required)
+        config.set(self._comp2_name, 'externals', self._comp2_externals)
+
+    def _check_comp1(self, model):
+        """Test that component one was constructed correctly.
+        """
+        self.assertTrue(self._comp1_name in model)
+        comp1 = model[self._comp1_name]
+        self.assertEqual(comp1[ModelDescription.PATH], self._comp1_path)
+        self.assertTrue(comp1[ModelDescription.REQUIRED])
+        repo = comp1[ModelDescription.REPO]
+        self.assertEqual(repo[ModelDescription.PROTOCOL],
+                         self._comp1_protocol)
+        self.assertEqual(repo[ModelDescription.REPO_URL], self._comp1_url)
+        self.assertEqual(repo[ModelDescription.TAG], self._comp1_tag)
+        self.assertEqual(EMPTY_STR, comp1[ModelDescription.EXTERNALS])
+
+    def _check_comp2(self, model):
+        """Test that component two was constucted correctly.
+        """
+        self.assertTrue(self._comp2_name in model)
+        comp2 = model[self._comp2_name]
+        self.assertEqual(comp2[ModelDescription.PATH], self._comp2_path)
+        self.assertFalse(comp2[ModelDescription.REQUIRED])
+        repo = comp2[ModelDescription.REPO]
+        self.assertEqual(repo[ModelDescription.PROTOCOL],
+                         self._comp2_protocol)
+        self.assertEqual(repo[ModelDescription.REPO_URL], self._comp2_url)
+        self.assertEqual(repo[ModelDescription.BRANCH], self._comp2_branch)
+        self.assertEqual(self._comp2_externals,
+                         comp2[ModelDescription.EXTERNALS])
+
+    def test_one_tag_required(self):
+        """Test that a component source with a tag is correctly parsed.
+        """
+        config = config_parser()
+        self._setup_comp1(config)
+        model = ModelDescription('cfg', config)
+        print(model)
+        self._check_comp1(model)
+
+    def test_one_branch_externals(self):
+        """Test that a component source with a branch is correctly parsed.
+        """
+        config = config_parser()
+        self._setup_comp2(config)
+        model = ModelDescription('cfg', config)
+        print(model)
+        self._check_comp2(model)
+
+    def test_two_sources(self):
+        """Test that multiple component sources are correctly parsed.
+        """
+        config = config_parser()
+        self._setup_comp1(config)
+        self._setup_comp2(config)
+        model = ModelDescription('cfg', config)
+        print(model)
+        self._check_comp1(model)
+        self._check_comp2(model)
+
+
+class TestModelDescritionYAML(unittest.TestCase):
+    """Test that parsing yaml file produces a correct dictionary
+    for the model description.
+
+    """
+
+    def setUp(self):
+        """Boiler plate construction of string containing xml for multiple components.
+        """
+        self._yaml_template_tag = string.Template('''
+$name:
+    required: $required
+    local_path: $path
+    repo:
+        protocol: $protocol
+        repo_url: $url
+        tag: $tag
+        ''')
+
+        self._yaml_template_branch = string.Template('''
+$name:
+    required: $required
+    local_path: $path
+    repo:
+        protocol: $protocol
+        repo_url: $url
+        branch: $branch
+    externals: $externals
+        ''')
+        self._setup_comp1()
+        self._setup_comp2()
+
+    def _setup_comp1(self):
+        """Boiler plate construction of xml string for componet 1
+        """
+        self._comp1_name = 'comp1'
+        self._comp1_path = 'path/to/comp1'
+        self._comp1_protocol = 'svn'
+        self._comp1_url = 'https://svn.somewhere.com/path/of/comp1'
+        self._comp1_tag = 'a_nice_tag_v1'
+        self._comp1_branch = ''
+        self._comp1_is_required = 'True'
+        self._comp1_externals = ''
+
+        self._comp1_str = self._yaml_template_tag.substitute(
+            name=self._comp1_name, path=self._comp1_path,
+            protocol=self._comp1_protocol, url=self._comp1_url,
+            tag=self._comp1_tag, required=self._comp1_is_required)
+
+    def _setup_comp2(self):
+        """Boiler plate construction of xml string for componet 2
+        """
+        self._comp2_name = 'comp2'
+        self._comp2_path = 'path/to/comp2'
+        self._comp2_protocol = 'git'
+        self._comp2_url = '/local/clone/of/comp2'
+        self._comp2_tag = ''
+        self._comp2_branch = 'a_very_nice_branch'
+        self._comp2_is_required = 'False'
+        self._comp2_externals = 'path/to/comp2.cfg'
+
+        self._comp2_str = self._yaml_template_branch.substitute(
+            name=self._comp2_name, path=self._comp2_path,
+            protocol=self._comp2_protocol, url=self._comp2_url,
+            branch=self._comp2_branch, externals=self._comp2_externals,
+            required=self._comp2_is_required)
+
+    def _check_comp1(self, model):
+        """Test that component one was constructed correctly.
+        """
+        self.assertTrue(self._comp1_name in model)
+        comp1 = model[self._comp1_name]
+        self.assertEqual(comp1[ModelDescription.PATH], self._comp1_path)
+        self.assertTrue(comp1[ModelDescription.REQUIRED])
+        repo = comp1[ModelDescription.REPO]
+        self.assertEqual(repo[ModelDescription.PROTOCOL],
+                         self._comp1_protocol)
+        self.assertEqual(repo[ModelDescription.REPO_URL], self._comp1_url)
+        self.assertEqual(repo[ModelDescription.TAG], self._comp1_tag)
+        self.assertEqual(EMPTY_STR, comp1[ModelDescription.EXTERNALS])
+
+    def _check_comp2(self, model):
+        """Test that component two was constucted correctly.
+        """
+        self.assertTrue(self._comp2_name in model)
+        comp2 = model[self._comp2_name]
+        self.assertEqual(comp2[ModelDescription.PATH], self._comp2_path)
+        self.assertFalse(comp2[ModelDescription.REQUIRED])
+        repo = comp2[ModelDescription.REPO]
+        self.assertEqual(repo[ModelDescription.PROTOCOL],
+                         self._comp2_protocol)
+        self.assertEqual(repo[ModelDescription.REPO_URL], self._comp2_url)
+        self.assertEqual(repo[ModelDescription.BRANCH], self._comp2_branch)
+        self.assertEqual(self._comp2_externals,
+                         comp2[ModelDescription.EXTERNALS])
+
+    def test_one_tag_required(self):
+        """Test that a component source with a tag is correctly parsed.
+        """
+        model_description = yaml.safe_load(self._comp1_str)
+        model = ModelDescription('yaml', model_description)
+        print(model)
+        self._check_comp1(model)
+
+    def test_one_branch_externals(self):
+        """Test that a component source with a branch is correctly parsed.
+        """
+        model_description = yaml.safe_load(self._comp2_str)
+        model = ModelDescription('yaml', model_description)
+        print(model)
+        self._check_comp2(model)
+
+    def test_two_sources(self):
+        """Test that multiple component sources are correctly parsed.
+        """
+        model_str = "{0}\n{1}".format(self._comp2_str, self._comp1_str)
+        model_description = yaml.safe_load(model_str)
+        model = ModelDescription('yaml', model_description)
+        print(model)
+        self._check_comp1(model)
+        self._check_comp2(model)
 
 
 SVN_INFO_MOSART = """Path: components/mosart
