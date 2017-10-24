@@ -228,7 +228,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
     parser.add_argument('-s', '--status', action='store_true', default=False,
                         help='Output status of the repositories managed by '
-                        'checkout_model. By default only summary information '
+                        '%(prog)s. By default only summary information '
                         'is provided. Use verbose output to see details.')
 
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
@@ -1635,10 +1635,10 @@ class _Source(object):
             stat.source_type = Status.OPTIONAL
         elif self._path == '.':
             # '.' paths are standalone component directories that are
-            # not managed by checkout_model.
+            # not managed by checkout_externals.
             stat.source_type = Status.STANDALONE
         else:
-            # managed by checkout_model
+            # managed by checkout_externals
             stat.source_type = Status.MANAGED
         ext_stats = {}
         # Make sure we are in correct location
@@ -1844,11 +1844,11 @@ def _main(args):
     Parse model file and load required repositories or all repositories if
     the --all option is passed.
     """
-    logging.basicConfig(filename='checkout_model.log',
+    logging.basicConfig(filename='checkout_externals.log',
                         format='%(levelname)s : %(asctime)s : %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.DEBUG)
-    logging.info('Begining of checkout_model')
+    logging.info('Begining of checkout_externals')
 
     load_all = False
     if args.optional:
@@ -1890,7 +1890,7 @@ def _main(args):
             source_tree.checkout(load_all)
             printlog('')
 
-    logging.info('checkout_model completed without exceptions.')
+    logging.info('checkout_externals completed without exceptions.')
     return 0
 
 

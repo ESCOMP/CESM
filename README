@@ -1,14 +1,15 @@
 -- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --
 
-usage: checkout_model.py [-h] [-m [MODEL]] [-o] [-s] [-v] [--backtrace] [-d]
+usage: checkout_externals.py [-h] [-m [MODEL]] [-o] [-s] [-v] [--backtrace]
+                             [-d]
 
-checkout_model.py manages checking out CESM externals from revision control
+checkout_externals.py manages checking out CESM externals from revision control
 based on a model description file. By default only the required
 components of the model are checkout out.
 
-NOTE: checkout_model.py *MUST* be run from the root of the source tree.
+NOTE: checkout_externals.py *MUST* be run from the root of the source tree.
 
-Running checkout_model.py without the '--status' option will always attempt to
+Running checkout_externals.py without the '--status' option will always attempt to
 synchronize the working copy with the model description.
 
 optional arguments:
@@ -19,8 +20,9 @@ optional arguments:
                         checked out. This flag will also checkout the optional
                         componets of the model.
   -s, --status          Output status of the repositories managed by
-                        checkout_model. By default only summary information is
-                        provided. Use verbose output to see details.
+                        checkout_externals.py. By default only summary
+                        information is provided. Use verbose output to see
+                        details.
   -v, --verbose         Output additional information to the screen and log
                         file.
   --backtrace           DEVELOPER: show exception backtraces as extra
@@ -28,7 +30,7 @@ optional arguments:
   -d, --debug           DEVELOPER: output additional debugging information to
                         the screen and log file.
 
-NOTE: checkout_model.py *MUST* be run from the root of the source tree it
+NOTE: checkout_externals.py *MUST* be run from the root of the source tree it
 is managing. For example, if you cloned CLM with:
 
     $ git clone git@github.com/ncar/clm clm-dev
@@ -47,13 +49,13 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
     description file:
 
       $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/checkout_model.py
+      $ ./checkout_cesm/checkout_externals.py
 
   * To update all required components to the current values in the
     model description file, re-run $(prog)s:
 
       $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/checkout_model.py
+      $ ./checkout_cesm/checkout_externals.py
 
     If there are *any* modifications to *any* working copy according
     to the git or svn 'status' command, $(prog)s will not update any
@@ -64,12 +66,12 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
     description file:
 
       $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/checkout_model.py --model myCESM.xml
+      $ ./checkout_cesm/checkout_externals.py --model myCESM.xml
 
-  * Status summary of the repositories managed by checkout_model.py:
+  * Status summary of the repositories managed by checkout_externals.py:
 
       $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/checkout_model.py --status
+      $ ./checkout_cesm/checkout_externals.py --status
 
       m   components/cism
        M  src/fates
@@ -86,7 +88,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
     Colunm one will be one of these values:
       * m : modified : repository is modefied compared to the model description
-      * e : empty : directory does not exist - checkout_model.py has not been run
+      * e : empty : directory does not exist - checkout_externals.py has not been run
       * ? : unknown : directory exists but .git or .svn directories are missing
 
     Colunm two will be one of these values:
@@ -98,10 +100,10 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
       * o : optional : optionally repository
       *   : blank / space : required repository
 
-  * Detailed git or svn status of the repositories managed by checkout_model.py:
+  * Detailed git or svn status of the repositories managed by checkout_externals.py:
 
       $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/checkout_model.py --status --verbose
+      $ ./checkout_cesm/checkout_externals.py --status --verbose
 
 # Model description file:
 
@@ -112,7 +114,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
   * required (boolean) : whether the component is a required checkout
 
-  * path (string) : component path *relative* to where checkout_model.py
+  * path (string) : component path *relative* to where checkout_externals.py
     is called.
 
   * protoctol (string) : version control protocol that is used to

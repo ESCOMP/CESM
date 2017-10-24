@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-"""Unit test driver for checkout_model
+"""Unit test driver for checkout_externals
 
-Note: this script assume the path to the checkout_model.py module is
+Note: this script assume the path to the checkout_externals.py module is
 already in the python path.
 
 """
@@ -35,9 +35,9 @@ try:
 except ImportError:
     yaml = None
 
-import checkout_model
+import checkout_externals
 
-from checkout_model import ModelDescription, Status, EMPTY_STR
+from checkout_externals import ModelDescription, Status, EMPTY_STR
 
 # in python2, xml.etree.ElementTree returns byte strings, str, instead
 # of unicode. We need unicode to be compatible with cfg and json
@@ -77,8 +77,8 @@ class TestCreateRepositoryDict(unittest.TestCase):
         protocols = ['git', 'GIT', 'Git', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
-            repo = checkout_model.create_repository(self._name, self._repo)
-            self.assertIsInstance(repo, checkout_model.GitRepository)
+            repo = checkout_externals.create_repository(self._name, self._repo)
+            self.assertIsInstance(repo, checkout_externals.GitRepository)
 
     def test_create_repo_svn(self):
         """Verify that several possible names for the 'svn' protocol
@@ -87,8 +87,8 @@ class TestCreateRepositoryDict(unittest.TestCase):
         protocols = ['svn', 'SVN', 'Svn', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
-            repo = checkout_model.create_repository(self._name, self._repo)
-            self.assertIsInstance(repo, checkout_model.SvnRepository)
+            repo = checkout_externals.create_repository(self._name, self._repo)
+            self.assertIsInstance(repo, checkout_externals.SvnRepository)
 
     def test_create_repo_externals_only(self):
         """Verify that an externals only repo returns None.
@@ -96,7 +96,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
         protocols = ['externals_only', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
-            repo = checkout_model.create_repository(self._name, self._repo)
+            repo = checkout_externals.create_repository(self._name, self._repo)
             self.assertEqual(None, repo)
 
     def test_create_repo_unsupported(self):
@@ -106,7 +106,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
             with self.assertRaises(RuntimeError):
-                checkout_model.create_repository(self._name, self._repo)
+                checkout_externals.create_repository(self._name, self._repo)
 
 
 class TestRepository(unittest.TestCase):
@@ -126,7 +126,7 @@ class TestRepository(unittest.TestCase):
                      ModelDescription.REPO_URL: url,
                      ModelDescription.TAG: tag,
                      ModelDescription.BRANCH: EMPTY_STR, }
-        repo = checkout_model.Repository(name, repo_info)
+        repo = checkout_externals.Repository(name, repo_info)
         print(repo.__dict__)
         self.assertEqual(repo.tag(), tag)
         self.assertEqual(repo.url(), url)
@@ -142,7 +142,7 @@ class TestRepository(unittest.TestCase):
                      ModelDescription.REPO_URL: url,
                      ModelDescription.BRANCH: branch,
                      ModelDescription.TAG: EMPTY_STR, }
-        repo = checkout_model.Repository(name, repo_info)
+        repo = checkout_externals.Repository(name, repo_info)
         print(repo.__dict__)
         self.assertEqual(repo.branch(), branch)
         self.assertEqual(repo.url(), url)
@@ -162,7 +162,7 @@ class TestRepository(unittest.TestCase):
                      ModelDescription.BRANCH: branch,
                      ModelDescription.TAG: tag, }
         with self.assertRaises(RuntimeError):
-            checkout_model.Repository(name, repo_info)
+            checkout_externals.Repository(name, repo_info)
 
     def test_no_tag_no_branch(self):
         """Test creation of a repository object without a tag or branch raises a
@@ -179,7 +179,7 @@ class TestRepository(unittest.TestCase):
                      ModelDescription.BRANCH: branch,
                      ModelDescription.TAG: tag, }
         with self.assertRaises(RuntimeError):
-            checkout_model.Repository(name, repo_info)
+            checkout_externals.Repository(name, repo_info)
 
 
 class TestXMLSchemaVersion(unittest.TestCase):
@@ -770,26 +770,26 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """Setup reusable svn repository object
         """
         self._name = 'component'
-        rdata = {checkout_model.ModelDescription.PROTOCOL: 'svn',
-                 checkout_model.ModelDescription.REPO_URL:
+        rdata = {checkout_externals.ModelDescription.PROTOCOL: 'svn',
+                 checkout_externals.ModelDescription.REPO_URL:
                      'https://svn-ccsm-models.cgd.ucar.edu/',
-                 checkout_model.ModelDescription.TAG:
+                 checkout_externals.ModelDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 checkout_model.ModelDescription.BRANCH: ''
+                 checkout_externals.ModelDescription.BRANCH: ''
                  }
 
         data = {self._name:
                 {
-                    checkout_model.ModelDescription.REQUIRED: False,
-                    checkout_model.ModelDescription.PATH: 'junk',
-                    checkout_model.ModelDescription.EXTERNALS: '',
-                    checkout_model.ModelDescription.REPO: rdata,
+                    checkout_externals.ModelDescription.REQUIRED: False,
+                    checkout_externals.ModelDescription.PATH: 'junk',
+                    checkout_externals.ModelDescription.EXTERNALS: '',
+                    checkout_externals.ModelDescription.REPO: rdata,
                 },
                 }
 
-        model = checkout_model.ModelDescription('json', data)
-        repo = model[self._name][checkout_model.ModelDescription.REPO]
-        self._repo = checkout_model.SvnRepository('test', repo)
+        model = checkout_externals.ModelDescription('json', data)
+        repo = model[self._name][checkout_externals.ModelDescription.REPO]
+        self._repo = checkout_externals.SvnRepository('test', repo)
 
     def test_check_url_same(self):
         """Test that we correctly identify that the correct URL.
@@ -828,26 +828,26 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         """Setup reusable svn repository object
         """
         self._name = "component"
-        rdata = {checkout_model.ModelDescription.PROTOCOL: 'svn',
-                 checkout_model.ModelDescription.REPO_URL:
+        rdata = {checkout_externals.ModelDescription.PROTOCOL: 'svn',
+                 checkout_externals.ModelDescription.REPO_URL:
                      'https://svn-ccsm-models.cgd.ucar.edu/',
-                 checkout_model.ModelDescription.TAG:
+                 checkout_externals.ModelDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 checkout_model.ModelDescription.BRANCH: EMPTY_STR
+                 checkout_externals.ModelDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
                 {
-                    checkout_model.ModelDescription.REQUIRED: False,
-                    checkout_model.ModelDescription.PATH: 'junk',
-                    checkout_model.ModelDescription.EXTERNALS: EMPTY_STR,
-                    checkout_model.ModelDescription.REPO: rdata,
+                    checkout_externals.ModelDescription.REQUIRED: False,
+                    checkout_externals.ModelDescription.PATH: 'junk',
+                    checkout_externals.ModelDescription.EXTERNALS: EMPTY_STR,
+                    checkout_externals.ModelDescription.REPO: rdata,
                 },
                 }
 
-        model = checkout_model.ModelDescription('json', data)
-        repo = model[self._name][checkout_model.ModelDescription.REPO]
-        self._repo = checkout_model.SvnRepository('test', repo)
+        model = checkout_externals.ModelDescription('json', data)
+        repo = model[self._name][checkout_externals.ModelDescription.REPO]
+        self._repo = checkout_externals.SvnRepository('test', repo)
 
     @staticmethod
     def _svn_info_empty(*_):
@@ -938,26 +938,26 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
 
     def setUp(self):
         self._name = 'component'
-        rdata = {checkout_model.ModelDescription.PROTOCOL: 'git',
-                 checkout_model.ModelDescription.REPO_URL:
+        rdata = {checkout_externals.ModelDescription.PROTOCOL: 'git',
+                 checkout_externals.ModelDescription.REPO_URL:
                  'git@git.github.com:ncar/rtm',
-                 checkout_model.ModelDescription.TAG:
+                 checkout_externals.ModelDescription.TAG:
                  'rtm1_0_26',
-                 checkout_model.ModelDescription.BRANCH: EMPTY_STR
+                 checkout_externals.ModelDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
                 {
-                    checkout_model.ModelDescription.REQUIRED: False,
-                    checkout_model.ModelDescription.PATH: 'junk',
-                    checkout_model.ModelDescription.EXTERNALS: EMPTY_STR,
-                    checkout_model.ModelDescription.REPO: rdata,
+                    checkout_externals.ModelDescription.REQUIRED: False,
+                    checkout_externals.ModelDescription.PATH: 'junk',
+                    checkout_externals.ModelDescription.EXTERNALS: EMPTY_STR,
+                    checkout_externals.ModelDescription.REPO: rdata,
                 },
                 }
 
-        model = checkout_model.ModelDescription('json', data)
-        repo = model[self._name][checkout_model.ModelDescription.REPO]
-        self._repo = checkout_model.GitRepository('test', repo)
+        model = checkout_externals.ModelDescription('json', data)
+        repo = model[self._name][checkout_externals.ModelDescription.REPO]
+        self._repo = checkout_externals.GitRepository('test', repo)
 
     def test_ref_detached_from_tag(self):
         """Test that we correctly identify that the ref is detached from a tag
@@ -1011,26 +1011,26 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         """Setup reusable git repository object
         """
         self._name = 'component'
-        rdata = {checkout_model.ModelDescription.PROTOCOL: 'git',
-                 checkout_model.ModelDescription.REPO_URL:
+        rdata = {checkout_externals.ModelDescription.PROTOCOL: 'git',
+                 checkout_externals.ModelDescription.REPO_URL:
                  'git@git.github.com:ncar/rtm',
-                 checkout_model.ModelDescription.TAG:
+                 checkout_externals.ModelDescription.TAG:
                  'rtm1_0_26',
-                 checkout_model.ModelDescription.BRANCH: EMPTY_STR
+                 checkout_externals.ModelDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
                 {
-                    checkout_model.ModelDescription.REQUIRED: False,
-                    checkout_model.ModelDescription.PATH: 'fake',
-                    checkout_model.ModelDescription.EXTERNALS: '',
-                    checkout_model.ModelDescription.REPO: rdata,
+                    checkout_externals.ModelDescription.REQUIRED: False,
+                    checkout_externals.ModelDescription.PATH: 'fake',
+                    checkout_externals.ModelDescription.EXTERNALS: '',
+                    checkout_externals.ModelDescription.REPO: rdata,
                 },
                 }
 
-        model = checkout_model.ModelDescription('json', data)
-        repo = model[self._name][checkout_model.ModelDescription.REPO]
-        self._repo = checkout_model.GitRepository('test', repo)
+        model = checkout_externals.ModelDescription('json', data)
+        repo = model[self._name][checkout_externals.ModelDescription.REPO]
+        self._repo = checkout_externals.GitRepository('test', repo)
         self.create_tmp_git_dir()
 
     def tearDown(self):
@@ -1343,7 +1343,7 @@ class TestSVNStatusXML(unittest.TestCase):
 
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_MISSING
-        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_modified(self):
@@ -1351,7 +1351,7 @@ class TestSVNStatusXML(unittest.TestCase):
         modified file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_MODIFIED
-        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_deleted(self):
@@ -1359,7 +1359,7 @@ class TestSVNStatusXML(unittest.TestCase):
         deleted file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_DELETED
-        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_unversion(self):
@@ -1367,7 +1367,7 @@ class TestSVNStatusXML(unittest.TestCase):
         unversioned file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_UNVERSION
-        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_added(self):
@@ -1375,7 +1375,7 @@ class TestSVNStatusXML(unittest.TestCase):
         added file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_ADDED
-        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_all(self):
@@ -1384,7 +1384,7 @@ class TestSVNStatusXML(unittest.TestCase):
 
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_ALL
-        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_clean(self):
@@ -1393,7 +1393,7 @@ class TestSVNStatusXML(unittest.TestCase):
 
         """
         svn_output = self.SVN_STATUS_XML_CLEAN
-        is_dirty = checkout_model.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
         self.assertFalse(is_dirty)
 
 
@@ -1413,7 +1413,7 @@ class TestGitStatusPorcelain(unittest.TestCase):
 
         """
         git_output = self.GIT_STATUS_PORCELAIN_V1_ALL
-        is_dirty = checkout_model.GitRepository.git_status_v1z_is_dirty(
+        is_dirty = checkout_externals.GitRepository.git_status_v1z_is_dirty(
             git_output)
         self.assertTrue(is_dirty)
 
@@ -1423,7 +1423,7 @@ class TestGitStatusPorcelain(unittest.TestCase):
 
         """
         git_output = self.GIT_STATUS_PORCELAIN_CLEAN
-        is_dirty = checkout_model.GitRepository.git_status_v1z_is_dirty(
+        is_dirty = checkout_externals.GitRepository.git_status_v1z_is_dirty(
             git_output)
         self.assertFalse(is_dirty)
 

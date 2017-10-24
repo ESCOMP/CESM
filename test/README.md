@@ -1,10 +1,10 @@
-# Testing for checkout_model
+# Testing for checkout_externals
 
 ## Unit tests
 
 ```SH
-    cd checkout_cesm
-    make -f .test/Makefile utest
+    cd checkout_cesm/test
+    make utest
 ```
 
 ## System tests

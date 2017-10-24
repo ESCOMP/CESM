@@ -11,25 +11,27 @@ PYLINT_ARGS=-j 2 --py3k --rcfile=../.pylint.rc
 PYLINT_3K_ARGS=--py3k
 
 SRC = \
-	../checkout_model.py
+	../checkout_externals.py
+
+EXE = ../checkout_externals.py
 
 TEST_DIR = .
 
 utest : FORCE
-	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_cm_unit*.py'
+	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_ce_unit*.py'
 
 
 utest3 : FORCE
-	$(PYPATH) $(PYTHON3) -m unittest discover --buffer --pattern 'test_cm_unit*.py'
+	$(PYPATH) $(PYTHON3) -m unittest discover --buffer --pattern 'test_ce_unit*.py'
 
 stest : FORCE
-	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_cm_sys*.py'
+	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_ce_sys*.py'
 
 test : utest
 
 readme : FORCE
 	echo '-- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --\n' > ../README
-	../checkout_model.py --help >> ../README
+	$(EXE) --help >> ../README
 
 style : FORCE
 	$(AUTOPEP8) $(AUTOPEP8_ARGS) --recursive $(SRC) $(TEST_DIR)
