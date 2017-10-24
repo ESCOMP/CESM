@@ -1879,10 +1879,15 @@ def _main(args):
         # checkout / update the model repositories.
         safe_to_update = check_safe_to_update_repos(tree_status, args.debug)
         if not safe_to_update:
+            # print status
+            for comp in tree_status:
+                msg = str(tree_status[comp])
+                printlog(msg)
+            # exit gracefully
             msg = textwrap.fill(
                 'Model contains repositories that are not in a clean '
-                'state. Please run with the --status flag and ensure all '
-                'repositories are clean before updating.')
+                'state. Please all external repositories are clean '
+                'before updating.')
             printlog('-' * 70)
             printlog(msg)
             printlog('-' * 70)
