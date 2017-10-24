@@ -8,17 +8,32 @@ already in the python path.
 """
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
 from __future__ import print_function
 
-import string
 import os
 import shutil
+import string
+import sys
 import unittest
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 import checkout_model
 
 from checkout_model import ModelDescription, Status, EMPTY_STR
+
+# in python2, xml.etree.ElementTree returns byte strings, str, instead
+# of unicode. We need unicode to be compatible with cfg and json
+# parser and python3.
+if sys.version_info[0] >= 3:
+    def UnicodeXMLTreeBuilder():
+        return None
+else:
+    class UnicodeXMLTreeBuilder(ET.XMLTreeBuilder):
+        # See this thread:
+        # http://www.gossamer-threads.com/lists/python/python/728903
+        def _fixtext(self, text):
+            return text
 
 
 class TestCreateRepositoryDict(unittest.TestCase):
@@ -48,7 +63,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
             repo = checkout_model.create_repository(self._name, self._repo)
             self.assertIsInstance(repo, checkout_model.GitRepository)
 
-    def test_create_repo_svn(self):
+    def test_create_repo_svn(self):b
         """Verify that several possible names for the 'svn' protocol
         create svn repository objects.
         """
@@ -78,8 +93,8 @@ class TestCreateRepositoryDict(unittest.TestCase):
 
 
 class TestRepository(unittest.TestCase):
-    """Test the xml processing used to create the Repository base class
-    shared by protocol specific repository classes.
+    """Test the model description processing used to create the Repository
+    base class shared by protocol specific repository classes.
 
     """
 
@@ -172,7 +187,7 @@ correct results.
         """
         version_str = '2.1.3'
         xml_str = self._xml_sourcetree.substitute(version=version_str)
-        xml_root = etree.fromstring(xml_str)
+        xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         received = ModelDescription.get_xml_schema_version(
             xml_root)
         expected_version = version_str.split('.')
@@ -184,7 +199,7 @@ correct results.
 
         """
         xml_str = '<config_sourcetree >comp1</config_sourcetree>'
-        xml_root = etree.fromstring(xml_str)
+        xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         with self.assertRaises(RuntimeError):
             ModelDescription.get_xml_schema_version(xml_root)
 
@@ -293,7 +308,7 @@ $req
         xml_str = self._xml_sourcetree.substitute(
             source=self._comp1_source, required=self._comp1_required)
         print(xml_str)
-        xml_root = etree.fromstring(xml_str)
+        xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp1(model)
@@ -303,7 +318,7 @@ $req
         """
         xml_str = self._xml_sourcetree.substitute(
             source=self._comp2_source, required=self._comp2_required)
-        xml_root = etree.fromstring(xml_str)
+        xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp2(model)
@@ -316,7 +331,7 @@ $req
         xml_str = self._xml_sourcetree.substitute(source=src_str,
                                                   required=req_str)
         print(xml_str)
-        xml_root = etree.fromstring(xml_str)
+        xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp1(model)
@@ -431,7 +446,7 @@ $source
         """
         xml_str = self._xml_sourcetree.substitute(source=self._comp1_source)
         print(xml_str)
-        xml_root = etree.fromstring(xml_str)
+        xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp1(model)
@@ -440,7 +455,7 @@ $source
         """Test that a component source with a branch is correctly parsed.
         """
         xml_str = self._xml_sourcetree.substitute(source=self._comp2_source)
-        xml_root = etree.fromstring(xml_str)
+        xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp2(model)
@@ -451,7 +466,7 @@ $source
         src_str = "{0}\n{1}".format(self._comp1_source, self._comp2_source)
         xml_str = self._xml_sourcetree.substitute(source=src_str)
         print(xml_str)
-        xml_root = etree.fromstring(xml_str)
+        xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         model = ModelDescription('xml', xml_root)
         print(model)
         self._check_comp1(model)
@@ -465,7 +480,7 @@ $source
 <repo protocol='git'><url>/path</url></repo>
 </source>"""
         print(xml_str)
-        xml_root = etree.fromstring(xml_str)
+        xml_root = ET.XML(xml_str, parser=UnicodeXMLTreeBuilder())
         with self.assertRaises(RuntimeError):
             ModelDescription('xml', xml_root)
 

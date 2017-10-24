@@ -7,6 +7,7 @@ If loaded as a module (e.g., in a component's buildcpp), it can be used
 to check the validity of existing subdirectories and load missing sources.
 """
 from __future__ import absolute_import
+from __future__ import unicode_literals
 from __future__ import print_function
 
 import argparse
@@ -30,6 +31,19 @@ try:
 except ImportError:
     # python3
     from configparser import ConfigParser as config_parser
+
+# in python2, xml.etree.ElementTree returns byte strings, str, instead
+# of unicode. We need unicode to be compatible with cfg and json
+# parser and python3.
+if sys.version_info[0] >= 3:
+    def UnicodeXMLTreeBuilder():
+        return None
+else:
+    class UnicodeXMLTreeBuilder(ET.XMLTreeBuilder):
+        # See this thread:
+        # http://www.gossamer-threads.com/lists/python/python/728903
+        def _fixtext(self, text):
+            return text
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
@@ -393,7 +407,7 @@ def read_model_description_file(root_dir, file_name):
     model_format = None
     with open(file_path, 'r') as filehandle:
         try:
-            xml_tree = ET.parse(filehandle)
+            xml_tree = ET.parse(filehandle, parser=UnicodeXMLTreeBuilder())
             model_description = xml_tree.getroot()
             model_format = 'xml'
         except ET.ParseError:
@@ -531,20 +545,6 @@ class ModelDescription(dict):
     def _parse_cfg(self, cfg_data):
         """Parse a config_parser object into a model description.
         """
-        def str_to_bool(bool_str):
-            """Convert a sting representation of as boolean into a true boolean.
-            """
-            value = None
-            if bool_str == 'true'.lower():
-                value = True
-            elif bool_str == 'false'.lower():
-                value = False
-            if value is None:
-                msg = ('ERROR: invalid boolean string value "{0}". '
-                       'Must be "true" or "false"'.format(bool_str))
-                fatal_error(msg)
-            return value
-
         def list_to_dict(input_list, convert_to_lower_case=True):
             """Convert a list of key-value pairs into a dictionary.
             """
@@ -552,6 +552,7 @@ class ModelDescription(dict):
             for item in input_list:
                 key = item[0].strip()
                 value = item[1].strip()
+                value = value
                 if convert_to_lower_case:
                     key = key.lower()
                 output_dict[key] = value
@@ -565,7 +566,7 @@ class ModelDescription(dict):
             for item in self[name].keys():
                 if item in self._source_schema:
                     if isinstance(self._source_schema[item], bool):
-                        self[name][item] = str_to_bool(self[name][item])
+                        self[name][item] = self.str_to_bool(self[name][item])
                 if item in self._source_schema[self.REPO]:
                     self[name][self.REPO][item] = self[name][item]
                     del self[name][item]
@@ -645,16 +646,25 @@ class ModelDescription(dict):
             else:
                 source[self.EXTERNALS] = EMPTY_STR
             required = src.get(self.REQUIRED).lower()
-            if required == 'false':
-                source[self.REQUIRED] = False
-            elif required == 'true':
-                source[self.REQUIRED] = True
-            else:
-                msg = 'ERROR: unknown value for attribute "required" = "{0}" '.format(
-                    required)
-                fatal_error(msg)
+            source[self.REQUIRED] = self.str_to_bool(required)
             name = src.get(self.NAME).lower()
             self[name] = source
+
+    @staticmethod
+    def str_to_bool(bool_str):
+        """Convert a sting representation of as boolean into a true boolean.
+        """
+        value = None
+        if bool_str.lower() == 'true':
+            value = True
+        elif bool_str.lower() == 'false':
+            value = False
+        if value is None:
+            msg = ('ERROR: invalid boolean string value "{0}". '
+                   'Must be "true" or "false"'.format(bool_str))
+            fatal_error(msg)
+        return value
+
 
     @staticmethod
     def _get_xml_config_sourcetree(xml_root):
