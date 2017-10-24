@@ -45,6 +45,16 @@ else:
         def _fixtext(self, text):
             return text
 
+# in python2, ConfigParser returns byte strings, str, instead
+# of unicode. We need unicode to be compatible with xml and json
+# parser and python3.
+if sys.version_info[0] >= 3:
+    def config_string_cleaner(text):
+        return text
+else:
+    def config_string_cleaner(text):
+            return text.decode('utf-8')
+
 if sys.hexversion < 0x02070000:
     print(70 * '*')
     print('ERROR: {0} requires python >= 2.7.x. '.format(sys.argv[0]))
@@ -550,8 +560,8 @@ class ModelDescription(dict):
             """
             output_dict = {}
             for item in input_list:
-                key = item[0].strip()
-                value = item[1].strip()
+                key = config_string_cleaner(item[0].strip())
+                value = config_string_cleaner(item[1].strip())
                 value = value
                 if convert_to_lower_case:
                     key = key.lower()
@@ -559,7 +569,7 @@ class ModelDescription(dict):
             return output_dict
 
         for section in cfg_data.sections():
-            name = section.lower().strip()
+            name = config_string_cleaner(section.lower().strip())
             self[name] = {}
             self[name].update(list_to_dict(cfg_data.items(section)))
             self[name][self.REPO] = {}
