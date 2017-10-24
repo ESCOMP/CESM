@@ -43,4 +43,11 @@ py3 :
 clean : FORCE
 	-rm -rf *~ test/*~
 
+env2 : FORCE
+	virtualenv --python $(PYTHON) $@
+
+develop : FORCE
+	. env2/bin/activate; pip install pyaml>=17.10.0
+	. env2/bin/activate; pip install pylint>=1.7.0
+
 FORCE : 

@@ -24,13 +24,20 @@ import textwrap
 import traceback
 import xml.etree.ElementTree as ET
 
+# ConfigParser was renamed in python2 to configparser. In python2,
+# ConfigParser returns byte strings, str, instead of unicode. We need
+# unicode to be compatible with xml and json parser and python3.
 try:
     # python2
     from ConfigParser import SafeConfigParser as config_parser
     import ConfigParser
+    def config_string_cleaner(text):
+            return text.decode('utf-8')
 except ImportError:
     # python3
     from configparser import ConfigParser as config_parser
+    def config_string_cleaner(text):
+        return text
 
 # in python2, xml.etree.ElementTree returns byte strings, str, instead
 # of unicode. We need unicode to be compatible with cfg and json
@@ -45,15 +52,10 @@ else:
         def _fixtext(self, text):
             return text
 
-# in python2, ConfigParser returns byte strings, str, instead
-# of unicode. We need unicode to be compatible with xml and json
-# parser and python3.
-if sys.version_info[0] >= 3:
-    def config_string_cleaner(text):
-        return text
-else:
-    def config_string_cleaner(text):
-            return text.decode('utf-8')
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
@@ -446,6 +448,19 @@ def read_model_description_file(root_dir, file_name):
             pass
 
     if model_description is None:
+        # NOTE(bja, 2017-10) json is a subset of yaml, so valid json
+        # file should be readable by yaml. Need to try json first.
+        if yaml:
+            with file(file_path, 'r') as filehandle:
+                try:
+                    model_description = yaml.safe_load(filehandle)
+                    model_format = 'yaml'
+                except yaml.YAMLError as e:
+                    print(e)
+        else:
+            print('YAML not available - skipping.')
+
+    if model_description is None:
         msg = 'Unknown file format!'
         fatal_error(msg)
 
@@ -498,6 +513,8 @@ class ModelDescription(dict):
             self._parse_cfg(model_data)
         elif model_format == 'json':
             self._parse_json(model_data)
+        elif model_format == 'yaml':
+            self._parse_yaml(model_data)
         else:
             msg = 'Unknown model data format "{0}"'.format(model_format)
             fatal_error(msg)
@@ -552,6 +569,37 @@ class ModelDescription(dict):
         """
         self.update(json_data)
 
+    def _parse_yaml(self, yaml_data):
+        """Parse a yaml object, a native dictionary into a model
+        description. Note: yaml seems to only load python binary
+        strings, and we expect unicode for compatibility.
+
+        """
+        def dict_convert_str(input_dict, convert_to_lower_case=True):
+            """Convert a dictionary to use unicode for all key-value pairs.
+            """
+            output_dict = {}
+            for key in input_dict:
+                ukey = key.strip().decode('utf-8')
+                if convert_to_lower_case:
+                    ukey = ukey.lower()
+                value = input_dict[key]
+                if isinstance(value, dict):
+                    value = dict_convert_str(value)
+                elif isinstance(value, str):
+                    value = input_dict[key].strip().decode('utf-8')
+                elif isinstance(value, bool):
+                    pass
+                else:
+                    msg = ('Unexpected data type for "{0}" : '
+                           '{1} ({2})'.format(key, value, type(value)))
+                    fatal_error(msg)
+                output_dict[ukey] = value
+            return output_dict
+
+        udict = dict_convert_str(yaml_data)
+        self.update(udict)
+
     def _parse_cfg(self, cfg_data):
         """Parse a config_parser object into a model description.
         """
@@ -562,7 +610,6 @@ class ModelDescription(dict):
             for item in input_list:
                 key = config_string_cleaner(item[0].strip())
                 value = config_string_cleaner(item[1].strip())
-                value = value
                 if convert_to_lower_case:
                     key = key.lower()
                 output_dict[key] = value
