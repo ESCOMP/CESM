@@ -31,11 +31,13 @@ try:
     # python2
     from ConfigParser import SafeConfigParser as config_parser
     import ConfigParser
+
     def config_string_cleaner(text):
-            return text.decode('utf-8')
+        return text.decode('utf-8')
 except ImportError:
     # python3
     from configparser import ConfigParser as config_parser
+
     def config_string_cleaner(text):
         return text
 
@@ -283,11 +285,11 @@ def check_output(commands):
     except ValueError as error:
         printlog('ValueError in "{0}": {1}'.format(
             (' '.join(commands)), error), file=sys.stderr)
-        outstr = None
+        output = None
     except subprocess.CalledProcessError as error:
         printlog('CalledProcessError in "{0}": {1}'.format(
             (' '.join(commands)), error), file=sys.stderr)
-        outstr = None
+        output = None
 
     return output
 
@@ -451,14 +453,14 @@ def read_model_description_file(root_dir, file_name):
         # NOTE(bja, 2017-10) json is a subset of yaml, so valid json
         # file should be readable by yaml. Need to try json first.
         if yaml:
-            with file(file_path, 'r') as filehandle:
+            with open(file_path, 'r') as filehandle:
                 try:
                     model_description = yaml.safe_load(filehandle)
                     model_format = 'yaml'
-                except yaml.YAMLError as e:
-                    print(e)
+                except yaml.YAMLError as error:
+                    print(error)
         else:
-            print('YAML not available - skipping.')
+            print('YAML not available - can not load YAML file!')
 
     if model_description is None:
         msg = 'Unknown file format!'
@@ -532,22 +534,22 @@ class ModelDescription(dict):
         """
         for field in self.keys():
             if (self[field][self.REPO][self.PROTOCOL]
-                not in self.KNOWN_PRROTOCOLS):
+                    not in self.KNOWN_PRROTOCOLS):
                 msg = 'Unknown repository protocol "{0}" in "{1}".'.format(
                     self[field][self.REPO][self.PROTOCOL], field)
                 fatal_error(msg)
 
             if (self[field][self.REPO][self.PROTOCOL]
-                != self.PROTOCOL_EXTERNALS_ONLY):
+                    != self.PROTOCOL_EXTERNALS_ONLY):
                 if (self[field][self.REPO][self.TAG] and
-                    self[field][self.REPO][self.BRANCH]):
+                        self[field][self.REPO][self.BRANCH]):
                     msg = ('Model description is over specified! Can not '
                            'have both "tag" and "branch" in repo '
-                           'description for "{0}"'.format())
+                           'description for "{0}"'.format(field))
                     fatal_error(msg)
 
                 if (not self[field][self.REPO][self.TAG] and
-                    not self[field][self.REPO][self.BRANCH]):
+                        not self[field][self.REPO][self.BRANCH]):
                     msg = ('Model description is under specified! Must have '
                            'either "tag" or "branch" in repo '
                            'description for "{0}"'.format(field))
@@ -785,7 +787,6 @@ class ModelDescription(dict):
                    'Must be "true" or "false"'.format(bool_str))
             fatal_error(msg)
         return value
-
 
     @staticmethod
     def _get_xml_config_sourcetree(xml_root):

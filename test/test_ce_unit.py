@@ -21,12 +21,13 @@ import xml.etree.ElementTree as ET
 try:
     # python2
     from ConfigParser import SafeConfigParser as config_parser
-    import ConfigParser
+
     def config_string_cleaner(text):
-            return text.decode('utf-8')
+        return text.decode('utf-8')
 except ImportError:
     # python3
     from configparser import ConfigParser as config_parser
+
     def config_string_cleaner(text):
         return text
 
@@ -43,8 +44,10 @@ from checkout_externals import ModelDescription, Status, EMPTY_STR
 # of unicode. We need unicode to be compatible with cfg and json
 # parser and python3.
 if sys.version_info[0] >= 3:
+    # pylint: disable=invalid-name
     def UnicodeXMLTreeBuilder():
         return None
+    # pylint: enable=invalid-name
 else:
     class UnicodeXMLTreeBuilder(ET.XMLTreeBuilder):
         # See this thread:
@@ -510,11 +513,6 @@ class TestModelDescritionConfig(unittest.TestCase):
     def setUp(self):
         """Boiler plate construction of string containing xml for multiple components.
         """
-        pass
-
-    def _setup_comp1(self, config):
-        """Boiler plate construction of xml string for componet 1
-        """
         self._comp1_name = 'comp1'
         self._comp1_path = 'path/to/comp1'
         self._comp1_protocol = 'svn'
@@ -524,6 +522,18 @@ class TestModelDescritionConfig(unittest.TestCase):
         self._comp1_is_required = 'True'
         self._comp1_externals = ''
 
+        self._comp2_name = 'comp2'
+        self._comp2_path = 'path/to/comp2'
+        self._comp2_protocol = 'git'
+        self._comp2_url = '/local/clone/of/comp2'
+        self._comp2_tag = ''
+        self._comp2_branch = 'a_very_nice_branch'
+        self._comp2_is_required = 'False'
+        self._comp2_externals = 'path/to/comp2.cfg'
+
+    def _setup_comp1(self, config):
+        """Boiler plate construction of xml string for componet 1
+        """
         config.add_section(self._comp1_name)
         config.set(self._comp1_name, 'local_path', self._comp1_path)
         config.set(self._comp1_name, 'protocol', self._comp1_protocol)
@@ -534,15 +544,6 @@ class TestModelDescritionConfig(unittest.TestCase):
     def _setup_comp2(self, config):
         """Boiler plate construction of xml string for componet 2
         """
-        self._comp2_name = 'comp2'
-        self._comp2_path = 'path/to/comp2'
-        self._comp2_protocol = 'git'
-        self._comp2_url = '/local/clone/of/comp2'
-        self._comp2_tag = ''
-        self._comp2_branch = 'a_very_nice_branch'
-        self._comp2_is_required = 'False'
-        self._comp2_externals = 'path/to/comp2.cfg'
-
         config.add_section(self._comp2_name)
         config.set(self._comp2_name, 'local_path', self._comp2_path)
         config.set(self._comp2_name, 'protocol', self._comp2_protocol)
@@ -1343,7 +1344,8 @@ class TestSVNStatusXML(unittest.TestCase):
 
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_MISSING
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+            svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_modified(self):
@@ -1351,7 +1353,8 @@ class TestSVNStatusXML(unittest.TestCase):
         modified file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_MODIFIED
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+            svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_deleted(self):
@@ -1359,7 +1362,8 @@ class TestSVNStatusXML(unittest.TestCase):
         deleted file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_DELETED
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+            svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_unversion(self):
@@ -1367,7 +1371,8 @@ class TestSVNStatusXML(unittest.TestCase):
         unversioned file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_UNVERSION
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+            svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_added(self):
@@ -1375,7 +1380,8 @@ class TestSVNStatusXML(unittest.TestCase):
         added file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_ADDED
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+            svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_all(self):
@@ -1384,7 +1390,8 @@ class TestSVNStatusXML(unittest.TestCase):
 
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_ALL
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+            svn_output)
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_clean(self):
@@ -1393,7 +1400,8 @@ class TestSVNStatusXML(unittest.TestCase):
 
         """
         svn_output = self.SVN_STATUS_XML_CLEAN
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(svn_output)
+        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+            svn_output)
         self.assertFalse(is_dirty)
 
 

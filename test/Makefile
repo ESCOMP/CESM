@@ -7,7 +7,7 @@ AUTOPEP8=autopep8
 AUTOPEP8_ARGS=--aggressive --in-place 
 
 PYLINT=pylint
-PYLINT_ARGS=-j 2 --py3k --rcfile=../.pylint.rc
+PYLINT_ARGS=-j 2 --rcfile=../.pylint.rc
 PYLINT_3K_ARGS=--py3k
 
 SRC = \
@@ -34,10 +34,10 @@ readme : FORCE
 	$(EXE) --help >> ../README
 
 style : FORCE
-	$(AUTOPEP8) $(AUTOPEP8_ARGS) --recursive $(SRC) $(TEST_DIR)
+	$(AUTOPEP8) $(AUTOPEP8_ARGS) --recursive $(SRC) $(TEST_DIR)/test_*.py
 
 lint : style
-	$(PYLINT) $(PYLINT_ARGS) $(SRC) $(TEST_DIR)/*.py
+	$(PYLINT) $(PYLINT_ARGS) $(SRC) $(TEST_DIR)/test_*.py
 
 py3 : 
 	$(PYLINT) $(PYLINT_ARGS) $(PYLINT_3K_ARGS) $(SRC) $(TEST_DIR)/*.py
@@ -49,7 +49,8 @@ env2 : FORCE
 	virtualenv --python $(PYTHON) $@
 
 develop : FORCE
-	. env2/bin/activate; pip install pyaml>=17.10.0
-	. env2/bin/activate; pip install pylint>=1.7.0
+	. env2/bin/activate; pip install 'pyaml>=17.10.0'
+	. env2/bin/activate; pip install 'pylint>=1.7.0'
+	. env2/bin/activate; pip install 'autopep8>=1.3.0'
 
 FORCE : 
