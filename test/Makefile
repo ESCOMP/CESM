@@ -1,6 +1,13 @@
+python = not-set
+
+ifneq ($(python), not-set)
+PYTHON=$(python)
+else
 PYTHON=python
-PYTHON3=python3
-PYPATH=PYTHONPATH=..:${PYTHONPATH}
+endif
+
+PYPATH=PYTHONPATH=..:
+
 TEST_ARGS=-m unittest --buffer
 
 AUTOPEP8=autopep8
@@ -9,6 +16,9 @@ AUTOPEP8_ARGS=--aggressive --in-place
 PYLINT=pylint
 PYLINT_ARGS=-j 2 --rcfile=../.pylint.rc
 PYLINT_3K_ARGS=--py3k
+
+COVERAGE=coverage
+COVERAGE_ARGS=--rcfile=.coveragerc
 
 SRC = \
 	../checkout_externals.py
@@ -19,10 +29,6 @@ TEST_DIR = .
 
 utest : FORCE
 	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_ce_unit*.py'
-
-
-utest3 : FORCE
-	$(PYPATH) $(PYTHON3) -m unittest discover --buffer --pattern 'test_ce_unit*.py'
 
 stest : FORCE
 	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_ce_sys*.py'
@@ -39,18 +45,24 @@ style : FORCE
 lint : style
 	$(PYLINT) $(PYLINT_ARGS) $(SRC) $(TEST_DIR)/test_*.py
 
+coverage : FORCE
+	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) test_ce_unit.py
+	$(PYPATH) $(COVERAGE) html
+
 py3 : 
 	$(PYLINT) $(PYLINT_ARGS) $(PYLINT_3K_ARGS) $(SRC) $(TEST_DIR)/*.py
 
+env : FORCE
+	$(PYPATH) virtualenv --python $(PYTHON) $@_$(PYTHON)
+	. $@_$(PYTHON)/bin/activate; pip install 'pyaml>=17.10.0'
+	. $@_$(PYTHON)/bin/activate; pip install 'pylint>=1.7.0'
+	. $@_$(PYTHON)/bin/activate; pip install 'autopep8>=1.3.0'
+	. $@_$(PYTHON)/bin/activate; pip install 'coverage>=4.4.0'
+
 clean : FORCE
-	-rm -rf *~ test/*~
+	-rm -rf *~ *.pyc
 
-env2 : FORCE
-	virtualenv --python $(PYTHON) $@
-
-develop : FORCE
-	. env2/bin/activate; pip install 'pyaml>=17.10.0'
-	. env2/bin/activate; pip install 'pylint>=1.7.0'
-	. env2/bin/activate; pip install 'autopep8>=1.3.0'
+clobber : clean
+	-rm -rf env_* htmlcov
 
 FORCE : 
