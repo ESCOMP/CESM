@@ -13,6 +13,16 @@ put them in the source tree. The default file is called "CESM.xml"
 regardless of whether you are checking out CESM or a standalone
 component.
 
+checkout_externals requires access to git and svn repositories that
+require authentication. checkout_externals may pass through
+authentication requests, but it will not cache them for you. For the
+best and most robust user experience, you should have svn and git
+working without password authentication. See:
+
+    https://help.github.com/articles/connecting-to-github-with-ssh/
+
+    ?svn ref?
+
 NOTE: checkout_externals.py *MUST* be run from the root of the source
 tree it is managing. For example, if you cloned CLM with:
 
