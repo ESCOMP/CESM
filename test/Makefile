@@ -14,7 +14,7 @@ AUTOPEP8=autopep8
 AUTOPEP8_ARGS=--aggressive --in-place 
 
 PYLINT=pylint
-PYLINT_ARGS=-j 2 --rcfile=../.pylint.rc
+PYLINT_ARGS=-j 2 --rcfile=.pylint.rc
 PYLINT_3K_ARGS=--py3k
 
 COVERAGE=coverage
