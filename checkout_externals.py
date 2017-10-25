@@ -1132,17 +1132,13 @@ class SvnRepository(Repository):
         * missing files
         * unversioned files
 
+        The only acceptable state returned from svn is 'external'
+
         """
         # pylint: disable=invalid-name
-        SVN_MISSING = 'missing'
-        SVN_MODIFIED = 'modified'
-        SVN_DELETED = 'deleted'
-        SVN_UNVERSIONED = 'unversioned'
-        SVN_ADDED = 'added'
+        SVN_EXTERNAL = 'external'
         # pylint: enable=invalid-name
 
-        svn_dirty = (SVN_MISSING, SVN_MODIFIED,
-                     SVN_DELETED, SVN_UNVERSIONED, SVN_ADDED)
         is_dirty = False
         xml_status = ET.fromstring(svn_output)
         xml_target = xml_status.find('./target')
@@ -1150,7 +1146,7 @@ class SvnRepository(Repository):
         for entry in entries:
             status = entry.find('./wc-status')
             item = status.get('item')
-            if item in svn_dirty:
+            if item != SVN_EXTERNAL:
                 is_dirty = True
         return is_dirty
 
