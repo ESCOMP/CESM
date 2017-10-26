@@ -869,11 +869,15 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         return SVN_INFO_CISM
 
     def test_repo_dir_not_exist(self):
-        """Test that a directory that doesn't exist returns an empty status
+        """Test that a directory that doesn't exist returns an error status
+
+        Note: the Repository classes should be prevented from ever
+        working on an empty directory by the _Source object.
+
         """
         stat = Status()
         self._repo.svn_check_sync(stat, 'junk')
-        self.assertEqual(stat.sync_state, Status.EMPTY)
+        self.assertEqual(stat.sync_state, Status.STATUS_ERROR)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
 
@@ -1080,11 +1084,15 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         return git_output
 
     def test_repo_dir_not_exist(self):
-        """Test that a directory that doesn't exist returns an empty status
+        """Test that a directory that doesn't exist returns an error status
+
+        Note: the Repository classes should be prevented from ever
+        working on an empty directory by the _Source object.
+
         """
         stat = Status()
         self._repo.git_check_sync(stat, 'junk')
-        self.assertEqual(stat.sync_state, Status.EMPTY)
+        self.assertEqual(stat.sync_state, Status.STATUS_ERROR)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, Status.DEFAULT)
 

@@ -843,6 +843,7 @@ class Status(object):
     DIRTY = 'M'
 
     STATUS_OK = ' '
+    STATUS_ERROR = '!'
 
     # source types
     OPTIONAL = 'o'
@@ -940,7 +941,7 @@ class Repository(object):
         if self._tag is not EMPTY_STR and self._branch is not EMPTY_STR:
             fatal_error('repo cannot have both a tag and a branch element')
 
-    def checkout(self, repo_dir):  # pylint: disable=unused-argument
+    def checkout(self, base_dir_path, repo_dir_name):  # pylint: disable=unused-argument
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -951,7 +952,7 @@ class Repository(object):
                'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
 
-    def status(self, stat, repo_dir):  # pylint: disable=unused-argument
+    def status(self, stat, repo_dir_path):  # pylint: disable=unused-argument
         """Report the status of the repo
 
         """
@@ -959,7 +960,7 @@ class Repository(object):
                'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
 
-    def verbose_status(self, repo_dir):  # pylint: disable=unused-argument
+    def verbose_status(self, repo_dir_path):  # pylint: disable=unused-argument
         """Display the raw repo status to the user.
 
         """
@@ -1002,27 +1003,23 @@ class SvnRepository(Repository):
             msg = "DEV_ERROR in svn repository. Shouldn't be here!"
             fatal_error(msg)
 
-    def status(self, stat, repo_dir):
+    def status(self, stat, repo_dir_path):
         """
-        If the repo destination directory exists, ensure it is correct (from
-        correct URL, correct branch or tag), and possibly update the source.
-        If the repo destination directory does not exist, checkout the correce
-        branch or tag.
+        Check and report the status of the repository
         """
-        self.svn_check_sync(stat, repo_dir)
-        if os.path.exists(repo_dir):
-            self.svn_status(stat, repo_dir)
+        self.svn_check_sync(stat, repo_dir_path)
+        if os.path.exists(repo_dir_path):
+            self.svn_status(stat, repo_dir_path)
         return stat
 
-    def verbose_status(self, repo_dir):
+    def verbose_status(self, repo_dir_path):
         """Display the raw repo status to the user.
 
         """
-        repo_path = os.path.join(repo_dir, self._name)
-        if os.path.exists(repo_path):
-            self.svn_status_verbose(repo_path)
+        if os.path.exists(repo_dir_path):
+            self.svn_status_verbose(repo_dir_path)
 
-    def checkout(self, repo_dir):
+    def checkout(self, base_dir_path, repo_dir_name):
         """Checkout or update the working copy
 
         If the repo destination directory exists, switch the sandbox to
@@ -1032,45 +1029,34 @@ class SvnRepository(Repository):
         correct branch or tag.
 
         """
-        if os.path.exists(repo_dir):
-            self._svn_switch(repo_dir)
+        repo_dir_path = os.path.join(base_dir_path, repo_dir_name)
+        if os.path.exists(repo_dir_path):
+            self._svn_switch(repo_dir_path)
         else:
-            self._svn_checkout(repo_dir)
+            self._svn_checkout(repo_dir_path)
 
-        return True
-
-    def _svn_checkout(self, checkout_dir):
+    def _svn_checkout(self, repo_dir_path):
         """
         Checkout a subversion repository (repo_url) to checkout_dir.
         """
-        cmd = ['svn', 'checkout', self._url, checkout_dir]
+        cmd = ['svn', 'checkout', self._url, repo_dir_path]
         execute_subprocess(cmd)
 
-    def _svn_switch(self, repo_dir):
+    def _svn_switch(self, repo_dir_path):
         """
         Switch branches for in an svn sandbox
         """
         cwd = os.getcwd()
-        os.chdir(repo_dir)
+        os.chdir(repo_dir_path)
         cmd = ['svn', 'switch', self._url]
         execute_subprocess(cmd)
         os.chdir(cwd)
 
     @staticmethod
-    def _svn_update(updir):
-        """
-        Refresh a subversion sandbox (updir)
-        """
-        mycurrdir = os.path.abspath('.')
-        os.chdir(updir)
-        execute_subprocess(['svn', 'update'])
-        os.chdir(mycurrdir)
-
-    @staticmethod
-    def svn_info(repo_dir):
+    def svn_info(repo_dir_path):
         """Return results of svn info command
         """
-        cmd = ['svn', 'info', repo_dir]
+        cmd = ['svn', 'info', repo_dir_path]
         try:
             output = check_output(cmd)
             log_process_output(output)
@@ -1098,26 +1084,30 @@ class SvnRepository(Repository):
             status = Status.MODEL_MODIFIED
         return status
 
-    def svn_check_sync(self, stat, repo_dir):
+    def svn_check_sync(self, stat, repo_dir_path):
         """Check to see if repository directory exists and is at the expected
         url.  Return: status object
 
         """
-        if not os.path.exists(repo_dir):
-            stat.sync_state = Status.EMPTY
+        if not os.path.exists(repo_dir_path):
+            # NOTE(bja, 2017-10) this state should have been recorded by
+            # the source object and we never get here!
+            stat.sync_state = Status.STATUS_ERROR
         else:
-            svn_output = self.svn_info(repo_dir)
+            svn_output = self.svn_info(repo_dir_path)
             if not svn_output:
+                # directory exists, but info returned nothing. .svn
+                # directory removed or incomplete checkout?
                 stat.sync_state = Status.UNKNOWN
             else:
                 stat.sync_state = self.svn_check_url(svn_output, self._url)
 
     @staticmethod
-    def _svn_status_xml(repo_dir):
+    def _svn_status_xml(repo_dir_path):
         """
         Get status of the subversion sandbox in repo_dir
         """
-        cmd = ['svn', 'status', '--xml', repo_dir]
+        cmd = ['svn', 'status', '--xml', repo_dir_path]
         svn_output = check_output(cmd)
         return svn_output
 
@@ -1150,12 +1140,12 @@ class SvnRepository(Repository):
                 is_dirty = True
         return is_dirty
 
-    def svn_status(self, stat, repo_dir):
+    def svn_status(self, stat, repo_dir_path):
         """Report whether the svn repository is in-sync with the model
         description and whether the sandbox is clean or dirty.
 
         """
-        svn_output = self._svn_status_xml(repo_dir)
+        svn_output = self._svn_status_xml(repo_dir_path)
         is_dirty = self.xml_status_is_dirty(svn_output)
         if is_dirty:
             stat.clean_state = Status.DIRTY
@@ -1163,18 +1153,18 @@ class SvnRepository(Repository):
             stat.clean_state = Status.STATUS_OK
 
     @staticmethod
-    def _svn_status_verbose(repo_dir):
+    def _svn_status_verbose(repo_dir_path):
         """capture the full svn status output
         """
-        cmd = ['svn', 'status', repo_dir]
+        cmd = ['svn', 'status', repo_dir_path]
         svn_output = check_output(cmd)
         return svn_output
 
-    def svn_status_verbose(self, repo_dir):
+    def svn_status_verbose(self, repo_dir_path):
         """Display the raw svn status output to the user.
 
         """
-        svn_output = self._svn_status_verbose(repo_dir)
+        svn_output = self._svn_status_verbose(repo_dir_path)
         log_process_output(svn_output)
         print(svn_output)
 
@@ -1199,34 +1189,50 @@ class GitRepository(Repository):
         """
         Repository.__init__(self, component_name, repo)
 
-    def checkout(self, repo_dir):
+    def checkout(self, base_dir_path, repo_dir_name):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
         """
-        self._git_checkout(repo_dir)
+        repo_dir_path = os.path.join(base_dir_path, repo_dir_name)
+        if not os.path.exists(repo_dir_path):
+            self.git_clone(base_dir_path, repo_dir_name)
+        self._git_checkout(repo_dir_path)
 
-        return True
-
-    def status(self, stat, repo_dir):
+    def status(self, stat, repo_dir_path):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
         """
-        self.git_check_sync(stat, repo_dir)
-        if os.path.exists(repo_dir):
-            self.git_status(stat, repo_dir)
+        self.git_check_sync(stat, repo_dir_path)
+        if os.path.exists(repo_dir_path):
+            self.git_status(stat, repo_dir_path)
 
-    def verbose_status(self, repo_dir):
+    def verbose_status(self, repo_dir_path):
         """Display the raw repo status to the user.
 
         """
-        if os.path.exists(repo_dir):
-            self.git_status_verbose(repo_dir)
+        if os.path.exists(repo_dir_path):
+            self.git_status_verbose(repo_dir_path)
+
+    @staticmethod
+    def _git_clone(url, repo_dir_name):
+        """Execute clone subprocess
+        """
+        cmd = ['git', 'clone', url, repo_dir_name]
+        execute_subprocess(cmd)
+
+    def git_clone(self, base_dir_path, repo_dir_name):
+        """Prepare to execute the clone by managing directory location
+        """
+        cwd = os.getcwd()
+        os.chdir(base_dir_path)
+        self._git_clone(self._url, repo_dir_name)
+        os.chdir(cwd)
 
     def _git_ref_type(self, ref):
         """
@@ -1328,7 +1334,7 @@ class GitRepository(Repository):
                 ref = current_branch.split()[-1]
         return ref
 
-    def git_check_sync(self, stat, repo_dir):
+    def git_check_sync(self, stat, repo_dir_path):
         """Determine whether a git repository is in-sync with the model
         description.
 
@@ -1336,15 +1342,19 @@ class GitRepository(Repository):
         whether the branch or tag is the same.
 
         """
-        current_dir = os.path.abspath('.')
-        if not os.path.exists(repo_dir):
-            stat.sync_state = Status.EMPTY
+        if not os.path.exists(repo_dir_path):
+            # NOTE(bja, 2017-10) condition should have been checkoud
+            # by _Source() object and should never be here!
+            stat.sync_state = Status.STATUS_ERROR
         else:
-            git_dir = os.path.join(repo_dir, '.git')
+            git_dir = os.path.join(repo_dir_path, '.git')
             if not os.path.exists(git_dir):
+                # NOTE(bja, 2017-10) directory exists, but no git repo
+                # info....
                 stat.sync_state = Status.UNKNOWN
             else:
-                os.chdir(repo_dir)
+                cwd = os.getcwd()
+                os.chdir(repo_dir_path)
                 git_output = self.git_branch()
                 ref = self.current_ref_from_branch_command(git_output)
                 if ref == EMPTY_STR:
@@ -1359,7 +1369,7 @@ class GitRepository(Repository):
                         stat.sync_state = Status.STATUS_OK
                     else:
                         stat.sync_state = Status.MODEL_MODIFIED
-        os.chdir(current_dir)
+                os.chdir(cwd)
 
     @staticmethod
     def _git_check_dir(chkdir, ref):
@@ -1438,34 +1448,31 @@ class GitRepository(Repository):
         execute_subprocess(cmd)
         os.chdir(mycurrdir)
 
-    def _git_checkout(self, checkout_dir):
+    def _git_checkout(self, repo_dir_path):
         """
         Checkout 'branch' or 'tag' from 'repo_url'
         """
-        mycurrdir = os.path.abspath('.')
-        if os.path.exists(checkout_dir):
-            # We can't do a clone. See what we have here
-            if self._git_check_dir(checkout_dir, None):
-                os.chdir(checkout_dir)
-                # We have a git repo, is it from the correct URL?
-                cmd = ['git', 'config', 'remote.origin.url']
-                check_url = check_output(cmd)
-                if check_url is not None:
-                    check_url = check_url.rstrip()
+        if not os.path.exists(repo_dir_path):
+            msg = ('DEV_ERROR: Repo not cloned correctly. Trying to '
+                   'checkout a git repo for "{0}" in '
+                   'an empty directory: {1}'.format(self._name, repo_dir_path))
+            fatal_error(msg)
 
-                if check_url != self._url:
-                    msg = ("Invalid repository in {0}, url = {1}, "
-                           "should be {2}".format(checkout_dir, check_url,
-                                                  self._url))
-                    fatal_error(msg)
-                # FIXME(bja, 2017-09) we are updating an existing
-                # clone. Need to do a fetch here to ensure that the
-                # branch or tag checkout will work
+        cwd = os.getcwd()
+        os.chdir(repo_dir_path)
+        # We have a git repo, is it from the correct URL?
+        cmd = ['git', 'config', 'remote.origin.url']
+        check_url = check_output(cmd)
+        if check_url is not None:
+            check_url = check_url.rstrip()
 
-        else:
-            cmd = ['git', 'clone', self._url, checkout_dir]
-            execute_subprocess(cmd)
-            os.chdir(checkout_dir)
+        if check_url != self._url:
+            msg = ("Invalid repository in {0}, url = {1}, "
+                   "should be {2}".format(repo_dir_path, check_url,
+                                          self._url))
+            fatal_error(msg)
+        cmd = ['git', 'fetch', '--all', '--tags']
+        execute_subprocess(cmd)
 
         cmd = []
         if self._branch:
@@ -1475,9 +1482,9 @@ class GitRepository(Repository):
                 cmd = ['git', 'checkout', '--track', 'origin/' + self._branch]
             elif ref_type == self.GIT_REF_LOCAL_BRANCH:
                 if curr_branch != self._branch:
-                    if not self._git_working_dir_clean(checkout_dir):
+                    if not self._git_working_dir_clean(repo_dir_path):
                         msg = ('Working directory "{0}" not clean, '
-                               'aborting'.format(checkout_dir))
+                               'aborting'.format(repo_dir_path))
                         fatal_error(msg)
                     else:
                         cmd = ['git', 'checkout', self._branch]
@@ -1496,7 +1503,7 @@ class GitRepository(Repository):
         if cmd:
             execute_subprocess(cmd)
 
-        os.chdir(mycurrdir)
+        os.chdir(cwd)
 
     @staticmethod
     def git_status_porcelain_v1z():
@@ -1543,19 +1550,19 @@ class GitRepository(Repository):
             is_dirty = True
         return is_dirty
 
-    def git_status(self, stat, repo_dir):
+    def git_status(self, stat, repo_dir_path):
         """Determine the clean/dirty status of a git repository
 
         """
         cwd = os.getcwd()
-        os.chdir(repo_dir)
+        os.chdir(repo_dir_path)
         git_output = self.git_status_porcelain_v1z()
+        os.chdir(cwd)
         is_dirty = self.git_status_v1z_is_dirty(git_output)
         if is_dirty:
             stat.clean_state = Status.DIRTY
         else:
             stat.clean_state = Status.STATUS_OK
-        os.chdir(cwd)
 
     @staticmethod
     def _git_status_verbose():
@@ -1565,16 +1572,16 @@ class GitRepository(Repository):
         git_output = check_output(cmd)
         return git_output
 
-    def git_status_verbose(self, repo_dir):
+    def git_status_verbose(self, repo_dir_path):
         """Display raw git status output to the user
 
         """
         cwd = os.getcwd()
-        os.chdir(repo_dir)
+        os.chdir(repo_dir_path)
         git_output = self._git_status_verbose()
+        os.chdir(cwd)
         log_process_output(git_output)
         print(git_output)
-        os.chdir(cwd)
 
 
 class _Source(object):
@@ -1582,28 +1589,45 @@ class _Source(object):
     _Source represents a <source> object in a <config_sourcetree>
     """
 
-    def __init__(self, name, source):
-        """
-        Parse an XML node for a <source> tag
+    def __init__(self, root_dir, name, source):
+        """Parse an XML node for a <source> tag
+
+        Input:
+
+            root_dir : string - the root directory path where
+            'local_path' is relative to.
+
+            name : string - name of the source object. may or may not
+            correspond to something in the path.
+
+            source : dict - source ModelDescription object
+
         """
         self._name = name
-        self._repos = []
-        self._loaded = False
+        self._repo = None
         self._externals = EMPTY_STR
         self._externals_sourcetree = None
         # Parse the sub-elements
-        self._path = source[ModelDescription.PATH]
-        self._repo_dir = os.path.basename(self._path)
+
+        # _path : local path relative to the containing source tree
+        self._local_path = source[ModelDescription.PATH]
+        # _repo_dir : full repository directory
+        repo_dir = os.path.join(root_dir, self._local_path)
+        self._repo_dir_path = os.path.abspath(repo_dir)
+        # _base_dir : base directory *containing* the repository
+        self._base_dir_path = os.path.dirname(self._repo_dir_path)
+        # repo_dir_name : base_dir_path + repo_dir_name = rep_dir_path
+        self._repo_dir_name = os.path.basename(self._repo_dir_path)
+        assert(os.path.join(self._base_dir_path, self._repo_dir_name)
+               == self._repo_dir_path)
+
         self._required = source[ModelDescription.REQUIRED]
         self._externals = source[ModelDescription.EXTERNALS]
         if self._externals:
             self._create_externals_sourcetree()
         repo = create_repository(name, source[ModelDescription.REPO])
-        self._loaded = False
-        if repo is None:
-            self._loaded = True
-        else:
-            self._repos.append(repo)
+        if repo:
+            self._repo = repo
 
     def get_name(self):
         """
@@ -1611,13 +1635,13 @@ class _Source(object):
         """
         return self._name
 
-    def get_path(self):
+    def get_local_path(self):
         """
         Return the source object's path
         """
-        return self._path
+        return self._local_path
 
-    def status(self, tree_root):
+    def status(self):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -1627,65 +1651,65 @@ class _Source(object):
         """
 
         stat = Status()
-        stat.path = self.get_path()
+        stat.path = self.get_local_path()
         if not self._required:
             stat.source_type = Status.OPTIONAL
-        elif self._path == '.':
+        elif self._local_path == '.':
             # '.' paths are standalone component directories that are
             # not managed by checkout_externals.
             stat.source_type = Status.STANDALONE
         else:
             # managed by checkout_externals
             stat.source_type = Status.MANAGED
+
         ext_stats = {}
-        # Make sure we are in correct location
-        mycurrdir = os.path.abspath('.')
-        pdir = os.path.join(tree_root, os.path.dirname(self._path))
-        if not os.path.exists(pdir):
+
+        if not os.path.exists(self._repo_dir_path):
             stat.sync_state = Status.EMPTY
+            msg = ('status check: repository directory for "{0}" does not '
+                   'exist.'.format(self._name))
+            logging.info(msg)
         else:
-            os.chdir(pdir)
+            if self._repo:
+                self._repo.status(stat, self._repo_dir_path)
 
-            repo_loaded = self._loaded
-            if not repo_loaded:
-                for repo in self._repos:
-                    repo.status(stat, self._repo_dir)
-
-            if self._externals:
-                comp_dir = os.path.join(tree_root, self._path)
-                os.chdir(comp_dir)
+            if self._externals and self._externals_sourcetree:
+                # we expect externals and they exist
+                cwd = os.getcwd()
+                # SourceTree expecteds to be called from the correct
+                # root directory.
+                os.chdir(self._repo_dir_path)
                 ext_stats = self._externals_sourcetree.status()
-
-            os.chdir(mycurrdir)
+                os.chdir(cwd)
 
         all_stats = {}
-        if self._path != '.':
+        if self._local_path != '.':
             # don't add the root component because we don't manage it
             # and can't provide useful info about it.
             all_stats[self._name] = stat
+
         if ext_stats:
             all_stats.update(ext_stats)
 
         return all_stats
 
-    def verbose_status(self, tree_root):
+    def verbose_status(self):
         """Display the verbose status to the user. This is just the raw output
         from the repository 'status' command.
 
         """
-        repo_dir = os.path.join(tree_root, os.path.dirname(self.get_path()))
-        if not os.path.exists(repo_dir):
-            msg = ('Repository directory for "{0}" is empty or does not '
+        if not os.path.exists(self._repo_dir_path):
+            msg = ('status check: repository directory for "{0}" does not '
                    'exist!'.format(self._name))
-            printlog(msg)
+            logging.info(msg)
         else:
             cwd = os.getcwd()
-            os.chdir(repo_dir)
-            for repo in self._repos:
-                repo.verbose_status(repo_dir)
+            os.chdir(self._repo_dir_path)
+            if self._repo:
+                self._repo.verbose_status(self._repo_dir_path)
             os.chdir(cwd)
 
-    def checkout(self, tree_root, load_all):
+    def checkout(self, load_all):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -1696,47 +1720,50 @@ class _Source(object):
         if load_all:
             pass
         # Make sure we are in correct location
-        mycurrdir = os.path.abspath('.')
-        pdir = os.path.join(tree_root, os.path.dirname(self._path))
-        if not os.path.exists(pdir):
+
+        if not os.path.exists(self._repo_dir_path):
+            # repository directory doesn't exist. Need to check it
+            # out, and for that we need the base_dir_path to exist
             try:
-                os.makedirs(pdir)
+                os.makedirs(self._base_dir_path)
             except OSError as error:
                 if error.errno != errno.EEXIST:
-                    msg = 'Could not create directory "{0}"'.format(pdir)
+                    msg = 'Could not create directory "{0}"'.format(
+                        self._base_dir_path)
                     fatal_error(msg)
 
-        os.chdir(pdir)
-
-        repo_loaded = self._loaded
-        if not repo_loaded:
-            for repo in self._repos:
-                repo_loaded = repo.checkout(self._repo_dir)
-                if repo_loaded:
-                    break
-
-        self._loaded = repo_loaded
+        if self._repo:
+            self._repo.checkout(self._base_dir_path, self._repo_dir_name)
 
         if self._externals:
-            comp_dir = os.path.join(tree_root, self._path)
-            os.chdir(comp_dir)
             self._externals_sourcetree.checkout(load_all)
-
-        os.chdir(mycurrdir)
-        return repo_loaded
 
     def _create_externals_sourcetree(self):
         """
         """
+        if not os.path.exists(self._repo_dir_path):
+            # NOTE(bja, 2017-10) repository has not been checked out
+            # yet, can't process the externals file. Assume we are
+            # checking status before code is checkoud out and this
+            # will be handled correctly later.
+            return
+
+        cwd = os.getcwd()
+        os.chdir(self._repo_dir_path)
         if not os.path.exists(self._externals):
+            # NOTE(bja, 2017-10) this check is redundent with the one
+            # in read_model_description_file!
             msg = ('External model description file "{0}" '
-                   'does not exist!'.format(self._externals))
+                   'does not exist! In directory: {1}'.format(
+                       self._externals, self._repo_dir_path))
             fatal_error(msg)
-        ext_root = self._path
+
+        externals_root = self._repo_dir_path
         model_format, model_data = read_model_description_file(
-            ext_root, self._externals)
+            externals_root, self._externals)
         externals = ModelDescription(model_format, model_data)
-        self._externals_sourcetree = SourceTree(ext_root, externals)
+        self._externals_sourcetree = SourceTree(externals_root, externals)
+        os.chdir(cwd)
 
 
 class SourceTree(object):
@@ -1748,11 +1775,11 @@ class SourceTree(object):
         """
         Parse a model file into a SourceTree object
         """
-        self._root_dir = root_dir
+        self._root_dir = os.path.abspath(root_dir)
         self._all_components = {}
         self._required_compnames = []
         for comp in model:
-            src = _Source(comp, model[comp])
+            src = _Source(self._root_dir, comp, model[comp])
             self._all_components[comp] = src
             if model[comp][ModelDescription.REQUIRED]:
                 self._required_compnames.append(comp)
@@ -1773,7 +1800,7 @@ class SourceTree(object):
         summary = {}
         for comp in load_comps:
             printlog('{0}, '.format(comp), end='')
-            stat = self._all_components[comp].status(self._root_dir)
+            stat = self._all_components[comp].status()
             summary.update(stat)
 
         return summary
@@ -1785,7 +1812,7 @@ class SourceTree(object):
         """
         load_comps = self._all_components.keys()
         for comp in load_comps:
-            self._all_components[comp].verbose_status(self._root_dir)
+            self._all_components[comp].verbose_status()
 
     def checkout(self, load_all, load_comp=None):
         """
@@ -1805,7 +1832,7 @@ class SourceTree(object):
 
         for comp in load_comps:
             printlog('{0}, '.format(comp), end='')
-            self._all_components[comp].checkout(self._root_dir, load_all)
+            self._all_components[comp].checkout(load_all)
 
 
 def check_safe_to_update_repos(tree_status, debug):
