@@ -1679,14 +1679,16 @@ class _Source(object):
                 # SourceTree expecteds to be called from the correct
                 # root directory.
                 os.chdir(self._repo_dir_path)
-                ext_stats = self._externals_sourcetree.status()
+                ext_stats = self._externals_sourcetree.status(self._local_path)
                 os.chdir(cwd)
 
         all_stats = {}
+        # don't add the root component because we don't manage it
+        # and can't provide useful info about it.
         if self._local_path != '.':
-            # don't add the root component because we don't manage it
-            # and can't provide useful info about it.
-            all_stats[self._name] = stat
+            # store the stats under tha local_path, not comp name so
+            # it will be sorted correctly
+            all_stats[stat.path] = stat
 
         if ext_stats:
             all_stats.update(ext_stats)
@@ -1784,7 +1786,7 @@ class SourceTree(object):
             if model[comp][ModelDescription.REQUIRED]:
                 self._required_compnames.append(comp)
 
-    def status(self):
+    def status(self, relative_path_base='.'):
         """Report the status components
 
         FIXME(bja, 2017-10) what do we do about situations where the
@@ -1801,6 +1803,17 @@ class SourceTree(object):
         for comp in load_comps:
             printlog('{0}, '.format(comp), end='')
             stat = self._all_components[comp].status()
+            for comp in stat.keys():
+                # check if we need to append the relative_path_base to
+                # the path so it will be sorted in the correct order.
+                if not stat[comp].path.startswith(relative_path_base):
+                    stat[comp].path = os.path.join(relative_path_base,
+                                                   stat[comp].path)
+                    # store under key = updated path, and delete the
+                    # old key.
+                    comp_stat = stat[comp]
+                    del stat[comp]
+                    stat[comp_stat.path] = comp_stat
             summary.update(stat)
 
         return summary
@@ -1892,7 +1905,7 @@ def _main(args):
 
     if args.status:
         # user requested status-only
-        for comp in tree_status:
+        for comp in sorted(tree_status.iterkeys()):
             msg = str(tree_status[comp])
             printlog(msg)
         if args.verbose:
@@ -1903,7 +1916,7 @@ def _main(args):
         safe_to_update = check_safe_to_update_repos(tree_status, args.debug)
         if not safe_to_update:
             # print status
-            for comp in tree_status:
+            for comp in sorted(tree_status.iterkeys()):
                 msg = str(tree_status[comp])
                 printlog(msg)
             # exit gracefully
