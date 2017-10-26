@@ -1512,7 +1512,7 @@ class GitRepository(Repository):
         between version or user configuration.
 
         """
-        cmd = ['git', 'status', '--porcelain=v1', '-z']
+        cmd = ['git', 'status', '--porcelain', '-z']
         git_output = check_output(cmd)
         return git_output
 
@@ -1738,6 +1738,8 @@ class _Source(object):
             self._repo.checkout(self._base_dir_path, self._repo_dir_name)
 
         if self._externals:
+            if not self._externals_sourcetree:
+                self._create_externals_sourcetree()
             self._externals_sourcetree.checkout(load_all)
 
     def _create_externals_sourcetree(self):
