@@ -102,7 +102,7 @@ is managing. For example, if you cloned CLM with:
 
     $ git clone git@github.com/ncar/clm clm-dev
 
-Then the root of the source tree is /path/to/cesm-dev. If you obtained
+Then the root of the source tree is /path/to/clm-dev. If you obtained
 CLM via an svn checkout of CESM and you need to checkout the CLM
 externals, then the root of the source tree for CLM is:
 
@@ -120,15 +120,16 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
       $ ./checkout_cesm/%(prog)s
 
   * To update all required components to the current values in the
-    model description file, re-run $(prog)s:
+    model description file, re-run %(prog)s:
 
       $ cd ${SRC_ROOT}
       $ ./checkout_cesm/%(prog)s
 
     If there are *any* modifications to *any* working copy according
-    to the git or svn 'status' command, $(prog)s will not update any
-    repositories in the model. Modifications include: modified files,
-    added files, removed files, missing files or untracked files,
+    to the git or svn 'status' command, %(prog)s
+    will not update any repositories in the model. Modifications
+    include: modified files, added files, removed files, missing
+    files or untracked files,
 
   * Checkout all required components from a user specified model
     description file:
@@ -182,15 +183,15 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
   * required (boolean) : whether the component is a required checkout
 
-  * path (string) : component path *relative* to where %(prog)s
-    is called.
+  * local_path (string) : component path *relative* to where
+    %(prog)s is called.
 
   * protoctol (string) : version control protocol that is used to
     manage the component.  Valid values are 'git', 'svn',
     'externals_only'.
 
     Note: 'externals_only' will only process the externals model
-    description file without trying to manage a repositor for the
+    description file without trying to manage a repository for the
     component. This is used for retreiving externals for standalone
     components like cam and clm.
 
@@ -205,9 +206,9 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
   * externals (string) : relative path to the external model
     description file that should also be used. It is *relative* to the
-    component path. For example, the CESM model description will load
-    clm. CLM has additional externals that must be downloaded to be
-    complete. Those additional externals are managed from the clm
+    component local_path. For example, the CESM model description will
+    load clm. CLM has additional externals that must be downloaded to
+    be complete. Those additional externals are managed from the clm
     source root by the file pointed to by 'externals'.
 
 '''
