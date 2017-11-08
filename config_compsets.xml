@@ -270,7 +270,7 @@
 
   <compset>
     <alias>ETEST</alias>
-    <lname>2000_CAM60_CLM50_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST</lname>
+    <lname>2000_CAM60_CLM50%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST</lname>
   </compset>
 
   <compset>
