@@ -229,7 +229,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
                         'are checked out. This flag will also checkout the '
                         'optional componets of the model.')
 
-    parser.add_argument('-s', '--status', action='store_true', default=False,
+    parser.add_argument('-S', '--status', action='store_true', default=False,
                         help='Output status of the repositories managed by '
                         '%(prog)s. By default only summary information '
                         'is provided. Use verbose output to see details.')
