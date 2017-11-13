@@ -220,7 +220,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
     #
     # user options
     #
-    parser.add_argument('-m', '--model', nargs='?', default='CESM.xml',
+    parser.add_argument('-m', '--model', nargs='?', default='CESM.cfg',
                         help='The model description filename. '
                         'Default: %(default)s.')
 
