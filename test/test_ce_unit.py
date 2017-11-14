@@ -36,10 +36,14 @@ try:
 except ImportError:
     yaml = None
 
-import checkout_externals
 
-from checkout_externals import Status
-from manageexternals import ModelDescription, EMPTY_STR
+from manageexternals.repository_factory import create_repository
+from manageexternals.repository_git import GitRepository
+from manageexternals.repository_svn import SvnRepository
+from manageexternals.repository import Repository
+from manageexternals.externalstatus import ExternalStatus
+from manageexternals.model_description import ModelDescription
+from manageexternals.globals import EMPTY_STR
 
 # in python2, xml.etree.ElementTree returns byte strings, str, instead
 # of unicode. We need unicode to be compatible with cfg and json
@@ -81,8 +85,8 @@ class TestCreateRepositoryDict(unittest.TestCase):
         protocols = ['git', 'GIT', 'Git', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
-            repo = checkout_externals.create_repository(self._name, self._repo)
-            self.assertIsInstance(repo, checkout_externals.GitRepository)
+            repo = create_repository(self._name, self._repo)
+            self.assertIsInstance(repo, GitRepository)
 
     def test_create_repo_svn(self):
         """Verify that several possible names for the 'svn' protocol
@@ -91,8 +95,8 @@ class TestCreateRepositoryDict(unittest.TestCase):
         protocols = ['svn', 'SVN', 'Svn', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
-            repo = checkout_externals.create_repository(self._name, self._repo)
-            self.assertIsInstance(repo, checkout_externals.SvnRepository)
+            repo = create_repository(self._name, self._repo)
+            self.assertIsInstance(repo, SvnRepository)
 
     def test_create_repo_externals_only(self):
         """Verify that an externals only repo returns None.
@@ -100,7 +104,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
         protocols = ['externals_only', ]
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
-            repo = checkout_externals.create_repository(self._name, self._repo)
+            repo = create_repository(self._name, self._repo)
             self.assertEqual(None, repo)
 
     def test_create_repo_unsupported(self):
@@ -110,7 +114,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
         for protocol in protocols:
             self._repo[ModelDescription.PROTOCOL] = protocol
             with self.assertRaises(RuntimeError):
-                checkout_externals.create_repository(self._name, self._repo)
+                create_repository(self._name, self._repo)
 
 
 class TestRepository(unittest.TestCase):
@@ -130,7 +134,7 @@ class TestRepository(unittest.TestCase):
                      ModelDescription.REPO_URL: url,
                      ModelDescription.TAG: tag,
                      ModelDescription.BRANCH: EMPTY_STR, }
-        repo = checkout_externals.Repository(name, repo_info)
+        repo = Repository(name, repo_info)
         print(repo.__dict__)
         self.assertEqual(repo.tag(), tag)
         self.assertEqual(repo.url(), url)
@@ -146,7 +150,7 @@ class TestRepository(unittest.TestCase):
                      ModelDescription.REPO_URL: url,
                      ModelDescription.BRANCH: branch,
                      ModelDescription.TAG: EMPTY_STR, }
-        repo = checkout_externals.Repository(name, repo_info)
+        repo = Repository(name, repo_info)
         print(repo.__dict__)
         self.assertEqual(repo.branch(), branch)
         self.assertEqual(repo.url(), url)
@@ -166,7 +170,7 @@ class TestRepository(unittest.TestCase):
                      ModelDescription.BRANCH: branch,
                      ModelDescription.TAG: tag, }
         with self.assertRaises(RuntimeError):
-            checkout_externals.Repository(name, repo_info)
+            Repository(name, repo_info)
 
     def test_no_tag_no_branch(self):
         """Test creation of a repository object without a tag or branch raises a
@@ -183,7 +187,7 @@ class TestRepository(unittest.TestCase):
                      ModelDescription.BRANCH: branch,
                      ModelDescription.TAG: tag, }
         with self.assertRaises(RuntimeError):
-            checkout_externals.Repository(name, repo_info)
+            Repository(name, repo_info)
 
 
 class TestXMLSchemaVersion(unittest.TestCase):
@@ -772,26 +776,26 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """Setup reusable svn repository object
         """
         self._name = 'component'
-        rdata = {checkout_externals.ModelDescription.PROTOCOL: 'svn',
-                 checkout_externals.ModelDescription.REPO_URL:
+        rdata = {ModelDescription.PROTOCOL: 'svn',
+                 ModelDescription.REPO_URL:
                      'https://svn-ccsm-models.cgd.ucar.edu/',
-                 checkout_externals.ModelDescription.TAG:
+                 ModelDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 checkout_externals.ModelDescription.BRANCH: ''
+                 ModelDescription.BRANCH: ''
                  }
 
         data = {self._name:
                 {
-                    checkout_externals.ModelDescription.REQUIRED: False,
-                    checkout_externals.ModelDescription.PATH: 'junk',
-                    checkout_externals.ModelDescription.EXTERNALS: '',
-                    checkout_externals.ModelDescription.REPO: rdata,
+                    ModelDescription.REQUIRED: False,
+                    ModelDescription.PATH: 'junk',
+                    ModelDescription.EXTERNALS: '',
+                    ModelDescription.REPO: rdata,
                 },
                 }
 
-        model = checkout_externals.ModelDescription('json', data)
-        repo = model[self._name][checkout_externals.ModelDescription.REPO]
-        self._repo = checkout_externals.SvnRepository('test', repo)
+        model = ModelDescription('json', data)
+        repo = model[self._name][ModelDescription.REPO]
+        self._repo = SvnRepository('test', repo)
 
     def test_check_url_same(self):
         """Test that we correctly identify that the correct URL.
@@ -799,7 +803,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         svn_output = SVN_INFO_MOSART
         expected_url = self._repo.url()
         result = self._repo.svn_check_url(svn_output, expected_url)
-        self.assertEqual(result, Status.STATUS_OK)
+        self.assertEqual(result, ExternalStatus.STATUS_OK)
 
     def test_check_url_different(self):
         """Test that we correctly reject an incorrect URL.
@@ -807,7 +811,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         svn_output = SVN_INFO_CISM
         expected_url = self._repo.url()
         result = self._repo.svn_check_url(svn_output, expected_url)
-        self.assertEqual(result, Status.MODEL_MODIFIED)
+        self.assertEqual(result, ExternalStatus.MODEL_MODIFIED)
 
     def test_check_url_none(self):
         """Test that we can handle an empty string for output, e.g. not an svn
@@ -817,7 +821,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         svn_output = EMPTY_STR
         expected_url = self._repo.url()
         result = self._repo.svn_check_url(svn_output, expected_url)
-        self.assertEqual(result, Status.UNKNOWN)
+        self.assertEqual(result, ExternalStatus.UNKNOWN)
 
 
 class TestSvnRepositoryCheckSync(unittest.TestCase):
@@ -830,26 +834,26 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         """Setup reusable svn repository object
         """
         self._name = "component"
-        rdata = {checkout_externals.ModelDescription.PROTOCOL: 'svn',
-                 checkout_externals.ModelDescription.REPO_URL:
+        rdata = {ModelDescription.PROTOCOL: 'svn',
+                 ModelDescription.REPO_URL:
                      'https://svn-ccsm-models.cgd.ucar.edu/',
-                 checkout_externals.ModelDescription.TAG:
+                 ModelDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 checkout_externals.ModelDescription.BRANCH: EMPTY_STR
+                 ModelDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
                 {
-                    checkout_externals.ModelDescription.REQUIRED: False,
-                    checkout_externals.ModelDescription.PATH: 'junk',
-                    checkout_externals.ModelDescription.EXTERNALS: EMPTY_STR,
-                    checkout_externals.ModelDescription.REPO: rdata,
+                    ModelDescription.REQUIRED: False,
+                    ModelDescription.PATH: 'junk',
+                    ModelDescription.EXTERNALS: EMPTY_STR,
+                    ModelDescription.REPO: rdata,
                 },
                 }
 
-        model = checkout_externals.ModelDescription('json', data)
-        repo = model[self._name][checkout_externals.ModelDescription.REPO]
-        self._repo = checkout_externals.SvnRepository('test', repo)
+        model = ModelDescription('json', data)
+        repo = model[self._name][ModelDescription.REPO]
+        self._repo = SvnRepository('test', repo)
 
     @staticmethod
     def _svn_info_empty(*_):
@@ -876,51 +880,51 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         working on an empty directory by the _Source object.
 
         """
-        stat = Status()
+        stat = ExternalStatus()
         self._repo.svn_check_sync(stat, 'junk')
-        self.assertEqual(stat.sync_state, Status.STATUS_ERROR)
+        self.assertEqual(stat.sync_state, ExternalStatus.STATUS_ERROR)
         # check_dir should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, Status.DEFAULT)
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
     def test_repo_dir_exist_no_svn_info(self):
         """Test that an empty info string returns an unknown status
         """
-        stat = Status()
+        stat = ExternalStatus()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
         self._repo.svn_info = self._svn_info_empty
         self._repo.svn_check_sync(stat, '.')
-        self.assertEqual(stat.sync_state, Status.UNKNOWN)
+        self.assertEqual(stat.sync_state, ExternalStatus.UNKNOWN)
         # check_dir should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, Status.DEFAULT)
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
     def test_repo_dir_synced(self):
         """Test that a valid info string that is synced to the repo in the
         model description returns an ok status.
 
         """
-        stat = Status()
+        stat = ExternalStatus()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
         self._repo.svn_info = self._svn_info_synced
         self._repo.svn_check_sync(stat, '.')
-        self.assertEqual(stat.sync_state, Status.STATUS_OK)
+        self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_dir should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, Status.DEFAULT)
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
     def test_repo_dir_modified(self):
         """Test that a valid svn info string that is out of sync with the
         model description returns a modified status.
 
         """
-        stat = Status()
+        stat = ExternalStatus()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
         self._repo.svn_info = self._svn_info_modified
         self._repo.svn_check_sync(stat, '.')
-        self.assertEqual(stat.sync_state, Status.MODEL_MODIFIED)
+        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_dir should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, Status.DEFAULT)
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
 
 class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
@@ -944,26 +948,26 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
 
     def setUp(self):
         self._name = 'component'
-        rdata = {checkout_externals.ModelDescription.PROTOCOL: 'git',
-                 checkout_externals.ModelDescription.REPO_URL:
+        rdata = {ModelDescription.PROTOCOL: 'git',
+                 ModelDescription.REPO_URL:
                  'git@git.github.com:ncar/rtm',
-                 checkout_externals.ModelDescription.TAG:
+                 ModelDescription.TAG:
                  'rtm1_0_26',
-                 checkout_externals.ModelDescription.BRANCH: EMPTY_STR
+                 ModelDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
                 {
-                    checkout_externals.ModelDescription.REQUIRED: False,
-                    checkout_externals.ModelDescription.PATH: 'junk',
-                    checkout_externals.ModelDescription.EXTERNALS: EMPTY_STR,
-                    checkout_externals.ModelDescription.REPO: rdata,
+                    ModelDescription.REQUIRED: False,
+                    ModelDescription.PATH: 'junk',
+                    ModelDescription.EXTERNALS: EMPTY_STR,
+                    ModelDescription.REPO: rdata,
                 },
                 }
 
-        model = checkout_externals.ModelDescription('json', data)
-        repo = model[self._name][checkout_externals.ModelDescription.REPO]
-        self._repo = checkout_externals.GitRepository('test', repo)
+        model = ModelDescription('json', data)
+        repo = model[self._name][ModelDescription.REPO]
+        self._repo = GitRepository('test', repo)
 
     def test_ref_detached_from_tag(self):
         """Test that we correctly identify that the ref is detached from a tag
@@ -1017,26 +1021,26 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         """Setup reusable git repository object
         """
         self._name = 'component'
-        rdata = {checkout_externals.ModelDescription.PROTOCOL: 'git',
-                 checkout_externals.ModelDescription.REPO_URL:
+        rdata = {ModelDescription.PROTOCOL: 'git',
+                 ModelDescription.REPO_URL:
                  'git@git.github.com:ncar/rtm',
-                 checkout_externals.ModelDescription.TAG:
+                 ModelDescription.TAG:
                  'rtm1_0_26',
-                 checkout_externals.ModelDescription.BRANCH: EMPTY_STR
+                 ModelDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
                 {
-                    checkout_externals.ModelDescription.REQUIRED: False,
-                    checkout_externals.ModelDescription.PATH: 'fake',
-                    checkout_externals.ModelDescription.EXTERNALS: '',
-                    checkout_externals.ModelDescription.REPO: rdata,
+                    ModelDescription.REQUIRED: False,
+                    ModelDescription.PATH: 'fake',
+                    ModelDescription.EXTERNALS: '',
+                    ModelDescription.REPO: rdata,
                 },
                 }
 
-        model = checkout_externals.ModelDescription('json', data)
-        repo = model[self._name][checkout_externals.ModelDescription.REPO]
-        self._repo = checkout_externals.GitRepository('test', repo)
+        model = ModelDescription('json', data)
+        repo = model[self._name][ModelDescription.REPO]
+        self._repo = GitRepository('test', repo)
         self.create_tmp_git_dir()
 
     def tearDown(self):
@@ -1091,51 +1095,51 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         working on an empty directory by the _Source object.
 
         """
-        stat = Status()
+        stat = ExternalStatus()
         self._repo.git_check_sync(stat, 'junk')
-        self.assertEqual(stat.sync_state, Status.STATUS_ERROR)
+        self.assertEqual(stat.sync_state, ExternalStatus.STATUS_ERROR)
         # check_dir should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, Status.DEFAULT)
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
     def test_repo_dir_exist_no_git_info(self):
         """Test that an empty info string returns an unknown status
         """
-        stat = Status()
+        stat = ExternalStatus()
         # Now we over-ride the _git_branch method on the repo to return
         # a known value without requiring access to git.
         self._repo.git_branch = self._git_branch_empty
         self._repo.git_check_sync(stat, 'fake')
-        self.assertEqual(stat.sync_state, Status.UNKNOWN)
+        self.assertEqual(stat.sync_state, ExternalStatus.UNKNOWN)
         # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, Status.DEFAULT)
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
     def test_repo_dir_synced(self):
         """Test that a valid info string that is synced to the repo in the
         model description returns an ok status.
 
         """
-        stat = Status()
+        stat = ExternalStatus()
         # Now we over-ride the _git_branch method on the repo to return
         # a known value without requiring access to svn.
         self._repo.git_branch = self._git_branch_synced
         self._repo.git_check_sync(stat, 'fake')
-        self.assertEqual(stat.sync_state, Status.STATUS_OK)
+        self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, Status.DEFAULT)
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
     def test_repo_dir_modified(self):
         """Test that a valid svn info string that is out of sync with the
         model description returns a modified status.
 
         """
-        stat = Status()
+        stat = ExternalStatus()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
         self._repo.git_branch = self._git_branch_modified
         self._repo.git_check_sync(stat, 'fake')
-        self.assertEqual(stat.sync_state, Status.MODEL_MODIFIED)
+        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, Status.DEFAULT)
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
 
 class TestSVNStatusXML(unittest.TestCase):
@@ -1353,7 +1357,7 @@ class TestSVNStatusXML(unittest.TestCase):
 
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_MISSING
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+        is_dirty = SvnRepository.xml_status_is_dirty(
             svn_output)
         self.assertTrue(is_dirty)
 
@@ -1362,7 +1366,7 @@ class TestSVNStatusXML(unittest.TestCase):
         modified file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_MODIFIED
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+        is_dirty = SvnRepository.xml_status_is_dirty(
             svn_output)
         self.assertTrue(is_dirty)
 
@@ -1371,7 +1375,7 @@ class TestSVNStatusXML(unittest.TestCase):
         deleted file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_DELETED
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+        is_dirty = SvnRepository.xml_status_is_dirty(
             svn_output)
         self.assertTrue(is_dirty)
 
@@ -1380,7 +1384,7 @@ class TestSVNStatusXML(unittest.TestCase):
         unversioned file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_UNVERSION
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+        is_dirty = SvnRepository.xml_status_is_dirty(
             svn_output)
         self.assertTrue(is_dirty)
 
@@ -1389,7 +1393,7 @@ class TestSVNStatusXML(unittest.TestCase):
         added file.
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_ADDED
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+        is_dirty = SvnRepository.xml_status_is_dirty(
             svn_output)
         self.assertTrue(is_dirty)
 
@@ -1399,7 +1403,7 @@ class TestSVNStatusXML(unittest.TestCase):
 
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_ALL
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+        is_dirty = SvnRepository.xml_status_is_dirty(
             svn_output)
         self.assertTrue(is_dirty)
 
@@ -1409,7 +1413,7 @@ class TestSVNStatusXML(unittest.TestCase):
 
         """
         svn_output = self.SVN_STATUS_XML_CLEAN
-        is_dirty = checkout_externals.SvnRepository.xml_status_is_dirty(
+        is_dirty = SvnRepository.xml_status_is_dirty(
             svn_output)
         self.assertFalse(is_dirty)
 
@@ -1430,7 +1434,7 @@ class TestGitStatusPorcelain(unittest.TestCase):
 
         """
         git_output = self.GIT_STATUS_PORCELAIN_V1_ALL
-        is_dirty = checkout_externals.GitRepository.git_status_v1z_is_dirty(
+        is_dirty = GitRepository.git_status_v1z_is_dirty(
             git_output)
         self.assertTrue(is_dirty)
 
@@ -1440,7 +1444,7 @@ class TestGitStatusPorcelain(unittest.TestCase):
 
         """
         git_output = self.GIT_STATUS_PORCELAIN_CLEAN
-        is_dirty = checkout_externals.GitRepository.git_status_v1z_is_dirty(
+        is_dirty = GitRepository.git_status_v1z_is_dirty(
             git_output)
         self.assertFalse(is_dirty)
 
@@ -1454,29 +1458,29 @@ class TestStatusObject(unittest.TestCase):
         clean state, then it is considered not to exist.
 
         """
-        stat = Status()
-        stat.sync_state = Status.EMPTY
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.EMPTY
+        stat.clean_state = ExternalStatus.DEFAULT
         exists = stat.exists()
         self.assertFalse(exists)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         exists = stat.exists()
         self.assertFalse(exists)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         exists = stat.exists()
         self.assertFalse(exists)
 
         # this state represtens an internal logic error in how the
         # repo status was determined.
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
         # this state represtens an internal logic error in how the
         # repo status was determined.
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1485,25 +1489,25 @@ class TestStatusObject(unittest.TestCase):
         regardless of clean state.
 
         """
-        stat = Status()
-        stat.sync_state = Status.DEFAULT
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.DEFAULT
+        stat.clean_state = ExternalStatus.DEFAULT
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1512,25 +1516,25 @@ class TestStatusObject(unittest.TestCase):
         regardless of clean state.
 
         """
-        stat = Status()
-        stat.sync_state = Status.UNKNOWN
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.UNKNOWN
+        stat.clean_state = ExternalStatus.DEFAULT
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1539,25 +1543,25 @@ class TestStatusObject(unittest.TestCase):
         regardless of clean state.
 
         """
-        stat = Status()
-        stat.sync_state = Status.MODEL_MODIFIED
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.MODEL_MODIFIED
+        stat.clean_state = ExternalStatus.DEFAULT
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1566,25 +1570,25 @@ class TestStatusObject(unittest.TestCase):
         regardless of clean state.
 
         """
-        stat = Status()
-        stat.sync_state = Status.STATUS_OK
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.STATUS_OK
+        stat.clean_state = ExternalStatus.DEFAULT
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         exists = stat.exists()
         self.assertTrue(exists)
 
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         exists = stat.exists()
         self.assertTrue(exists)
 
@@ -1593,25 +1597,25 @@ class TestStatusObject(unittest.TestCase):
         update only if clean state is ok
 
         """
-        stat = Status()
-        stat.sync_state = Status.STATUS_OK
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.STATUS_OK
+        stat.clean_state = ExternalStatus.DEFAULT
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertTrue(safe_to_update)
 
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1620,25 +1624,25 @@ class TestStatusObject(unittest.TestCase):
         update only if clean state is ok
 
         """
-        stat = Status()
-        stat.sync_state = Status.MODEL_MODIFIED
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.MODEL_MODIFIED
+        stat.clean_state = ExternalStatus.DEFAULT
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertTrue(safe_to_update)
 
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1647,25 +1651,25 @@ class TestStatusObject(unittest.TestCase):
         update, regardless of the clean state.
 
         """
-        stat = Status()
-        stat.sync_state = Status.UNKNOWN
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.UNKNOWN
+        stat.clean_state = ExternalStatus.DEFAULT
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1674,25 +1678,25 @@ class TestStatusObject(unittest.TestCase):
         update, regardless of the clean state.
 
         """
-        stat = Status()
-        stat.sync_state = Status.UNKNOWN
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.UNKNOWN
+        stat.clean_state = ExternalStatus.DEFAULT
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
@@ -1701,25 +1705,25 @@ class TestStatusObject(unittest.TestCase):
         update, regardless of the clean state.
 
         """
-        stat = Status()
-        stat.sync_state = Status.UNKNOWN
-        stat.clean_state = Status.DEFAULT
+        stat = ExternalStatus()
+        stat.sync_state = ExternalStatus.UNKNOWN
+        stat.clean_state = ExternalStatus.DEFAULT
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.EMPTY
+        stat.clean_state = ExternalStatus.EMPTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.UNKNOWN
+        stat.clean_state = ExternalStatus.UNKNOWN
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.STATUS_OK
+        stat.clean_state = ExternalStatus.STATUS_OK
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
-        stat.clean_state = Status.DIRTY
+        stat.clean_state = ExternalStatus.DIRTY
         safe_to_update = stat.safe_to_update()
         self.assertFalse(safe_to_update)
 
