@@ -29,10 +29,10 @@ EXE = ../checkout_externals.py
 TEST_DIR = .
 
 utest : FORCE
-	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_ce_unit*.py'
+	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_unit_*.py'
 
 stest : FORCE
-	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_ce_sys*.py'
+	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_sys_*.py'
 
 test : utest
 
@@ -47,7 +47,7 @@ lint : style
 	$(PYLINT) $(PYLINT_ARGS) $(SRC) $(TEST_DIR)/test_*.py
 
 coverage : FORCE
-	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) test_ce_unit.py
+	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) test_unit_*.py
 	$(PYPATH) $(COVERAGE) html
 
 py3 : 
