@@ -37,13 +37,13 @@ except ImportError:
     yaml = None
 
 
-from manageexternals.repository_factory import create_repository
-from manageexternals.repository_git import GitRepository
-from manageexternals.repository_svn import SvnRepository
-from manageexternals.repository import Repository
-from manageexternals.externalstatus import ExternalStatus
-from manageexternals.model_description import ModelDescription
-from manageexternals.globals import EMPTY_STR
+from manic.repository_factory import create_repository
+from manic.repository_git import GitRepository
+from manic.repository_svn import SvnRepository
+from manic.repository import Repository
+from manic.externalstatus import ExternalStatus
+from manic.model_description import ModelDescription
+from manic.globals import EMPTY_STR
 
 # in python2, xml.etree.ElementTree returns byte strings, str, instead
 # of unicode. We need unicode to be compatible with cfg and json

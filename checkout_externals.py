@@ -27,10 +27,10 @@ if sys.hexversion < 0x02070000:
     print(70 * '*')
     sys.exit(1)
 
-from manageexternals import read_model_description_file, ModelDescription
-from manageexternals import SourceTree
-from manageexternals import check_safe_to_update_repos
-from manageexternals import printlog, PPRINTER
+from manic import read_model_description_file, ModelDescription
+from manic import SourceTree
+from manic import check_safe_to_update_repos
+from manic import printlog, PPRINTER
 
 # ---------------------------------------------------------------------
 #
