@@ -21,7 +21,8 @@ COVERAGE=coverage
 COVERAGE_ARGS=--rcfile=.coveragerc
 
 SRC = \
-	../checkout_externals.py
+	../checkout_externals.py \
+	../manageexternals/*.py
 
 EXE = ../checkout_externals.py
 

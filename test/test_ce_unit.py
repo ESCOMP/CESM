@@ -38,7 +38,8 @@ except ImportError:
 
 import checkout_externals
 
-from checkout_externals import ModelDescription, Status, EMPTY_STR
+from checkout_externals import Status
+from manageexternals import ModelDescription, EMPTY_STR
 
 # in python2, xml.etree.ElementTree returns byte strings, str, instead
 # of unicode. We need unicode to be compatible with cfg and json
