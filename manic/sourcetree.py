@@ -8,7 +8,9 @@ import logging
 import os
 
 from .globals import EMPTY_STR
-from .model_description import ModelDescription, read_model_description_file
+from .model_description import ModelDescription
+from .model_description import read_model_description_file
+from .model_description import create_model_description
 from .repository_factory import create_repository
 from .externalstatus import ExternalStatus
 from .utils import fatal_error, printlog
@@ -193,9 +195,9 @@ class _Source(object):
             fatal_error(msg)
 
         externals_root = self._repo_dir_path
-        model_format, model_data = read_model_description_file(
-            externals_root, self._externals)
-        externals = ModelDescription(model_format, model_data)
+        model_data = read_model_description_file(externals_root,
+                                                 self._externals)
+        externals = create_model_description(model_data)
         self._externals_sourcetree = SourceTree(externals_root, externals)
         os.chdir(cwd)
 

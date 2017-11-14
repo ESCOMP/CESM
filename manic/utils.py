@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Common public utilities for manage_externals
+Common public utilities for manic package
 
 """
 
@@ -14,6 +14,11 @@ import subprocess
 import sys
 
 
+# ---------------------------------------------------------------------
+#
+# screen and logging output
+#
+# ---------------------------------------------------------------------
 def log_process_output(output):
     """Log each line of process output at debug level so it can be
     filtered if necessary. By default, output is a single string, and
@@ -38,6 +43,11 @@ def printlog(msg, **kwargs):
         print(msg)
 
 
+# ---------------------------------------------------------------------
+#
+# error handling
+#
+# ---------------------------------------------------------------------
 def fatal_error(message):
     """
     Error output function
@@ -46,6 +56,33 @@ def fatal_error(message):
     raise RuntimeError("{0}ERROR: {1}".format(os.linesep, message))
 
 
+# ---------------------------------------------------------------------
+#
+# Data conversion / manipulation
+#
+# ---------------------------------------------------------------------
+def str_to_bool(bool_str):
+    """Convert a sting representation of as boolean into a true boolean.
+
+    Conversion should be case insensitive.
+    """
+    value = None
+    if ((bool_str.lower() == 'true') or (bool_str.lower() == 't')):
+        value = True
+    elif bool_str.lower() == 'false' or bool_str.lower() == 'f':
+        value = False
+    if value is None:
+        msg = ('ERROR: invalid boolean string value "{0}". '
+               'Must be "true" or "false"'.format(bool_str))
+        fatal_error(msg)
+    return value
+
+
+# ---------------------------------------------------------------------
+#
+# subprocess
+#
+# ---------------------------------------------------------------------
 def check_output(commands):
     """
     Wrapper around subprocess.check_output to handle common exceptions.
@@ -120,5 +157,3 @@ def execute_subprocess(commands, status_to_caller=False):
             fatal_error(msg)
         status = error.returncode
     return status
-
-

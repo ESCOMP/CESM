@@ -20,6 +20,7 @@ import unittest
 from manic.repository_svn import SvnRepository
 from manic.externalstatus import ExternalStatus
 from manic.model_description import ModelDescription
+from manic.model_description import ModelDescriptionDict
 from manic.globals import EMPTY_STR
 
 SVN_INFO_MOSART = """Path: components/mosart
@@ -76,7 +77,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
                 },
                 }
 
-        model = ModelDescription('json', data)
+        model = ModelDescriptionDict(data)
         repo = model[self._name][ModelDescription.REPO]
         self._repo = SvnRepository('test', repo)
 
@@ -134,7 +135,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
                 },
                 }
 
-        model = ModelDescription('json', data)
+        model = ModelDescriptionDict(data)
         repo = model[self._name][ModelDescription.REPO]
         self._repo = SvnRepository('test', repo)
 

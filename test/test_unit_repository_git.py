@@ -18,6 +18,7 @@ import unittest
 from manic.repository_git import GitRepository
 from manic.externalstatus import ExternalStatus
 from manic.model_description import ModelDescription
+from manic.model_description import ModelDescriptionDict
 from manic.globals import EMPTY_STR
 
 
@@ -59,7 +60,7 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
                 },
                 }
 
-        model = ModelDescription('json', data)
+        model = ModelDescriptionDict(data)
         repo = model[self._name][ModelDescription.REPO]
         self._repo = GitRepository('test', repo)
 
@@ -132,7 +133,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
                 },
                 }
 
-        model = ModelDescription('json', data)
+        model = ModelDescriptionDict(data)
         repo = model[self._name][ModelDescription.REPO]
         self._repo = GitRepository('test', repo)
         self.create_tmp_git_dir()

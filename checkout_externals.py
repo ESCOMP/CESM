@@ -27,17 +27,10 @@ if sys.hexversion < 0x02070000:
     print(70 * '*')
     sys.exit(1)
 
-from manic import read_model_description_file, ModelDescription
+from manic import read_model_description_file, create_model_description
 from manic import SourceTree
 from manic import check_safe_to_update_repos
 from manic import printlog, PPRINTER
-
-# ---------------------------------------------------------------------
-#
-# Global variables
-#
-# ---------------------------------------------------------------------
-RE_NAMESPACE = re.compile(r'{[^}]*}')
 
 
 # ---------------------------------------------------------------------
@@ -239,9 +232,8 @@ def _main(args):
         load_all = True
 
     root_dir = os.path.abspath('.')
-    model_format, model_data = read_model_description_file(
-        root_dir, args.model)
-    model = ModelDescription(model_format, model_data)
+    model_data = read_model_description_file(root_dir, args.model)
+    model = create_model_description(model_data)
     if args.debug:
         PPRINTER.pprint(model)
 
