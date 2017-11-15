@@ -1,3 +1,10 @@
+"""Factory for creating and initializing the appropriate repository class
+"""
+
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+
 from .repository_git import GitRepository
 from .repository_svn import SvnRepository
 from .externals_description import ExternalsDescription

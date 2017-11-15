@@ -22,7 +22,7 @@ COVERAGE_ARGS=--rcfile=.coveragerc
 
 SRC = \
 	../checkout_externals.py \
-	../manageexternals/*.py
+	../manic/*.py
 
 EXE = ../checkout_externals.py
 

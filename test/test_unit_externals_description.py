@@ -11,8 +11,6 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
 
-import string
-import sys
 import unittest
 
 try:
@@ -20,12 +18,18 @@ try:
     from ConfigParser import SafeConfigParser as config_parser
 
     def config_string_cleaner(text):
+        """convert strings into unicode
+        """
         return text.decode('utf-8')
 except ImportError:
     # python3
     from configparser import ConfigParser as config_parser
 
     def config_string_cleaner(text):
+        """Python3 already uses unicode strings, so just return the string
+        without modification.
+
+        """
         return text
 
 from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM

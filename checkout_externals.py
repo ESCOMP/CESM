@@ -14,10 +14,14 @@ import argparse
 import logging
 import os
 import os.path
-import re
 import sys
 import textwrap
 import traceback
+
+from manic import read_externals_description_file, create_externals_description
+from manic import SourceTree
+from manic import check_safe_to_update_repos
+from manic import printlog, PPRINTER
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
@@ -26,11 +30,6 @@ if sys.hexversion < 0x02070000:
         '.'.join(str(x) for x in sys.version_info[0:3])))
     print(70 * '*')
     sys.exit(1)
-
-from manic import read_externals_description_file, create_externals_description
-from manic import SourceTree
-from manic import check_safe_to_update_repos
-from manic import printlog, PPRINTER
 
 
 # ---------------------------------------------------------------------
@@ -244,7 +243,7 @@ def _main(args):
 
     if args.status:
         # user requested status-only
-        for comp in sorted(tree_status.iterkeys()):
+        for comp in sorted(tree_status.keys()):
             msg = str(tree_status[comp])
             printlog(msg)
         if args.verbose:
@@ -255,7 +254,7 @@ def _main(args):
         safe_to_update = check_safe_to_update_repos(tree_status, args.debug)
         if not safe_to_update:
             # print status
-            for comp in sorted(tree_status.iterkeys()):
+            for comp in sorted(tree_status.keys()):
                 msg = str(tree_status[comp])
                 printlog(msg)
             # exit gracefully

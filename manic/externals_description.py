@@ -28,15 +28,24 @@ import re
 try:
     # python2
     from ConfigParser import SafeConfigParser as config_parser
-    import ConfigParser
+    from ConfigParser import MissingSectionHeaderError
+    from ConfigParser import NoSectionError, NoOptionError
 
     def config_string_cleaner(text):
+        """convert strings into unicode
+        """
         return text.decode('utf-8')
 except ImportError:
     # python3
     from configparser import ConfigParser as config_parser
+    from configparser import MissingSectionHeaderError
+    from configparser import NoSectionError, NoOptionError
 
     def config_string_cleaner(text):
+        """Python3 already uses unicode strings, so just return the string
+        without modification.
+
+        """
         return text
 
 from .utils import printlog, fatal_error, str_to_bool
@@ -70,7 +79,7 @@ def read_externals_description_file(root_dir, file_name):
         config = config_parser()
         config.read(file_path)
         externals_description = config
-    except ConfigParser.MissingSectionHeaderError:
+    except MissingSectionHeaderError:
         # not a cfg file
         pass
 
@@ -115,8 +124,8 @@ def get_cfg_schema_version(model_cfg):
     semver_str = ''
     try:
         semver_str = model_cfg.get(DESCRIPTION_SECTION, VERSION_ITEM)
-    except Exception:
-        msg = ('ERROR: externals description file must have the required '
+    except (NoSectionError, NoOptionError):
+        msg = ('externals description file must have the required '
                'section: "{0}" and item "{1}"'.format(DESCRIPTION_SECTION,
                                                       VERSION_ITEM))
         fatal_error(msg)
@@ -291,6 +300,7 @@ class ExternalsDescriptionDict(ExternalsDescription):
     description files for unit testing.
 
     """
+
     def __init__(self, model_data):
         """Parse a native dictionary into a externals description.
         """
@@ -304,6 +314,7 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
     schema version 1.
 
     """
+
     def __init__(self, model_data):
         """Convert the xml into a standardized dict that can be used to
         construct the source objects
@@ -350,5 +361,3 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
                 if item in self._source_schema[self.REPO]:
                     self[name][self.REPO][item] = self[name][item]
                     del self[name][item]
-
-

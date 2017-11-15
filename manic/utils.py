@@ -67,9 +67,10 @@ def str_to_bool(bool_str):
     Conversion should be case insensitive.
     """
     value = None
-    if ((bool_str.lower() == 'true') or (bool_str.lower() == 't')):
+    str_lower = bool_str.lower()
+    if (str_lower == 'true') or (str_lower == 't'):
         value = True
-    elif bool_str.lower() == 'false' or bool_str.lower() == 'f':
+    elif (str_lower == 'false') or (str_lower == 'f'):
         value = False
     if value is None:
         msg = ('ERROR: invalid boolean string value "{0}". '

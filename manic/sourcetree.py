@@ -196,7 +196,7 @@ class _Source(object):
 
         externals_root = self._repo_dir_path
         model_data = read_externals_description_file(externals_root,
-                                                 self._externals)
+                                                     self._externals)
         externals = create_externals_description(model_data)
         self._externals_sourcetree = SourceTree(externals_root, externals)
         os.chdir(cwd)
@@ -237,16 +237,16 @@ class SourceTree(object):
         for comp in load_comps:
             printlog('{0}, '.format(comp), end='')
             stat = self._all_components[comp].status()
-            for comp in stat.keys():
+            for name in stat.keys():
                 # check if we need to append the relative_path_base to
                 # the path so it will be sorted in the correct order.
-                if not stat[comp].path.startswith(relative_path_base):
-                    stat[comp].path = os.path.join(relative_path_base,
-                                                   stat[comp].path)
+                if not stat[name].path.startswith(relative_path_base):
+                    stat[name].path = os.path.join(relative_path_base,
+                                                   stat[name].path)
                     # store under key = updated path, and delete the
                     # old key.
-                    comp_stat = stat[comp]
-                    del stat[comp]
+                    comp_stat = stat[name]
+                    del stat[name]
                     stat[comp_stat.path] = comp_stat
             summary.update(stat)
 

@@ -1,3 +1,10 @@
+"""Class for interacting with git repositories
+"""
+
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+
 import os
 import re
 
@@ -315,23 +322,7 @@ class GitRepository(Repository):
 
         cmd = []
         if self._branch:
-            (curr_branch, _) = self._git_current_branch()
-            ref_type = self._git_ref_type(self._branch)
-            if ref_type == self.GIT_REF_REMOTE_BRANCH:
-                cmd = ['git', 'checkout', '--track', 'origin/' + self._branch]
-            elif ref_type == self.GIT_REF_LOCAL_BRANCH:
-                if curr_branch != self._branch:
-                    if not self._git_working_dir_clean(repo_dir_path):
-                        msg = ('Working directory "{0}" not clean, '
-                               'aborting'.format(repo_dir_path))
-                        fatal_error(msg)
-                    else:
-                        cmd = ['git', 'checkout', self._branch]
-
-            else:
-                msg = 'Unable to check out branch, "{0}"'.format(self._branch)
-                fatal_error(msg)
-
+            cmd = self._checkout_branch_command(repo_dir_path)
         elif self._tag:
             # For now, do a hail mary and hope tag can be checked out
             cmd = ['git', 'checkout', self._tag]
@@ -343,6 +334,31 @@ class GitRepository(Repository):
             execute_subprocess(cmd)
 
         os.chdir(cwd)
+
+    def _checkout_branch_command(self, repo_dir_path):
+        """Construct the command for checking out the specified branch
+        """
+        cmd = []
+        (curr_branch, _) = self._git_current_branch()
+        ref_type = self._git_ref_type(self._branch)
+        if ref_type == self.GIT_REF_REMOTE_BRANCH:
+            cmd = ['git', 'checkout', '--track', 'origin/' + self._branch]
+        elif ref_type == self.GIT_REF_LOCAL_BRANCH:
+            if curr_branch != self._branch:
+                # FIXME(bja, 2017-11) not sure what this branch logic
+                # is accomplishing, but it can lead to cmd being
+                # undefined without an error. Probably not what we
+                # want!
+                if not self._git_working_dir_clean(repo_dir_path):
+                    msg = ('Working directory "{0}" not clean, '
+                           'aborting'.format(repo_dir_path))
+                    fatal_error(msg)
+                else:
+                    cmd = ['git', 'checkout', self._branch]
+        else:
+            msg = 'Unable to check out branch, "{0}"'.format(self._branch)
+            fatal_error(msg)
+        return cmd
 
     @staticmethod
     def git_status_porcelain_v1z():
