@@ -1,0 +1,45 @@
+
+       The Community Earth System Model version 1.5 (CESM1.5)
+
+                     http://www2.cesm.ucar.edu
+
+       See the CESM web site for documentation and information.
+
+The most current process for updating and testing CESM versions is documented in a shared
+NCAR/UCAR google document at:
+
+https://docs.google.com/a/ucar.edu/document/d/1oDNFPzw8bFbuyY129vX6-RJG-C9ZNUs-O1x2uVjSO4M/edit?usp=sharing
+
+CESM alpha tag creation should be coordinated through CSEG at NCAR. (cgd-cseg@ucar.edu).
+
+*********************
+
+General instructions:
+
+For commits to the CESM svn repo 
+
+1) check out the latest cesm alpha tag but do not populate external directories
+> svn co --ignore-externals $SVNREPO/cesm1/alphas/tags/cesm1_5_alpha## my_sandbox
+> svn co -N $SVNREPO/cesm1/alphas/tags/cesm1_5_alpha## my_sandbox
+
+2) modify the file SVN_EXTERNAL_DIRECTORIES with any changes to
+component tags
+> cd  my_sandbox
+> emacs SVN_EXTERNAL_DIRECTORIES
+
+3) set the property for the external definitions - don't forget the dot at the end
+> svn propset  svn:externals  -F SVN_EXTERNAL_DIRECTORIES .
+
+4) populate your sandbox with the external files
+> svn update
+
+5) test
+
+6) document your mods
+> cp  ChangeLog_template  ChangeLog.new
+> cat  ChangeLog  >>  ChangeLog.new
+> emacs  ChangeLog.new
+> mv ChangeLog.new  ChangeLog
+
+7) copy your sandbox to a new tag in the repository
+> svn copy . $SVNREPO/cesm1/alphas/tags/cesm1_5_alpha## -m "created tag cesm1_5_alpha##"
