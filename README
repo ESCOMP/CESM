@@ -1,5 +1,7 @@
 -- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --
 
+[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)
+
 usage: checkout_externals.py [-h] [-m [MODEL]] [-o] [-S] [-v] [--backtrace]
                              [-d]
 

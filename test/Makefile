@@ -38,6 +38,7 @@ test : utest
 
 readme : FORCE
 	echo '-- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --\n' > ../README
+	echo '[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)\n' >> ../README
 	$(EXE) --help >> ../README
 
 style : FORCE
@@ -55,10 +56,7 @@ py3 :
 
 env : FORCE
 	$(PYPATH) virtualenv --python $(PYTHON) $@_$(PYTHON)
-	. $@_$(PYTHON)/bin/activate; pip install 'pyaml>=17.10.0'
-	. $@_$(PYTHON)/bin/activate; pip install 'pylint>=1.7.0'
-	. $@_$(PYTHON)/bin/activate; pip install 'autopep8>=1.3.0'
-	. $@_$(PYTHON)/bin/activate; pip install 'coverage>=4.4.0'
+	. $@_$(PYTHON)/bin/activate; pip install -r requirements.txt
 
 clean : FORCE
 	-rm -rf *~ *.pyc
