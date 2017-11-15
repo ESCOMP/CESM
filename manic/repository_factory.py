@@ -1,6 +1,6 @@
 from .repository_git import GitRepository
 from .repository_svn import SvnRepository
-from .model_description import ModelDescription
+from .externals_description import ExternalsDescription
 from .utils import fatal_error
 
 
@@ -9,7 +9,7 @@ def create_repository(component_name, repo_info):
     create the appropriate object.
 
     """
-    protocol = repo_info[ModelDescription.PROTOCOL].lower()
+    protocol = repo_info[ExternalsDescription.PROTOCOL].lower()
     if protocol == 'git':
         repo = GitRepository(component_name, repo_info)
     elif protocol == 'svn':

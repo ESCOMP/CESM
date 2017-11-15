@@ -28,10 +28,10 @@ except ImportError:
     def config_string_cleaner(text):
         return text
 
-from manic.model_description import DESCRIPTION_SECTION, VERSION_ITEM
-from manic.model_description import ModelDescription
-from manic.model_description import ModelDescriptionConfigV1
-from manic.model_description import get_cfg_schema_version
+from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
+from manic.externals_description import ExternalsDescription
+from manic.externals_description import ExternalsDescriptionConfigV1
+from manic.externals_description import get_cfg_schema_version
 
 from manic.globals import EMPTY_STR
 
@@ -76,7 +76,7 @@ class TestCfgSchemaVersion(unittest.TestCase):
             get_cfg_schema_version(self._config)
 
     def test_schema_version_missing(self):
-        """Test that a model description file without a version raises a
+        """Test that a externals description file without a version raises a
         runtime error.
 
         """
@@ -89,7 +89,7 @@ class TestCfgSchemaVersion(unittest.TestCase):
 
 class TestModelDescritionConfigV1(unittest.TestCase):
     """Test that parsing config/ini fileproduces a correct dictionary
-    for the model description.
+    for the externals description.
 
     """
 
@@ -140,36 +140,36 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         """
         self.assertTrue(self._comp1_name in model)
         comp1 = model[self._comp1_name]
-        self.assertEqual(comp1[ModelDescription.PATH], self._comp1_path)
-        self.assertTrue(comp1[ModelDescription.REQUIRED])
-        repo = comp1[ModelDescription.REPO]
-        self.assertEqual(repo[ModelDescription.PROTOCOL],
+        self.assertEqual(comp1[ExternalsDescription.PATH], self._comp1_path)
+        self.assertTrue(comp1[ExternalsDescription.REQUIRED])
+        repo = comp1[ExternalsDescription.REPO]
+        self.assertEqual(repo[ExternalsDescription.PROTOCOL],
                          self._comp1_protocol)
-        self.assertEqual(repo[ModelDescription.REPO_URL], self._comp1_url)
-        self.assertEqual(repo[ModelDescription.TAG], self._comp1_tag)
-        self.assertEqual(EMPTY_STR, comp1[ModelDescription.EXTERNALS])
+        self.assertEqual(repo[ExternalsDescription.REPO_URL], self._comp1_url)
+        self.assertEqual(repo[ExternalsDescription.TAG], self._comp1_tag)
+        self.assertEqual(EMPTY_STR, comp1[ExternalsDescription.EXTERNALS])
 
     def _check_comp2(self, model):
         """Test that component two was constucted correctly.
         """
         self.assertTrue(self._comp2_name in model)
         comp2 = model[self._comp2_name]
-        self.assertEqual(comp2[ModelDescription.PATH], self._comp2_path)
-        self.assertFalse(comp2[ModelDescription.REQUIRED])
-        repo = comp2[ModelDescription.REPO]
-        self.assertEqual(repo[ModelDescription.PROTOCOL],
+        self.assertEqual(comp2[ExternalsDescription.PATH], self._comp2_path)
+        self.assertFalse(comp2[ExternalsDescription.REQUIRED])
+        repo = comp2[ExternalsDescription.REPO]
+        self.assertEqual(repo[ExternalsDescription.PROTOCOL],
                          self._comp2_protocol)
-        self.assertEqual(repo[ModelDescription.REPO_URL], self._comp2_url)
-        self.assertEqual(repo[ModelDescription.BRANCH], self._comp2_branch)
+        self.assertEqual(repo[ExternalsDescription.REPO_URL], self._comp2_url)
+        self.assertEqual(repo[ExternalsDescription.BRANCH], self._comp2_branch)
         self.assertEqual(self._comp2_externals,
-                         comp2[ModelDescription.EXTERNALS])
+                         comp2[ExternalsDescription.EXTERNALS])
 
     def test_one_tag_required(self):
         """Test that a component source with a tag is correctly parsed.
         """
         config = config_parser()
         self._setup_comp1(config)
-        model = ModelDescriptionConfigV1(config)
+        model = ExternalsDescriptionConfigV1(config)
         print(model)
         self._check_comp1(model)
 
@@ -178,7 +178,7 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         """
         config = config_parser()
         self._setup_comp2(config)
-        model = ModelDescriptionConfigV1(config)
+        model = ExternalsDescriptionConfigV1(config)
         print(model)
         self._check_comp2(model)
 
@@ -188,7 +188,7 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         config = config_parser()
         self._setup_comp1(config)
         self._setup_comp2(config)
-        model = ModelDescriptionConfigV1(config)
+        model = ExternalsDescriptionConfigV1(config)
         print(model)
         self._check_comp1(model)
         self._check_comp2(model)

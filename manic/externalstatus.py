@@ -12,7 +12,7 @@ class ExternalStatus(object):
 
     There are two states of concern:
 
-    * If the repository is in-sync with the model description file.
+    * If the repository is in-sync with the externals description file.
 
     * If the repostiory working copy is clean and there are no pending
     transactions (e.g. add, remove, rename, untracked files).
@@ -105,7 +105,7 @@ def check_safe_to_update_repos(tree_status, debug):
     the model in an inconsistent state.
 
     Note: if there is an update to do, the repositories will by
-    definiation be out of synce with the model description, so we
+    definiation be out of synce with the externals description, so we
     can't use that as criteria for updating.
 
     """

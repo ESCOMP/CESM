@@ -19,8 +19,8 @@ import unittest
 
 from manic.repository_svn import SvnRepository
 from manic.externalstatus import ExternalStatus
-from manic.model_description import ModelDescription
-from manic.model_description import ModelDescriptionDict
+from manic.externals_description import ExternalsDescription
+from manic.externals_description import ExternalsDescriptionDict
 from manic.globals import EMPTY_STR
 
 SVN_INFO_MOSART = """Path: components/mosart
@@ -60,25 +60,25 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """Setup reusable svn repository object
         """
         self._name = 'component'
-        rdata = {ModelDescription.PROTOCOL: 'svn',
-                 ModelDescription.REPO_URL:
+        rdata = {ExternalsDescription.PROTOCOL: 'svn',
+                 ExternalsDescription.REPO_URL:
                      'https://svn-ccsm-models.cgd.ucar.edu/',
-                 ModelDescription.TAG:
+                 ExternalsDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 ModelDescription.BRANCH: ''
+                 ExternalsDescription.BRANCH: ''
                  }
 
         data = {self._name:
                 {
-                    ModelDescription.REQUIRED: False,
-                    ModelDescription.PATH: 'junk',
-                    ModelDescription.EXTERNALS: '',
-                    ModelDescription.REPO: rdata,
+                    ExternalsDescription.REQUIRED: False,
+                    ExternalsDescription.PATH: 'junk',
+                    ExternalsDescription.EXTERNALS: '',
+                    ExternalsDescription.REPO: rdata,
                 },
                 }
 
-        model = ModelDescriptionDict(data)
-        repo = model[self._name][ModelDescription.REPO]
+        model = ExternalsDescriptionDict(data)
+        repo = model[self._name][ExternalsDescription.REPO]
         self._repo = SvnRepository('test', repo)
 
     def test_check_url_same(self):
@@ -118,25 +118,25 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         """Setup reusable svn repository object
         """
         self._name = "component"
-        rdata = {ModelDescription.PROTOCOL: 'svn',
-                 ModelDescription.REPO_URL:
+        rdata = {ExternalsDescription.PROTOCOL: 'svn',
+                 ExternalsDescription.REPO_URL:
                      'https://svn-ccsm-models.cgd.ucar.edu/',
-                 ModelDescription.TAG:
+                 ExternalsDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 ModelDescription.BRANCH: EMPTY_STR
+                 ExternalsDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
                 {
-                    ModelDescription.REQUIRED: False,
-                    ModelDescription.PATH: 'junk',
-                    ModelDescription.EXTERNALS: EMPTY_STR,
-                    ModelDescription.REPO: rdata,
+                    ExternalsDescription.REQUIRED: False,
+                    ExternalsDescription.PATH: 'junk',
+                    ExternalsDescription.EXTERNALS: EMPTY_STR,
+                    ExternalsDescription.REPO: rdata,
                 },
                 }
 
-        model = ModelDescriptionDict(data)
-        repo = model[self._name][ModelDescription.REPO]
+        model = ExternalsDescriptionDict(data)
+        repo = model[self._name][ExternalsDescription.REPO]
         self._repo = SvnRepository('test', repo)
 
     @staticmethod
@@ -184,7 +184,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
 
     def test_repo_dir_synced(self):
         """Test that a valid info string that is synced to the repo in the
-        model description returns an ok status.
+        externals description returns an ok status.
 
         """
         stat = ExternalStatus()
@@ -198,7 +198,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
 
     def test_repo_dir_modified(self):
         """Test that a valid svn info string that is out of sync with the
-        model description returns a modified status.
+        externals description returns a modified status.
 
         """
         stat = ExternalStatus()

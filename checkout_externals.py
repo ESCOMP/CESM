@@ -27,7 +27,7 @@ if sys.hexversion < 0x02070000:
     print(70 * '*')
     sys.exit(1)
 
-from manic import read_model_description_file, create_model_description
+from manic import read_externals_description_file, create_externals_description
 from manic import SourceTree
 from manic import check_safe_to_update_repos
 from manic import printlog, PPRINTER
@@ -43,13 +43,13 @@ def commandline_arguments():
     """
     description = '''
 %(prog)s manages checking out CESM externals from revision control
-based on a model description file. By default only the required
+based on a externals description file. By default only the required
 components of the model are checkout out.
 
 NOTE: %(prog)s *MUST* be run from the root of the source tree.
 
 Running %(prog)s without the '--status' option will always attempt to
-synchronize the working copy with the model description.
+synchronize the working copy with the externals description.
 '''
 
     epilog = '''
@@ -76,7 +76,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
       $ ./checkout_cesm/%(prog)s
 
   * To update all required components to the current values in the
-    model description file, re-run %(prog)s:
+    externals description file, re-run %(prog)s:
 
       $ cd ${SRC_ROOT}
       $ ./checkout_cesm/%(prog)s
@@ -107,12 +107,12 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
     where:
       * column one indicates the status of the repository in relation
-        to the model description file.
+        to the externals description file.
       * column two indicates whether the working copy has modified files.
       * column three shows how the repository is managed, optional or required
 
     Colunm one will be one of these values:
-      * m : modified : repository is modefied compared to the model description
+      * m : modified : repository is modefied compared to the externals description
       * e : empty : directory does not exist - %(prog)s has not been run
       * ? : unknown : directory exists but .git or .svn directories are missing
 
@@ -132,7 +132,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
 # Model description file:
 
-  The model description contains a list of the model components that
+  The externals description contains a list of the model components that
   are used and their version control locations. Each component has:
 
   * name (string) : component name, e.g. cime, cism, clm, cam, etc.
@@ -162,7 +162,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
   * externals (string) : relative path to the external model
     description file that should also be used. It is *relative* to the
-    component local_path. For example, the CESM model description will
+    component local_path. For example, the CESM externals description will
     load clm. CLM has additional externals that must be downloaded to
     be complete. Those additional externals are managed from the clm
     source root by the file pointed to by 'externals'.
@@ -177,7 +177,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
     # user options
     #
     parser.add_argument('-m', '--model', nargs='?', default='CESM.cfg',
-                        help='The model description filename. '
+                        help='The externals description filename. '
                         'Default: %(default)s.')
 
     parser.add_argument('-o', '--optional', action='store_true', default=False,
@@ -232,8 +232,8 @@ def _main(args):
         load_all = True
 
     root_dir = os.path.abspath('.')
-    model_data = read_model_description_file(root_dir, args.model)
-    model = create_model_description(model_data)
+    model_data = read_externals_description_file(root_dir, args.model)
+    model = create_externals_description(model_data)
     if args.debug:
         PPRINTER.pprint(model)
 

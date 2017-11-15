@@ -7,7 +7,7 @@ included in the model. It processes in input data structure, and
 converts it into a standard interface that is used by the rest of the
 system.
 
-To maintain backward compatibility, model description files should
+To maintain backward compatibility, externals description files should
 follow semantic versioning rules, http://semver.org/
 
 
@@ -49,15 +49,15 @@ DESCRIPTION_SECTION = 'externals_description'
 VERSION_ITEM = 'version'
 
 
-def read_model_description_file(root_dir, file_name):
-    """Given a file name containing a model description, determine the
+def read_externals_description_file(root_dir, file_name):
+    """Given a file name containing a externals description, determine the
     format and read it into it's internal representation.
 
     """
     root_dir = os.path.abspath(root_dir)
     msg = 'In directory : {0}'.format(root_dir)
     logging.info(msg)
-    printlog('Processing model description file : {0}'.format(file_name))
+    printlog('Processing externals description file : {0}'.format(file_name))
 
     file_path = os.path.join(root_dir, file_name)
     if not os.path.exists(file_name):
@@ -65,32 +65,32 @@ def read_model_description_file(root_dir, file_name):
                'exist at {1}'.format(file_name, file_path))
         fatal_error(msg)
 
-    model_description = None
+    externals_description = None
     try:
         config = config_parser()
         config.read(file_path)
-        model_description = config
+        externals_description = config
     except ConfigParser.MissingSectionHeaderError:
         # not a cfg file
         pass
 
-    if model_description is None:
+    if externals_description is None:
         msg = 'Unknown file format!'
         fatal_error(msg)
 
-    return model_description
+    return externals_description
 
 
-def create_model_description(model_data, model_format='cfg'):
-    """Create the a model description object from the provided data
+def create_externals_description(model_data, model_format='cfg'):
+    """Create the a externals description object from the provided data
     """
-    model_description = None
+    externals_description = None
     if model_format == 'dict':
-        model_description = ModelDescriptionDict(model_data, )
+        externals_description = ExternalsDescriptionDict(model_data, )
     elif model_format == 'cfg':
         major, _, _ = get_cfg_schema_version(model_data)
         if major == 1:
-            model_description = ModelDescriptionConfigV1(model_data)
+            externals_description = ExternalsDescriptionConfigV1(model_data)
         else:
             msg = ('Externals description file has unsupported schema '
                    'version "{0}".'.format(major))
@@ -98,7 +98,7 @@ def create_model_description(model_data, model_format='cfg'):
     else:
         msg = 'Unknown model data format "{0}"'.format(model_format)
         fatal_error(msg)
-    return model_description
+    return externals_description
 
 
 def get_cfg_schema_version(model_cfg):
@@ -132,14 +132,14 @@ def get_cfg_schema_version(model_cfg):
     return major, minor, patch
 
 
-class ModelDescription(dict):
-    """Base model description class that is independent of the user input
+class ExternalsDescription(dict):
+    """Base externals description class that is independent of the user input
     format. Different input formats can all be converted to this
     representation to provide a consistent represtentation for the
     rest of the objects in the system.
 
     """
-    # keywords defining the interface into the model description data
+    # keywords defining the interface into the externals description data
     EXTERNALS = 'externals'
     BRANCH = 'branch'
     REPO = 'repo'
@@ -222,7 +222,7 @@ class ModelDescription(dict):
     def _check_optional(self):
         """Some fields like externals, repo:tag repo:branch are
         (conditionally) optional. We don't want the user to be
-        required to enter them in every model description file, but
+        required to enter them in every externals description file, but
         still want to validate the input. Check conditions and add
         default values if appropriate.
 
@@ -241,7 +241,7 @@ class ModelDescription(dict):
                 self[field][self.REPO][self.REPO_URL] = EMPTY_STR
 
     def _validate(self):
-        """Validate that the parsed model description contains all necessary
+        """Validate that the parsed externals description contains all necessary
         fields.
 
         """
@@ -285,22 +285,22 @@ class ModelDescription(dict):
                 fatal_error(msg)
 
 
-class ModelDescriptionDict(ModelDescription):
-    """Create a model description object from a dictionary using the API
+class ExternalsDescriptionDict(ExternalsDescription):
+    """Create a externals description object from a dictionary using the API
     representations. Primarily used to simplify creating model
     description files for unit testing.
 
     """
     def __init__(self, model_data):
-        """Parse a native dictionary into a model description.
+        """Parse a native dictionary into a externals description.
         """
-        ModelDescription.__init__(self)
+        ExternalsDescription.__init__(self)
         self.update(model_data)
         self._check_user_input()
 
 
-class ModelDescriptionConfigV1(ModelDescription):
-    """Create a model description object from a config_parser object,
+class ExternalsDescriptionConfigV1(ExternalsDescription):
+    """Create a externals description object from a config_parser object,
     schema version 1.
 
     """
@@ -309,7 +309,7 @@ class ModelDescriptionConfigV1(ModelDescription):
         construct the source objects
 
         """
-        ModelDescription.__init__(self)
+        ExternalsDescription.__init__(self)
         self._remove_metadata(model_data)
         self._parse_cfg(model_data)
         self._check_user_input()
@@ -324,7 +324,7 @@ class ModelDescriptionConfigV1(ModelDescription):
         model_data.remove_section(DESCRIPTION_SECTION)
 
     def _parse_cfg(self, cfg_data):
-        """Parse a config_parser object into a model description.
+        """Parse a config_parser object into a externals description.
         """
         def list_to_dict(input_list, convert_to_lower_case=True):
             """Convert a list of key-value pairs into a dictionary.

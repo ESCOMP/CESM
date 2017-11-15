@@ -17,8 +17,8 @@ import unittest
 
 from manic.repository_git import GitRepository
 from manic.externalstatus import ExternalStatus
-from manic.model_description import ModelDescription
-from manic.model_description import ModelDescriptionDict
+from manic.externals_description import ExternalsDescription
+from manic.externals_description import ExternalsDescriptionDict
 from manic.globals import EMPTY_STR
 
 
@@ -43,25 +43,25 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
 
     def setUp(self):
         self._name = 'component'
-        rdata = {ModelDescription.PROTOCOL: 'git',
-                 ModelDescription.REPO_URL:
+        rdata = {ExternalsDescription.PROTOCOL: 'git',
+                 ExternalsDescription.REPO_URL:
                  'git@git.github.com:ncar/rtm',
-                 ModelDescription.TAG:
+                 ExternalsDescription.TAG:
                  'rtm1_0_26',
-                 ModelDescription.BRANCH: EMPTY_STR
+                 ExternalsDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
                 {
-                    ModelDescription.REQUIRED: False,
-                    ModelDescription.PATH: 'junk',
-                    ModelDescription.EXTERNALS: EMPTY_STR,
-                    ModelDescription.REPO: rdata,
+                    ExternalsDescription.REQUIRED: False,
+                    ExternalsDescription.PATH: 'junk',
+                    ExternalsDescription.EXTERNALS: EMPTY_STR,
+                    ExternalsDescription.REPO: rdata,
                 },
                 }
 
-        model = ModelDescriptionDict(data)
-        repo = model[self._name][ModelDescription.REPO]
+        model = ExternalsDescriptionDict(data)
+        repo = model[self._name][ExternalsDescription.REPO]
         self._repo = GitRepository('test', repo)
 
     def test_ref_detached_from_tag(self):
@@ -116,25 +116,25 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         """Setup reusable git repository object
         """
         self._name = 'component'
-        rdata = {ModelDescription.PROTOCOL: 'git',
-                 ModelDescription.REPO_URL:
+        rdata = {ExternalsDescription.PROTOCOL: 'git',
+                 ExternalsDescription.REPO_URL:
                  'git@git.github.com:ncar/rtm',
-                 ModelDescription.TAG:
+                 ExternalsDescription.TAG:
                  'rtm1_0_26',
-                 ModelDescription.BRANCH: EMPTY_STR
+                 ExternalsDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
                 {
-                    ModelDescription.REQUIRED: False,
-                    ModelDescription.PATH: 'fake',
-                    ModelDescription.EXTERNALS: '',
-                    ModelDescription.REPO: rdata,
+                    ExternalsDescription.REQUIRED: False,
+                    ExternalsDescription.PATH: 'fake',
+                    ExternalsDescription.EXTERNALS: '',
+                    ExternalsDescription.REPO: rdata,
                 },
                 }
 
-        model = ModelDescriptionDict(data)
-        repo = model[self._name][ModelDescription.REPO]
+        model = ExternalsDescriptionDict(data)
+        repo = model[self._name][ExternalsDescription.REPO]
         self._repo = GitRepository('test', repo)
         self.create_tmp_git_dir()
 
@@ -210,7 +210,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
     def test_repo_dir_synced(self):
         """Test that a valid info string that is synced to the repo in the
-        model description returns an ok status.
+        externals description returns an ok status.
 
         """
         stat = ExternalStatus()
@@ -224,7 +224,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
     def test_repo_dir_modified(self):
         """Test that a valid svn info string that is out of sync with the
-        model description returns a modified status.
+        externals description returns a modified status.
 
         """
         stat = ExternalStatus()

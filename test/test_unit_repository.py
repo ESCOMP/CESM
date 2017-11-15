@@ -17,7 +17,7 @@ from manic.repository_factory import create_repository
 from manic.repository_git import GitRepository
 from manic.repository_svn import SvnRepository
 from manic.repository import Repository
-from manic.model_description import ModelDescription
+from manic.externals_description import ExternalsDescription
 from manic.globals import EMPTY_STR
 
 
@@ -32,10 +32,10 @@ class TestCreateRepositoryDict(unittest.TestCase):
         """Common data needed for all tests in this class
         """
         self._name = 'test_name'
-        self._repo = {ModelDescription.PROTOCOL: None,
-                      ModelDescription.REPO_URL: 'junk_root',
-                      ModelDescription.TAG: 'junk_tag',
-                      ModelDescription.BRANCH: EMPTY_STR, }
+        self._repo = {ExternalsDescription.PROTOCOL: None,
+                      ExternalsDescription.REPO_URL: 'junk_root',
+                      ExternalsDescription.TAG: 'junk_tag',
+                      ExternalsDescription.BRANCH: EMPTY_STR, }
 
     def test_create_repo_git(self):
         """Verify that several possible names for the 'git' protocol
@@ -44,7 +44,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
         """
         protocols = ['git', 'GIT', 'Git', ]
         for protocol in protocols:
-            self._repo[ModelDescription.PROTOCOL] = protocol
+            self._repo[ExternalsDescription.PROTOCOL] = protocol
             repo = create_repository(self._name, self._repo)
             self.assertIsInstance(repo, GitRepository)
 
@@ -54,7 +54,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
         """
         protocols = ['svn', 'SVN', 'Svn', ]
         for protocol in protocols:
-            self._repo[ModelDescription.PROTOCOL] = protocol
+            self._repo[ExternalsDescription.PROTOCOL] = protocol
             repo = create_repository(self._name, self._repo)
             self.assertIsInstance(repo, SvnRepository)
 
@@ -63,7 +63,7 @@ class TestCreateRepositoryDict(unittest.TestCase):
         """
         protocols = ['externals_only', ]
         for protocol in protocols:
-            self._repo[ModelDescription.PROTOCOL] = protocol
+            self._repo[ExternalsDescription.PROTOCOL] = protocol
             repo = create_repository(self._name, self._repo)
             self.assertEqual(None, repo)
 
@@ -72,13 +72,13 @@ class TestCreateRepositoryDict(unittest.TestCase):
         """
         protocols = ['not_a_supported_protocol', ]
         for protocol in protocols:
-            self._repo[ModelDescription.PROTOCOL] = protocol
+            self._repo[ExternalsDescription.PROTOCOL] = protocol
             with self.assertRaises(RuntimeError):
                 create_repository(self._name, self._repo)
 
 
 class TestRepository(unittest.TestCase):
-    """Test the model description processing used to create the Repository
+    """Test the externals description processing used to create the Repository
     base class shared by protocol specific repository classes.
 
     """
@@ -90,10 +90,10 @@ class TestRepository(unittest.TestCase):
         protocol = 'test_protocol'
         url = 'test_url'
         tag = 'test_tag'
-        repo_info = {ModelDescription.PROTOCOL: protocol,
-                     ModelDescription.REPO_URL: url,
-                     ModelDescription.TAG: tag,
-                     ModelDescription.BRANCH: EMPTY_STR, }
+        repo_info = {ExternalsDescription.PROTOCOL: protocol,
+                     ExternalsDescription.REPO_URL: url,
+                     ExternalsDescription.TAG: tag,
+                     ExternalsDescription.BRANCH: EMPTY_STR, }
         repo = Repository(name, repo_info)
         print(repo.__dict__)
         self.assertEqual(repo.tag(), tag)
@@ -106,10 +106,10 @@ class TestRepository(unittest.TestCase):
         protocol = 'test_protocol'
         url = 'test_url'
         branch = 'test_branch'
-        repo_info = {ModelDescription.PROTOCOL: protocol,
-                     ModelDescription.REPO_URL: url,
-                     ModelDescription.BRANCH: branch,
-                     ModelDescription.TAG: EMPTY_STR, }
+        repo_info = {ExternalsDescription.PROTOCOL: protocol,
+                     ExternalsDescription.REPO_URL: url,
+                     ExternalsDescription.BRANCH: branch,
+                     ExternalsDescription.TAG: EMPTY_STR, }
         repo = Repository(name, repo_info)
         print(repo.__dict__)
         self.assertEqual(repo.branch(), branch)
@@ -125,10 +125,10 @@ class TestRepository(unittest.TestCase):
         url = 'test_url'
         branch = 'test_branch'
         tag = 'test_tag'
-        repo_info = {ModelDescription.PROTOCOL: protocol,
-                     ModelDescription.REPO_URL: url,
-                     ModelDescription.BRANCH: branch,
-                     ModelDescription.TAG: tag, }
+        repo_info = {ExternalsDescription.PROTOCOL: protocol,
+                     ExternalsDescription.REPO_URL: url,
+                     ExternalsDescription.BRANCH: branch,
+                     ExternalsDescription.TAG: tag, }
         with self.assertRaises(RuntimeError):
             Repository(name, repo_info)
 
@@ -142,10 +142,10 @@ class TestRepository(unittest.TestCase):
         url = 'test_url'
         branch = EMPTY_STR
         tag = EMPTY_STR
-        repo_info = {ModelDescription.PROTOCOL: protocol,
-                     ModelDescription.REPO_URL: url,
-                     ModelDescription.BRANCH: branch,
-                     ModelDescription.TAG: tag, }
+        repo_info = {ExternalsDescription.PROTOCOL: protocol,
+                     ExternalsDescription.REPO_URL: url,
+                     ExternalsDescription.BRANCH: branch,
+                     ExternalsDescription.TAG: tag, }
         with self.assertRaises(RuntimeError):
             Repository(name, repo_info)
 

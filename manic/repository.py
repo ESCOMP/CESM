@@ -1,7 +1,7 @@
 """Base class representation of a repository
 """
 
-from .model_description import ModelDescription
+from .externals_description import ExternalsDescription
 from .utils import fatal_error
 from .globals import EMPTY_STR
 
@@ -13,13 +13,13 @@ class Repository(object):
 
     def __init__(self, component_name, repo):
         """
-        Parse repo model description
+        Parse repo externals description
         """
         self._name = component_name
-        self._protocol = repo[ModelDescription.PROTOCOL]
-        self._tag = repo[ModelDescription.TAG]
-        self._branch = repo[ModelDescription.BRANCH]
-        self._url = repo[ModelDescription.REPO_URL]
+        self._protocol = repo[ExternalsDescription.PROTOCOL]
+        self._tag = repo[ExternalsDescription.TAG]
+        self._branch = repo[ExternalsDescription.BRANCH]
+        self._url = repo[ExternalsDescription.REPO_URL]
 
         if self._url is EMPTY_STR:
             fatal_error('repo must have a URL')

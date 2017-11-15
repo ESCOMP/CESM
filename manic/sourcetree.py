@@ -8,9 +8,9 @@ import logging
 import os
 
 from .globals import EMPTY_STR
-from .model_description import ModelDescription
-from .model_description import read_model_description_file
-from .model_description import create_model_description
+from .externals_description import ExternalsDescription
+from .externals_description import read_externals_description_file
+from .externals_description import create_externals_description
 from .repository_factory import create_repository
 from .externalstatus import ExternalStatus
 from .utils import fatal_error, printlog
@@ -32,7 +32,7 @@ class _Source(object):
             name : string - name of the source object. may or may not
             correspond to something in the path.
 
-            source : dict - source ModelDescription object
+            source : dict - source ExternalsDescription object
 
         """
         self._name = name
@@ -42,7 +42,7 @@ class _Source(object):
         # Parse the sub-elements
 
         # _path : local path relative to the containing source tree
-        self._local_path = source[ModelDescription.PATH]
+        self._local_path = source[ExternalsDescription.PATH]
         # _repo_dir : full repository directory
         repo_dir = os.path.join(root_dir, self._local_path)
         self._repo_dir_path = os.path.abspath(repo_dir)
@@ -53,11 +53,11 @@ class _Source(object):
         assert(os.path.join(self._base_dir_path, self._repo_dir_name)
                == self._repo_dir_path)
 
-        self._required = source[ModelDescription.REQUIRED]
-        self._externals = source[ModelDescription.EXTERNALS]
+        self._required = source[ExternalsDescription.REQUIRED]
+        self._externals = source[ExternalsDescription.EXTERNALS]
         if self._externals:
             self._create_externals_sourcetree()
-        repo = create_repository(name, source[ModelDescription.REPO])
+        repo = create_repository(name, source[ExternalsDescription.REPO])
         if repo:
             self._repo = repo
 
@@ -188,16 +188,16 @@ class _Source(object):
         os.chdir(self._repo_dir_path)
         if not os.path.exists(self._externals):
             # NOTE(bja, 2017-10) this check is redundent with the one
-            # in read_model_description_file!
-            msg = ('External model description file "{0}" '
+            # in read_externals_description_file!
+            msg = ('External externals description file "{0}" '
                    'does not exist! In directory: {1}'.format(
                        self._externals, self._repo_dir_path))
             fatal_error(msg)
 
         externals_root = self._repo_dir_path
-        model_data = read_model_description_file(externals_root,
+        model_data = read_externals_description_file(externals_root,
                                                  self._externals)
-        externals = create_model_description(model_data)
+        externals = create_externals_description(model_data)
         self._externals_sourcetree = SourceTree(externals_root, externals)
         os.chdir(cwd)
 
@@ -217,7 +217,7 @@ class SourceTree(object):
         for comp in model:
             src = _Source(self._root_dir, comp, model[comp])
             self._all_components[comp] = src
-            if model[comp][ModelDescription.REQUIRED]:
+            if model[comp][ExternalsDescription.REQUIRED]:
                 self._required_compnames.append(comp)
 
     def status(self, relative_path_base='.'):

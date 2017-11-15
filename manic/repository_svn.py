@@ -49,7 +49,7 @@ class SvnRepository(Repository):
         """Checkout or update the working copy
 
         If the repo destination directory exists, switch the sandbox to
-        match the model description.
+        match the externals description.
 
         If the repo destination directory does not exist, checkout the
         correct branch or tag.
