@@ -1,25 +1,25 @@
 -- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --
 
-usage: checkout_externals.py [-h] [-m [MODEL]] [-o] [-s] [-v] [--backtrace]
+usage: checkout_externals.py [-h] [-m [MODEL]] [-o] [-S] [-v] [--backtrace]
                              [-d]
 
 checkout_externals.py manages checking out CESM externals from revision control
-based on a model description file. By default only the required
+based on a externals description file. By default only the required
 components of the model are checkout out.
 
 NOTE: checkout_externals.py *MUST* be run from the root of the source tree.
 
 Running checkout_externals.py without the '--status' option will always attempt to
-synchronize the working copy with the model description.
+synchronize the working copy with the externals description.
 
 optional arguments:
   -h, --help            show this help message and exit
   -m [MODEL], --model [MODEL]
-                        The model description filename. Default: CESM.xml.
+                        The externals description filename. Default: CESM.cfg.
   -o, --optional        By default only the required model components are
                         checked out. This flag will also checkout the optional
                         componets of the model.
-  -s, --status          Output status of the repositories managed by
+  -S, --status          Output status of the repositories managed by
                         checkout_externals.py. By default only summary
                         information is provided. Use verbose output to see
                         details.
@@ -52,7 +52,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
       $ ./checkout_cesm/checkout_externals.py
 
   * To update all required components to the current values in the
-    model description file, re-run checkout_externals.py:
+    externals description file, re-run checkout_externals.py:
 
       $ cd ${SRC_ROOT}
       $ ./checkout_cesm/checkout_externals.py
@@ -83,12 +83,12 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
     where:
       * column one indicates the status of the repository in relation
-        to the model description file.
+        to the externals description file.
       * column two indicates whether the working copy has modified files.
       * column three shows how the repository is managed, optional or required
 
     Colunm one will be one of these values:
-      * m : modified : repository is modefied compared to the model description
+      * m : modified : repository is modefied compared to the externals description
       * e : empty : directory does not exist - checkout_externals.py has not been run
       * ? : unknown : directory exists but .git or .svn directories are missing
 
@@ -108,7 +108,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
 # Model description file:
 
-  The model description contains a list of the model components that
+  The externals description contains a list of the model components that
   are used and their version control locations. Each component has:
 
   * name (string) : component name, e.g. cime, cism, clm, cam, etc.
@@ -138,7 +138,7 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
   * externals (string) : relative path to the external model
     description file that should also be used. It is *relative* to the
-    component local_path. For example, the CESM model description will
+    component local_path. For example, the CESM externals description will
     load clm. CLM has additional externals that must be downloaded to
     be complete. Those additional externals are managed from the clm
     source root by the file pointed to by 'externals'.
