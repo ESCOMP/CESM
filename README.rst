@@ -16,17 +16,17 @@ To obtain the CESM2.0 code you need to do the following:
 
 #. Clone the repository. ::
 
-      > git clone https://github.com/escomp/cesm.git
+      > git clone https://github.com/escomp/cesm.git my_cesm_sandbox
 
-   This will create a directory cesm/ in your current working directory.
+   This will create a directory ``my_cesm_sandbox/`` in your current working directory.
 
-#. Go into the newly created cesm repository and determine what version of cesm you want.
+#. Go into the newly created CESM repository and determine what version of CESM you want.
    To see what cesm tags are available, simply issue the **git tag** command. ::
 
-      > cd cesm
+      > cd my_cesm_sandbox
       > git tag
 
-#. Do a git checkout of the tag you want. If you want to checkout cesm2_0_beta07, you would issue the following. ::
+#. Do a git checkout of the tag you want. If you want to checkout cesm2.0.beta07, you would issue the following. ::
 
       > git checkout cesm2.0.beta07
 
@@ -36,13 +36,13 @@ To obtain the CESM2.0 code you need to do the following:
 
    The **checkout_externals.py** script is a package manager that will populate the cesm directory with the
    relevant versions of each of the components along with the CIME infrastructure code. To see more details of
-   **checkout_externals.py** simply issue ::
+   **checkout_externals.py**, issue ::
 
      > ./manage_externals/checkout_externals.py --help
 
 At this point you have a working version of CESM.
 
-To see full details of how to set up a case, compile and run see the CIME documentation at http://esmci.github.io/cime/ .
+To see full details of how to set up a case, compile and run, see the CIME documentation at http://esmci.github.io/cime/ .
 
 Customizing your CESM sandbox
 =============================
@@ -54,11 +54,16 @@ Switching to a different CESM tag
 
 If you have already checked out a tag and **HAVE NOT MADE ANY
 MODIFICATIONS** it is simple to change your sandbox. Say that you
-checkout out cesm2.0.beta07 but really wanted to have cesm2.0.beta08,
+checked out cesm2.0.beta07 but really wanted to have cesm2.0.beta08;
 you would simply do the following::
 
   > git checkout cesm2.0.beta08
   > ./manage_externals/checkout_externals.py
+
+You should **not** use this method if you have made any source code
+changes, or if you have any ongoing CESM cases that were created from
+this sandbox. In these cases, it is often easiest to do a second **git
+clone**.
 
 Pointing to a different version of a component
 ----------------------------------------------
@@ -80,7 +85,7 @@ example below)::
 Each entry specifies either a tag or a branch. To point to a new tag:
 
 #. Modify the relevant entry/entries in **CESM.cfg** (e.g., changing
-``cam5_4_143`` to ``cam5_4_144`` above)
+   ``cam5_4_143`` to ``cam5_4_144`` above)
 
 #. Checkout the new component(s)::
 
