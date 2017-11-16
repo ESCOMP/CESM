@@ -34,15 +34,39 @@ To obtain the CESM2.0 code you need to do the following:
 
       > ./manage_externals/checkout_externals.py
 
-   The **checkout_externals.py** script is a package manager that will populate the cesm directory with the
-   relevant versions of each of the components along with the CIME infrastructure code. To see more details of
-   **checkout_externals.py**, issue ::
-
-     > ./manage_externals/checkout_externals.py --help
+   The **checkout_externals.py** script is a package manager that will
+   populate the cesm directory with the relevant versions of each of the
+   components along with the CIME infrastructure code.
 
 At this point you have a working version of CESM.
 
 To see full details of how to set up a case, compile and run, see the CIME documentation at http://esmci.github.io/cime/ .
+
+More details on checkout_externals.py
+-------------------------------------
+
+The file **CESM.cfg** in your top-level CESM directory tells
+**checkout_externals.py** which tag/branch of each component should be
+brought in to generate your sandbox. (This file serves the same purpose
+as SVN_EXTERNAL_DIRECTORIES when CESM was in a subversion repository.)
+
+**You need to rerun checkout_externals.py whenever CESM.cfg has
+changed** (unless you have already manually updated the relevant
+external(s) to have the correct branch/tag checked out). Common times
+when this is needed are:
+
+* After checking out a new CESM branch/tag
+
+* After merging some other CESM branch/tag into your currently
+  checked-out branch
+
+**checkout_externals.py** must be run from the root of the source tree -
+i.e., your current working directory must be the directory containing
+**CESM.cfg**.
+
+To see more details of **checkout_externals.py**, issue ::
+
+  > ./manage_externals/checkout_externals.py --help
 
 Customizing your CESM sandbox
 =============================
@@ -68,10 +92,6 @@ clone**.
 Pointing to a different version of a component
 ----------------------------------------------
 
-The file **CESM.cfg** in your top-level CESM directory tells
-**checkout_externals.py** which tag/branch of each component should be
-brought in to generate your sandbox. (This file serves the same purpose
-as SVN_EXTERNAL_DIRECTORIES when CESM was in a subversion repository.)
 Each entry in **CESM.cfg** has the following form (we use CAM as an
 example below)::
  
