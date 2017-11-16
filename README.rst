@@ -5,8 +5,8 @@
 See the CESM web site for documentation and information:
 http://www2.cesm.ucar.edu
 
-Obtaining and running the model
-===============================
+Obtaining the full model code and associated scripting infrastructure
+=====================================================================
 CESM2.0 is now released via github. You will need some familiarity with git in order
 to modify the code and commit these changes. However, to simply checkout and run the
 code, no git knowledge is required other than what is documented in the following steps.
@@ -40,3 +40,5 @@ To obtain the CESM2.0 code you need to do the following:
      > ./manage_externals/checkout_externals.py --help
 
 At this point you have a working version of CESM.
+
+To see full details of how to set up a case, compile and run see the CIME documentation at http://esmci.github.io/cime/ .
