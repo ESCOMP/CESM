@@ -7,6 +7,7 @@ http://www2.cesm.ucar.edu
 
 Obtaining the full model code and associated scripting infrastructure
 =====================================================================
+
 CESM2.0 is now released via github. You will need some familiarity with git in order
 to modify the code and commit these changes. However, to simply checkout and run the
 code, no git knowledge is required other than what is documented in the following steps.
@@ -42,3 +43,57 @@ To obtain the CESM2.0 code you need to do the following:
 At this point you have a working version of CESM.
 
 To see full details of how to set up a case, compile and run see the CIME documentation at http://esmci.github.io/cime/ .
+
+Customizing your CESM sandbox
+=============================
+
+There are several use cases to consider when you want to customize or modify your CESM sandbox.
+
+1. If you have already checked out a tag and **HAVE NOT MADE ANY
+MODIFICATIONS** it is simple to change your sandbox. Say that you
+checkout out cesm2.0.beta07 but really wanted to have cesm2.0.beta08,
+you would simply do the following ::
+
+  > git checkout cesm2.0.beta08
+  > ./manage_externals/checkout_externals.py
+
+2. If you want to now modify any of the components, you need to
+   understand how **checkout_externals.py** interacts with the
+   configuration file **CESM.cfg** in your top level CESM directory.
+
+   **CESM.cfg** determines what tags of each component and CIME are brought in to generate your sandbox.
+   Each entry in **CESM.cfg** has the following form (we use cam as an example below) ::
+
+     [cam]
+     tag = trunk_tags/cam5_4_143/components/cam
+     protocol = svn
+     repo_url = https://svn-ccsm-models.cgd.ucar.edu/cam1
+     local_path = components/cam
+     required = True
+
+   Each entry specifies either a tag or a branch.
+
+   If you want to modify the cam code, you will need to first create a
+   cam branch and then modify the **CESM.cfg** file to use that CAM
+   branch instead of the default setting that comes with the CESM tag
+   you are using.
+
+   Notice that cam code base originates from a subversion repository. So you will need to first create a
+   branch in that subversion repository in order to modify the above.
+   Say you created this branch and called it **my_branch**. So the above entry should be modified as follows ::
+
+     [cam]
+     branch = branches/my_branch/components/cam
+     protocol = svn
+     repo_url = https://svn-ccsm-models.cgd.ucar.edu/cam1
+     local_path = components/cam
+     required = True
+
+   Say you created a new branch tag and called it **my_branch_tag**. The entry should read ::
+
+     [cam]
+     tag = branch_tags/my_branch_tags/my_branch_tag/components/cam
+     protocol = svn
+     repo_url = https://svn-ccsm-models.cgd.ucar.edu/cam1
+     local_path = components/cam
+     required = True
