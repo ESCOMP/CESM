@@ -5,6 +5,6 @@
 See the CESM web site for documentation and information:
 http://www2.cesm.ucar.edu
 
-Obtaining and running the code
-==============================
+Obtaining and running the model
+===============================
 
