@@ -24,9 +24,11 @@ SRC = \
 	../checkout_externals.py \
 	../manic/*.py
 
-EXE = ../checkout_externals.py
+CHECKOUT_EXE = ../checkout_externals.py
 
 TEST_DIR = .
+
+README = ../README.md
 
 utest : FORCE
 	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_unit_*.py'
@@ -37,9 +39,10 @@ stest : FORCE
 test : utest
 
 readme : FORCE
-	echo '-- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --\n' > ../README
-	echo '[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)\n' >> ../README
-	$(EXE) --help >> ../README
+	echo '-- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --\n' > $(README)
+	echo '[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)\n' >> $(README)
+	echo '```\n' >> $(README)
+	$(CHECKOUT_EXE) --help >> $(README)
 
 style : FORCE
 	$(AUTOPEP8) $(AUTOPEP8_ARGS) --recursive $(SRC) $(TEST_DIR)/test_*.py

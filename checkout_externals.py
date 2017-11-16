@@ -52,33 +52,37 @@ synchronize the working copy with the externals description.
 '''
 
     epilog = '''
+```
 NOTE: %(prog)s *MUST* be run from the root of the source tree it
 is managing. For example, if you cloned CLM with:
 
     $ git clone git@github.com/ncar/clm clm-dev
 
 Then the root of the source tree is /path/to/clm-dev. If you obtained
-CLM via an svn checkout of CESM and you need to checkout the CLM
-externals, then the root of the source tree for CLM is:
+CLM via a checkout of CESM:
 
-    /path/to/cesm-dev/components/clm
+    $ git clone git@github.com/escomp/cesm cesm-dev
 
-The root of the source tree will be referred to as ${SRC_ROOT} below.
+and you need to checkout the CLM externals, then the root of the
+source tree is /path/to/cesm-dev. Do *NOT* run %(prog)s
+from within /path/to/cesm-dev/components/clm.
+
+The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
 
-# Supported workflows:
+# Supported workflows
 
   * Checkout all required components from the default model
     description file:
 
-      $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/%(prog)s
+        $ cd ${SRC_ROOT}
+        $ ./manage_externals/%(prog)s
 
   * To update all required components to the current values in the
     externals description file, re-run %(prog)s:
 
-      $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/%(prog)s
+        $ cd ${SRC_ROOT}
+        $ ./manage_externals/%(prog)s
 
     If there are *any* modifications to *any* working copy according
     to the git or svn 'status' command, %(prog)s
@@ -89,20 +93,21 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
   * Checkout all required components from a user specified model
     description file:
 
-      $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/%(prog)s --model myCESM.xml
+        $ cd ${SRC_ROOT}
+        $ ./manage_externals/%(prog)s --model myCESM.xml
 
   * Status summary of the repositories managed by %(prog)s:
 
-      $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/%(prog)s --status
+        $ cd ${SRC_ROOT}
+        $ ./manage_externals/%(prog)s --status
 
-      m   components/cism
-       M  src/fates
-      e-o components/mosart
-          cime
-          components/rtm
-      e-o tools/PTCLM
+              ./cime
+          m   ./components/cism
+              ./components/mosart
+          e-o ./components/rtm
+           M  ./src/fates
+          e-o ./tools/PTCLM
+
 
     where:
       * column one indicates the status of the repository in relation
@@ -126,10 +131,10 @@ The root of the source tree will be referred to as ${SRC_ROOT} below.
 
   * Detailed git or svn status of the repositories managed by %(prog)s:
 
-      $ cd ${SRC_ROOT}
-      $ ./checkout_cesm/%(prog)s --status --verbose
+        $ cd ${SRC_ROOT}
+        $ ./manage_externals/%(prog)s --status --verbose
 
-# Model description file:
+# Model description file
 
   The externals description contains a list of the model components that
   are used and their version control locations. Each component has:
