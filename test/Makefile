@@ -8,7 +8,7 @@ endif
 
 PYPATH=PYTHONPATH=..:
 
-TEST_ARGS=-m unittest --buffer
+TEST_ARGS=-m unittest discover --buffer
 
 AUTOPEP8=autopep8
 AUTOPEP8_ARGS=--aggressive --in-place 
@@ -18,7 +18,7 @@ PYLINT_ARGS=-j 2 --rcfile=.pylint.rc
 PYLINT_3K_ARGS=--py3k
 
 COVERAGE=coverage
-COVERAGE_ARGS=--rcfile=.coveragerc
+COVERAGE_ARGS=--rcfile=.coveragerc --append
 
 SRC = \
 	../checkout_externals.py \
@@ -31,16 +31,17 @@ TEST_DIR = .
 README = ../README.md
 
 utest : FORCE
-	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_unit_*.py'
+	$(PYPATH) $(PYTHON) $(TEST_ARGS) --pattern 'test_unit_*.py'
 
 stest : FORCE
-	$(PYPATH) $(PYTHON) -m unittest discover --buffer --pattern 'test_sys_*.py'
+	$(PYPATH) $(PYTHON) $(TEST_ARGS) --pattern 'test_sys_*.py'
 
 test : utest
 
 readme : FORCE
 	echo '-- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --\n' > $(README)
 	echo '[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)\n' >> $(README)
+	echo '[![Coverage Status](https://coveralls.io/repos/github/NCAR/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/NCAR/manage_externals?branch=master)' >> $(README)
 	echo '```\n' >> $(README)
 	$(CHECKOUT_EXE) --help >> $(README)
 
@@ -51,7 +52,8 @@ lint : style
 	$(PYLINT) $(PYLINT_ARGS) $(SRC) $(TEST_DIR)/test_*.py
 
 coverage : FORCE
-	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) test_unit_*.py
+	$(PYPATH) $(COVERAGE) erase
+	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_unit_*.py'
 	$(PYPATH) $(COVERAGE) html
 
 py3 : 

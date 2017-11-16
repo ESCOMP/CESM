@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)
 
+[![Coverage Status](https://coveralls.io/repos/github/NCAR/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/NCAR/manage_externals?branch=master)
 ```
 
 usage: checkout_externals.py [-h] [-m [MODEL]] [-o] [-S] [-v] [--backtrace]
