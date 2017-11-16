@@ -77,10 +77,17 @@ example below)::
   local_path = components/cam
   required = True
 
-Each entry specifies either a tag or a branch. To point to a new tag,
-first modify the relevant entry in **CESM.cfg** (e.g., changing
-``cam5_4_143`` to ``cam5_4_144`` above), then rerun
-**checkout_externals.py**.
+Each entry specifies either a tag or a branch. To point to a new tag:
+
+#. Modify the relevant entry/entries in **CESM.cfg** (e.g., changing
+``cam5_4_143`` to ``cam5_4_144`` above)
+
+#. Checkout the new component(s)::
+
+     > ./manage_externals/checkout_externals.py
+
+Committing your change to CESM.cfg
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After making this change, it's a good idea to commit the change in your
 local CESM git repository. First create a CESM branch in your local
@@ -95,32 +102,17 @@ create whatever local branches you'd like.) For example::
 Modifying a component
 ---------------------
 
+If you'd like to modify a component via a branch and point to that
+branch in your CESM sandbox, use the following procedure (again, using
+CAM as an example):
 
+#. Create a CAM branch. Since CAM originates from a subversion
+   repository, you will first need to create a branch in that
+   repository. Let's assume you have created this branch and called it
+   **my_branch**.
 
-2. If you want to now modify any of the components, you need to
-   understand how **checkout_externals.py** interacts with the
-   configuration file **CESM.cfg** in your top level CESM directory.
-
-   **CESM.cfg** determines what tags of each component and CIME are brought in to generate your sandbox.
-   Each entry in **CESM.cfg** has the following form (we use cam as an example below) ::
-
-     [cam]
-     tag = trunk_tags/cam5_4_143/components/cam
-     protocol = svn
-     repo_url = https://svn-ccsm-models.cgd.ucar.edu/cam1
-     local_path = components/cam
-     required = True
-
-   Each entry specifies either a tag or a branch.
-
-   If you want to modify the cam code, you will need to first create a
-   cam branch and then modify the **CESM.cfg** file to use that CAM
-   branch instead of the default setting that comes with the CESM tag
-   you are using.
-
-   Notice that the cam code base originates from a subversion repository. So you will need to first create a
-   branch in that subversion repository in order to modify the above.
-   Say you created this branch and called it **my_branch**. So the above entry should be modified as follows ::
+#. Update **CESM.cfg** to point to your branch. You can replace the
+   **tag** entry with a **branch** entry, as follows::
 
      [cam]
      branch = branches/my_branch/components/cam
@@ -129,13 +121,9 @@ Modifying a component
      local_path = components/cam
      required = True
 
-   Say you created a new branch tag and called it **my_branch_tag**. The entry should read ::
+#. Checkout your branch::
 
-     [cam]
-     tag = branch_tags/my_branch_tags/my_branch_tag/components/cam
-     protocol = svn
-     repo_url = https://svn-ccsm-models.cgd.ucar.edu/cam1
-     local_path = components/cam
-     required = True
+     > ./manage_externals/checkout_externals.py
 
-   
+It's a good idea to commit your **CESM.cfg** file changes. See the above
+documentation, `Committing your change to CESM.cfg`_.
