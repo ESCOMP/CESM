@@ -15,8 +15,8 @@ To obtain the CESM2.0 code you need to do the following:
 
 1. clone the repository
 
-::
+   ::
 
-   git clone https://github.com/escomp/cesm.git
+      git clone https://github.com/escomp/cesm.git
 
-This will create a directory cesm/ in your current working directory.
+   This will create a directory cesm/ in your current working directory.
