@@ -354,7 +354,8 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
             self[name] = {}
             self[name].update(list_to_dict(cfg_data.items(section)))
             self[name][self.REPO] = {}
-            for item in self[name].keys():
+            loop_keys = self[name].copy().keys()
+            for item in loop_keys:
                 if item in self._source_schema:
                     if isinstance(self._source_schema[item], bool):
                         self[name][item] = str_to_bool(self[name][item])

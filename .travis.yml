@@ -2,12 +2,13 @@
 #  on mac os. As a work around, we declare as a 'generic', use built-in
 #  python on linux, and manually install python with homebrew on osx.
 
-language: generic
+language: python
+os: linux
+python: 
+  - "2.7"
+  - "3.6"
 matrix:
   include:
-  - os: linux
-    language: python
-    python: 2.7
   - os: osx
     language: generic
     before_install:
