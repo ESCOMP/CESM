@@ -17,6 +17,17 @@ To obtain the CESM2.0 code you need to do the following:
 
    ::
 
-      git clone https://github.com/escomp/cesm.git
+      > git clone https://github.com/escomp/cesm.git
 
    This will create a directory cesm/ in your current working directory.
+
+2. cd into the newly created cesm repository and run the script **manage_externals/checkout_externals.py**
+
+   ::
+
+      > cd cesm
+      > ./manage_externals/checkout_externals.py
+
+   The **checkout_externals.py** script is a package manager that will populate the cesm directory with the
+   relevant versions of each of the components along with the CIME infrastructure code. A quick overview of
+   **checkout_externals.py** is provided below.
