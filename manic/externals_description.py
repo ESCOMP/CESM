@@ -228,6 +228,33 @@ class ExternalsDescription(dict):
                            'description for "{0}"'.format(field))
                     fatal_error(msg)
 
+                url = self.check_url(
+                    self[field][self.REPO][self.REPO_URL], field)
+                self[field][self.REPO][self.REPO_URL] = url
+
+    @staticmethod
+    def check_url(url, field):
+        """check if the user provided a local file path instead of a
+           remote. If so, it must be expanded to an absolute
+           path.
+
+        """
+        remote_prefixes = ['http', 'https', 'ssh', 'git@']
+        remote_url = False
+        for prefix in remote_prefixes:
+            if url.startswith(prefix):
+                remote_url = True
+        if not remote_url:
+            url = os.path.expandvars(url)
+            url = os.path.expanduser(url)
+            if not os.path.isabs(url):
+                msg = ('WARNING: Externals description for "{0}" contains a '
+                       'url that is not remote and does not expand to an '
+                       'absolute path. Version control operations may '
+                       'fail.'.format(field))
+                printlog(msg)
+        return url
+
     def _check_optional(self):
         """Some fields like externals, repo:tag repo:branch are
         (conditionally) optional. We don't want the user to be

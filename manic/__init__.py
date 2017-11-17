@@ -11,5 +11,5 @@ from manic.externalstatus import check_safe_to_update_repos
 __all__ = ['PPRINTER',
            'printlog', 'log_process_output', 'fatal_error',
            'read_externals_description_file', 'create_externals_description',
-           'SourceTree',
+           'SourceTree', 'check_safe_to_update_repos'
            ]

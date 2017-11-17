@@ -37,8 +37,13 @@ if sys.hexversion < 0x02070000:
 # User input
 #
 # ---------------------------------------------------------------------
-def commandline_arguments():
+def commandline_arguments(args=None):
     """Process the command line arguments
+
+    Params: args - optional args. Should only be used during systems
+    testing.
+
+    Returns: processed command line arguments
     """
     description = '''
 %(prog)s manages checking out CESM externals from revision control
@@ -156,13 +161,26 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     components like cam and clm.
 
   * repo_url (string) : URL for the repository location, examples:
-    * svn - https://svn-ccsm-models.cgd.ucar.edu/glc
-    * git - git@github.com:esmci/cime.git
-    * local - /path/to/local/repository
+    * https://svn-ccsm-models.cgd.ucar.edu/glc
+    * git@github.com:esmci/cime.git
+    * /path/to/local/repository
+
+    If a repo url is determined to be a local path (not a network url)
+    then user expansion, e.g. ~/, and environment variable expansion,
+    e.g. $HOME or $REPO_ROOT, will be performed.
+
+    Relative paths are difficult to get correct, especially for mixed
+    use repos like clm. It is advised that local paths expand to
+    absolute paths. If relative paths are used, they should be
+    relative to one level above local_path. If local path is
+    'src/foo', the the relative url should be relative to
+    'src'.
 
   * tag (string) : tag to checkout
 
   * branch (string) : branch to checkout
+
+    Note: either tag or branch must be supplied, but not both.
 
   * externals (string) : relative path to the external model
     description file that should also be used. It is *relative* to the
@@ -209,7 +227,10 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
                         help='DEVELOPER: output additional debugging '
                         'information to the screen and log file.')
 
-    options = parser.parse_args()
+    if args:
+        options = parser.parse_args(args)
+    else:
+        options = parser.parse_args()
     return options
 
 
@@ -218,7 +239,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 # main
 #
 # ---------------------------------------------------------------------
-def _main(args):
+def main(args):
     """
     Function to call when module is called from the command line.
     Parse model file and load required repositories or all repositories if
@@ -282,7 +303,7 @@ def _main(args):
 if __name__ == '__main__':
     ARGS = commandline_arguments()
     try:
-        RET_STATUS = _main(ARGS)
+        RET_STATUS = main(ARGS)
         sys.exit(RET_STATUS)
     except Exception as error:  # pylint: disable=broad-except
         printlog(str(error))
