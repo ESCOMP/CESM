@@ -64,9 +64,13 @@ when this is needed are:
 * After merging some other CESM branch/tag into your currently
   checked-out branch
 
-**checkout_externals.py** must be run from the root of the source tree -
-i.e., your current working directory must be the directory containing
-**CESM.cfg**.
+**checkout_externals.py** must be run from the root of the source
+tree. For example, if you cloned CESM with::
+
+  > git clone https://github.com/escomp/cesm.git my_cesm_sandbox
+
+then you must run **checkout_externals.py** from
+``/path/to/my_cesm_sandbox``.
 
 To see more details of **checkout_externals.py**, issue ::
 
@@ -114,6 +118,10 @@ Each entry specifies either a tag or a branch. To point to a new tag:
 #. Checkout the new component(s)::
 
      > ./manage_externals/checkout_externals.py
+
+Keep in mind that changing individual components from a tag may result
+in an invalid model (won't compile, won't run, not scientifically
+meaningful) and is unsupported.
 
 Committing your change to CESM.cfg
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
