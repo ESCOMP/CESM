@@ -3,7 +3,7 @@
 ========================================================
 
 See the CESM web site for documentation and information:
-http://www2.cesm.ucar.edu
+http://www.cesm.ucar.edu
 
 .. sectnum::
 
