@@ -178,6 +178,8 @@ functions, class methods, and groups of functions and class methods.
 System Integration Tests
 ------------------------
 
+NOTE(bja, 2017-11) The systems integration tests currently do not include svn repositories.
+
 The manage_externals package is extremely tedious and error prone to test manually.
 
 Combinations that must be tested to ensure basic functionality are:

@@ -48,7 +48,7 @@ def commandline_arguments(args=None):
     description = '''
 %(prog)s manages checking out CESM externals from revision control
 based on a externals description file. By default only the required
-components of the model are checkout out.
+externals are checkout out.
 
 NOTE: %(prog)s *MUST* be run from the root of the source tree.
 
@@ -77,7 +77,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
 # Supported workflows
 
-  * Checkout all required components from the default model
+  * Checkout all required components from the default externals
     description file:
 
         $ cd ${SRC_ROOT}
@@ -91,15 +91,15 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
     If there are *any* modifications to *any* working copy according
     to the git or svn 'status' command, %(prog)s
-    will not update any repositories in the model. Modifications
+    will not update any external repositories. Modifications
     include: modified files, added files, removed files, missing
     files or untracked files,
 
-  * Checkout all required components from a user specified model
+  * Checkout all required components from a user specified externals
     description file:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/%(prog)s --model myCESM.xml
+        $ ./manage_externals/%(prog)s --excernals myCESM.xml
 
   * Status summary of the repositories managed by %(prog)s:
 
@@ -139,10 +139,11 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
         $ cd ${SRC_ROOT}
         $ ./manage_externals/%(prog)s --status --verbose
 
-# Model description file
+# Externals description file
 
-  The externals description contains a list of the model components that
-  are used and their version control locations. Each component has:
+  The externals description contains a list of the external
+  repositories that are used and their version control locations. Each
+  external has:
 
   * name (string) : component name, e.g. cime, cism, clm, cam, etc.
 
@@ -155,10 +156,10 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     manage the component.  Valid values are 'git', 'svn',
     'externals_only'.
 
-    Note: 'externals_only' will only process the externals model
-    description file without trying to manage a repository for the
-    component. This is used for retreiving externals for standalone
-    components like cam and clm.
+    Note: 'externals_only' will only process the external's own
+    external description file without trying to manage a repository
+    for the component. This is used for retreiving externals for
+    standalone components like cam and clm.
 
   * repo_url (string) : URL for the repository location, examples:
     * https://svn-ccsm-models.cgd.ucar.edu/glc
@@ -182,12 +183,12 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
     Note: either tag or branch must be supplied, but not both.
 
-  * externals (string) : relative path to the external model
+  * externals (string) : relative path to the external's own external
     description file that should also be used. It is *relative* to the
-    component local_path. For example, the CESM externals description will
-    load clm. CLM has additional externals that must be downloaded to
-    be complete. Those additional externals are managed from the clm
-    source root by the file pointed to by 'externals'.
+    component local_path. For example, the CESM externals description
+    will load clm. CLM has additional externals that must be
+    downloaded to be complete. Those additional externals are managed
+    from the clm source root by the file pointed to by 'externals'.
 
 '''
 
@@ -198,14 +199,14 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     #
     # user options
     #
-    parser.add_argument('-m', '--model', nargs='?', default='CESM.cfg',
+    parser.add_argument('-e', '--externals', nargs='?', default='CESM.cfg',
                         help='The externals description filename. '
                         'Default: %(default)s.')
 
     parser.add_argument('-o', '--optional', action='store_true', default=False,
-                        help='By default only the required model components '
+                        help='By default only the required externals '
                         'are checked out. This flag will also checkout the '
-                        'optional componets of the model.')
+                        'optional externals.')
 
     parser.add_argument('-S', '--status', action='store_true', default=False,
                         help='Output status of the repositories managed by '
@@ -242,7 +243,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 def main(args):
     """
     Function to call when module is called from the command line.
-    Parse model file and load required repositories or all repositories if
+    Parse externals file and load required repositories or all repositories if
     the --all option is passed.
     """
     logging.basicConfig(filename='manage_externals.log',
@@ -257,12 +258,12 @@ def main(args):
         load_all = True
 
     root_dir = os.path.abspath('.')
-    model_data = read_externals_description_file(root_dir, args.model)
-    model = create_externals_description(model_data)
+    external_data = read_externals_description_file(root_dir, args.externals)
+    external = create_externals_description(external_data)
     if args.debug:
-        PPRINTER.pprint(model)
+        PPRINTER.pprint(external)
 
-    source_tree = SourceTree(root_dir, model)
+    source_tree = SourceTree(root_dir, external)
     printlog('Checking status of components: ', end='')
     tree_status = source_tree.status()
     printlog('')
@@ -276,7 +277,7 @@ def main(args):
             # user requested verbose status dump of the git/svn status commands
             source_tree.verbose_status()
     else:
-        # checkout / update the model repositories.
+        # checkout / update the external repositories.
         safe_to_update = check_safe_to_update_repos(tree_status, args.debug)
         if not safe_to_update:
             # print status
@@ -285,8 +286,8 @@ def main(args):
                 printlog(msg)
             # exit gracefully
             msg = textwrap.fill(
-                'Model contains repositories that are not in a clean '
-                'state. Please all external repositories are clean '
+                'Some external repositories that are not in a clean '
+                'state. Please ensure all external repositories are clean '
                 'before updating.')
             printlog('-' * 70)
             printlog(msg)

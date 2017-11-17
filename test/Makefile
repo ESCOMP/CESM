@@ -56,7 +56,7 @@ test : utest stest
 .PHONY : readme
 readme : $(CHECKOUT_EXE)
 	echo '-- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --\n' > $(README)
-	echo '[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)\n' >> $(README)
+	echo -n '[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)' >> $(README)
 	echo '[![Coverage Status](https://coveralls.io/repos/github/NCAR/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/NCAR/manage_externals?branch=master)' >> $(README)
 	echo '```\n' >> $(README)
 	$(CHECKOUT_EXE) --help >> $(README)

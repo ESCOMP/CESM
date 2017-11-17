@@ -1,16 +1,15 @@
 -- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --
 
-[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)
-
+-n [![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)
 [![Coverage Status](https://coveralls.io/repos/github/NCAR/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/NCAR/manage_externals?branch=master)
 ```
 
-usage: checkout_externals.py [-h] [-m [MODEL]] [-o] [-S] [-v] [--backtrace]
-                             [-d]
+usage: checkout_externals.py [-h] [-e [EXTERNALS]] [-o] [-S] [-v]
+                             [--backtrace] [-d]
 
 checkout_externals.py manages checking out CESM externals from revision control
 based on a externals description file. By default only the required
-components of the model are checkout out.
+externals are checkout out.
 
 NOTE: checkout_externals.py *MUST* be run from the root of the source tree.
 
@@ -19,11 +18,11 @@ synchronize the working copy with the externals description.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -m [MODEL], --model [MODEL]
+  -e [EXTERNALS], --externals [EXTERNALS]
                         The externals description filename. Default: CESM.cfg.
-  -o, --optional        By default only the required model components are
-                        checked out. This flag will also checkout the optional
-                        componets of the model.
+  -o, --optional        By default only the required externals are checked
+                        out. This flag will also checkout the optional
+                        externals.
   -S, --status          Output status of the repositories managed by
                         checkout_externals.py. By default only summary
                         information is provided. Use verbose output to see
@@ -54,7 +53,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
 # Supported workflows
 
-  * Checkout all required components from the default model
+  * Checkout all required components from the default externals
     description file:
 
         $ cd ${SRC_ROOT}
@@ -68,15 +67,15 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
     If there are *any* modifications to *any* working copy according
     to the git or svn 'status' command, checkout_externals.py
-    will not update any repositories in the model. Modifications
+    will not update any external repositories. Modifications
     include: modified files, added files, removed files, missing
     files or untracked files,
 
-  * Checkout all required components from a user specified model
+  * Checkout all required components from a user specified externals
     description file:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/checkout_externals.py --model myCESM.xml
+        $ ./manage_externals/checkout_externals.py --excernals myCESM.xml
 
   * Status summary of the repositories managed by checkout_externals.py:
 
@@ -115,10 +114,11 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
         $ cd ${SRC_ROOT}
         $ ./manage_externals/checkout_externals.py --status --verbose
 
-# Model description file
+# Externals description file
 
-  The externals description contains a list of the model components that
-  are used and their version control locations. Each component has:
+  The externals description contains a list of the external
+  repositories that are used and their version control locations. Each
+  external has:
 
   * name (string) : component name, e.g. cime, cism, clm, cam, etc.
 
@@ -131,23 +131,36 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     manage the component.  Valid values are 'git', 'svn',
     'externals_only'.
 
-    Note: 'externals_only' will only process the externals model
-    description file without trying to manage a repository for the
-    component. This is used for retreiving externals for standalone
-    components like cam and clm.
+    Note: 'externals_only' will only process the external's own
+    external description file without trying to manage a repository
+    for the component. This is used for retreiving externals for
+    standalone components like cam and clm.
 
   * repo_url (string) : URL for the repository location, examples:
-    * svn - https://svn-ccsm-models.cgd.ucar.edu/glc
-    * git - git@github.com:esmci/cime.git
-    * local - /path/to/local/repository
+    * https://svn-ccsm-models.cgd.ucar.edu/glc
+    * git@github.com:esmci/cime.git
+    * /path/to/local/repository
+
+    If a repo url is determined to be a local path (not a network url)
+    then user expansion, e.g. ~/, and environment variable expansion,
+    e.g. $HOME or $REPO_ROOT, will be performed.
+
+    Relative paths are difficult to get correct, especially for mixed
+    use repos like clm. It is advised that local paths expand to
+    absolute paths. If relative paths are used, they should be
+    relative to one level above local_path. If local path is
+    'src/foo', the the relative url should be relative to
+    'src'.
 
   * tag (string) : tag to checkout
 
   * branch (string) : branch to checkout
 
-  * externals (string) : relative path to the external model
+    Note: either tag or branch must be supplied, but not both.
+
+  * externals (string) : relative path to the external's own external
     description file that should also be used. It is *relative* to the
-    component local_path. For example, the CESM externals description will
-    load clm. CLM has additional externals that must be downloaded to
-    be complete. Those additional externals are managed from the clm
-    source root by the file pointed to by 'externals'.
+    component local_path. For example, the CESM externals description
+    will load clm. CLM has additional externals that must be
+    downloaded to be complete. Those additional externals are managed
+    from the clm source root by the file pointed to by 'externals'.

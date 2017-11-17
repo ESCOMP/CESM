@@ -274,7 +274,7 @@ class TestSysCheckout(unittest.TestCase):
         """
         cwd = os.getcwd()
         os.chdir(under_test_dir)
-        cmdline = ['--model', CFG_NAME, ]
+        cmdline = ['--externals', CFG_NAME, ]
         cmdline += args
         options = checkout_externals.commandline_arguments(cmdline)
         status = checkout_externals.main(options)
