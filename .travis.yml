@@ -1,11 +1,13 @@
 # NOTE(bja, 2017-11) travis-ci dosen't support python language builds
-#  on mac os. As a work around, we declare as a 'generic', use built-in
-#  python on linux, and manually install python with homebrew on osx.
+#  on mac os. As a work around, we use built-in python on linux, and
+#  declare osx a 'generic' language, and create our own python env.
 
 language: python
 os: linux
 python: 
   - "2.7"
+  - "3.4"
+  - "3.5"
   - "3.6"
 matrix:
   include:
@@ -19,6 +21,8 @@ matrix:
       - source env/bin/activate
 install:
   - pip install -r test/requirements.txt
+before_script:
+  - git --version
 script:
   - cd test; make test
 #  - cd test; make lint
