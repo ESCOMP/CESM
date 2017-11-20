@@ -12,7 +12,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 
 from .repository import Repository
-from .externalstatus import ExternalStatus
+from .externals_status import ExternalStatus
 from .utils import fatal_error, log_process_output
 from .utils import check_output, execute_subprocess
 

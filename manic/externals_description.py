@@ -49,7 +49,7 @@ except ImportError:
         return text
 
 from .utils import printlog, fatal_error, str_to_bool
-from .globals import EMPTY_STR, PPRINTER
+from .global_constants import EMPTY_STR, PPRINTER
 
 #
 # Globals

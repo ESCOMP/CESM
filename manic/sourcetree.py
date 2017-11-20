@@ -7,13 +7,13 @@ import errno
 import logging
 import os
 
-from .globals import EMPTY_STR
 from .externals_description import ExternalsDescription
 from .externals_description import read_externals_description_file
 from .externals_description import create_externals_description
 from .repository_factory import create_repository
-from .externalstatus import ExternalStatus
+from .externals_status import ExternalStatus
 from .utils import fatal_error, printlog
+from .global_constants import EMPTY_STR
 
 
 class _Source(object):

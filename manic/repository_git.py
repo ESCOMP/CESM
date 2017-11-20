@@ -8,9 +8,9 @@ from __future__ import print_function
 import os
 import re
 
-from .globals import EMPTY_STR
+from .global_constants import EMPTY_STR
 from .repository import Repository
-from .externalstatus import ExternalStatus
+from .externals_status import ExternalStatus
 from .utils import fatal_error, log_process_output
 from .utils import execute_subprocess, check_output
 

@@ -3,7 +3,7 @@
 """Unit test driver for checkout_externals
 
 Note: this script assume the path to the manic and
-checkout_externals.py module is already in the python path. This is
+checkout_externals module is already in the python path. This is
 usually handled by the makefile. If you call it directly, you may need
 to adjust your path.
 
@@ -37,7 +37,7 @@ import unittest
 
 from manic.externals_description import ExternalsDescription
 from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
-import checkout_externals
+from manic import checkout
 
 # ConfigParser was renamed in python2 to configparser. In python2,
 # ConfigParser returns byte strings, str, instead of unicode. We need
@@ -217,7 +217,7 @@ class TestSysCheckout(unittest.TestCase):
         self._test_id = random.randint(0, 999)
 
         # path to the executable
-        self._checkout = os.path.join('../checkout_externals.py')
+        self._checkout = os.path.join('../checkout_externals')
         self._checkout = os.path.abspath(self._checkout)
 
         # directory where we have test repositories
@@ -276,8 +276,8 @@ class TestSysCheckout(unittest.TestCase):
         os.chdir(under_test_dir)
         cmdline = ['--externals', CFG_NAME, ]
         cmdline += args
-        options = checkout_externals.commandline_arguments(cmdline)
-        status = checkout_externals.main(options)
+        options = checkout.commandline_arguments(cmdline)
+        status = checkout.main(options)
         os.chdir(cwd)
         return status
 

@@ -18,7 +18,7 @@ from manic.repository_git import GitRepository
 from manic.repository_svn import SvnRepository
 from manic.repository import Repository
 from manic.externals_description import ExternalsDescription
-from manic.globals import EMPTY_STR
+from manic.global_constants import EMPTY_STR
 
 
 class TestCreateRepositoryDict(unittest.TestCase):

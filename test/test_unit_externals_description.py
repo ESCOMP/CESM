@@ -39,7 +39,7 @@ from manic.externals_description import ExternalsDescription
 from manic.externals_description import ExternalsDescriptionConfigV1
 from manic.externals_description import get_cfg_schema_version
 
-from manic.globals import EMPTY_STR
+from manic.global_constants import EMPTY_STR
 
 
 class TestCfgSchemaVersion(unittest.TestCase):

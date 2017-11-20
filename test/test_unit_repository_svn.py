@@ -14,10 +14,10 @@ from __future__ import print_function
 import unittest
 
 from manic.repository_svn import SvnRepository
-from manic.externalstatus import ExternalStatus
+from manic.externals_status import ExternalStatus
 from manic.externals_description import ExternalsDescription
 from manic.externals_description import ExternalsDescriptionDict
-from manic.globals import EMPTY_STR
+from manic.global_constants import EMPTY_STR
 
 SVN_INFO_MOSART = """Path: components/mosart
 Working Copy Root Path: /Users/andreb/projects/ncar/git-conversion/clm-dev-experimental/components/mosart

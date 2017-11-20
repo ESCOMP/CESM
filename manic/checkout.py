@@ -18,10 +18,11 @@ import sys
 import textwrap
 import traceback
 
-from manic import read_externals_description_file, create_externals_description
-from manic import SourceTree
-from manic import check_safe_to_update_repos
-from manic import printlog, PPRINTER
+from manic.externals_description import read_externals_description_file, create_externals_description
+from manic.externals_status import check_safe_to_update_repos
+from manic.sourcetree import SourceTree
+from manic.utils import printlog
+from manic.global_constants import PPRINTER
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
@@ -246,11 +247,6 @@ def main(args):
     Parse externals file and load required repositories or all repositories if
     the --all option is passed.
     """
-    logging.basicConfig(filename='manage_externals.log',
-                        format='%(levelname)s : %(asctime)s : %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S',
-                        level=logging.DEBUG)
-
     logging.info('Begining of checkout_externals')
 
     load_all = False
@@ -300,14 +296,3 @@ def main(args):
     logging.info('checkout_externals completed without exceptions.')
     return 0
 
-
-if __name__ == '__main__':
-    ARGS = commandline_arguments()
-    try:
-        RET_STATUS = main(ARGS)
-        sys.exit(RET_STATUS)
-    except Exception as error:  # pylint: disable=broad-except
-        printlog(str(error))
-        if ARGS.backtrace:
-            traceback.print_exc()
-        sys.exit(1)

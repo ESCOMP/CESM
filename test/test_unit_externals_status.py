@@ -13,7 +13,7 @@ from __future__ import print_function
 
 import unittest
 
-from manic.externalstatus import ExternalStatus
+from manic.externals_status import ExternalStatus
 
 
 class TestStatusObject(unittest.TestCase):

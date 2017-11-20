@@ -16,10 +16,10 @@ import shutil
 import unittest
 
 from manic.repository_git import GitRepository
-from manic.externalstatus import ExternalStatus
+from manic.externals_status import ExternalStatus
 from manic.externals_description import ExternalsDescription
 from manic.externals_description import ExternalsDescriptionDict
-from manic.globals import EMPTY_STR
+from manic.global_constants import EMPTY_STR
 
 
 class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
