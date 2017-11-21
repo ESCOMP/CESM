@@ -41,6 +41,7 @@ def printlog(msg, **kwargs):
         print(msg, **kwargs)
     else:
         print(msg)
+    sys.stdout.flush()
 
 
 # ---------------------------------------------------------------------
