@@ -5,14 +5,17 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
 
+import copy
 import os
 import re
 import string
+import sys
 
 from .global_constants import EMPTY_STR
 from .repository import Repository
 from .externals_status import ExternalStatus
-from .utils import fatal_error, log_process_output
+from .utils import expand_local_url, split_remote_url, is_remote_url
+from .utils import log_process_output
 from .utils import execute_subprocess, check_output
 
 
@@ -248,13 +251,34 @@ class GitRepository(Repository):
         container/../ext_repo, but may be many layers deep, e.g.
         container/../../../../../ext_repo
 
+        NOTE(bja, 2017-11)
+
+            The base name below may not be unique, for example if the
+            user has local paths like:
+
+            /path/to/my/repos/nice_repo
+            /path/to/other/repos/nice_repo
+
+            But the current implementation should cover most common
+            use cases for remotes and still provide usable names.
+
         """
-        url = self._url.split('/')
+        url = copy.deepcopy(self._url)
+        if is_remote_url(url):
+            url = split_remote_url(url)
+        else:
+            url = expand_local_url(url, self._name)
+        print(url)
+        url = url.split('/')
+        print(url)
         repo_name = url[-1]
         base_name = url[-2]
-        unsafe = '<>:"/\\|?*&$.'
-        remove = string.maketrans(unsafe, '_' * len(unsafe))
-        base_name = base_name.translate(remove)
+        # repo name should nominally already be something that git can
+        # deal with. We need to remove other possibly troublesome
+        # punctuation, e.g. /, $, from the base name.
+        unsafe = '!@#$%^&*()[]{}\\/,;~'
+        for c in unsafe:
+            base_name = base_name.replace(c, '')
         remote_name = "{0}_{1}".format(base_name, repo_name)
         return remote_name
 

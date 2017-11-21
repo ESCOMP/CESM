@@ -80,6 +80,64 @@ def str_to_bool(bool_str):
     return value
 
 
+REMOTE_PREFIXES = ['http://', 'https://', 'ssh://', 'git@']
+
+
+def is_remote_url(url):
+    """check if the user provided a local file path instead of a
+       remote. If so, it must be expanded to an absolute
+       path.
+
+    """
+    remote_url = False
+    for prefix in REMOTE_PREFIXES:
+        if url.startswith(prefix):
+            remote_url = True
+    return remote_url
+
+
+def split_remote_url(url):
+    """check if the user provided a local file path or a
+       remote. If remote, try to strip off protocol info.
+
+    """
+    remote_url = is_remote_url(url)
+    if not remote_url:
+        return url
+
+    for prefix in REMOTE_PREFIXES:
+        url = url.replace(prefix, '')
+
+    if '@' in url:
+        url = url.split('@')[1]
+
+    if ':' in url:
+        url = url.split(':')[1]
+
+    return url
+
+
+def expand_local_url(url, field):
+    """check if the user provided a local file path instead of a
+       remote. If so, it must be expanded to an absolute
+       path.
+
+    """
+    remote_url = is_remote_url(url)
+    if not remote_url:
+        url = os.path.expandvars(url)
+        url = os.path.expanduser(url)
+        if not os.path.isabs(url):
+            msg = ('WARNING: Externals description for "{0}" contains a '
+                   'url that is not remote and does not expand to an '
+                   'absolute path. Version control operations may '
+                   'fail.\n\nurl={1}'.format(field, url))
+            printlog(msg)
+        else:
+            url = os.path.normpath(url)
+    return url
+
+
 # ---------------------------------------------------------------------
 #
 # subprocess

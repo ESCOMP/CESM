@@ -6,6 +6,7 @@ FIXME(bja, 2017-11) Source and SourceTree have a circular dependancy!
 import errno
 import logging
 import os
+import sys
 
 from .externals_description import ExternalsDescription
 from .externals_description import read_externals_description_file
@@ -279,4 +280,5 @@ class SourceTree(object):
 
         for comp in load_comps:
             printlog('{0}, '.format(comp), end='')
+            sys.stdout.flush()
             self._all_components[comp].checkout(load_all)

@@ -269,5 +269,51 @@ class TestGitStatusPorcelain(unittest.TestCase):
         self.assertFalse(is_dirty)
 
 
+class TestGitCreateRemoteName(unittest.TestCase):
+    """Test the create_remote_name method on the GitRepository class
+    """
+
+    def setUp(self):
+        """
+        """
+        self._rdata = {ExternalsDescription.PROTOCOL: 'git',
+                       ExternalsDescription.REPO_URL:
+                       'empty',
+                       ExternalsDescription.TAG:
+                       'very_useful_tag',
+                       ExternalsDescription.BRANCH: EMPTY_STR, }
+        self._repo = GitRepository('test', self._rdata)
+
+    def test_remote_git_proto(self):
+        """Test remote with git protocol
+        """
+        self._repo._url = 'git@git.github.com:very_nice_org/useful_repo'
+        remote_name = self._repo._create_remote_name()
+        self.assertEqual(remote_name, 'very_nice_org_useful_repo')
+
+    def test_remote_https_proto(self):
+        """Test remote with git protocol
+        """
+        self._repo._url = 'https://www.github.com/very_nice_org/useful_repo'
+        remote_name = self._repo._create_remote_name()
+        self.assertEqual(remote_name, 'very_nice_org_useful_repo')
+
+    def test_remote_local_abs(self):
+        """Test remote with git protocol
+        """
+        self._repo._url = '/path/to/local/repositories/useful_repo'
+        remote_name = self._repo._create_remote_name()
+        self.assertEqual(remote_name, 'repositories_useful_repo')
+
+    def test_remote_local_rel(self):
+        """Test remote with git protocol
+        """
+        os.environ['TEST_VAR'] = '/my/path/to/repos'
+        self._repo._url = '${TEST_VAR}/../../useful_repo'
+        remote_name = self._repo._create_remote_name()
+        self.assertEqual(remote_name, 'path_useful_repo')
+        del os.environ['TEST_VAR']
+
+
 if __name__ == '__main__':
     unittest.main()

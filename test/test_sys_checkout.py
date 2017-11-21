@@ -65,6 +65,7 @@ BARE_REPO_ROOT_NAME = 'repos'
 CONTAINER_REPO_NAME = 'container.git'
 MIXED_REPO_NAME = 'mixed-cont-ext.git'
 SIMPLE_REPO_NAME = 'simple-ext.git'
+SIMPLE_FORK_NAME = 'simple-ext-fork.git'
 ERROR_REPO_NAME = 'error'
 REPO_UNDER_TEST = 'under_test'
 EXTERNALS_NAME = 'externals'
@@ -200,6 +201,42 @@ class GenerateExternalsDescriptionCfgV1(object):
         if externals:
             self._config.set(name, ExternalsDescription.EXTERNALS, externals)
 
+    def update_branch(self, dest_dir, name, branch, repo_type=None,
+                      filename=CFG_NAME):
+        """Update a repository branch, and potentially the remote.
+        """
+        self._config.set(name, ExternalsDescription.BRANCH, branch)
+
+        if repo_type:
+            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_type)
+            self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
+
+        try:
+            # remove the tag if it existed
+            self._config.remove_option(name, ExternalsDescription.TAG)
+        except:
+            pass
+
+        self._write_config(dest_dir, filename)
+
+    def update_tag(self, dest_dir, name, tag, repo_type=None,
+                   filename=CFG_NAME):
+        """Update a repository tag, and potentially the remote
+        """
+        self._config.set(name, ExternalsDescription.TAG, tag)
+
+        if repo_type:
+            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_type)
+            self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
+
+        try:
+            # remove the branch if it existed
+            self._config.remove_option(name, ExternalsDescription.BRANCH)
+        except:
+            pass
+
+        self._write_config(dest_dir, filename)
+
 
 class TestSysCheckout(unittest.TestCase):
     """Run systems level tests of checkout_externals
@@ -282,7 +319,7 @@ class TestSysCheckout(unittest.TestCase):
         return status
 
     def test_container_simple_required(self):
-        """Verify that 'full' container with simple and mixed subrepos
+        """Verify that a container with simple subrepos
         generates the correct initial status.
 
         """
@@ -297,7 +334,7 @@ class TestSysCheckout(unittest.TestCase):
         self.assertEqual(status, 0)
 
     def test_container_simple_optional(self):
-        """Verify that 'full' container with simple and mixed subrepos
+        """Verify that container with an optional simple subrepos
         generates the correct initial status.
 
         """
@@ -308,6 +345,108 @@ class TestSysCheckout(unittest.TestCase):
         self.assertEqual(status, 0)
         status = self.execute_cmd_in_dir(under_test_dir, [])
         self.assertEqual(status, 0)
+        status = self.execute_cmd_in_dir(under_test_dir, args)
+        self.assertEqual(status, 0)
+
+    def test_container_simple_verbose(self):
+        """Verify that container with simple subrepos runs with verbose status
+        output and generates the correct initial status.
+
+        """
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+        # checkout
+        status = self.execute_cmd_in_dir(under_test_dir, [])
+        self.assertEqual(status, 0)
+
+        # check verbose status
+        args = ['--status', '--verbose']
+        status = self.execute_cmd_in_dir(under_test_dir, args)
+        self.assertEqual(status, 0)
+
+    def test_container_simple_dirty(self):
+        """Verify that a container with simple subrepos
+        and a dirty status exits gracefully.
+
+        NOTE(bja, 2017-11) need to do some screen scraping to verify
+        that we correctly identified the dirty status and didn't
+        update.
+
+        """
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # checkout
+        status = self.execute_cmd_in_dir(under_test_dir, [])
+        self.assertEqual(status, 0)
+
+        # add a file to the repo
+        dirty_path = os.path.join(under_test_dir, 'externals/simp_tag/tmp.txt')
+        with open(dirty_path, 'w') as tmp:
+            tmp.write('Hello, world!')
+
+        # get status
+        args = ['--status']
+        status = self.execute_cmd_in_dir(under_test_dir, args)
+        self.assertEqual(status, 0)
+
+    def test_container_remote_branch(self):
+        """Verify that a container with remote branch change works
+
+        """
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # checkout
+        status = self.execute_cmd_in_dir(under_test_dir, [])
+        self.assertEqual(status, 0)
+
+        # update the config file to point to a different remote with
+        # the same branch
+        self._generator.update_branch(under_test_dir, 'simp_branch',
+                                      'feature2', SIMPLE_FORK_NAME)
+
+        # status should be out of sync
+        args = ['--status']
+        status = self.execute_cmd_in_dir(under_test_dir, args)
+        self.assertEqual(status, 0)
+
+        # checkout
+        status = self.execute_cmd_in_dir(under_test_dir, [])
+        self.assertEqual(status, 0)
+
+        # status should be synced
+        args = ['--status']
+        status = self.execute_cmd_in_dir(under_test_dir, args)
+        self.assertEqual(status, 0)
+
+    def test_container_remote_tag(self):
+        """Verify that a container with remote tag change works
+
+        """
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # checkout
+        status = self.execute_cmd_in_dir(under_test_dir, [])
+        self.assertEqual(status, 0)
+
+        # update the config file to point to a different remote with
+        # the same branch
+        self._generator.update_tag(under_test_dir, 'simp_branch',
+                                   'forked-feature-v1', SIMPLE_FORK_NAME)
+
+        # status should be out of sync
+        args = ['--status']
+        status = self.execute_cmd_in_dir(under_test_dir, args)
+        self.assertEqual(status, 0)
+
+        # checkout
+        status = self.execute_cmd_in_dir(under_test_dir, [])
+        self.assertEqual(status, 0)
+
+        # status should be synced
+        args = ['--status']
         status = self.execute_cmd_in_dir(under_test_dir, args)
         self.assertEqual(status, 0)
 
