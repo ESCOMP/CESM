@@ -21,6 +21,8 @@ from manic.externals_description import ExternalsDescription
 from manic.externals_description import ExternalsDescriptionDict
 from manic.global_constants import EMPTY_STR
 
+# pylint: disable=W0212
+
 
 class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
     """test the current_ref_from_branch_command on a git repository
@@ -69,7 +71,7 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         """
         git_output = self.GIT_BRANCH_OUTPUT_DETACHED_TAG
         expected = self._repo.tag()
-        result = self._repo.current_ref_from_branch_command(
+        result = self._repo._current_ref_from_branch_command(
             git_output)
         self.assertEqual(result, expected)
 
@@ -78,7 +80,7 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         """
         git_output = self.GIT_BRANCH_OUTPUT_BRANCH
         expected = 'great_new_feature_branch'
-        result = self._repo.current_ref_from_branch_command(
+        result = self._repo._current_ref_from_branch_command(
             git_output)
         self.assertEqual(result, expected)
 
@@ -89,7 +91,7 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         """
         git_output = self.GIT_BRANCH_OUTPUT_HASH
         expected = '0246874c'
-        result = self._repo.current_ref_from_branch_command(
+        result = self._repo._current_ref_from_branch_command(
             git_output)
         self.assertEqual(result, expected)
 
@@ -100,7 +102,7 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         """
         git_output = EMPTY_STR
         expected = EMPTY_STR
-        result = self._repo.current_ref_from_branch_command(
+        result = self._repo._current_ref_from_branch_command(
             git_output)
         self.assertEqual(result, expected)
 
@@ -110,7 +112,8 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     correct.
 
     """
-    TMP_GIT_DIR = 'fake/.git'
+    TMP_FAKE_DIR = 'fake'
+    TMP_FAKE_GIT_DIR = os.path.join(TMP_FAKE_DIR, '.git')
 
     def setUp(self):
         """Setup reusable git repository object
@@ -127,7 +130,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         data = {self._name:
                 {
                     ExternalsDescription.REQUIRED: False,
-                    ExternalsDescription.PATH: 'fake',
+                    ExternalsDescription.PATH: self.TMP_FAKE_DIR,
                     ExternalsDescription.EXTERNALS: '',
                     ExternalsDescription.REPO: rdata,
                 },
@@ -146,14 +149,14 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     def create_tmp_git_dir(self):
         """Create a temporary fake git directory for testing purposes.
         """
-        if not os.path.exists(self.TMP_GIT_DIR):
-            os.makedirs(self.TMP_GIT_DIR)
+        if not os.path.exists(self.TMP_FAKE_GIT_DIR):
+            os.makedirs(self.TMP_FAKE_GIT_DIR)
 
     def remove_tmp_git_dir(self):
         """Remove the temporary fake git directory
         """
-        if os.path.exists(self.TMP_GIT_DIR):
-            shutil.rmtree(self.TMP_GIT_DIR)
+        if os.path.exists(self.TMP_FAKE_DIR):
+            shutil.rmtree(self.TMP_FAKE_DIR)
 
     @staticmethod
     def _git_branch_empty():
@@ -191,7 +194,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo.git_check_sync(stat, 'junk')
+        self._repo._check_sync(stat, 'invalid_directory_name')
         self.assertEqual(stat.sync_state, ExternalStatus.STATUS_ERROR)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
@@ -202,8 +205,8 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         stat = ExternalStatus()
         # Now we over-ride the _git_branch method on the repo to return
         # a known value without requiring access to git.
-        self._repo.git_branch = self._git_branch_empty
-        self._repo.git_check_sync(stat, 'fake')
+        self._repo._git_branch = self._git_branch_empty
+        self._repo._check_sync(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.UNKNOWN)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
@@ -216,8 +219,8 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         stat = ExternalStatus()
         # Now we over-ride the _git_branch method on the repo to return
         # a known value without requiring access to svn.
-        self._repo.git_branch = self._git_branch_synced
-        self._repo.git_check_sync(stat, 'fake')
+        self._repo._git_branch = self._git_branch_synced
+        self._repo._check_sync(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
@@ -228,10 +231,10 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        # Now we over-ride the _svn_info method on the repo to return
+        # Now we over-ride the _git_branch method on the repo to return
         # a known value without requiring access to svn.
-        self._repo.git_branch = self._git_branch_modified
-        self._repo.git_check_sync(stat, 'fake')
+        self._repo._git_branch = self._git_branch_modified
+        self._repo._check_sync(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
@@ -253,8 +256,7 @@ class TestGitStatusPorcelain(unittest.TestCase):
 
         """
         git_output = self.GIT_STATUS_PORCELAIN_V1_ALL
-        is_dirty = GitRepository.git_status_v1z_is_dirty(
-            git_output)
+        is_dirty = GitRepository._status_v1z_is_dirty(git_output)
         self.assertTrue(is_dirty)
 
     def test_porcelain_status_clean(self):
@@ -263,8 +265,7 @@ class TestGitStatusPorcelain(unittest.TestCase):
 
         """
         git_output = self.GIT_STATUS_PORCELAIN_CLEAN
-        is_dirty = GitRepository.git_status_v1z_is_dirty(
-            git_output)
+        is_dirty = GitRepository._status_v1z_is_dirty(git_output)
         self.assertFalse(is_dirty)
 
 

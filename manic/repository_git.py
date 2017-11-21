@@ -7,6 +7,7 @@ from __future__ import print_function
 
 import os
 import re
+import string
 
 from .global_constants import EMPTY_STR
 from .repository import Repository
@@ -16,8 +17,21 @@ from .utils import execute_subprocess, check_output
 
 
 class GitRepository(Repository):
-    """
-    Class to represent and operate on a repository description.
+    """Class to represent and operate on a repository description.
+
+    For testing purpose, all system calls to git should:
+
+    * be isolated in separate functions with no application logic
+      * of the form:
+         - cmd = []
+         - value = check_output(cmd)
+         - return value
+      * be static methods (not rely on self)
+      * name as git_subcommand_args(user_args)
+
+    This convention allows easy unit testing of the repository logic
+    by mocking the specific calls to return predefined results.
+
     """
 
     GIT_REF_UNKNOWN = 'unknown'
@@ -35,6 +49,11 @@ class GitRepository(Repository):
         """
         Repository.__init__(self, component_name, repo)
 
+    # ----------------------------------------------------------------
+    #
+    # Public API, defined by Repository
+    #
+    # ----------------------------------------------------------------
     def checkout(self, base_dir_path, repo_dir_name):
         """
         If the repo destination directory exists, ensure it is correct (from
@@ -44,8 +63,8 @@ class GitRepository(Repository):
         """
         repo_dir_path = os.path.join(base_dir_path, repo_dir_name)
         if not os.path.exists(repo_dir_path):
-            self.git_clone(base_dir_path, repo_dir_name)
-        self._git_checkout(repo_dir_path)
+            self._clone_repo(base_dir_path, repo_dir_name)
+        self._checkout_external_ref(repo_dir_path)
 
     def status(self, stat, repo_dir_path):
         """
@@ -54,25 +73,23 @@ class GitRepository(Repository):
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
         """
-        self.git_check_sync(stat, repo_dir_path)
+        self._check_sync(stat, repo_dir_path)
         if os.path.exists(repo_dir_path):
-            self.git_status(stat, repo_dir_path)
+            self._status_summary(stat, repo_dir_path)
 
     def verbose_status(self, repo_dir_path):
         """Display the raw repo status to the user.
 
         """
         if os.path.exists(repo_dir_path):
-            self.git_status_verbose(repo_dir_path)
+            self._status_verbose(repo_dir_path)
 
-    @staticmethod
-    def _git_clone(url, repo_dir_name):
-        """Execute clone subprocess
-        """
-        cmd = ['git', 'clone', url, repo_dir_name]
-        execute_subprocess(cmd)
-
-    def git_clone(self, base_dir_path, repo_dir_name):
+    # ----------------------------------------------------------------
+    #
+    # Internal work functions
+    #
+    # ----------------------------------------------------------------
+    def _clone_repo(self, base_dir_path, repo_dir_name):
         """Prepare to execute the clone by managing directory location
         """
         cwd = os.getcwd()
@@ -80,7 +97,37 @@ class GitRepository(Repository):
         self._git_clone(self._url, repo_dir_name)
         os.chdir(cwd)
 
-    def _git_ref_type(self, ref):
+    def _check_dir(self, chkdir, ref):
+        """
+        Check to see if directory (chkdir) exists and is the correct
+        treeish (ref)
+        Return True (correct), False (incorrect) or None (chkdir not found)
+        """
+        refchk = None
+        mycurrdir = os.path.abspath('.')
+        if os.path.exists(chkdir):
+            if os.path.exists(os.path.join(chkdir, '.git')):
+                os.chdir(chkdir)
+                head = self._git_revparse_head()
+                if ref is not None:
+                    refchk = self._git_revparse_ref(ref)
+
+            else:
+                head = None
+
+            if ref is None:
+                status = head is not None
+            elif refchk is None:
+                status = None
+            else:
+                status = (head == refchk)
+        else:
+            status = None
+
+        os.chdir(mycurrdir)
+        return status
+
+    def _determine_ref_type(self, ref):
         """
         Determine if 'ref' is a local branch, a remote branch, a tag, or a
         commit.
@@ -89,7 +136,7 @@ class GitRepository(Repository):
         """
         ref_type = self.GIT_REF_UNKNOWN
         # First check for local branch
-        gitout = check_output(['git', 'branch'])
+        gitout = self._git_branch()
         if gitout is not None:
             branches = [x.lstrip('* ') for x in gitout.splitlines()]
             for branch in branches:
@@ -99,7 +146,7 @@ class GitRepository(Repository):
 
         # Next, check for remote branch
         if ref_type == self.GIT_REF_UNKNOWN:
-            gitout = check_output(['git', 'branch', '-r'])
+            gitout = self._git_branch_remotes()
             if gitout is not None:
                 for branch in gitout.splitlines():
                     match = GitRepository.RE_REMOTEBRANCH.match(branch)
@@ -109,7 +156,7 @@ class GitRepository(Repository):
 
         # Next, check for a tag
         if ref_type == self.GIT_REF_UNKNOWN:
-            gitout = check_output(['git', 'tag'])
+            gitout = self._git_tag()
             if gitout is not None:
                 for tag in gitout.splitlines():
                     if tag == ref:
@@ -125,30 +172,7 @@ class GitRepository(Repository):
         return ref_type
 
     @staticmethod
-    def _git_current_branch():
-        """
-        Return the (current branch, sha1 hash) of working copy in wdir
-        """
-        branch = check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])
-        git_hash = check_output(['git', 'rev-parse', 'HEAD'])
-        if branch is not None:
-            branch = branch.rstrip()
-
-        if git_hash is not None:
-            git_hash = git_hash.rstrip()
-
-        return (branch, git_hash)
-
-    @staticmethod
-    def git_branch():
-        """Run the git branch command
-        """
-        cmd = ['git', 'branch']
-        git_output = check_output(cmd)
-        return git_output
-
-    @staticmethod
-    def current_ref_from_branch_command(git_output):
+    def _current_ref_from_branch_command(git_output):
         """Parse output of the 'git branch' command to determine the current branch.
         The line starting with '*' is the current branch. It can be one of:
 
@@ -180,7 +204,7 @@ class GitRepository(Repository):
                 ref = current_branch.split()[-1]
         return ref
 
-    def git_check_sync(self, stat, repo_dir_path):
+    def _check_sync(self, stat, repo_dir_path):
         """Determine whether a git repository is in-sync with the model
         description.
 
@@ -189,20 +213,22 @@ class GitRepository(Repository):
 
         """
         if not os.path.exists(repo_dir_path):
-            # NOTE(bja, 2017-10) condition should have been checkoud
+            # NOTE(bja, 2017-10) condition should have been determined
             # by _Source() object and should never be here!
             stat.sync_state = ExternalStatus.STATUS_ERROR
         else:
             git_dir = os.path.join(repo_dir_path, '.git')
             if not os.path.exists(git_dir):
                 # NOTE(bja, 2017-10) directory exists, but no git repo
-                # info....
+                # info.... Can't test with subprocess git command
+                # because git will move up directory tree until it
+                # finds the parent repo git dir!
                 stat.sync_state = ExternalStatus.UNKNOWN
             else:
                 cwd = os.getcwd()
                 os.chdir(repo_dir_path)
-                git_output = self.git_branch()
-                ref = self.current_ref_from_branch_command(git_output)
+                git_output = self._git_branch()
+                ref = self._current_ref_from_branch_command(git_output)
                 if ref == EMPTY_STR:
                     stat.sync_state = ExternalStatus.UNKNOWN
                 elif self._tag:
@@ -217,82 +243,79 @@ class GitRepository(Repository):
                         stat.sync_state = ExternalStatus.MODEL_MODIFIED
                 os.chdir(cwd)
 
-    @staticmethod
-    def _git_check_dir(chkdir, ref):
-        """
-        Check to see if directory (chkdir) exists and is the correct
-        treeish (ref)
-        Return True (correct), False (incorrect) or None (chkdir not found)
-        """
-        refchk = None
-        mycurrdir = os.path.abspath('.')
-        if os.path.exists(chkdir):
-            if os.path.exists(os.path.join(chkdir, '.git')):
-                os.chdir(chkdir)
-                head = check_output(['git', 'rev-parse', 'HEAD'])
-                if ref is not None:
-                    refchk = check_output(['git', 'rev-parse', ref])
+    def _determine_remote_name(self):
+        """Return the remote name.
 
-            else:
-                head = None
+        Note that this is for the *future* repo url and branch, not
+        the current working copy!
 
-            if ref is None:
-                status = head is not None
-            elif refchk is None:
-                status = None
-            else:
-                status = (head == refchk)
-        else:
-            status = None
+        """
+        git_output = self._git_remote_verbose()
+        git_output = git_output.splitlines()
+        remote_name = ''
+        for line in git_output:
+            if self._url in line:
+                data = line.split()
+                remote_name = data[0].strip()
+        return remote_name
 
-        os.chdir(mycurrdir)
-        return status
+    def _create_remote_name(self):
+        """The url specified in the externals description file was not known
+        to git. We need to add it, which means adding a unique and
+        safe name....
 
-    @staticmethod
-    def _git_working_dir_clean(wdir):
-        """
-        Return True if wdir is clean or False if there are modifications
-        """
-        mycurrdir = os.path.abspath('.')
-        os.chdir(wdir)
-        cmd = ['git', 'diff', '--quiet', '--exit-code']
-        retcode = execute_subprocess(cmd, status_to_caller=True)
-        os.chdir(mycurrdir)
-        return retcode == 0
+        The assigned name needs to be safe for git to use, e.g. can't
+        look like a path 'foo/bar' and work with both remote and local paths.
 
-    def _git_remote(self, repo_dir):
+        Remote paths include but are not limited to: git, ssh, https,
+        github, gitlab, bitbucket, custom server, etc.
+
+        Local paths can be relative or absolute. They may contain
+        shell variables, e.g. ${REPO_ROOT}/repo_name, or username
+        expansion, i.e. ~/ or ~someuser/.
+
+        Relative paths must be at least one layer of redirection, i.e.
+        container/../ext_repo, but may be many layers deep, e.g.
+        container/../../../../../ext_repo
+
         """
-        Return the remote for the current branch or tag
-        """
-        mycurrdir = os.path.abspath(".")
+        url = self._url.split('/')
+        repo_name = url[-1]
+        base_name = url[-2]
+        unsafe = '<>:"/\\|?*&$.'
+        remove = string.maketrans(unsafe, '_' * len(unsafe))
+        base_name = base_name.translate(remove)
+        remote_name = "{0}_{1}".format(base_name, repo_name)
+        return remote_name
+
+    def _checkout_external_ref(self, repo_dir):
+        cwd = os.getcwd()
         os.chdir(repo_dir)
-        # Make sure we are on a remote-tracking branch
-        (curr_branch, _) = self._git_current_branch()
-        ref_type = self._git_ref_type(curr_branch)
-        if ref_type == self.GIT_REF_REMOTE_BRANCH:
-            remote = check_output(
-                ['git', 'config', 'branch.{0}.remote'.format(curr_branch)])
+        remote_name = self._determine_remote_name()
+        if not remote_name:
+            remote_name = self._create_remote_name()
+            self._git_remote_add(remote_name, self._url)
+        self._git_fetch(remote_name)
+        if self._tag:
+            ref = self._tag
         else:
-            remote = None
+            ref = '{0}/{1}'.format(remote_name, self._branch)
+        self._git_checkout_ref(ref)
+        os.chdir(cwd)
 
-        os.chdir(mycurrdir)
-        return remote
-
-    # Need to decide how to do this. Just doing pull for now
-    def _git_update(self, repo_dir):
+    def _current_branch_and_hash(self):
         """
-        Do an update and a FF merge if possible
+        Return the (current branch, sha1 hash) of working copy in wdir
         """
-        mycurrdir = os.path.abspath('.')
-        os.chdir(repo_dir)
-        remote = self._git_remote(repo_dir)
-        if remote is not None:
-            cmd = ['git', 'remote', 'update', '--prune', remote]
-            execute_subprocess(cmd)
+        branch = self._git_revparse_abbrev_head()
+        sha_hash = self._git_revparse_head()
+        if branch is not None:
+            branch = branch.rstrip()
 
-        cmd = ['git', 'merge', '--ff-only', '@{u}']
-        execute_subprocess(cmd)
-        os.chdir(mycurrdir)
+        if sha_hash is not None:
+            sha_hash = sha_hash.rstrip()
+
+        return (branch, sha_hash)
 
     def _git_checkout(self, repo_dir_path):
         """
@@ -317,62 +340,72 @@ class GitRepository(Repository):
                    "should be {2}".format(repo_dir_path, check_url,
                                           self._url))
             fatal_error(msg)
-        cmd = ['git', 'fetch', '--all', '--tags']
-        execute_subprocess(cmd)
 
-        cmd = []
+        self._git_fetch_all_tags()
+
+        ref = ''
         if self._branch:
-            cmd = self._checkout_branch_command(repo_dir_path)
+            ref = self._checkout_branch_command(repo_dir_path)
+            self._git_checkout_ref(ref)
         elif self._tag:
             # For now, do a hail mary and hope tag can be checked out
-            cmd = ['git', 'checkout', self._tag]
+            ref = self._tag
+            self._git_checkout_ref(ref)
         else:
             msg = "DEV_ERROR: in git repo. Shouldn't be here!"
             fatal_error(msg)
-
-        if cmd:
-            execute_subprocess(cmd)
 
         os.chdir(cwd)
 
     def _checkout_branch_command(self, repo_dir_path):
         """Construct the command for checking out the specified branch
         """
-        cmd = []
-        (curr_branch, _) = self._git_current_branch()
-        ref_type = self._git_ref_type(self._branch)
+        ref = ''
+        curr_branch = self._git_branch()
+        ref_type = self._determine_ref_type(self._branch)
         if ref_type == self.GIT_REF_REMOTE_BRANCH:
-            cmd = ['git', 'checkout', '--track', 'origin/' + self._branch]
+            ref = 'origin/' + self._branch
         elif ref_type == self.GIT_REF_LOCAL_BRANCH:
             if curr_branch != self._branch:
-                # FIXME(bja, 2017-11) not sure what this branch logic
-                # is accomplishing, but it can lead to cmd being
-                # undefined without an error. Probably not what we
-                # want!
-                if not self._git_working_dir_clean(repo_dir_path):
+                if not self._working_dir_clean(repo_dir_path):
                     msg = ('Working directory "{0}" not clean, '
                            'aborting'.format(repo_dir_path))
                     fatal_error(msg)
                 else:
-                    cmd = ['git', 'checkout', self._branch]
-        else:
-            msg = 'Unable to check out branch, "{0}"'.format(self._branch)
+                    ref = self._branch
+        if not ref:
+            msg = ('Unable to determine ref to checkout out for '
+                   'branch, "{0}"'.format(self._branch))
             fatal_error(msg)
-        return cmd
+        return ref
 
-    @staticmethod
-    def git_status_porcelain_v1z():
-        """Run the git status command on the cwd and report results in the
-        machine parable format that is guarenteed not to change
-        between version or user configuration.
+    def _status_summary(self, stat, repo_dir_path):
+        """Determine the clean/dirty status of a git repository
 
         """
-        cmd = ['git', 'status', '--porcelain', '-z']
-        git_output = check_output(cmd)
-        return git_output
+        cwd = os.getcwd()
+        os.chdir(repo_dir_path)
+        git_output = self._git_status_porcelain_v1z()
+        os.chdir(cwd)
+        is_dirty = self._status_v1z_is_dirty(git_output)
+        if is_dirty:
+            stat.clean_state = ExternalStatus.DIRTY
+        else:
+            stat.clean_state = ExternalStatus.STATUS_OK
+
+    def _status_verbose(self, repo_dir_path):
+        """Display raw git status output to the user
+
+        """
+        cwd = os.getcwd()
+        os.chdir(repo_dir_path)
+        git_output = self._git_status_verbose()
+        os.chdir(cwd)
+        log_process_output(git_output)
+        print(git_output)
 
     @staticmethod
-    def git_status_v1z_is_dirty(git_output):
+    def _status_v1z_is_dirty(git_output):
         """Parse the git status output from --porcelain=v1 -z and determine if
         the repo status is clean or dirty. Dirty means:
 
@@ -387,17 +420,8 @@ class GitRepository(Repository):
         NOTE: Based on the above definition, the porcelain status
         should be an empty string to be considered 'clean'. Of course
         this assumes we only get an empty string from an status
-        command on a clean checkout, and not some error condition...
-
-        GIT_DELETED = 'D'
-        GIT_MODIFIED = 'M'
-        GIT_UNTRACKED = '?'
-        GIT_RENAMED = 'R'
-        GIT_COPIED = 'C'
-        GIT_UNMERGED = 'U'
-        git_dirty[GIT_DELETED, GIT_MODIFIED, GIT_UNTRACKED, GIT_RENAMED,
-                  GIT_COPIED, GIT_UNMERGED, ]
-        git_output = git_output.split('\0')
+        command on a clean checkout, and not some error
+        condition... Could alse use 'git diff --quiet'.
 
         """
         is_dirty = False
@@ -405,35 +429,156 @@ class GitRepository(Repository):
             is_dirty = True
         return is_dirty
 
-    def git_status(self, stat, repo_dir_path):
-        """Determine the clean/dirty status of a git repository
+    def _working_dir_clean(self, wdir):
+        """
+        Return True if wdir is clean or False if there are modifications
+        """
+        mycurrdir = os.path.abspath('.')
+        os.chdir(wdir)
+        retcode = self._git_diff_quiet()
+        os.chdir(mycurrdir)
+        return retcode == 0
+
+    # ----------------------------------------------------------------
+    #
+    # system call to git for information gathering
+    #
+    # ----------------------------------------------------------------
+    @staticmethod
+    def _git_diff_quiet():
+        """Run git diff to obtain repository information
+        """
+        cmd = ['git', 'diff', '--quiet', '--exit-code']
+        retcode = execute_subprocess(cmd, status_to_caller=True)
+        return retcode
+
+    @staticmethod
+    def _git_revparse_head():
+        """Run git ref-parse to obtain repository information
+        """
+        cmd = ['git', 'rev-parse', 'HEAD']
+        git_hash = check_output(cmd)
+        return git_hash
+
+    @staticmethod
+    def _git_revparse_abbrev_head():
+        """Run git ref-parse to obtain repository information
+        """
+        cmd = ['git', 'rev-parse', '--abbrev-ref', 'HEAD']
+        branch_name = check_output(cmd)
+        return branch_name
+
+    @staticmethod
+    def _git_revparse_ref(ref):
+        """Run git ref-parse to obtain repository information
+        """
+        cmd = ['git', 'rev-parse', ref]
+        ref = check_output(cmd)
+        return ref
+
+    @staticmethod
+    def _git_branch():
+        """Run git branch to obtain repository information
+        """
+        cmd = ['git', 'branch']
+        git_output = check_output(cmd)
+        return git_output
+
+    @staticmethod
+    def _git_branch_remotes():
+        """Run git branch to obtain repository information
+        """
+        cmd = ['git', 'branch', '--remotes']
+        git_output = check_output(cmd)
+        return git_output
+
+    @staticmethod
+    def _git_tag():
+        """Run git tag to obtain repository information
+        """
+        cmd = ['git', 'tag']
+        git_output = check_output(cmd)
+        return git_output
+
+    @staticmethod
+    def _git_status_porcelain_v1z():
+        """Run git status to obtain repository information.
+
+        The machine parable format that is guarenteed not to change
+        between git versions or *user configuration*.
 
         """
-        cwd = os.getcwd()
-        os.chdir(repo_dir_path)
-        git_output = self.git_status_porcelain_v1z()
-        os.chdir(cwd)
-        is_dirty = self.git_status_v1z_is_dirty(git_output)
-        if is_dirty:
-            stat.clean_state = ExternalStatus.DIRTY
-        else:
-            stat.clean_state = ExternalStatus.STATUS_OK
+        cmd = ['git', 'status', '--porcelain', '-z']
+        git_output = check_output(cmd)
+        return git_output
 
     @staticmethod
     def _git_status_verbose():
-        """Run the git status command and capture the output
+        """Run the git status command to obtain repository information.
         """
         cmd = ['git', 'status']
         git_output = check_output(cmd)
         return git_output
 
-    def git_status_verbose(self, repo_dir_path):
-        """Display raw git status output to the user
+    @staticmethod
+    def _git_remote_verbose():
+        """Run the git remote command to obtain repository information.
+        """
+        cmd = ['git', 'remote', '--verbose']
+        git_output = check_output(cmd)
+        return git_output
+
+    # ----------------------------------------------------------------
+    #
+    # system call to git for sideffects modifying the working tree
+    #
+    # ----------------------------------------------------------------
+    @staticmethod
+    def _git_clone(url, repo_dir_name):
+        """Run git clone for the side effect of creating a repository.
+        """
+        cmd = ['git', 'clone', url, repo_dir_name]
+        execute_subprocess(cmd)
+
+    @staticmethod
+    def _git_remote_add(name, url):
+        """Run the git remote command to for the side effect of adding a remote
+        """
+        cmd = ['git', 'remote', 'add', name, url]
+        execute_subprocess(cmd)
+
+    @staticmethod
+    def _git_fetch(remote_name):
+        """Run the git fetch command to for the side effect of updating the repo
+        """
+        cmd = ['git', 'fetch', remote_name]
+        execute_subprocess(cmd)
+
+    @staticmethod
+    def _git_fetch_all_tags():
+        """Run the git fetch command to for the side effect of updating the repo
+        """
+        cmd = ['git', 'fetch', '--all', '--tags']
+        execute_subprocess(cmd)
+
+    @staticmethod
+    def _git_checkout_ref(ref):
+        """Run the git checkout command to for the side effect of updating the repo
+
+        Param: ref is a reference to a local or remote object in the
+        form 'origin/my_feature', or 'tag1'.
 
         """
-        cwd = os.getcwd()
-        os.chdir(repo_dir_path)
-        git_output = self._git_status_verbose()
-        os.chdir(cwd)
-        log_process_output(git_output)
-        print(git_output)
+        cmd = ['git', 'checkout', ref]
+        execute_subprocess(cmd)
+
+    @staticmethod
+    def _git_checkout_track_remote_ref(remote_ref):
+        """Run the git checkout command to for the side effect of updating the repo
+
+        Param: remote_ref is a reference to a remote in the form
+        'remote/ref', e.g. 'origin/my_feature'
+
+        """
+        cmd = ['git', 'checkout', '--track', remote_ref]
+        execute_subprocess(cmd)

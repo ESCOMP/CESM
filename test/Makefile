@@ -30,7 +30,7 @@ SRC = \
 	../checkout_externals.py \
 	../manic/*.py
 
-CHECKOUT_EXE = ../checkout_externals.py
+CHECKOUT_EXE = ../checkout_externals
 
 TEST_DIR = .
 
