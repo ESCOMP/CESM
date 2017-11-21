@@ -133,8 +133,8 @@ def execute_subprocess(commands, status_to_caller=False):
     status = -1
     try:
         logging.info(' '.join(commands))
-        output = subprocess.check_output(commands, stderr=subprocess.STDOUT)
-        output = output.decode('ascii')
+        output = subprocess.check_output(commands, stderr=subprocess.STDOUT,
+                                         universal_newlines=True)
         log_process_output(output)
         status = 0
     except OSError as error:
