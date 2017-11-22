@@ -19,6 +19,8 @@ from manic.externals_description import ExternalsDescription
 from manic.externals_description import ExternalsDescriptionDict
 from manic.global_constants import EMPTY_STR
 
+# pylint: disable=W0212
+
 SVN_INFO_MOSART = """Path: components/mosart
 Working Copy Root Path: /Users/andreb/projects/ncar/git-conversion/clm-dev-experimental/components/mosart
 URL: https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_26
@@ -82,7 +84,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """
         svn_output = SVN_INFO_MOSART
         expected_url = self._repo.url()
-        result = self._repo.svn_check_url(svn_output, expected_url)
+        result = self._repo._check_url(svn_output, expected_url)
         self.assertEqual(result, ExternalStatus.STATUS_OK)
 
     def test_check_url_different(self):
@@ -90,7 +92,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """
         svn_output = SVN_INFO_CISM
         expected_url = self._repo.url()
-        result = self._repo.svn_check_url(svn_output, expected_url)
+        result = self._repo._check_url(svn_output, expected_url)
         self.assertEqual(result, ExternalStatus.MODEL_MODIFIED)
 
     def test_check_url_none(self):
@@ -100,7 +102,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """
         svn_output = EMPTY_STR
         expected_url = self._repo.url()
-        result = self._repo.svn_check_url(svn_output, expected_url)
+        result = self._repo._check_url(svn_output, expected_url)
         self.assertEqual(result, ExternalStatus.UNKNOWN)
 
 
@@ -161,7 +163,7 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo.svn_check_sync(stat, 'junk')
+        self._repo._check_sync(stat, 'junk')
         self.assertEqual(stat.sync_state, ExternalStatus.STATUS_ERROR)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
@@ -172,8 +174,8 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         stat = ExternalStatus()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
-        self._repo.svn_info = self._svn_info_empty
-        self._repo.svn_check_sync(stat, '.')
+        self._repo._svn_info = self._svn_info_empty
+        self._repo._check_sync(stat, '.')
         self.assertEqual(stat.sync_state, ExternalStatus.UNKNOWN)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
@@ -186,8 +188,8 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         stat = ExternalStatus()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
-        self._repo.svn_info = self._svn_info_synced
-        self._repo.svn_check_sync(stat, '.')
+        self._repo._svn_info = self._svn_info_synced
+        self._repo._check_sync(stat, '.')
         self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
@@ -200,8 +202,8 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
         stat = ExternalStatus()
         # Now we over-ride the _svn_info method on the repo to return
         # a known value without requiring access to svn.
-        self._repo.svn_info = self._svn_info_modified
-        self._repo.svn_check_sync(stat, '.')
+        self._repo._svn_info = self._svn_info_modified
+        self._repo._check_sync(stat, '.')
         self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_dir should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
