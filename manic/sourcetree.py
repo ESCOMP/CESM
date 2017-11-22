@@ -22,6 +22,8 @@ class _Source(object):
     _Source represents a <source> object in a <config_sourcetree>
     """
 
+    # pylint: disable=R0902
+
     def __init__(self, root_dir, name, source):
         """Parse an XML node for a <source> tag
 

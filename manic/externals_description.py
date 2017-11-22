@@ -135,9 +135,15 @@ def get_cfg_schema_version(model_cfg):
     version_list = re.split(r'[-+]', semver_str)
     version_str = version_list[0]
     version = version_str.split('.')
-    major = int(version[0].strip())
-    minor = int(version[1].strip())
-    patch = int(version[2].strip())
+    try:
+        major = int(version[0].strip())
+        minor = int(version[1].strip())
+        patch = int(version[2].strip())
+    except ValueError:
+        msg = ('Config file schema version must have integer digits for '
+               'major, minor and patch versions. '
+               'Received "{0}"'.format(version_str))
+        fatal_error(msg)
     return major, minor, patch
 
 

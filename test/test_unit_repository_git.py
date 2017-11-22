@@ -131,7 +131,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
                 {
                     ExternalsDescription.REQUIRED: False,
                     ExternalsDescription.PATH: self.TMP_FAKE_DIR,
-                    ExternalsDescription.EXTERNALS: '',
+                    ExternalsDescription.EXTERNALS: EMPTY_STR,
                     ExternalsDescription.REPO: rdata,
                 },
                 }
@@ -274,7 +274,7 @@ class TestGitCreateRemoteName(unittest.TestCase):
     """
 
     def setUp(self):
-        """
+        """Common infrastructure for testing _create_remote_name
         """
         self._rdata = {ExternalsDescription.PROTOCOL: 'git',
                        ExternalsDescription.REPO_URL:

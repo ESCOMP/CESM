@@ -16,9 +16,9 @@ import os
 import os.path
 import sys
 import textwrap
-import traceback
 
-from manic.externals_description import read_externals_description_file, create_externals_description
+from manic.externals_description import create_externals_description
+from manic.externals_description import read_externals_description_file
 from manic.externals_status import check_safe_to_update_repos
 from manic.sourcetree import SourceTree
 from manic.utils import printlog
@@ -295,4 +295,3 @@ def main(args):
 
     logging.info('checkout_externals completed without exceptions.')
     return 0
-

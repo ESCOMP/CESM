@@ -5,5 +5,5 @@ import manic.checkout as checkout
 from manic.utils import printlog
 
 __all__ = [
-    checkout, printlog,
+    'checkout', 'printlog',
 ]

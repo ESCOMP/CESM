@@ -14,8 +14,40 @@ from __future__ import print_function
 import os
 import unittest
 
-from manic.utils import str_to_bool, is_remote_url, split_remote_url
-from manic.utils import expand_local_url
+from manic.utils import str_to_bool, execute_subprocess
+from manic.utils import is_remote_url, split_remote_url, expand_local_url
+
+
+class TestExecuteSubprocess(unittest.TestCase):
+    """Test the application logic of execute_subprocess wrapper
+    """
+
+    def test_exesub_return_stat_err(self):
+        """Test that execute_subprocess returns a status code when caller
+        requests and the executed subprocess fails.
+
+        """
+        cmd = ['false']
+        status = execute_subprocess(cmd, status_to_caller=True)
+        self.assertEqual(status, 1)
+
+    def test_exesub_return_stat_ok(self):
+        """Test that execute_subprocess returns a status code when caller
+        requests and the executed subprocess succeeds.
+
+        """
+        cmd = ['true']
+        status = execute_subprocess(cmd, status_to_caller=True)
+        self.assertEqual(status, 0)
+
+    def test_exesub_except_stat_err(self):
+        """Test that execute_subprocess raises an exception on error when
+        caller doesn't request return code
+
+        """
+        cmd = ['false']
+        with self.assertRaises(RuntimeError):
+            execute_subprocess(cmd, status_to_caller=False)
 
 
 class TestStrToBool(unittest.TestCase):

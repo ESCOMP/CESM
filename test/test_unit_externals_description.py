@@ -13,6 +13,7 @@ from __future__ import print_function
 
 import os
 import os.path
+import shutil
 import unittest
 
 try:
@@ -36,8 +37,11 @@ except ImportError:
 
 from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
 from manic.externals_description import ExternalsDescription
+from manic.externals_description import ExternalsDescriptionDict
 from manic.externals_description import ExternalsDescriptionConfigV1
 from manic.externals_description import get_cfg_schema_version
+from manic.externals_description import read_externals_description_file
+from manic.externals_description import create_externals_description
 
 from manic.global_constants import EMPTY_STR
 
@@ -92,12 +96,23 @@ class TestCfgSchemaVersion(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             get_cfg_schema_version(self._config)
 
+    def test_schema_version_not_int(self):
+        """Test that a externals description file a version that doesn't
+        decompose to integer major, minor and patch versions raises
+        runtime error.
+
+        """
+        self._config.set(DESCRIPTION_SECTION, VERSION_ITEM, 'unknown')
+        with self.assertRaises(RuntimeError):
+            get_cfg_schema_version(self._config)
+
 
 class TestModelDescritionConfigV1(unittest.TestCase):
     """Test that parsing config/ini fileproduces a correct dictionary
     for the externals description.
 
     """
+    # pylint: disable=R0902
 
     def setUp(self):
         """Boiler plate construction of string containing xml for multiple components.
@@ -198,6 +213,130 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         print(model)
         self._check_comp1(model)
         self._check_comp2(model)
+
+
+class TestReadExternalsDescription(unittest.TestCase):
+    """Test the application logic of read_externals_description_file
+    """
+    TMP_FAKE_DIR = 'fake'
+
+    def setUp(self):
+        """Setup directory for tests
+        """
+        if not os.path.exists(self.TMP_FAKE_DIR):
+            os.makedirs(self.TMP_FAKE_DIR)
+
+    def tearDown(self):
+        """Cleanup tmp stuff on the file system
+        """
+        if os.path.exists(self.TMP_FAKE_DIR):
+            shutil.rmtree(self.TMP_FAKE_DIR)
+
+    def test_no_file_error(self):
+        """Test that a runtime error is raised when the file does not exist
+
+        """
+        root_dir = os.getcwd()
+        filename = 'this-file-should-not-exist'
+        with self.assertRaises(RuntimeError):
+            read_externals_description_file(root_dir, filename)
+
+    def test_no_dir_error(self):
+        """Test that a runtime error is raised when the file does not exist
+
+        """
+        root_dir = '/path/to/some/repo'
+        filename = 'externals.cfg'
+        with self.assertRaises(RuntimeError):
+            read_externals_description_file(root_dir, filename)
+
+    def test_no_invalid_error(self):
+        """Test that a runtime error is raised when the file format is invalid
+
+        """
+        root_dir = os.getcwd()
+        filename = 'externals.cfg'
+        file_path = os.path.join(root_dir, filename)
+        file_path = os.path.abspath(file_path)
+        contents = """
+<source_tree version='1.0.0'>
+invalid file format
+</sourc_tree>"""
+        with open(file_path, 'w') as fhandle:
+            fhandle.write(contents)
+        with self.assertRaises(RuntimeError):
+            read_externals_description_file(root_dir, filename)
+        os.remove(file_path)
+
+
+class TestCreateExternalsDescription(unittest.TestCase):
+    """Test the application logic of creat_externals_description
+    """
+
+    def setUp(self):
+        """Create config object used as basis for all tests
+        """
+        self._config = config_parser()
+        self.setup_config()
+
+    def setup_config(self):
+        """Boiler plate construction of xml string for componet 1
+        """
+        name = 'test'
+        self._config.add_section(name)
+        self._config.set(name, ExternalsDescription.PATH, 'externals')
+        self._config.set(name, ExternalsDescription.PROTOCOL, 'git')
+        self._config.set(name, ExternalsDescription.REPO_URL, '/path/to/repo')
+        self._config.set(name, ExternalsDescription.TAG, 'test_tag')
+        self._config.set(name, ExternalsDescription.REQUIRED, 'True')
+
+        self._config.add_section(DESCRIPTION_SECTION)
+        self._config.set(DESCRIPTION_SECTION, VERSION_ITEM, '1.0.0')
+
+    def test_cfg_v1(self):
+        """Test that a correct cfg v1 object is created by create_externals_description
+
+        """
+        self._config.set(DESCRIPTION_SECTION, VERSION_ITEM, '1.2.3')
+        ext = create_externals_description(self._config, model_format='cfg')
+        self.assertIsInstance(ext, ExternalsDescriptionConfigV1)
+
+    def test_dict(self):
+        """Test that a correct cfg v1 object is created by create_externals_description
+
+        """
+        rdata = {ExternalsDescription.PROTOCOL: 'git',
+                 ExternalsDescription.REPO_URL: '/path/to/repo',
+                 ExternalsDescription.TAG: 'tagv1',
+                 ExternalsDescription.BRANCH: EMPTY_STR, }
+
+        desc = {
+            'test': {
+                ExternalsDescription.REQUIRED: False,
+                ExternalsDescription.PATH: '../fake',
+                ExternalsDescription.EXTERNALS: EMPTY_STR,
+                ExternalsDescription.REPO: rdata, },
+        }
+
+        ext = create_externals_description(desc, model_format='dict')
+        self.assertIsInstance(ext, ExternalsDescriptionDict)
+
+    def test_cfg_unknown_version(self):
+        """Test that a runtime error is raised when an unknown file version is
+        received
+
+        """
+        self._config.set(DESCRIPTION_SECTION, VERSION_ITEM, '123.456.789')
+        with self.assertRaises(RuntimeError):
+            create_externals_description(self._config, model_format='cfg')
+
+    def test_cfg_unknown_format(self):
+        """Test that a runtime error is raised when an unknown format string is
+        received
+
+        """
+        with self.assertRaises(RuntimeError):
+            create_externals_description(self._config, model_format='unknown')
 
 
 if __name__ == '__main__':

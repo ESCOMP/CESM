@@ -27,7 +27,7 @@ COVERAGE_ARGS=--rcfile=.coveragerc --append
 
 # source files
 SRC = \
-	../checkout_externals.py \
+	../checkout_externals \
 	../manic/*.py
 
 CHECKOUT_EXE = ../checkout_externals
@@ -91,11 +91,11 @@ env : FORCE
 #
 .PHONY : clean
 clean : FORCE
-	-rm -rf *~ *.pyc
+	-rm -rf *~ *.pyc tmp fake htmlcov
 
 .PHONY : clobber
 clobber : clean
-	-rm -rf env_* htmlcov tmp fake
+	-rm -rf env_*
 
 FORCE : 
 

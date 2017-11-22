@@ -180,6 +180,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         optional items.
 
         """
+        # pylint: disable=R0913
         self._config.add_section(name)
         self._config.set(name, ExternalsDescription.PATH,
                          os.path.join(EXTERNALS_NAME, name))
@@ -205,6 +206,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                       filename=CFG_NAME):
         """Update a repository branch, and potentially the remote.
         """
+        # pylint: disable=R0913
         self._config.set(name, ExternalsDescription.BRANCH, branch)
 
         if repo_type:
@@ -214,7 +216,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         try:
             # remove the tag if it existed
             self._config.remove_option(name, ExternalsDescription.TAG)
-        except:
+        except BaseException:
             pass
 
         self._write_config(dest_dir, filename)
@@ -223,6 +225,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                    filename=CFG_NAME):
         """Update a repository tag, and potentially the remote
         """
+        # pylint: disable=R0913
         self._config.set(name, ExternalsDescription.TAG, tag)
 
         if repo_type:
@@ -232,7 +235,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         try:
             # remove the branch if it existed
             self._config.remove_option(name, ExternalsDescription.BRANCH)
-        except:
+        except BaseException:
             pass
 
         self._write_config(dest_dir, filename)

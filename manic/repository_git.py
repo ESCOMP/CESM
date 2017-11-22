@@ -8,8 +8,6 @@ from __future__ import print_function
 import copy
 import os
 import re
-import string
-import sys
 
 from .global_constants import EMPTY_STR
 from .repository import Repository
@@ -26,11 +24,11 @@ class GitRepository(Repository):
 
     * be isolated in separate functions with no application logic
       * of the form:
-         - cmd = []
+         - cmd = ['git', ...]
          - value = check_output(cmd)
          - return value
       * be static methods (not rely on self)
-      * name as git_subcommand_args(user_args)
+      * name as _git_subcommand_args(user_args)
 
     This convention allows easy unit testing of the repository logic
     by mocking the specific calls to return predefined results.
@@ -232,9 +230,9 @@ class GitRepository(Repository):
         # repo name should nominally already be something that git can
         # deal with. We need to remove other possibly troublesome
         # punctuation, e.g. /, $, from the base name.
-        unsafe = '!@#$%^&*()[]{}\\/,;~'
-        for c in unsafe:
-            base_name = base_name.replace(c, '')
+        unsafe_characters = '!@#$%^&*()[]{}\\/,;~'
+        for unsafe in unsafe_characters:
+            base_name = base_name.replace(unsafe, '')
         remote_name = "{0}_{1}".format(base_name, repo_name)
         return remote_name
 
