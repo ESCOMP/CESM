@@ -100,50 +100,6 @@ class GitRepository(Repository):
         self._git_clone(self._url, repo_dir_name)
         os.chdir(cwd)
 
-    def _determine_ref_type(self, ref):
-        """
-        Determine if 'ref' is a local branch, a remote branch, a tag, or a
-        commit.
-        Should probably use this command instead:
-        git show-ref --verify --quiet refs/heads/<branch-name>
-        """
-        ref_type = self.GIT_REF_UNKNOWN
-        # First check for local branch
-        gitout = self._git_branch()
-        if gitout is not None:
-            branches = [x.lstrip('* ') for x in gitout.splitlines()]
-            for branch in branches:
-                if branch == ref:
-                    ref_type = self.GIT_REF_LOCAL_BRANCH
-                    break
-
-        # Next, check for remote branch
-        if ref_type == self.GIT_REF_UNKNOWN:
-            gitout = self._git_branch_remotes()
-            if gitout is not None:
-                for branch in gitout.splitlines():
-                    match = GitRepository.RE_REMOTEBRANCH.match(branch)
-                    if (match is not None) and (match.group(1) == ref):
-                        ref_type = self.GIT_REF_REMOTE_BRANCH
-                        break
-
-        # Next, check for a tag
-        if ref_type == self.GIT_REF_UNKNOWN:
-            gitout = self._git_tag()
-            if gitout is not None:
-                for tag in gitout.splitlines():
-                    if tag == ref:
-                        ref_type = self.GIT_REF_TAG
-                        break
-
-        # Finally, see if it just looks like a commit hash
-        if ((ref_type == self.GIT_REF_UNKNOWN) and
-                GitRepository.RE_GITHASH.match(ref)):
-            ref_type = self.GIT_REF_SHA1
-
-        # Return what we've come up with
-        return ref_type
-
     @staticmethod
     def _current_ref_from_branch_command(git_output):
         """Parse output of the 'git branch' command to determine the current branch.
