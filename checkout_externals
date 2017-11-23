@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     ARGS = manic.checkout.commandline_arguments()
     try:
-        RET_STATUS = manic.checkout.main(ARGS)
+        RET_STATUS, _ = manic.checkout.main(ARGS)
         sys.exit(RET_STATUS)
     except Exception as error:  # pylint: disable=broad-except
         manic.printlog(str(error))

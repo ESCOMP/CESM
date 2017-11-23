@@ -294,4 +294,5 @@ def main(args):
             printlog('')
 
     logging.info('checkout_externals completed without exceptions.')
-    return 0
+    # NOTE(bja, 2017-11) tree status is used by the systems tests
+    return 0, tree_status

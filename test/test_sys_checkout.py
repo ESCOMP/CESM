@@ -36,6 +36,7 @@ import unittest
 
 from manic.externals_description import ExternalsDescription
 from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
+from manic.externals_status import ExternalStatus
 from manic.repository_git import GitRepository
 from manic.utils import printlog
 from manic import checkout
@@ -223,8 +224,13 @@ class GenerateExternalsDescriptionCfgV1(object):
         self._write_config(dest_dir, filename)
 
     def update_tag(self, dest_dir, name, tag, repo_type=None,
-                   filename=CFG_NAME):
+                   filename=CFG_NAME, remove_branch=True):
         """Update a repository tag, and potentially the remote
+
+        NOTE(bja, 2017-11) remove_branch=False should result in an
+        overspecified external with both a branch and tag. This is
+        used for error condition testing.
+
         """
         # pylint: disable=R0913
         self._config.set(name, ExternalsDescription.TAG, tag)
@@ -235,9 +241,55 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         try:
             # remove the branch if it existed
+            if remove_branch:
+                self._config.remove_option(name, ExternalsDescription.BRANCH)
+        except BaseException:
+            pass
+
+        self._write_config(dest_dir, filename)
+
+    def update_underspecify_branch_tag(self, dest_dir, name,
+                                       filename=CFG_NAME):
+        """Update a repository protocol, and potentially the remote
+        """
+        # pylint: disable=R0913
+        try:
+            # remove the branch if it existed
             self._config.remove_option(name, ExternalsDescription.BRANCH)
         except BaseException:
             pass
+
+        try:
+            # remove the tag if it existed
+            self._config.remove_option(name, ExternalsDescription.TAG)
+        except BaseException:
+            pass
+
+        self._write_config(dest_dir, filename)
+
+    def update_underspecify_remove_url(self, dest_dir, name,
+                                       filename=CFG_NAME):
+        """Update a repository protocol, and potentially the remote
+        """
+        # pylint: disable=R0913
+        try:
+            # remove the repo url if it existed
+            self._config.remove_option(name, ExternalsDescription.REPO_URL)
+        except BaseException:
+            pass
+
+        self._write_config(dest_dir, filename)
+
+    def update_protocol(self, dest_dir, name, protocol, repo_type=None,
+                        filename=CFG_NAME):
+        """Update a repository protocol, and potentially the remote
+        """
+        # pylint: disable=R0913
+        self._config.set(name, ExternalsDescription.PROTOCOL, protocol)
+
+        if repo_type:
+            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_type)
+            self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
 
         self._write_config(dest_dir, filename)
 
@@ -246,6 +298,15 @@ class TestSysCheckout(unittest.TestCase):
     """Run systems level tests of checkout_externals
 
     """
+    # NOTE(bja, 2017-11) pylint complains about long method names, but
+    # it is hard to differentiate tests without making them more
+    # cryptic.
+    # pylint: disable=invalid-name
+
+    status_args = ['--status']
+    checkout_args = []
+    optional_args = ['--optional']
+    verbose_args = ['--status', '--verbose']
 
     def setUp(self):
         """Setup for all individual checkout_externals tests
@@ -312,148 +373,334 @@ class TestSysCheckout(unittest.TestCase):
         cmdline += args
         repo_root = 'MANIC_TEST_BARE_REPO_ROOT={root}'.format(
             root=os.environ[MANIC_TEST_BARE_REPO_ROOT])
-        manual_cmd = ('Test cmd:\ncd {cwd}; {env} {checkout} {args}'.format(
+        manual_cmd = ('Test cmd:\npushd {cwd}; {env} {checkout} {args}'.format(
             cwd=under_test_dir, env=repo_root, checkout=checkout_path,
             args=' '.join(cmdline)))
         printlog(manual_cmd)
         options = checkout.commandline_arguments(cmdline)
-        status = checkout.main(options)
+        overall_status, tree_status = checkout.main(options)
         os.chdir(cwd)
-        return status
+        return overall_status, tree_status
 
+    # ----------------------------------------------------------------
+    #
+    # Check results for generic perturbation of states
+    #
+    # ----------------------------------------------------------------
+    def _check_generic_empty_default_required(self, tree, name):
+        self.assertEqual(tree[name].sync_state, ExternalStatus.EMPTY)
+        self.assertEqual(tree[name].clean_state, ExternalStatus.DEFAULT)
+        self.assertEqual(tree[name].source_type, ExternalStatus.MANAGED)
+
+    def _check_generic_ok_clean_required(self, tree, name):
+        self.assertEqual(tree[name].sync_state, ExternalStatus.STATUS_OK)
+        self.assertEqual(tree[name].clean_state, ExternalStatus.STATUS_OK)
+        self.assertEqual(tree[name].source_type, ExternalStatus.MANAGED)
+
+    def _check_generic_ok_dirty_required(self, tree, name):
+        self.assertEqual(tree[name].sync_state, ExternalStatus.STATUS_OK)
+        self.assertEqual(tree[name].clean_state, ExternalStatus.DIRTY)
+        self.assertEqual(tree[name].source_type, ExternalStatus.MANAGED)
+
+    def _check_generic_modified_ok_required(self, tree, name):
+        self.assertEqual(tree[name].sync_state, ExternalStatus.MODEL_MODIFIED)
+        self.assertEqual(tree[name].clean_state, ExternalStatus.STATUS_OK)
+        self.assertEqual(tree[name].source_type, ExternalStatus.MANAGED)
+
+    def _check_generic_empty_default_optional(self, tree, name):
+        self.assertEqual(tree[name].sync_state, ExternalStatus.EMPTY)
+        self.assertEqual(tree[name].clean_state, ExternalStatus.DEFAULT)
+        self.assertEqual(tree[name].source_type, ExternalStatus.OPTIONAL)
+
+    def _check_generic_ok_clean_optional(self, tree, name):
+        self.assertEqual(tree[name].sync_state, ExternalStatus.STATUS_OK)
+        self.assertEqual(tree[name].clean_state, ExternalStatus.STATUS_OK)
+        self.assertEqual(tree[name].source_type, ExternalStatus.OPTIONAL)
+
+    # ----------------------------------------------------------------
+    #
+    # Check results for individual named externals
+    #
+    # ----------------------------------------------------------------
+    def _check_simple_tag_empty(self, tree):
+        name = './externals/simp_tag'
+        self._check_generic_empty_default_required(tree, name)
+
+    def _check_simple_tag_ok(self, tree):
+        name = './externals/simp_tag'
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_simple_tag_dirty(self, tree):
+        name = './externals/simp_tag'
+        self._check_generic_ok_dirty_required(tree, name)
+
+    def _check_simple_branch_empty(self, tree):
+        name = './externals/simp_branch'
+        self._check_generic_empty_default_required(tree, name)
+
+    def _check_simple_branch_ok(self, tree):
+        name = './externals/simp_branch'
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_simple_branch_modified(self, tree):
+        name = './externals/simp_branch'
+        self._check_generic_modified_ok_required(tree, name)
+
+    def _check_simple_req_empty(self, tree):
+        name = './externals/simp_req'
+        self._check_generic_empty_default_required(tree, name)
+
+    def _check_simple_req_ok(self, tree):
+        name = './externals/simp_req'
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_simple_opt_empty(self, tree):
+        name = './externals/simp_opt'
+        self._check_generic_empty_default_optional(tree, name)
+
+    def _check_simple_opt_ok(self, tree):
+        name = './externals/simp_opt'
+        self._check_generic_ok_clean_optional(tree, name)
+
+    # ----------------------------------------------------------------
+    #
+    # Check results for groups of externals under specific conditions
+    #
+    # ----------------------------------------------------------------
+    def _check_container_simple_required_pre_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_empty(tree)
+        self._check_simple_branch_empty(tree)
+
+    def _check_container_simple_required_checkout(self, overall, tree):
+        # Note, this is the internal tree status just before checkout
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_empty(tree)
+        self._check_simple_branch_empty(tree)
+
+    def _check_container_simple_required_post_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_branch_ok(tree)
+
+    def _check_container_simple_optional_pre_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_req_empty(tree)
+        self._check_simple_opt_empty(tree)
+
+    def _check_container_simple_optional_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_req_empty(tree)
+        self._check_simple_opt_empty(tree)
+
+    def _check_container_simple_optional_post_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_req_ok(tree)
+        self._check_simple_opt_empty(tree)
+
+    def _check_container_simple_optional_post_optional(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_req_ok(tree)
+        self._check_simple_opt_ok(tree)
+
+    def _check_container_simple_required_sb_modified(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_branch_modified(tree)
+
+    def _check_container_simple_optional_st_dirty(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_dirty(tree)
+        self._check_simple_branch_ok(tree)
+
+    # ----------------------------------------------------------------
+    #
+    # Run systems tests
+    #
+    # ----------------------------------------------------------------
     def test_container_simple_required(self):
         """Verify that a container with simple subrepos
         generates the correct initial status.
 
         """
+        # create repo
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
         self._generator.container_simple_required(under_test_dir)
-        args = ['--status']
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
-        status = self.execute_cmd_in_dir(under_test_dir, [])
-        self.assertEqual(status, 0)
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
+
+        # status of empty repo
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_pre_checkout(overall, tree)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
+
+        # status clean checked out
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
 
     def test_container_simple_optional(self):
         """Verify that container with an optional simple subrepos
         generates the correct initial status.
 
         """
+        # create repo
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
         self._generator.container_simple_optional(under_test_dir)
-        args = ['--status']
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
-        status = self.execute_cmd_in_dir(under_test_dir, [])
-        self.assertEqual(status, 0)
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
+
+        # check status of empty repo
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_optional_pre_checkout(overall, tree)
+
+        # checkout required
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_optional_checkout(overall, tree)
+
+        # status
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_optional_post_checkout(overall, tree)
+
+        # checkout optional
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.optional_args)
+        self._check_container_simple_optional_post_checkout(overall, tree)
+
+        # status
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_optional_post_optional(overall, tree)
 
     def test_container_simple_verbose(self):
         """Verify that container with simple subrepos runs with verbose status
         output and generates the correct initial status.
 
         """
+        # create repo
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
         self._generator.container_simple_required(under_test_dir)
+
         # checkout
-        status = self.execute_cmd_in_dir(under_test_dir, [])
-        self.assertEqual(status, 0)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
 
         # check verbose status
-        args = ['--status', '--verbose']
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.verbose_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
 
     def test_container_simple_dirty(self):
         """Verify that a container with simple subrepos
         and a dirty status exits gracefully.
-
-        NOTE(bja, 2017-11) need to do some screen scraping to verify
-        that we correctly identified the dirty status and didn't
-        update.
 
         """
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
         self._generator.container_simple_required(under_test_dir)
 
         # checkout
-        status = self.execute_cmd_in_dir(under_test_dir, [])
-        self.assertEqual(status, 0)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
 
         # add a file to the repo
         dirty_path = os.path.join(under_test_dir, 'externals/simp_tag/tmp.txt')
         with open(dirty_path, 'w') as tmp:
             tmp.write('Hello, world!')
 
-        # get status
-        args = ['--status']
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
+        # checkout: pre-checkout status should be dirty, did not
+        # modify working copy.
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_optional_st_dirty(overall, tree)
+
+        # verify status is still dirty
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_optional_st_dirty(overall, tree)
 
     def test_container_remote_branch(self):
         """Verify that a container with remote branch change works
 
         """
+        # create repo
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
         self._generator.container_simple_required(under_test_dir)
 
         # checkout
-        status = self.execute_cmd_in_dir(under_test_dir, [])
-        self.assertEqual(status, 0)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
 
         # update the config file to point to a different remote with
         # the same branch
         self._generator.update_branch(under_test_dir, 'simp_branch',
                                       'feature2', SIMPLE_FORK_NAME)
 
-        # status should be out of sync
-        args = ['--status']
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
+        # status of simp_branch should be out of sync
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_sb_modified(overall, tree)
 
-        # checkout
-        status = self.execute_cmd_in_dir(under_test_dir, [])
-        self.assertEqual(status, 0)
+        # checkout new externals
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_sb_modified(overall, tree)
 
         # status should be synced
-        args = ['--status']
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
 
     def test_container_remote_tag(self):
-        """Verify that a container with remote tag change works
+        """Verify that a container with remote tag change works. The new tag
+        should not be in the original repo, only the new remote fork.
 
         """
+        # create repo
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
         self._generator.container_simple_required(under_test_dir)
 
         # checkout
-        status = self.execute_cmd_in_dir(under_test_dir, [])
-        self.assertEqual(status, 0)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
 
         # update the config file to point to a different remote with
-        # the same branch
+        # the tag instead of branch. Tag MUST NOT be in the original
+        # repo!
         self._generator.update_tag(under_test_dir, 'simp_branch',
                                    'forked-feature-v1', SIMPLE_FORK_NAME)
 
-        # status should be out of sync
-        args = ['--status']
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
+        # status of simp_branch should be out of sync
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_sb_modified(overall, tree)
 
-        # checkout
-        status = self.execute_cmd_in_dir(under_test_dir, [])
-        self.assertEqual(status, 0)
+        # checkout new externals
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_sb_modified(overall, tree)
 
         # status should be synced
-        args = ['--status']
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
 
-    @unittest.skip('repo development inprogress')
+    @unittest.skip('test development inprogress')
+    def test_container_preserve_dot(self):
+        """Verify that after inital checkout, modifying an external git repo
+        url to '.' and the current branch will leave it unchanged.
+
+        """
+        pass
+
+    @unittest.skip('test development inprogress')
     def test_container_full(self):
         """Verify that 'full' container with simple and mixed subrepos
         generates the correct initial status.
@@ -461,13 +708,147 @@ class TestSysCheckout(unittest.TestCase):
         """
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
         self._generator.container_full(under_test_dir)
-        args = ['--status']
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
-        status = self.execute_cmd_in_dir(under_test_dir, [])
-        self.assertEqual(status, 0)
-        status = self.execute_cmd_in_dir(under_test_dir, args)
-        self.assertEqual(status, 0)
+        overall, tree = self.execute_cmd_in_dir(
+            under_test_dir, self.status_args)
+        self.assertEqual(overall, 0)
+        overall, tree = self.execute_cmd_in_dir(
+            under_test_dir, self.checkout_args)
+        self.assertEqual(overall, 0)
+        overall, tree = self.execute_cmd_in_dir(
+            under_test_dir, self.status_args)
+        self.assertEqual(overall, 0)
+        _ = tree
+
+    @unittest.skip('test development inprogress')
+    def test_mixed_simple(self):
+        """Verify that a mixed use repo can serve as a 'full' container,
+        pulling in a set of externals and a seperate set of sub-externals.
+
+        """
+        pass
+
+    # ----------------------------------------------------------------
+    #
+    # Error conditions - these tests are designed to trigger specific
+    # error conditions and ensure that they are being handled as
+    # runtime errors (and hopefully usefull error messages) instead of
+    # the default internal message that won't mean anything to the
+    # user, e.g. key error, called process error, etc.
+    #
+    # These are not 'expected failures'. They are pass when a
+    # RuntimeError is raised, fail if any other error is raised (or no
+    # error is raised).
+    #
+    # ----------------------------------------------------------------
+    def test_error_unknown_protocol(self):
+        """Verify that a runtime error is raised when the user specified repo protocol
+        is not known.
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # update the config file to point to a different remote with
+        # the tag instead of branch. Tag MUST NOT be in the original
+        # repo!
+        self._generator.update_protocol(under_test_dir, 'simp_branch',
+                                        'this-protocol-does-not-exist')
+
+        with self.assertRaises(RuntimeError):
+            self.execute_cmd_in_dir(under_test_dir, self.checkout_args)
+
+    def test_error_switch_protocol(self):
+        """Verify that a runtime error is raised when the user switches
+        protocols, git to svn.
+
+        TODO(bja, 2017-11) This correctly results in an error, but it
+        isn't a helpful error message.
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # update the config file to point to a different remote with
+        # the tag instead of branch. Tag MUST NOT be in the original
+        # repo!
+        self._generator.update_protocol(under_test_dir, 'simp_branch', 'svn')
+        with self.assertRaises(RuntimeError):
+            self.execute_cmd_in_dir(under_test_dir, self.checkout_args)
+
+    def test_error_unknown_tag(self):
+        """Verify that a runtime error is raised when the user specified tag
+        does not exist.
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # update the config file to point to a different remote with
+        # the tag instead of branch. Tag MUST NOT be in the original
+        # repo!
+        self._generator.update_tag(under_test_dir, 'simp_branch',
+                                   'this-tag-does-not-exist', SIMPLE_REPO_NAME)
+
+        with self.assertRaises(RuntimeError):
+            self.execute_cmd_in_dir(under_test_dir, self.checkout_args)
+
+    def test_error_overspecify_tag_branch(self):
+        """Verify that a runtime error is raised when the user specified both
+        tag and a branch
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # update the config file to point to a different remote with
+        # the tag instead of branch. Tag MUST NOT be in the original
+        # repo!
+        self._generator.update_tag(under_test_dir, 'simp_branch',
+                                   'this-tag-does-not-exist', SIMPLE_REPO_NAME,
+                                   remove_branch=False)
+
+        with self.assertRaises(RuntimeError):
+            self.execute_cmd_in_dir(under_test_dir, self.checkout_args)
+
+    def test_error_underspecify_tag_branch(self):
+        """Verify that a runtime error is raised when the user specified
+        neither a tag or a branch
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # update the config file to point to a different remote with
+        # the tag instead of branch. Tag MUST NOT be in the original
+        # repo!
+        self._generator.update_underspecify_branch_tag(under_test_dir,
+                                                       'simp_branch')
+
+        with self.assertRaises(RuntimeError):
+            self.execute_cmd_in_dir(under_test_dir, self.checkout_args)
+
+    def test_error_missing_url(self):
+        """Verify that a runtime error is raised when the user specified
+        neither a tag or a branch
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # update the config file to point to a different remote with
+        # the tag instead of branch. Tag MUST NOT be in the original
+        # repo!
+        self._generator.update_underspecify_remove_url(under_test_dir,
+                                                       'simp_branch')
+
+        with self.assertRaises(RuntimeError):
+            self.execute_cmd_in_dir(under_test_dir, self.checkout_args)
 
 
 if __name__ == '__main__':
