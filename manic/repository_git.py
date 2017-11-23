@@ -13,7 +13,7 @@ from .global_constants import EMPTY_STR
 from .repository import Repository
 from .externals_status import ExternalStatus
 from .utils import expand_local_url, split_remote_url, is_remote_url
-from .utils import log_process_output
+from .utils import log_process_output, fatal_error
 from .utils import execute_subprocess, check_output
 
 
@@ -35,14 +35,13 @@ class GitRepository(Repository):
 
     """
 
-    GIT_REF_UNKNOWN = 'unknown'
-    GIT_REF_LOCAL_BRANCH = 'localBranch'
-    GIT_REF_REMOTE_BRANCH = 'remoteBranch'
-    GIT_REF_TAG = 'gitTag'
-    GIT_REF_SHA1 = 'gitSHA1'
+    # match XYZ of '* (HEAD detached at {XYZ}):
+    # e.g. * (HEAD detached at origin/feature-2)
+    RE_DETACHED = re.compile(r'\* \([\w]+[\s]+detached at ([\w\-./]+)\)')
 
-    RE_GITHASH = re.compile(r"\A([a-fA-F0-9]+)\Z")
-    RE_REMOTEBRANCH = re.compile(r"\s*origin/(\S+)")
+    # match tracking reference info, return XYZ from [XYZ]
+    # e.g. [origin/master]
+    RE_TRACKING = re.compile(r'\[([\w\-./]+)\]')
 
     def __init__(self, component_name, repo):
         """
@@ -98,10 +97,30 @@ class GitRepository(Repository):
         self._git_clone(self._url, repo_dir_name)
         os.chdir(cwd)
 
-    @staticmethod
-    def _current_ref_from_branch_command(git_output):
+    def _current_ref_from_branch_command(self, git_output):
         """Parse output of the 'git branch' command to determine the current branch.
         The line starting with '*' is the current branch. It can be one of:
+
+  feature2 36418b4 [origin/feature2] Work on feature2
+* feature3 36418b4 Work on feature2
+  master   9b75494 [origin/master] Initialize repository.
+
+* (HEAD detached at 36418b4) 36418b4 Work on feature2
+  feature2                   36418b4 [origin/feature2] Work on feature2
+  master                     9b75494 [origin/master] Initialize repository.
+
+* (HEAD detached at origin/feature2) 36418b4 Work on feature2
+  feature2                           36418b4 [origin/feature2] Work on feature2
+  feature3                           36418b4 Work on feature2
+  master                             9b75494 [origin/master] Initialize repository.
+
+        Possible head states:
+
+          * detached from remote branch --> ref = remote/branch
+          * detached from tag --> ref = tag
+          * detached from sha --> ref = sha
+          * on local branch --> ref = branch
+          * on tracking branch --> ref = remote/branch
 
         On a branch:
         * cm-testing
@@ -118,18 +137,36 @@ class GitRepository(Repository):
 
         """
         lines = git_output.splitlines()
-        current_branch = None
+        ref = ''
         for line in lines:
             if line.startswith('*'):
-                current_branch = line
-        ref = EMPTY_STR
-        if current_branch:
-            if 'detached' in current_branch:
-                ref = current_branch.split(' ')[-1]
-                ref = ref.strip(')')
-            else:
-                ref = current_branch.split()[-1]
-        return ref
+                ref = line
+                break
+        current_ref = EMPTY_STR
+        if not ref:
+            # not a git repo? some other error? we return so the
+            # caller can handle.
+            pass
+        elif 'detached' in ref:
+            match = self.RE_DETACHED.search(ref)
+            try:
+                current_ref = match.group(1)
+            except BaseException:
+                msg = 'DEV_ERROR: regex to detect detached head state failed!'
+                msg += '\nref:\n{0}\ngit_output\n{1}\n'.format(ref, git_output)
+                fatal_error(msg)
+        elif '[' in ref:
+            match = self.RE_TRACKING.search(ref)
+            try:
+                current_ref = match.group(1)
+            except BaseException:
+                msg = 'DEV_ERROR: regex to detect tracking branch failed.'
+        else:
+            # assumed local branch
+            current_ref = ref.split()[1]
+
+        current_ref = current_ref.strip()
+        return current_ref
 
     def _check_sync(self, stat, repo_dir_path):
         """Determine whether a git repository is in-sync with the model
@@ -152,23 +189,41 @@ class GitRepository(Repository):
                 # finds the parent repo git dir!
                 stat.sync_state = ExternalStatus.UNKNOWN
             else:
-                cwd = os.getcwd()
-                os.chdir(repo_dir_path)
-                git_output = self._git_branch()
-                ref = self._current_ref_from_branch_command(git_output)
-                if ref == EMPTY_STR:
-                    stat.sync_state = ExternalStatus.UNKNOWN
-                elif self._tag:
-                    if self._tag == ref:
-                        stat.sync_state = ExternalStatus.STATUS_OK
-                    else:
-                        stat.sync_state = ExternalStatus.MODEL_MODIFIED
+                self._check_sync_logic(stat, repo_dir_path)
+
+    def _check_sync_logic(self, stat, repo_dir_path):
+        """Isolate the complicated synce logic so it is not so deeply nested
+        and a bit easier to understand.
+
+        Sync logic - only reporting on whether we are on the ref
+        (branch, tag, hash) specified in the externals description.
+
+
+        """
+        cwd = os.getcwd()
+        os.chdir(repo_dir_path)
+        git_output = self._git_branch_vv()
+        current_ref = self._current_ref_from_branch_command(git_output)
+        if current_ref == EMPTY_STR:
+            stat.sync_state = ExternalStatus.UNKNOWN
+        elif self._branch:
+            remote_name = self._determine_remote_name()
+            if not remote_name:
+                # git doesn't know about this remote. by definition
+                # this is a modefied state.
+                stat.sync_state = ExternalStatus.MODEL_MODIFIED
+            else:
+                expected_ref = "{0}/{1}".format(remote_name, self._branch)
+                if current_ref == expected_ref:
+                    stat.sync_state = ExternalStatus.STATUS_OK
                 else:
-                    if self._branch == ref:
-                        stat.sync_state = ExternalStatus.STATUS_OK
-                    else:
-                        stat.sync_state = ExternalStatus.MODEL_MODIFIED
-                os.chdir(cwd)
+                    stat.sync_state = ExternalStatus.MODEL_MODIFIED
+        else:
+            if self._tag == current_ref:
+                stat.sync_state = ExternalStatus.STATUS_OK
+            else:
+                stat.sync_state = ExternalStatus.MODEL_MODIFIED
+        os.chdir(cwd)
 
     def _determine_remote_name(self):
         """Return the remote name.
@@ -181,9 +236,15 @@ class GitRepository(Repository):
         git_output = git_output.splitlines()
         remote_name = ''
         for line in git_output:
-            if self._url in line:
-                data = line.split()
-                remote_name = data[0].strip()
+            data = line.strip()
+            if not data:
+                continue
+            data = data.split()
+            name = data[0].strip()
+            url = data[1].strip()
+            if self._url == url:
+                remote_name = name
+                break
         return remote_name
 
     def _create_remote_name(self):
@@ -222,9 +283,7 @@ class GitRepository(Repository):
             url = split_remote_url(url)
         else:
             url = expand_local_url(url, self._name)
-        print(url)
         url = url.split('/')
-        print(url)
         repo_name = url[-1]
         base_name = url[-2]
         # repo name should nominally already be something that git can
@@ -245,11 +304,82 @@ class GitRepository(Repository):
             self._git_remote_add(remote_name, self._url)
         self._git_fetch(remote_name)
         if self._tag:
+            is_unique_tag = self._is_unique_tag(self._tag)
+            if not is_unique_tag:
+                msg = ('In repo "{1}": tag "{0}" is either not a valid '
+                       'reference or is shadowed by a branch.'.format(
+                           self._tag, self._name))
+                fatal_error(msg)
             ref = self._tag
         else:
             ref = '{0}/{1}'.format(remote_name, self._branch)
         self._git_checkout_ref(ref)
         os.chdir(cwd)
+
+    def _is_unique_tag(self, ref):
+        """Verify that a reference is a valid tag and is unique (not a branch)
+
+        Tags may be tag names, or SHA id's. It is also possible that a
+        branch and tag have the some name.
+
+        Note: values returned by git_showref_* and git_revparse are
+        shell return codes, which are zero for success, non-zero for
+        error!
+
+        """
+        is_tag = self._ref_is_tag(ref)
+        is_branch = self._ref_is_branch(ref)
+        is_commit = self._ref_is_commit(ref)
+
+        is_unique_tag = False
+        if is_tag and not is_branch:
+            # unique tag
+            is_unique_tag = True
+        if not is_branch and is_commit:
+            # probably a sha1 or HEAD, etc, we call it a tag
+            is_unique_tag = True
+        return is_unique_tag
+
+    def _ref_is_tag(self, ref):
+        """Verify that a reference is a valid tag according to git.
+
+        Note: values returned by git_showref_* and git_revparse are
+        shell return codes, which are zero for success, non-zero for
+        error!
+        """
+        is_tag = False
+        value = self._git_showref_tag(ref)
+        if value == 0:
+            is_tag = True
+        return is_tag
+
+    def _ref_is_branch(self, ref):
+        """Verify that a reference is a valid branch according to git.
+
+        Note: values returned by git_showref_* and git_revparse are
+        shell return codes, which are zero for success, non-zero for
+        error!
+        """
+        is_branch = False
+        value = self._git_showref_branch(ref)
+        if value == 0:
+            is_branch = True
+        return is_branch
+
+    def _ref_is_commit(self, ref):
+        """Verify that a reference is a valid commit according to git.
+
+        This could be a tag, branch, sha1 id, HEAD and potentially others...
+
+        Note: values returned by git_showref_* and git_revparse are
+        shell return codes, which are zero for success, non-zero for
+        error!
+        """
+        is_commit = False
+        value = self._git_revparse_commit(ref)
+        if value == 0:
+            is_commit = True
+        return is_commit
 
     def _status_summary(self, stat, repo_dir_path):
         """Determine the clean/dirty status of a git repository
@@ -307,12 +437,46 @@ class GitRepository(Repository):
     #
     # ----------------------------------------------------------------
     @staticmethod
-    def _git_branch():
-        """Run git branch to obtain repository information
+    def _git_branch_vv():
+        """Run git branch -vv to obtain verbose branch information, including
+        upstream tracking and hash.
+
         """
-        cmd = ['git', 'branch']
+        cmd = ['git', 'branch', '--verbose', '--verbose']
         git_output = check_output(cmd)
         return git_output
+
+    @staticmethod
+    def _git_showref_tag(ref):
+        """Run git show-ref check if the user supplied ref is a tag.
+
+        could also use git rev-parse --quiet --verify tagname^{tag}
+        """
+        cmd = ['git', 'show-ref', '--quiet', '--verify',
+               'refs/tags/{0}'.format(ref), ]
+        status = execute_subprocess(cmd, status_to_caller=True)
+        return status
+
+    @staticmethod
+    def _git_showref_branch(ref):
+        """Run git show-ref check if the user supplied ref is a branch.
+
+        """
+        cmd = ['git', 'show-ref', '--quiet', '--verify',
+               'refs/heads/{0}'.format(ref), ]
+        status = execute_subprocess(cmd, status_to_caller=True)
+        return status
+
+    @staticmethod
+    def _git_revparse_commit(ref):
+        """Run git rev-parse to detect if a reference is a SHA, HEAD or other
+        valid commit.
+
+        """
+        cmd = ['git', 'rev-parse', '--quiet', '--verify',
+               '{0}^{1}'.format(ref, '{commit}'), ]
+        status = execute_subprocess(cmd, status_to_caller=True)
+        return status
 
     @staticmethod
     def _git_status_porcelain_v1z():

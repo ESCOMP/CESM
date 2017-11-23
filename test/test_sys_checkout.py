@@ -32,11 +32,12 @@ import os
 import os.path
 import random
 import shutil
-import subprocess
 import unittest
 
 from manic.externals_description import ExternalsDescription
 from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
+from manic.repository_git import GitRepository
+from manic.utils import printlog
 from manic import checkout
 
 # ConfigParser was renamed in python2 to configparser. In python2,
@@ -290,17 +291,9 @@ class TestSysCheckout(unittest.TestCase):
         parent_repo_dir = os.path.join(self._bare_root, parent_repo_name)
         dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
                                 test_dir_name)
-        self.clone_repo(parent_repo_dir, dest_dir)
+        # pylint: disable=W0212
+        GitRepository._git_clone(parent_repo_dir, dest_dir)
         return dest_dir
-
-    @staticmethod
-    def clone_repo(base_repo_dir, dest_dir):
-        """Call git to clone the repository
-
-        """
-        cmd = ['git', 'clone', base_repo_dir, dest_dir]
-        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-        return output
 
     @staticmethod
     def execute_cmd_in_dir(under_test_dir, args):
@@ -313,9 +306,16 @@ class TestSysCheckout(unittest.TestCase):
 
         """
         cwd = os.getcwd()
+        checkout_path = os.path.abspath('{0}/../../checkout_externals')
         os.chdir(under_test_dir)
         cmdline = ['--externals', CFG_NAME, ]
         cmdline += args
+        repo_root = 'MANIC_TEST_BARE_REPO_ROOT={root}'.format(
+            root=os.environ[MANIC_TEST_BARE_REPO_ROOT])
+        manual_cmd = ('Test cmd:\ncd {cwd}; {env} {checkout} {args}'.format(
+            cwd=under_test_dir, env=repo_root, checkout=checkout_path,
+            args=' '.join(cmdline)))
+        printlog(manual_cmd)
         options = checkout.commandline_arguments(cmdline)
         status = checkout.main(options)
         os.chdir(cwd)
