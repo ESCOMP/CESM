@@ -776,23 +776,39 @@ class TestVerifyTag(unittest.TestCase):
         self._repo = GitRepository('test', repo)
 
     @staticmethod
-    def _shell_true(url):
+    def _shell_true(url, remote=None):
         _ = url
+        _ = remote
         return 0
 
     @staticmethod
-    def _shell_false(url):
+    def _shell_false(url, remote=None):
         _ = url
+        _ = remote
         return 1
 
-    def test_tag_not_tag(self):
+    def test_tag_not_tag_branch_commit(self):
         """Verify a non-tag returns false
         """
         self._repo._git_showref_tag = self._shell_false
         self._repo._git_showref_branch = self._shell_false
+        self._repo._git_lsremote_branch = self._shell_false
+        self._repo._git_revparse_commit = self._shell_false
+        self._repo._tag = 'something'
+        remote_name = 'origin'
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
+        self.assertFalse(received)
+
+    def test_tag_not_tag(self):
+        """Verify a non-tag, untracked remote returns false
+        """
+        self._repo._git_showref_tag = self._shell_false
+        self._repo._git_showref_branch = self._shell_true
+        self._repo._git_lsremote_branch = self._shell_true
         self._repo._git_revparse_commit = self._shell_false
         self._repo._tag = 'tag1'
-        received = self._repo._is_unique_tag(self._repo._tag)
+        remote_name = 'origin'
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
         self.assertFalse(received)
 
     def test_tag_indeterminant(self):
@@ -800,9 +816,11 @@ class TestVerifyTag(unittest.TestCase):
         """
         self._repo._git_showref_tag = self._shell_true
         self._repo._git_showref_branch = self._shell_true
+        self._repo._git_lsremote_branch = self._shell_true
         self._repo._git_revparse_commit = self._shell_true
         self._repo._tag = 'something'
-        received = self._repo._is_unique_tag(self._repo._tag)
+        remote_name = 'origin'
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
         self.assertFalse(received)
 
     def test_tag_is_unique(self):
@@ -810,9 +828,23 @@ class TestVerifyTag(unittest.TestCase):
         """
         self._repo._git_showref_tag = self._shell_true
         self._repo._git_showref_branch = self._shell_false
+        self._repo._git_lsremote_branch = self._shell_false
         self._repo._git_revparse_commit = self._shell_true
         self._repo._tag = 'tag1'
-        received = self._repo._is_unique_tag(self._repo._tag)
+        remote_name = 'origin'
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
+        self.assertTrue(received)
+
+    def test_tag_is_commit(self):
+        """Verify a commit hash
+        """
+        self._repo._git_showref_tag = self._shell_false
+        self._repo._git_showref_branch = self._shell_false
+        self._repo._git_lsremote_branch = self._shell_false
+        self._repo._git_revparse_commit = self._shell_true
+        self._repo._tag = '97ebc0e0'
+        remote_name = 'origin'
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
         self.assertTrue(received)
 
 
