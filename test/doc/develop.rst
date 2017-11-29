@@ -200,7 +200,7 @@ Do something approach
 
 In the test directory, run:
 
-.. code_block:: shell
+.. code-block:: shell
 
     make env
     make lint
