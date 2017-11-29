@@ -49,7 +49,7 @@ except ImportError:
         return text
 
 from .utils import printlog, fatal_error, str_to_bool, expand_local_url
-from .global_constants import EMPTY_STR, PPRINTER
+from .global_constants import EMPTY_STR, PPRINTER, VERSION_SEPERATOR
 
 #
 # Globals
@@ -134,7 +134,7 @@ def get_cfg_schema_version(model_cfg):
     # build/pre-release metadata for now!
     version_list = re.split(r'[-+]', semver_str)
     version_str = version_list[0]
-    version = version_str.split('.')
+    version = version_str.split(VERSION_SEPERATOR)
     try:
         major = int(version[0].strip())
         minor = int(version[1].strip())

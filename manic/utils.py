@@ -13,12 +13,15 @@ import os
 import subprocess
 import sys
 
+from .global_constants import LOCAL_PATH_INDICATOR
 
 # ---------------------------------------------------------------------
 #
 # screen and logging output
 #
 # ---------------------------------------------------------------------
+
+
 def log_process_output(output):
     """Log each line of process output at debug level so it can be
     filtered if necessary. By default, output is a single string, and
@@ -122,13 +125,13 @@ def expand_local_url(url, field):
     remote. If so, it must be expanded to an absolute
     path.
 
-    Note: local paths of '.' have special meaning and represent local
-    copy only, don't work with the remotes.
+    Note: local paths of LOCAL_PATH_INDICATOR have special meaning and
+    represent local copy only, don't work with the remotes.
 
     """
     remote_url = is_remote_url(url)
     if not remote_url:
-        if url.strip() == '.':
+        if url.strip() == LOCAL_PATH_INDICATOR:
             pass
         else:
             url = os.path.expandvars(url)

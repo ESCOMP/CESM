@@ -14,7 +14,7 @@ from .externals_description import create_externals_description
 from .repository_factory import create_repository
 from .externals_status import ExternalStatus
 from .utils import fatal_error, printlog
-from .global_constants import EMPTY_STR
+from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
 
 
 class _Source(object):
@@ -89,9 +89,10 @@ class _Source(object):
         stat.path = self.get_local_path()
         if not self._required:
             stat.source_type = ExternalStatus.OPTIONAL
-        elif self._local_path == '.':
-            # '.' paths are standalone component directories that are
-            # not managed by checkout_externals.
+        elif self._local_path == LOCAL_PATH_INDICATOR:
+            # LOCAL_PATH_INDICATOR, '.' paths, are standalone
+            # component directories that are not managed by
+            # checkout_externals.
             stat.source_type = ExternalStatus.STANDALONE
         else:
             # managed by checkout_externals
@@ -120,7 +121,7 @@ class _Source(object):
         all_stats = {}
         # don't add the root component because we don't manage it
         # and can't provide useful info about it.
-        if self._local_path != '.':
+        if self._local_path != LOCAL_PATH_INDICATOR:
             # store the stats under tha local_path, not comp name so
             # it will be sorted correctly
             all_stats[stat.path] = stat
@@ -223,7 +224,7 @@ class SourceTree(object):
             if model[comp][ExternalsDescription.REQUIRED]:
                 self._required_compnames.append(comp)
 
-    def status(self, relative_path_base='.'):
+    def status(self, relative_path_base=LOCAL_PATH_INDICATOR):
         """Report the status components
 
         FIXME(bja, 2017-10) what do we do about situations where the

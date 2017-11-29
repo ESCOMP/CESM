@@ -9,7 +9,7 @@ import copy
 import os
 import re
 
-from .global_constants import EMPTY_STR
+from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
 from .repository import Repository
 from .externals_status import ExternalStatus
 from .utils import expand_local_url, split_remote_url, is_remote_url
@@ -217,7 +217,7 @@ class GitRepository(Repository):
         if current_ref == EMPTY_STR:
             stat.sync_state = ExternalStatus.UNKNOWN
         elif self._branch:
-            if self._url == '.':
+            if self._url == LOCAL_PATH_INDICATOR:
                 expected_ref = self._branch
                 stat.sync_state = compare_refs(current_ref, expected_ref)
             else:
@@ -309,7 +309,7 @@ class GitRepository(Repository):
         # import pdb; pdb.set_trace()
         cwd = os.getcwd()
         os.chdir(repo_dir)
-        if self._url.strip() == '.':
+        if self._url.strip() == LOCAL_PATH_INDICATOR:
             self._checkout_local_ref()
         else:
             self._checkout_external_ref()

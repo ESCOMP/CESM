@@ -22,13 +22,13 @@ from manic.externals_description import read_externals_description_file
 from manic.externals_status import check_safe_to_update_repos
 from manic.sourcetree import SourceTree
 from manic.utils import printlog
-from manic.global_constants import PPRINTER
+from manic.global_constants import PPRINTER, VERSION_SEPERATOR
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
     print('ERROR: {0} requires python >= 2.7.x. '.format(sys.argv[0]))
     print('It appears that you are running python {0}'.format(
-        '.'.join(str(x) for x in sys.version_info[0:3])))
+        VERSION_SEPERATOR.join(str(x) for x in sys.version_info[0:3])))
     print(70 * '*')
     sys.exit(1)
 
@@ -253,7 +253,7 @@ def main(args):
     if args.optional:
         load_all = True
 
-    root_dir = os.path.abspath('.')
+    root_dir = os.path.abspath(os.getcwd())
     external_data = read_externals_description_file(root_dir, args.externals)
     external = create_externals_description(external_data)
     if args.debug:
