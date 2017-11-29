@@ -60,7 +60,8 @@ class _External(object):
         self._externals = ext_description[ExternalsDescription.EXTERNALS]
         if self._externals:
             self._create_externals_sourcetree()
-        repo = create_repository(name, ext_description[ExternalsDescription.REPO])
+        repo = create_repository(
+            name, ext_description[ExternalsDescription.REPO])
         if repo:
             self._repo = repo
 

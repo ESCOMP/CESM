@@ -14,7 +14,7 @@ from .repository import Repository
 from .externals_status import ExternalStatus
 from .utils import expand_local_url, split_remote_url, is_remote_url
 from .utils import log_process_output, fatal_error
-from .utils import execute_subprocess, check_output
+from .utils import execute_subprocess
 
 
 class GitRepository(Repository):
@@ -25,7 +25,8 @@ class GitRepository(Repository):
     * be isolated in separate functions with no application logic
       * of the form:
          - cmd = ['git', ...]
-         - value = check_output(cmd)
+         - value = execute_subprocess(cmd, output_to_caller={T|F},
+                                      status_to_caller={T|F})
          - return value
       * be static methods (not rely on self)
       * name as _git_subcommand_args(user_args)
@@ -553,7 +554,7 @@ class GitRepository(Repository):
 
         """
         cmd = ['git', 'branch', '--verbose', '--verbose']
-        git_output = check_output(cmd)
+        git_output = execute_subprocess(cmd, output_to_caller=True)
         return git_output
 
     @staticmethod
@@ -609,7 +610,7 @@ class GitRepository(Repository):
 
         """
         cmd = ['git', 'status', '--porcelain', '-z']
-        git_output = check_output(cmd)
+        git_output = execute_subprocess(cmd, output_to_caller=True)
         return git_output
 
     @staticmethod
@@ -617,7 +618,7 @@ class GitRepository(Repository):
         """Run the git status command to obtain repository information.
         """
         cmd = ['git', 'status']
-        git_output = check_output(cmd)
+        git_output = execute_subprocess(cmd, output_to_caller=True)
         return git_output
 
     @staticmethod
@@ -625,7 +626,7 @@ class GitRepository(Repository):
         """Run the git remote command to obtain repository information.
         """
         cmd = ['git', 'remote', '--verbose']
-        git_output = check_output(cmd)
+        git_output = execute_subprocess(cmd, output_to_caller=True)
         return git_output
 
     # ----------------------------------------------------------------

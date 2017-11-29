@@ -26,7 +26,7 @@ if sys.hexversion < 0x02070000:
 
 
 if __name__ == '__main__':
-    logging.basicConfig(filename='manage_externals.log',
+    logging.basicConfig(filename=manic.global_constants.LOG_FILE_NAME,
                         format='%(levelname)s : %(asctime)s : %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.DEBUG)

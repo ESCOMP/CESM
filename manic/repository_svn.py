@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 from .repository import Repository
 from .externals_status import ExternalStatus
 from .utils import fatal_error, log_process_output
-from .utils import check_output, execute_subprocess
+from .utils import execute_subprocess
 
 
 class SvnRepository(Repository):
@@ -24,7 +24,8 @@ class SvnRepository(Repository):
     * be isolated in separate functions with no application logic
       * of the form:
          - cmd = ['svn', ...]
-         - value = check_output(cmd)
+         - value = execute_subprocess(cmd, output_to_caller={T|F},
+                                      status_to_caller={T|F})
          - return value
       * be static methods (not rely on self)
       * name as _svn_subcommand_args(user_args)
@@ -189,7 +190,7 @@ class SvnRepository(Repository):
         """Return results of svn info command
         """
         cmd = ['svn', 'info', repo_dir_path]
-        output = check_output(cmd)
+        output = execute_subprocess(cmd, output_to_caller=True)
         return output
 
     @staticmethod
@@ -197,7 +198,7 @@ class SvnRepository(Repository):
         """capture the full svn status output
         """
         cmd = ['svn', 'status', repo_dir_path]
-        svn_output = check_output(cmd)
+        svn_output = execute_subprocess(cmd, output_to_caller=True)
         return svn_output
 
     @staticmethod
@@ -206,7 +207,7 @@ class SvnRepository(Repository):
         Get status of the subversion sandbox in repo_dir
         """
         cmd = ['svn', 'status', '--xml', repo_dir_path]
-        svn_output = check_output(cmd)
+        svn_output = execute_subprocess(cmd, output_to_caller=True)
         return svn_output
 
     # ----------------------------------------------------------------
