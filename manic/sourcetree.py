@@ -1,6 +1,6 @@
 """
 
-FIXME(bja, 2017-11) Source and SourceTree have a circular dependancy!
+FIXME(bja, 2017-11) External and SourceTree have a circular dependancy!
 """
 
 import errno
@@ -17,25 +17,25 @@ from .utils import fatal_error, printlog
 from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
 
 
-class _Source(object):
+class _External(object):
     """
-    _Source represents a <source> object in a <config_sourcetree>
+    _External represents an external object in side a SourceTree
     """
 
     # pylint: disable=R0902
 
-    def __init__(self, root_dir, name, source):
-        """Parse an XML node for a <source> tag
+    def __init__(self, root_dir, name, ext_description):
+        """Parse an external description file into a dictionary of externals.
 
         Input:
 
             root_dir : string - the root directory path where
             'local_path' is relative to.
 
-            name : string - name of the source object. may or may not
+            name : string - name of the ext_description object. may or may not
             correspond to something in the path.
 
-            source : dict - source ExternalsDescription object
+            ext_description : dict - source ExternalsDescription object
 
         """
         self._name = name
@@ -45,7 +45,7 @@ class _Source(object):
         # Parse the sub-elements
 
         # _path : local path relative to the containing source tree
-        self._local_path = source[ExternalsDescription.PATH]
+        self._local_path = ext_description[ExternalsDescription.PATH]
         # _repo_dir : full repository directory
         repo_dir = os.path.join(root_dir, self._local_path)
         self._repo_dir_path = os.path.abspath(repo_dir)
@@ -56,33 +56,33 @@ class _Source(object):
         assert(os.path.join(self._base_dir_path, self._repo_dir_name)
                == self._repo_dir_path)
 
-        self._required = source[ExternalsDescription.REQUIRED]
-        self._externals = source[ExternalsDescription.EXTERNALS]
+        self._required = ext_description[ExternalsDescription.REQUIRED]
+        self._externals = ext_description[ExternalsDescription.EXTERNALS]
         if self._externals:
             self._create_externals_sourcetree()
-        repo = create_repository(name, source[ExternalsDescription.REPO])
+        repo = create_repository(name, ext_description[ExternalsDescription.REPO])
         if repo:
             self._repo = repo
 
     def get_name(self):
         """
-        Return the source object's name
+        Return the external object's name
         """
         return self._name
 
     def get_local_path(self):
         """
-        Return the source object's path
+        Return the external object's path
         """
         return self._local_path
 
     def status(self):
         """
         If the repo destination directory exists, ensure it is correct (from
-        correct URL, correct branch or tag), and possibly update the source.
+        correct URL, correct branch or tag), and possibly update the external.
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
-        If load_all is True, also load all of the the sources sub-sources.
+        If load_all is True, also load all of the the externals sub-externals.
         """
 
         stat = ExternalStatus()
@@ -150,10 +150,10 @@ class _Source(object):
     def checkout(self, load_all):
         """
         If the repo destination directory exists, ensure it is correct (from
-        correct URL, correct branch or tag), and possibly update the source.
+        correct URL, correct branch or tag), and possibly update the external.
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
-        If load_all is True, also load all of the the sources sub-sources.
+        If load_all is True, also load all of the the externals sub-externals.
         """
         if load_all:
             pass
@@ -208,18 +208,18 @@ class _Source(object):
 
 class SourceTree(object):
     """
-    SourceTree represents a <config_sourcetree> object
+    SourceTree represents a group of managed externals
     """
 
     def __init__(self, root_dir, model):
         """
-        Parse a model file into a SourceTree object
+        Build a SourceTree object from a model description
         """
         self._root_dir = os.path.abspath(root_dir)
         self._all_components = {}
         self._required_compnames = []
         for comp in model:
-            src = _Source(self._root_dir, comp, model[comp])
+            src = _External(self._root_dir, comp, model[comp])
             self._all_components[comp] = src
             if model[comp][ExternalsDescription.REQUIRED]:
                 self._required_compnames.append(comp)
@@ -270,9 +270,9 @@ class SourceTree(object):
         Checkout or update indicated components into the the configured
         subdirs.
 
-        If load_all is True, recursively checkout all sources.
+        If load_all is True, recursively checkout all externals.
         If load_all is False, load_comp is an optional set of components to load.
-        If load_all is True and load_comp is None, only load the required sources.
+        If load_all is True and load_comp is None, only load the required externals.
         """
         if load_all:
             load_comps = self._all_components.keys()

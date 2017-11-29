@@ -205,38 +205,38 @@ class ExternalsDescription(dict):
     def _check_data(self):
         """Check user supplied data is valid where possible.
         """
-        for field in self.keys():
-            if (self[field][self.REPO][self.PROTOCOL]
+        for ext_name in self.keys():
+            if (self[ext_name][self.REPO][self.PROTOCOL]
                     not in self.KNOWN_PRROTOCOLS):
                 msg = 'Unknown repository protocol "{0}" in "{1}".'.format(
-                    self[field][self.REPO][self.PROTOCOL], field)
+                    self[ext_name][self.REPO][self.PROTOCOL], ext_name)
                 fatal_error(msg)
 
-            if (self[field][self.REPO][self.PROTOCOL]
+            if (self[ext_name][self.REPO][self.PROTOCOL]
                     != self.PROTOCOL_EXTERNALS_ONLY):
-                if (self[field][self.REPO][self.TAG] and
-                        self[field][self.REPO][self.BRANCH]):
+                if (self[ext_name][self.REPO][self.TAG] and
+                        self[ext_name][self.REPO][self.BRANCH]):
                     msg = ('Model description is over specified! Can not '
                            'have both "tag" and "branch" in repo '
-                           'description for "{0}"'.format(field))
+                           'description for "{0}"'.format(ext_name))
                     fatal_error(msg)
 
-                if (not self[field][self.REPO][self.TAG] and
-                        not self[field][self.REPO][self.BRANCH]):
+                if (not self[ext_name][self.REPO][self.TAG] and
+                        not self[ext_name][self.REPO][self.BRANCH]):
                     msg = ('Model description is under specified! Must have '
                            'either "tag" or "branch" in repo '
-                           'description for "{0}"'.format(field))
+                           'description for "{0}"'.format(ext_name))
                     fatal_error(msg)
 
-                if not self[field][self.REPO][self.REPO_URL]:
+                if not self[ext_name][self.REPO][self.REPO_URL]:
                     msg = ('Model description is under specified! Must have '
                            'either "repo_url" in repo '
-                           'description for "{0}"'.format(field))
+                           'description for "{0}"'.format(ext_name))
                     fatal_error(msg)
 
                 url = expand_local_url(
-                    self[field][self.REPO][self.REPO_URL], field)
-                self[field][self.REPO][self.REPO_URL] = url
+                    self[ext_name][self.REPO][self.REPO_URL], ext_name)
+                self[ext_name][self.REPO][self.REPO_URL] = url
 
     def _check_optional(self):
         """Some fields like externals, repo:tag repo:branch are
