@@ -1,37 +1,101 @@
 Developer Guidelines
 ====================
 
-Basic Design Principles
+The manage externals utilities are a light weight replacement for svn
+externals that will work with git repositories pulling in a mixture of
+git and svn dependencies.
+
+Given an externals description and a working copy:
+
+* *checkout_externals* attempts to make the working copy agree with the
+  externals description
+
+* *generate_externals* attempts to make the externals description agree
+  with the working copy.
+
+For these operations utilities should:
+
+* consistently across git and svn
+
+* operate simply with minimal user complexity
+
+* robustly across a wide range of repository states
+
+* provide explicit error messages when a problem occurs
+
+* leave the working copy in a valid state
+  
+The utilities in manage externals are **NOT** generic wrappers around
+revision control operations or a replacement for common tasks. Users
+are expected to:
+
+* create branches prior to starting development
+  
+* add remotes and push changes
+
+* create tags
+  
+* delete branches
+
+These types of tasks are often highly workflow dependent, e.g. branch
+naming conventions may vary between repositories, have the potential
+to destroy user data, introduce significant code complexit and 'edge
+cases' that are extremely difficult to detect and test, and often
+require subtle decision making, especially if a problem occurs.
+
+Users who want to automate these types are encouraged to create their
+own tools. The externals description files are explicitly versioned
+and the internal APIs are intended to be stable for these purposes.
+
+Core Design Principles
 -----------------------
 
-1. Do *not* do anything that will possibly destroy user data!
+1. Users can, and are actively encouraged to, modify the externals
+   directories using revision control outside of manage_externals
+   tools. You can't make any assumptions about the state of the
+   working copy. Examples: adding a remote, creating a branch,
+   switching to a branch, deleting the directory entirely.
+      
+2. Give that the user can do anything, the manage externals library
+   can not preserve state between calls. The only information it can
+   rely on is what it expectes based on the content of the externals
+   description file, and what the actual state of the directory tree
+   is.
 
-   1. Do not remove files from the file system. We are operating on
+3. Do *not* do anything that will possibly destroy user data!
+
+   a. Do not remove files from the file system. We are operating on
       user supplied input. If you don't call 'rm', you can't
       accidentally remove the user's data. Thinking of calling
       ``shutil.rmtree(user_input)``? What if the user accidentally
       specified user_input such that it resolves to their home
       directory.... Yeah. Don't go there.
 
-   2. Rely on git and svn to do their job as much as possible. Don't
-      duplicate functionality. For example: We require the working
-      copies to be 'clean' as reported by ``git status`` and ``svn
-      status``. What if there are misc editor files floating around
-      that prevent an update? Use the git and svn ignore functionality
-      so they are not reported. Don't try to remove them from
-      manage_externals or determine if they are 'safe' to ignore.
+   b. Rely on git and svn to do their job as much as possible. Don't
+      duplicate functionality. Examples:
 
-2. Users can, and probably will, modify the externals directories
-   using revision control outside of manage_externals tools. You can't
-   make any assumptions about the state of the repo. Examples: adding
-   a remote, creating a branch, switching to a branch, deleting the
-   directory entirely.
-      
-3. Give that the user can do anything, the manage externals library
-   can not preserve state between calls. The only information it can
-   rely on is what it expectes based on the content of the externals
-   description file, and what the actual state of the directory tree
-   is.
+      i. We require the working copies to be 'clean' as reported by
+         ``git status`` and ``svn status``. What if there are misc
+         editor files floating around that prevent an update? Use the
+         git and svn ignore functionality so they are not
+         reported. Don't try to remove them from manage_externals or
+         determine if they are 'safe' to ignore.
+
+      ii. There are often multiple ways to obtain a particular piece
+          of information from git. Scraping screen output is brittle
+          and generally not considered a stable API across different
+          versions of git. Given a choice between:
+          
+            1. high level git command that produces a bunch of output
+               that must be processed.
+
+            2. a lower level git 'plumbing' command that processes a
+               specific request and returns a sucess/failure status.
+
+           We always prefer the latter. It almost always involves
+           writing and maintaining less code and is more likely to be
+           stable.
+
 
 4. Backward compatibility is critical. We have *nested*
    repositories. They are trivially easy to change versions. They may
@@ -86,6 +150,31 @@ There are three basic types of repositories that must be considered:
 Repositories must be able to checkout and switch to both branches and
 tags.
 
+Development
+===========
+
+The functionality to manage externals is broken into a library of core
+functionality and applications built with the library.
+
+The core library is called 'manic', pseduo-homophone of (man)age
+(ex)ternals that is: short, pronounceable and spell-checkable. It is
+also no more or less meaningful to an unfamiliar user than a random
+jumble of letters forming an acronym.
+
+The core architecture of manic is:
+
+* externals description - an abstract description on an external,
+  including of how to obtain it, where to obtain it, where it goes in
+  the working tree.
+
+* externals - the software object representing an external.
+  
+* source trees - collection of externals
+  
+* repository wrappers - object oriented wrappers around repository
+  operations. So the higher level management of the soure tree and
+  external does not have to be concerned with how a particular
+  external is obtained and managed.
   
 Testing
 =======
