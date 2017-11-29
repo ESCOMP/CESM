@@ -12,7 +12,8 @@ Welcome to Manage Externals's documentation!
 
 
    develop.rst
-
+   testing.rst
+   
 Indices and tables
 ==================
 

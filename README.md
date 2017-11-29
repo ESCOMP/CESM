@@ -4,16 +4,16 @@
 [![Coverage Status](https://coveralls.io/repos/github/NCAR/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/NCAR/manage_externals?branch=master)
 ```
 
-usage: checkout_externals.py [-h] [-e [EXTERNALS]] [-o] [-S] [-v]
-                             [--backtrace] [-d]
+usage: checkout_externals [-h] [-e [EXTERNALS]] [-o] [-S] [-v] [--backtrace]
+                          [-d]
 
-checkout_externals.py manages checking out CESM externals from revision control
+checkout_externals manages checking out CESM externals from revision control
 based on a externals description file. By default only the required
 externals are checkout out.
 
-NOTE: checkout_externals.py *MUST* be run from the root of the source tree.
+NOTE: checkout_externals *MUST* be run from the root of the source tree.
 
-Running checkout_externals.py without the '--status' option will always attempt to
+Running checkout_externals without the '--status' option will always attempt to
 synchronize the working copy with the externals description.
 
 optional arguments:
@@ -24,7 +24,7 @@ optional arguments:
                         out. This flag will also checkout the optional
                         externals.
   -S, --status          Output status of the repositories managed by
-                        checkout_externals.py. By default only summary
+                        checkout_externals. By default only summary
                         information is provided. Use verbose output to see
                         details.
   -v, --verbose         Output additional information to the screen and log
@@ -35,7 +35,7 @@ optional arguments:
                         the screen and log file.
 
 ```
-NOTE: checkout_externals.py *MUST* be run from the root of the source tree it
+NOTE: checkout_externals *MUST* be run from the root of the source tree it
 is managing. For example, if you cloned CLM with:
 
     $ git clone git@github.com/ncar/clm clm-dev
@@ -46,7 +46,7 @@ CLM via a checkout of CESM:
     $ git clone git@github.com/escomp/cesm cesm-dev
 
 and you need to checkout the CLM externals, then the root of the
-source tree is /path/to/cesm-dev. Do *NOT* run checkout_externals.py
+source tree is /path/to/cesm-dev. Do *NOT* run checkout_externals
 from within /path/to/cesm-dev/components/clm.
 
 The root of the source tree will be referred to as `${SRC_ROOT}` below.
@@ -57,16 +57,16 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     description file:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/checkout_externals.py
+        $ ./manage_externals/checkout_externals
 
   * To update all required components to the current values in the
-    externals description file, re-run checkout_externals.py:
+    externals description file, re-run checkout_externals:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/checkout_externals.py
+        $ ./manage_externals/checkout_externals
 
     If there are *any* modifications to *any* working copy according
-    to the git or svn 'status' command, checkout_externals.py
+    to the git or svn 'status' command, checkout_externals
     will not update any external repositories. Modifications
     include: modified files, added files, removed files, missing
     files or untracked files,
@@ -75,12 +75,12 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     description file:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/checkout_externals.py --excernals myCESM.xml
+        $ ./manage_externals/checkout_externals --excernals myCESM.xml
 
-  * Status summary of the repositories managed by checkout_externals.py:
+  * Status summary of the repositories managed by checkout_externals:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/checkout_externals.py --status
+        $ ./manage_externals/checkout_externals --status
 
               ./cime
           m   ./components/cism
@@ -97,7 +97,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
     Colunm one will be one of these values:
       * m : modified : repository is modefied compared to the externals description
-      * e : empty : directory does not exist - checkout_externals.py has not been run
+      * e : empty : directory does not exist - checkout_externals has not been run
       * ? : unknown : directory exists but .git or .svn directories are missing
 
     Colunm two will be one of these values:
@@ -109,10 +109,10 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
       * o : optional : optionally repository
       *   : blank / space : required repository
 
-  * Detailed git or svn status of the repositories managed by checkout_externals.py:
+  * Detailed git or svn status of the repositories managed by checkout_externals:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/checkout_externals.py --status --verbose
+        $ ./manage_externals/checkout_externals --status --verbose
 
 # Externals description file
 
@@ -125,7 +125,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
   * required (boolean) : whether the component is a required checkout
 
   * local_path (string) : component path *relative* to where
-    checkout_externals.py is called.
+    checkout_externals is called.
 
   * protoctol (string) : version control protocol that is used to
     manage the component.  Valid values are 'git', 'svn',
