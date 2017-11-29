@@ -188,8 +188,9 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
     # NOTE(bja, 2017-11) pylint complains about long method names, but
     # it is hard to differentiate tests without making them more
-    # cryptic.
-    # pylint: disable=invalid-name
+    # cryptic. Also complains about too many public methods, but it
+    # doesn't really make sense to break this up.
+    # pylint: disable=invalid-name,too-many-public-methods
 
     TMP_FAKE_DIR = 'fake'
     TMP_FAKE_GIT_DIR = os.path.join(TMP_FAKE_DIR, '.git')
@@ -537,15 +538,10 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     def test_sync_branch_on_untracked_branch(self):
         """Test expect branch on untracked branch --> status modified
 
-        NOTE(bja, 2017-11) the externals description is always a
+        NOTE(bja, 2017-11) the externals description url is always a
         remote repository. A local untracked branch only exists
         locally, therefore it is always a modified state, even if this
         is what the user wants.
-
-        FIME(bja, 2017-11) this brings up an additional case where the
-        user wants to modify other externals, but keep the current
-        one fixed. In that case, they would specify '.' for the
-        repository and their branch....
 
         """
         stat = ExternalStatus()
@@ -555,6 +551,46 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._git_branch_vv = self._git_branch_untracked_branch
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
+        # check_sync should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
+
+    def test_sync_branch_on_unknown_remote(self):
+        """Test expect branch, but remote is unknown --> status modified
+
+        """
+        stat = ExternalStatus()
+        self._repo._git_remote_verbose = self._git_remote_origin_upstream
+        self._repo._branch = 'feature-2'
+        self._repo._tag = ''
+        self._repo._url = '/path/to/unknown/repo'
+        self._repo._git_branch_vv = self._git_branch_untracked_branch
+        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
+        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
+        # check_sync should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
+
+    def test_sync_branch_on_untracked_local(self):
+        """Test expect branch, on untracked branch in local repo --> status ok
+
+        Setting the externals description to '.' indicates that the
+        user only want's to consider the current local repo state
+        without fetching from remotes. This is required to preserve
+        the current branch of a repository during an update.
+
+        NOTE(bja, 2017-11) the externals description is always a
+        remote repository. A local untracked branch only exists
+        locally, therefore it is always a modified state, even if this
+        is what the user wants.
+
+        """
+        stat = ExternalStatus()
+        self._repo._git_remote_verbose = self._git_remote_origin_upstream
+        self._repo._branch = 'feature3'
+        self._repo._tag = ''
+        self._repo._git_branch_vv = self._git_branch_untracked_branch
+        self._repo._url = '.'
+        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
+        self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
@@ -845,6 +881,92 @@ class TestVerifyTag(unittest.TestCase):
         self._repo._tag = '97ebc0e0'
         remote_name = 'origin'
         received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
+        self.assertTrue(received)
+
+
+class TestValidRef(unittest.TestCase):
+    """Test logic verifying that a reference is a valid tag, branch or sha1
+
+    """
+
+    def setUp(self):
+        """Setup reusable git repository object
+        """
+        self._name = 'component'
+        rdata = {ExternalsDescription.PROTOCOL: 'git',
+                 ExternalsDescription.REPO_URL:
+                 '/path/to/local/repo',
+                 ExternalsDescription.TAG: 'tag1',
+                 ExternalsDescription.BRANCH: EMPTY_STR
+                 }
+
+        data = {self._name:
+                {
+                    ExternalsDescription.REQUIRED: False,
+                    ExternalsDescription.PATH: 'tmp',
+                    ExternalsDescription.EXTERNALS: EMPTY_STR,
+                    ExternalsDescription.REPO: rdata,
+                },
+                }
+
+        model = ExternalsDescriptionDict(data)
+        repo = model[self._name][ExternalsDescription.REPO]
+        self._repo = GitRepository('test', repo)
+
+    @staticmethod
+    def _shell_true(url, remote=None):
+        _ = url
+        _ = remote
+        return 0
+
+    @staticmethod
+    def _shell_false(url, remote=None):
+        _ = url
+        _ = remote
+        return 1
+
+    def test_valid_ref_is_invalid(self):
+        """Verify an invalid reference raises an exception
+        """
+        self._repo._git_showref_tag = self._shell_false
+        self._repo._git_showref_branch = self._shell_false
+        self._repo._git_lsremote_branch = self._shell_false
+        self._repo._git_revparse_commit = self._shell_false
+        self._repo._tag = 'invalid_ref'
+        with self.assertRaises(RuntimeError):
+            self._repo._check_for_valid_ref(self._repo._tag)
+
+    def test_valid_tag(self):
+        """Verify a valid tag return true
+        """
+        self._repo._git_showref_tag = self._shell_true
+        self._repo._git_showref_branch = self._shell_false
+        self._repo._git_lsremote_branch = self._shell_false
+        self._repo._git_revparse_commit = self._shell_true
+        self._repo._tag = 'tag1'
+        received = self._repo._check_for_valid_ref(self._repo._tag)
+        self.assertTrue(received)
+
+    def test_valid_branch(self):
+        """Verify a valid tag return true
+        """
+        self._repo._git_showref_tag = self._shell_false
+        self._repo._git_showref_branch = self._shell_true
+        self._repo._git_lsremote_branch = self._shell_false
+        self._repo._git_revparse_commit = self._shell_true
+        self._repo._tag = 'tag1'
+        received = self._repo._check_for_valid_ref(self._repo._tag)
+        self.assertTrue(received)
+
+    def test_valid_hash(self):
+        """Verify a valid tag return true
+        """
+        self._repo._git_showref_tag = self._shell_false
+        self._repo._git_showref_branch = self._shell_false
+        self._repo._git_lsremote_branch = self._shell_false
+        self._repo._git_revparse_commit = self._shell_true
+        self._repo._tag = '56cc0b5394'
+        received = self._repo._check_for_valid_ref(self._repo._tag)
         self.assertTrue(received)
 
 

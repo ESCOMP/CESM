@@ -30,7 +30,6 @@ from __future__ import print_function
 
 import os
 import os.path
-import random
 import shutil
 import unittest
 
@@ -38,7 +37,7 @@ from manic.externals_description import ExternalsDescription
 from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
 from manic.externals_status import ExternalStatus
 from manic.repository_git import GitRepository
-from manic.utils import printlog
+from manic.utils import printlog, execute_subprocess
 from manic import checkout
 
 # ConfigParser was renamed in python2 to configparser. In python2,
@@ -68,10 +67,11 @@ CONTAINER_REPO_NAME = 'container.git'
 MIXED_REPO_NAME = 'mixed-cont-ext.git'
 SIMPLE_REPO_NAME = 'simple-ext.git'
 SIMPLE_FORK_NAME = 'simple-ext-fork.git'
+SIMPLE_LOCAL_ONLY_NAME = '.'
 ERROR_REPO_NAME = 'error'
-REPO_UNDER_TEST = 'under_test'
 EXTERNALS_NAME = 'externals'
 CFG_NAME = 'externals.cfg'
+README_NAME = 'readme.txt'
 
 
 def setUpModule():  # pylint: disable=C0103
@@ -204,6 +204,27 @@ class GenerateExternalsDescriptionCfgV1(object):
         if externals:
             self._config.set(name, ExternalsDescription.EXTERNALS, externals)
 
+    @staticmethod
+    def create_branch(dest_dir, repo_name, branch, with_commit=False):
+        """Update a repository branch, and potentially the remote.
+        """
+        # pylint: disable=R0913
+        cwd = os.getcwd()
+        repo_root = os.path.join(dest_dir, EXTERNALS_NAME)
+        repo_root = os.path.join(repo_root, repo_name)
+        os.chdir(repo_root)
+        cmd = ['git', 'checkout', '-b', branch, ]
+        execute_subprocess(cmd)
+        if with_commit:
+            msg = 'start work on {0}'.format(branch)
+            with open(README_NAME, 'a') as handle:
+                handle.write(msg)
+            cmd = ['git', 'add', README_NAME, ]
+            execute_subprocess(cmd)
+            cmd = ['git', 'commit', '-m', msg, ]
+            execute_subprocess(cmd)
+        os.chdir(cwd)
+
     def update_branch(self, dest_dir, name, branch, repo_type=None,
                       filename=CFG_NAME):
         """Update a repository branch, and potentially the remote.
@@ -212,7 +233,11 @@ class GenerateExternalsDescriptionCfgV1(object):
         self._config.set(name, ExternalsDescription.BRANCH, branch)
 
         if repo_type:
-            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_type)
+            if repo_type == SIMPLE_LOCAL_ONLY_NAME:
+                repo_url = SIMPLE_LOCAL_ONLY_NAME
+            else:
+                repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}',
+                                        repo_type)
             self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
 
         try:
@@ -315,8 +340,7 @@ class TestSysCheckout(unittest.TestCase):
         # checkout_externals are done cd'ing all over the place.
         self._return_dir = os.getcwd()
 
-        # create a random test id for this test.
-        self._test_id = random.randint(0, 999)
+        self._test_id = self.id().split('.')[-1]
 
         # path to the executable
         self._checkout = os.path.join('../checkout_externals')
@@ -346,7 +370,7 @@ class TestSysCheckout(unittest.TestCase):
 
         """
         # unique repo for this test
-        test_dir_name = '{0}.{1}'.format(REPO_UNDER_TEST, self._test_id)
+        test_dir_name = self._test_id
         print("Test repository name: {0}".format(test_dir_name))
 
         parent_repo_dir = os.path.join(self._bare_root, parent_repo_name)
@@ -692,13 +716,47 @@ class TestSysCheckout(unittest.TestCase):
                                                 self.status_args)
         self._check_container_simple_required_post_checkout(overall, tree)
 
-    @unittest.skip('test development inprogress')
     def test_container_preserve_dot(self):
         """Verify that after inital checkout, modifying an external git repo
         url to '.' and the current branch will leave it unchanged.
 
         """
-        pass
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
+
+        # update the config file to point to a different remote with
+        # the same branch
+        self._generator.update_branch(under_test_dir, 'simp_branch',
+                                      'feature2', SIMPLE_FORK_NAME)
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+
+        # verify status is clean and unmodified
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
+
+        # update branch to point to a new branch that only exists in
+        # the local fork
+        self._generator.create_branch(under_test_dir, 'simp_branch',
+                                      'private-feature', with_commit=True)
+        self._generator.update_branch(under_test_dir, 'simp_branch',
+                                      'private-feature',
+                                      SIMPLE_LOCAL_ONLY_NAME)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+
+        # verify status is clean and unmodified
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
 
     @unittest.skip('test development inprogress')
     def test_container_full(self):

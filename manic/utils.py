@@ -119,22 +119,28 @@ def split_remote_url(url):
 
 def expand_local_url(url, field):
     """check if the user provided a local file path instead of a
-       remote. If so, it must be expanded to an absolute
-       path.
+    remote. If so, it must be expanded to an absolute
+    path.
+
+    Note: local paths of '.' have special meaning and represent local
+    copy only, don't work with the remotes.
 
     """
     remote_url = is_remote_url(url)
     if not remote_url:
-        url = os.path.expandvars(url)
-        url = os.path.expanduser(url)
-        if not os.path.isabs(url):
-            msg = ('WARNING: Externals description for "{0}" contains a '
-                   'url that is not remote and does not expand to an '
-                   'absolute path. Version control operations may '
-                   'fail.\n\nurl={1}'.format(field, url))
-            printlog(msg)
+        if url.strip() == '.':
+            pass
         else:
-            url = os.path.normpath(url)
+            url = os.path.expandvars(url)
+            url = os.path.expanduser(url)
+            if not os.path.isabs(url):
+                msg = ('WARNING: Externals description for "{0}" contains a '
+                       'url that is not remote and does not expand to an '
+                       'absolute path. Version control operations may '
+                       'fail.\n\nurl={1}'.format(field, url))
+                printlog(msg)
+            else:
+                url = os.path.normpath(url)
     return url
 
 

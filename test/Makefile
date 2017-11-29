@@ -75,7 +75,8 @@ lint : style
 .PHONY : coverage
 coverage : FORCE
 	$(PYPATH) $(COVERAGE) erase
-	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_*.py'
+	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_unit_*.py'
+	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_sys_*.py'
 	$(PYPATH) $(COVERAGE) html
 
 #

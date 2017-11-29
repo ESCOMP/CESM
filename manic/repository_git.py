@@ -64,7 +64,7 @@ class GitRepository(Repository):
         repo_dir_path = os.path.join(base_dir_path, repo_dir_name)
         if not os.path.exists(repo_dir_path):
             self._clone_repo(base_dir_path, repo_dir_name)
-        self._checkout_external_ref(repo_dir_path)
+        self._checkout_ref(repo_dir_path)
 
     def status(self, stat, repo_dir_path):
         """
@@ -200,6 +200,16 @@ class GitRepository(Repository):
 
 
         """
+        def compare_refs(current_ref, expected_ref):
+            """Compare the current and expected ref.
+
+            """
+            if current_ref == expected_ref:
+                status = ExternalStatus.STATUS_OK
+            else:
+                status = ExternalStatus.MODEL_MODIFIED
+            return status
+
         cwd = os.getcwd()
         os.chdir(repo_dir_path)
         git_output = self._git_branch_vv()
@@ -207,22 +217,20 @@ class GitRepository(Repository):
         if current_ref == EMPTY_STR:
             stat.sync_state = ExternalStatus.UNKNOWN
         elif self._branch:
-            remote_name = self._determine_remote_name()
-            if not remote_name:
-                # git doesn't know about this remote. by definition
-                # this is a modefied state.
-                stat.sync_state = ExternalStatus.MODEL_MODIFIED
+            if self._url == '.':
+                expected_ref = self._branch
+                stat.sync_state = compare_refs(current_ref, expected_ref)
             else:
-                expected_ref = "{0}/{1}".format(remote_name, self._branch)
-                if current_ref == expected_ref:
-                    stat.sync_state = ExternalStatus.STATUS_OK
-                else:
+                remote_name = self._determine_remote_name()
+                if not remote_name:
+                    # git doesn't know about this remote. by definition
+                    # this is a modefied state.
                     stat.sync_state = ExternalStatus.MODEL_MODIFIED
+                else:
+                    expected_ref = "{0}/{1}".format(remote_name, self._branch)
+                    stat.sync_state = compare_refs(current_ref, expected_ref)
         else:
-            if self._tag == current_ref:
-                stat.sync_state = ExternalStatus.STATUS_OK
-            else:
-                stat.sync_state = ExternalStatus.MODEL_MODIFIED
+            stat.sync_state = compare_refs(current_ref, self._tag)
         os.chdir(cwd)
 
     def _determine_remote_name(self):
@@ -295,9 +303,34 @@ class GitRepository(Repository):
         remote_name = "{0}_{1}".format(base_name, repo_name)
         return remote_name
 
-    def _checkout_external_ref(self, repo_dir):
+    def _checkout_ref(self, repo_dir):
+        """Checkout the user supplied reference
+        """
+        # import pdb; pdb.set_trace()
         cwd = os.getcwd()
         os.chdir(repo_dir)
+        if self._url.strip() == '.':
+            self._checkout_local_ref()
+        else:
+            self._checkout_external_ref()
+        os.chdir(cwd)
+
+    def _checkout_local_ref(self):
+        """Checkout the reference considering the local repo only. Do not
+        fetch any additional remotes or specify the remote when
+        checkout out the ref.
+
+        """
+        if self._tag:
+            ref = self._tag
+        else:
+            ref = self._branch
+        self._check_for_valid_ref(ref)
+        self._git_checkout_ref(ref)
+
+    def _checkout_external_ref(self):
+        """Checkout the reference from a remote repository
+        """
         remote_name = self._determine_remote_name()
         if not remote_name:
             remote_name = self._create_remote_name()
@@ -314,7 +347,25 @@ class GitRepository(Repository):
         else:
             ref = '{0}/{1}'.format(remote_name, self._branch)
         self._git_checkout_ref(ref)
-        os.chdir(cwd)
+
+    def _check_for_valid_ref(self, ref):
+        """Try some basic sanity checks on the user supplied reference so we
+        can provide a more useful error message than calledprocess
+        error...
+
+        """
+        is_tag = self._ref_is_tag(ref)
+        is_branch = self._ref_is_branch(ref)
+        is_commit = self._ref_is_commit(ref)
+
+        is_valid = is_tag or is_branch or is_commit
+        if not is_valid:
+            msg = ('In repo "{0}": reference "{1}" does not appear to be a '
+                   'valid tag, branch or commit! Please verify the reference '
+                   'name (e.g. spelling), is available from: {2} '.format(
+                       self._name, ref, self._url))
+            fatal_error(msg)
+        return is_valid
 
     def _is_unique_tag(self, ref, remote_name):
         """Verify that a reference is a valid tag and is unique (not a branch)
@@ -373,15 +424,19 @@ class GitRepository(Repository):
             is_tag = True
         return is_tag
 
-    def _ref_is_branch(self, ref, remote_name):
+    def _ref_is_branch(self, ref, remote_name=None):
         """Verify if a ref is any kind of branch (local, tracked remote,
         untracked remote).
 
         """
-        untracked_remote = self._ref_is_remote_branch(ref, remote_name)
-        local = self._ref_is_local_branch(ref)
+        local_branch = False
+        remote_branch = False
+        if remote_name:
+            remote_branch = self._ref_is_remote_branch(ref, remote_name)
+        local_branch = self._ref_is_local_branch(ref)
+
         is_branch = False
-        if untracked_remote is True or local is True:
+        if local_branch or remote_branch:
             is_branch = True
         return is_branch
 
