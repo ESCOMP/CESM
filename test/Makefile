@@ -1,4 +1,6 @@
 python = not-set
+verbose = not-set
+debug = not-set
 
 ifneq ($(python), not-set)
 PYTHON=$(python)
@@ -11,7 +13,21 @@ endif
 PYPATH=PYTHONPATH=..:
 
 # common args for running tests
-TEST_ARGS=-m unittest discover --buffer
+TEST_ARGS=-m unittest discover
+
+ifeq ($(debug), not-set)
+    ifeq ($(verbose), not-set)
+        # summary only output
+        TEST_ARGS+=--buffer
+    else
+        # show individual test summary
+        TEST_ARGS+=--buffer --verbose
+    endif
+else
+    # show detailed test output
+    TEST_ARGS+=--verbose
+endif
+
 
 # auto reformat the code
 AUTOPEP8=autopep8

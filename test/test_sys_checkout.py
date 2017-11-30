@@ -44,6 +44,7 @@ from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
 from manic.externals_status import ExternalStatus
 from manic.repository_git import GitRepository
 from manic.utils import printlog, execute_subprocess
+from manic.global_constants import LOCAL_PATH_INDICATOR
 from manic import checkout
 
 # ConfigParser was renamed in python2 to configparser. In python2,
@@ -76,7 +77,9 @@ SIMPLE_FORK_NAME = 'simple-ext-fork.git'
 SIMPLE_LOCAL_ONLY_NAME = '.'
 ERROR_REPO_NAME = 'error'
 EXTERNALS_NAME = 'externals'
+SUB_EXTERNALS_PATH = 'src'
 CFG_NAME = 'externals.cfg'
+CFG_SUB_NAME = 'sub-externals.cfg'
 README_NAME = 'readme.txt'
 
 SVN_TEST_REPO = 'https://github.com/escomp/cesm'
@@ -127,10 +130,10 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1', required=False)
 
         self.create_section(MIXED_REPO_NAME, 'mixed_req',
-                            tag='tag1', externals='sub-ext.cfg')
+                            tag='tag1', externals=CFG_SUB_NAME)
 
         self.create_section(MIXED_REPO_NAME, 'mixed_opt',
-                            tag='tag1', externals='sub-ext.cfg',
+                            tag='tag1', externals=CFG_SUB_NAME,
                             required=False)
 
         self._write_config(dest_dir)
@@ -173,6 +176,33 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         self._write_config(dest_dir)
 
+    def mixed_simple_base(self, dest_dir):
+        """Create a mixed-use base externals file with only simple externals.
+
+        """
+        self.create_config()
+        self.create_section_ext_only('mixed_base')
+        self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
+                            tag='tag1')
+
+        self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
+                            branch='feature2')
+
+        self._write_config(dest_dir)
+
+    def mixed_simple_sub(self, dest_dir):
+        """Create a mixed-use sub externals file with only simple externals.
+
+        """
+        self.create_config()
+        self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
+                            tag='tag1', path=SUB_EXTERNALS_PATH)
+
+        self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
+                            branch='feature2', path=SUB_EXTERNALS_PATH)
+
+        self._write_config(dest_dir, filename=CFG_SUB_NAME)
+
     def _write_config(self, dest_dir, filename=CFG_NAME):
         """Write the configuration file to disk
 
@@ -197,7 +227,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                          self._schema_version)
 
     def create_section(self, repo_type, name, tag='', branch='',
-                       required=True, externals=''):
+                       required=True, path=EXTERNALS_NAME, externals=''):
         """Create a config section with autofilling some items and handling
         optional items.
 
@@ -205,7 +235,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         # pylint: disable=R0913
         self._config.add_section(name)
         self._config.set(name, ExternalsDescription.PATH,
-                         os.path.join(EXTERNALS_NAME, name))
+                         os.path.join(path, name))
 
         self._config.set(name, ExternalsDescription.PROTOCOL,
                          ExternalsDescription.PROTOCOL_GIT)
@@ -220,6 +250,27 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         if branch:
             self._config.set(name, ExternalsDescription.BRANCH, branch)
+
+        if externals:
+            self._config.set(name, ExternalsDescription.EXTERNALS, externals)
+
+    def create_section_ext_only(self, name,
+                                required=True, externals=CFG_SUB_NAME):
+        """Create a config section with autofilling some items and handling
+        optional items.
+
+        """
+        # pylint: disable=R0913
+        self._config.add_section(name)
+        self._config.set(name, ExternalsDescription.PATH, LOCAL_PATH_INDICATOR)
+
+        self._config.set(name, ExternalsDescription.PROTOCOL,
+                         ExternalsDescription.PROTOCOL_EXTERNALS_ONLY)
+
+        self._config.set(name, ExternalsDescription.REPO_URL,
+                         LOCAL_PATH_INDICATOR)
+
+        self._config.set(name, ExternalsDescription.REQUIRED, str(required))
 
         if externals:
             self._config.set(name, ExternalsDescription.EXTERNALS, externals)
@@ -411,6 +462,8 @@ class BaseTestSysCheckout(unittest.TestCase):
 
         # set the input file generator
         self._generator = GenerateExternalsDescriptionCfgV1()
+        # set the input file generator for secondary externals
+        self._sub_generator = GenerateExternalsDescriptionCfgV1()
 
     def tearDown(self):
         """Tear down for individual tests
@@ -511,44 +564,44 @@ class BaseTestSysCheckout(unittest.TestCase):
     # Check results for individual named externals
     #
     # ----------------------------------------------------------------
-    def _check_simple_tag_empty(self, tree):
-        name = './externals/simp_tag'
+    def _check_simple_tag_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_tag'.format(directory)
         self._check_generic_empty_default_required(tree, name)
 
-    def _check_simple_tag_ok(self, tree):
-        name = './externals/simp_tag'
+    def _check_simple_tag_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_tag'.format(directory)
         self._check_generic_ok_clean_required(tree, name)
 
-    def _check_simple_tag_dirty(self, tree):
-        name = './externals/simp_tag'
+    def _check_simple_tag_dirty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_tag'.format(directory)
         self._check_generic_ok_dirty_required(tree, name)
 
-    def _check_simple_branch_empty(self, tree):
-        name = './externals/simp_branch'
+    def _check_simple_branch_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_branch'.format(directory)
         self._check_generic_empty_default_required(tree, name)
 
-    def _check_simple_branch_ok(self, tree):
-        name = './externals/simp_branch'
+    def _check_simple_branch_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_branch'.format(directory)
         self._check_generic_ok_clean_required(tree, name)
 
-    def _check_simple_branch_modified(self, tree):
-        name = './externals/simp_branch'
+    def _check_simple_branch_modified(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_branch'.format(directory)
         self._check_generic_modified_ok_required(tree, name)
 
-    def _check_simple_req_empty(self, tree):
-        name = './externals/simp_req'
+    def _check_simple_req_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_req'.format(directory)
         self._check_generic_empty_default_required(tree, name)
 
-    def _check_simple_req_ok(self, tree):
-        name = './externals/simp_req'
+    def _check_simple_req_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_req'.format(directory)
         self._check_generic_ok_clean_required(tree, name)
 
-    def _check_simple_opt_empty(self, tree):
-        name = './externals/simp_opt'
+    def _check_simple_opt_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_opt'.format(directory)
         self._check_generic_empty_default_optional(tree, name)
 
-    def _check_simple_opt_ok(self, tree):
-        name = './externals/simp_opt'
+    def _check_simple_opt_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_opt'.format(directory)
         self._check_generic_ok_clean_optional(tree, name)
 
     # ----------------------------------------------------------------
@@ -601,6 +654,30 @@ class BaseTestSysCheckout(unittest.TestCase):
         self.assertEqual(overall, 0)
         self._check_simple_tag_dirty(tree)
         self._check_simple_branch_ok(tree)
+
+    def _check_mixed_sub_simple_required_pre_checkout(self, overall, tree):
+        # Note, this is the internal tree status just before checkout
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_empty(tree, directory=EXTERNALS_NAME)
+        self._check_simple_branch_empty(tree, directory=EXTERNALS_NAME)
+        self._check_simple_tag_empty(tree, directory=SUB_EXTERNALS_PATH)
+        self._check_simple_branch_empty(tree, directory=SUB_EXTERNALS_PATH)
+
+    def _check_mixed_sub_simple_required_checkout(self, overall, tree):
+        # Note, this is the internal tree status just before checkout
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_empty(tree, directory=EXTERNALS_NAME)
+        self._check_simple_branch_empty(tree, directory=EXTERNALS_NAME)
+        self._check_simple_tag_empty(tree, directory=SUB_EXTERNALS_PATH)
+        self._check_simple_branch_empty(tree, directory=SUB_EXTERNALS_PATH)
+
+    def _check_mixed_sub_simple_required_post_checkout(self, overall, tree):
+        # Note, this is the internal tree status just before checkout
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree, directory=EXTERNALS_NAME)
+        self._check_simple_branch_ok(tree, directory=EXTERNALS_NAME)
+        self._check_simple_tag_ok(tree, directory=SUB_EXTERNALS_PATH)
+        self._check_simple_branch_ok(tree, directory=SUB_EXTERNALS_PATH)
 
 
 class TestSysCheckout(BaseTestSysCheckout):
@@ -850,13 +927,28 @@ class TestSysCheckout(BaseTestSysCheckout):
         self.assertEqual(overall, 0)
         _ = tree
 
-    @unittest.skip('test development inprogress')
     def test_mixed_simple(self):
         """Verify that a mixed use repo can serve as a 'full' container,
         pulling in a set of externals and a seperate set of sub-externals.
 
         """
-        pass
+        #import pdb; pdb.set_trace()
+        # create repository
+        under_test_dir = self.setup_test_repo(MIXED_REPO_NAME)
+        # create top level externals file
+        self._generator.mixed_simple_base(under_test_dir)
+        # create sub-externals file
+        self._sub_generator.mixed_simple_sub(under_test_dir)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_mixed_sub_simple_required_checkout(overall, tree)
+
+        # verify status is clean and unmodified
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_mixed_sub_simple_required_post_checkout(overall, tree)
 
 
 class TestSysCheckoutSVN(BaseTestSysCheckout):
@@ -890,20 +982,20 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
 
     """
 
-    def _check_svn_branch_ok(self, tree):
-        name = './externals/svn_branch'
+    def _check_svn_branch_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/svn_branch'.format(directory)
         self._check_generic_ok_clean_required(tree, name)
 
-    def _check_svn_branch_dirty(self, tree):
-        name = './externals/svn_branch'
+    def _check_svn_branch_dirty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/svn_branch'.format(directory)
         self._check_generic_ok_dirty_required(tree, name)
 
-    def _check_svn_tag_ok(self, tree):
-        name = './externals/svn_tag'
+    def _check_svn_tag_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/svn_tag'.format(directory)
         self._check_generic_ok_clean_required(tree, name)
 
-    def _check_svn_tag_modified(self, tree):
-        name = './externals/svn_tag'
+    def _check_svn_tag_modified(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/svn_tag'.format(directory)
         self._check_generic_modified_ok_required(tree, name)
 
     def _check_container_simple_svn_post_checkout(self, overall, tree):
