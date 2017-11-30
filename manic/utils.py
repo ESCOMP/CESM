@@ -193,14 +193,19 @@ def execute_subprocess(commands, status_to_caller=False,
         logging.error(error)
         fatal_error(msg)
     except subprocess.CalledProcessError as error:
-        msg = failed_command_msg(
-            'Called process did not run successfully.\n'
-            'Returned status: {0}'.format(error.returncode),
-            commands)
-        logging.error(error)
-        logging.error(msg)
-        log_process_output(error.output)
+        # Only report the error if we are NOT returning to the
+        # caller. If we are returning to the caller, then it may be a
+        # simple status check. If returning, it is the callers
+        # responsibility determine if an error occurred and handle it
+        # appropriately.
         if not return_to_caller:
+            msg = failed_command_msg(
+                'Called process did not run successfully.\n'
+                'Returned status: {0}'.format(error.returncode),
+                commands)
+            logging.error(error)
+            logging.error(msg)
+            log_process_output(error.output)
             fatal_error(msg)
         status = error.returncode
 

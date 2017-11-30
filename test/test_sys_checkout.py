@@ -24,6 +24,12 @@ setUpModule.
 
 """
 
+# NOTE(bja, 2017-11) pylint complains that the module is too big, but
+# I'm still working on how to break up the tests and still have the
+# temporary directory be preserved....
+# pylint: disable=too-many-lines
+
+
 from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
@@ -72,6 +78,8 @@ ERROR_REPO_NAME = 'error'
 EXTERNALS_NAME = 'externals'
 CFG_NAME = 'externals.cfg'
 README_NAME = 'readme.txt'
+
+SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 
 
 def setUpModule():  # pylint: disable=C0103
@@ -153,6 +161,18 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         self._write_config(dest_dir)
 
+    def container_simple_svn(self, dest_dir):
+        """Create a container externals file with only simple externals.
+
+        """
+        self.create_config()
+        self.create_section(SIMPLE_REPO_NAME, 'simp_tag', tag='tag1')
+
+        self.create_svn_external('svn_branch', branch='trunk')
+        self.create_svn_external('svn_tag', tag='tags/cesm2.0.beta07')
+
+        self._write_config(dest_dir)
+
     def _write_config(self, dest_dir, filename=CFG_NAME):
         """Write the configuration file to disk
 
@@ -203,6 +223,27 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         if externals:
             self._config.set(name, ExternalsDescription.EXTERNALS, externals)
+
+    def create_svn_external(self, name, tag='', branch=''):
+        """Create a config section for an svn repository.
+
+        """
+        self._config.add_section(name)
+        self._config.set(name, ExternalsDescription.PATH,
+                         os.path.join(EXTERNALS_NAME, name))
+
+        self._config.set(name, ExternalsDescription.PROTOCOL,
+                         ExternalsDescription.PROTOCOL_SVN)
+
+        self._config.set(name, ExternalsDescription.REPO_URL, SVN_TEST_REPO)
+
+        self._config.set(name, ExternalsDescription.REQUIRED, str(True))
+
+        if tag:
+            self._config.set(name, ExternalsDescription.TAG, tag)
+
+        if branch:
+            self._config.set(name, ExternalsDescription.BRANCH, branch)
 
     @staticmethod
     def create_branch(dest_dir, repo_name, branch, with_commit=False):
@@ -319,8 +360,9 @@ class GenerateExternalsDescriptionCfgV1(object):
         self._write_config(dest_dir, filename)
 
 
-class TestSysCheckout(unittest.TestCase):
-    """Run systems level tests of checkout_externals
+class BaseTestSysCheckout(unittest.TestCase):
+    """Base class of reusable systems level test setup for
+    checkout_externals
 
     """
     # NOTE(bja, 2017-11) pylint complains about long method names, but
@@ -536,6 +578,16 @@ class TestSysCheckout(unittest.TestCase):
         self.assertEqual(overall, 0)
         self._check_simple_tag_dirty(tree)
         self._check_simple_branch_ok(tree)
+
+
+class TestSysCheckout(BaseTestSysCheckout):
+    """Run systems level tests of checkout_externals
+
+    """
+    # NOTE(bja, 2017-11) pylint complains about long method names, but
+    # it is hard to differentiate tests without making them more
+    # cryptic.
+    # pylint: disable=invalid-name
 
     # ----------------------------------------------------------------
     #
@@ -785,22 +837,115 @@ class TestSysCheckout(unittest.TestCase):
         """
         pass
 
-    # ----------------------------------------------------------------
-    #
-    # Error conditions - these tests are designed to trigger specific
-    # error conditions and ensure that they are being handled as
-    # runtime errors (and hopefully usefull error messages) instead of
-    # the default internal message that won't mean anything to the
-    # user, e.g. key error, called process error, etc.
-    #
-    # These are not 'expected failures'. They are pass when a
-    # RuntimeError is raised, fail if any other error is raised (or no
-    # error is raised).
-    #
-    # ----------------------------------------------------------------
+
+class TestSysCheckoutSVN(BaseTestSysCheckout):
+    """Run systems level tests of checkout_externals accessing svn repositories
+
+    SVN tests - these tests use the svn repository interface. Since
+    they require an active network connection, they are significantly
+    slower than the git tests. But svn testing is critical. So try to
+    design the tests to only test svn repository functionality
+    (checkout, switch) and leave generic testing of functionality like
+    'optional' to the fast git tests.
+
+    Example timing as of 2017-11:
+
+      * All other git and unit tests combined take between 4-5 seconds
+
+      * Just checking if svn is available for a single test takes 2 seconds.
+
+      * The single svn test typically takes between 5 and 25 seconds
+        (depending on the network)!
+
+    NOTE(bja, 2017-11) To enable CI testing we can't use a real remote
+    repository that restricts access and it seems inappropriate to hit
+    a random open source repo. For now we are just hitting one of our
+    own github repos using the github svn server interface. This
+    should be "good enough" for basic checkout and swich
+    functionality. But if additional svn functionality is required, a
+    better solution will be necessary. I think eventually we want to
+    create a small local svn repository on the fly (doesn't require an
+    svn server or network connection!) and use it for testing.
+
+    """
+
+    def _check_svn_branch_ok(self, tree):
+        name = './externals/svn_branch'
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_svn_tag_ok(self, tree):
+        name = './externals/svn_tag'
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_container_simple_svn_post_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_svn_branch_ok(tree)
+        self._check_svn_tag_ok(tree)
+
+    @staticmethod
+    def have_svn_access():
+        """Check if we have svn access so we can enable tests that use svn.
+
+        """
+        have_svn = False
+        cmd = ['svn', 'ls', SVN_TEST_REPO, ]
+        try:
+            execute_subprocess(cmd)
+            have_svn = True
+        except BaseException:
+            pass
+        return have_svn
+
+    def skip_if_no_svn_access(self):
+        """Function decorator to disable svn tests when svn isn't available
+        """
+        have_svn = self.have_svn_access()
+        if not have_svn:
+            raise unittest.SkipTest("No svn access")
+
+    def test_container_simple_svn(self):
+        """Verify that a container repo can pull in an svn branch and svn tag.
+
+        """
+        self.skip_if_no_svn_access()
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_svn(under_test_dir)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+
+        # verify status is clean and unmodified
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_svn_post_checkout(overall, tree)
+
+
+class TestSysCheckoutErrors(BaseTestSysCheckout):
+    """Run systems level tests of error conditions in checkout_externals
+
+    Error conditions - these tests are designed to trigger specific
+    error conditions and ensure that they are being handled as
+    runtime errors (and hopefully usefull error messages) instead of
+    the default internal message that won't mean anything to the
+    user, e.g. key error, called process error, etc.
+
+    These are not 'expected failures'. They are pass when a
+    RuntimeError is raised, fail if any other error is raised (or no
+    error is raised).
+
+    """
+
+    # NOTE(bja, 2017-11) pylint complains about long method names, but
+    # it is hard to differentiate tests without making them more
+    # cryptic.
+    # pylint: disable=invalid-name
+
     def test_error_unknown_protocol(self):
-        """Verify that a runtime error is raised when the user specified repo protocol
-        is not known.
+        """Verify that a runtime error is raised when the user specified repo
+        protocol is not known.
 
         """
         # create repo
