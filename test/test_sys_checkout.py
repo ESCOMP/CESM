@@ -289,6 +289,20 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         self._write_config(dest_dir, filename)
 
+    def update_svn_branch(self, dest_dir, name, branch, filename=CFG_NAME):
+        """Update a repository branch, and potentially the remote.
+        """
+        # pylint: disable=R0913
+        self._config.set(name, ExternalsDescription.BRANCH, branch)
+
+        try:
+            # remove the tag if it existed
+            self._config.remove_option(name, ExternalsDescription.TAG)
+        except BaseException:
+            pass
+
+        self._write_config(dest_dir, filename)
+
     def update_tag(self, dest_dir, name, tag, repo_type=None,
                    filename=CFG_NAME, remove_branch=True):
         """Update a repository tag, and potentially the remote
@@ -421,6 +435,15 @@ class BaseTestSysCheckout(unittest.TestCase):
         # pylint: disable=W0212
         GitRepository._git_clone(parent_repo_dir, dest_dir)
         return dest_dir
+
+    @staticmethod
+    def _add_file_to_repo(under_test_dir, filename):
+        """Add a file to the repository so we can put it into a dirty state
+
+        """
+        dirty_path = os.path.join(under_test_dir, filename)
+        with open(dirty_path, 'w') as tmp:
+            tmp.write('Hello, world!')
 
     @staticmethod
     def execute_cmd_in_dir(under_test_dir, args):
@@ -685,9 +708,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._check_container_simple_required_checkout(overall, tree)
 
         # add a file to the repo
-        dirty_path = os.path.join(under_test_dir, 'externals/simp_tag/tmp.txt')
-        with open(dirty_path, 'w') as tmp:
-            tmp.write('Hello, world!')
+        self._add_file_to_repo(under_test_dir, 'externals/simp_tag/tmp.txt')
 
         # checkout: pre-checkout status should be dirty, did not
         # modify working copy.
@@ -854,7 +875,7 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
 
       * Just checking if svn is available for a single test takes 2 seconds.
 
-      * The single svn test typically takes between 5 and 25 seconds
+      * The single svn test typically takes between 10 and 25 seconds
         (depending on the network)!
 
     NOTE(bja, 2017-11) To enable CI testing we can't use a real remote
@@ -873,15 +894,29 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
         name = './externals/svn_branch'
         self._check_generic_ok_clean_required(tree, name)
 
+    def _check_svn_branch_dirty(self, tree):
+        name = './externals/svn_branch'
+        self._check_generic_ok_dirty_required(tree, name)
+
     def _check_svn_tag_ok(self, tree):
         name = './externals/svn_tag'
         self._check_generic_ok_clean_required(tree, name)
+
+    def _check_svn_tag_modified(self, tree):
+        name = './externals/svn_tag'
+        self._check_generic_modified_ok_required(tree, name)
 
     def _check_container_simple_svn_post_checkout(self, overall, tree):
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree)
         self._check_svn_branch_ok(tree)
         self._check_svn_tag_ok(tree)
+
+    def _check_container_simple_svn_sb_dirty_st_mod(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_svn_tag_modified(tree)
+        self._check_svn_branch_dirty(tree)
 
     @staticmethod
     def have_svn_access():
@@ -921,6 +956,40 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
         self._check_container_simple_svn_post_checkout(overall, tree)
+
+        # update description file to make the tag into a branch and
+        # trigger a switch
+        self._generator.update_svn_branch(under_test_dir, 'svn_tag', 'trunk')
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+
+        # verify status is clean and unmodified
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_svn_post_checkout(overall, tree)
+
+        # add a file to the repo
+        self._add_file_to_repo(under_test_dir,
+                               'externals/svn_branch/tmp.txt')
+
+        # update description file to make the branch into a tag and
+        # trigger a modified status
+        self._generator.update_svn_branch(under_test_dir, 'svn_tag',
+                                          'tags/cesm2.0.beta07')
+
+        # checkout: pre-checkout status should be dirty and modified,
+        # did not modify working copy.
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_svn_sb_dirty_st_mod(overall, tree)
+
+        # verify status is still dirty and modified with verbose, last
+        # checkout did not modify working dir state.
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.verbose_args)
+        self._check_container_simple_svn_sb_dirty_st_mod(overall, tree)
 
 
 class TestSysCheckoutErrors(BaseTestSysCheckout):
