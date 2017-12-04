@@ -55,7 +55,7 @@ from .global_constants import EMPTY_STR, PPRINTER, VERSION_SEPERATOR
 # Globals
 #
 DESCRIPTION_SECTION = 'externals_description'
-VERSION_ITEM = 'version'
+VERSION_ITEM = 'schema_version'
 
 
 def read_externals_description_file(root_dir, file_name):
