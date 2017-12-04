@@ -6,7 +6,6 @@ FIXME(bja, 2017-11) External and SourceTree have a circular dependancy!
 import errno
 import logging
 import os
-import sys
 
 from .externals_description import ExternalsDescription
 from .externals_description import read_externals_description_file
@@ -174,6 +173,9 @@ class _External(object):
         if self._repo:
             self._repo.checkout(self._base_dir_path, self._repo_dir_name)
 
+    def checkout_externals(self, load_all):
+        """Checkout the sub-externals for this object
+        """
         if self._externals:
             if not self._externals_sourcetree:
                 self._create_externals_sourcetree()
@@ -275,6 +277,7 @@ class SourceTree(object):
         If load_all is False, load_comp is an optional set of components to load.
         If load_all is True and load_comp is None, only load the required externals.
         """
+        printlog('Checkout components: ', end='')
         if load_all:
             load_comps = self._all_components.keys()
         elif load_comp is not None:
@@ -282,7 +285,12 @@ class SourceTree(object):
         else:
             load_comps = self._required_compnames
 
+        # checkout the primary externals
         for comp in load_comps:
             printlog('{0}, '.format(comp), end='')
-            sys.stdout.flush()
             self._all_components[comp].checkout(load_all)
+        printlog('')
+
+        # now give each external an opportunitity to checkout it's externals.
+        for comp in load_comps:
+            self._all_components[comp].checkout_externals(load_all)

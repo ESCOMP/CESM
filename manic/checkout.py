@@ -289,7 +289,6 @@ def main(args):
             printlog(msg)
             printlog('-' * 70)
         else:
-            printlog('Checkout components: ', end='')
             source_tree.checkout(load_all)
             printlog('')
 
