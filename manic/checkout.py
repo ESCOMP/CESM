@@ -22,7 +22,7 @@ from manic.externals_description import read_externals_description_file
 from manic.externals_status import check_safe_to_update_repos
 from manic.sourcetree import SourceTree
 from manic.utils import printlog
-from manic.global_constants import PPRINTER, VERSION_SEPERATOR
+from manic.global_constants import VERSION_SEPERATOR
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
@@ -256,8 +256,6 @@ def main(args):
     root_dir = os.path.abspath(os.getcwd())
     external_data = read_externals_description_file(root_dir, args.externals)
     external = create_externals_description(external_data)
-    if args.debug:
-        PPRINTER.pprint(external)
 
     source_tree = SourceTree(root_dir, external)
     printlog('Checking status of components: ', end='')
@@ -274,7 +272,7 @@ def main(args):
             source_tree.verbose_status()
     else:
         # checkout / update the external repositories.
-        safe_to_update = check_safe_to_update_repos(tree_status, args.debug)
+        safe_to_update = check_safe_to_update_repos(tree_status)
         if not safe_to_update:
             # print status
             for comp in sorted(tree_status.keys()):
