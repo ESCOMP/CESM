@@ -71,7 +71,8 @@ def read_externals_description_file(root_dir, file_name):
     file_path = os.path.join(root_dir, file_name)
     if not os.path.exists(file_name):
         msg = ('ERROR: Model description file, "{0}", does not '
-               'exist at {1}'.format(file_name, file_path))
+               'exist at path:\n    {1}\nDid you run from the root of '
+               'the source tree?'.format(file_name, file_path))
         fatal_error(msg)
 
     externals_description = None
