@@ -6,6 +6,7 @@ Note: this script assume the path to the checkout_externals.py module is
 already in the python path.
 
 """
+# pylint: disable=too-many-lines,protected-access
 
 from __future__ import absolute_import
 from __future__ import unicode_literals
@@ -22,7 +23,12 @@ from manic.externals_description import ExternalsDescription
 from manic.externals_description import ExternalsDescriptionDict
 from manic.global_constants import EMPTY_STR
 
-# pylint: disable=W0212
+# pylint: disable=C0103
+GIT_BRANCH_OUTPUT_DETACHED_BRANCH_v1_8 = '''
+* (detached from origin/feature2) 36418b4 Work on feature2
+  master                          9b75494 [origin/master] Initialize repository.
+'''
+# pylint: enable=C0103
 
 
 GIT_BRANCH_OUTPUT_DETACHED_BRANCH = '''
@@ -122,6 +128,16 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         """
         git_output = GIT_BRANCH_OUTPUT_DETACHED_BRANCH
         expected = 'origin/feature-2'
+        result = self._repo._current_ref_from_branch_command(
+            git_output)
+        self.assertEqual(result, expected)
+
+    def test_ref_detached_branch_v1_8(self):
+        """Test that we can identify ref is detached from a remote branch
+
+        """
+        git_output = GIT_BRANCH_OUTPUT_DETACHED_BRANCH_v1_8
+        expected = 'origin/feature2'
         result = self._repo._current_ref_from_branch_command(
             git_output)
         self.assertEqual(result, expected)
@@ -604,8 +620,11 @@ class TestGitRegExp(unittest.TestCase):
     def setUp(self):
         """Common constans
         """
-        self._detached_tmpl = string.Template(
+        self._detached_git_v2_tmpl = string.Template(
             '* (HEAD detached at $ref) 36418b4 Work on feature-2')
+
+        self._detached_git_v1_tmpl = string.Template(
+            '* (detached from $ref) 36418b4 Work on feature-2')
 
         self._tracking_tmpl = string.Template(
             '* feature-2 36418b4 [$ref] Work on feature-2')
@@ -617,7 +636,11 @@ class TestGitRegExp(unittest.TestCase):
         """Test re correctly matches alphnumeric (basic debugging)
         """
         value = 'feature2'
-        input_str = self._detached_tmpl.substitute(ref=value)
+        input_str = self._detached_git_v2_tmpl.substitute(ref=value)
+        match = GitRepository.RE_DETACHED.search(input_str)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), value)
+        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
         match = GitRepository.RE_DETACHED.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
@@ -626,7 +649,11 @@ class TestGitRegExp(unittest.TestCase):
         """Test re matches with underscore
         """
         value = 'feature_2'
-        input_str = self._detached_tmpl.substitute(ref=value)
+        input_str = self._detached_git_v2_tmpl.substitute(ref=value)
+        match = GitRepository.RE_DETACHED.search(input_str)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), value)
+        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
         match = GitRepository.RE_DETACHED.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
@@ -635,7 +662,11 @@ class TestGitRegExp(unittest.TestCase):
         """Test re matches -
         """
         value = 'feature-2'
-        input_str = self._detached_tmpl.substitute(ref=value)
+        input_str = self._detached_git_v2_tmpl.substitute(ref=value)
+        match = GitRepository.RE_DETACHED.search(input_str)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), value)
+        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
         match = GitRepository.RE_DETACHED.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
@@ -644,7 +675,11 @@ class TestGitRegExp(unittest.TestCase):
         """Test re matches .
         """
         value = 'feature.2'
-        input_str = self._detached_tmpl.substitute(ref=value)
+        input_str = self._detached_git_v2_tmpl.substitute(ref=value)
+        match = GitRepository.RE_DETACHED.search(input_str)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), value)
+        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
         match = GitRepository.RE_DETACHED.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
@@ -653,7 +688,11 @@ class TestGitRegExp(unittest.TestCase):
         """Test re matches /
         """
         value = 'feature/2'
-        input_str = self._detached_tmpl.substitute(ref=value)
+        input_str = self._detached_git_v2_tmpl.substitute(ref=value)
+        match = GitRepository.RE_DETACHED.search(input_str)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), value)
+        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
         match = GitRepository.RE_DETACHED.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)

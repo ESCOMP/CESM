@@ -38,7 +38,8 @@ class GitRepository(Repository):
 
     # match XYZ of '* (HEAD detached at {XYZ}):
     # e.g. * (HEAD detached at origin/feature-2)
-    RE_DETACHED = re.compile(r'\* \([\w]+[\s]+detached at ([\w\-./]+)\)')
+    RE_DETACHED = re.compile(
+        r'\* \((?:[\w]+[\s]+)?detached (?:at|from) ([\w\-./]+)\)')
 
     # match tracking reference info, return XYZ from [XYZ]
     # e.g. [origin/master]
