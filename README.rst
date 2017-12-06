@@ -60,7 +60,7 @@ brought in to generate your sandbox. (This file serves the same purpose
 as SVN_EXTERNAL_DIRECTORIES when CESM was in a subversion repository.)
 
 NOTE: Just like svn externals, checkout_externals will always attempt
-to make the working copy exectly match the externals description. If
+to make the working copy exactly match the externals description. If
 you manually modify an external without updating CESM.cfg, e.g. switch
 to a different tag, then rerunning checkout_externals will switch you
 back to the external described in CESM.cfg. See below
