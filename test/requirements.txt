@@ -1,0 +1,5 @@
+pylint>=1.7.0
+autopep8>=1.3.0
+coverage>=4.4.0
+coveralls>=1.2.0
+sphinx>=1.6.0
