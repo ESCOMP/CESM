@@ -1,6 +1,0 @@
-[run]
-branch = True
-omit = test_ce_*.py
-       /usr/*
-       .local/*
-       */site-packages/*
