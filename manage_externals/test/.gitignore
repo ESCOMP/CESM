@@ -1,0 +1,7 @@
+# virtual environments
+env_python*
+
+# python code coverage tool output
+.coverage
+htmlcov
+

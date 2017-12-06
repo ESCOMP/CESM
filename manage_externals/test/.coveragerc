@@ -1,0 +1,7 @@
+[run]
+branch = True
+omit = test_unit_*.py
+       test_sys_*.py
+       /usr/*
+       .local/*
+       */site-packages/*
