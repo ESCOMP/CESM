@@ -3,7 +3,7 @@
 
 from .externals_description import ExternalsDescription
 from .utils import fatal_error
-from .globals import EMPTY_STR
+from .global_constants import EMPTY_STR
 
 
 class Repository(object):

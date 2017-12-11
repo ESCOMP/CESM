@@ -48,14 +48,14 @@ except ImportError:
         """
         return text
 
-from .utils import printlog, fatal_error, str_to_bool
-from .globals import EMPTY_STR, PPRINTER
+from .utils import printlog, fatal_error, str_to_bool, expand_local_url
+from .global_constants import EMPTY_STR, PPRINTER, VERSION_SEPERATOR
 
 #
 # Globals
 #
 DESCRIPTION_SECTION = 'externals_description'
-VERSION_ITEM = 'version'
+VERSION_ITEM = 'schema_version'
 
 
 def read_externals_description_file(root_dir, file_name):
@@ -71,7 +71,8 @@ def read_externals_description_file(root_dir, file_name):
     file_path = os.path.join(root_dir, file_name)
     if not os.path.exists(file_name):
         msg = ('ERROR: Model description file, "{0}", does not '
-               'exist at {1}'.format(file_name, file_path))
+               'exist at path:\n    {1}\nDid you run from the root of '
+               'the source tree?'.format(file_name, file_path))
         fatal_error(msg)
 
     externals_description = None
@@ -134,10 +135,16 @@ def get_cfg_schema_version(model_cfg):
     # build/pre-release metadata for now!
     version_list = re.split(r'[-+]', semver_str)
     version_str = version_list[0]
-    version = version_str.split('.')
-    major = int(version[0].strip())
-    minor = int(version[1].strip())
-    patch = int(version[2].strip())
+    version = version_str.split(VERSION_SEPERATOR)
+    try:
+        major = int(version[0].strip())
+        minor = int(version[1].strip())
+        patch = int(version[2].strip())
+    except ValueError:
+        msg = ('Config file schema version must have integer digits for '
+               'major, minor and patch versions. '
+               'Received "{0}"'.format(version_str))
+        fatal_error(msg)
     return major, minor, patch
 
 
@@ -199,34 +206,38 @@ class ExternalsDescription(dict):
     def _check_data(self):
         """Check user supplied data is valid where possible.
         """
-        for field in self.keys():
-            if (self[field][self.REPO][self.PROTOCOL]
+        for ext_name in self.keys():
+            if (self[ext_name][self.REPO][self.PROTOCOL]
                     not in self.KNOWN_PRROTOCOLS):
                 msg = 'Unknown repository protocol "{0}" in "{1}".'.format(
-                    self[field][self.REPO][self.PROTOCOL], field)
+                    self[ext_name][self.REPO][self.PROTOCOL], ext_name)
                 fatal_error(msg)
 
-            if (self[field][self.REPO][self.PROTOCOL]
+            if (self[ext_name][self.REPO][self.PROTOCOL]
                     != self.PROTOCOL_EXTERNALS_ONLY):
-                if (self[field][self.REPO][self.TAG] and
-                        self[field][self.REPO][self.BRANCH]):
+                if (self[ext_name][self.REPO][self.TAG] and
+                        self[ext_name][self.REPO][self.BRANCH]):
                     msg = ('Model description is over specified! Can not '
                            'have both "tag" and "branch" in repo '
-                           'description for "{0}"'.format(field))
+                           'description for "{0}"'.format(ext_name))
                     fatal_error(msg)
 
-                if (not self[field][self.REPO][self.TAG] and
-                        not self[field][self.REPO][self.BRANCH]):
+                if (not self[ext_name][self.REPO][self.TAG] and
+                        not self[ext_name][self.REPO][self.BRANCH]):
                     msg = ('Model description is under specified! Must have '
                            'either "tag" or "branch" in repo '
-                           'description for "{0}"'.format(field))
+                           'description for "{0}"'.format(ext_name))
                     fatal_error(msg)
 
-                if not self[field][self.REPO][self.REPO_URL]:
+                if not self[ext_name][self.REPO][self.REPO_URL]:
                     msg = ('Model description is under specified! Must have '
                            'either "repo_url" in repo '
-                           'description for "{0}"'.format(field))
+                           'description for "{0}"'.format(ext_name))
                     fatal_error(msg)
+
+                url = expand_local_url(
+                    self[ext_name][self.REPO][self.REPO_URL], ext_name)
+                self[ext_name][self.REPO][self.REPO_URL] = url
 
     def _check_optional(self):
         """Some fields like externals, repo:tag repo:branch are
@@ -354,7 +365,8 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
             self[name] = {}
             self[name].update(list_to_dict(cfg_data.items(section)))
             self[name][self.REPO] = {}
-            for item in self[name].keys():
+            loop_keys = self[name].copy().keys()
+            for item in loop_keys:
                 if item in self._source_schema:
                     if isinstance(self._source_schema[item], bool):
                         self[name][item] = str_to_bool(self[name][item])

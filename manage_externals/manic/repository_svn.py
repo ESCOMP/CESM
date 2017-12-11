@@ -5,21 +5,34 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
 
-import logging
 import os
 import re
-import subprocess
 import xml.etree.ElementTree as ET
 
 from .repository import Repository
-from .externalstatus import ExternalStatus
+from .externals_status import ExternalStatus
 from .utils import fatal_error, log_process_output
-from .utils import check_output, execute_subprocess
+from .utils import execute_subprocess
 
 
 class SvnRepository(Repository):
     """
     Class to represent and operate on a repository description.
+
+    For testing purpose, all system calls to svn should:
+
+    * be isolated in separate functions with no application logic
+      * of the form:
+         - cmd = ['svn', ...]
+         - value = execute_subprocess(cmd, output_to_caller={T|F},
+                                      status_to_caller={T|F})
+         - return value
+      * be static methods (not rely on self)
+      * name as _svn_subcommand_args(user_args)
+
+    This convention allows easy unit testing of the repository logic
+    by mocking the specific calls to return predefined results.
+
     """
     RE_URLLINE = re.compile(r'^URL:')
 
@@ -36,22 +49,11 @@ class SvnRepository(Repository):
             msg = "DEV_ERROR in svn repository. Shouldn't be here!"
             fatal_error(msg)
 
-    def status(self, stat, repo_dir_path):
-        """
-        Check and report the status of the repository
-        """
-        self.svn_check_sync(stat, repo_dir_path)
-        if os.path.exists(repo_dir_path):
-            self.svn_status(stat, repo_dir_path)
-        return stat
-
-    def verbose_status(self, repo_dir_path):
-        """Display the raw repo status to the user.
-
-        """
-        if os.path.exists(repo_dir_path):
-            self.svn_status_verbose(repo_dir_path)
-
+    # ----------------------------------------------------------------
+    #
+    # Public API, defined by Repository
+    #
+    # ----------------------------------------------------------------
     def checkout(self, base_dir_path, repo_dir_name):
         """Checkout or update the working copy
 
@@ -64,42 +66,54 @@ class SvnRepository(Repository):
         """
         repo_dir_path = os.path.join(base_dir_path, repo_dir_name)
         if os.path.exists(repo_dir_path):
-            self._svn_switch(repo_dir_path)
+            cwd = os.getcwd()
+            os.chdir(repo_dir_path)
+            self._svn_switch(self._url)
+            os.chdir(cwd)
         else:
-            self._svn_checkout(repo_dir_path)
+            self._svn_checkout(self._url, repo_dir_path)
 
-    def _svn_checkout(self, repo_dir_path):
+    def status(self, stat, repo_dir_path):
         """
-        Checkout a subversion repository (repo_url) to checkout_dir.
+        Check and report the status of the repository
         """
-        cmd = ['svn', 'checkout', self._url, repo_dir_path]
-        execute_subprocess(cmd)
+        self._check_sync(stat, repo_dir_path)
+        if os.path.exists(repo_dir_path):
+            self._status_summary(stat, repo_dir_path)
+        return stat
 
-    def _svn_switch(self, repo_dir_path):
+    def verbose_status(self, repo_dir_path):
+        """Display the raw repo status to the user.
+
         """
-        Switch branches for in an svn sandbox
+        if os.path.exists(repo_dir_path):
+            self._status_verbose(repo_dir_path)
+
+    # ----------------------------------------------------------------
+    #
+    # Internal work functions
+    #
+    # ----------------------------------------------------------------
+    def _check_sync(self, stat, repo_dir_path):
+        """Check to see if repository directory exists and is at the expected
+        url.  Return: status object
+
         """
-        cwd = os.getcwd()
-        os.chdir(repo_dir_path)
-        cmd = ['svn', 'switch', self._url]
-        execute_subprocess(cmd)
-        os.chdir(cwd)
+        if not os.path.exists(repo_dir_path):
+            # NOTE(bja, 2017-10) this state should have been handled by
+            # the source object and we never get here!
+            stat.sync_state = ExternalStatus.STATUS_ERROR
+        else:
+            svn_output = self._svn_info(repo_dir_path)
+            if not svn_output:
+                # directory exists, but info returned nothing. .svn
+                # directory removed or incomplete checkout?
+                stat.sync_state = ExternalStatus.UNKNOWN
+            else:
+                stat.sync_state = self._check_url(svn_output, self._url)
 
     @staticmethod
-    def svn_info(repo_dir_path):
-        """Return results of svn info command
-        """
-        cmd = ['svn', 'info', repo_dir_path]
-        try:
-            output = check_output(cmd)
-            log_process_output(output)
-        except subprocess.CalledProcessError as error:
-            logging.info(error)
-            output = ''
-        return output
-
-    @staticmethod
-    def svn_check_url(svn_output, expected_url):
+    def _check_url(svn_output, expected_url):
         """Determine the svn url from svn info output and return whether it
         matches the expected value.
 
@@ -117,32 +131,25 @@ class SvnRepository(Repository):
             status = ExternalStatus.MODEL_MODIFIED
         return status
 
-    def svn_check_sync(self, stat, repo_dir_path):
-        """Check to see if repository directory exists and is at the expected
-        url.  Return: status object
+    def _status_summary(self, stat, repo_dir_path):
+        """Report whether the svn repository is in-sync with the model
+        description and whether the sandbox is clean or dirty.
 
         """
-        if not os.path.exists(repo_dir_path):
-            # NOTE(bja, 2017-10) this state should have been recorded by
-            # the source object and we never get here!
-            stat.sync_state = ExternalStatus.STATUS_ERROR
+        svn_output = self._svn_status_xml(repo_dir_path)
+        is_dirty = self.xml_status_is_dirty(svn_output)
+        if is_dirty:
+            stat.clean_state = ExternalStatus.DIRTY
         else:
-            svn_output = self.svn_info(repo_dir_path)
-            if not svn_output:
-                # directory exists, but info returned nothing. .svn
-                # directory removed or incomplete checkout?
-                stat.sync_state = ExternalStatus.UNKNOWN
-            else:
-                stat.sync_state = self.svn_check_url(svn_output, self._url)
+            stat.clean_state = ExternalStatus.STATUS_OK
 
-    @staticmethod
-    def _svn_status_xml(repo_dir_path):
+    def _status_verbose(self, repo_dir_path):
+        """Display the raw svn status output to the user.
+
         """
-        Get status of the subversion sandbox in repo_dir
-        """
-        cmd = ['svn', 'status', '--xml', repo_dir_path]
-        svn_output = check_output(cmd)
-        return svn_output
+        svn_output = self._svn_status_verbose(repo_dir_path)
+        log_process_output(svn_output)
+        print(svn_output)
 
     @staticmethod
     def xml_status_is_dirty(svn_output):
@@ -173,30 +180,53 @@ class SvnRepository(Repository):
                 is_dirty = True
         return is_dirty
 
-    def svn_status(self, stat, repo_dir_path):
-        """Report whether the svn repository is in-sync with the model
-        description and whether the sandbox is clean or dirty.
-
+    # ----------------------------------------------------------------
+    #
+    # system call to svn for information gathering
+    #
+    # ----------------------------------------------------------------
+    @staticmethod
+    def _svn_info(repo_dir_path):
+        """Return results of svn info command
         """
-        svn_output = self._svn_status_xml(repo_dir_path)
-        is_dirty = self.xml_status_is_dirty(svn_output)
-        if is_dirty:
-            stat.clean_state = ExternalStatus.DIRTY
-        else:
-            stat.clean_state = ExternalStatus.STATUS_OK
+        cmd = ['svn', 'info', repo_dir_path]
+        output = execute_subprocess(cmd, output_to_caller=True)
+        return output
 
     @staticmethod
     def _svn_status_verbose(repo_dir_path):
         """capture the full svn status output
         """
         cmd = ['svn', 'status', repo_dir_path]
-        svn_output = check_output(cmd)
+        svn_output = execute_subprocess(cmd, output_to_caller=True)
         return svn_output
 
-    def svn_status_verbose(self, repo_dir_path):
-        """Display the raw svn status output to the user.
-
+    @staticmethod
+    def _svn_status_xml(repo_dir_path):
         """
-        svn_output = self._svn_status_verbose(repo_dir_path)
-        log_process_output(svn_output)
-        print(svn_output)
+        Get status of the subversion sandbox in repo_dir
+        """
+        cmd = ['svn', 'status', '--xml', repo_dir_path]
+        svn_output = execute_subprocess(cmd, output_to_caller=True)
+        return svn_output
+
+    # ----------------------------------------------------------------
+    #
+    # system call to svn for sideffects modifying the working tree
+    #
+    # ----------------------------------------------------------------
+    @staticmethod
+    def _svn_checkout(url, repo_dir_path):
+        """
+        Checkout a subversion repository (repo_url) to checkout_dir.
+        """
+        cmd = ['svn', 'checkout', url, repo_dir_path]
+        execute_subprocess(cmd)
+
+    @staticmethod
+    def _svn_switch(url):
+        """
+        Switch branches for in an svn sandbox
+        """
+        cmd = ['svn', 'switch', url]
+        execute_subprocess(cmd)

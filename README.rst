@@ -39,11 +39,11 @@ To obtain the CESM2.0 code you need to do the following:
 
       > git checkout cesm2.0.beta07
 
-#. Run the script **manage_externals/checkout_externals.py**. ::
+#. Run the script **manage_externals/checkout_externals**. ::
 
-      > ./manage_externals/checkout_externals.py
+      > ./manage_externals/checkout_externals
 
-   The **checkout_externals.py** script is a package manager that will
+   The **checkout_externals** script is a package manager that will
    populate the cesm directory with the relevant versions of each of the
    components along with the CIME infrastructure code.
 
@@ -51,15 +51,22 @@ At this point you have a working version of CESM.
 
 To see full details of how to set up a case, compile and run, see the CIME documentation at http://esmci.github.io/cime/ .
 
-More details on checkout_externals.py
--------------------------------------
+More details on checkout_externals
+----------------------------------
 
 The file **CESM.cfg** in your top-level CESM directory tells
-**checkout_externals.py** which tag/branch of each component should be
+**checkout_externals** which tag/branch of each component should be
 brought in to generate your sandbox. (This file serves the same purpose
 as SVN_EXTERNAL_DIRECTORIES when CESM was in a subversion repository.)
 
-**You need to rerun checkout_externals.py whenever CESM.cfg has
+NOTE: Just like svn externals, checkout_externals will always attempt
+to make the working copy exactly match the externals description. If
+you manually modify an external without updating CESM.cfg, e.g. switch
+to a different tag, then rerunning checkout_externals will switch you
+back to the external described in CESM.cfg. See below
+documentation `Customizing your CESM sandbox`_ for more details.
+
+**You need to rerun checkout_externals whenever CESM.cfg has
 changed** (unless you have already manually updated the relevant
 external(s) to have the correct branch/tag checked out). Common times
 when this is needed are:
@@ -69,17 +76,17 @@ when this is needed are:
 * After merging some other CESM branch/tag into your currently
   checked-out branch
 
-**checkout_externals.py** must be run from the root of the source
+**checkout_externals** must be run from the root of the source
 tree. For example, if you cloned CESM with::
 
   > git clone https://github.com/escomp/cesm.git my_cesm_sandbox
 
-then you must run **checkout_externals.py** from
+then you must run **checkout_externals** from
 ``/path/to/my_cesm_sandbox``.
 
-To see more details of **checkout_externals.py**, issue ::
+To see more details of **checkout_externals**, issue ::
 
-  > ./manage_externals/checkout_externals.py --help
+  > ./manage_externals/checkout_externals --help
 
 Customizing your CESM sandbox
 =============================
@@ -95,7 +102,7 @@ checked out cesm2.0.beta07 but really wanted to have cesm2.0.beta08;
 you would simply do the following::
 
   > git checkout cesm2.0.beta08
-  > ./manage_externals/checkout_externals.py
+  > ./manage_externals/checkout_externals
 
 You should **not** use this method if you have made any source code
 changes, or if you have any ongoing CESM cases that were created from
@@ -122,7 +129,7 @@ Each entry specifies either a tag or a branch. To point to a new tag:
 
 #. Checkout the new component(s)::
 
-     > ./manage_externals/checkout_externals.py
+     > ./manage_externals/checkout_externals
 
 Keep in mind that changing individual components from a tag may result
 in an invalid model (won't compile, won't run, not scientifically
@@ -165,7 +172,7 @@ CAM as an example):
 
 #. Checkout your branch::
 
-     > ./manage_externals/checkout_externals.py
+     > ./manage_externals/checkout_externals
 
 It's a good idea to commit your **CESM.cfg** file changes. See the above
 documentation, `Committing your change to CESM.cfg`_.

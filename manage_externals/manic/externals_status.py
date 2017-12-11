@@ -8,8 +8,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from .globals import EMPTY_STR
-from .utils import printlog
+from .global_constants import EMPTY_STR
 
 
 class ExternalStatus(object):
@@ -109,7 +108,7 @@ class ExternalStatus(object):
         return exists
 
 
-def check_safe_to_update_repos(tree_status, debug):
+def check_safe_to_update_repos(tree_status):
     """Check if *ALL* repositories are in a safe state to update. We don't
     want to do a partial update of the repositories then die, leaving
     the model in an inconsistent state.
@@ -122,10 +121,6 @@ def check_safe_to_update_repos(tree_status, debug):
     safe_to_update = True
     for comp in tree_status:
         stat = tree_status[comp]
-        if debug:
-            printlog('{0} - {1} sync {2} clean {3}'.format(
-                comp, stat.safe_to_update(), stat.sync_state,
-                stat.clean_state))
-
         safe_to_update &= stat.safe_to_update()
+
     return safe_to_update
