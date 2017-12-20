@@ -39,6 +39,11 @@ To obtain the CESM2.0 code you need to do the following:
 
       git checkout cesm2.0.beta07
 
+   (It is normal and expected to get a message about being in 'detached
+   HEAD' state. For now you can ignore this, but it becomes important if
+   you want to make changes to your CESM.cfg file and commit those
+   changes to a branch.)
+
 #. Run the script **manage_externals/checkout_externals**. ::
 
       ./manage_externals/checkout_externals
