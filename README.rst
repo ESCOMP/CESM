@@ -10,6 +10,8 @@ This repository provides tools for managing the external components that
 make up a CESM tag - alpha, beta and release. CESM tag creation should
 be coordinated through CSEG at NCAR.
 
+See the file ``REQUIREMENTS.rst`` for a list of software requirements.
+
 .. sectnum::
 
 .. contents::
