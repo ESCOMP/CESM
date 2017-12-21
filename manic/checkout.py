@@ -258,7 +258,7 @@ def main(args):
     external = create_externals_description(external_data)
 
     source_tree = SourceTree(root_dir, external)
-    printlog('Checking status of components: ', end='')
+    printlog('Checking status of externals: ', end='')
     tree_status = source_tree.status()
     printlog('')
 

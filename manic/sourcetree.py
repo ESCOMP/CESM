@@ -277,7 +277,7 @@ class SourceTree(object):
         If load_all is False, load_comp is an optional set of components to load.
         If load_all is True and load_comp is None, only load the required externals.
         """
-        printlog('Checkout components: ', end='')
+        printlog('Checking out externals: ', end='')
         if load_all:
             load_comps = self._all_components.keys()
         elif load_comp is not None:
