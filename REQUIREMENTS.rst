@@ -11,11 +11,11 @@ Installing, building and running CESM requires:
 
 * git client version 1.8 or newer
 
-* subversion client version ??? or newer
+* subversion client (we have tested with versions 1.6.11 and newer)
 
 * python2 version 2.7 or newer
 
-* perl version ??? or newer
+* perl version 5
 
 * build tools gmake and cmake
 
@@ -52,16 +52,6 @@ We regularly test CESM with the following Fortran compiler versions:
 * PGI (pgfortran) versions ???
     
 * NAG (nagfor) versions ???
-
-* Others???
-
-The following relatively recent compiler versions are known to have
-problems building and running at least some CESM configurations. **Do
-not try to use these compiler versions:**
-
-* Intel (ifort) versions 16.x
-
-* PGI (pgfortran) versions ???
 
 * Others???
 
