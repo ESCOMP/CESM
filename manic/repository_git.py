@@ -226,7 +226,7 @@ class GitRepository(Repository):
                 remote_name = self._determine_remote_name()
                 if not remote_name:
                     # git doesn't know about this remote. by definition
-                    # this is a modefied state.
+                    # this is a modified state.
                     stat.sync_state = ExternalStatus.MODEL_MODIFIED
                 else:
                     expected_ref = "{0}/{1}".format(remote_name, self._branch)

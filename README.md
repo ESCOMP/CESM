@@ -96,7 +96,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
       * column three shows how the repository is managed, optional or required
 
     Colunm one will be one of these values:
-      * m : modified : repository is modefied compared to the externals description
+      * m : modified : repository is modified compared to the externals description
       * e : empty : directory does not exist - checkout_externals has not been run
       * ? : unknown : directory exists but .git or .svn directories are missing
 
@@ -153,6 +153,8 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     'src'.
 
   * tag (string) : tag to checkout
+
+    This can also be a git SHA-1
 
   * branch (string) : branch to checkout
 
