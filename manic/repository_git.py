@@ -520,10 +520,12 @@ class GitRepository(Repository):
         * modified files
         * missing files
         * added files
-        * untracked files
         * removed
         * renamed
         * unmerged
+
+        Whether untracked files are considered depends on how the status
+        command was run (i.e., whether it was run with the '-u' option).
 
         NOTE: Based on the above definition, the porcelain status
         should be an empty string to be considered 'clean'. Of course
@@ -600,11 +602,13 @@ class GitRepository(Repository):
     def _git_status_porcelain_v1z():
         """Run git status to obtain repository information.
 
-        The machine parable format that is guarenteed not to change
+        This is run with '--untracked=no' to ignore untracked files.
+
+        The machine-portable format that is guaranteed not to change
         between git versions or *user configuration*.
 
         """
-        cmd = ['git', 'status', '--porcelain', '-z']
+        cmd = ['git', 'status', '--untracked-files=no', '--porcelain', '-z']
         git_output = execute_subprocess(cmd, output_to_caller=True)
         return git_output
 

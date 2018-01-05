@@ -193,13 +193,15 @@ then rerun checkout_externals.
         * added files
         * deleted files
         * missing files
-        * unversioned files
 
-        The only acceptable state returned from svn is 'external'
+        Unversioned files do not affect the clean/dirty status.
+
+        'external' is also an acceptable state
 
         """
         # pylint: disable=invalid-name
         SVN_EXTERNAL = 'external'
+        SVN_UNVERSIONED = 'unversioned'
         # pylint: enable=invalid-name
 
         is_dirty = False
@@ -209,8 +211,13 @@ then rerun checkout_externals.
         for entry in entries:
             status = entry.find('./wc-status')
             item = status.get('item')
-            if item != SVN_EXTERNAL:
+            if item == SVN_EXTERNAL:
+                continue
+            if item == SVN_UNVERSIONED:
+                continue
+            else:
                 is_dirty = True
+                break
         return is_dirty
 
     # ----------------------------------------------------------------

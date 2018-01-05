@@ -496,13 +496,26 @@ class BaseTestSysCheckout(unittest.TestCase):
         return dest_dir
 
     @staticmethod
-    def _add_file_to_repo(under_test_dir, filename):
+    def _add_file_to_repo(under_test_dir, filename, tracked):
         """Add a file to the repository so we can put it into a dirty state
 
         """
-        dirty_path = os.path.join(under_test_dir, filename)
-        with open(dirty_path, 'w') as tmp:
+        cwd = os.getcwd()
+        os.chdir(under_test_dir)
+        with open(filename, 'w') as tmp:
             tmp.write('Hello, world!')
+
+        if tracked:
+            # NOTE(bja, 2018-01) brittle hack to obtain repo dir and
+            # file name
+            path_data = filename.split('/')
+            repo_dir = os.path.join(path_data[0], path_data[1])
+            os.chdir(repo_dir)
+            tracked_file = path_data[2]
+            cmd = ['git', 'add', tracked_file]
+            execute_subprocess(cmd)
+
+        os.chdir(cwd)
 
     @staticmethod
     def execute_cmd_in_dir(under_test_dir, args):
@@ -791,7 +804,9 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._check_container_simple_required_checkout(overall, tree)
 
         # add a file to the repo
-        self._add_file_to_repo(under_test_dir, 'externals/simp_tag/tmp.txt')
+        tracked = True
+        self._add_file_to_repo(under_test_dir, 'externals/simp_tag/tmp.txt',
+                               tracked)
 
         # checkout: pre-checkout status should be dirty, did not
         # modify working copy.
@@ -803,6 +818,35 @@ class TestSysCheckout(BaseTestSysCheckout):
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
         self._check_container_simple_optional_st_dirty(overall, tree)
+
+    def test_container_simple_untracked(self):
+        """Verify that a container with simple subrepos and a untracked files
+        is not considered 'dirty' and will attempt an update.
+
+        """
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
+
+        # add a file to the repo
+        tracked = False
+        self._add_file_to_repo(under_test_dir, 'externals/simp_tag/tmp.txt',
+                               tracked)
+
+        # checkout: pre-checkout status should be clean, ignoring the
+        # untracked file.
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
+
+        # verify status is still clean
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
 
     def test_container_remote_branch(self):
         """Verify that a container with remote branch change works
@@ -1056,6 +1100,12 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
         self._check_svn_tag_modified(tree)
         self._check_svn_branch_dirty(tree)
 
+    def _check_container_simple_svn_sb_clean_st_mod(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_svn_tag_modified(tree)
+        self._check_svn_branch_ok(tree)
+
     @staticmethod
     def have_svn_access():
         """Check if we have svn access so we can enable tests that use svn.
@@ -1108,26 +1158,33 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_simple_svn_post_checkout(overall, tree)
 
-        # add a file to the repo
+        # add an untracked file to the repo
+        tracked = False
         self._add_file_to_repo(under_test_dir,
-                               'externals/svn_branch/tmp.txt')
+                               'externals/svn_branch/tmp.txt', tracked)
+
+        # run a no-op checkout: pre-checkout status should be clean,
+        # ignoring the untracked file.
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_svn_post_checkout(overall, tree)
 
         # update description file to make the branch into a tag and
-        # trigger a modified status
+        # trigger a modified sync status
         self._generator.update_svn_branch(under_test_dir, 'svn_tag',
                                           'tags/cesm2.0.beta07')
 
-        # checkout: pre-checkout status should be dirty and modified,
-        # did not modify working copy.
+        # checkout: pre-checkout status should be clean and modified,
+        # will modify working copy.
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.checkout_args)
-        self._check_container_simple_svn_sb_dirty_st_mod(overall, tree)
+        self._check_container_simple_svn_sb_clean_st_mod(overall, tree)
 
-        # verify status is still dirty and modified with verbose, last
-        # checkout did not modify working dir state.
+        # verify status is still clean and unmodified, last
+        # checkout modified the working dir state.
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.verbose_args)
-        self._check_container_simple_svn_sb_dirty_st_mod(overall, tree)
+        self._check_container_simple_svn_post_checkout(overall, tree)
 
 
 class TestSysCheckoutErrors(BaseTestSysCheckout):

@@ -749,6 +749,7 @@ class TestGitRegExp(unittest.TestCase):
 class TestGitStatusPorcelain(unittest.TestCase):
     """Test parsing of output from git status --porcelain=v1 -z
     """
+    # pylint: disable=C0103
     GIT_STATUS_PORCELAIN_V1_ALL = (
         r' D INSTALL\0MM Makefile\0M README.md\0R  cmakelists.txt\0'
         r'CMakeLists.txt\0D  commit-message-template.txt\0A  stuff.txt\0'

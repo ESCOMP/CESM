@@ -93,8 +93,8 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     If there are *any* modifications to *any* working copy according
     to the git or svn 'status' command, %(prog)s
     will not update any external repositories. Modifications
-    include: modified files, added files, removed files, missing
-    files or untracked files,
+    include: modified files, added files, removed files, or missing
+    files.
 
   * Checkout all required components from a user specified externals
     description file:
