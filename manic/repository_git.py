@@ -653,7 +653,7 @@ class GitRepository(Repository):
     def _git_fetch(remote_name):
         """Run the git fetch command to for the side effect of updating the repo
         """
-        cmd = ['git', 'fetch', remote_name]
+        cmd = ['git', 'fetch', '--tags', remote_name]
         execute_subprocess(cmd)
 
     @staticmethod

@@ -831,9 +831,11 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_simple_required_post_checkout(overall, tree)
 
-    def test_container_remote_tag(self):
+    def test_container_remote_tag_same_branch(self):
         """Verify that a container with remote tag change works. The new tag
-        should not be in the original repo, only the new remote fork.
+        should not be in the original repo, only the new remote
+        fork. The new tag is automatically fetched because it is on
+        the branch.
 
         """
         # create repo
@@ -850,6 +852,44 @@ class TestSysCheckout(BaseTestSysCheckout):
         # repo!
         self._generator.update_tag(under_test_dir, 'simp_branch',
                                    'forked-feature-v1', SIMPLE_FORK_NAME)
+
+        # status of simp_branch should be out of sync
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_sb_modified(overall, tree)
+
+        # checkout new externals
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_sb_modified(overall, tree)
+
+        # status should be synced
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
+
+    def test_container_remote_tag_fetch_all(self):
+        """Verify that a container with remote tag change works. The new tag
+        should not be in the original repo, only the new remote
+        fork. It should also not be on a branch that will be fetch,
+        and therefore not fetched by default with 'git fetch'. It will
+        only be retreived by 'git fetch --tags'
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
+
+        # update the config file to point to a different remote with
+        # the tag instead of branch. Tag MUST NOT be in the original
+        # repo!
+        self._generator.update_tag(under_test_dir, 'simp_branch',
+                                   'abandoned-feature', SIMPLE_FORK_NAME)
 
         # status of simp_branch should be out of sync
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
