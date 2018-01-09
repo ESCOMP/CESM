@@ -79,12 +79,12 @@ class GitRepository(Repository):
         if os.path.exists(repo_dir_path):
             self._status_summary(stat, repo_dir_path)
 
-    def verbose_status(self, repo_dir_path):
+    def verbose_status_dump(self, repo_dir_path):
         """Display the raw repo status to the user.
 
         """
         if os.path.exists(repo_dir_path):
-            self._status_verbose(repo_dir_path)
+            self._status_verbose_dump(repo_dir_path)
 
     # ----------------------------------------------------------------
     #
@@ -507,7 +507,7 @@ class GitRepository(Repository):
         else:
             stat.clean_state = ExternalStatus.STATUS_OK
 
-    def _status_verbose(self, repo_dir_path):
+    def _status_verbose_dump(self, repo_dir_path):
         """Display raw git status output to the user
 
         """

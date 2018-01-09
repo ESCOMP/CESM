@@ -280,7 +280,7 @@ def main(args):
             printlog(msg)
         if args.verbose:
             # user requested verbose status dump of the git/svn status commands
-            source_tree.verbose_status()
+            source_tree.verbose_status_dump()
     else:
         # checkout / update the external repositories.
         safe_to_update = check_safe_to_update_repos(tree_status)

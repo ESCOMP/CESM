@@ -131,7 +131,7 @@ class _External(object):
 
         return all_stats
 
-    def verbose_status(self):
+    def verbose_status_dump(self):
         """Display the verbose status to the user. This is just the raw output
         from the repository 'status' command.
 
@@ -144,7 +144,7 @@ class _External(object):
             cwd = os.getcwd()
             os.chdir(self._repo_dir_path)
             if self._repo:
-                self._repo.verbose_status(self._repo_dir_path)
+                self._repo.verbose_status_dump(self._repo_dir_path)
             os.chdir(cwd)
 
     def checkout(self, load_all):
@@ -259,14 +259,14 @@ class SourceTree(object):
 
         return summary
 
-    def verbose_status(self):
+    def verbose_status_dump(self):
         """Display verbose status to the user. This is just the raw output of
         the git and svn status commands.
 
         """
         load_comps = self._all_components.keys()
         for comp in load_comps:
-            self._all_components[comp].verbose_status()
+            self._all_components[comp].verbose_status_dump()
 
     def checkout(self, load_all, load_comp=None):
         """
