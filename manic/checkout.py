@@ -22,7 +22,7 @@ from manic.externals_description import read_externals_description_file
 from manic.externals_status import check_safe_to_update_repos
 from manic.sourcetree import SourceTree
 from manic.utils import printlog
-from manic.global_constants import VERSION_SEPERATOR
+from manic.global_constants import VERSION_SEPERATOR, LOG_FILE_NAME
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
@@ -231,6 +231,9 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
                         help='DEVELOPER: output additional debugging '
                         'information to the screen and log file.')
 
+    parser.add_argument('--no-logging', action='store_true',
+                        help='DEVELOPER: disable logging.')
+
     if args:
         options = parser.parse_args(args)
     else:
@@ -249,6 +252,12 @@ def main(args):
     Parse externals file and load required repositories or all repositories if
     the --all option is passed.
     """
+    if not args.no_logging:
+        logging.basicConfig(filename=LOG_FILE_NAME,
+                            format='%(levelname)s : %(asctime)s : %(message)s',
+                            datefmt='%Y-%m-%d %H:%M:%S',
+                            level=logging.DEBUG)
+
     logging.info('Begining of checkout_externals')
 
     load_all = False

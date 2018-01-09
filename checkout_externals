@@ -10,7 +10,6 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
 
-import logging
 import sys
 import traceback
 
@@ -26,11 +25,6 @@ if sys.hexversion < 0x02070000:
 
 
 if __name__ == '__main__':
-    logging.basicConfig(filename=manic.global_constants.LOG_FILE_NAME,
-                        format='%(levelname)s : %(asctime)s : %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S',
-                        level=logging.DEBUG)
-
     ARGS = manic.checkout.commandline_arguments()
     try:
         RET_STATUS, _ = manic.checkout.main(ARGS)
