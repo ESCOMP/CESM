@@ -14,6 +14,7 @@ from __future__ import print_function
 import os
 import unittest
 
+from manic.utils import last_n_lines, indent_string
 from manic.utils import str_to_bool, execute_subprocess
 from manic.utils import is_remote_url, split_remote_url, expand_local_url
 
@@ -49,6 +50,66 @@ class TestExecuteSubprocess(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             execute_subprocess(cmd, status_to_caller=False)
 
+class TestLastNLines(unittest.TestCase):
+    """Test the last_n_lines function.
+
+    """
+
+    def test_last_n_lines_short(self):
+        """With a message with <= n lines, result of last_n_lines should
+        just be the original message.
+
+        """
+        mystr = """three
+line
+string
+"""
+
+        mystr_truncated = last_n_lines(mystr, 3, truncation_message='[truncated]')
+        self.assertEqual(mystr, mystr_truncated)
+
+    def test_last_n_lines_long(self):
+        """With a message with > n lines, result of last_n_lines should
+        be a truncated string.
+
+        """
+        mystr = """a
+big
+five
+line
+string
+"""
+        expected = """[truncated]
+five
+line
+string
+"""
+
+        mystr_truncated = last_n_lines(mystr, 3, truncation_message='[truncated]')
+        self.assertEqual(expected, mystr_truncated)
+
+class TestIndentStr(unittest.TestCase):
+    """Test the indent_string function.
+
+    """
+
+    def test_indent_string_singleline(self):
+        mystr = 'foo'
+        result = indent_string(mystr, 4)
+        expected = '    foo'
+        self.assertEqual(expected, result)
+
+    def test_indent_string_multiline(self):
+        mystr = """hello
+hi
+goodbye
+"""
+        result = indent_string(mystr, 2)
+        expected = """  hello
+  hi
+  goodbye
+"""
+        self.assertEqual(expected, result)
 
 class TestStrToBool(unittest.TestCase):
     """Test the string to boolean conversion routine.

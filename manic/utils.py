@@ -18,7 +18,7 @@ from .global_constants import LOCAL_PATH_INDICATOR, LOG_FILE_NAME
 
 # ---------------------------------------------------------------------
 #
-# screen and logging output
+# screen and logging output and functions to massage text for output
 #
 # ---------------------------------------------------------------------
 
@@ -47,6 +47,48 @@ def printlog(msg, **kwargs):
         print(msg)
     sys.stdout.flush()
 
+def last_n_lines(the_string, n_lines, truncation_message=None):
+    """Returns the last n lines of the given string
+
+    Args:
+        the_string: str
+        n_lines: int
+        truncation_message: str, optional
+
+    Returns a string containing the last n lines of the_string
+
+    If truncation_message is provided, the returned string begins with
+    the given message if and only if the string is less than n lines to
+    begin with.
+    """
+
+    lines = the_string.splitlines(True)
+    if len(lines) <= n_lines:
+        return the_string
+    else:
+        lines_subset = lines[-n_lines:]
+        str_truncated = ''.join(lines_subset)
+        if truncation_message:
+            str_truncated = truncation_message + '\n' + str_truncated
+        return str_truncated
+
+def indent_string(the_string, indent_level):
+    """Indents the given string by a given number of spaces
+
+    Args:
+       the_string: str
+       indent_level: int
+
+    Returns a new string that is the same as the_string, except that
+    each line is indented by 'indent_level' spaces.
+    
+    In python3, this can be done with textwrap.indent.
+    """
+
+    lines = the_string.splitlines(True)
+    padding = ' '*indent_level
+    lines_indented = [padding + line for line in lines]
+    return ''.join(lines_indented)
 
 # ---------------------------------------------------------------------
 #
@@ -199,10 +241,12 @@ def execute_subprocess(commands, status_to_caller=False,
         # responsibility determine if an error occurred and handle it
         # appropriately.
         if not return_to_caller:
+            msg_context = ('Process did not run successfully; '
+                           'returned status {0}'.format(error.returncode))
             msg = failed_command_msg(
-                'Called process did not run successfully.\n'
-                'Returned status: {0}'.format(error.returncode),
-                commands)
+                msg_context,
+                commands,
+                output = error.output)
             logging.error(error)
             logging.error(msg)
             log_process_output(error.output)
@@ -221,17 +265,32 @@ def execute_subprocess(commands, status_to_caller=False,
     return ret_value
 
 
-def failed_command_msg(msg_context, command):
+def failed_command_msg(msg_context, command, output=None):
     """Template for consistent error messages from subprocess calls.
+
+    If 'output' is given, it should provide the output from the failed
+    command
     """
-    error_msg = string.Template("""$context
-Failed command:
-    $command
-Please check the log file "$log" for more details.""")
-    values = {
-        'context': msg_context,
-        'command': ' '.join(command),
-        'log': LOG_FILE_NAME,
-    }
-    msg = error_msg.substitute(values)
-    return msg
+
+    if output:
+        output_truncated = last_n_lines(output, 20,
+                                        truncation_message = '[... Output truncated for brevity ...]')
+        errmsg = ('Failed with output:\n' +
+                  indent_string(output_truncated, 4) +
+                  '\nERROR: ')
+    else:
+        errmsg = ''
+
+    command_str = ' '.join(command)
+    errmsg += """In directory
+    {cwd}
+{context}:
+    {command}
+""".format(cwd = os.getcwd(), context = msg_context, command = command_str)
+
+    if output:
+        errmsg += 'See above for output from failed command.\n'
+
+    errmsg += 'Please check the log file {log} for more details.'.format(log = LOG_FILE_NAME)
+
+    return errmsg
