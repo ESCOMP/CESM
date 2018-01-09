@@ -85,8 +85,11 @@ style : FORCE
 	$(AUTOPEP8) $(AUTOPEP8_ARGS) --recursive $(SRC) $(TEST_DIR)/test_*.py
 
 .PHONY : lint
-lint : style
+lint : FORCE
 	$(PYLINT) $(PYLINT_ARGS) $(SRC) $(TEST_DIR)/test_*.py
+
+.PHONY : stylint
+stylint : style lint
 
 .PHONY : coverage
 coverage : FORCE
