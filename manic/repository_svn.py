@@ -142,9 +142,9 @@ in the new revision.
 
 To recover: Clean up the above directory (resolving conflicts, etc.),
 then rerun checkout_externals.
-""".format(cwd = repo_dir_path,
-           message = message,
-           status = status)
+""".format(cwd=repo_dir_path,
+                message=message,
+                status=status)
 
             fatal_error(errmsg)
 

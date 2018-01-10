@@ -50,6 +50,7 @@ class TestExecuteSubprocess(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             execute_subprocess(cmd, status_to_caller=False)
 
+
 class TestLastNLines(unittest.TestCase):
     """Test the last_n_lines function.
 
@@ -65,7 +66,8 @@ line
 string
 """
 
-        mystr_truncated = last_n_lines(mystr, 3, truncation_message='[truncated]')
+        mystr_truncated = last_n_lines(
+            mystr, 3, truncation_message='[truncated]')
         self.assertEqual(mystr, mystr_truncated)
 
     def test_last_n_lines_long(self):
@@ -85,8 +87,10 @@ line
 string
 """
 
-        mystr_truncated = last_n_lines(mystr, 3, truncation_message='[truncated]')
+        mystr_truncated = last_n_lines(
+            mystr, 3, truncation_message='[truncated]')
         self.assertEqual(expected, mystr_truncated)
+
 
 class TestIndentStr(unittest.TestCase):
     """Test the indent_string function.
@@ -94,12 +98,18 @@ class TestIndentStr(unittest.TestCase):
     """
 
     def test_indent_string_singleline(self):
+        """Test the indent_string function with a single-line string
+
+        """
         mystr = 'foo'
         result = indent_string(mystr, 4)
         expected = '    foo'
         self.assertEqual(expected, result)
 
     def test_indent_string_multiline(self):
+        """Test the indent_string function with a multi-line string
+
+        """
         mystr = """hello
 hi
 goodbye
@@ -110,6 +120,7 @@ goodbye
   goodbye
 """
         self.assertEqual(expected, result)
+
 
 class TestStrToBool(unittest.TestCase):
     """Test the string to boolean conversion routine.

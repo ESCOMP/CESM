@@ -10,7 +10,6 @@ from __future__ import print_function
 
 import logging
 import os
-import string
 import subprocess
 import sys
 
@@ -47,6 +46,7 @@ def printlog(msg, **kwargs):
         print(msg)
     sys.stdout.flush()
 
+
 def last_n_lines(the_string, n_lines, truncation_message=None):
     """Returns the last n lines of the given string
 
@@ -72,6 +72,7 @@ def last_n_lines(the_string, n_lines, truncation_message=None):
             str_truncated = truncation_message + '\n' + str_truncated
         return str_truncated
 
+
 def indent_string(the_string, indent_level):
     """Indents the given string by a given number of spaces
 
@@ -81,12 +82,12 @@ def indent_string(the_string, indent_level):
 
     Returns a new string that is the same as the_string, except that
     each line is indented by 'indent_level' spaces.
-    
+
     In python3, this can be done with textwrap.indent.
     """
 
     lines = the_string.splitlines(True)
-    padding = ' '*indent_level
+    padding = ' ' * indent_level
     lines_indented = [padding + line for line in lines]
     return ''.join(lines_indented)
 
@@ -95,6 +96,8 @@ def indent_string(the_string, indent_level):
 # error handling
 #
 # ---------------------------------------------------------------------
+
+
 def fatal_error(message):
     """
     Error output function
@@ -246,7 +249,7 @@ def execute_subprocess(commands, status_to_caller=False,
             msg = failed_command_msg(
                 msg_context,
                 commands,
-                output = error.output)
+                output=error.output)
             logging.error(error)
             logging.error(msg)
             log_process_output(error.output)
@@ -274,7 +277,7 @@ def failed_command_msg(msg_context, command, output=None):
 
     if output:
         output_truncated = last_n_lines(output, 20,
-                                        truncation_message = '[... Output truncated for brevity ...]')
+                                        truncation_message='[... Output truncated for brevity ...]')
         errmsg = ('Failed with output:\n' +
                   indent_string(output_truncated, 4) +
                   '\nERROR: ')
@@ -286,11 +289,12 @@ def failed_command_msg(msg_context, command, output=None):
     {cwd}
 {context}:
     {command}
-""".format(cwd = os.getcwd(), context = msg_context, command = command_str)
+""".format(cwd=os.getcwd(), context=msg_context, command=command_str)
 
     if output:
         errmsg += 'See above for output from failed command.\n'
 
-    errmsg += 'Please check the log file {log} for more details.'.format(log = LOG_FILE_NAME)
+    errmsg += 'Please check the log file {log} for more details.'.format(
+        log=LOG_FILE_NAME)
 
     return errmsg
