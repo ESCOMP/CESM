@@ -58,8 +58,8 @@ def last_n_lines(the_string, n_lines, truncation_message=None):
     Returns a string containing the last n lines of the_string
 
     If truncation_message is provided, the returned string begins with
-    the given message if and only if the string is less than n lines to
-    begin with.
+    the given message if and only if the string is greater than n lines
+    to begin with.
     """
 
     lines = the_string.splitlines(True)
