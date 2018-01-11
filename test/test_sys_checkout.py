@@ -34,6 +34,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
 
+import logging
 import os
 import os.path
 import shutil
@@ -45,6 +46,7 @@ from manic.externals_status import ExternalStatus
 from manic.repository_git import GitRepository
 from manic.utils import printlog, execute_subprocess
 from manic.global_constants import LOCAL_PATH_INDICATOR
+from manic.global_constants import LOG_FILE_NAME
 from manic import checkout
 
 # ConfigParser was renamed in python2 to configparser. In python2,
@@ -88,6 +90,10 @@ SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 def setUpModule():  # pylint: disable=C0103
     """Setup for all tests in this module. It is called once per module!
     """
+    logging.basicConfig(filename=LOG_FILE_NAME,
+                        format='%(levelname)s : %(asctime)s : %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S',
+                        level=logging.DEBUG)
     repo_root = os.path.join(os.getcwd(), TMP_REPO_DIR_NAME)
     repo_root = os.path.abspath(repo_root)
     # delete if it exists from previous runs
