@@ -1,5 +1,0 @@
-! The following options keep the ice sheet at its present-day configuration, rather than letting it evolve in time.
-! In this way, CISM essentially acts as a diagnostic component without any effect on the rest of the system.
-! Now defined in CISM1%NOEVOLVE
-!evolve_ice = 0
-!zero_gcm_fluxes = 1
