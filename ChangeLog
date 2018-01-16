@@ -1,4 +1,719 @@
 ===============================================================
+Tag name: cesm2_0_alpha08f
+Originator(s): CSEG
+Date: 22 December 2017
+One-line Summary: Fixes for issues found during testing
+
+cime                               https://github.com/CESM-Development/cime/tags/cime5.4.0.alpha.17                           **
+cime_config                        https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.07             **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_155/components/cam             --
+components/clm                     https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r270/components/clm         **
+components/cice                    https://svn-ccsm-models.cgd.ucar.edu/cice/trunk_tags/cice5_20171218                        **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171229                 **
+components/cism                    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_44                             --
+components/rtm                     https://svn-ccsm-models.cgd.ucar.edu/rivrtm/trunk_tags/rtm1_0_63                           --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_170731                             --
+components/mosart                  https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_28                        --
+
+cice
+    Chris Fischer 2017-12-19 - cice5_20171218 - components/cice (cesm2_0_alpha08f)
+    https://svn-ccsm-models.cgd.ucar.edu/cice/trunk_tags/cice5_20171218
+
+    Removed the one barrier call in ice_comp_mct.
+
+
+cime
+    Chris Fischer 2018-01-02 - cime5.4.0-alpha.17 - cime (cesm2_0_alpha08f)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.17
+
+        - Add flux convergence criteria.
+        - Pass CIMEROOT to CMake unit test builds.
+        - scripts_regression_tests.py should use values in .cime/config if provided.
+        - Testing/multiinst baselines.
+        - Fix pylint error that I introduced in #2168.
+        - Generalize some paths to support a standalone CISM checkout.
+        - Revert to previous cheyenne gnu environment.
+        - Y10k fix.
+
+
+    Chris Fischer 2017-12-20 - cime5.4.0-alpha.16 - cime (cesm2_0_alpha08f)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.16
+
+        - Fix pylint issue.
+        - Allows available and default MPILIBS to be specified per compiler.
+        - Find test dir must use case object to fully resolve vars.
+        - Always use GLC_NEC=10 for CLM45/CLM5; remove tropicAtl grid in CESM.
+        - Updates for nersc systems.
+        - DATM and DROF jra55 mode, new grids tx0.1v3, TL319, JRA025.
+        - Fix typo in template.
+        - Remove unused doctests.
+        - Add the batch jobid to the lid.
+        - Fix typo of xcpl_comps dir in buildlib.csm_share.
+        - Fix max tasks for homebrew.
+        - Use the encoding flag to open in py3 to set utf-8.
+
+
+    Depends on clm4_5_18_r270
+
+
+cime_config
+    Chris Fischer 2017-12-20 - cime_config0.1.0.alpha.07 - cime_config (cesm2_0_alpha08f)
+    https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.07
+
+    Moving some compsets from CAM50 to CAM60.
+
+
+clm
+    William Sacks 2017-12-20 - clm4_5_18_r270 - components/clm (cesm2_0_alpha08f)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r270/components/clm
+
+    Always use multiple elevation classes for glacier, even with stub glc
+
+    Changes answers for cases with SGLC
+
+    Depends on cime5.4.0-alpha.16
+
+
+    Erik Kluzek 2017-12-15 - clm4_5_18_r269 - components/clm (cesm2_0_alpha08f)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r269/components/clm
+
+    Update externals for CLM to github versions
+
+
+pop
+    Michael Levy 2018-01-03 - cesm_pop_2_1_20180103 - components/pop (cesm2_0_alpha08f)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180103
+
+    Include full CVMix repository rather than just src/shared directory
+    (will be useful when moving to manage_externals and pulling CVMix in via git)
+
+
+    Alper Altuntas 2017-12-29 - cesm_pop_2_1_20171229 - components/pop (cesm2_0_alpha08f)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171229/
+
+    cime_config changes for the new CIME. 
+    new tavg fields.
+
+
+    Alper Altuntas 2017-12-20 - cesm_pop_2_1_20171214 - components/pop (cesm2_0_alpha08f)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171214/
+
+    Added:
+    - tx01.v3 grid. 
+    - GIAF_JRA and GIAF_JRA_HR compsets for DATM and DROF jra55 modes. 
+    - Fixed half hourly coupling. 
+    - Minor fixes in forcing.F90, step_mod.F90 and tavg.F90 for high resolution runs. 
+
+===============================================================
+Tag name: cesm2_0_alpha08e
+Originator(s): CSEG
+Date: 11 December 2017
+One-line Summary: CAM SE, CLM, POP answer changes
+
+cime                               https://github.com/CESM-Development/cime/tags/cime5.4.0.alpha.15                           **
+cime_config                        https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.06             **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_155/components/cam             **
+components/clm                     https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r268/components/clm         **
+components/cice                    https://svn-ccsm-models.cgd.ucar.edu/cice/trunk_tags/cice5_20171208                        **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171213                 **
+components/cism                    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_44                             **
+components/rtm                     https://svn-ccsm-models.cgd.ucar.edu/rivrtm/trunk_tags/rtm1_0_63                           --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_170731                             --
+components/mosart                  https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_28                        --
+
+cam
+    Francis Vitt 2017-12-11 - cam5_4_155 - components/cam (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_155
+
+    Fix chemistry preprocessor bug and other misc updates
+
+
+    Brian Eaton 2017-12-08 - cam5_4_154 - components/cam (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_154/components/cam
+
+    Add a check for the CLUBB timestep.
+
+    Fix for WACCM use_case files so they work with SE dycore.
+
+
+    Cheryl Craig 2017-11-30 - cam5_4_153 - components/cam (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_153/components/cam
+
+    Remove CAM6 settings from use_cases and make them defaults
+
+    -- Answer changing for CAM6 aquaplanet runs (as they are now using all CAM6 settings)
+    -- All other compsets are unchanged
+
+
+    Brian Eaton 2017-11-20 - cam5_4_152 - components/cam (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_152/components/cam
+
+    Add new SE dycore, CSLAM advection, physics grid capability.
+
+    Only answer changing for SE dycore.
+
+
+cice
+    Chris Fischer 2017-12-11 - cice5_20171208 - components/cice (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/cice/trunk_tags/cice5_20171208
+
+    Update hobart PE counts.
+    Also delete PDFs and grid information.
+
+
+cime
+    Chris Fischer 2017-12-14 - cime5.4.0-alpha.15 - cime (cesm2_0_alpha08e)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.15
+
+        - PIO2 update.
+        - Replace fancy quotes with standard ones.
+        - Add some debug info and correct PYTHON.
+        - Allow python to be specified in environment.
+        - Avoid continue run if resubmit_sets_continue_run is false.
+        - PIO1 update.
+
+
+    Chris Fischer 2017-12-11 - cime5.4.0-alpha.14 - cime (cesm2_0_alpha08e)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.14
+
+        - Add debug print statements to describe current workload.
+        - Fix issue in declaration.
+        - Provide access functions for the setting of pio_rearranger variables.
+        - Move GMAKE and GMAKE_J options to env_run so that changing them doesn't
+          require a rebuild.
+        - Fix processor overflow in create_test.
+        - Miscellaneous tool improvement.
+        - Add ability to customize CaseStatus success message for a phase.
+        - DOCN mode fix.
+        - Fix bug in compare namelists.
+        - Fixes a memory leak in gptl.
+
+
+cime_config
+    Chris Fischer 2017-12-07 - cime_config0.1.0.alpha.06 - cime_config (cesm2_0_alpha08e)
+    https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.06
+
+    Fixes pe layouts on cheyenne for testing. 
+
+
+cism
+    William Sacks 2017-12-11 - cism2_1_44 - components/cism (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_44
+
+    Migrate aux_glc yellowstone tests to cheyenne
+
+    In prealpha: changed ERS_Ly20_N2_P2.f09_g16_gl20.T1850G1.cheyenne_intel
+    to ERS_Ly20_N2_P2.f09_g16_gl20.T1850G1.cheyenne_gnu
+
+
+    William Sacks 2017-11-22 - cism2_1_43 - components/cism (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_43
+
+    Avoid recreating Filepath when not needed
+
+
+clm
+    Erik Kluzek 2017-12-11 - clm4_5_18_r268 - components/clm (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r268/components/clm
+
+    Changes to dry deposition from Simone/Louisa correcting stomatal resistance. Increase cutoff of total vegetation carbon for resetting soil decomposition pools to 0.1. 
+
+    Only changes answers for SSP and drydep tests.
+
+
+    William Sacks 2017-12-07 - clm4_5_18_r267 - components/clm (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r267/components/clm
+
+    Fixes for accumulation fields
+
+    Changes answers for Hist and DV compsets, and for ERI and SSP tests
+
+
+    William Sacks 2017-11-27 - clm4_5_17_r266 - components/clm (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_17_r266/components/clm
+
+    Avoid negative snow densities
+
+    Changes answers for any case where atmospheric forcing temperatures drop below about -58 deg C
+    This happens in many cases
+
+
+pop
+    Chris Fischer 2017-12-14 - cesm_pop_2_1_20171213 - components/pop (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171213
+
+                 1) Update to latest MARBL (0.22.0) and bring in all of MARBL
+                    as an external rather than just src/
+                 2) Rather than generating marbl_in via build-namelist, buildnml
+                    calls a MARBL script; users override MARBL defaults by
+                    setting variables in user_nl_marbl
+                 3) MARBL options that affect tracer count need to be set in
+                    user_nl_marbl prior to building, rather than being set in
+                    env_build.xml. Specifically, ciso is no longer a valid
+                    OCN_TRACER_MODULES (just set ciso_on = .true. in
+                    user_nl_marbl) and the following can not be set in
+                    OCN_TRACER_MODULES_OPT:
+                    - ECOSYS_BASE_NT & CISO_NT [MARBL_NT is reported by MARBL]
+                    - VARIABLE_PTOC [set lvariable_PtoC in user_nl_marbl]
+                 4) support for multi-instance ocean runs with different MARBL
+                    settings among the instances (including a test in aux_pop_MARBL
+                    to ensure this functionality does not break in the future)
+
+
+    Michael Levy 2017-11-17 - cesm_pop_2_1_20171117b - components/pop (cesm2_0_alpha08e)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171117b
+
+    Get latest MARBL developments from marbl_dev branch of POP
+
+===============================================================
+Tag name: cesm2_0_alpha08d
+Originator(s): CSEG
+Date: 20 November 2017
+One-line Summary: CLM answer changes
+
+cime                               https://github.com/CESM-Development/cime/tags/cime5.4.0.alpha.13                           **
+cime_config                        https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.05             --
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_150/components/cam             --
+components/clm                     https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r265/components/clm         **
+components/cice                    https://svn-ccsm-models.cgd.ucar.edu/cice/trunk_tags/cice5_20170927                        --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171117                 **
+components/cism                    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_42                             **
+components/rtm                     https://svn-ccsm-models.cgd.ucar.edu/rivrtm/trunk_tags/rtm1_0_63                           --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_170731                             --
+components/mosart                  https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_28                        --
+
+cime
+    Chris Fischer 2017-12-04 - cime5.4.0-alpha.13 - cime (cesm2_0_alpha08d)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.13
+
+        - BUILD_THREADED needs to be set if any nthrds > 1.
+
+    Chris Fischer 2017-12-03 - cime5.4.0-alpha.12 - cime (cesm2_0_alpha08d)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.12
+        - Fix gptl threaded build, batch change for cheyenne
+        - Update CIME RST documentation.
+        - Correct path for includes used in build.
+        - Check for unicode in expect().
+        - Separate liq and ice in glc2ocn mapping, and fix glc2ocn mapping bug.
+
+    Chris Fischer 2017-11-22 - cime5.4.0-alpha.11 - cime (cesm2_0_alpha08d)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.11
+
+        - GPTL build threaded, makefile cleanup.
+        - Changes in merged Makefile to satisfy dependancies thus making rebuild faster.
+        - Fix run_sub_or_cmd in the case where a cmd is run and log is None.
+        - Enable ldsta case.submit to be run twice.
+
+
+    Chris Fischer 2017-11-17 - cime5.4.0-alpha.10 - cime (cesm2_0_alpha08d)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.10
+
+        - Add LDSTA to cime_developer test suite.
+        - Major refactor of baseline handling.
+        - Add bless logging capability.
+        - Fix clm build.
+        - Add function to ensure correct bld logging.
+        - Short term archiver last date option test.
+        - Redo mct and mpi-serial buildlib scripts in python.
+        - Add a list of test types to the users guide.
+        - Fix MCC test on master.
+        - Fix csm_build, remove debug print statement.
+        - Cleanup gptl build, replace perl buildlib.csm_share with python.
+        - Convert buildlib.gptl to python and call it and the buildlib.pio as subroutines.
+        - Run sub logging fixes.
+        - Fix redirection for run_sub to include stderr.
+        - Separate DATA_ASSIMILATION flag by component and add to Fortran infodata.
+        - Add unit tests of compare_two's handling of pass/fail in comparison.
+        - Fixes incorrect timer event name in data runoff model.
+        - Update from ACME 11-13-2017.
+        - Fix pylint issue.
+        - Locked files handled BUILD_COMPLETE better.
+        - Add optional COSTPES_PER_NODE.
+        - Switch melvin to use officially supported pfunit.
+        - USER_REQUESTED_ vars should go in env_batch.
+        - Use_existing needs to set FAIL states back to PEND.
+        - Add create_test options to config for user tuned defaults.
+        - Jgfouca/branch for acme split 11-07-2017 pr.
+        - Improve email handling.
+        - Add retry capability to create_test.
+        - Convert line to utf-8.
+        - Change paths to case2 rundir and exeroot.
+
+
+cism
+    William Sacks 2017-11-14 - cism2_1_42 - components/cism (cesm2_0_alpha08d)
+    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_42
+
+    Reduce the ice runoff field when running with test_coupling
+
+    Changes answers for tests using the cism-test_coupling testmod
+
+
+clm
+    Erik Kluzek 2017-11-17 - clm4_5_17_r265 - components/clm (cesm2_0_alpha08d)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_17_r265/components/clm
+
+    New clm50 parameter file and a fix for urban for CLM50.
+
+    Changes answers for CLM50, but CLM45, and CLM40 are b4b to previous tag.
+
+
+    Erik Kluzek 2017-11-16 - clm4_5_17_r264 - components/clm (cesm2_0_alpha08d)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_17_r264/components/clm
+
+    Reset soil carbon and nitrogen decomposition pools if total vegetation carbon is low. Fix a few small issues.
+
+    Does change answers for SSP tests. Everything else is exact.
+
+
+    Erik Kluzek 2017-10-31 - clm4_5_17_r263 - components/clm (cesm2_0_alpha08d)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_17_r263/components/clm
+
+    Changes answers for clm45 and clm50.
+
+    Double drydep for SO2, and fix initialization of organic matter in soil. fix NACTIVE and max daylength bugs.
+
+
+    William Sacks 2017-10-27 - clm4_5_16_r262 - components/clm (cesm2_0_alpha08d)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r262/components/clm
+
+    - Rename atm2lnd history fields for downscaled fields
+
+    - Properly turn on vic for clm45
+
+    - Other minor fixes
+
+    Changes answers for:
+    - a few diagnostic fields in all cases (FLDS, PBOT, QBOT, RAIN, SNOW, TBOT, THBOT in CLM hist files)
+    - completely changes behavior for CLM45 cases with VIC
+
+
+    William Sacks 2017-10-25 - clm4_5_16_r261 - components/clm (cesm2_0_alpha08d)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r261/components/clm
+
+    Add option to reset snow over glacier columns
+
+    Just changes answers for tests with the reseedresetsnow test mod
+
+
+pop
+    Michael Levy 2017-11-16 - cesm_pop_2_1_20171117 - components/pop (cesm2_0_alpha08d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171117
+
+    Fixed another bug from 20171115 (bad user_nl_pop in new test)
+
+
+    Michael Levy 2017-11-16 - cesm_pop_2_1_20171116 - components/pop (cesm2_0_alpha08d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171116
+
+    Minor bug fix, 20171115 doesn't compile with nag or pgi compiler if tavg output is r4 instead of r8
+
+
+    Michael Levy 2017-11-15 - cesm_pop_2_1_20171115 - components/pop (cesm2_0_alpha08d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171115
+
+    Bugfix - POP was crashing when reading an r4 restart history file in DEBUG mode
+
+===============================================================
+Tag name: cesm2_0_alpha08c
+Originator(s): CSEG
+Date: 6 November 2017
+One-line Summary: CAM climate changing answers
+
+cime                               https://github.com/CESM-Development/cime/tags/cime5.4.0.alpha.09                           **
+cime_config                        https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.05             **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_150/components/cam             **
+components/clm                     https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r260/components/clm         --
+components/cice                    https://svn-ccsm-models.cgd.ucar.edu/cice/trunk_tags/cice5_20170927                        --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171017                 **
+components/cism                    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_41                             --
+components/rtm                     https://svn-ccsm-models.cgd.ucar.edu/rivrtm/trunk_tags/rtm1_0_63                           --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_170731                             --
+components/mosart                  https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_28                        --
+
+cam
+    Cheryl Craig 2017-10-31 - cam5_4_150 - components/cam (cesm2_0_alpha08c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_150/components/cam
+
+    Update CAM namelists and CAM source mods to match Cecile's #202 run
+      - CAM6 code changes
+      - some namelist settings changed
+
+    All CAM6 will be climate changing.
+    CAM5 runs which use changed namelists will also have answer changes
+
+
+    Cheryl Craig 2017-10-26 - cam5_4_149 - components/cam (cesm2_0_alpha08c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_149/components/cam
+
+    Updates to support running SCAM using CESM scripts
+
+    (Includes fix for failing SMS_D_Ln9.f09_f09_mg17.FCHIST.cheyenne_intel.cam-outfrq9s)
+
+
+cime
+    Chris Fischer 2017-11-08 - cime5.4.0-alpha.09 - cime (cesm2_0_alpha08c)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.09
+
+        - Allow undated history files to be archived.
+        - Convert SEQ to use compare-two.
+
+
+    Chris Fischer 2017-11-07 - cime5.4.0-alpha.08 - cime (cesm2_0_alpha08c)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.08
+
+        - Handle case when cmdargs is not a list.
+
+
+    Chris Fischer 2017-11-06 - cime5.4.0-alpha.07 - cime (cesm2_0_alpha08c)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.07
+
+        - Improve interface to external scripts PRERUN_SCRIPT, POSTRUN_SCRIPT, DATA_ASSIMILATION_SCRIPT.
+        - Better error message for compsets.
+        - For runoff map: fix mask_b and frac_b in nearest neighbor map.
+        - If area units on source grid file are in sq deg, convert to sq radians.
+        - Handle the case where no points are mapped to marginal seas.
+        - Add function to rebuild dependencies.
+        - Make srt change backward compatible.
+        - Allow overrides in config batch.
+        - Fix machines option to srt and unitialzed var.
+        - Fix cprnc build on mac.
+        - Add NLCOMP warning if comparison fails and RUN phase is complete.
+        - Remove string formatting from code-path that checks python version.
+        - Bluewaters update.
+        - Fix for ACME MPAS builds.
+        - Add support for selecting different driver.
+        - Fix critical bug with py3 str handling.
+        - Only report mem and tput errors once.
+        - Fix slurm output fields.
+        - Fix critical problems found during ACME/ESMCI integration.
+        - Handle pattern match chars like + in casename.
+        - Add check for a batch system when testing user prerequisites.
+        - Fix batch prepend test.
+        - py3 fixes
+        - Fix COST_PES and TOTALPES for titan (aprun).
+        - Add support for arbitrary prerequisites to case.submit.
+        - Updates for NAS pleiades systems.
+
+
+cime_config
+    Chris Fischer 2017-11-08 - cime_config0.1.0.alpha.04 - cime_config (cesm2_0_alpha08c)
+    https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.05
+
+    Fix ETEST compset by adding %SP to CLM in the compset long name.
+
+
+pop
+    Alper Altuntas 2017-10-17 - cesm_pop_2_1_20171017 - components/pop (cesm2_0_alpha08c)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171017
+
+    Added namelist parameters to specify perturbation
+===============================================================
+Tag name: cesm2_0_alpha08b
+Originator(s): CSEG
+Date: 17 October 2017
+One-line Summary: Some answer changes for CLM
+
+cime                               https://github.com/CESM-Development/cime/tags/cime5.4.0.alpha.06                           **
+cime_config                        https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.04             **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_148/components/cam             **
+components/clm                     https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r260/components/clm         **
+components/cice                    https://svn-ccsm-models.cgd.ucar.edu/cice/trunk_tags/cice5_20170927                        --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171008                 --
+components/cism                    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_41                             --
+components/rtm                     https://svn-ccsm-models.cgd.ucar.edu/rivrtm/trunk_tags/rtm1_0_63                           --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_170731                             --
+components/mosart                  https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_28                        **
+
+cam
+    Brian Eaton 2017-10-24 - cam5_4_148 - components/cam (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_148/components/cam
+
+    Updates for CAM testing on Cheyenne.
+
+
+    Francis Vitt 2017-10-20 - cam5_4_147 - components/cam (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_147
+
+    WACCMX updates
+
+    Mostly B4B
+    Will see changes in FXHIST and FXSD if run longer than 3 hours
+
+
+    Cheryl Craig 2017-10-17 - cam5_4_146 - components/cam (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_146/components/cam
+
+    Changes to support removal of CLM irrig namelist and specify BGC-CROP in CAM's compsets
+
+
+cime
+    Chris Fischer 2017-10-25 - cime5.4.0-alpha.06 - cime (cesm2_0_alpha08b)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.06
+
+        - Update mpt and pnetcdf on cheyenne.
+        - Fix several data component issues.
+        - Resolve compset issue.
+
+
+    Chris Fischer 2017-10-25 - cime5.4.0-alpha.05 - cime (cesm2_0_alpha08b)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.05
+
+        - Add mapping files for T42_T42_mg17.
+        - Remove empty proxy tag from anlworkstation.
+        - Updates for testreporter and remove AWAV from testlist.
+        - Bring in E3SM cime changes for past 3 months.
+        - Adjustments for new CAM-SE dycore.
+        - Make sure user changes to wallclock/queue are not lost.
+        - Minor cleanup of PEM test.
+        - Add COMP_ROOT_DIR_ variables so that a component can be moved with the
+          change of a single cime variable.
+        - Set correct domain files for ne16np4.
+        - Add LBL Machines.
+        - Data model documentation edits.
+
+
+cime_config
+    Chris Fischer 2017-10-25 - cime_config0.1.0.alpha.04 - cime_config (cesm2_0_alpha08b)
+    https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.04
+
+    Move changes related to CISM's test_coupling into a new testmod dir.
+       Failures for both BASELINE and NLCOMP for all tests that use the allactive-defaultio testmod.
+
+
+clm
+    Erik Kluzek 2017-10-17 - clm4_5_16_r260 - components/clm (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r260/components/clm
+
+    New parameter file for CLM50, and update fates. Changes answers for CLM50 and for any I compsets running fates (ED).
+
+
+    Erik Kluzek 2017-10-12 - clm4_5_16_r259 - components/clm (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r259/components/clm
+
+    Update config_component to version 3. Update version of cime, mosart, rtm, and cism used. 
+    Fix several bugs. Add -ignore_warnings option to CLM_BLDNML_OPTS so that namelist warnings will run rather than abort 
+    (now they abort unless this happens, before they were ignored).
+
+
+    Erik Kluzek 2017-10-06 - clm4_5_16_r258 - components/clm (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r258/components/clm
+
+    Revert the previous change in fire that was incorrect (r257). 
+    Set n_melt_glcmc=10, which should have come in with the fresh snow grain size change in r256. 
+    Update mosart version used.
+
+
+    Erik Kluzek 2017-09-29 - clm4_5_16_r257 - components/clm (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r257/components/clm
+
+    Two small bug fixes to CLM45/50 BGC one for fire model (when CN and fire model is on) and one for Carbon isotopes (when use_c13 and/or use_c14 is on)
+
+
+    Erik Kluzek 2017-09-19 - clm4_5_16_r256 - components/clm (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r256/components/clm
+
+    Use temperature dependent fresh snow grain size over glaciers.
+
+
+    Erik Kluzek 2017-09-19 - clm4_5_16_r255 - components/clm (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r255/components/clm
+
+    Changes to crop and enabling Carbon isotopes for crop and some miscellaneous small changes
+
+
+    Erik Kluzek 2017-07-21 - clm4_5_16_r254 - components/clm (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r254/components/clm
+
+    Update soil color in surface datasets
+
+
+mosart
+    Erik Kluzek 2017-10-05 - mosart1_0_28 - components/mosart (cesm2_0_alpha08b)
+    https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_28
+
+    Fix from Sean Swenson so that short rivers don't accumulate water by having a minimum value for rlen.
+===============================================================
+Tag name: cesm2_0_alpha08a
+Originator(s): CSEG
+Date: 17 October 2017
+One-line Summary: Upgrade last components to cfg-version3, some answer changes for CAM
+
+cime                               https://github.com/CESM-Development/cime/tags/cime5.4.0.alpha.04                           **
+cime_config                        https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.03             **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_145/components/cam             **
+components/clm                     https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_16_r253/components/clm         --
+components/cice                    https://svn-ccsm-models.cgd.ucar.edu/cice/trunk_tags/cice5_20170927                        --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20171008                 --
+components/cism                    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_41                             **
+components/rtm                     https://svn-ccsm-models.cgd.ucar.edu/rivrtm/trunk_tags/rtm1_0_63                           **
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_170731                             --
+components/mosart                  https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_27                        **
+
+cam
+    Cheryl Craig 2017-10-16 - cam5_4_145 - components/cam (cesm2_0_alpha08a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_145/components/cam
+
+    Fix for wp2_wp3 band solver in CLUBB (fix Himalaya's crash)
+
+    Answer changing for all CAM6 and any runs which use CLUBB
+
+
+    Cheryl Craig 2017-10-16 - cam5_4_144 - components/cam (cesm2_0_alpha08a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_144/components/cam
+
+    First set of namelist updates to match Cecile's 197 5-day_volc runs
+
+    Answer changes for all CAM6 (unless all changed values are overridden in use_cases)
+
+
+cime
+    Chris Fischer 2017-10-16 - cime5.4.0-alpha.04 - cime (cesm2_0_alpha08a)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.04
+
+        - Cleanup of the compvar implementation.
+        - Refactor CPLHIST mode and add DATM CPLHIST topo capability.
+        - Fix py3 for erio test.
+        - Fix some issues found in type conversion.
+        - Port to python3 while maintaining compatibility with python 2.7
+        - Remove developers table on README.md.
+        - Load balancing tool mods.
+        - Add auto-normalization to case_diff.
+
+
+cime_config
+    Chris Fischer 2017-10-16 - cime_config0.1.0.alpha.03 - cime_config (cesm2_0_alpha08a)
+    https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.03
+
+    - B1850 f09_g17 pe-layout for edison
+    - Testlist updates
+
+
+cism
+    William Sacks 2017-10-13 - cism2_1_41 - components/cism (cesm2_0_alpha08a)
+    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_41
+
+    Minor fixes to build scripts
+
+    Adds prealpha test SMS_Lm13.f10_f10_musgs.I1850Clm50SpG.cheyenne_intel
+    so that will have a baseline failure due to non-existent baselines
+
+
+mosart
+    Erik Kluzek 2017-09-29 - mosart1_0_27 - components/mosart (cesm2_0_alpha08a)
+    https://svn-ccsm-models.cgd.ucar.edu/mosart/trunk_tags/mosart1_0_27
+
+    Upgrade to config_component.xml version 3 and fix a few bugs. Changes from Jim Edwards to set the NetCDF format of output NetCDF files.
+
+
+rtm
+    Erik Kluzek 2017-09-29 - rtm1_0_63 - components/rtm (cesm2_0_alpha08a)
+    https://svn-ccsm-models.cgd.ucar.edu/rivrtm/trunk_tags/rtm1_0_63
+
+    Upgrade to config_component.xml version 3, and fix a few bugs.
+
+
+===============================================================
 Tag name: cesm2_0_beta07
 Originator(s): CSEG
 Date: 13 October 2017
