@@ -45,7 +45,7 @@ from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
 from manic.externals_status import ExternalStatus
 from manic.repository_git import GitRepository
 from manic.utils import printlog, execute_subprocess
-from manic.global_constants import LOCAL_PATH_INDICATOR
+from manic.global_constants import LOCAL_PATH_INDICATOR, VERBOSITY_DEFAULT
 from manic.global_constants import LOG_FILE_NAME
 from manic import checkout
 
@@ -492,7 +492,7 @@ class BaseTestSysCheckout(unittest.TestCase):
         dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
                                 test_dir_name)
         # pylint: disable=W0212
-        GitRepository._git_clone(parent_repo_dir, dest_dir)
+        GitRepository._git_clone(parent_repo_dir, dest_dir, VERBOSITY_DEFAULT)
         return dest_dir
 
     @staticmethod

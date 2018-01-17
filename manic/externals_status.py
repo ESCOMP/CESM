@@ -9,6 +9,8 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from .global_constants import EMPTY_STR
+from .utils import printlog
+from .global_constants import VERBOSITY_DEFAULT
 
 
 class ExternalStatus(object):
@@ -46,11 +48,41 @@ class ExternalStatus(object):
         self.clean_state = self.DEFAULT
         self.source_type = self.DEFAULT
         self.path = EMPTY_STR
+        self.current_version = EMPTY_STR
+        self.expected_version = EMPTY_STR
 
-    def __str__(self):
+    def log_status_message(self, verbosity):
+        """Write status message to the screen and log file
+        """
+        if verbosity == VERBOSITY_DEFAULT:
+            msg = self.default_status_message()
+        else:
+            msg = self.verbose_status_message()
+        printlog(msg)
+
+    def default_status_message(self):
+        """Return the default terse status message string
+        """
         msg = '{sync}{clean}{src_type} {path}'.format(
             sync=self.sync_state, clean=self.clean_state,
             src_type=self.source_type, path=self.path)
+        return msg
+
+    def verbose_status_message(self):
+        """Return the verbose status message string
+        """
+        clean_str = self.DEFAULT
+        if self.clean_state == self.STATUS_OK:
+            clean_str = 'clean sandbox'
+        elif self.clean_state == self.DIRTY:
+            clean_str = 'modified sandbox'
+
+        sync_str = 'on {0}'.format(self.current_version)
+        if self.sync_state != self.STATUS_OK:
+            sync_str = '{current} --> {expected}'.format(
+                current=self.current_version, expected=self.expected_version)
+        msg = '{path} :\n    {clean}, {sync}'.format(
+            path=self.path, clean=clean_str, sync=sync_str)
         return msg
 
     def safe_to_update(self):

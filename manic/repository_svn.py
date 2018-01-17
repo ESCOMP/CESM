@@ -9,9 +9,10 @@ import os
 import re
 import xml.etree.ElementTree as ET
 
+from .global_constants import EMPTY_STR, VERBOSITY_VERBOSE
 from .repository import Repository
 from .externals_status import ExternalStatus
-from .utils import fatal_error, log_process_output, indent_string
+from .utils import fatal_error, log_process_output, indent_string, printlog
 from .utils import execute_subprocess
 
 
@@ -54,7 +55,7 @@ class SvnRepository(Repository):
     # Public API, defined by Repository
     #
     # ----------------------------------------------------------------
-    def checkout(self, base_dir_path, repo_dir_name):
+    def checkout(self, base_dir_path, repo_dir_name, verbosity):
         """Checkout or update the working copy
 
         If the repo destination directory exists, switch the sandbox to
@@ -68,7 +69,7 @@ class SvnRepository(Repository):
         if os.path.exists(repo_dir_path):
             cwd = os.getcwd()
             os.chdir(repo_dir_path)
-            self._svn_switch(self._url)
+            self._svn_switch(self._url, verbosity)
             # svn switch can lead to a conflict state, but it gives a
             # return code of 0. So now we need to make sure that we're
             # in a clean (non-conflict) state.
@@ -76,7 +77,7 @@ class SvnRepository(Repository):
                                  "Expected clean state following switch")
             os.chdir(cwd)
         else:
-            self._svn_checkout(self._url, repo_dir_path)
+            self._svn_checkout(self._url, repo_dir_path, verbosity)
 
     def status(self, stat, repo_dir_path):
         """
@@ -85,7 +86,6 @@ class SvnRepository(Repository):
         self._check_sync(stat, repo_dir_path)
         if os.path.exists(repo_dir_path):
             self._status_summary(stat, repo_dir_path)
-        return stat
 
     def verbose_status_dump(self, repo_dir_path):
         """Display the raw repo status to the user.
@@ -115,7 +115,9 @@ class SvnRepository(Repository):
                 # directory removed or incomplete checkout?
                 stat.sync_state = ExternalStatus.UNKNOWN
             else:
-                stat.sync_state = self._check_url(svn_output, self._url)
+                stat.sync_state, stat.current_version = \
+                    self._check_url(svn_output, self._url)
+            stat.expected_version = '/'.join(self._url.split('/')[3:])
 
     def _abort_if_dirty(self, repo_dir_path, message):
         """Check if the repo is in a dirty state; if so, abort with a
@@ -165,7 +167,13 @@ then rerun checkout_externals.
             status = ExternalStatus.STATUS_OK
         else:
             status = ExternalStatus.MODEL_MODIFIED
-        return status
+
+        if url:
+            current_version = '/'.join(url.split('/')[3:])
+        else:
+            current_version = EMPTY_STR
+
+        return status, current_version
 
     def _status_summary(self, stat, repo_dir_path):
         """Report whether the svn repository is in-sync with the model
@@ -252,17 +260,21 @@ then rerun checkout_externals.
     #
     # ----------------------------------------------------------------
     @staticmethod
-    def _svn_checkout(url, repo_dir_path):
+    def _svn_checkout(url, repo_dir_path, verbosity):
         """
         Checkout a subversion repository (repo_url) to checkout_dir.
         """
         cmd = ['svn', 'checkout', url, repo_dir_path]
+        if verbosity == VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
 
     @staticmethod
-    def _svn_switch(url):
+    def _svn_switch(url, verbosity):
         """
         Switch branches for in an svn sandbox
         """
         cmd = ['svn', 'switch', url]
+        if verbosity == VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)

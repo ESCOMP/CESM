@@ -23,6 +23,7 @@ from manic.externals_status import check_safe_to_update_repos
 from manic.sourcetree import SourceTree
 from manic.utils import printlog
 from manic.global_constants import VERSION_SEPERATOR, LOG_FILE_NAME
+from manic.global_constants import VERBOSITY_DUMP
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
@@ -216,9 +217,10 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
                         '%(prog)s. By default only summary information '
                         'is provided. Use verbose output to see details.')
 
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
+    parser.add_argument('-v', '--verbose', action='count', default=0,
                         help='Output additional information to '
-                        'the screen and log file.')
+                        'the screen and log file. This flag can be used '
+                        'multiple times.')
 
     #
     # developer options
@@ -275,10 +277,10 @@ def main(args):
 
     if args.status:
         # user requested status-only
-        for comp in sorted(tree_status.keys()):
-            msg = str(tree_status[comp])
-            printlog(msg)
-        if args.verbose:
+        if args.verbose != VERBOSITY_DUMP:
+            for comp in sorted(tree_status.keys()):
+                tree_status[comp].log_status_message(args.verbose)
+        else:  # args.verbose == VERBOSITY_DUMP
             # user requested verbose status dump of the git/svn status commands
             source_tree.verbose_status_dump()
     else:
@@ -287,8 +289,7 @@ def main(args):
         if not safe_to_update:
             # print status
             for comp in sorted(tree_status.keys()):
-                msg = str(tree_status[comp])
-                printlog(msg)
+                tree_status[comp].log_status_message(args.verbose)
             # exit gracefully
             msg = textwrap.fill(
                 'Some external repositories are not in a clean state. '
@@ -300,7 +301,7 @@ def main(args):
             printlog(msg)
             printlog('-' * 70)
         else:
-            source_tree.checkout(load_all)
+            source_tree.checkout(args.verbose, load_all)
             printlog('')
 
     logging.info('checkout_externals completed without exceptions.')

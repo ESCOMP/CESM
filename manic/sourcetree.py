@@ -14,6 +14,7 @@ from .repository_factory import create_repository
 from .externals_status import ExternalStatus
 from .utils import fatal_error, printlog
 from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
+from .global_constants import VERBOSITY_VERBOSE
 
 
 class _External(object):
@@ -105,6 +106,15 @@ class _External(object):
             msg = ('status check: repository directory for "{0}" does not '
                    'exist.'.format(self._name))
             logging.info(msg)
+            stat.current_version = 'not checked out'
+            # NOTE(bja, 2018-01) directory doesn't exist, so we cannot
+            # use repo to determine the expected version. We just take
+            # a best-guess based on the assumption that only tag or
+            # branch should be set, but not both.
+            if not self._repo:
+                stat.expected_version = 'unknown'
+            else:
+                stat.expected_version = self._repo.tag() + self._repo.branch()
         else:
             if self._repo:
                 self._repo.status(stat, self._repo_dir_path)
@@ -147,7 +157,7 @@ class _External(object):
                 self._repo.verbose_status_dump(self._repo_dir_path)
             os.chdir(cwd)
 
-    def checkout(self, load_all):
+    def checkout(self, verbosity, load_all):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the external.
@@ -171,15 +181,18 @@ class _External(object):
                     fatal_error(msg)
 
         if self._repo:
-            self._repo.checkout(self._base_dir_path, self._repo_dir_name)
+            self._repo.checkout(
+                self._base_dir_path,
+                self._repo_dir_name,
+                verbosity)
 
-    def checkout_externals(self, load_all):
+    def checkout_externals(self, verbosity, load_all):
         """Checkout the sub-externals for this object
         """
         if self._externals:
             if not self._externals_sourcetree:
                 self._create_externals_sourcetree()
-            self._externals_sourcetree.checkout(load_all)
+            self._externals_sourcetree.checkout(verbosity, load_all)
 
     def _create_externals_sourcetree(self):
         """
@@ -242,7 +255,6 @@ class SourceTree(object):
 
         summary = {}
         for comp in load_comps:
-            printlog('{0}, '.format(comp), end='')
             stat = self._all_components[comp].status()
             for name in stat.keys():
                 # check if we need to append the relative_path_base to
@@ -268,7 +280,7 @@ class SourceTree(object):
         for comp in load_comps:
             self._all_components[comp].verbose_status_dump()
 
-    def checkout(self, load_all, load_comp=None):
+    def checkout(self, verbosity, load_all, load_comp=None):
         """
         Checkout or update indicated components into the the configured
         subdirs.
@@ -277,7 +289,11 @@ class SourceTree(object):
         If load_all is False, load_comp is an optional set of components to load.
         If load_all is True and load_comp is None, only load the required externals.
         """
-        printlog('Checking out externals: ', end='')
+        if verbosity == VERBOSITY_VERBOSE:
+            printlog('Checking out externals: ')
+        else:
+            printlog('Checking out externals: ', end='')
+
         if load_all:
             load_comps = self._all_components.keys()
         elif load_comp is not None:
@@ -287,10 +303,13 @@ class SourceTree(object):
 
         # checkout the primary externals
         for comp in load_comps:
-            printlog('{0}, '.format(comp), end='')
-            self._all_components[comp].checkout(load_all)
+            if verbosity == VERBOSITY_VERBOSE:
+                printlog('\n  {0} : '.format(comp))
+            else:
+                printlog('{0}, '.format(comp), end='')
+            self._all_components[comp].checkout(verbosity, load_all)
         printlog('')
 
         # now give each external an opportunitity to checkout it's externals.
         for comp in load_comps:
-            self._all_components[comp].checkout_externals(load_all)
+            self._all_components[comp].checkout_externals(verbosity, load_all)

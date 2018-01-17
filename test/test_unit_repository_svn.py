@@ -84,16 +84,20 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """
         svn_output = SVN_INFO_MOSART
         expected_url = self._repo.url()
-        result = self._repo._check_url(svn_output, expected_url)
+        result, current_version = \
+            self._repo._check_url(svn_output, expected_url)
         self.assertEqual(result, ExternalStatus.STATUS_OK)
+        self.assertEqual(current_version, 'mosart/trunk_tags/mosart1_0_26')
 
     def test_check_url_different(self):
         """Test that we correctly reject an incorrect URL.
         """
         svn_output = SVN_INFO_CISM
         expected_url = self._repo.url()
-        result = self._repo._check_url(svn_output, expected_url)
+        result, current_version = \
+            self._repo._check_url(svn_output, expected_url)
         self.assertEqual(result, ExternalStatus.MODEL_MODIFIED)
+        self.assertEqual(current_version, 'glc/trunk_tags/cism2_1_37')
 
     def test_check_url_none(self):
         """Test that we can handle an empty string for output, e.g. not an svn
@@ -102,8 +106,10 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """
         svn_output = EMPTY_STR
         expected_url = self._repo.url()
-        result = self._repo._check_url(svn_output, expected_url)
+        result, current_version = \
+            self._repo._check_url(svn_output, expected_url)
         self.assertEqual(result, ExternalStatus.UNKNOWN)
+        self.assertEqual(current_version, '')
 
 
 class TestSvnRepositoryCheckSync(unittest.TestCase):

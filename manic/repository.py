@@ -30,7 +30,7 @@ class Repository(object):
         if self._tag is not EMPTY_STR and self._branch is not EMPTY_STR:
             fatal_error('repo cannot have both a tag and a branch element')
 
-    def checkout(self, base_dir_path, repo_dir_name):  # pylint: disable=unused-argument
+    def checkout(self, base_dir_path, repo_dir_name, verbosity):  # pylint: disable=unused-argument
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
