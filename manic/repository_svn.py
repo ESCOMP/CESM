@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 
 from .repository import Repository
 from .externals_status import ExternalStatus
-from .utils import fatal_error, log_process_output
+from .utils import fatal_error, log_process_output, indent_string
 from .utils import execute_subprocess
 
 
@@ -69,6 +69,11 @@ class SvnRepository(Repository):
             cwd = os.getcwd()
             os.chdir(repo_dir_path)
             self._svn_switch(self._url)
+            # svn switch can lead to a conflict state, but it gives a
+            # return code of 0. So now we need to make sure that we're
+            # in a clean (non-conflict) state.
+            self._abort_if_dirty(repo_dir_path,
+                                 "Expected clean state following switch")
             os.chdir(cwd)
         else:
             self._svn_checkout(self._url, repo_dir_path)
@@ -111,6 +116,37 @@ class SvnRepository(Repository):
                 stat.sync_state = ExternalStatus.UNKNOWN
             else:
                 stat.sync_state = self._check_url(svn_output, self._url)
+
+    def _abort_if_dirty(self, repo_dir_path, message):
+        """Check if the repo is in a dirty state; if so, abort with a
+        helpful message.
+
+        """
+
+        stat = ExternalStatus()
+        self._status_summary(stat, repo_dir_path)
+        if stat.clean_state != ExternalStatus.STATUS_OK:
+            status = self._svn_status_verbose(repo_dir_path)
+            status = indent_string(status, 4)
+            errmsg = """In directory
+    {cwd}
+
+svn status now shows:
+{status}
+
+ERROR: {message}
+
+One possible cause of this problem is that there may have been untracked
+files in your working directory that had the same name as tracked files
+in the new revision.
+
+To recover: Clean up the above directory (resolving conflicts, etc.),
+then rerun checkout_externals.
+""".format(cwd=repo_dir_path,
+                message=message,
+                status=status)
+
+            fatal_error(errmsg)
 
     @staticmethod
     def _check_url(svn_output, expected_url):
