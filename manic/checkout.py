@@ -218,9 +218,9 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
     parser.add_argument('-v', '--verbose', action='count', default=0,
                         help='Output additional information to '
-                        'the screen and log file. For --status, this flag '
-                        'can be used a second time, increasing the verbosity'
-                        'level each time.')
+                        'the screen and log file. This flag can be '
+                        'used up to two times, increasing the '
+                        'verbosity level each time.')
 
     #
     # developer options

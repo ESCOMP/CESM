@@ -173,8 +173,15 @@ class _External(object):
                 self._stat.log_status_message(VERBOSITY_VERBOSE)
 
         if self._repo:
+            if self._stat.sync_state == ExternalStatus.STATUS_OK:
+                # If we're already in sync, avoid showing verbose output
+                # from the checkout command, unless the verbosity level
+                # is 2 or more.
+                checkout_verbosity = verbosity - 1
+            else:
+                checkout_verbosity = verbosity
             self._repo.checkout(self._base_dir_path,
-                                self._repo_dir_name, verbosity)
+                                self._repo_dir_name, checkout_verbosity)
 
     def checkout_externals(self, verbosity, load_all):
         """Checkout the sub-externals for this object
