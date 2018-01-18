@@ -49,14 +49,6 @@ class Repository(object):
                'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
 
-    def verbose_status_dump(self, repo_dir_path):  # pylint: disable=unused-argument
-        """Display the raw repo status to the user.
-
-        """
-        msg = ('DEV_ERROR: status method must be implemented in all '
-               'repository classes! {0}'.format(self.__class__.__name__))
-        fatal_error(msg)
-
     def url(self):
         """Public access of repo url.
         """

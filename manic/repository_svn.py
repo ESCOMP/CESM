@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 from .global_constants import EMPTY_STR, VERBOSITY_VERBOSE
 from .repository import Repository
 from .externals_status import ExternalStatus
-from .utils import fatal_error, log_process_output, indent_string, printlog
+from .utils import fatal_error, indent_string, printlog
 from .utils import execute_subprocess
 
 
@@ -86,13 +86,6 @@ class SvnRepository(Repository):
         self._check_sync(stat, repo_dir_path)
         if os.path.exists(repo_dir_path):
             self._status_summary(stat, repo_dir_path)
-
-    def verbose_status_dump(self, repo_dir_path):
-        """Display the raw repo status to the user.
-
-        """
-        if os.path.exists(repo_dir_path):
-            self._status_verbose_dump(repo_dir_path)
 
     # ----------------------------------------------------------------
     #
@@ -187,13 +180,9 @@ then rerun checkout_externals.
         else:
             stat.clean_state = ExternalStatus.STATUS_OK
 
-    def _status_verbose_dump(self, repo_dir_path):
-        """Display the raw svn status output to the user.
-
-        """
-        svn_output = self._svn_status_verbose(repo_dir_path)
-        log_process_output(svn_output)
-        print(svn_output)
+        # Now save the verbose status output incase the user wants to
+        # see it.
+        stat.status_output = self._svn_status_verbose(repo_dir_path)
 
     @staticmethod
     def xml_status_is_dirty(svn_output):
@@ -265,7 +254,7 @@ then rerun checkout_externals.
         Checkout a subversion repository (repo_url) to checkout_dir.
         """
         cmd = ['svn', 'checkout', url, repo_dir_path]
-        if verbosity == VERBOSITY_VERBOSE:
+        if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
 
@@ -275,6 +264,6 @@ then rerun checkout_externals.
         Switch branches for in an svn sandbox
         """
         cmd = ['svn', 'switch', url]
-        if verbosity == VERBOSITY_VERBOSE:
+        if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)

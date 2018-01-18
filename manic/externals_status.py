@@ -9,8 +9,8 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from .global_constants import EMPTY_STR
-from .utils import printlog
-from .global_constants import VERBOSITY_DEFAULT
+from .utils import printlog, indent_string
+from .global_constants import VERBOSITY_VERBOSE, VERBOSITY_DUMP
 
 
 class ExternalStatus(object):
@@ -50,25 +50,26 @@ class ExternalStatus(object):
         self.path = EMPTY_STR
         self.current_version = EMPTY_STR
         self.expected_version = EMPTY_STR
+        self.status_output = EMPTY_STR
 
     def log_status_message(self, verbosity):
         """Write status message to the screen and log file
         """
-        if verbosity == VERBOSITY_DEFAULT:
-            msg = self.default_status_message()
-        else:
-            msg = self.verbose_status_message()
-        printlog(msg)
+        self._default_status_message()
+        if verbosity >= VERBOSITY_VERBOSE:
+            self._verbose_status_message()
+        if verbosity >= VERBOSITY_DUMP:
+            self._dump_status_message()
 
-    def default_status_message(self):
+    def _default_status_message(self):
         """Return the default terse status message string
         """
         msg = '{sync}{clean}{src_type} {path}'.format(
             sync=self.sync_state, clean=self.clean_state,
             src_type=self.source_type, path=self.path)
-        return msg
+        printlog(msg)
 
-    def verbose_status_message(self):
+    def _verbose_status_message(self):
         """Return the verbose status message string
         """
         clean_str = self.DEFAULT
@@ -81,9 +82,14 @@ class ExternalStatus(object):
         if self.sync_state != self.STATUS_OK:
             sync_str = '{current} --> {expected}'.format(
                 current=self.current_version, expected=self.expected_version)
-        msg = '{path} :\n    {clean}, {sync}'.format(
-            path=self.path, clean=clean_str, sync=sync_str)
-        return msg
+        msg = '        {clean}, {sync}'.format(clean=clean_str, sync=sync_str)
+        printlog(msg)
+
+    def _dump_status_message(self):
+        """Return the dump status message string
+        """
+        msg = indent_string(self.status_output, 12)
+        printlog(msg)
 
     def safe_to_update(self):
         """Report if it is safe to update a repository. Safe is defined as:

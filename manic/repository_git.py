@@ -14,7 +14,7 @@ from .global_constants import VERBOSITY_VERBOSE
 from .repository import Repository
 from .externals_status import ExternalStatus
 from .utils import expand_local_url, split_remote_url, is_remote_url
-from .utils import log_process_output, fatal_error, printlog
+from .utils import fatal_error, printlog
 from .utils import execute_subprocess
 
 
@@ -79,13 +79,6 @@ class GitRepository(Repository):
         self._check_sync(stat, repo_dir_path)
         if os.path.exists(repo_dir_path):
             self._status_summary(stat, repo_dir_path)
-
-    def verbose_status_dump(self, repo_dir_path):
-        """Display the raw repo status to the user.
-
-        """
-        if os.path.exists(repo_dir_path):
-            self._status_verbose_dump(repo_dir_path)
 
     # ----------------------------------------------------------------
     #
@@ -508,23 +501,16 @@ class GitRepository(Repository):
         cwd = os.getcwd()
         os.chdir(repo_dir_path)
         git_output = self._git_status_porcelain_v1z()
-        os.chdir(cwd)
         is_dirty = self._status_v1z_is_dirty(git_output)
         if is_dirty:
             stat.clean_state = ExternalStatus.DIRTY
         else:
             stat.clean_state = ExternalStatus.STATUS_OK
 
-    def _status_verbose_dump(self, repo_dir_path):
-        """Display raw git status output to the user
-
-        """
-        cwd = os.getcwd()
-        os.chdir(repo_dir_path)
-        git_output = self._git_status_verbose()
+        # Now save the verbose status output incase the user wants to
+        # see it.
+        stat.status_output = self._git_status_verbose()
         os.chdir(cwd)
-        log_process_output(git_output)
-        print(git_output)
 
     @staticmethod
     def _status_v1z_is_dirty(git_output):
@@ -648,7 +634,7 @@ class GitRepository(Repository):
         """Run git clone for the side effect of creating a repository.
         """
         cmd = ['git', 'clone', url, repo_dir_name]
-        if verbosity == VERBOSITY_VERBOSE:
+        if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
 
@@ -675,6 +661,6 @@ class GitRepository(Repository):
 
         """
         cmd = ['git', 'checkout', ref]
-        if verbosity == VERBOSITY_VERBOSE:
+        if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)

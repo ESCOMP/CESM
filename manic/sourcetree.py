@@ -42,6 +42,7 @@ class _External(object):
         self._repo = None
         self._externals = EMPTY_STR
         self._externals_sourcetree = None
+        self._stat = ExternalStatus()
         # Parse the sub-elements
 
         # _path : local path relative to the containing source tree
@@ -86,38 +87,37 @@ class _External(object):
         If load_all is True, also load all of the the externals sub-externals.
         """
 
-        stat = ExternalStatus()
-        stat.path = self.get_local_path()
+        self._stat.path = self.get_local_path()
         if not self._required:
-            stat.source_type = ExternalStatus.OPTIONAL
+            self._stat.source_type = ExternalStatus.OPTIONAL
         elif self._local_path == LOCAL_PATH_INDICATOR:
             # LOCAL_PATH_INDICATOR, '.' paths, are standalone
             # component directories that are not managed by
             # checkout_externals.
-            stat.source_type = ExternalStatus.STANDALONE
+            self._stat.source_type = ExternalStatus.STANDALONE
         else:
             # managed by checkout_externals
-            stat.source_type = ExternalStatus.MANAGED
+            self._stat.source_type = ExternalStatus.MANAGED
 
         ext_stats = {}
 
         if not os.path.exists(self._repo_dir_path):
-            stat.sync_state = ExternalStatus.EMPTY
+            self._stat.sync_state = ExternalStatus.EMPTY
             msg = ('status check: repository directory for "{0}" does not '
                    'exist.'.format(self._name))
             logging.info(msg)
-            stat.current_version = 'not checked out'
+            self._stat.current_version = 'not checked out'
             # NOTE(bja, 2018-01) directory doesn't exist, so we cannot
             # use repo to determine the expected version. We just take
             # a best-guess based on the assumption that only tag or
             # branch should be set, but not both.
             if not self._repo:
-                stat.expected_version = 'unknown'
+                self._stat.expected_version = 'unknown'
             else:
-                stat.expected_version = self._repo.tag() + self._repo.branch()
+                self._stat.expected_version = self._repo.tag() + self._repo.branch()
         else:
             if self._repo:
-                self._repo.status(stat, self._repo_dir_path)
+                self._repo.status(self._stat, self._repo_dir_path)
 
             if self._externals and self._externals_sourcetree:
                 # we expect externals and they exist
@@ -134,28 +134,12 @@ class _External(object):
         if self._local_path != LOCAL_PATH_INDICATOR:
             # store the stats under tha local_path, not comp name so
             # it will be sorted correctly
-            all_stats[stat.path] = stat
+            all_stats[self._stat.path] = self._stat
 
         if ext_stats:
             all_stats.update(ext_stats)
 
         return all_stats
-
-    def verbose_status_dump(self):
-        """Display the verbose status to the user. This is just the raw output
-        from the repository 'status' command.
-
-        """
-        if not os.path.exists(self._repo_dir_path):
-            msg = ('status check: repository directory for "{0}" does not '
-                   'exist!'.format(self._name))
-            logging.info(msg)
-        else:
-            cwd = os.getcwd()
-            os.chdir(self._repo_dir_path)
-            if self._repo:
-                self._repo.verbose_status_dump(self._repo_dir_path)
-            os.chdir(cwd)
 
     def checkout(self, verbosity, load_all):
         """
@@ -180,11 +164,17 @@ class _External(object):
                         self._base_dir_path)
                     fatal_error(msg)
 
+        if self._stat.source_type != ExternalStatus.STANDALONE:
+            if verbosity >= VERBOSITY_VERBOSE:
+                # NOTE(bja, 2018-01) probably do not want to pass
+                # verbosity in this case, because if (verbosity ==
+                # VERBOSITY_DUMP), then the previous status output would
+                # also be dumped, adding noise to the output.
+                self._stat.log_status_message(VERBOSITY_VERBOSE)
+
         if self._repo:
-            self._repo.checkout(
-                self._base_dir_path,
-                self._repo_dir_name,
-                verbosity)
+            self._repo.checkout(self._base_dir_path,
+                                self._repo_dir_name, verbosity)
 
     def checkout_externals(self, verbosity, load_all):
         """Checkout the sub-externals for this object
@@ -255,6 +245,7 @@ class SourceTree(object):
 
         summary = {}
         for comp in load_comps:
+            printlog('{0}, '.format(comp), end='')
             stat = self._all_components[comp].status()
             for name in stat.keys():
                 # check if we need to append the relative_path_base to
@@ -271,15 +262,6 @@ class SourceTree(object):
 
         return summary
 
-    def verbose_status_dump(self):
-        """Display verbose status to the user. This is just the raw output of
-        the git and svn status commands.
-
-        """
-        load_comps = self._all_components.keys()
-        for comp in load_comps:
-            self._all_components[comp].verbose_status_dump()
-
     def checkout(self, verbosity, load_all, load_comp=None):
         """
         Checkout or update indicated components into the the configured
@@ -289,7 +271,7 @@ class SourceTree(object):
         If load_all is False, load_comp is an optional set of components to load.
         If load_all is True and load_comp is None, only load the required externals.
         """
-        if verbosity == VERBOSITY_VERBOSE:
+        if verbosity >= VERBOSITY_VERBOSE:
             printlog('Checking out externals: ')
         else:
             printlog('Checking out externals: ', end='')
@@ -303,10 +285,12 @@ class SourceTree(object):
 
         # checkout the primary externals
         for comp in load_comps:
-            if verbosity == VERBOSITY_VERBOSE:
-                printlog('\n  {0} : '.format(comp))
-            else:
+            if verbosity < VERBOSITY_VERBOSE:
                 printlog('{0}, '.format(comp), end='')
+            else:
+                # verbose output handled by the _External object, just
+                # output a newline
+                printlog(EMPTY_STR)
             self._all_components[comp].checkout(verbosity, load_all)
         printlog('')
 

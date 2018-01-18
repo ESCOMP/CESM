@@ -23,7 +23,6 @@ from manic.externals_status import check_safe_to_update_repos
 from manic.sourcetree import SourceTree
 from manic.utils import printlog
 from manic.global_constants import VERSION_SEPERATOR, LOG_FILE_NAME
-from manic.global_constants import VERBOSITY_DUMP
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
@@ -219,8 +218,9 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
     parser.add_argument('-v', '--verbose', action='count', default=0,
                         help='Output additional information to '
-                        'the screen and log file. This flag can be used '
-                        'multiple times.')
+                        'the screen and log file. For --status, this flag '
+                        'can be used a second time, increasing the verbosity'
+                        'level each time.')
 
     #
     # developer options
@@ -277,12 +277,8 @@ def main(args):
 
     if args.status:
         # user requested status-only
-        if args.verbose != VERBOSITY_DUMP:
-            for comp in sorted(tree_status.keys()):
-                tree_status[comp].log_status_message(args.verbose)
-        else:  # args.verbose == VERBOSITY_DUMP
-            # user requested verbose status dump of the git/svn status commands
-            source_tree.verbose_status_dump()
+        for comp in sorted(tree_status.keys()):
+            tree_status[comp].log_status_message(args.verbose)
     else:
         # checkout / update the external repositories.
         safe_to_update = check_safe_to_update_repos(tree_status)
