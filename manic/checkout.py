@@ -15,7 +15,6 @@ import logging
 import os
 import os.path
 import sys
-import textwrap
 
 from manic.externals_description import create_externals_description
 from manic.externals_description import read_externals_description_file
@@ -262,7 +261,7 @@ def main(args):
                             level=logging.DEBUG)
 
     program_name = os.path.basename(sys.argv[0])
-    logging.info('Beginning of {}'.format(program_name))
+    logging.info('Beginning of %s', program_name)
 
     load_all = False
     if args.optional:
@@ -311,6 +310,6 @@ The following are two options for how to proceed:
             source_tree.checkout(args.verbose, load_all)
             printlog('')
 
-    logging.info('checkout_externals completed without exceptions.')
+    logging.info('%s completed without exceptions.', program_name)
     # NOTE(bja, 2017-11) tree status is used by the systems tests
     return 0, tree_status
