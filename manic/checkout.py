@@ -15,7 +15,6 @@ import logging
 import os
 import os.path
 import sys
-import textwrap
 
 from manic.externals_description import create_externals_description
 from manic.externals_description import read_externals_description_file
@@ -108,7 +107,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
         $ ./manage_externals/%(prog)s --status
 
               ./cime
-          m   ./components/cism
+          s   ./components/cism
               ./components/mosart
           e-o ./components/rtm
            M  ./src/fates
@@ -121,17 +120,18 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
       * column two indicates whether the working copy has modified files.
       * column three shows how the repository is managed, optional or required
 
-    Colunm one will be one of these values:
-      * m : modified : repository is modified compared to the externals description
+    Column one will be one of these values:
+      * s : out-of-sync : repository is checked out at a different commit
+            compared with the externals description
       * e : empty : directory does not exist - %(prog)s has not been run
       * ? : unknown : directory exists but .git or .svn directories are missing
 
-    Colunm two will be one of these values:
-      * M : Modified : untracked, modified, added, deleted or missing files
+    Column two will be one of these values:
+      * M : Modified : modified, added, deleted or missing files
       *   : blank / space : clean
       * - : dash : no meaningful state, for empty repositories
 
-    Colunm three will be one of these values:
+    Column three will be one of these values:
       * o : optional : optionally repository
       *   : blank / space : required repository
 
@@ -260,7 +260,8 @@ def main(args):
                             datefmt='%Y-%m-%d %H:%M:%S',
                             level=logging.DEBUG)
 
-    logging.info('Begining of checkout_externals')
+    program_name = os.path.basename(sys.argv[0])
+    logging.info('Beginning of %s', program_name)
 
     load_all = False
     if args.optional:
@@ -287,12 +288,21 @@ def main(args):
             for comp in sorted(tree_status.keys()):
                 tree_status[comp].log_status_message(args.verbose)
             # exit gracefully
-            msg = textwrap.fill(
-                'Some external repositories are not in a clean state. '
-                '(Generally, these are repositories with "M" in the '
-                'second column in the above status output.) '
-                'Please ensure all external repositories are clean '
-                'before updating.')
+            msg = """The external repositories labeled with 'M' above are not in a clean state.
+
+The following are two options for how to proceed:
+
+(1) Go into each external that is not in a clean state and issue either
+    an 'svn status' or a 'git status' command. Either revert or commit
+    your changes so that all externals are in a clean state. (Note,
+    though, that it is okay to have untracked files in your working
+    directory.) Then rerun {program_name}.
+
+(2) Alternatively, you do not have to rely on {program_name}. Instead, you
+    can manually update out-of-sync externals (labeled with 's' above)
+    as described in the configuration file {config_file}.
+""".format(program_name=program_name, config_file=args.externals)
+
             printlog('-' * 70)
             printlog(msg)
             printlog('-' * 70)
@@ -300,6 +310,6 @@ def main(args):
             source_tree.checkout(args.verbose, load_all)
             printlog('')
 
-    logging.info('checkout_externals completed without exceptions.')
+    logging.info('%s completed without exceptions.', program_name)
     # NOTE(bja, 2017-11) tree status is used by the systems tests
     return 0, tree_status

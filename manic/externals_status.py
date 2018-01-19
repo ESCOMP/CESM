@@ -32,7 +32,7 @@ class ExternalStatus(object):
     DEFAULT = '-'
     UNKNOWN = '?'
     EMPTY = 'e'
-    MODEL_MODIFIED = 'm'
+    MODEL_MODIFIED = 's'  # a.k.a. out-of-sync
     DIRTY = 'M'
 
     STATUS_OK = ' '
