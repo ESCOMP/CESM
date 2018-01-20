@@ -9,9 +9,10 @@ import os
 import re
 import xml.etree.ElementTree as ET
 
+from .global_constants import EMPTY_STR, VERBOSITY_VERBOSE
 from .repository import Repository
 from .externals_status import ExternalStatus
-from .utils import fatal_error, log_process_output
+from .utils import fatal_error, indent_string, printlog
 from .utils import execute_subprocess
 
 
@@ -54,7 +55,7 @@ class SvnRepository(Repository):
     # Public API, defined by Repository
     #
     # ----------------------------------------------------------------
-    def checkout(self, base_dir_path, repo_dir_name):
+    def checkout(self, base_dir_path, repo_dir_name, verbosity):
         """Checkout or update the working copy
 
         If the repo destination directory exists, switch the sandbox to
@@ -68,10 +69,15 @@ class SvnRepository(Repository):
         if os.path.exists(repo_dir_path):
             cwd = os.getcwd()
             os.chdir(repo_dir_path)
-            self._svn_switch(self._url)
+            self._svn_switch(self._url, verbosity)
+            # svn switch can lead to a conflict state, but it gives a
+            # return code of 0. So now we need to make sure that we're
+            # in a clean (non-conflict) state.
+            self._abort_if_dirty(repo_dir_path,
+                                 "Expected clean state following switch")
             os.chdir(cwd)
         else:
-            self._svn_checkout(self._url, repo_dir_path)
+            self._svn_checkout(self._url, repo_dir_path, verbosity)
 
     def status(self, stat, repo_dir_path):
         """
@@ -80,14 +86,6 @@ class SvnRepository(Repository):
         self._check_sync(stat, repo_dir_path)
         if os.path.exists(repo_dir_path):
             self._status_summary(stat, repo_dir_path)
-        return stat
-
-    def verbose_status(self, repo_dir_path):
-        """Display the raw repo status to the user.
-
-        """
-        if os.path.exists(repo_dir_path):
-            self._status_verbose(repo_dir_path)
 
     # ----------------------------------------------------------------
     #
@@ -110,7 +108,40 @@ class SvnRepository(Repository):
                 # directory removed or incomplete checkout?
                 stat.sync_state = ExternalStatus.UNKNOWN
             else:
-                stat.sync_state = self._check_url(svn_output, self._url)
+                stat.sync_state, stat.current_version = \
+                    self._check_url(svn_output, self._url)
+            stat.expected_version = '/'.join(self._url.split('/')[3:])
+
+    def _abort_if_dirty(self, repo_dir_path, message):
+        """Check if the repo is in a dirty state; if so, abort with a
+        helpful message.
+
+        """
+
+        stat = ExternalStatus()
+        self._status_summary(stat, repo_dir_path)
+        if stat.clean_state != ExternalStatus.STATUS_OK:
+            status = self._svn_status_verbose(repo_dir_path)
+            status = indent_string(status, 4)
+            errmsg = """In directory
+    {cwd}
+
+svn status now shows:
+{status}
+
+ERROR: {message}
+
+One possible cause of this problem is that there may have been untracked
+files in your working directory that had the same name as tracked files
+in the new revision.
+
+To recover: Clean up the above directory (resolving conflicts, etc.),
+then rerun checkout_externals.
+""".format(cwd=repo_dir_path,
+                message=message,
+                status=status)
+
+            fatal_error(errmsg)
 
     @staticmethod
     def _check_url(svn_output, expected_url):
@@ -129,7 +160,13 @@ class SvnRepository(Repository):
             status = ExternalStatus.STATUS_OK
         else:
             status = ExternalStatus.MODEL_MODIFIED
-        return status
+
+        if url:
+            current_version = '/'.join(url.split('/')[3:])
+        else:
+            current_version = EMPTY_STR
+
+        return status, current_version
 
     def _status_summary(self, stat, repo_dir_path):
         """Report whether the svn repository is in-sync with the model
@@ -143,13 +180,9 @@ class SvnRepository(Repository):
         else:
             stat.clean_state = ExternalStatus.STATUS_OK
 
-    def _status_verbose(self, repo_dir_path):
-        """Display the raw svn status output to the user.
-
-        """
-        svn_output = self._svn_status_verbose(repo_dir_path)
-        log_process_output(svn_output)
-        print(svn_output)
+        # Now save the verbose status output incase the user wants to
+        # see it.
+        stat.status_output = self._svn_status_verbose(repo_dir_path)
 
     @staticmethod
     def xml_status_is_dirty(svn_output):
@@ -160,13 +193,15 @@ class SvnRepository(Repository):
         * added files
         * deleted files
         * missing files
-        * unversioned files
 
-        The only acceptable state returned from svn is 'external'
+        Unversioned files do not affect the clean/dirty status.
+
+        'external' is also an acceptable state
 
         """
         # pylint: disable=invalid-name
         SVN_EXTERNAL = 'external'
+        SVN_UNVERSIONED = 'unversioned'
         # pylint: enable=invalid-name
 
         is_dirty = False
@@ -176,8 +211,13 @@ class SvnRepository(Repository):
         for entry in entries:
             status = entry.find('./wc-status')
             item = status.get('item')
-            if item != SVN_EXTERNAL:
+            if item == SVN_EXTERNAL:
+                continue
+            if item == SVN_UNVERSIONED:
+                continue
+            else:
                 is_dirty = True
+                break
         return is_dirty
 
     # ----------------------------------------------------------------
@@ -216,17 +256,21 @@ class SvnRepository(Repository):
     #
     # ----------------------------------------------------------------
     @staticmethod
-    def _svn_checkout(url, repo_dir_path):
+    def _svn_checkout(url, repo_dir_path, verbosity):
         """
         Checkout a subversion repository (repo_url) to checkout_dir.
         """
         cmd = ['svn', 'checkout', url, repo_dir_path]
+        if verbosity >= VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
 
     @staticmethod
-    def _svn_switch(url):
+    def _svn_switch(url, verbosity):
         """
         Switch branches for in an svn sandbox
         """
         cmd = ['svn', 'switch', url]
+        if verbosity >= VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
