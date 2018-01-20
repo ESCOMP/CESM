@@ -10,10 +10,11 @@ import os
 import re
 
 from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
+from .global_constants import VERBOSITY_VERBOSE
 from .repository import Repository
 from .externals_status import ExternalStatus
 from .utils import expand_local_url, split_remote_url, is_remote_url
-from .utils import log_process_output, fatal_error
+from .utils import fatal_error, printlog
 from .utils import execute_subprocess
 
 
@@ -56,7 +57,7 @@ class GitRepository(Repository):
     # Public API, defined by Repository
     #
     # ----------------------------------------------------------------
-    def checkout(self, base_dir_path, repo_dir_name):
+    def checkout(self, base_dir_path, repo_dir_name, verbosity):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -65,38 +66,31 @@ class GitRepository(Repository):
         """
         repo_dir_path = os.path.join(base_dir_path, repo_dir_name)
         if not os.path.exists(repo_dir_path):
-            self._clone_repo(base_dir_path, repo_dir_name)
-        self._checkout_ref(repo_dir_path)
+            self._clone_repo(base_dir_path, repo_dir_name, verbosity)
+        self._checkout_ref(repo_dir_path, verbosity)
 
     def status(self, stat, repo_dir_path):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
-        If the repo destination directory does not exist, checkout the correce
+        If the repo destination directory does not exist, checkout the correct
         branch or tag.
         """
         self._check_sync(stat, repo_dir_path)
         if os.path.exists(repo_dir_path):
             self._status_summary(stat, repo_dir_path)
 
-    def verbose_status(self, repo_dir_path):
-        """Display the raw repo status to the user.
-
-        """
-        if os.path.exists(repo_dir_path):
-            self._status_verbose(repo_dir_path)
-
     # ----------------------------------------------------------------
     #
     # Internal work functions
     #
     # ----------------------------------------------------------------
-    def _clone_repo(self, base_dir_path, repo_dir_name):
+    def _clone_repo(self, base_dir_path, repo_dir_name, verbosity):
         """Prepare to execute the clone by managing directory location
         """
         cwd = os.getcwd()
         os.chdir(base_dir_path)
-        self._git_clone(self._url, repo_dir_name)
+        self._git_clone(self._url, repo_dir_name, verbosity)
         os.chdir(cwd)
 
     def _current_ref_from_branch_command(self, git_output):
@@ -163,6 +157,7 @@ class GitRepository(Repository):
                 current_ref = match.group(1)
             except BaseException:
                 msg = 'DEV_ERROR: regex to detect tracking branch failed.'
+                fatal_error(msg)
         else:
             # assumed local branch
             current_ref = ref.split()[1]
@@ -214,25 +209,31 @@ class GitRepository(Repository):
 
         cwd = os.getcwd()
         os.chdir(repo_dir_path)
+
         git_output = self._git_branch_vv()
         current_ref = self._current_ref_from_branch_command(git_output)
-        if current_ref == EMPTY_STR:
-            stat.sync_state = ExternalStatus.UNKNOWN
-        elif self._branch:
+
+        if self._branch:
             if self._url == LOCAL_PATH_INDICATOR:
                 expected_ref = self._branch
-                stat.sync_state = compare_refs(current_ref, expected_ref)
             else:
                 remote_name = self._determine_remote_name()
                 if not remote_name:
                     # git doesn't know about this remote. by definition
-                    # this is a modefied state.
-                    stat.sync_state = ExternalStatus.MODEL_MODIFIED
+                    # this is a modified state.
+                    expected_ref = "unknown_remote/{0}".format(self._branch)
                 else:
                     expected_ref = "{0}/{1}".format(remote_name, self._branch)
-                    stat.sync_state = compare_refs(current_ref, expected_ref)
         else:
-            stat.sync_state = compare_refs(current_ref, self._tag)
+            expected_ref = self._tag
+
+        stat.sync_state = compare_refs(current_ref, expected_ref)
+        if current_ref == EMPTY_STR:
+            stat.sync_state = ExternalStatus.UNKNOWN
+
+        stat.current_version = current_ref
+        stat.expected_version = expected_ref
+
         os.chdir(cwd)
 
     def _determine_remote_name(self):
@@ -305,19 +306,19 @@ class GitRepository(Repository):
         remote_name = "{0}_{1}".format(base_name, repo_name)
         return remote_name
 
-    def _checkout_ref(self, repo_dir):
+    def _checkout_ref(self, repo_dir, verbosity):
         """Checkout the user supplied reference
         """
         # import pdb; pdb.set_trace()
         cwd = os.getcwd()
         os.chdir(repo_dir)
         if self._url.strip() == LOCAL_PATH_INDICATOR:
-            self._checkout_local_ref()
+            self._checkout_local_ref(verbosity)
         else:
-            self._checkout_external_ref()
+            self._checkout_external_ref(verbosity)
         os.chdir(cwd)
 
-    def _checkout_local_ref(self):
+    def _checkout_local_ref(self, verbosity):
         """Checkout the reference considering the local repo only. Do not
         fetch any additional remotes or specify the remote when
         checkout out the ref.
@@ -328,9 +329,9 @@ class GitRepository(Repository):
         else:
             ref = self._branch
         self._check_for_valid_ref(ref)
-        self._git_checkout_ref(ref)
+        self._git_checkout_ref(ref, verbosity)
 
-    def _checkout_external_ref(self):
+    def _checkout_external_ref(self, verbosity):
         """Checkout the reference from a remote repository
         """
         remote_name = self._determine_remote_name()
@@ -348,7 +349,7 @@ class GitRepository(Repository):
             ref = self._tag
         else:
             ref = '{0}/{1}'.format(remote_name, self._branch)
-        self._git_checkout_ref(ref)
+        self._git_checkout_ref(ref, verbosity)
 
     def _check_for_valid_ref(self, ref):
         """Try some basic sanity checks on the user supplied reference so we
@@ -500,23 +501,16 @@ class GitRepository(Repository):
         cwd = os.getcwd()
         os.chdir(repo_dir_path)
         git_output = self._git_status_porcelain_v1z()
-        os.chdir(cwd)
         is_dirty = self._status_v1z_is_dirty(git_output)
         if is_dirty:
             stat.clean_state = ExternalStatus.DIRTY
         else:
             stat.clean_state = ExternalStatus.STATUS_OK
 
-    def _status_verbose(self, repo_dir_path):
-        """Display raw git status output to the user
-
-        """
-        cwd = os.getcwd()
-        os.chdir(repo_dir_path)
-        git_output = self._git_status_verbose()
+        # Now save the verbose status output incase the user wants to
+        # see it.
+        stat.status_output = self._git_status_verbose()
         os.chdir(cwd)
-        log_process_output(git_output)
-        print(git_output)
 
     @staticmethod
     def _status_v1z_is_dirty(git_output):
@@ -526,10 +520,12 @@ class GitRepository(Repository):
         * modified files
         * missing files
         * added files
-        * untracked files
         * removed
         * renamed
         * unmerged
+
+        Whether untracked files are considered depends on how the status
+        command was run (i.e., whether it was run with the '-u' option).
 
         NOTE: Based on the above definition, the porcelain status
         should be an empty string to be considered 'clean'. Of course
@@ -606,11 +602,13 @@ class GitRepository(Repository):
     def _git_status_porcelain_v1z():
         """Run git status to obtain repository information.
 
-        The machine parable format that is guarenteed not to change
+        This is run with '--untracked=no' to ignore untracked files.
+
+        The machine-portable format that is guaranteed not to change
         between git versions or *user configuration*.
 
         """
-        cmd = ['git', 'status', '--porcelain', '-z']
+        cmd = ['git', 'status', '--untracked-files=no', '--porcelain', '-z']
         git_output = execute_subprocess(cmd, output_to_caller=True)
         return git_output
 
@@ -636,10 +634,12 @@ class GitRepository(Repository):
     #
     # ----------------------------------------------------------------
     @staticmethod
-    def _git_clone(url, repo_dir_name):
+    def _git_clone(url, repo_dir_name, verbosity):
         """Run git clone for the side effect of creating a repository.
         """
         cmd = ['git', 'clone', url, repo_dir_name]
+        if verbosity >= VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
 
     @staticmethod
@@ -653,11 +653,11 @@ class GitRepository(Repository):
     def _git_fetch(remote_name):
         """Run the git fetch command to for the side effect of updating the repo
         """
-        cmd = ['git', 'fetch', remote_name]
+        cmd = ['git', 'fetch', '--tags', remote_name]
         execute_subprocess(cmd)
 
     @staticmethod
-    def _git_checkout_ref(ref):
+    def _git_checkout_ref(ref, verbosity):
         """Run the git checkout command to for the side effect of updating the repo
 
         Param: ref is a reference to a local or remote object in the
@@ -665,4 +665,6 @@ class GitRepository(Repository):
 
         """
         cmd = ['git', 'checkout', ref]
+        if verbosity >= VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)

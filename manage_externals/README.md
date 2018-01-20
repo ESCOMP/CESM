@@ -68,8 +68,8 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     If there are *any* modifications to *any* working copy according
     to the git or svn 'status' command, checkout_externals
     will not update any external repositories. Modifications
-    include: modified files, added files, removed files, missing
-    files or untracked files,
+    include: modified files, added files, removed files, or missing
+    files.
 
   * Checkout all required components from a user specified externals
     description file:
@@ -83,7 +83,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
         $ ./manage_externals/checkout_externals --status
 
               ./cime
-          m   ./components/cism
+          s   ./components/cism
               ./components/mosart
           e-o ./components/rtm
            M  ./src/fates
@@ -95,17 +95,18 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
       * column two indicates whether the working copy has modified files.
       * column three shows how the repository is managed, optional or required
 
-    Colunm one will be one of these values:
-      * m : modified : repository is modefied compared to the externals description
+    Column one will be one of these values:
+      * s : out-of-sync : repository is checked out at a different commit
+            compared with the externals description
       * e : empty : directory does not exist - checkout_externals has not been run
       * ? : unknown : directory exists but .git or .svn directories are missing
 
-    Colunm two will be one of these values:
-      * M : Modified : untracked, modified, added, deleted or missing files
+    Column two will be one of these values:
+      * M : Modified : modified, added, deleted or missing files
       *   : blank / space : clean
       * - : dash : no meaningful state, for empty repositories
 
-    Colunm three will be one of these values:
+    Column three will be one of these values:
       * o : optional : optionally repository
       *   : blank / space : required repository
 
@@ -153,6 +154,8 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     'src'.
 
   * tag (string) : tag to checkout
+
+    This can also be a git SHA-1
 
   * branch (string) : branch to checkout
 

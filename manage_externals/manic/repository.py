@@ -30,7 +30,7 @@ class Repository(object):
         if self._tag is not EMPTY_STR and self._branch is not EMPTY_STR:
             fatal_error('repo cannot have both a tag and a branch element')
 
-    def checkout(self, base_dir_path, repo_dir_name):  # pylint: disable=unused-argument
+    def checkout(self, base_dir_path, repo_dir_name, verbosity):  # pylint: disable=unused-argument
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -43,14 +43,6 @@ class Repository(object):
 
     def status(self, stat, repo_dir_path):  # pylint: disable=unused-argument
         """Report the status of the repo
-
-        """
-        msg = ('DEV_ERROR: status method must be implemented in all '
-               'repository classes! {0}'.format(self.__class__.__name__))
-        fatal_error(msg)
-
-    def verbose_status(self, repo_dir_path):  # pylint: disable=unused-argument
-        """Display the raw repo status to the user.
 
         """
         msg = ('DEV_ERROR: status method must be implemented in all '
