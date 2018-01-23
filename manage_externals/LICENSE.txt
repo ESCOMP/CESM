@@ -1,4 +1,4 @@
-Copyright (c) 2017, University Corporation for Atmospheric Research (UCAR)
+Copyright (c) 2017-2018, University Corporation for Atmospheric Research (UCAR)
 All rights reserved.
 
 Developed by: 

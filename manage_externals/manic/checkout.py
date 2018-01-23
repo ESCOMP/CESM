@@ -202,7 +202,8 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     #
     # user options
     #
-    parser.add_argument('-e', '--externals', nargs='?', default='CESM.cfg',
+    parser.add_argument('-e', '--externals', nargs='?',
+                        default='Externals.cfg',
                         help='The externals description filename. '
                         'Default: %(default)s.')
 
