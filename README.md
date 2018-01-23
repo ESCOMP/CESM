@@ -5,7 +5,7 @@
 ```
 
 usage: checkout_externals [-h] [-e [EXTERNALS]] [-o] [-S] [-v] [--backtrace]
-                          [-d]
+                          [-d] [--no-logging]
 
 checkout_externals manages checking out CESM externals from revision control
 based on a externals description file. By default only the required
@@ -19,7 +19,8 @@ synchronize the working copy with the externals description.
 optional arguments:
   -h, --help            show this help message and exit
   -e [EXTERNALS], --externals [EXTERNALS]
-                        The externals description filename. Default: CESM.cfg.
+                        The externals description filename. Default:
+                        Externals.cfg.
   -o, --optional        By default only the required externals are checked
                         out. This flag will also checkout the optional
                         externals.
@@ -28,11 +29,13 @@ optional arguments:
                         information is provided. Use verbose output to see
                         details.
   -v, --verbose         Output additional information to the screen and log
-                        file.
+                        file. This flag can be used up to two times,
+                        increasing the verbosity level each time.
   --backtrace           DEVELOPER: show exception backtraces as extra
                         debugging output
   -d, --debug           DEVELOPER: output additional debugging information to
                         the screen and log file.
+  --no-logging          DEVELOPER: disable logging.
 
 ```
 NOTE: checkout_externals *MUST* be run from the root of the source tree it
