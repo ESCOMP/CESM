@@ -15,14 +15,13 @@ import logging
 import os
 import os.path
 import sys
-import textwrap
 
 from manic.externals_description import create_externals_description
 from manic.externals_description import read_externals_description_file
 from manic.externals_status import check_safe_to_update_repos
 from manic.sourcetree import SourceTree
 from manic.utils import printlog
-from manic.global_constants import VERSION_SEPERATOR
+from manic.global_constants import VERSION_SEPERATOR, LOG_FILE_NAME
 
 if sys.hexversion < 0x02070000:
     print(70 * '*')
@@ -93,8 +92,8 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     If there are *any* modifications to *any* working copy according
     to the git or svn 'status' command, %(prog)s
     will not update any external repositories. Modifications
-    include: modified files, added files, removed files, missing
-    files or untracked files,
+    include: modified files, added files, removed files, or missing
+    files.
 
   * Checkout all required components from a user specified externals
     description file:
@@ -108,7 +107,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
         $ ./manage_externals/%(prog)s --status
 
               ./cime
-          m   ./components/cism
+          s   ./components/cism
               ./components/mosart
           e-o ./components/rtm
            M  ./src/fates
@@ -121,17 +120,18 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
       * column two indicates whether the working copy has modified files.
       * column three shows how the repository is managed, optional or required
 
-    Colunm one will be one of these values:
-      * m : modified : repository is modefied compared to the externals description
+    Column one will be one of these values:
+      * s : out-of-sync : repository is checked out at a different commit
+            compared with the externals description
       * e : empty : directory does not exist - %(prog)s has not been run
       * ? : unknown : directory exists but .git or .svn directories are missing
 
-    Colunm two will be one of these values:
-      * M : Modified : untracked, modified, added, deleted or missing files
+    Column two will be one of these values:
+      * M : Modified : modified, added, deleted or missing files
       *   : blank / space : clean
       * - : dash : no meaningful state, for empty repositories
 
-    Colunm three will be one of these values:
+    Column three will be one of these values:
       * o : optional : optionally repository
       *   : blank / space : required repository
 
@@ -180,6 +180,8 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
   * tag (string) : tag to checkout
 
+    This can also be a git SHA-1
+
   * branch (string) : branch to checkout
 
     Note: either tag or branch must be supplied, but not both.
@@ -200,7 +202,8 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     #
     # user options
     #
-    parser.add_argument('-e', '--externals', nargs='?', default='CESM.cfg',
+    parser.add_argument('-e', '--externals', nargs='?',
+                        default='Externals.cfg',
                         help='The externals description filename. '
                         'Default: %(default)s.')
 
@@ -214,9 +217,11 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
                         '%(prog)s. By default only summary information '
                         'is provided. Use verbose output to see details.')
 
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
+    parser.add_argument('-v', '--verbose', action='count', default=0,
                         help='Output additional information to '
-                        'the screen and log file.')
+                        'the screen and log file. This flag can be '
+                        'used up to two times, increasing the '
+                        'verbosity level each time.')
 
     #
     # developer options
@@ -228,6 +233,9 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     parser.add_argument('-d', '--debug', action='store_true', default=False,
                         help='DEVELOPER: output additional debugging '
                         'information to the screen and log file.')
+
+    parser.add_argument('--no-logging', action='store_true',
+                        help='DEVELOPER: disable logging.')
 
     if args:
         options = parser.parse_args(args)
@@ -247,7 +255,14 @@ def main(args):
     Parse externals file and load required repositories or all repositories if
     the --all option is passed.
     """
-    logging.info('Begining of checkout_externals')
+    if not args.no_logging:
+        logging.basicConfig(filename=LOG_FILE_NAME,
+                            format='%(levelname)s : %(asctime)s : %(message)s',
+                            datefmt='%Y-%m-%d %H:%M:%S',
+                            level=logging.DEBUG)
+
+    program_name = os.path.basename(sys.argv[0])
+    logging.info('Beginning of %s', program_name)
 
     load_all = False
     if args.optional:
@@ -258,38 +273,44 @@ def main(args):
     external = create_externals_description(external_data)
 
     source_tree = SourceTree(root_dir, external)
-    printlog('Checking status of components: ', end='')
+    printlog('Checking status of externals: ', end='')
     tree_status = source_tree.status()
     printlog('')
 
     if args.status:
         # user requested status-only
         for comp in sorted(tree_status.keys()):
-            msg = str(tree_status[comp])
-            printlog(msg)
-        if args.verbose:
-            # user requested verbose status dump of the git/svn status commands
-            source_tree.verbose_status()
+            tree_status[comp].log_status_message(args.verbose)
     else:
         # checkout / update the external repositories.
         safe_to_update = check_safe_to_update_repos(tree_status)
         if not safe_to_update:
             # print status
             for comp in sorted(tree_status.keys()):
-                msg = str(tree_status[comp])
-                printlog(msg)
+                tree_status[comp].log_status_message(args.verbose)
             # exit gracefully
-            msg = textwrap.fill(
-                'Some external repositories that are not in a clean '
-                'state. Please ensure all external repositories are clean '
-                'before updating.')
+            msg = """The external repositories labeled with 'M' above are not in a clean state.
+
+The following are two options for how to proceed:
+
+(1) Go into each external that is not in a clean state and issue either
+    an 'svn status' or a 'git status' command. Either revert or commit
+    your changes so that all externals are in a clean state. (Note,
+    though, that it is okay to have untracked files in your working
+    directory.) Then rerun {program_name}.
+
+(2) Alternatively, you do not have to rely on {program_name}. Instead, you
+    can manually update out-of-sync externals (labeled with 's' above)
+    as described in the configuration file {config_file}.
+""".format(program_name=program_name, config_file=args.externals)
+
             printlog('-' * 70)
             printlog(msg)
             printlog('-' * 70)
         else:
-            source_tree.checkout(load_all)
+            source_tree.checkout(args.verbose, load_all)
             printlog('')
 
-    logging.info('checkout_externals completed without exceptions.')
+    logging.info('%s completed without exceptions.', program_name)
     # NOTE(bja, 2017-11) tree status is used by the systems tests
     return 0, tree_status
