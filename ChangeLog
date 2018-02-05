@@ -1,4 +1,389 @@
 ===============================================================
+Tag name: cesm2_0_alpha09a
+Originator(s): CSEG
+Date: 5 February 2018
+One-line Summary: git based cesm checkout
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_161/components/cam             --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180123                                   --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.23                           --
+cime_config                        https://github.com/CESM-Development/cime_config/tree/cime_config0.1.0.alpha.09             --
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_46                                     **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm4_5_18_r273                                         **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180205                 **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65                                               --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_171211                             --
+
+cism
+    William Sacks 2018-01-23 - cism2_1_46 - components/cism (cesm2_0_alpha09a)
+    https://github.com/ESCOMP/cism-wrapper
+
+    Update version of manage_externals
+
+
+    William Sacks 2017-12-27 - cism2_1_45 - components/cism (cesm2_0_alpha09a)
+    https://github.com/ESCOMP/cism-wrapper
+
+    Migrate to git; use manage_externals rather than svn externals
+
+    Requires an externals line in cesm's CESM.cfg file
+
+
+clm
+    William Sacks 2018-01-22 - clm4_5_18_r273 - components/clm (cesm2_0_alpha09a)
+    https://github.com/ESCOMP/ctsm/components/clm
+
+    CLM in git
+
+
+    William Sacks 2018-01-30 - clm4_5_18_r274 - components/clm (cesm2_0_alpha09a)
+    https://github.com/ESCOMP/ctsm
+
+    Fix auto-detection of CIME_MODEL in a standalone checkout
+
+    This is only relevant for a standalone ctsm checkout: it has no impact within CESM
+
+
+pop
+    Michael Levy 2018-01-22 - trunk_tags/cesm_pop_2_1_20180205 - components/pop (cesm2_0_alpha09a)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_2018????
+
+    Switch from svn:externals to manage_externals
+
+    Requires an externals line in cesm's CESM.cfg file
+
+===============================================================
+Tag name: cesm2_0_beta08
+Originator(s): CSEG
+Date: 2 February 2018
+One-line Summary: Updates to all components. Attempt to match Cecile's simualtion #260 
+
+Component tags used for this CESM beta tag :
+
+cime                               https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.23
+cime_config                        https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.09/
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_161/components/cam
+components/clm                     https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r272/components/clm
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20180123
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180103
+components/cism                    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_44
+components/rtm                     https://github.com/ESCOMP/rtm/tags/rtm1_0_65
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_171211
+components/mosart                  https://github.com/ESCOMP/mosart/tags/mosart1_0_30
+
+Answer Changes introduced with this tag when compared to cesm2_0_beta07:
+CAM
+   - All CAM6 will be climate changing.
+   - Always use multiple elevation classes for glacier, even with stub glc.  Changes answers for cases with SGLC
+   - Answer changes for SE dycore.
+   - CAM5 runs, which use changed namelists, will have answer changes.
+   - Will see changes in FXHIST and FXSD if run longer than 3 hours.
+   - Fix for wp2_wp3 band solver in CLUBB (fix Himalaya's crash), answer changing for all CAM6 and any runs which use CLUBB
+   - COSP diagnostic output has diffs.
+CICE
+   - Bug fix to make the code bfb across processors.
+   - Bug fix in thermodynamics. This will change answers for all active CICE compsets
+   - Bring in the Mahrt and Sun 95 flux modifications over sea ice.
+CISM
+    - Changes answers for tests using the cism-test_coupling testmod
+CLM
+    - Fixes for accumulation fields.  Changes answers for Hist and DV compsets, and for ERI and SSP tests
+    - Changes to dry deposition from Simone/Louisa correcting stomatal resistance. Only changes answers for SSP and drydep tests.
+    - Changes answers for any case where atmospheric forcing temperatures drop below about -58 deg C.
+    - New clm50 parameter file and a fix for urban for CLM50.  Changes answers for CLM50. 
+    - Changes answers for clm45.
+    - A few diagnostic fields in all cases (FLDS, PBOT, QBOT, RAIN, SNOW, TBOT, THBOT in CLM hist files)
+    - Completely changes behavior for CLM45 cases with VIC.
+    - Just changes answers for tests with the reseedresetsnow test mod.
+    - Changes answers for CLM50 and for any I compsets running fates (ED).
+    - Small bug fixe to CLM45/50 BGC for Carbon isotopes (when use_c13 and/or use_c14 is on).
+    - Use temperature dependent fresh snow grain size over glaciers.
+    - Changes to crop and enabling Carbon isotopes for crop and some miscellaneous small changes.
+MOSART 
+    - Fix from Sean Swenson so that short rivers don't accumulate water by having a minimum value for rlen.
+POP 
+    - Get latest MARBL developments from marbl_dev branch of POP.
+
+
+Problems identified after tag creation:
+- SSP tests are broken.
+- f09_f09_mg17.FWmadSD fails with high levels of CO2.
+- testreporter script is broken.
+- IRT_Ld7.T31_g37.B1850L45BGCR fails because of no cam ic file. 
+- ERS.T62_g37.G.cheyenne_gnu.pop-cice hanging, issue with using openmpi. Passes if CPL ROOTPE is 0. 
+- ne30_g17 grid isn't being supported at this time. 
+- No atm ncdata defined for f45_g37.B1850 and ne120_g16.B1850. 
+- There are known issues for the pgi and cray compilers.
+
+
+===============================================================
+Tag name: cesm2_0_alpha08g
+Originator(s): CSEG
+Date: 16 January 2018
+One-line Summary: Changes to duplicate Cecile's simualtion 260
+
+cime                               https://github.com/CESM-Development/cime/tags/cime5.4.0.alpha.23                           **
+cime_config                        https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.09             **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_161/components/cam             **
+components/clm                     https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r272/components/clm         **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20180123                                   **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20170103                 **
+components/cism                    https://svn-ccsm-models.cgd.ucar.edu/glc/trunk_tags/cism2_1_44                             --
+components/rtm                     https://github.com/ESCOMP/rtm/tags/rtm1_0_65                                               **
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_171211                             **
+components/mosart                  https://github.com/ESCOMP/mosart/tags/mosart1_0_30                                         **
+
+cam
+    Cheryl Craig 2018-01-19 - cam5_4_161 - components/cam (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_161/components/cam
+
+    Fix the water vapor anomaly
+
+    Answer changing for all CAM6 (runs which use CLUBB)
+
+
+    Cheryl Craig 2018-01-17 - cam5_4_160 - components/cam (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_160/components/cam
+
+    Update externals for all components 
+    Fix CAM/CESM regression test
+
+
+    Cheryl Craig 2018-01-17 - cam5_4_159 - components/cam (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_159/components/cam
+
+    Remove user_nl_XXX settings from 1850, F2000 and FHIST compsets
+
+    This requires an update to config_cime for B1850 f09 cases to work.
+
+    Other misc changes
+
+    **FSCAM is broken in this tag due to incompatibility between cime and CLM versions**
+
+
+    Brian Eaton 2018-01-09 - cam5_4_158 - components/cam (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_158/components/cam
+
+    Replace COSP-1.4 with COSP2.  COSP diagnostic output has diffs.
+
+
+    Cheryl Craig 2017-12-20 - cam5_4_157 - components/cam (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_157/components/cam
+
+    Begin cleanup of namelist_definition.xml file
+
+
+    Brian Eaton 2017-12-15 - cam5_4_156 - components/cam (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_156/components/cam
+
+    . Changes to pressure level diagnostics for T and Z.
+
+
+cice
+    David Bailey 2018-01-23 - cice5_20180123 - components/cice (cesm2_0_alpha08g)
+    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180123
+
+    Another bug fix to make the code bfb across processors.
+
+
+    David Bailey 2018-01-22 - cice5_20180122 - components/cice (cesm2_0_alpha08g)
+    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180122
+
+    Bug fix in thermodynamics. This will change answers for all active CICE compsets.
+
+
+    Chris Fischer 2018-01-19 - cice5_20180119 - components/cice (cesm2_0_alpha08g)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20180119
+
+    Correction to flux convergence to atmice flux.
+
+
+    David Bailey 2018-01-16 - cice5_20180116 - components/cice (cesm2_0_alpha08g)
+    https://github.com/NCAR/CESM_CICE5/tags/cice5_20180116
+
+    This bring in the Mahrt and Sun 95 flux modifications over sea ice. This is not bfb
+    in any active CICE configuration. Note, this tag depends on cime tag cime5.4.0-alpha.18. With this tag we have also moved to github.
+
+
+
+cime
+    Chris Fischer 2018-01-27 - cime5.4.0-alpha.23 - cime (cesm2_0_alpha08g)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.23
+
+        - Fix compare of env_batch.
+
+
+    Chris Fischer 2018-01-26 - cime5.4.0-alpha.22 - cime (cesm2_0_alpha08g)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.22
+
+        - Remove debug print statement
+        - Second fix for user compsets.
+        - Rearrange code in case.py so that compset alias and
+          compset longname get the same result.
+        - Minor fix to get acme provenance test working again.
+        - Fix for LockedFiles.
+        - Change PET to be a multisubmit job.
+        - Minor fix to get query config test working on melvin.
+        - Disable file caching for now.
+
+
+    Chris Fischer 2018-01-24 - cime5.4.0-alpha.21 - cime (cesm2_0_alpha08g)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.21
+
+        - Turn off XML file caching in test scheduler.
+        - Fix typo in cime_bisect.
+        - Cache file reads to avoid re-parsing XML files.
+        - Fix some minor log formatting issues.
+        - Fixed a broken hyperlink in the data ocean model rst documentation.
+        - Always want to see test-scheduler time taken.
+        - Query config update.
+        - Fix formatting of rst documentation for load balancing tool.
+        - Implement walltime stash to support more-accurate walltimes.
+        - Merge branch 'master' of github.com:ESMCI/cime.
+        - Hot fix for acme xsd error.
+
+
+    Chris Fischer 2018-01-16 - cime5.4.0-alpha.20 - cime (cesm2_0_alpha08g)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.20
+
+    Revert src/share/util/changes in shr_spfn_mod.F90
+
+
+    Chris Fischer 2018-01-16 - cime5.4.0-alpha.19 - cime (cesm2_0_alpha08g)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.19
+
+        - CPL user mods.
+        - Update slurm queueing for NERSC.
+        - Change grid in testlist schema to NMTOKEN.
+        - py3 pylint fix.
+        - Add minimal pgi compiler support cheyenne, fix an output error.
+        - Make doctest for get_current_branch more robust.
+        - Remove stale help section comments.
+        - Fix print statements that were corrupted by py3 changes.
+        - Updates for laramie.
+        - Fix K_TestCimeCase.test_cime_case_prereq for LSF machines.
+        - Fix regression test K_TestCimeCase.test_cime_case_test_custom_project.
+
+
+    Chris Fischer 2018-01-11 - cime5.4.0-alpha.18 - cime (cesm2_0_alpha08g)
+    https://github.com/CESM-Development/cime/tags/cime5.4.0-alpha.18
+
+    18358ce Merge pull request #2212 from ESMCI/jgfouca/branch-for-acme-split-2018-01-09
+    ddeb398 Merge pull request #2216 from jedwards4b/correct_bld_output
+    7f3c93b Merge pull request #2217 from jedwards4b/more_fortran_cleanup
+    f44bca3 Merge pull request #2213 from jedwards4b/more_fortran_cleanup
+    559d421 Merge pull request #2211 from jedwards4b/fixforxlf
+    d151642 Merge pull request #2179 from billsacks/fix_advdate
+    507b9dd Merge pull request #2158 from ESMCI/mvertens/dicemods
+    89015ca Merge pull request #2205 from ESMCI/jgfouca/remove_scans
+    3eb054d Merge pull request #2202 from jedwards4b/refactor_seq_diag_mod
+    cdb7b3f fix doctest for py3
+    5872dda Merge pull request #2208 from jedwards4b/py3fix
+    8e2319f Merge pull request #2206 from ESMCI/jgfouca/fix_desc_stride
+    e3cf1f3 Merge pull request #2198 from jedwards4b/more_atmocn_flux
+    cf9e427 Merge pull request #2204 from gold2718/lowresSEgrid
+    1bd046f Use https for cdash
+    bd9b5f1 Minor fixes for cdash interaction
+    a2ef582 Merge pull request #2201 from jedwards4b/fix_long_line
+    14176a0 Merge pull request #2192 from jedwards4b/reduce_fortran_warnings1
+    a44965e Merge pull request #2196 from ESMCI/jgfouca/remove_run_with_submit
+    ef10d62 Minor fix for ACME
+    7e28a21 Merge pull request #2148 from ESMCI/jgfouca/hide_xml_interface
+    05ba5c5 Merge pull request #2087 from ekluzek/addmachmodex
+    1ab0e78 Merge pull request #2193 from jedwards4b/always_set_baselineroot_in_tests
+    8a401cb Merge pull request #2189 from ESMCI/jgfouca/fix_melvin
+    d5e21de Merge pull request #2188 from ESMCI/jgfouca/fix_create_test_cesm_doc
+    7c607cb Merge pull request #2187 from ESMCI/jgfouca/max_task_fixes
+    ddb968b Merge pull request #2186 from ESMCI/jgfouca/improve_acme_cime_mgt
+    295e91c Merge pull request #2184 from jedwards4b/indent_consistantly
+
+
+cime_config
+    Erik Kluzek 2018-01-29 - cime_config0.1.0.alpha.09 - cime_config (cesm2_0_alpha08g)
+    https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.09
+
+    For fully coupled B1850 compsets at f09 point to an updated hybrid startup directory (b.e11.B1850C5CN.f09_g16.005_yr402_cesm2_v3). The new directory is the same as the old for everything but CLM which has an updated CLM finidat file, so CLM can run without needed to interpolate initial conditions.
+
+    Required with cam update: clm5_4_159 where user_nl_clm files were removed for B1850
+
+
+    Chris Fischer 2018-01-11 - cime_config0.1.0.alpha.08 - cime_config (cesm2_0_alpha08g)
+    https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.08
+
+    Updating the fully coupled user mods, add orb parameters for b1850, remove cism
+    Fixing issue with defaultiomi and PET tests.
+
+
+clm
+    Erik Kluzek 2018-01-24 - clm4_5_18_r272 - components/clm (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r272/components/clm
+
+    Bring in the latest updated FATES tag. Also bring in some IC files for FATES clm45. And fix options in testlist.
+
+
+    Erik Kluzek 2018-01-03 - clm4_5_18_r271 - components/clm (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/clm2/trunk_tags/clm4_5_18_r271/components/clm
+
+    Update testlist moving yellowstone tests to cheyenne
+
+
+mosart
+    Erik Kluzek 2018-01-24 - mosart1_0_30 - components/mosart (cesm2_0_alpha08g)
+    https://github.com/ESCOMP/mosart/tree/mosart1_0_30
+
+    Fix options in testlist
+
+
+    Erik Kluzek 2018-01-08 - mosart1_0_29 - components/mosart (cesm2_0_alpha08g)
+    https://github.com/ESCOMP/mosart/tree/mosart1_0_29
+
+    Remove yellowstone from mosart test list and update to version 2 format.
+
+
+    Erik Kluzek 2017-12-15 - mosart1_0_28 - components/mosart (cesm2_0_alpha08g)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_28
+
+    MOSART in github
+
+
+pop
+    Michael Levy 2018-01-03 - cesm_pop_2_1_20180103 - components/pop (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180103
+
+    Include full CVMix repository rather than just src/shared directory
+    (will be useful when moving to manage_externals and pulling CVMix in via git)
+
+
+rtm
+    Erik Kluzek 2018-01-24 - rtm1_0_65 - components/rtm (cesm2_0_alpha08g)
+    https://github.com/ESCOMP/rtm/tree/rtm1_0_65
+
+    Fix options in testlist.
+
+
+    Erik Kluzek 2018-01-08 - rtm1_0_64 - components/rtm (cesm2_0_alpha08g)
+    https://github.com/ESCOMP/rtm/tree/rtm1_0_64
+
+    Remove yellowstone from RTM test list and update to version 2 format.
+
+
+    Erik Kluzek 2017-12-15 - rtm1_0_63 - components/rtm (cesm2_0_alpha08g)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_63
+
+    RTM in github
+
+
+ww3
+    Alper Altuntas 2017-12-20 - ww3_171211 - components/ww3 (cesm2_0_alpha08g)
+    https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_171211/
+
+    Enable better control on the WW3 output frequency:
+    The output frequency is now set by 'outfreq' in the .wav_in' namelist 
+    and can be modified in the user specific namelist .user_nl_ww..
+
+
+===============================================================
 Tag name: cesm2_0_alpha08f
 Originator(s): CSEG
 Date: 22 December 2017
