@@ -1,4 +1,38 @@
 ===============================================================
+Tag name: cesm2_0_beta09
+Originator(s): CSEG
+Date: 9 February 2018
+One-line Summary: Move CESM to a git based checkout.
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_161/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180123 
+cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.23 
+cime_config                        https://github.com/CESM-Development/cime_config/tree/cime_config0.1.0.alpha.09
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_46 
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm4_5_18_r273 
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30 
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180205 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65 
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_171211
+
+
+Answer Changes introduced with this tag when compared to cesm2_0_beta08:
+- No answer changes in this beta tag.
+
+Problems identified after tag creation:
+- IRT_N3_Ld7.f19_g17.BHISTWs.cheyenne_gnu test in unstable due to a bad pes layout.
+- SSP tests are broken.
+- f09_f09_mg17.FWmadSD fails with high levels of CO2.
+- testreporter script is broken.
+- IRT_Ld7.T31_g37.B1850L45BGCR fails because of no cam ic file. 
+- ERS.T62_g37.G.cheyenne_gnu.pop-cice hanging, issue with using openmpi. Passes if CPL ROOTPE is 0. 
+- ne30_g17 grid isn't being supported at this time. 
+- No atm ncdata defined for f45_g37.B1850 and ne120_g16.B1850. 
+- There are known issues for the pgi and cray compilers.
+
+===============================================================
 Tag name: cesm2_0_alpha09a
 Originator(s): CSEG
 Date: 5 February 2018
