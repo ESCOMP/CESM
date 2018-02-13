@@ -1,4 +1,98 @@
 ===============================================================
+Tag name: cesm2_0_alpha10a
+Originator(s): CSEG
+Date: 13 February 2018
+One-line Summary: CAM updates 
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_165/components/cam             **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180123                                   --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.24                           **
+cime_config                        https://github.com/CESM-Development/cime_config/tree/cime_config0.1.0.alpha.10             **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_46                                     --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.000                                             **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180205                 --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65                                               --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                             **
+
+cam
+    Alice Bertini 2018-02-07 - trunk_tags/cam5_4_164 - components/cam (cesm2_0_alpha10a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_164
+
+    . update driver namelist settings to match CESM.  This only affects CAM standalone configurations.
+
+
+    Brian Eaton 2018-01-31 - /trunk_tags/cam5_4_163 - components/cam (cesm2_0_alpha10a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_163/components/cam
+
+    . requested fix for testlist_cam.xml
+    . updates for CAM regression testing
+
+
+    Alice Bertini 2018-02-08 - trunk_tags/cam5_4_165 - components/cam (cesm2_0_alpha10a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_165
+
+     Corrections to WACCM solar forcings
+
+    WACCM and WACCMX transient compsets are not bit-for-bit
+
+
+cime
+    Alice Bertini 2018-02-12 - cime5.4.0-alpha.24 - cime (cesm2_0_alpha10a)
+    https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.24
+
+    Move to ESMCI
+        - Query_config parsing fix to find correct component.
+        - Leverage env command options to assist parsing.
+        - Add a test that compares a case created using the compset alias to
+          one created using the longname for the same compset.
+        - Disable caching withing the main test_scheduler process.
+        - Upgrade cime_bisect.
+        - Another exception for read only in config files.
+        - Add pstrid to pes.
+        - Fix issues with read only xml.
+        - Separate post-DA from pause/resume and add resume signal at init.
+        - Restore case.st_archive.
+        - Allow merge of xml files without extra child level.
+        - Fix unused import.
+        - Reinstate xml file caching, but only for read-only files.
+        - Backout gnu changes.
+        - Update modules and mod paths for cheyenne.
+        - Jgfouca/branch for acme split 2018-01-30.
+        - Fix bug in generic env load.
+        - Improve python interface to environment modules.
+
+
+cime_config
+    Alice Bertini 2018-02-12 - cime_config0.1.0.alpha.10 - cime_config (cesm2_0_alpha10a)
+    https://github.com/CESM-Development/cime_config/tags/cime_config0.1.0.alpha.09
+
+    Fix missing compset names in testlist.
+    Fix to make IRT_N3 tests more stable on cheyenne my using a better pes layout.
+
+    This will be the last cime_config tag.
+
+
+clm
+    Alice Bertini 2018-02-06 - clm5.0.000 - components/clm (cesm2_0_alpha10a)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.000
+
+    Documentation tag same as previous version with new tag naming convention.
+
+
+    Alice Bertini 2018-02-05 - clm4_5_18_r275 - components/clm (cesm2_0_alpha10a)
+    https://github.com/ESCOMP/ctsm/tags/clm4_5_18_r275
+
+    Update initial condition files, update fates, new CMIP6 pop-dens, more lnd_tuning_mod options, updated ndep for fully coupled
+
+
+ww3
+    Alice Bertini 2018-02-07 - ww3_180115 - components/ww3 (cesm2_0_alpha10a)
+    https://svn-ccsm-models.cgd.ucar.edu/ww3/ww3_180115
+
+    Set restart file write frequency to waw_cpl_dt.
+
+===============================================================
 Tag name: cesm2_0_beta09
 Originator(s): CSEG
 Date: 9 February 2018
