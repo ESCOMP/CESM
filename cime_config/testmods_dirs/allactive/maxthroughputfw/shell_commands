@@ -1,0 +1,8 @@
+# copy the spmd_mod.F90
+# This performance test is only expected to work on yellowstone
+cp /glade/u/home/jedwards/b1850/SourceMods/src.cam/* SourceMods/src.cam
+./xmlchange NTASKS=2048
+./xmlchange NTHRDS=4
+./xmlchange --append CAM_CONFIG_OPTS="-pcols 8"
+
+

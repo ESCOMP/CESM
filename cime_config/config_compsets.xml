@@ -1,0 +1,333 @@
+<?xml version="1.0"?>
+
+<compsets version="2.0">
+
+  <help>
+    =========================================
+    compset naming convention
+    =========================================
+    The compset longname below has the specified order
+    atm, lnd, ice, ocn, river, glc wave cesm-options
+
+    The notation for the compset longname is
+    TIME_ATM[%phys]_LND[%phys]_ICE[%phys]_OCN[%phys]_ROF[%phys]_GLC[%phys]_WAV[%phys][_ESP%phys][_BGC%phys]
+    Where for the specific compsets below the following is supported
+    TIME = Time period (e.g. 2000, HIST, RCP8...)
+    ATM  = [CAM40, CAM50, CAM60]
+    LND  = [CLM45, CLM50, SLND]
+    ICE  = [CICE, DICE, SICE]
+    OCN  = [DOCN, ,AQUAP, SOCN]
+    ROF  = [RTM, MOSART, SROF]
+    GLC  = [CISM1, CISM2, SGLC]
+    WAV  = [WW3, DWAV, XWAV, SWAV]
+    ESP  = [SESP]
+    BGC  = optional BGC scenario
+
+    The OPTIONAL %phys attributes specify submodes of the given system
+    For example DOCN%DOM is the data ocean model for DOCN
+    ALL the possible %phys choices for each component are listed.
+    ALL data models must have a %phys option that corresponds to the data  model mode
+
+    Each compset node is associated with the following elements
+    - lname
+    - alias
+    - support  (optional description of the support level for this compset)
+    Each compset node can also have the following attributes
+    - grid  (optional regular expression match for grid to work with the compset)
+  </help>
+
+  <!-- 1850 compsets Default, Mosart, Wave for CESM2 -->
+
+
+  <compset>
+    <alias>B1850Ws</alias>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
+  </compset>
+
+  <compset>
+    <alias>B1850</alias>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f09_g16"/>
+  </compset>
+
+  <compset>
+    <alias>BW1850</alias>
+    <lname>1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <science_support grid="f09_g16"/>
+  </compset>
+  <compset>
+    <alias>BWma1850</alias>
+    <lname>1850_CAM60%WCCM_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
+  </compset>
+
+  <!--
+       Other B water isotope compsets that are only relevant for clm water isotope branches
+       where only clm40 is supported
+  -->
+
+  <compset>
+    <alias>Bi1850C5</alias>
+    <lname>1850_CAM50%WISOall_CLM40%SP-WISO_CICE%WISO_POP2%ISO_RTM%WISO_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>Bi1850C5CN</alias>
+    <lname>1850_CAM50%WISOall_CLM40%CN-WISO_CICE%WISO_POP2%ISO_RTM%WISO_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BiHISTC5CN</alias>
+    <lname>HIST_CAM50_CLM40%CN-WISO_CICE%WISO_POP2%ISO_RTM%WISO_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BiHISTC5CN5</alias>
+    <lname>HIST_CAM5_CLM50%CN-WISO_CICE%WISO_POP2%ISO_RTM%WISO_SGLC_SWAV</lname>
+  </compset>
+
+  <!-- No longer supported B compsets with CLM40 -->
+
+  <!-- <compset> -->
+  <!--   <alias>B1850C5L40SPR</alias> -->
+  <!--   <lname>1850_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV</lname> -->
+  <!-- </compset> -->
+
+  <!-- <compset> -->
+  <!--   <alias>B1850C4L40CNR</alias> -->
+  <!--   <lname>1850_CAM40_CLM40%CN_CICE_POP2_RTM_SGLC_SWAV</lname> -->
+  <!-- </compset> -->
+
+  <!-- <compset> -->
+  <!--   <alias>B1850C5L40CNR</alias> -->
+  <!--   <lname>1850_CAM50_CLM40%CN_CICE_POP2_RTM_SGLC_SWAV</lname> -->
+  <!-- </compset> -->
+
+  <compset>
+    <alias>BHIST</alias>
+    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+  </compset>
+
+  <compset>
+    <alias>BHISTWs</alias>
+    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
+  </compset>
+
+  <!-- <compset> -->
+  <!--   <alias>B1850C4RCO2L40CNR</alias> -->
+  <!--   <lname>1850_CAM40%RCO2_CLM40%CN_CICE_POP2_RTM_SGLC_SWAV</lname> -->
+  <!-- </compset> -->
+
+  <!-- <compset> -->
+  <!--   <alias>B1850C4L40CNRBDRD</alias> -->
+  <!--   <lname>1850_CAM40_CLM40%CN_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BDRD</lname> -->
+  <!-- </compset> -->
+
+  <!-- <compset> -->
+  <!--   <alias>BHISTC5L40CNRWs</alias> -->
+  <!--   <lname>HIST_CAM50_CLM40%CN_CICE_POP2_RTM_SGLC_SWAV</lname> -->
+  <!-- </compset> -->
+
+  <!-- <compset> -->
+  <!--   <alias>BHISTC5L40CNR</alias> -->
+  <!--   <lname>HIST_CAM50_CLM40%CN_CICE_POP2_RTM_SGLC_WW3</lname> -->
+  <!-- </compset> -->
+
+  <!-- <compset> -->
+  <!--   <alias>BRCP26C4L40CNR</alias> -->
+  <!--   <lname>RCP2_CAM40_CLM40%CN_CICE_POP2_RTM_SGLC_SWAV</lname> -->
+  <!-- </compset> -->
+
+  <!-- <compset> -->
+  <!--   <alias>BRCP45C4L40CNRBDRD</alias> -->
+  <!--   <lname>RCP4_CAM40_CLM40%CN_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BDRD</lname> -->
+  <!-- </compset> -->
+
+  <!-- <compset> -->
+  <!--   <alias>BRCP85C4L40CNRBPRP</alias> -->
+  <!--   <lname>RCP8_CAM40_CLM40%CN_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BPRP</lname> -->
+  <!-- </compset> -->
+
+  <!-- <compset> -->
+  <!--   <alias>BHISTC4L40CNRBDRD</alias> -->
+  <!--   <lname>HIST_CAM40_CLM40%CN_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BDRD</lname> -->
+  <!-- </compset> -->
+
+  <!-- Other B compsets -->
+
+<!--  <compset> -->
+<!--    <alias>BHISTC5L40CNRWs</alias> -->
+<!--    <lname>HIST_CAM50_CLM40%CN_CICE_POP2_RTM_SGLC_SWAV</lname> -->
+<!--  </compset> -->
+
+  <compset>
+    <alias>BC5L45BGC</alias>
+    <lname>2000_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>B1850L45BGCR</alias>
+    <lname>1850_CAM60_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
+  </compset>
+
+<!--  <compset> -->
+<!--    <alias>BHISTC5L40CNR</alias> -->
+<!--    <lname>HIST_CAM50_CLM40%CN_CICE_POP2_RTM_SGLC_WW3</lname> -->
+<!--  </compset> -->
+
+  <compset>
+    <alias>B1850C5L45BGC</alias>
+    <lname>1850_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
+  </compset>
+
+<!--  <compset> -->
+<!--    <alias>BHISTC5L45BGCRWs</alias> -->
+<!--    <lname>HIST_CAM50_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname> -->
+<!--  </compset> -->
+
+<!--  <compset> -->
+<!--    <alias>BHISTC5L45BGCR</alias> -->
+<!--    <lname>HIST_CAM50_CLM45%BGC_CICE_POP2_RTM_SGLC_WW3</lname> -->
+<!--  </compset> -->
+
+<!--  <compset> -->
+<!--    <alias>BHISTC5L45BGCWs</alias> -->
+<!--    <lname>HIST_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname> -->
+<!--  </compset> -->
+
+<!--  <compset> -->
+<!--    <alias>BHISTC5L45BGC</alias> -->
+<!--    <lname>HIST_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_WW3</lname> -->
+<!--  </compset> -->
+
+  <compset>
+    <alias>BRCP85L45BGCR</alias>
+    <lname>RCP8_CAM60_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BRCP85C5L45BGC</alias>
+    <lname>RCP8_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BC5L45BGCR</alias>
+    <lname>2000_CAM50_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
+  </compset>
+
+  <!-- Climate Simulation Lab compsets for Keith Lindsay -->
+
+  <compset>
+    <alias>B1850C4L45BGCRBPRP</alias>
+    <lname>1850_CAM40_CLM45%BGC_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BPRP</lname>
+  </compset>
+
+  <compset>
+    <alias>B1850C4L45BGCBPRP</alias>
+    <lname>1850_CAM40_CLM45%BGC_CICE_POP2%ECO_MOSART_SGLC_SWAV_BGC%BPRP</lname>
+  </compset>
+
+  <compset>
+    <alias>B1850L45BGCRBPRP</alias>
+    <lname>1850_CAM60_CLM45%BGC_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BPRP</lname>
+  </compset>
+
+<!--  <compset> -->
+<!--    <alias>BHISTC4L40CNRBDRD</alias> -->
+<!--    <lname>HIST_CAM40_CLM40%CN_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BDRD</lname> -->
+<!--  </compset> -->
+
+  <!-- BG compsets: evolving ice sheet -->
+
+  <compset>
+    <alias>B1850G</alias>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%EVOLVE_WW3_BGC%BDRD</lname>
+  </compset>
+
+  <!-- This is just needed for testing multi-instance, because WW3 currently does not support multi-instance -->
+  <compset>
+    <alias>B1850GWs</alias>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%EVOLVE_SWAV_BGC%BDRD</lname>
+  </compset>
+
+  <!-- Include one CISM1 compset, mainly for testing purposes, to make sure that
+       CISM1 can operate in a fully-coupled configuration. Main point is to
+       check the PE layout. -->
+  <compset>
+    <alias>B1850G1</alias>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%EVOLVE_WW3_BGC%BDRD</lname>
+  </compset>
+
+  <!-- Prognostic wave -->
+
+
+  <!-- Data wave -->
+
+
+  <!-- Single Column POP -->
+
+
+  <!-- SOM compsets -->
+
+  <compset>
+    <alias>ETEST</alias>
+    <lname>2000_CAM60_CLM50%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST</lname>
+  </compset>
+
+  <compset>
+    <alias>E1850L45TEST</alias>
+    <lname>1850_CAM60_CLM45%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST</lname>
+  </compset>
+
+  <!-- All active except data atmosphere
+       Used for spinup and testing of CISM couplings -->
+
+  <compset>
+     <alias>J1850G</alias>
+     <lname>1850_DATM%CRU_CLM50%BGC-CROP_CICE_POP2_MOSART_CISM2%EVOLVE_SWAV</lname>
+  </compset>
+
+  <entries>
+    <entry id="RUN_STARTDATE">
+      <values>
+        <value compset="1850_"     >0001-01-01</value>
+        <value compset="2000_"     >0001-01-01</value>
+        <value compset="HIST_"     >1850-01-01</value>
+        <value compset="5505_"     >1955-01-01</value>
+        <value compset="RCP[2468]_">2005-01-01</value>
+        <value compset="2013_"     >2013-01-01</value>
+      </values>
+    </entry>
+    <entry id="RUN_REFDATE">
+      <values match="first">
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >0402-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >0402-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3"         >0157-01-01</value>
+      </values>
+    </entry>
+
+    <entry id="RUN_TYPE">
+      <values match="first">
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >hybrid</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >hybrid</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3"         >hybrid</value>
+      </values>
+    </entry>
+
+    <entry id="RUN_REFCASE">
+      <values match="first">
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >b.e11.B1850C5CN.f09_g16.005_yr402_cesm2_v3</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >b.e11.B1850C5CN.f09_g16.005_yr402_cesm2_v3</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3"         >b.e20.B1850.f09_g17.pi_control.all.260</value>
+      </values>
+    </entry>
+
+    <entry id="RUN_REFDIR">
+      <values match="first">
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >cesm2_init</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >cesm2_init</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3"         >cesm2_init</value>
+      </values>
+    </entry>
+  </entries>
+
+</compsets>

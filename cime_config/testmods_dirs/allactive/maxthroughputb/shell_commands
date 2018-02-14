@@ -1,0 +1,33 @@
+# copy the spmd_mod.F90
+# This performance test is only expected to work on yellowstone
+cp /glade/u/home/jedwards/b1850/SourceMods/src.cam/* SourceMods/src.cam
+NTASKS_ATM=1920
+NTASKS_CPL=608
+NTASKS_LND=1184
+NTASKS_ICE=608
+NTASKS_WAV=128
+NTASKS_OCN=192
+NTHRDS=2
+
+ROOTPE_WAV=$(($NTASKS_LND + $NTASKS_ICE))
+#ROOTPE_CPL=$(($ROOTPE_WAV + $NTASKS_WAV))
+ROOTPE_CPL=$NTASKS_LND
+COST_PES=$(($NTHRDS*($NTASKS_ATM + $NTASKS_OCN)))
+ROOTPE_OCN=$(($NTASKS_ATM))
+
+./xmlchange MAX_MPITASKS_PER_NODE=16
+./xmlchange MAX_TASKS_PER_NODE=16
+./xmlchange NTASKS_ATM=$NTASKS_ATM
+./xmlchange NTASKS_CPL=$NTASKS_CPL
+./xmlchange NTASKS_GLC=$NTASKS_ATM
+./xmlchange NTASKS_LND=$NTASKS_LND
+./xmlchange NTASKS_ROF=$NTASKS_LND
+./xmlchange NTASKS_ICE=$NTASKS_ICE
+./xmlchange NTASKS_WAV=$NTASKS_WAV
+./xmlchange NTASKS_OCN=$NTASKS_OCN
+./xmlchange ROOTPE_OCN=$ROOTPE_OCN
+./xmlchange ROOTPE_ICE=$NTASKS_LND
+./xmlchange ROOTPE_WAV=$ROOTPE_WAV
+./xmlchange ROOTPE_CPL=$ROOTPE_CPL
+./xmlchange NTHRDS=$NTHRDS
+

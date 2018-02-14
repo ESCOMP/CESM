@@ -1,0 +1,4 @@
+
+! This is needed to give CISM history output in the (typically short)
+! tests that are done with this testmod directory
+history_option = 'coupler'

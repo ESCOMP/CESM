@@ -1,0 +1,4 @@
+
+! This option changes the ice sheet dynamics time step to 1 day rather than 1 year
+! Thus, the ice sheet dynamics can be exercised in a few-day run
+test_coupling = .true.
