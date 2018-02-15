@@ -1,6 +1,5 @@
 # managed directories that are checked out by the externals tool
 cime/
-cime_config/
 components/
 
 # generated local files

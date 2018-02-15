@@ -1,0 +1,13 @@
+!----------------------------------------------------------------------------------
+! Users should add all user specific namelist changes below in the form of
+! namelist_var = new_namelist_value
+! NOTE: namelist variable rtm_tstep CAN ONLY be changed by modifying the value
+!       of the xml variable ROF_NCPL in env_run.xml
+! NOTE: if the xml variable RTM_MODE in env_run.xml is set to 'NULL', then
+!        then rtm will set rtm_present to .false. - and will ignore everything else
+!----------------------------------------------------------------------------------
+rtmhist_ndens     = 1
+rtmhist_nhtfrq    =-24
+rtmhist_mfilt     = 1
+
+

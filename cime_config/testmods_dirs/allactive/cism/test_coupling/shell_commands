@@ -1,0 +1,2 @@
+# Since we're doing a daily mass balance time step in CISM, we can't use the default GLC_AVG_PERIOD of yearly
+./xmlchange GLC_AVG_PERIOD=glc_coupling_period
