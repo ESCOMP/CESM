@@ -24,6 +24,22 @@
       <option name="wallclock"> 01:00 </option>
     </options>
   </test>
+  <test name="SMS_Ld2" grid="f09_g17" compset="B1850" testmods="allactive/defaultio">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="aux_cime_baseline"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30 </option>
+    </options>
+  </test>
+  <test name="SMS_N3_PM3_Ld2" grid="f19_g17" compset="BHISTWs" testmods="allactive/defaultio">
+    <machines>
+      <machine name="cheyenne" compiler="gnu" category="aux_cime_baesline"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30 </option>
+    </options>
+  </test>
   <test name="ERR" grid="f19_g17" compset="B1850" testmods="allactive/defaultio">
     <machines>
       <machine name="edison" compiler="intel" category="prealpha"/>
