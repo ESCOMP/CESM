@@ -44,7 +44,7 @@ class GitRepository(Repository):
 
     # match tracking reference info, return XYZ from [XYZ]
     # e.g. [origin/master]
-    RE_TRACKING = re.compile(r'\[([\w\-./]+)\]')
+    RE_TRACKING = re.compile(r'\[([\w\-./]+).*\]')
 
     def __init__(self, component_name, repo):
         """
