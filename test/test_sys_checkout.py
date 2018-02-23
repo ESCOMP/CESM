@@ -679,7 +679,6 @@ class BaseTestSysCheckout(unittest.TestCase):
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_empty(tree, directory=EXTERNALS_NAME)
-        self._check_simple_tag_empty(tree, directory=SUB_EXTERNALS_PATH)
         self._check_simple_branch_empty(tree, directory=SUB_EXTERNALS_PATH)
 
     def _check_mixed_sub_simple_required_checkout(self, overall, tree):
@@ -687,7 +686,6 @@ class BaseTestSysCheckout(unittest.TestCase):
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_empty(tree, directory=EXTERNALS_NAME)
-        self._check_simple_tag_empty(tree, directory=SUB_EXTERNALS_PATH)
         self._check_simple_branch_empty(tree, directory=SUB_EXTERNALS_PATH)
 
     def _check_mixed_sub_simple_required_post_checkout(self, overall, tree):
@@ -695,7 +693,6 @@ class BaseTestSysCheckout(unittest.TestCase):
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_ok(tree, directory=EXTERNALS_NAME)
-        self._check_simple_tag_ok(tree, directory=SUB_EXTERNALS_PATH)
         self._check_simple_branch_ok(tree, directory=SUB_EXTERNALS_PATH)
 
 
@@ -1027,8 +1024,10 @@ class TestSysCheckout(BaseTestSysCheckout):
         under_test_dir = self.setup_test_repo(MIXED_REPO_NAME)
         # create top level externals file
         self._generator.mixed_simple_base(under_test_dir)
-        # create sub-externals file
-        self._sub_generator.mixed_simple_sub(under_test_dir)
+        # NOTE: sub-externals file is already in the repo so we can
+        # switch branches during testing. Since this is a mixed-repo
+        # serving as the top level container repo, we can't switch
+        # during this test.
 
         # checkout
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
