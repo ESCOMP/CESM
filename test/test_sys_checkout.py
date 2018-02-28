@@ -1103,7 +1103,8 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._check_container_full_pre_checkout_ext_change(overall, tree)
 
         # run the checkout. Now the mixed use external and it's
-        # sub-exterals should be changed. Status is pre-checkout!
+        # sub-exterals should be changed. Returned status is
+        # pre-checkout!
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.checkout_args)
         self._check_container_full_pre_checkout_ext_change(overall, tree)
@@ -1112,10 +1113,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # are in sync.
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
-        # Bug: stale sub-external info means the sub-externals were
-        # not updated in the previous checkout, therefore are really
-        # out of sync,
-        self._check_container_full_post_checkout_subext_modified(overall, tree)
+        self._check_container_full_post_checkout(overall, tree)
 
     def test_mixed_simple(self):
         """Verify that a mixed use repo can serve as a 'full' container,
