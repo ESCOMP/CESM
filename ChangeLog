@@ -4,7 +4,7 @@ Originator(s): CSEG
 Date: 13 February 2018
 One-line Summary: More updates 
 
-components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_171/components/cam             **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_170/components/cam             **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180123                                   --
 cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.25                           **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_49                                     **
@@ -15,9 +15,6 @@ components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65 
 components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                             --
 
 cam
-    Cheryl Craig 2018-03-06 - trunk_tags/cam5_4_171 - components/cam (cesm2_0_alpha10b)
-    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_171
-
     Update CAM to use checkout_externals and remove SVN_EXTERNAL_DIRECTORIES
 
 
