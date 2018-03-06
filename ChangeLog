@@ -1,4 +1,152 @@
 ===============================================================
+Tag name: cesm2_0_alpha10b
+Originator(s): CSEG
+Date: 13 February 2018
+One-line Summary: More updates 
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_171/components/cam             **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180123                                   --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.25                           **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_49                                     **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev002                                          **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180216                 **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65                                               --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                             --
+
+cam
+    Cheryl Craig 2018-03-06 - trunk_tags/cam5_4_171 - components/cam (cesm2_0_alpha10b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_171
+
+    Update CAM to use checkout_externals and remove SVN_EXTERNAL_DIRECTORIES
+
+
+    Cheryl Craig 2018-02-28 - trunk_tags/cam5_4_170 - components/cam (cesm2_0_alpha10b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_170
+
+    - Update CAM's SVN_EXTERNAL_DIRECTORIES to match cesm2_0_beta09
+
+
+    Brian Eaton 2018-02-27 - trunk_tags/cam5_4_169 - components/cam (cesm2_0_alpha10b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_169
+
+    Optimization for SE/CSLAM
+
+
+    Francis Vitt 2018-02-26 - trunk_tags/cam5_4_168 - components/cam (cesm2_0_alpha10b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_168
+
+    WACCM and CAM-Chem compset updates
+
+     WACCM and CAM-Chem compsets are not bit-for-bit
+     fixes the FWmadSD compset -- should run without error
+
+
+    Cheryl Craig 2018-02-22 - trunk_tags/cam5_4_167 - components/cam (cesm2_0_alpha10b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_167
+
+    - aux_cime_baselines tests added
+    - _FillValue changes to support pio2
+    - timings for prealpha and prebeta runs
+
+
+cime
+    Chris Fischer 2018-03-06 - cime5.4.0-alpha.25 - cime (cesm2_0_alpha10b)
+    https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.25
+
+        - Add support for environment and module to depend on job.
+        - Fix mistake in scripts-regression-tests help dump.
+        - Env batch cleanup
+        - Add queue attribute (small cheyenne jobs go to share queue).
+        - For Travis-CI build: kick off build on master whenever it's pushed.
+        - Reinstate ability to select queue by num tasks.
+        - Give st_archive an extra 10 min just to be sure.
+        - Refactor handling of small jobs.
+        - Report lock file info as debug output.
+        - Auto-regen batch files in case_submit.
+        - Add travis_ci testing.
+        - Supported attribute is string.
+        - Cleanup xml.
+        - Redo orb_year_defaults for cesm only.
+            Expected to change answers for non-B 1850 compsets in CESM
+        - Add supported flag to testlist.xml.
+        - Big upgrade to scripts_regression_tests argument handling.
+        - Update esmf module for edison.nersc.gov.
+        - New allow_error field for module system.
+        - Fix trivial pylint problem.
+        - Add the comment from config_pes.xml to the env_mach_pes.xml file.
+        - Refactor _get_datenames to count the correct number of cpl.r files.
+        - Change subtree split method.
+        - Jgfouca/branch for acme split 2018-02-22.
+        - Fix uninitialized variable.
+        - python2 needs an init file in Servers.
+        - Catch more errors in the testlist schema, remove generic GSW DATM_MODE ignore scripts/cases.
+        - Add support for ftp and wget.
+        - Add support for provenance in cesm.
+        - Swap command cannot be batched together.
+        - Add xml support for inputdata server.
+        - Fix bug when providing -p PROJECT flag to create_test.
+        - Rename acme to e3sm everywhere.
+        - Update components' communicator initialization.
+        - Make get_components return None instead of fail.
+
+
+cism
+    Alice Bertini 2018-02-05 - cism2_1_47 - components/cism (cesm2_0_alpha10b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_4?
+
+    Point to cism2.1 dev version, temporarily mirrored in the svn repo
+
+    Changes answers for cases with CISM2%EVOLVE, and some cases with CISM1%EVOLVE
+
+    For tests with NOEVOLVE: some cases will show answer changes in CISM diagnostic fields,
+    but no changes that feed back to the rest of the system
+
+    Also adds an aux_cime_baselines test category
+
+    Some new prealpha and prebeta tests that won't have baselines:
+
+    prealpha: ERS_Ly7.f09_g16_gl4.T1850G.cheyenne_intel
+
+    prebeta: ERI_Ly15.f09_g16_gl4.T1850G.edison_intel.cism-isostasy_period4
+    prebeta: ERS_Ly3_N2_D.f09_g16_gl20.T1850G.cheyenne_intel
+    prebeta: ERS_Ly7.f09_g16_gl4.T1850G.bluewaters_pgi
+    prebeta: SMS_D_Ly1.f09_g16_gl4.T1850G.cheyenne_intel
+
+
+    William Sacks 2018-02-26 - cism2_1_49 - components/cism (cesm2_0_alpha10b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_49
+
+    Add more output variables, including for CMIP6; reduce PE count
+
+    Changes answers for T compsets with _gl4 grid
+
+
+    William Sacks 2018-02-21 - cism2_1_48 - components/cism (cesm2_0_alpha10b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_48
+
+    Update externals for standalone checkout
+
+    No impact on cesm testing
+
+
+clm
+    William Sacks 2018-02-25 - clm5.0.dev002 - components/clm (cesm2_0_alpha10b)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev002
+
+    Add some land ice diagnostic vars needed for CMIP6
+
+    Changes answers for two CLM diagnostic fields: SNOWICE, SNOWLIQ
+
+
+pop
+    Alper Altuntas 2018-02-16 - trunk_tags/cesm_pop_2_1_20180216 - components/pop (cesm2_0_alpha10b)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/cesm_pop_2_1_20180216
+
+    add tests in a new aux_cime_baselines category
+
+
+===============================================================
 Tag name: cesm2_0_alpha10a
 Originator(s): CSEG
 Date: 13 February 2018
