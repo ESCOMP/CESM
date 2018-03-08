@@ -4,17 +4,34 @@ Originator(s): CSEG
 Date: 13 February 2018
 One-line Summary: More updates 
 
-components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_170/components/cam             **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_174/components/cam             **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180123                                   --
 cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.25                           **
-components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_49                                     **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_50                                     **
 components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev002                                          **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
 components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180216                 **
 components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65                                               --
 components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                             --
 
+manage_externals                   v0.8.0                                                                                     --
+
 cam
+    Cheryl Craig 2018-03-07 - trunk_tags/cam5_4_174 - components/cam (cesm2_0_alpha10b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_173
+
+    Add changes to allow manage_externals to work within CESM as well as CAM
+
+
+    Cheryl Craig 2018-03-07 - trunk_tags/cam5_4_172 - components/cam (cesm2_0_alpha10b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_172
+
+    Minor fixes to enable checkout_externals to work properly
+
+
+    Cheryl Craig 2018-03-06 - trunk_tags/cam5_4_171 - components/cam (cesm2_0_alpha10b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_171
+
     Update CAM to use checkout_externals and remove SVN_EXTERNAL_DIRECTORIES
 
 
@@ -89,6 +106,12 @@ cime
 
 
 cism
+    William Sacks 2018-03-07 - cism2_1_50 - components/cism (cesm2_0_alpha10b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_50
+
+    Use observed init cond file in hybrid cases with CISM_EVOLVE=FALSE
+
+
     Alice Bertini 2018-02-05 - cism2_1_47 - components/cism (cesm2_0_alpha10b)
     https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_4?
 
@@ -141,6 +164,7 @@ pop
     https://svn-ccsm-models.cgd.ucar.edu/pop2/cesm_pop_2_1_20180216
 
     add tests in a new aux_cime_baselines category
+
 
 
 ===============================================================
