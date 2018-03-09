@@ -330,6 +330,26 @@ class ExternalsDescription(dict):
         fields.
 
         """
+        def print_compare_difference(data_a, data_b, loc_a, loc_b):
+            """Look through the data structures and print the differences.
+
+            """
+            for item in data_a:
+                if item in data_b:
+                    if not isinstance(data_b[item], type(data_a[item])):
+                        printlog("    {item}: {loc} = {val} ({val_type})".format(
+                            item=item, loc=loc_a, val=data_a[item],
+                            val_type=type(data_a[item])))
+                        printlog("    {item}  {loc} = {val} ({val_type})".format(
+                            item=' ' * len(item), loc=loc_b, val=data_b[item],
+                            val_type=type(data_b[item])))
+                else:
+                    printlog("    {item}: {loc} = {val} ({val_type})".format(
+                        item=item, loc=loc_a, val=data_a[item],
+                        val_type=type(data_a[item])))
+                    printlog("    {item}  {loc} missing".format(
+                        item=' ' * len(item), loc=loc_b))
+
         def validate_data_struct(schema, data):
             """Compare a data structure against a schema and validate all required
             fields are present.
@@ -339,6 +359,8 @@ class ExternalsDescription(dict):
             in_ref = True
             valid = True
             if isinstance(schema, dict) and isinstance(data, dict):
+                # Both are dicts, recursively verify that all fields
+                # in schema are present in the data.
                 for k in schema:
                     in_ref = in_ref and (k in data)
                     if in_ref:
@@ -346,19 +368,20 @@ class ExternalsDescription(dict):
                             validate_data_struct(schema[k], data[k]))
                 is_valid = in_ref and valid
             else:
+                # non-recursive structure. verify data and schema have
+                # the same type.
                 is_valid = isinstance(data, type(schema))
+
             if not is_valid:
-                printlog("  Unmatched schema and data:")
+                printlog("  Unmatched schema and input:")
                 if isinstance(schema, dict):
-                    for item in schema:
-                        printlog("    {0} schema = {1} ({2})".format(
-                            item, schema[item], type(schema[item])))
-                        printlog("    {0} data = {1} ({2})".format(
-                            item, data[item], type(data[item])))
+                    print_compare_difference(schema, data, 'schema', 'input')
+                    print_compare_difference(data, schema, 'input', 'schema')
                 else:
                     printlog("    schema = {0} ({1})".format(
                         schema, type(schema)))
-                    printlog("    data = {0} ({1})".format(data, type(data)))
+                    printlog("    input = {0} ({1})".format(data, type(data)))
+
             return is_valid
 
         for field in self:
