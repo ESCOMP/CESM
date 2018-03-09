@@ -97,7 +97,6 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
                  '/path/to/local/repo',
                  ExternalsDescription.TAG:
                  'tag1',
-                 ExternalsDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
@@ -251,7 +250,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
                  ExternalsDescription.REPO_URL:
                  '/path/to/local/repo',
                  ExternalsDescription.TAG: 'tag1',
-                 ExternalsDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
@@ -897,7 +895,6 @@ class TestVerifyTag(unittest.TestCase):
                  ExternalsDescription.REPO_URL:
                  '/path/to/local/repo',
                  ExternalsDescription.TAG: 'tag1',
-                 ExternalsDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
@@ -999,7 +996,6 @@ class TestValidRef(unittest.TestCase):
                  ExternalsDescription.REPO_URL:
                  '/path/to/local/repo',
                  ExternalsDescription.TAG: 'tag1',
-                 ExternalsDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:

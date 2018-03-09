@@ -122,7 +122,6 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         self._comp1_protocol = 'svn'
         self._comp1_url = 'https://svn.somewhere.com/path/of/comp1'
         self._comp1_tag = 'a_nice_tag_v1'
-        self._comp1_branch = ''
         self._comp1_is_required = 'True'
         self._comp1_externals = ''
 
@@ -130,7 +129,6 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         self._comp2_path = 'path/to/comp2'
         self._comp2_protocol = 'git'
         self._comp2_url = '/local/clone/of/comp2'
-        self._comp2_tag = ''
         self._comp2_branch = 'a_very_nice_branch'
         self._comp2_is_required = 'False'
         self._comp2_externals = 'path/to/comp2.cfg'
@@ -358,7 +356,7 @@ class TestCreateExternalsDescription(unittest.TestCase):
         rdata = {ExternalsDescription.PROTOCOL: 'git',
                  ExternalsDescription.REPO_URL: '/path/to/repo',
                  ExternalsDescription.TAG: 'tagv1',
-                 ExternalsDescription.BRANCH: EMPTY_STR, }
+                 }
 
         desc = {
             'test': {

@@ -250,10 +250,14 @@ class ExternalsDescription(dict):
         NOTE(bja, 2018-03) These checks are called *after* the file is
         read. That means the schema check can not occur here.
 
+        Note: the order is important. check_optional will create
+        optional with null data. run check_data first to ensure
+        required data was provided correctly by the user.
+
         """
+        self._check_data()
         self._check_optional()
         self._validate()
-        self._check_data()
 
     def _check_data(self):
         """Check user supplied data is valid where possible.
@@ -265,25 +269,34 @@ class ExternalsDescription(dict):
                     self[ext_name][self.REPO][self.PROTOCOL], ext_name)
                 fatal_error(msg)
 
-            if (self[ext_name][self.REPO][self.PROTOCOL]
-                    != self.PROTOCOL_EXTERNALS_ONLY):
-                if (self[ext_name][self.REPO][self.TAG] and
-                        self[ext_name][self.REPO][self.BRANCH]):
-                    msg = ('Model description is over specified! Can not '
-                           'have both "tag" and "branch" in repo '
-                           'description for "{0}"'.format(ext_name))
+            if (self[ext_name][self.REPO][self.PROTOCOL] !=
+                    self.PROTOCOL_EXTERNALS_ONLY):
+                ref_count = 0
+                found_refs = ''
+                if self.TAG in self[ext_name][self.REPO]:
+                    ref_count += 1
+                    found_refs = '"{0}", {1}'.format(
+                        self[ext_name][self.REPO][self.TAG], found_refs)
+                if self.BRANCH in self[ext_name][self.REPO]:
+                    ref_count += 1
+                    found_refs = '"{0}", {1}'.format(
+                        self[ext_name][self.REPO][self.BRANCH], found_refs)
+
+                if ref_count > 1:
+                    msg = ('Model description is over specified! Only one of '
+                           '"tag", "branch", or "hash" may be specified for '
+                           'repo description of "{0}".'.format(ext_name))
+                    msg = '{0}\nFound: {1}'.format(msg, found_refs)
+                    fatal_error(msg)
+                elif ref_count < 1:
+                    msg = ('Model description is under specified! One of '
+                           '"tag", "branch", or "hash" must be specified for '
+                           'repo description of "{0}"'.format(ext_name))
                     fatal_error(msg)
 
-                if (not self[ext_name][self.REPO][self.TAG] and
-                        not self[ext_name][self.REPO][self.BRANCH]):
+                if self.REPO_URL not in self[ext_name][self.REPO]:
                     msg = ('Model description is under specified! Must have '
-                           'either "tag" or "branch" in repo '
-                           'description for "{0}"'.format(ext_name))
-                    fatal_error(msg)
-
-                if not self[ext_name][self.REPO][self.REPO_URL]:
-                    msg = ('Model description is under specified! Must have '
-                           'either "repo_url" in repo '
+                           '"repo_url" in repo '
                            'description for "{0}"'.format(ext_name))
                     fatal_error(msg)
 
