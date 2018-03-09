@@ -154,6 +154,18 @@ class ExternalsDescription(dict):
     representation to provide a consistent represtentation for the
     rest of the objects in the system.
 
+    NOTE(bja, 2018-03): do NOT define _schema_major etc at the class
+    level in the base class. The nested/recursive nature of externals
+    means different schema versions may be present in a single run!
+
+    All inheriting classes must overwrite:
+        self._schema_major and self._input_major
+        self._schema_minor and self._input_minor
+        self._schema_patch and self._input_patch
+
+    where _schema_x is the supported schema, _input_x is the user
+    input value.
+
     """
     # keywords defining the interface into the externals description data
     EXTERNALS = 'externals'
@@ -195,9 +207,49 @@ class ExternalsDescription(dict):
         """
         dict.__init__(self)
 
+        self._schema_major = None
+        self._schema_minor = None
+        self._schema_patch = None
+        self._input_major = None
+        self._input_minor = None
+        self._input_patch = None
+
+    def _verify_schema_version(self):
+        """Use semantic versioning rules to verify we can process this schema.
+
+        """
+        known = '{0}.{1}.{2}'.format(self._schema_major,
+                                     self._schema_minor,
+                                     self._schema_patch)
+        received = '{0}.{1}.{2}'.format(self._input_major,
+                                        self._input_minor,
+                                        self._input_patch)
+
+        if self._input_major != self._schema_major:
+            # should never get here, the factory should handle this correctly!
+            msg = ('DEV_ERROR: version "{0}" parser received '
+                   'version "{1}" input.'.format(known, received))
+            fatal_error(msg)
+
+        if self._input_minor > self._schema_minor:
+            msg = ('Incompatible schema version:\n'
+                   '  User supplied schema version "{0}" is too new."\n'
+                   '  Can only process version "{1}" files and '
+                   'older.'.format(received, known))
+            fatal_error(msg)
+
+        if self._input_patch > self._schema_patch:
+            # NOTE(bja, 2018-03) ignoring for now... Not clear what
+            # conditions the test is needed.
+            pass
+
     def _check_user_input(self):
         """Run a series of checks to attempt to validate the user input and
         detect errors as soon as possible.
+
+        NOTE(bja, 2018-03) These checks are called *after* the file is
+        read. That means the schema check can not occur here.
+
         """
         self._check_optional()
         self._validate()
@@ -316,6 +368,13 @@ class ExternalsDescriptionDict(ExternalsDescription):
         """Parse a native dictionary into a externals description.
         """
         ExternalsDescription.__init__(self)
+        self._schema_major = 1
+        self._schema_minor = 0
+        self._schema_patch = 0
+        self._input_major = 1
+        self._input_minor = 0
+        self._input_patch = 0
+        self._verify_schema_version()
         self.update(model_data)
         self._check_user_input()
 
@@ -332,6 +391,12 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
 
         """
         ExternalsDescription.__init__(self)
+        self._schema_major = 1
+        self._schema_minor = 0
+        self._schema_patch = 0
+        self._input_major, self._input_minor, self._input_patch = \
+            get_cfg_schema_version(model_data)
+        self._verify_schema_version()
         self._remove_metadata(model_data)
         self._parse_cfg(model_data)
         self._check_user_input()
@@ -370,6 +435,10 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
                 if item in self._source_schema:
                     if isinstance(self._source_schema[item], bool):
                         self[name][item] = str_to_bool(self[name][item])
-                if item in self._source_schema[self.REPO]:
+                elif item in self._source_schema[self.REPO]:
                     self[name][self.REPO][item] = self[name][item]
                     del self[name][item]
+                else:
+                    msg = ('Invalid input: "{sect}" contains unknown '
+                           'item "{item}".'.format(sect=name, item=item))
+                    fatal_error(msg)

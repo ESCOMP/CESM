@@ -156,6 +156,14 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         config.set(self._comp2_name, 'required', self._comp2_is_required)
         config.set(self._comp2_name, 'externals', self._comp2_externals)
 
+    @staticmethod
+    def _setup_externals_description(config):
+        """Add the required exernals description section
+        """
+
+        config.add_section(DESCRIPTION_SECTION)
+        config.set(DESCRIPTION_SECTION, VERSION_ITEM, '1.0.1')
+
     def _check_comp1(self, model):
         """Test that component one was constructed correctly.
         """
@@ -190,6 +198,7 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         """
         config = config_parser()
         self._setup_comp1(config)
+        self._setup_externals_description(config)
         model = ExternalsDescriptionConfigV1(config)
         print(model)
         self._check_comp1(model)
@@ -199,6 +208,7 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         """
         config = config_parser()
         self._setup_comp2(config)
+        self._setup_externals_description(config)
         model = ExternalsDescriptionConfigV1(config)
         print(model)
         self._check_comp2(model)
@@ -209,10 +219,41 @@ class TestModelDescritionConfigV1(unittest.TestCase):
         config = config_parser()
         self._setup_comp1(config)
         self._setup_comp2(config)
+        self._setup_externals_description(config)
         model = ExternalsDescriptionConfigV1(config)
         print(model)
         self._check_comp1(model)
         self._check_comp2(model)
+
+    def test_cfg_v1_reject_unknown_item(self):
+        """Test that a v1 description object will reject unknown items
+        """
+        config = config_parser()
+        self._setup_comp1(config)
+        self._setup_externals_description(config)
+        config.set(self._comp1_name, 'junk', 'foobar')
+        with self.assertRaises(RuntimeError):
+            ExternalsDescriptionConfigV1(config)
+
+    def test_cfg_v1_reject_v2(self):
+        """Test that a v1 description object won't try to parse a v2 file.
+        """
+        config = config_parser()
+        self._setup_comp1(config)
+        self._setup_externals_description(config)
+        config.set(DESCRIPTION_SECTION, VERSION_ITEM, '2.0.1')
+        with self.assertRaises(RuntimeError):
+            ExternalsDescriptionConfigV1(config)
+
+    def test_cfg_v1_reject_v1_too_new(self):
+        """Test that a v1 description object won't try to parse a v2 file.
+        """
+        config = config_parser()
+        self._setup_comp1(config)
+        self._setup_externals_description(config)
+        config.set(DESCRIPTION_SECTION, VERSION_ITEM, '1.100.0')
+        with self.assertRaises(RuntimeError):
+            ExternalsDescriptionConfigV1(config)
 
 
 class TestReadExternalsDescription(unittest.TestCase):
@@ -293,13 +334,22 @@ class TestCreateExternalsDescription(unittest.TestCase):
         self._config.add_section(DESCRIPTION_SECTION)
         self._config.set(DESCRIPTION_SECTION, VERSION_ITEM, '1.0.0')
 
-    def test_cfg_v1(self):
+    def test_cfg_v1_ok(self):
         """Test that a correct cfg v1 object is created by create_externals_description
 
         """
-        self._config.set(DESCRIPTION_SECTION, VERSION_ITEM, '1.2.3')
+        self._config.set(DESCRIPTION_SECTION, VERSION_ITEM, '1.0.3')
         ext = create_externals_description(self._config, model_format='cfg')
         self.assertIsInstance(ext, ExternalsDescriptionConfigV1)
+
+    def test_cfg_v1_unknown_version(self):
+        """Test that a config file with unknown schema version is rejected by
+        create_externals_description.
+
+        """
+        self._config.set(DESCRIPTION_SECTION, VERSION_ITEM, '100.0.3')
+        with self.assertRaises(RuntimeError):
+            create_externals_description(self._config, model_format='cfg')
 
     def test_dict(self):
         """Test that a correct cfg v1 object is created by create_externals_description
