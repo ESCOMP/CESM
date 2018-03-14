@@ -187,8 +187,15 @@ class _External(object):
         """Checkout the sub-externals for this object
         """
         if self._externals:
-            if not self._externals_sourcetree:
-                self._create_externals_sourcetree()
+            if self._externals_sourcetree:
+                # NOTE(bja, 2018-02): the subtree externals objects
+                # were created during initial status check. Updating
+                # the external may have changed which sub-externals
+                # are needed. We need to delete those objects and
+                # re-read the potentially modified externals
+                # description file.
+                self._externals_sourcetree = None
+            self._create_externals_sourcetree()
             self._externals_sourcetree.checkout(verbosity, load_all)
 
     def _create_externals_sourcetree(self):

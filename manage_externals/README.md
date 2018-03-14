@@ -1,9 +1,6 @@
 -- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --
-
--n [![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)
-[![Coverage Status](https://coveralls.io/repos/github/NCAR/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/NCAR/manage_externals?branch=master)
+[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)[![Coverage Status](https://coveralls.io/repos/github/NCAR/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/NCAR/manage_externals?branch=master)
 ```
-
 usage: checkout_externals [-h] [-e [EXTERNALS]] [-o] [-S] [-v] [--backtrace]
                           [-d] [--no-logging]
 
@@ -14,7 +11,7 @@ externals are checkout out.
 NOTE: checkout_externals *MUST* be run from the root of the source tree.
 
 Running checkout_externals without the '--status' option will always attempt to
-synchronize the working copy with the externals description.
+synchronize the working copy to exactly match the externals description.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -144,17 +141,22 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     * https://svn-ccsm-models.cgd.ucar.edu/glc
     * git@github.com:esmci/cime.git
     * /path/to/local/repository
+    * .
+
+    NOTE: To operate on only the local clone and and ignore remote
+    repositories, set the url to '.' (the unix current path),
+    i.e. 'repo_url = .' . This can be used to checkout a local branch
+    instead of the upstream branch.
 
     If a repo url is determined to be a local path (not a network url)
     then user expansion, e.g. ~/, and environment variable expansion,
     e.g. $HOME or $REPO_ROOT, will be performed.
 
     Relative paths are difficult to get correct, especially for mixed
-    use repos like clm. It is advised that local paths expand to
-    absolute paths. If relative paths are used, they should be
-    relative to one level above local_path. If local path is
-    'src/foo', the the relative url should be relative to
-    'src'.
+    use repos. It is advised that local paths expand to absolute paths.
+    If relative paths are used, they should be relative to one level
+    above local_path. If local path is 'src/foo', the the relative url
+    should be relative to 'src'.
 
   * tag (string) : tag to checkout
 
@@ -164,9 +166,12 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
     Note: either tag or branch must be supplied, but not both.
 
-  * externals (string) : relative path to the external's own external
-    description file that should also be used. It is *relative* to the
-    component local_path. For example, the CESM externals description
-    will load clm. CLM has additional externals that must be
-    downloaded to be complete. Those additional externals are managed
-    from the clm source root by the file pointed to by 'externals'.
+  * externals (string) : used to make manage_externals aware of
+    sub-externals required by an external. This is a relative path to
+    the external's root directory. For example, the main externals
+    description has an external checkout out at 'src/useful_library'.
+    useful_library requires additional externals to be complete.
+    Those additional externals are managed from the source root by the
+    externals description file pointed 'useful_library/sub-xternals.cfg',
+    Then the main 'externals' field in the top level repo should point to
+    'sub-externals.cfg'.

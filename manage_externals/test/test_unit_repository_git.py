@@ -64,6 +64,16 @@ GIT_BRANCH_OUTPUT_TRACKING_BRANCH = '''
   master   9b75494 [origin/master] Initialize repository.
 '''
 
+GIT_BRANCH_OUTPUT_TRACKING_BRANCH_AHEAD_BEHIND = '''
+* master 408a8920 [origin/master: ahead 3, behind 2] more junk
+  feature3 36418b4 Work on feature-2
+'''
+
+GIT_BRANCH_OUTPUT_TRACKING_BRANCH_AHEAD = '''
+* master 408a8920 [origin/master: ahead 3] more junk
+  feature3 36418b4 Work on feature-2
+'''
+
 # NOTE(bja, 2017-11) order is important here. origin should be a
 # subset of other to trap errors on processing remotes!
 GIT_REMOTE_OUTPUT_ORIGIN_UPSTREAM = '''
@@ -147,6 +157,28 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         """
         git_output = GIT_BRANCH_OUTPUT_TRACKING_BRANCH
         expected = 'origin/feature-2'
+        result = self._repo._current_ref_from_branch_command(
+            git_output)
+        self.assertEqual(result, expected)
+
+    def test_ref_tracking_branch_ahead(self):
+        """Test that we correctly identify we are on a tracking branch that is
+        ahead or behind the remote branch.
+
+        """
+        git_output = GIT_BRANCH_OUTPUT_TRACKING_BRANCH_AHEAD
+        expected = 'origin/master'
+        result = self._repo._current_ref_from_branch_command(
+            git_output)
+        self.assertEqual(result, expected)
+
+    def test_ref_tracking_branch_ahead_behind(self):  # pylint: disable=C0103
+        """Test that we correctly identify we are on a tracking branch that is
+        ahead or behind the remote branch.
+
+        """
+        git_output = GIT_BRANCH_OUTPUT_TRACKING_BRANCH_AHEAD_BEHIND
+        expected = 'origin/master'
         result = self._repo._current_ref_from_branch_command(
             git_output)
         self.assertEqual(result, expected)
@@ -744,6 +776,36 @@ class TestGitRegExp(unittest.TestCase):
         match = GitRepository.RE_TRACKING.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
+
+    def test_re_tracking_colon(self):
+        """Test re rejects names with colons because they are invalid for git
+        tag and branch names
+
+        """
+        value = 'feature:2'
+        input_str = self._tracking_tmpl.substitute(ref=value)
+        match = GitRepository.RE_TRACKING.search(input_str)
+        self.assertIsNone(match)
+
+    def test_re_tracking_ahead(self):
+        """Test re matches correctly with the ': ahead' syntax from git
+        """
+        value = 'feature-2: ahead 3'
+        input_str = self._tracking_tmpl.substitute(ref=value)
+        match = GitRepository.RE_TRACKING.search(input_str)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), 'feature-2')
+
+    def test_re_tracking_ahead_behind(self):
+        """Test re matches correctly with the ': ahead 3, behind 2' syntax
+        from git
+
+        """
+        value = 'feature-2: ahead 3, behind 2'
+        input_str = self._tracking_tmpl.substitute(ref=value)
+        match = GitRepository.RE_TRACKING.search(input_str)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), 'feature-2')
 
 
 class TestGitStatusPorcelain(unittest.TestCase):
