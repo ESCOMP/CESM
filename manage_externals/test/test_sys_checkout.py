@@ -136,11 +136,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1', required=False)
 
         self.create_section(MIXED_REPO_NAME, 'mixed_req',
-                            tag='tag1', externals=CFG_SUB_NAME)
-
-        self.create_section(MIXED_REPO_NAME, 'mixed_opt',
-                            tag='tag1', externals=CFG_SUB_NAME,
-                            required=False)
+                            branch='master', externals=CFG_SUB_NAME)
 
         self._write_config(dest_dir)
 
@@ -623,6 +619,18 @@ class BaseTestSysCheckout(unittest.TestCase):
         name = './{0}/simp_opt'.format(directory)
         self._check_generic_ok_clean_optional(tree, name)
 
+    def _check_mixed_ext_branch_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/mixed_req'.format(directory)
+        self._check_generic_empty_default_required(tree, name)
+
+    def _check_mixed_ext_branch_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/mixed_req'.format(directory)
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_mixed_ext_branch_modified(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/mixed_req'.format(directory)
+        self._check_generic_modified_ok_required(tree, name)
+
     # ----------------------------------------------------------------
     #
     # Check results for groups of externals under specific conditions
@@ -674,28 +682,91 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_tag_dirty(tree)
         self._check_simple_branch_ok(tree)
 
-    def _check_mixed_sub_simple_required_pre_checkout(self, overall, tree):
+    def _check_container_full_pre_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_empty(tree)
+        self._check_simple_branch_empty(tree)
+        self._check_simple_opt_empty(tree)
+        self._check_mixed_ext_branch_required_pre_checkout(overall, tree)
+
+    def _check_container_full_post_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_branch_ok(tree)
+        self._check_simple_opt_empty(tree)
+        self._check_mixed_ext_branch_required_post_checkout(overall, tree)
+
+    def _check_container_full_pre_checkout_ext_change(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_branch_ok(tree)
+        self._check_simple_opt_empty(tree)
+        self._check_mixed_ext_branch_required_pre_checkout_ext_change(
+            overall, tree)
+
+    def _check_container_full_post_checkout_subext_modified(
+            self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_branch_ok(tree)
+        self._check_simple_opt_empty(tree)
+        self._check_mixed_ext_branch_required_post_checkout_subext_modified(
+            overall, tree)
+
+    def _check_mixed_ext_branch_required_pre_checkout(self, overall, tree):
+        # Note, this is the internal tree status just before checkout
+        self.assertEqual(overall, 0)
+        self._check_mixed_ext_branch_empty(tree, directory=EXTERNALS_NAME)
+        # NOTE: externals/mixed_req/src should not exist in the tree
+        # since this is the status before checkout of mixed_req.
+
+    def _check_mixed_ext_branch_required_post_checkout(self, overall, tree):
+        # Note, this is the internal tree status just before checkout
+        self.assertEqual(overall, 0)
+        self._check_mixed_ext_branch_ok(tree, directory=EXTERNALS_NAME)
+        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
+                                         SUB_EXTERNALS_PATH)
+        self._check_simple_branch_ok(tree, directory=check_dir)
+
+    def _check_mixed_ext_branch_required_pre_checkout_ext_change(
+            self, overall, tree):
+        # Note, this is the internal tree status just after change the
+        # externals description file, but before checkout
+        self.assertEqual(overall, 0)
+        self._check_mixed_ext_branch_modified(tree, directory=EXTERNALS_NAME)
+        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
+                                         SUB_EXTERNALS_PATH)
+        self._check_simple_branch_ok(tree, directory=check_dir)
+
+    def _check_mixed_ext_branch_required_post_checkout_subext_modified(
+            self, overall, tree):
+        # Note, this is the internal tree status just after change the
+        # externals description file, but before checkout
+        self.assertEqual(overall, 0)
+        self._check_mixed_ext_branch_ok(tree, directory=EXTERNALS_NAME)
+        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
+                                         SUB_EXTERNALS_PATH)
+        self._check_simple_branch_modified(tree, directory=check_dir)
+
+    def _check_mixed_cont_simple_required_pre_checkout(self, overall, tree):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_empty(tree, directory=EXTERNALS_NAME)
-        self._check_simple_tag_empty(tree, directory=SUB_EXTERNALS_PATH)
         self._check_simple_branch_empty(tree, directory=SUB_EXTERNALS_PATH)
 
-    def _check_mixed_sub_simple_required_checkout(self, overall, tree):
+    def _check_mixed_cont_simple_required_checkout(self, overall, tree):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_empty(tree, directory=EXTERNALS_NAME)
-        self._check_simple_tag_empty(tree, directory=SUB_EXTERNALS_PATH)
         self._check_simple_branch_empty(tree, directory=SUB_EXTERNALS_PATH)
 
-    def _check_mixed_sub_simple_required_post_checkout(self, overall, tree):
+    def _check_mixed_cont_simple_required_post_checkout(self, overall, tree):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_ok(tree, directory=EXTERNALS_NAME)
-        self._check_simple_tag_ok(tree, directory=SUB_EXTERNALS_PATH)
         self._check_simple_branch_ok(tree, directory=SUB_EXTERNALS_PATH)
 
 
@@ -998,24 +1069,51 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_simple_required_post_checkout(overall, tree)
 
-    @unittest.skip('test development inprogress')
     def test_container_full(self):
         """Verify that 'full' container with simple and mixed subrepos
         generates the correct initial status.
 
+        The mixed subrepo has a sub-externals file with different
+        sub-externals on different branches.
+
         """
+        # create the test repository
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+
+        # create the top level externals file
         self._generator.container_full(under_test_dir)
-        overall, tree = self.execute_cmd_in_dir(
-            under_test_dir, self.status_args)
-        self.assertEqual(overall, 0)
-        overall, tree = self.execute_cmd_in_dir(
-            under_test_dir, self.checkout_args)
-        self.assertEqual(overall, 0)
-        overall, tree = self.execute_cmd_in_dir(
-            under_test_dir, self.status_args)
-        self.assertEqual(overall, 0)
-        _ = tree
+
+        # inital checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_full_pre_checkout(overall, tree)
+
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_full_post_checkout(overall, tree)
+
+        # update the mixed-use repo to point to different branch
+        self._generator.update_branch(under_test_dir, 'mixed_req',
+                                      'new-feature', MIXED_REPO_NAME)
+
+        # check status out of sync for mixed_req, but sub-externals
+        # are still in sync
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_full_pre_checkout_ext_change(overall, tree)
+
+        # run the checkout. Now the mixed use external and it's
+        # sub-exterals should be changed. Returned status is
+        # pre-checkout!
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_full_pre_checkout_ext_change(overall, tree)
+
+        # check status out of sync for mixed_req, and sub-externals
+        # are in sync.
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_full_post_checkout(overall, tree)
 
     def test_mixed_simple(self):
         """Verify that a mixed use repo can serve as a 'full' container,
@@ -1027,18 +1125,20 @@ class TestSysCheckout(BaseTestSysCheckout):
         under_test_dir = self.setup_test_repo(MIXED_REPO_NAME)
         # create top level externals file
         self._generator.mixed_simple_base(under_test_dir)
-        # create sub-externals file
-        self._sub_generator.mixed_simple_sub(under_test_dir)
+        # NOTE: sub-externals file is already in the repo so we can
+        # switch branches during testing. Since this is a mixed-repo
+        # serving as the top level container repo, we can't switch
+        # during this test.
 
         # checkout
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.checkout_args)
-        self._check_mixed_sub_simple_required_checkout(overall, tree)
+        self._check_mixed_cont_simple_required_checkout(overall, tree)
 
         # verify status is clean and unmodified
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
-        self._check_mixed_sub_simple_required_post_checkout(overall, tree)
+        self._check_mixed_cont_simple_required_post_checkout(overall, tree)
 
 
 class TestSysCheckoutSVN(BaseTestSysCheckout):
