@@ -44,7 +44,7 @@ class GitRepository(Repository):
 
     # match tracking reference info, return XYZ from [XYZ]
     # e.g. [origin/master]
-    RE_TRACKING = re.compile(r'\[([\w\-./]+)\]')
+    RE_TRACKING = re.compile(r'\[([\w\-./]+)(?::[\s]+[\w\s,]+)?\]')
 
     def __init__(self, component_name, repo):
         """
@@ -94,38 +94,42 @@ class GitRepository(Repository):
         os.chdir(cwd)
 
     def _current_ref_from_branch_command(self, git_output):
-        """Parse output of the 'git branch' command to determine the current branch.
-        The line starting with '*' is the current branch. It can be one of:
+        """Parse output of the 'git branch -vv' command to determine the current
+        branch.  The line starting with '*' is the current branch. It
+        can be one of the following head states:
 
-  feature2 36418b4 [origin/feature2] Work on feature2
-* feature3 36418b4 Work on feature2
-  master   9b75494 [origin/master] Initialize repository.
+        1. On local branch
 
-* (HEAD detached at 36418b4) 36418b4 Work on feature2
-  feature2                   36418b4 [origin/feature2] Work on feature2
-  master                     9b75494 [origin/master] Initialize repository.
+              feature2 36418b4 [origin/feature2] Work on feature2
+            * feature3 36418b4 Work on feature2
+              master   9b75494 [origin/master] Initialize repository.
 
-* (HEAD detached at origin/feature2) 36418b4 Work on feature2
-  feature2                           36418b4 [origin/feature2] Work on feature2
-  feature3                           36418b4 Work on feature2
-  master                             9b75494 [origin/master] Initialize repository.
+        2. Detached from sha
 
-        Possible head states:
+            * (HEAD detached at 36418b4) 36418b4 Work on feature2
+              feature2                   36418b4 [origin/feature2] Work on feature2
+              master                     9b75494 [origin/master] Initialize repository.
 
-          * detached from remote branch --> ref = remote/branch
-          * detached from tag --> ref = tag
-          * detached from sha --> ref = sha
-          * on local branch --> ref = branch
-          * on tracking branch --> ref = remote/branch
+        3. Detached from remote branch
 
-        On a branch:
-        * cm-testing
+            * (HEAD detached at origin/feature2) 36418b4 Work on feature2
+              feature2                           36418b4 [origin/feature2] Work on feature2
+              feature3                           36418b4 Work on feature2
+              master                             9b75494 [origin/master] Initialize repository.
 
-        Detached head from a tag:
-        * (HEAD detached at junk-tag)
+        4. Detached from tag
 
-        Detached head from a hash
-        * (HEAD detached at 0246874c)
+            * (HEAD detached at clm4_5_18_r272) b837fc36 clm4_5_18_r272
+
+        5. On tracking branch. Note, may be may be ahead or behind remote.
+
+            * master 562bac9a [origin/master] more test junk
+
+            * master 408a8920 [origin/master: ahead 3] more junk
+
+            * master 408a8920 [origin/master: ahead 3, behind 2] more junk
+
+            * master 822d687d [origin/master: behind 3] more junk
 
         NOTE: Parsing the output of the porcelain is probably not a
         great idea, but there doesn't appear to be a single plumbing
@@ -157,6 +161,7 @@ class GitRepository(Repository):
                 current_ref = match.group(1)
             except BaseException:
                 msg = 'DEV_ERROR: regex to detect tracking branch failed.'
+                msg += '\nref:\n{0}\ngit_output\n{1}\n'.format(ref, git_output)
                 fatal_error(msg)
         else:
             # assumed local branch
