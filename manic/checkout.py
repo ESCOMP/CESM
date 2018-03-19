@@ -207,14 +207,15 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
   * tag (string) : tag to checkout
 
-    This can also be a git SHA-1
+  * hash (string) : the git hash to checkout. Only applies to git
+    repositories.
 
   * branch (string) : branch to checkout from the specified
     repository. Specifying a branch on a remote repository means that
     %(prog)s will checkout the version of the branch in the remote,
     not the the version in the local repository (if it exists).
 
-    Note: either tag or branch must be supplied, but not both.
+    Note: one and only one of tag, branch hash must be supplied.
 
   * externals (string) : used to make manage_externals aware of
     sub-externals required by an external. This is a relative path to

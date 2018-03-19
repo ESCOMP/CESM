@@ -288,16 +288,6 @@ def execute_subprocess(commands, status_to_caller=False,
     return code, otherwise execute_subprocess treats non-zero return
     status as an error and raises an exception.
 
-    NOTE(bja, 2018-03) if the user doesn't have credentials setup
-    correctly, then svn and git will prompt for a username/password or
-    accepting the domain as trusted. We need to detect this and print
-    enough info for the user to determine what happened and enter the
-    appropriate information. When we detect some pre-determined
-    conditions, we turn on screen output so the user can see what is
-    needed. There doesn't appear to be a way to detect if the user
-    entered any information in the terminal. So there is no way to
-    turn off output.
-
     NOTE(bja, 2018-03) we are polling the running process to avoid
     having it hang indefinitely if there is input that we don't
     detect. Some large checkouts are multiple minutes long. For now we
@@ -308,7 +298,6 @@ def execute_subprocess(commands, status_to_caller=False,
         os.getcwd())
     logging.info(msg)
     logging.info(commands)
-    return_to_caller = status_to_caller or output_to_caller
     try:
         ret_value = _poll_subprocess(
             commands, status_to_caller, output_to_caller)
@@ -330,7 +319,13 @@ def execute_subprocess(commands, status_to_caller=False,
         # simple status check. If returning, it is the callers
         # responsibility determine if an error occurred and handle it
         # appropriately.
-        if not return_to_caller:
+        if status_to_caller and output_to_caller:
+            ret_value = (error.returncode, error.output)
+        elif status_to_caller:
+            ret_value = error.returncode
+        elif output_to_caller:
+            ret_value = error.output
+        else:
             msg_context = ('Process did not run successfully; '
                            'returned status {0}'.format(error.returncode))
             msg = failed_command_msg(msg_context, commands,
@@ -338,7 +333,6 @@ def execute_subprocess(commands, status_to_caller=False,
             logging.error(error)
             log_process_output(error.output)
             fatal_error(msg)
-        ret_value = error.returncode
 
     return ret_value
 

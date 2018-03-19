@@ -176,6 +176,7 @@ class ExternalsDescription(dict):
     PATH = 'local_path'
     PROTOCOL = 'protocol'
     REPO_URL = 'repo_url'
+    HASH = 'hash'
     NAME = 'name'
 
     PROTOCOL_EXTERNALS_ONLY = 'externals_only'
@@ -197,6 +198,7 @@ class ExternalsDescription(dict):
                              REPO_URL: 'string',
                              TAG: 'string',
                              BRANCH: 'string',
+                             HASH: 'string',
                              }
                       }
 
@@ -269,18 +271,33 @@ class ExternalsDescription(dict):
                     self[ext_name][self.REPO][self.PROTOCOL], ext_name)
                 fatal_error(msg)
 
+            if (self[ext_name][self.REPO][self.PROTOCOL] ==
+                    self.PROTOCOL_SVN):
+                if self.HASH in self[ext_name][self.REPO]:
+                    msg = ('In repo description for "{0}". svn repositories '
+                           'may not include the "hash" keyword.'.format(
+                               ext_name))
+                    fatal_error(msg)
+
             if (self[ext_name][self.REPO][self.PROTOCOL] !=
                     self.PROTOCOL_EXTERNALS_ONLY):
                 ref_count = 0
                 found_refs = ''
                 if self.TAG in self[ext_name][self.REPO]:
                     ref_count += 1
-                    found_refs = '"{0}", {1}'.format(
-                        self[ext_name][self.REPO][self.TAG], found_refs)
+                    found_refs = '"{0} = {1}", {2}'.format(
+                        self.TAG, self[ext_name][self.REPO][self.TAG],
+                        found_refs)
                 if self.BRANCH in self[ext_name][self.REPO]:
                     ref_count += 1
-                    found_refs = '"{0}", {1}'.format(
-                        self[ext_name][self.REPO][self.BRANCH], found_refs)
+                    found_refs = '"{0} = {1}", {2}'.format(
+                        self.BRANCH, self[ext_name][self.REPO][self.BRANCH],
+                        found_refs)
+                if self.HASH in self[ext_name][self.REPO]:
+                    ref_count += 1
+                    found_refs = '"{0} = {1}", {2}'.format(
+                        self.HASH, self[ext_name][self.REPO][self.HASH],
+                        found_refs)
 
                 if ref_count > 1:
                     msg = ('Model description is over specified! Only one of '
@@ -322,6 +339,8 @@ class ExternalsDescription(dict):
                 self[field][self.REPO][self.TAG] = EMPTY_STR
             if self.BRANCH not in self[field][self.REPO]:
                 self[field][self.REPO][self.BRANCH] = EMPTY_STR
+            if self.HASH not in self[field][self.REPO]:
+                self[field][self.REPO][self.HASH] = EMPTY_STR
             if self.REPO_URL not in self[field][self.REPO]:
                 self[field][self.REPO][self.REPO_URL] = EMPTY_STR
 
@@ -428,7 +447,7 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
         """
         ExternalsDescription.__init__(self)
         self._schema_major = 1
-        self._schema_minor = 0
+        self._schema_minor = 1
         self._schema_patch = 0
         self._input_major, self._input_minor, self._input_patch = \
             get_cfg_schema_version(model_data)
