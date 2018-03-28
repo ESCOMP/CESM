@@ -46,11 +46,18 @@ def commandline_arguments(args=None):
     Returns: processed command line arguments
     """
     description = '''
-%(prog)s manages checking out CESM externals from revision control
-based on a externals description file. By default only the required
-externals are checkout out.
 
-NOTE: %(prog)s *MUST* be run from the root of the source tree.
+%(prog)s manages checking out groups of externals from revision
+control based on a externals description file. By default only the
+required externals are checkout out.
+
+Operations performed by manage_externals utilities are explicit and
+data driven. %(prog)s will always make the working copy *exactly*
+match what is in the externals file when modifying the working copy of
+a repository.
+
+If %(prog)s isn't doing what you expected, double check the contents
+of the externals description file.
 
 Running %(prog)s without the '--status' option will always attempt to
 synchronize the working copy to exactly match the externals description.
@@ -59,18 +66,18 @@ synchronize the working copy to exactly match the externals description.
     epilog = '''
 ```
 NOTE: %(prog)s *MUST* be run from the root of the source tree it
-is managing. For example, if you cloned CLM with:
+is managing. For example, if you cloned a repository with:
 
-    $ git clone git@github.com/ncar/clm clm-dev
+    $ git clone git@github.com/{SOME_ORG}/some-project some-project-dev
 
-Then the root of the source tree is /path/to/clm-dev. If you obtained
-CLM via a checkout of CESM:
+Then the root of the source tree is /path/to/some-project-dev. If you
+obtained a sub-project via a checkout of another project:
 
-    $ git clone git@github.com/escomp/cesm cesm-dev
+    $ git clone git@github.com/{SOME_ORG}/some-project some-project-dev
 
-and you need to checkout the CLM externals, then the root of the
-source tree is /path/to/cesm-dev. Do *NOT* run %(prog)s
-from within /path/to/cesm-dev/components/clm.
+and you need to checkout the sub-project externals, then the root of the
+source tree is /path/to/some-project-dev. Do *NOT* run %(prog)s
+from within /path/to/some-project-dev/sub-project
 
 The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
@@ -95,11 +102,14 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     include: modified files, added files, removed files, or missing
     files.
 
+    To avoid this safety check, edit the externals description file
+    and comment out the modified external block.
+
   * Checkout all required components from a user specified externals
     description file:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/%(prog)s --excernals myCESM.xml
+        $ ./manage_externals/%(prog)s --excernals my-externals.cfg
 
   * Status summary of the repositories managed by %(prog)s:
 
@@ -143,12 +153,17 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 # Externals description file
 
   The externals description contains a list of the external
-  repositories that are used and their version control locations. Each
-  external has:
+  repositories that are used and their version control locations. The
+  file format is the standard ini/cfg configuration file format. Each
+  external is defined by a section containing the component name in
+  square brackets:
 
-  * name (string) : component name, e.g. cime, cism, clm, cam, etc.
+  * name (string) : component name, e.g. [cime], [cism], etc.
 
-  * required (boolean) : whether the component is a required checkout
+  Each section has the following keyword-value pairs:
+
+  * required (boolean) : whether the component is a required checkout,
+    'true' or 'false'.
 
   * local_path (string) : component path *relative* to where
     %(prog)s is called.
@@ -157,10 +172,17 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     manage the component.  Valid values are 'git', 'svn',
     'externals_only'.
 
+    Switching an external between different protocols is not
+    supported, e.g. from svn to git. To switch protocols, you need to
+    manually move the old working copy to a new location.
+
     Note: 'externals_only' will only process the external's own
     external description file without trying to manage a repository
     for the component. This is used for retreiving externals for
-    standalone components like cam and clm.
+    standalone components like cam and clm. If the source root of the
+    externals_only component is the same as the main source root, then
+    the local path must be set to '.', the unix current working
+    directory, e. g. 'local_path = .'
 
   * repo_url (string) : URL for the repository location, examples:
     * https://svn-ccsm-models.cgd.ucar.edu/glc
@@ -187,7 +209,10 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
     This can also be a git SHA-1
 
-  * branch (string) : branch to checkout
+  * branch (string) : branch to checkout from the specified
+    repository. Specifying a branch on a remote repository means that
+    %(prog)s will checkout the version of the branch in the remote,
+    not the the version in the local repository (if it exists).
 
     Note: either tag or branch must be supplied, but not both.
 
@@ -200,6 +225,8 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     externals description file pointed 'useful_library/sub-xternals.cfg',
     Then the main 'externals' field in the top level repo should point to
     'sub-externals.cfg'.
+
+  * Lines begining with '#' or ';' are comments and will be ignored.
 
 '''
 
