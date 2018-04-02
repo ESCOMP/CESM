@@ -1,4 +1,117 @@
 ===============================================================
+Tag name: cesm2_0_alpha10c
+Originator(s): CSEG
+Date: 2 April 2018
+One-line Summary: CAM answer changing tag 
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_178/components/cam             **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180123                                   --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.26                           **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_50                                     --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev002                                          --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180216                 --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65                                               --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                             --
+
+manage_externals                   v1.0.1                                                                                     --
+    Bugfix for stale sub-externals after checkout.
+    Bugfix for regexp when determining git tracking branches
+    Update README.
+
+
+cam
+    Brian Eaton 2018-03-28 - trunk_tags/cam5_4_178 - components/cam (cesm2_0_alpha10c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_178
+
+    Fix cosp_ht coordinate in history output.
+
+
+    Brian Eaton 2018-03-26 - trunk_tags/cam5_4_177 - components/cam (cesm2_0_alpha10c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_177
+
+    Bug fix for ideal physics configurations with >=60 layers.
+
+
+    Francis Vitt 2018-03-22 - trunk_tags/cam5_4_176 - components/cam (cesm2_0_alpha10c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_176
+
+    Corrections to wet removal of gas-phase constituents and other misc changes
+
+
+    Cheryl Craig 2018-03-21 - trunk_tags/cam5_4_175 - components/cam (cesm2_0_alpha10c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_175
+
+    SCAM updates (answer changing just for SCAM)
+
+    - SCAM now uses CAM6 physics
+    - Mods to allow SCAM to run in a single MPI task.  Previously it was only
+      allowed to be configured with the -nospmd flag.
+    - Added 8 new IOP test cases for SCAM
+    - Expanded the functionality of the scam relaxation feature
+
+
+cime
+    Chris Fischer 2018-04-02 - cime5.4.0-alpha.26 - cime (cesm2_0_alpha10c)
+    https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.26
+
+        - Fix pylint
+        - Update hobart queue limits.
+        - Allow env vars to be unresolved.
+        - Add mosart restart history to archive list.
+        - Improve cprnc build.
+        - External script handling.
+        - Update MPI message tags in coupler-component exchanges.
+        - Always downscale walltime for tests.
+        - st_archive the DART restart history files.
+        - Do not make unnecessary env_batch jobs or batch job scripts.
+        - Add unofficial support for shell version of case.run batch script.
+        - Remove test mod from cime_developer PET test.
+        - Only set and check glcrun_avg_alarm if glc_prognostic is true.
+        - Branch for acme split 2018-03-27.
+        - Allow case_diff to work on cases that are not tests.
+        - Locals method did not work in py3, using getattr instead works in both.
+        - env_mach_specific was coded to always try to combine module operations.
+          Instead, it should only do that for "module" module systems.
+        - Rearrange case subdirectory.
+        - Remove text 'ccsm' and 'cesm' and replace appropriately.
+        - Add comment.
+        - Permit IOErrors as well as OSErrors when trying to copy crpnc log.
+        - Update MCT to 2.10rc2.
+        - Make case tools part of the Case object.
+        - Cleanup acme -> e3sm references in rst documentation.
+        - Add an A and X compset test to aux_cime_baselines.
+        - Compare two case setup.
+        - Remove old pointclm directory.
+        - Update key concepts documentation.
+        - Fix skip-pnl for tests.
+        - Order e3sm test list by runtime.
+        - Update to newer version of cprnc on hobart.
+        - Support full matching restrictions for batch directives.
+        - Ignore files beginning in test_.
+        - More updates to e3sm cime mgmt.
+        - Rename and reorg upper level contents.
+        - Move example of query_config to introduction.
+        - Add switch to list of module actions that cannot be batched.
+        - Improve create_test error message.
+        - Allow custom batch directive prefixes.
+        - Provide infrastructure to allow single column model to run with SE dycore.
+        - Branch for acme split 2018-03-13.
+        - Add better output to cime mgmt tool.
+        - Add stack size modifier to hobart.
+        - Add ability to xmlquery derived attributes.
+        - Modify regex for hobart to work on compute nodes.
+        - Make sure to clean repo before doing cime updates.
+        - st archive/encapsulate datetime.
+        - lawrencium machine cesm entries.
+        - Add a CONTRIBUTING file welcoming contributions and giving some brief guidance.
+        - Documentation updates for user customization.
+        - Fix XML errors in config_archive for E3SM.
+        - Implement improvements to st_archive regular expressions.
+        - Remove the run_e3sm testing scripts from the CIME repo.
+
+
+===============================================================
 Tag name: cesm2_0_alpha10b
 Originator(s): CSEG
 Date: 13 February 2018
