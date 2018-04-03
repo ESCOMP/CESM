@@ -364,7 +364,11 @@ The following are two options for how to proceed:
             printlog(msg)
             printlog('-' * 70)
         else:
-            source_tree.checkout(args.verbose, load_all, load_comp=args.components)
+            if args.components:
+                for comp in args.components:
+                    source_tree.checkout(args.verbose, load_all, load_comp=args.comp)
+            else:
+                source_tree.checkout(args.verbose, load_all)
             printlog('')
 
     logging.info('%s completed without exceptions.', program_name)
