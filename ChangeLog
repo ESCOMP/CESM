@@ -52,6 +52,12 @@ cam
 
 
 cime
+    Chris Fischer 2018-04-03 - cime5.4.0-alpha.27 - cime (cesm2_0_alpha10c)
+    https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.27
+
+        - Avoid encode error.
+
+
     Chris Fischer 2018-04-02 - cime5.4.0-alpha.26 - cime (cesm2_0_alpha10c)
     https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.26
 
