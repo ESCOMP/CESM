@@ -290,6 +290,11 @@ def main(args):
     Function to call when module is called from the command line.
     Parse externals file and load required repositories or all repositories if
     the --all option is passed.
+
+    Returns a tuple (overall_status, tree_status). overall_status is 0
+    on success, non-zero on failure. tree_status gives the full status
+    *before* executing the checkout command - i.e., the status that it
+    used to determine if it's safe to proceed with the checkout.
     """
     if not args.no_logging:
         logging.basicConfig(filename=LOG_FILE_NAME,
