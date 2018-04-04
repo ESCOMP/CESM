@@ -176,6 +176,7 @@ class ExternalsDescription(dict):
     PATH = 'local_path'
     PROTOCOL = 'protocol'
     REPO_URL = 'repo_url'
+    HASH = 'hash'
     NAME = 'name'
 
     PROTOCOL_EXTERNALS_ONLY = 'externals_only'
@@ -197,6 +198,7 @@ class ExternalsDescription(dict):
                              REPO_URL: 'string',
                              TAG: 'string',
                              BRANCH: 'string',
+                             HASH: 'string',
                              }
                       }
 
@@ -250,10 +252,14 @@ class ExternalsDescription(dict):
         NOTE(bja, 2018-03) These checks are called *after* the file is
         read. That means the schema check can not occur here.
 
+        Note: the order is important. check_optional will create
+        optional with null data. run check_data first to ensure
+        required data was provided correctly by the user.
+
         """
+        self._check_data()
         self._check_optional()
         self._validate()
-        self._check_data()
 
     def _check_data(self):
         """Check user supplied data is valid where possible.
@@ -265,25 +271,49 @@ class ExternalsDescription(dict):
                     self[ext_name][self.REPO][self.PROTOCOL], ext_name)
                 fatal_error(msg)
 
-            if (self[ext_name][self.REPO][self.PROTOCOL]
-                    != self.PROTOCOL_EXTERNALS_ONLY):
-                if (self[ext_name][self.REPO][self.TAG] and
-                        self[ext_name][self.REPO][self.BRANCH]):
-                    msg = ('Model description is over specified! Can not '
-                           'have both "tag" and "branch" in repo '
-                           'description for "{0}"'.format(ext_name))
+            if (self[ext_name][self.REPO][self.PROTOCOL] ==
+                    self.PROTOCOL_SVN):
+                if self.HASH in self[ext_name][self.REPO]:
+                    msg = ('In repo description for "{0}". svn repositories '
+                           'may not include the "hash" keyword.'.format(
+                               ext_name))
                     fatal_error(msg)
 
-                if (not self[ext_name][self.REPO][self.TAG] and
-                        not self[ext_name][self.REPO][self.BRANCH]):
-                    msg = ('Model description is under specified! Must have '
-                           'either "tag" or "branch" in repo '
-                           'description for "{0}"'.format(ext_name))
+            if (self[ext_name][self.REPO][self.PROTOCOL] !=
+                    self.PROTOCOL_EXTERNALS_ONLY):
+                ref_count = 0
+                found_refs = ''
+                if self.TAG in self[ext_name][self.REPO]:
+                    ref_count += 1
+                    found_refs = '"{0} = {1}", {2}'.format(
+                        self.TAG, self[ext_name][self.REPO][self.TAG],
+                        found_refs)
+                if self.BRANCH in self[ext_name][self.REPO]:
+                    ref_count += 1
+                    found_refs = '"{0} = {1}", {2}'.format(
+                        self.BRANCH, self[ext_name][self.REPO][self.BRANCH],
+                        found_refs)
+                if self.HASH in self[ext_name][self.REPO]:
+                    ref_count += 1
+                    found_refs = '"{0} = {1}", {2}'.format(
+                        self.HASH, self[ext_name][self.REPO][self.HASH],
+                        found_refs)
+
+                if ref_count > 1:
+                    msg = ('Model description is over specified! Only one of '
+                           '"tag", "branch", or "hash" may be specified for '
+                           'repo description of "{0}".'.format(ext_name))
+                    msg = '{0}\nFound: {1}'.format(msg, found_refs)
+                    fatal_error(msg)
+                elif ref_count < 1:
+                    msg = ('Model description is under specified! One of '
+                           '"tag", "branch", or "hash" must be specified for '
+                           'repo description of "{0}"'.format(ext_name))
                     fatal_error(msg)
 
-                if not self[ext_name][self.REPO][self.REPO_URL]:
+                if self.REPO_URL not in self[ext_name][self.REPO]:
                     msg = ('Model description is under specified! Must have '
-                           'either "repo_url" in repo '
+                           '"repo_url" in repo '
                            'description for "{0}"'.format(ext_name))
                     fatal_error(msg)
 
@@ -309,6 +339,8 @@ class ExternalsDescription(dict):
                 self[field][self.REPO][self.TAG] = EMPTY_STR
             if self.BRANCH not in self[field][self.REPO]:
                 self[field][self.REPO][self.BRANCH] = EMPTY_STR
+            if self.HASH not in self[field][self.REPO]:
+                self[field][self.REPO][self.HASH] = EMPTY_STR
             if self.REPO_URL not in self[field][self.REPO]:
                 self[field][self.REPO][self.REPO_URL] = EMPTY_STR
 
@@ -317,6 +349,26 @@ class ExternalsDescription(dict):
         fields.
 
         """
+        def print_compare_difference(data_a, data_b, loc_a, loc_b):
+            """Look through the data structures and print the differences.
+
+            """
+            for item in data_a:
+                if item in data_b:
+                    if not isinstance(data_b[item], type(data_a[item])):
+                        printlog("    {item}: {loc} = {val} ({val_type})".format(
+                            item=item, loc=loc_a, val=data_a[item],
+                            val_type=type(data_a[item])))
+                        printlog("    {item}  {loc} = {val} ({val_type})".format(
+                            item=' ' * len(item), loc=loc_b, val=data_b[item],
+                            val_type=type(data_b[item])))
+                else:
+                    printlog("    {item}: {loc} = {val} ({val_type})".format(
+                        item=item, loc=loc_a, val=data_a[item],
+                        val_type=type(data_a[item])))
+                    printlog("    {item}  {loc} missing".format(
+                        item=' ' * len(item), loc=loc_b))
+
         def validate_data_struct(schema, data):
             """Compare a data structure against a schema and validate all required
             fields are present.
@@ -326,6 +378,8 @@ class ExternalsDescription(dict):
             in_ref = True
             valid = True
             if isinstance(schema, dict) and isinstance(data, dict):
+                # Both are dicts, recursively verify that all fields
+                # in schema are present in the data.
                 for k in schema:
                     in_ref = in_ref and (k in data)
                     if in_ref:
@@ -333,19 +387,20 @@ class ExternalsDescription(dict):
                             validate_data_struct(schema[k], data[k]))
                 is_valid = in_ref and valid
             else:
+                # non-recursive structure. verify data and schema have
+                # the same type.
                 is_valid = isinstance(data, type(schema))
+
             if not is_valid:
-                printlog("  Unmatched schema and data:")
+                printlog("  Unmatched schema and input:")
                 if isinstance(schema, dict):
-                    for item in schema:
-                        printlog("    {0} schema = {1} ({2})".format(
-                            item, schema[item], type(schema[item])))
-                        printlog("    {0} data = {1} ({2})".format(
-                            item, data[item], type(data[item])))
+                    print_compare_difference(schema, data, 'schema', 'input')
+                    print_compare_difference(data, schema, 'input', 'schema')
                 else:
                     printlog("    schema = {0} ({1})".format(
                         schema, type(schema)))
-                    printlog("    data = {0} ({1})".format(data, type(data)))
+                    printlog("    input = {0} ({1})".format(data, type(data)))
+
             return is_valid
 
         for field in self:
@@ -392,7 +447,7 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
         """
         ExternalsDescription.__init__(self)
         self._schema_major = 1
-        self._schema_minor = 0
+        self._schema_minor = 1
         self._schema_patch = 0
         self._input_major, self._input_minor, self._input_patch = \
             get_cfg_schema_version(model_data)

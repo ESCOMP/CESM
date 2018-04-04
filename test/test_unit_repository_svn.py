@@ -63,7 +63,6 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
                      'https://svn-ccsm-models.cgd.ucar.edu/',
                  ExternalsDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 ExternalsDescription.BRANCH: ''
                  }
 
         data = {self._name:
@@ -127,7 +126,6 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
                      'https://svn-ccsm-models.cgd.ucar.edu/',
                  ExternalsDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 ExternalsDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:

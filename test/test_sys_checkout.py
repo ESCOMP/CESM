@@ -117,7 +117,7 @@ class GenerateExternalsDescriptionCfgV1(object):
     """
 
     def __init__(self):
-        self._schema_version = '1.0.0'
+        self._schema_version = '1.1.0'
         self._config = None
 
     def container_full(self, dest_dir):
@@ -150,6 +150,9 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
                             branch='feature2')
+
+        self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
+                            ref_hash='60b1cc1a38d63')
 
         self._write_config(dest_dir)
 
@@ -190,6 +193,9 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
                             branch='feature2')
 
+        self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
+                            ref_hash='60b1cc1a38d63')
+
         self._write_config(dest_dir)
 
     def mixed_simple_sub(self, dest_dir):
@@ -229,6 +235,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                          self._schema_version)
 
     def create_section(self, repo_type, name, tag='', branch='',
+                       ref_hash='',
                        required=True, path=EXTERNALS_NAME, externals=''):
         """Create a config section with autofilling some items and handling
         optional items.
@@ -252,6 +259,9 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         if branch:
             self._config.set(name, ExternalsDescription.BRANCH, branch)
+
+        if ref_hash:
+            self._config.set(name, ExternalsDescription.HASH, ref_hash)
 
         if externals:
             self._config.set(name, ExternalsDescription.EXTERNALS, externals)
@@ -603,6 +613,14 @@ class BaseTestSysCheckout(unittest.TestCase):
         name = './{0}/simp_branch'.format(directory)
         self._check_generic_modified_ok_required(tree, name)
 
+    def _check_simple_hash_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_hash'.format(directory)
+        self._check_generic_empty_default_required(tree, name)
+
+    def _check_simple_hash_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_hash'.format(directory)
+        self._check_generic_ok_clean_required(tree, name)
+
     def _check_simple_req_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_req'.format(directory)
         self._check_generic_empty_default_required(tree, name)
@@ -640,17 +658,20 @@ class BaseTestSysCheckout(unittest.TestCase):
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree)
         self._check_simple_branch_empty(tree)
+        self._check_simple_hash_empty(tree)
 
     def _check_container_simple_required_checkout(self, overall, tree):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree)
         self._check_simple_branch_empty(tree)
+        self._check_simple_hash_empty(tree)
 
     def _check_container_simple_required_post_checkout(self, overall, tree):
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree)
         self._check_simple_branch_ok(tree)
+        self._check_simple_hash_ok(tree)
 
     def _check_container_simple_optional_pre_checkout(self, overall, tree):
         self.assertEqual(overall, 0)
@@ -676,6 +697,7 @@ class BaseTestSysCheckout(unittest.TestCase):
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree)
         self._check_simple_branch_modified(tree)
+        self._check_simple_hash_ok(tree)
 
     def _check_container_simple_optional_st_dirty(self, overall, tree):
         self.assertEqual(overall, 0)

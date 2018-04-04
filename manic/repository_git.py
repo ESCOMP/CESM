@@ -229,6 +229,14 @@ class GitRepository(Repository):
                     expected_ref = "unknown_remote/{0}".format(self._branch)
                 else:
                     expected_ref = "{0}/{1}".format(remote_name, self._branch)
+        elif self._hash:
+            # NOTE(bja, 2018-03) For comparison purposes, we could
+            # determine which is longer and check that the short ref
+            # is a substring of the long ref. But it is simpler to
+            # just expand both to the full sha and do an exact
+            # comparison.
+            _, expected_ref = self._git_revparse_commit(self._hash)
+            _, current_ref = self._git_revparse_commit(current_ref)
         else:
             expected_ref = self._tag
 
@@ -331,48 +339,64 @@ class GitRepository(Repository):
         """
         if self._tag:
             ref = self._tag
-        else:
+        elif self._branch:
             ref = self._branch
+        else:
+            ref = self._hash
+
         self._check_for_valid_ref(ref)
         self._git_checkout_ref(ref, verbosity)
 
     def _checkout_external_ref(self, verbosity):
         """Checkout the reference from a remote repository
         """
+        if self._tag:
+            ref = self._tag
+        elif self._branch:
+            ref = self._branch
+        else:
+            ref = self._hash
+
         remote_name = self._determine_remote_name()
         if not remote_name:
             remote_name = self._create_remote_name()
             self._git_remote_add(remote_name, self._url)
         self._git_fetch(remote_name)
-        if self._tag:
-            is_unique_tag, check_msg = self._is_unique_tag(self._tag,
-                                                           remote_name)
-            if not is_unique_tag:
-                msg = ('In repo "{0}": tag "{1}" {2}'.format(
-                    self._name, self._tag, check_msg))
-                fatal_error(msg)
-            ref = self._tag
-        else:
-            ref = '{0}/{1}'.format(remote_name, self._branch)
+
+        # NOTE(bja, 2018-03) we need to send seperate ref and remote
+        # name to check_for_vaild_ref, but the combined name to
+        # checkout_ref!
+        self._check_for_valid_ref(ref, remote_name)
+
+        if self._branch:
+            ref = '{0}/{1}'.format(remote_name, ref)
         self._git_checkout_ref(ref, verbosity)
 
-    def _check_for_valid_ref(self, ref):
+    def _check_for_valid_ref(self, ref, remote_name=None):
         """Try some basic sanity checks on the user supplied reference so we
         can provide a more useful error message than calledprocess
         error...
 
         """
         is_tag = self._ref_is_tag(ref)
-        is_branch = self._ref_is_branch(ref)
-        is_commit = self._ref_is_commit(ref)
+        is_branch = self._ref_is_branch(ref, remote_name)
+        is_hash = self._ref_is_hash(ref)
 
-        is_valid = is_tag or is_branch or is_commit
+        is_valid = is_tag or is_branch or is_hash
         if not is_valid:
             msg = ('In repo "{0}": reference "{1}" does not appear to be a '
-                   'valid tag, branch or commit! Please verify the reference '
+                   'valid tag, branch or hash! Please verify the reference '
                    'name (e.g. spelling), is available from: {2} '.format(
                        self._name, ref, self._url))
             fatal_error(msg)
+
+        if is_tag:
+            is_unique_tag, msg = self._is_unique_tag(ref, remote_name)
+            if not is_unique_tag:
+                msg = ('In repo "{0}": tag "{1}" {2}'.format(
+                    self._name, self._tag, msg))
+                fatal_error(msg)
+
         return is_valid
 
     def _is_unique_tag(self, ref, remote_name):
@@ -388,7 +412,7 @@ class GitRepository(Repository):
         """
         is_tag = self._ref_is_tag(ref)
         is_branch = self._ref_is_branch(ref, remote_name)
-        is_commit = self._ref_is_commit(ref)
+        is_hash = self._ref_is_hash(ref)
 
         msg = ''
         is_unique_tag = False
@@ -407,13 +431,13 @@ class GitRepository(Repository):
                    'exist. Please check the name.')
             is_unique_tag = False
         else:  # not is_tag and not is_branch:
-            if is_commit:
+            if is_hash:
                 # probably a sha1 or HEAD, etc, we call it a tag
                 msg = 'is ok'
                 is_unique_tag = True
             else:
                 # undetermined state.
-                msg = ('does not appear to be a valid tag, branch or commit! '
+                msg = ('does not appear to be a valid tag, branch or hash! '
                        'Please check the name and repository.')
                 is_unique_tag = False
 
@@ -494,10 +518,31 @@ class GitRepository(Repository):
         error!
         """
         is_commit = False
-        value = self._git_revparse_commit(ref)
+        value, _ = self._git_revparse_commit(ref)
         if value == 0:
             is_commit = True
         return is_commit
+
+    def _ref_is_hash(self, ref):
+        """Verify that a reference is a valid hash according to git.
+
+        Git doesn't seem to provide an exact way to determine if user
+        supplied reference is an actual hash. So we verify that the
+        ref is a valid commit and return the underlying commit
+        hash. Then check that the commit hash begins with the user
+        supplied string.
+
+        Note: values returned by git_showref_* and git_revparse are
+        shell return codes, which are zero for success, non-zero for
+        error!
+
+        """
+        is_hash = False
+        status, git_output = self._git_revparse_commit(ref)
+        if status == 0:
+            if git_output.strip().startswith(ref):
+                is_hash = True
+        return is_hash
 
     def _status_summary(self, stat, repo_dir_path):
         """Determine the clean/dirty status of a git repository
@@ -600,8 +645,9 @@ class GitRepository(Repository):
         """
         cmd = ['git', 'rev-parse', '--quiet', '--verify',
                '{0}^{1}'.format(ref, '{commit}'), ]
-        status = execute_subprocess(cmd, status_to_caller=True)
-        return status
+        status, git_output = execute_subprocess(cmd, status_to_caller=True,
+                                                output_to_caller=True)
+        return status, git_output
 
     @staticmethod
     def _git_status_porcelain_v1z():
