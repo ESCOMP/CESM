@@ -1240,9 +1240,16 @@ class TestSysCheckout(BaseTestSysCheckout):
         # create the top level externals file
         self._generator.container_full(under_test_dir)
 
-        # inital checkout
+        # inital checkout, first try a nonexistant component argument noref
+        checkout_args = ['simp_opt', 'noref']
+        checkout_args.extend(self.checkout_args)
+
+        with self.assertRaises(RuntimeError):
+            self.execute_cmd_in_dir(under_test_dir, checkout_args)
+
         checkout_args = ['simp_opt']
         checkout_args.extend(self.checkout_args)
+
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 checkout_args)
 
