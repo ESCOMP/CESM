@@ -366,7 +366,7 @@ The following are two options for how to proceed:
             if not args.components:
                 source_tree.checkout(args.verbose, load_all)
             for comp in args.components:
-                source_tree.checkout(args.verbose, load_all, load_comp=args.comp)
+                source_tree.checkout(args.verbose, load_all, load_comp=comp)
             printlog('')
 
     logging.info('%s completed without exceptions.', program_name)
