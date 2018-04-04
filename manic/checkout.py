@@ -322,10 +322,9 @@ def main(args):
     external_data = read_externals_description_file(root_dir, args.externals)
     external = create_externals_description(external_data, components=args.components)
 
-    if args.components:
-        for comp in args.components:
-            if comp not in external.keys():
-                fatal_error("No component {} found in {}".format(comp, args.externals))
+    for comp in args.components:
+        if comp not in external.keys():
+            fatal_error("No component {} found in {}".format(comp, args.externals))
 
 
     source_tree = SourceTree(root_dir, external)
@@ -364,11 +363,10 @@ The following are two options for how to proceed:
             printlog(msg)
             printlog('-' * 70)
         else:
-            if args.components:
-                for comp in args.components:
-                    source_tree.checkout(args.verbose, load_all, load_comp=args.comp)
-            else:
+            if not args.components:
                 source_tree.checkout(args.verbose, load_all)
+            for comp in args.components:
+                source_tree.checkout(args.verbose, load_all, load_comp=args.comp)
             printlog('')
 
     logging.info('%s completed without exceptions.', program_name)
