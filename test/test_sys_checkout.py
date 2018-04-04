@@ -758,6 +758,12 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_tag_empty(tree)
         self._check_simple_branch_empty(tree)
 
+    def _check_container_component_post_checkout2(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_opt_ok(tree)
+        self._check_simple_tag_empty(tree)
+        self._check_simple_branch_ok(tree)
+
     def _check_container_full_post_checkout(self, overall, tree):
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree)
@@ -1243,7 +1249,12 @@ class TestSysCheckout(BaseTestSysCheckout):
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
         self._check_container_component_post_checkout(overall, tree)
-
+        checkout_args.append('simp_branch')
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                checkout_args)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_component_post_checkout2(overall, tree)
 
     def test_mixed_simple(self):
         """Verify that a mixed use repo can serve as a 'full' container,
