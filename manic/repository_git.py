@@ -94,7 +94,7 @@ class GitRepository(Repository):
         os.chdir(cwd)
 
     def _current_ref_from_branch_command(self, git_output):
-        """Parse output of the 'git branch -vv' command to determine the current
+        """Parse output of the 'git branch -vv' command to determine the *name* of current
         branch.  The line starting with '*' is the current branch. It
         can be one of the following head states:
 
@@ -104,24 +104,39 @@ class GitRepository(Repository):
             * feature3 36418b4 Work on feature2
               master   9b75494 [origin/master] Initialize repository.
 
-        2. Detached from sha
+        2. Detached at sha
 
             * (HEAD detached at 36418b4) 36418b4 Work on feature2
               feature2                   36418b4 [origin/feature2] Work on feature2
               master                     9b75494 [origin/master] Initialize repository.
 
-        3. Detached from remote branch
+        3. Detached at remote branch
 
             * (HEAD detached at origin/feature2) 36418b4 Work on feature2
               feature2                           36418b4 [origin/feature2] Work on feature2
               feature3                           36418b4 Work on feature2
               master                             9b75494 [origin/master] Initialize repository.
 
-        4. Detached from tag
+        4. Detached at tag, still at exactly the tag
 
             * (HEAD detached at clm4_5_18_r272) b837fc36 clm4_5_18_r272
 
-        5. On tracking branch. Note, may be may be ahead or behind remote.
+        5. Detached from a sha, development beyond the sha
+
+            * (HEAD detached from 60b1cc1) 046eeac work on great new feature!
+              master                       9b75494 [origin/master] Initialize repository.
+
+        6. Detached from a branch, development beyond the branch
+
+            * (HEAD detached from origin/feature2) 1c455f6 work on great new feature!
+              master                               9b75494 [origin/master] Initialize repository.
+
+        7. Detached from a tag, development beyond the tag
+
+            * (HEAD detached from tag1) 3bcf79f work on great new feature!
+            master                    9b75494 [origin/master] Initialize repository.
+
+        8. On tracking branch. Note, may be may be ahead or behind remote.
 
             * master 562bac9a [origin/master] more test junk
 
@@ -194,12 +209,11 @@ class GitRepository(Repository):
                 self._check_sync_logic(stat, repo_dir_path)
 
     def _check_sync_logic(self, stat, repo_dir_path):
-        """Isolate the complicated synce logic so it is not so deeply nested
-        and a bit easier to understand.
+        """Compare the underlying hashes of the currently checkout ref and the
+        expected ref.
 
-        Sync logic - only reporting on whether we are on the ref
-        (branch, tag, hash) specified in the externals description.
-
+        Output: sets the sync_state as well as the current and
+        expected ref in the input status object.
 
         """
         def compare_refs(current_ref, expected_ref):
@@ -215,8 +229,9 @@ class GitRepository(Repository):
         cwd = os.getcwd()
         os.chdir(repo_dir_path)
 
-        git_output = self._git_branch_vv()
-        current_ref = self._current_ref_from_branch_command(git_output)
+        # get the full hash of the current commit
+        current_ref = self._git_log_hash()
+        current_ref = current_ref.strip('"')
 
         if self._branch:
             if self._url == LOCAL_PATH_INDICATOR:
@@ -230,22 +245,23 @@ class GitRepository(Repository):
                 else:
                     expected_ref = "{0}/{1}".format(remote_name, self._branch)
         elif self._hash:
-            # NOTE(bja, 2018-03) For comparison purposes, we could
-            # determine which is longer and check that the short ref
-            # is a substring of the long ref. But it is simpler to
-            # just expand both to the full sha and do an exact
-            # comparison.
-            _, expected_ref = self._git_revparse_commit(self._hash)
-            _, current_ref = self._git_revparse_commit(current_ref)
+            expected_ref = self._hash
         else:
             expected_ref = self._tag
 
+        # record the *names* of the current and expected branches
+        git_output = self._git_branch_vv()
+        stat.current_version = self._current_ref_from_branch_command(
+            git_output)
+        stat.expected_version = copy.deepcopy(expected_ref)
+
+        # get the underlying hash of the expected ref
+        _, expected_ref = self._git_revparse_commit(expected_ref)
+        # import pdb; pdb.set_trace()
+        # compare the underlying hashes
         stat.sync_state = compare_refs(current_ref, expected_ref)
         if current_ref == EMPTY_STR:
             stat.sync_state = ExternalStatus.UNKNOWN
-
-        stat.current_version = current_ref
-        stat.expected_version = expected_ref
 
         os.chdir(cwd)
 
@@ -595,6 +611,16 @@ class GitRepository(Repository):
     #
     # ----------------------------------------------------------------
     @staticmethod
+    def _git_log_hash():
+        """Run git log -1 --format='%H' to return the full hash of the
+        currently checkedout version.
+
+        """
+        cmd = ['git', 'log', '-1', '--format="%H"']
+        git_output = execute_subprocess(cmd, output_to_caller=True)
+        return git_output.strip()
+
+    @staticmethod
     def _git_branch_vv():
         """Run git branch -vv to obtain verbose branch information, including
         upstream tracking and hash.
@@ -647,6 +673,7 @@ class GitRepository(Repository):
                '{0}^{1}'.format(ref, '{commit}'), ]
         status, git_output = execute_subprocess(cmd, status_to_caller=True,
                                                 output_to_caller=True)
+        git_output = git_output.strip()
         return status, git_output
 
     @staticmethod
