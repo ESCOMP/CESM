@@ -52,6 +52,19 @@ cam
 
 
 cime
+    Chris Fischer 2018-04-06 - cime5.4.0-alpha.28 - cime (cesm2_0_alpha10c)
+    https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.28
+
+        - py3 fix
+        - Fix for ERI test.
+        - More fixes for archiver and tests.
+        - cime_bisect improvements.
+        - ERS and ERI tests need skip_pnl=False.
+        - More fixes related to cesm testing.
+        - CESM test fixes.
+        - Refactor crucial run_sub_or_cmd method.
+        - Restore shell batch capability.
+
     Chris Fischer 2018-04-03 - cime5.4.0-alpha.27 - cime (cesm2_0_alpha10c)
     https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.27
 
