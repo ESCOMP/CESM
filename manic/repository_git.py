@@ -257,7 +257,6 @@ class GitRepository(Repository):
 
         # get the underlying hash of the expected ref
         _, expected_ref = self._git_revparse_commit(expected_ref)
-        # import pdb; pdb.set_trace()
         # compare the underlying hashes
         stat.sync_state = compare_refs(current_ref, expected_ref)
         if current_ref == EMPTY_STR:
