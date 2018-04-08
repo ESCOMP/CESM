@@ -23,19 +23,25 @@ from manic.externals_description import ExternalsDescription
 from manic.externals_description import ExternalsDescriptionDict
 from manic.global_constants import EMPTY_STR
 
-# pylint: disable=C0103
-GIT_BRANCH_OUTPUT_DETACHED_BRANCH_v1_8 = '''
-* (detached from origin/feature2) 36418b4 Work on feature2
-  master                          9b75494 [origin/master] Initialize repository.
-'''
-# pylint: enable=C0103
-
+# In the following git branch output, note the distinction between
+# "detached at" vs. "detached from": At least with recent versions of
+# git, "detached at" means your HEAD is still at the same hash as the
+# given reference; "detached from" means that your HEAD has moved past
+# the hash corresponding to the given reference (branch or tag). (Ben
+# Andre says that earlier versions of git, such as 1.8, did not
+# distinguish between these situations, instead calling everything
+# "detached from".)
 
 GIT_BRANCH_OUTPUT_DETACHED_BRANCH = '''
 * (HEAD detached at origin/feature-2) 36418b4 Work on feature-2
   feature-2                           36418b4 [origin/feature-2] Work on feature-2
   feature3                           36418b4 Work on feature-2
   master                             9b75494 [origin/master] Initialize repository.
+'''
+
+GIT_BRANCH_OUTPUT_DETACHED_FROM_BRANCH = '''
+* (HEAD detached from origin/feature2) 36418b4 Work on feature2
+  master                               9b75494 [origin/master] Initialize repository.
 '''
 
 GIT_BRANCH_OUTPUT_DETACHED_HASH = '''
@@ -47,6 +53,13 @@ GIT_BRANCH_OUTPUT_DETACHED_HASH = '''
 
 GIT_BRANCH_OUTPUT_DETACHED_TAG = '''
 * (HEAD detached at tag1) 9b75494 Initialize repository.
+  feature-2                36418b4 [origin/feature-2] Work on feature-2
+  feature3                36418b4 Work on feature-2
+  master                  9b75494 [origin/master] Initialize repository.
+'''
+
+GIT_BRANCH_OUTPUT_DETACHED_FROM_TAG = '''
+* (HEAD detached from tag1) 9b75494 Initialize repository.
   feature-2                36418b4 [origin/feature-2] Work on feature-2
   feature3                36418b4 Work on feature-2
   master                  9b75494 [origin/master] Initialize repository.
@@ -112,52 +125,82 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         repo = model[self._name][ExternalsDescription.REPO]
         self._repo = GitRepository('test', repo)
 
-    def test_ref_detached_from_tag(self):
-        """Test that we correctly identify that the ref is detached from a tag
+    #
+    # mock methods replacing git system calls
+    #
+    @staticmethod
+    def _git_branch_vv(output):
+        """Return a function that takes the place of
+        repo._git_branch_vv, which returns the given output.
         """
-        git_output = GIT_BRANCH_OUTPUT_DETACHED_TAG
+        def my_git_branch_vv():
+            return output
+        return my_git_branch_vv
+
+    # ------------------------------------------------------------------------
+    # Begin tests
+    #
+    # See above for distinction between "detached at" vs. "detached from"
+    # ------------------------------------------------------------------------
+
+    def test_ref_detached_tag(self):
+        """Test that we correctly identify that the ref is detached at a tag
+        """
+        self._repo._git_branch_vv = self._git_branch_vv(
+            GIT_BRANCH_OUTPUT_DETACHED_TAG)
         expected = self._repo.tag()
-        result = self._repo._current_ref_from_branch_command(
-            git_output)
+        result = self._repo._current_ref()
+        self.assertEqual(result, expected)
+
+    def test_ref_detached_from_tag(self):
+        """Test that we correctly identify that the ref is detached FROM a tag
+
+        In this case, the best we can do is to list the hash we're on
+        """
+        self._repo._git_branch_vv = self._git_branch_vv(
+            GIT_BRANCH_OUTPUT_DETACHED_FROM_TAG)
+        expected = '9b75494'
+        result = self._repo._current_ref()
         self.assertEqual(result, expected)
 
     def test_ref_detached_hash(self):
-        """Test that we can identify ref is detached from a hash
+        """Test that we can identify ref is detached at a hash
 
         """
-        git_output = GIT_BRANCH_OUTPUT_DETACHED_HASH
+        self._repo._git_branch_vv = self._git_branch_vv(
+            GIT_BRANCH_OUTPUT_DETACHED_HASH)
         expected = '36418b4'
-        result = self._repo._current_ref_from_branch_command(
-            git_output)
+        result = self._repo._current_ref()
         self.assertEqual(result, expected)
 
     def test_ref_detached_branch(self):
-        """Test that we can identify ref is detached from a remote branch
+        """Test that we can identify ref is detached at a remote branch
 
         """
-        git_output = GIT_BRANCH_OUTPUT_DETACHED_BRANCH
+        self._repo._git_branch_vv = self._git_branch_vv(
+            GIT_BRANCH_OUTPUT_DETACHED_BRANCH)
         expected = 'origin/feature-2'
-        result = self._repo._current_ref_from_branch_command(
-            git_output)
+        result = self._repo._current_ref()
         self.assertEqual(result, expected)
 
-    def test_ref_detached_branch_v1_8(self):
-        """Test that we can identify ref is detached from a remote branch
+    def test_ref_detached_from_branch(self):
+        """Test that we can identify ref is detached FROM a remote branch
 
+        In this case, the best we can do is to list the hash we're on
         """
-        git_output = GIT_BRANCH_OUTPUT_DETACHED_BRANCH_v1_8
-        expected = 'origin/feature2'
-        result = self._repo._current_ref_from_branch_command(
-            git_output)
+        self._repo._git_branch_vv = self._git_branch_vv(
+            GIT_BRANCH_OUTPUT_DETACHED_FROM_BRANCH)
+        expected = '36418b4'
+        result = self._repo._current_ref()
         self.assertEqual(result, expected)
 
     def test_ref_tracking_branch(self):
         """Test that we correctly identify we are on a tracking branch
         """
-        git_output = GIT_BRANCH_OUTPUT_TRACKING_BRANCH
+        self._repo._git_branch_vv = self._git_branch_vv(
+            GIT_BRANCH_OUTPUT_TRACKING_BRANCH)
         expected = 'origin/feature-2'
-        result = self._repo._current_ref_from_branch_command(
-            git_output)
+        result = self._repo._current_ref()
         self.assertEqual(result, expected)
 
     def test_ref_tracking_branch_ahead(self):
@@ -165,10 +208,10 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         ahead or behind the remote branch.
 
         """
-        git_output = GIT_BRANCH_OUTPUT_TRACKING_BRANCH_AHEAD
+        self._repo._git_branch_vv = self._git_branch_vv(
+            GIT_BRANCH_OUTPUT_TRACKING_BRANCH_AHEAD)
         expected = 'origin/master'
-        result = self._repo._current_ref_from_branch_command(
-            git_output)
+        result = self._repo._current_ref()
         self.assertEqual(result, expected)
 
     def test_ref_tracking_branch_ahead_behind(self):  # pylint: disable=C0103
@@ -176,19 +219,19 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         ahead or behind the remote branch.
 
         """
-        git_output = GIT_BRANCH_OUTPUT_TRACKING_BRANCH_AHEAD_BEHIND
+        self._repo._git_branch_vv = self._git_branch_vv(
+            GIT_BRANCH_OUTPUT_TRACKING_BRANCH_AHEAD_BEHIND)
         expected = 'origin/master'
-        result = self._repo._current_ref_from_branch_command(
-            git_output)
+        result = self._repo._current_ref()
         self.assertEqual(result, expected)
 
     def test_ref_untracked_branch(self):
         """Test that we correctly identify we are on an untracked branch
         """
-        git_output = GIT_BRANCH_OUTPUT_UNTRACKED_BRANCH
+        self._repo._git_branch_vv = self._git_branch_vv(
+            GIT_BRANCH_OUTPUT_UNTRACKED_BRANCH)
         expected = 'feature3'
-        result = self._repo._current_ref_from_branch_command(
-            git_output)
+        result = self._repo._current_ref()
         self.assertEqual(result, expected)
 
     def test_ref_none(self):
@@ -196,9 +239,9 @@ class TestGitRepositoryCurrentRefBranch(unittest.TestCase):
         repo.
 
         """
-        git_output = EMPTY_STR
-        received = self._repo._current_ref_from_branch_command(
-            git_output)
+        self._repo._git_branch_vv = self._git_branch_vv(
+            EMPTY_STR)
+        received = self._repo._current_ref()
         self.assertEqual(received, EMPTY_STR)
 
 
@@ -264,6 +307,11 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         model = ExternalsDescriptionDict(data)
         repo = model[self._name][ExternalsDescription.REPO]
         self._repo = GitRepository('test', repo)
+        # The unit tests here don't care about the result of
+        # _git_branch_vv, but we replace it here so that we don't need
+        # to worry about calling a possibly slow and possibly
+        # error-producing command:
+        self._repo._git_branch_vv = self._git_branch_empty
         self._create_tmp_git_dir()
 
     def tearDown(self):
@@ -293,36 +341,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         return EMPTY_STR
 
     @staticmethod
-    def _git_branch_detached_tag():
-        """Return an info sting that is a checkouted tag
-        """
-        return GIT_BRANCH_OUTPUT_DETACHED_TAG
-
-    @staticmethod
-    def _git_branch_detached_hash():
-        """Return an info string that is a checkout hash
-        """
-        return GIT_BRANCH_OUTPUT_DETACHED_HASH
-
-    @staticmethod
-    def _git_branch_detached_branch():
-        """Return an info string that is a checkout hash
-        """
-        return GIT_BRANCH_OUTPUT_DETACHED_BRANCH
-
-    @staticmethod
-    def _git_branch_untracked_branch():
-        """Return an info string that is a checkout branch
-        """
-        return GIT_BRANCH_OUTPUT_UNTRACKED_BRANCH
-
-    @staticmethod
-    def _git_branch_tracked_branch():
-        """Return an info string that is a checkout branch
-        """
-        return GIT_BRANCH_OUTPUT_TRACKING_BRANCH
-
-    @staticmethod
     def _git_remote_origin_upstream():
         """Return an info string that is a checkout hash
         """
@@ -333,6 +351,29 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         """Return an info string that is a checkout hash
         """
         return EMPTY_STR
+
+    @staticmethod
+    def _git_log_hash(myhash):
+        """Return a function that takes the place of repo._git_log_hash,
+        which returns the given hash
+        """
+        def my_git_log_hash():
+            return myhash
+        return my_git_log_hash
+
+    def _git_revparse_commit(self, expected_ref, mystatus, myhash):
+        """Return a function that takes the place of
+        repo._git_revparse_commit, which returns a tuple:
+        (mystatus, myhash).
+
+        Expects the passed-in ref to equal expected_ref
+
+        status = 0 implies success, non-zero implies failure
+        """
+        def my_git_revparse_commit(ref):
+            self.assertEqual(expected_ref, ref)
+            return mystatus, myhash
+        return my_git_revparse_commit
 
     # ----------------------------------------------------------------
     #
@@ -353,15 +394,36 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
     def test_sync_dir_exist_no_git_info(self):
-        """Test that an empty info string returns an unknown status
+        """Test that a non-existent git repo returns an unknown status
         """
         stat = ExternalStatus()
-        # Now we over-ride the _git_branch method on the repo to return
+        # Now we over-ride the _git_remote_verbose method on the repo to return
         # a known value without requiring access to git.
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._git_branch_vv = self._git_branch_empty
+        self._repo._tag = 'tag1'
+        self._repo._git_log_hash = self._git_log_hash('')
+        self._repo._git_revparse_commit = self._git_revparse_commit('tag1', 1, '')
         self._repo._check_sync(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.UNKNOWN)
+        # check_sync should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
+
+    # ------------------------------------------------------------------------
+    #
+    # Tests where version in configuration file is not a valid reference
+    #
+    # ------------------------------------------------------------------------
+
+    def test_sync_invalid_reference(self):
+        """Test that an invalid reference returns out-of-sync
+        """
+        stat = ExternalStatus()
+        self._repo._git_remote_verbose = self._git_remote_origin_upstream
+        self._repo._tag = 'tag1'
+        self._repo._git_log_hash = self._git_log_hash('abc123')
+        self._repo._git_revparse_commit = self._git_revparse_commit('tag1', 1, '')
+        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
+        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
@@ -369,89 +431,65 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     #
     # Tests where external description specifies a tag
     #
-    # Perturbations of working dir state: on detached
-    # {tag|branch|hash}, tracking branch, untracked branch.
-    #
     # ----------------------------------------------------------------
-    def test_sync_tag_on_detached_tag(self):
-        """Test expect tag on detached tag --> status ok
+    def test_sync_tag_on_same_hash(self):
+        """Test expect tag on same hash --> status ok
 
         """
         stat = ExternalStatus()
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = ''
         self._repo._tag = 'tag1'
-        self._repo._git_branch_vv = self._git_branch_detached_tag
+        self._repo._git_log_hash = self._git_log_hash('abc123')
+        self._repo._git_revparse_commit = self._git_revparse_commit('tag1', 0, 'abc123')
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
-    def test_sync_tag_on_diff_tag(self):
-        """Test expect tag on diff tag --> status modified
+    def test_sync_tag_on_different_hash(self):
+        """Test expect tag on a different hash --> status modified
 
         """
         stat = ExternalStatus()
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = ''
-        self._repo._tag = 'tag2'
-        self._repo._git_branch_vv = self._git_branch_detached_tag
+        self._repo._tag = 'tag1'
+        self._repo._git_log_hash = self._git_log_hash('def456')
+        self._repo._git_revparse_commit = self._git_revparse_commit('tag1', 0, 'abc123')
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
-    def test_sync_tag_on_detached_hash(self):
-        """Test expect tag on detached hash --> status modified
+    # ----------------------------------------------------------------
+    #
+    # Tests where external description specifies a hash
+    #
+    # ----------------------------------------------------------------
+    def test_sync_hash_on_same_hash(self):
+        """Test expect hash on same hash --> status ok
 
         """
         stat = ExternalStatus()
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = ''
-        self._repo._tag = 'tag1'
-        self._repo._git_branch_vv = self._git_branch_detached_hash
+        self._repo._tag = ''
+        self._repo._hash = 'abc'
+        self._repo._git_log_hash = self._git_log_hash('abc123')
+        self._repo._git_revparse_commit = self._git_revparse_commit('abc', 0, 'abc123')
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
+        self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
-    def test_sync_tag_on_detached_branch(self):
-        """Test expect tag on detached branch --> status modified
+    def test_sync_hash_on_different_hash(self):
+        """Test expect hash on a different hash --> status modified
 
         """
         stat = ExternalStatus()
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = ''
-        self._repo._tag = 'tag1'
-        self._repo._git_branch_vv = self._git_branch_detached_branch
-        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
-
-    def test_sync_tag_on_tracking_branch(self):
-        """Test expect tag on tracking branch --> status modified
-
-        """
-        stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = ''
-        self._repo._tag = 'tag1'
-        self._repo._git_branch_vv = self._git_branch_tracked_branch
-        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
-
-    def test_sync_tag_on_untracked_branch(self):
-        """Test expect tag on untracked branch --> status modified
-
-        """
-        stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = ''
-        self._repo._tag = 'tag1'
-        self._repo._git_branch_vv = self._git_branch_untracked_branch
+        self._repo._tag = ''
+        self._repo._hash = 'abc'
+        self._repo._git_log_hash = self._git_log_hash('def456')
+        self._repo._git_revparse_commit = self._git_revparse_commit('abc', 0, 'abc123')
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
@@ -461,26 +499,41 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     #
     # Tests where external description specifies a branch
     #
-    # Perturbations of working dir state: on detached
-    # {tag|branch|hash}, tracking branch, untracked branch.
-    #
     # ----------------------------------------------------------------
-    def test_sync_branch_on_detached_branch_same_remote(self):
-        """Test expect branch on detached branch with same remote --> status ok
+    def test_sync_branch_on_same_hash(self):
+        """Test expect branch on same hash --> status ok
 
         """
         stat = ExternalStatus()
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._branch = 'feature-2'
         self._repo._tag = ''
-        self._repo._git_branch_vv = self._git_branch_detached_branch
+        self._repo._git_log_hash = self._git_log_hash('abc123')
+        self._repo._git_revparse_commit = (
+            self._git_revparse_commit('origin/feature-2', 0, 'abc123'))
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
-    def test_sync_branch_on_detached_branch_diff_remote(self):
-        """Test expect branch on detached branch, different remote --> status modified
+    def test_sync_branch_on_diff_hash(self):
+        """Test expect branch on diff hash --> status modified
+
+        """
+        stat = ExternalStatus()
+        self._repo._git_remote_verbose = self._git_remote_origin_upstream
+        self._repo._branch = 'feature-2'
+        self._repo._tag = ''
+        self._repo._git_log_hash = self._git_log_hash('abc123')
+        self._repo._git_revparse_commit = (
+            self._git_revparse_commit('origin/feature-2', 0, 'def456'))
+        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
+        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
+        # check_sync should only modify the sync_state, not clean_state
+        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
+
+    def test_sync_branch_diff_remote(self):
+        """Test _determine_remote_name with a different remote
 
         """
         stat = ExternalStatus()
@@ -488,14 +541,15 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._branch = 'feature-2'
         self._repo._tag = ''
         self._repo._url = '/path/to/other/repo'
-        self._repo._git_branch_vv = self._git_branch_detached_branch
+        self._repo._git_log_hash = self._git_log_hash('abc123')
+        self._repo._git_revparse_commit = (
+            self._git_revparse_commit('upstream/feature-2', 0, 'def456'))
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
+        # The test passes if _git_revparse_commit is called with the
+        # expected argument
 
-    def test_sync_branch_on_detached_branch_diff_remote2(self):
-        """Test expect branch on detached branch, different remote --> status modified
+    def test_sync_branch_diff_remote2(self):
+        """Test _determine_remote_name with a different remote
 
         """
         stat = ExternalStatus()
@@ -503,102 +557,12 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._branch = 'feature-2'
         self._repo._tag = ''
         self._repo._url = '/path/to/local/repo2'
-        self._repo._git_branch_vv = self._git_branch_detached_branch
+        self._repo._git_log_hash = self._git_log_hash('abc123')
+        self._repo._git_revparse_commit = (
+            self._git_revparse_commit('other/feature-2', 0, 'def789'))
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
-
-    def test_sync_branch_on_diff_branch(self):
-        """Test expect branch on diff branch --> status modified
-
-        """
-        stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = 'nice_new_feature'
-        self._repo._tag = ''
-        self._repo._git_branch_vv = self._git_branch_detached_branch
-        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
-
-    def test_sync_branch_on_detached_hash(self):
-        """Test expect branch on detached hash --> status modified
-
-        """
-        stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = 'feature-2'
-        self._repo._tag = ''
-        self._repo._git_branch_vv = self._git_branch_detached_hash
-        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
-
-    def test_sync_branch_on_detached_tag(self):
-        """Test expect branch on detached tag --> status modified
-
-        """
-        stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = 'feature-2'
-        self._repo._tag = ''
-        self._repo._git_branch_vv = self._git_branch_detached_tag
-        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
-
-    def test_sync_branch_on_tracking_branch_same_remote(self):
-        """Test expect branch on tracking branch with same remote --> status ok
-
-        """
-        stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = 'feature-2'
-        self._repo._tag = ''
-        self._repo._git_branch_vv = self._git_branch_tracked_branch
-        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
-
-    def test_sync_branch_on_tracking_branch_diff_remote(self):
-        """Test expect branch on tracking branch with different remote-->
-        status modified
-
-        """
-        stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = 'feature-2'
-        self._repo._tag = ''
-        self._repo._url = '/path/to/other/repo'
-        self._repo._git_branch_vv = self._git_branch_tracked_branch
-        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
-
-    def test_sync_branch_on_untracked_branch(self):
-        """Test expect branch on untracked branch --> status modified
-
-        NOTE(bja, 2017-11) the externals description url is always a
-        remote repository. A local untracked branch only exists
-        locally, therefore it is always a modified state, even if this
-        is what the user wants.
-
-        """
-        stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
-        self._repo._branch = 'feature-2'
-        self._repo._tag = ''
-        self._repo._git_branch_vv = self._git_branch_untracked_branch
-        self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
-        self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
-        # check_sync should only modify the sync_state, not clean_state
-        self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
+        # The test passes if _git_revparse_commit is called with the
+        # expected argument
 
     def test_sync_branch_on_unknown_remote(self):
         """Test expect branch, but remote is unknown --> status modified
@@ -609,7 +573,9 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._branch = 'feature-2'
         self._repo._tag = ''
         self._repo._url = '/path/to/unknown/repo'
-        self._repo._git_branch_vv = self._git_branch_untracked_branch
+        self._repo._git_log_hash = self._git_log_hash('abc123')
+        self._repo._git_revparse_commit = (
+            self._git_revparse_commit('unknown_remote/feature-2', 1, ''))
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
@@ -619,22 +585,19 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         """Test expect branch, on untracked branch in local repo --> status ok
 
         Setting the externals description to '.' indicates that the
-        user only want's to consider the current local repo state
+        user only wants to consider the current local repo state
         without fetching from remotes. This is required to preserve
         the current branch of a repository during an update.
-
-        NOTE(bja, 2017-11) the externals description is always a
-        remote repository. A local untracked branch only exists
-        locally, therefore it is always a modified state, even if this
-        is what the user wants.
 
         """
         stat = ExternalStatus()
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._branch = 'feature3'
         self._repo._tag = ''
-        self._repo._git_branch_vv = self._git_branch_untracked_branch
         self._repo._url = '.'
+        self._repo._git_log_hash = self._git_log_hash('abc123')
+        self._repo._git_revparse_commit = (
+            self._git_revparse_commit('feature3', 0, 'abc123'))
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
@@ -653,25 +616,18 @@ class TestGitRegExp(unittest.TestCase):
         self._detached_git_v2_tmpl = string.Template(
             '* (HEAD detached at $ref) 36418b4 Work on feature-2')
 
-        self._detached_git_v1_tmpl = string.Template(
-            '* (detached from $ref) 36418b4 Work on feature-2')
-
         self._tracking_tmpl = string.Template(
             '* feature-2 36418b4 [$ref] Work on feature-2')
 
     #
-    # RE_DETACHED
+    # RE_DETACHED_AT
     #
     def test_re_detached_alphnum(self):
         """Test re correctly matches alphnumeric (basic debugging)
         """
         value = 'feature2'
         input_str = self._detached_git_v2_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
-        self.assertIsNotNone(match)
-        self.assertEqual(match.group(1), value)
-        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
+        match = GitRepository.RE_DETACHED_AT.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
 
@@ -680,11 +636,7 @@ class TestGitRegExp(unittest.TestCase):
         """
         value = 'feature_2'
         input_str = self._detached_git_v2_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
-        self.assertIsNotNone(match)
-        self.assertEqual(match.group(1), value)
-        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
+        match = GitRepository.RE_DETACHED_AT.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
 
@@ -693,11 +645,7 @@ class TestGitRegExp(unittest.TestCase):
         """
         value = 'feature-2'
         input_str = self._detached_git_v2_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
-        self.assertIsNotNone(match)
-        self.assertEqual(match.group(1), value)
-        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
+        match = GitRepository.RE_DETACHED_AT.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
 
@@ -706,11 +654,7 @@ class TestGitRegExp(unittest.TestCase):
         """
         value = 'feature.2'
         input_str = self._detached_git_v2_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
-        self.assertIsNotNone(match)
-        self.assertEqual(match.group(1), value)
-        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
+        match = GitRepository.RE_DETACHED_AT.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
 
@@ -719,11 +663,7 @@ class TestGitRegExp(unittest.TestCase):
         """
         value = 'feature/2'
         input_str = self._detached_git_v2_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
-        self.assertIsNotNone(match)
-        self.assertEqual(match.group(1), value)
-        input_str = self._detached_git_v1_tmpl.substitute(ref=value)
-        match = GitRepository.RE_DETACHED.search(input_str)
+        match = GitRepository.RE_DETACHED_AT.search(input_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), value)
 

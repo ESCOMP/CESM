@@ -37,10 +37,25 @@ class GitRepository(Repository):
 
     """
 
+    # Note the distinction between "detached at" vs. "detached from": At
+    # least with recent versions of git, "detached at" means your HEAD
+    # is still at the same hash as the given reference; "detached from"
+    # means that your HEAD has moved past the hash corresponding to the
+    # given reference (branch or tag). (Ben Andre says that earlier
+    # versions of git, such as 1.8, did not distinguish between these
+    # situations, instead calling everything "detached from".)
+
     # match XYZ of '* (HEAD detached at {XYZ}):
     # e.g. * (HEAD detached at origin/feature-2)
-    RE_DETACHED = re.compile(
-        r'\* \((?:[\w]+[\s]+)?detached (?:at|from) ([\w\-./]+)\)')
+    RE_DETACHED_AT = re.compile(
+        r'\* \((?:[\w]+[\s]+)?detached at ([\w\-./]+)\)')
+
+    # match abc123 of '* (HEAD detached from XYZ) abc123':
+    # e.g. * (HEAD detached from origin/feature-2) abc123
+    # (where abc123 is the current hash)
+    RE_DETACHED_FROM = re.compile(
+        r'\* \((?:[\w]+[\s]+)?detached from [\w\-./]+\)[\s]+([\w]+)')
+
 
     # match tracking reference info, return XYZ from [XYZ]
     # e.g. [origin/master]
@@ -93,9 +108,9 @@ class GitRepository(Repository):
         self._git_clone(self._url, repo_dir_name, verbosity)
         os.chdir(cwd)
 
-    def _current_ref_from_branch_command(self, git_output):
+    def _current_ref(self):
         """Parse output of the 'git branch -vv' command to determine the *name* of current
-        branch.  The line starting with '*' is the current branch. It
+        branch, tag or hash. The line starting with '*' is the current branch. It
         can be one of the following head states:
 
         1. On local branch
@@ -121,7 +136,8 @@ class GitRepository(Repository):
 
             * (HEAD detached at clm4_5_18_r272) b837fc36 clm4_5_18_r272
 
-        5. Detached from a sha, development beyond the sha
+        5. Detached from a sha, development beyond the sha (not sure if
+           this will ever occur)
 
             * (HEAD detached from 60b1cc1) 046eeac work on great new feature!
               master                       9b75494 [origin/master] Initialize repository.
@@ -151,6 +167,7 @@ class GitRepository(Repository):
         command that will return the same info.
 
         """
+        git_output = self._git_branch_vv()
         lines = git_output.splitlines()
         ref = ''
         for line in lines:
@@ -162,12 +179,25 @@ class GitRepository(Repository):
             # not a git repo? some other error? we return so the
             # caller can handle.
             pass
-        elif 'detached' in ref:
-            match = self.RE_DETACHED.search(ref)
+        elif 'detached at' in ref:
+            match = self.RE_DETACHED_AT.search(ref)
             try:
+                # In this case, match group 1 gives the reference we are
+                # detached at (e.g., the tag name)
                 current_ref = match.group(1)
             except BaseException:
-                msg = 'DEV_ERROR: regex to detect detached head state failed!'
+                msg = 'DEV_ERROR: regex to detect "detached at" head state failed!'
+                msg += '\nref:\n{0}\ngit_output\n{1}\n'.format(ref, git_output)
+                fatal_error(msg)
+        elif 'detached from' in ref:
+            match = self.RE_DETACHED_FROM.search(ref)
+            try:
+                # In this case, match group 1 gives the current hash,
+                # because (at least with git v. 2) we are not actually
+                # at the given tag, but are beyond it
+                current_ref = match.group(1)
+            except BaseException:
+                msg = 'DEV_ERROR: regex to detect "detached from" head state failed!'
                 msg += '\nref:\n{0}\ngit_output\n{1}\n'.format(ref, git_output)
                 fatal_error(msg)
         elif '[' in ref:
@@ -246,21 +276,31 @@ class GitRepository(Repository):
                     expected_ref = "{0}/{1}".format(remote_name, self._branch)
         elif self._hash:
             expected_ref = self._hash
-        else:
+        elif self._tag:
             expected_ref = self._tag
+        else:
+            msg = 'In repo "{0}": none of branch, hash or tag are set'.format(
+                self._name)
+            fatal_error(msg)
 
         # record the *names* of the current and expected branches
-        git_output = self._git_branch_vv()
-        stat.current_version = self._current_ref_from_branch_command(
-            git_output)
+        stat.current_version = self._current_ref()
         stat.expected_version = copy.deepcopy(expected_ref)
 
-        # get the underlying hash of the expected ref
-        _, expected_ref = self._git_revparse_commit(expected_ref)
-        # compare the underlying hashes
-        stat.sync_state = compare_refs(current_ref, expected_ref)
         if current_ref == EMPTY_STR:
             stat.sync_state = ExternalStatus.UNKNOWN
+        else:
+            # get the underlying hash of the expected ref
+            revparse_status, expected_ref_hash = self._git_revparse_commit(expected_ref)
+            if revparse_status:
+                # We failed to get the hash associated with
+                # expected_ref. Maybe we should assign this to some special
+                # status, but for now we're just calling this out-of-sync to
+                # remain consistent with how this worked before.
+                stat.sync_state = ExternalStatus.MODEL_MODIFIED
+            else:
+                # compare the underlying hashes
+                stat.sync_state = compare_refs(current_ref, expected_ref_hash)
 
         os.chdir(cwd)
 
