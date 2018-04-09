@@ -1,6 +1,6 @@
 -- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --
 
-[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)[![Coverage Status](https://coveralls.io/repos/github/NCAR/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/NCAR/manage_externals?branch=master)
+[![Build Status](https://travis-ci.org/ESMCI/manage_externals.svg?branch=master)](https://travis-ci.org/ESMCI/manage_externals)[![Coverage Status](https://coveralls.io/repos/github/ESMCI/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/ESMCI/manage_externals?branch=master)
 ```
 usage: checkout_externals [-h] [-e [EXTERNALS]] [-o] [-S] [-v] [--backtrace]
                           [-d] [--no-logging]
@@ -203,3 +203,9 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     'sub-externals.cfg'.
 
   * Lines begining with '#' or ';' are comments and will be ignored.
+
+# Obtaining this tool, reporting issues, etc.
+
+  The master repository for manage_externals is
+  https://github.com/ESMCI/manage_externals. Any issues with this tool
+  should be reported there.
