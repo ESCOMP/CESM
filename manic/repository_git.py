@@ -197,7 +197,8 @@ class GitRepository(Repository):
             stat.sync_state = ExternalStatus.UNKNOWN
         else:
             # get the underlying hash of the expected ref
-            revparse_status, expected_ref_hash = self._git_revparse_commit(expected_ref)
+            revparse_status, expected_ref_hash = self._git_revparse_commit(
+                expected_ref)
             if revparse_status:
                 # We failed to get the hash associated with
                 # expected_ref. Maybe we should assign this to some special

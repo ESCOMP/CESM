@@ -22,6 +22,7 @@ from manic.externals_description import ExternalsDescription
 from manic.externals_description import ExternalsDescriptionDict
 from manic.utils import execute_subprocess
 
+
 class GitTestCase(unittest.TestCase):
     """Adds some git-specific unit test functionality on top of TestCase"""
 
@@ -43,6 +44,7 @@ class GitTestCase(unittest.TestCase):
         self.assertTrue(set(maybe_hash) <= allowed_chars_set,
                         msg="maybe_hash has non-hash characters: {}".format(maybe_hash))
 
+
 class TestGitTestCase(GitTestCase):
     """Tests GitTestCase"""
 
@@ -60,6 +62,7 @@ class TestGitTestCase(GitTestCase):
     def test_assertIsHash_badChar(self):
         with self.assertRaises(AssertionError):
             self.assertIsHash('abc123g')
+
 
 class TestGitRepositoryGitCommands(GitTestCase):
 
@@ -96,7 +99,6 @@ class TestGitRepositoryGitCommands(GitTestCase):
         model = ExternalsDescriptionDict(data)
         repo = model[self._name][ExternalsDescription.REPO]
         self._repo = GitRepository('test', repo)
-
 
     def tearDown(self):
         shutil.rmtree(self._tmpdir, ignore_errors=True)
@@ -183,6 +185,7 @@ class TestGitRepositoryGitCommands(GitTestCase):
         tag_found, mytag = self._repo._git_current_tag()
         self.assertFalse(tag_found)
         self.assertEqual('', mytag)
+
 
 if __name__ == '__main__':
     unittest.main()

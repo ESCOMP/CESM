@@ -95,7 +95,8 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
     def test_ref_branch(self):
         """Test that we correctly identify we are on a branch
         """
-        self._repo._git_current_branch = self._git_current_branch(True, 'feature3')
+        self._repo._git_current_branch = self._git_current_branch(
+            True, 'feature3')
         self._repo._git_current_tag = self._git_current_tag(True, 'foo_tag')
         self._repo._git_current_hash = self._git_current_hash(True, 'abc123')
         expected = 'feature3'
@@ -291,7 +292,8 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = 'tag1'
         self._repo._git_current_hash = self._git_current_hash('')
-        self._repo._git_revparse_commit = self._git_revparse_commit('tag1', 1, '')
+        self._repo._git_revparse_commit = self._git_revparse_commit(
+            'tag1', 1, '')
         self._repo._check_sync(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.UNKNOWN)
         # check_sync should only modify the sync_state, not clean_state
@@ -310,7 +312,8 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = 'tag1'
         self._repo._git_current_hash = self._git_current_hash('abc123')
-        self._repo._git_revparse_commit = self._git_revparse_commit('tag1', 1, '')
+        self._repo._git_revparse_commit = self._git_revparse_commit(
+            'tag1', 1, '')
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
@@ -329,7 +332,8 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = 'tag1'
         self._repo._git_current_hash = self._git_current_hash('abc123')
-        self._repo._git_revparse_commit = self._git_revparse_commit('tag1', 0, 'abc123')
+        self._repo._git_revparse_commit = self._git_revparse_commit(
+            'tag1', 0, 'abc123')
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
@@ -343,7 +347,8 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = 'tag1'
         self._repo._git_current_hash = self._git_current_hash('def456')
-        self._repo._git_revparse_commit = self._git_revparse_commit('tag1', 0, 'abc123')
+        self._repo._git_revparse_commit = self._git_revparse_commit(
+            'tag1', 0, 'abc123')
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
@@ -363,7 +368,8 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._tag = ''
         self._repo._hash = 'abc'
         self._repo._git_current_hash = self._git_current_hash('abc123')
-        self._repo._git_revparse_commit = self._git_revparse_commit('abc', 0, 'abc123')
+        self._repo._git_revparse_commit = self._git_revparse_commit(
+            'abc', 0, 'abc123')
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.STATUS_OK)
         # check_sync should only modify the sync_state, not clean_state
@@ -378,7 +384,8 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._tag = ''
         self._repo._hash = 'abc'
         self._repo._git_current_hash = self._git_current_hash('def456')
-        self._repo._git_revparse_commit = self._git_revparse_commit('abc', 0, 'abc123')
+        self._repo._git_revparse_commit = self._git_revparse_commit(
+            'abc', 0, 'abc123')
         self._repo._check_sync_logic(stat, self.TMP_FAKE_DIR)
         self.assertEqual(stat.sync_state, ExternalStatus.MODEL_MODIFIED)
         # check_sync should only modify the sync_state, not clean_state
