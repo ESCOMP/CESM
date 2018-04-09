@@ -14,7 +14,6 @@ from __future__ import print_function
 
 import os
 import shutil
-import string
 import unittest
 
 from manic.repository_git import GitRepository
@@ -69,6 +68,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
         """Return a function that takes the place of
         repo._git_current_branch, which returns the given output."""
         def my_git_current_branch():
+            """mock function that can take the place of repo._git_current_branch"""
             return branch_found, branch_name
         return my_git_current_branch
 
@@ -77,6 +77,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
         """Return a function that takes the place of
         repo._git_current_tag, which returns the given output."""
         def my_git_current_tag():
+            """mock function that can take the place of repo._git_current_tag"""
             return tag_found, tag_name
         return my_git_current_tag
 
@@ -85,6 +86,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
         """Return a function that takes the place of
         repo._git_current_hash, which returns the given output."""
         def my_git_current_hash():
+            """mock function that can take the place of repo._git_current_hash"""
             return hash_found, hash_name
         return my_git_current_hash
 
@@ -248,6 +250,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         which returns the given hash
         """
         def my_git_current_hash():
+            """mock function that can take the place of repo._git_current_hash"""
             return 0, myhash
         return my_git_current_hash
 
@@ -261,6 +264,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         status = 0 implies success, non-zero implies failure
         """
         def my_git_revparse_commit(ref):
+            """mock function that can take the place of repo._git_revparse_commit"""
             self.assertEqual(expected_ref, ref)
             return mystatus, myhash
         return my_git_revparse_commit

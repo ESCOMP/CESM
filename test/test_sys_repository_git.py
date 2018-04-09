@@ -22,6 +22,14 @@ from manic.externals_description import ExternalsDescription
 from manic.externals_description import ExternalsDescriptionDict
 from manic.utils import execute_subprocess
 
+# NOTE(wjs, 2018-04-09) I find a mix of camel case and underscores to be
+# more readable for unit test names, so I'm disabling pylint's naming
+# convention check
+# pylint: disable=C0103
+
+# Allow access to protected members
+# pylint: disable=W0212
+
 
 class GitTestCase(unittest.TestCase):
     """Adds some git-specific unit test functionality on top of TestCase"""
@@ -49,22 +57,40 @@ class TestGitTestCase(GitTestCase):
     """Tests GitTestCase"""
 
     def test_assertIsHash_true(self):
+        """Ensure that assertIsHash passes for something that looks
+        like a hash"""
         self.assertIsHash('abc123')
 
     def test_assertIsHash_empty(self):
+        """Ensure that assertIsHash raises an AssertionError for an
+        empty string"""
         with self.assertRaises(AssertionError):
             self.assertIsHash('')
 
     def test_assertIsHash_multipleStrings(self):
+        """Ensure that assertIsHash raises an AssertionError when
+        given multiple strings"""
         with self.assertRaises(AssertionError):
             self.assertIsHash('abc123 def456')
 
     def test_assertIsHash_badChar(self):
+        """Ensure that assertIsHash raises an AssertionError when given a
+        string that has a character that doesn't belong in a hash
+        """
         with self.assertRaises(AssertionError):
             self.assertIsHash('abc123g')
 
 
 class TestGitRepositoryGitCommands(GitTestCase):
+    """Test some git commands in RepositoryGit
+
+    It's silly that we need to create a repository in order to test
+    these git commands. Much or all of the git functionality that is
+    currently in repository_git.py should eventually be moved to a
+    separate module that is solely responsible for wrapping git
+    commands; that would allow us to test it independently of this
+    repository class.
+    """
 
     # ========================================================================
     # Test helper functions
@@ -74,12 +100,6 @@ class TestGitRepositoryGitCommands(GitTestCase):
         self._tmpdir = tempfile.mkdtemp()
         os.chdir(self._tmpdir)
 
-        # It's silly that we need to create a repository in order to
-        # test these git commands. Much or all of the git functionality
-        # that is currently in repository_git.py should eventually be
-        # moved to a separate module that is solely responsible for
-        # wrapping git commands; that would allow us to test it
-        # independently of this repository class.
         self._name = 'component'
         rdata = {ExternalsDescription.PROTOCOL: 'git',
                  ExternalsDescription.REPO_URL:
@@ -103,26 +123,31 @@ class TestGitRepositoryGitCommands(GitTestCase):
     def tearDown(self):
         shutil.rmtree(self._tmpdir, ignore_errors=True)
 
-    def make_git_repo(self):
+    @staticmethod
+    def make_git_repo():
         """Turn the current directory into an empty git repository"""
         execute_subprocess(['git', 'init'])
 
-    def add_git_commit(self):
+    @staticmethod
+    def add_git_commit():
         """Add a git commit in the current directory"""
         with open('README', 'a') as myfile:
             myfile.write('more info')
         execute_subprocess(['git', 'add', 'README'])
         execute_subprocess(['git', 'commit', '-m', 'my commit message'])
 
-    def checkout_git_branch(self, branchname):
+    @staticmethod
+    def checkout_git_branch(branchname):
         """Checkout a new branch in the current directory"""
         execute_subprocess(['git', 'checkout', '-b', branchname])
 
-    def make_git_tag(self, tagname):
+    @staticmethod
+    def make_git_tag(tagname):
         """Make a lightweight tag at the current commit"""
         execute_subprocess(['git', 'tag', '-m', 'making a tag', tagname])
 
-    def checkout_ref(self, refname):
+    @staticmethod
+    def checkout_ref(refname):
         """Checkout the given refname in the current directory"""
         execute_subprocess(['git', 'checkout', refname])
 
@@ -131,6 +156,7 @@ class TestGitRepositoryGitCommands(GitTestCase):
     # ========================================================================
 
     def test_currentHash_returnsHash(self):
+        """Ensure that the _git_current_hash function returns a hash"""
         self.make_git_repo()
         self.add_git_commit()
         hash_found, myhash = self._repo._git_current_hash()
@@ -138,11 +164,15 @@ class TestGitRepositoryGitCommands(GitTestCase):
         self.assertIsHash(myhash)
 
     def test_currentHash_outsideGitRepo(self):
+        """Ensure that the _git_current_hash function returns False when
+        outside a git repository"""
         hash_found, myhash = self._repo._git_current_hash()
         self.assertFalse(hash_found)
         self.assertEqual('', myhash)
 
     def test_currentBranch_onBranch(self):
+        """Ensure that the _git_current_branch function returns the name
+        of the branch"""
         self.make_git_repo()
         self.add_git_commit()
         self.checkout_git_branch('foo')
@@ -151,6 +181,8 @@ class TestGitRepositoryGitCommands(GitTestCase):
         self.assertEqual('foo', mybranch)
 
     def test_currentBranch_notOnBranch(self):
+        """Ensure that the _git_current_branch function returns False
+        when not on a branch"""
         self.make_git_repo()
         self.add_git_commit()
         self.make_git_tag('mytag')
@@ -160,11 +192,15 @@ class TestGitRepositoryGitCommands(GitTestCase):
         self.assertEqual('', mybranch)
 
     def test_currentBranch_outsideGitRepo(self):
+        """Ensure that the _git_current_branch function returns False
+        when outside a git repository"""
         branch_found, mybranch = self._repo._git_current_branch()
         self.assertFalse(branch_found)
         self.assertEqual('', mybranch)
 
     def test_currentTag_onTag(self):
+        """Ensure that the _git_current_tag function returns the name of
+        the tag"""
         self.make_git_repo()
         self.add_git_commit()
         self.make_git_tag('some_tag')
@@ -173,6 +209,8 @@ class TestGitRepositoryGitCommands(GitTestCase):
         self.assertEqual('some_tag', mytag)
 
     def test_currentTag_notOnTag(self):
+        """Ensure tha the _git_current_tag function returns False when
+        not on a tag"""
         self.make_git_repo()
         self.add_git_commit()
         self.make_git_tag('some_tag')
@@ -182,6 +220,8 @@ class TestGitRepositoryGitCommands(GitTestCase):
         self.assertEqual('', mytag)
 
     def test_currentTag_outsideGitRepo(self):
+        """Ensure that the _git_current_tag function returns False when
+        outside a git repository"""
         tag_found, mytag = self._repo._git_current_tag()
         self.assertFalse(tag_found)
         self.assertEqual('', mytag)

@@ -7,7 +7,6 @@ from __future__ import print_function
 
 import copy
 import os
-import re
 
 from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
 from .global_constants import VERBOSITY_VERBOSE
