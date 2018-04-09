@@ -203,3 +203,9 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     'sub-externals.cfg'.
 
   * Lines begining with '#' or ';' are comments and will be ignored.
+
+# Obtaining this tool, reporting issues, etc.
+
+  The master repository for manage_externals is
+  https://github.com/ESMCI/manage_externals. Any issues with this tool
+  should be reported there.
