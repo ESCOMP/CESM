@@ -97,6 +97,10 @@ class TestGitRepositoryGitCommands(GitTestCase):
     # ========================================================================
 
     def setUp(self):
+        # directory we want to return to after the test system and
+        # checkout_externals are done cd'ing all over the place.
+        self._return_dir = os.getcwd()
+
         self._tmpdir = tempfile.mkdtemp()
         os.chdir(self._tmpdir)
 
@@ -121,6 +125,9 @@ class TestGitRepositoryGitCommands(GitTestCase):
         self._repo = GitRepository('test', repo)
 
     def tearDown(self):
+        # return to our common starting point
+        os.chdir(self._return_dir)
+
         shutil.rmtree(self._tmpdir, ignore_errors=True)
 
     @staticmethod
