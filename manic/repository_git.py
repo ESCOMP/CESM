@@ -7,7 +7,6 @@ from __future__ import print_function
 
 import copy
 import os
-import re
 
 from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
 from .global_constants import VERBOSITY_VERBOSE
@@ -36,15 +35,6 @@ class GitRepository(Repository):
     by mocking the specific calls to return predefined results.
 
     """
-
-    # match XYZ of '* (HEAD detached at {XYZ}):
-    # e.g. * (HEAD detached at origin/feature-2)
-    RE_DETACHED = re.compile(
-        r'\* \((?:[\w]+[\s]+)?detached (?:at|from) ([\w\-./]+)\)')
-
-    # match tracking reference info, return XYZ from [XYZ]
-    # e.g. [origin/master]
-    RE_TRACKING = re.compile(r'\[([\w\-./]+)(?::[\s]+[\w\s,]+)?\]')
 
     def __init__(self, component_name, repo):
         """
@@ -93,81 +83,42 @@ class GitRepository(Repository):
         self._git_clone(self._url, repo_dir_name, verbosity)
         os.chdir(cwd)
 
-    def _current_ref_from_branch_command(self, git_output):
-        """Parse output of the 'git branch -vv' command to determine the current
-        branch.  The line starting with '*' is the current branch. It
-        can be one of the following head states:
+    def _current_ref(self):
+        """Determine the *name* associated with HEAD.
 
-        1. On local branch
-
-              feature2 36418b4 [origin/feature2] Work on feature2
-            * feature3 36418b4 Work on feature2
-              master   9b75494 [origin/master] Initialize repository.
-
-        2. Detached from sha
-
-            * (HEAD detached at 36418b4) 36418b4 Work on feature2
-              feature2                   36418b4 [origin/feature2] Work on feature2
-              master                     9b75494 [origin/master] Initialize repository.
-
-        3. Detached from remote branch
-
-            * (HEAD detached at origin/feature2) 36418b4 Work on feature2
-              feature2                           36418b4 [origin/feature2] Work on feature2
-              feature3                           36418b4 Work on feature2
-              master                             9b75494 [origin/master] Initialize repository.
-
-        4. Detached from tag
-
-            * (HEAD detached at clm4_5_18_r272) b837fc36 clm4_5_18_r272
-
-        5. On tracking branch. Note, may be may be ahead or behind remote.
-
-            * master 562bac9a [origin/master] more test junk
-
-            * master 408a8920 [origin/master: ahead 3] more junk
-
-            * master 408a8920 [origin/master: ahead 3, behind 2] more junk
-
-            * master 822d687d [origin/master: behind 3] more junk
-
-        NOTE: Parsing the output of the porcelain is probably not a
-        great idea, but there doesn't appear to be a single plumbing
-        command that will return the same info.
-
+        If we're on a branch, then returns the branch name; otherwise,
+        if we're on a tag, then returns the tag name; otherwise, returns
+        the current hash. Returns an empty string if no reference can be
+        determined (e.g., if we're not actually in a git repository).
         """
-        lines = git_output.splitlines()
-        ref = ''
-        for line in lines:
-            if line.startswith('*'):
-                ref = line
-                break
-        current_ref = EMPTY_STR
-        if not ref:
-            # not a git repo? some other error? we return so the
-            # caller can handle.
-            pass
-        elif 'detached' in ref:
-            match = self.RE_DETACHED.search(ref)
-            try:
-                current_ref = match.group(1)
-            except BaseException:
-                msg = 'DEV_ERROR: regex to detect detached head state failed!'
-                msg += '\nref:\n{0}\ngit_output\n{1}\n'.format(ref, git_output)
-                fatal_error(msg)
-        elif '[' in ref:
-            match = self.RE_TRACKING.search(ref)
-            try:
-                current_ref = match.group(1)
-            except BaseException:
-                msg = 'DEV_ERROR: regex to detect tracking branch failed.'
-                msg += '\nref:\n{0}\ngit_output\n{1}\n'.format(ref, git_output)
-                fatal_error(msg)
-        else:
-            # assumed local branch
-            current_ref = ref.split()[1]
+        ref_found = False
 
-        current_ref = current_ref.strip()
+        # If we're on a branch, then use that as the current ref
+        branch_found, branch_name = self._git_current_branch()
+        if branch_found:
+            current_ref = branch_name
+            ref_found = True
+
+        if not ref_found:
+            # Otherwise, if we're exactly at a tag, use that as the
+            # current ref
+            tag_found, tag_name = self._git_current_tag()
+            if tag_found:
+                current_ref = tag_name
+                ref_found = True
+
+        if not ref_found:
+            # Otherwise, use current hash as the current ref
+            hash_found, hash_name = self._git_current_hash()
+            if hash_found:
+                current_ref = hash_name
+                ref_found = True
+
+        if not ref_found:
+            # If we still can't find a ref, return empty string. This
+            # can happen if we're not actually in a git repo
+            current_ref = ''
+
         return current_ref
 
     def _check_sync(self, stat, repo_dir_path):
@@ -194,12 +145,11 @@ class GitRepository(Repository):
                 self._check_sync_logic(stat, repo_dir_path)
 
     def _check_sync_logic(self, stat, repo_dir_path):
-        """Isolate the complicated synce logic so it is not so deeply nested
-        and a bit easier to understand.
+        """Compare the underlying hashes of the currently checkout ref and the
+        expected ref.
 
-        Sync logic - only reporting on whether we are on the ref
-        (branch, tag, hash) specified in the externals description.
-
+        Output: sets the sync_state as well as the current and
+        expected ref in the input status object.
 
         """
         def compare_refs(current_ref, expected_ref):
@@ -215,8 +165,8 @@ class GitRepository(Repository):
         cwd = os.getcwd()
         os.chdir(repo_dir_path)
 
-        git_output = self._git_branch_vv()
-        current_ref = self._current_ref_from_branch_command(git_output)
+        # get the full hash of the current commit
+        _, current_ref = self._git_current_hash()
 
         if self._branch:
             if self._url == LOCAL_PATH_INDICATOR:
@@ -230,22 +180,33 @@ class GitRepository(Repository):
                 else:
                     expected_ref = "{0}/{1}".format(remote_name, self._branch)
         elif self._hash:
-            # NOTE(bja, 2018-03) For comparison purposes, we could
-            # determine which is longer and check that the short ref
-            # is a substring of the long ref. But it is simpler to
-            # just expand both to the full sha and do an exact
-            # comparison.
-            _, expected_ref = self._git_revparse_commit(self._hash)
-            _, current_ref = self._git_revparse_commit(current_ref)
-        else:
+            expected_ref = self._hash
+        elif self._tag:
             expected_ref = self._tag
+        else:
+            msg = 'In repo "{0}": none of branch, hash or tag are set'.format(
+                self._name)
+            fatal_error(msg)
 
-        stat.sync_state = compare_refs(current_ref, expected_ref)
+        # record the *names* of the current and expected branches
+        stat.current_version = self._current_ref()
+        stat.expected_version = copy.deepcopy(expected_ref)
+
         if current_ref == EMPTY_STR:
             stat.sync_state = ExternalStatus.UNKNOWN
-
-        stat.current_version = current_ref
-        stat.expected_version = expected_ref
+        else:
+            # get the underlying hash of the expected ref
+            revparse_status, expected_ref_hash = self._git_revparse_commit(
+                expected_ref)
+            if revparse_status:
+                # We failed to get the hash associated with
+                # expected_ref. Maybe we should assign this to some special
+                # status, but for now we're just calling this out-of-sync to
+                # remain consistent with how this worked before.
+                stat.sync_state = ExternalStatus.MODEL_MODIFIED
+            else:
+                # compare the underlying hashes
+                stat.sync_state = compare_refs(current_ref, expected_ref_hash)
 
         os.chdir(cwd)
 
@@ -595,14 +556,58 @@ class GitRepository(Repository):
     #
     # ----------------------------------------------------------------
     @staticmethod
-    def _git_branch_vv():
-        """Run git branch -vv to obtain verbose branch information, including
-        upstream tracking and hash.
+    def _git_current_hash():
+        """Return the full hash of the currently checked-out version.
 
+        Returns a tuple, (hash_found, hash), where hash_found is a
+        logical specifying whether a hash was found for HEAD (False
+        could mean we're not in a git repository at all). (If hash_found
+        is False, then hash is ''.)
         """
-        cmd = ['git', 'branch', '--verbose', '--verbose']
-        git_output = execute_subprocess(cmd, output_to_caller=True)
-        return git_output
+        status, git_output = GitRepository._git_revparse_commit("HEAD")
+        hash_found = not status
+        if not hash_found:
+            git_output = ''
+        return hash_found, git_output
+
+    @staticmethod
+    def _git_current_branch():
+        """Determines the name of the current branch.
+
+        Returns a tuple, (branch_found, branch_name), where branch_found
+        is a logical specifying whether a branch name was found for
+        HEAD. (If branch_found is False, then branch_name is ''.)
+        """
+        cmd = ['git', 'symbolic-ref', '--short', '-q', 'HEAD']
+        status, git_output = execute_subprocess(cmd,
+                                                output_to_caller=True,
+                                                status_to_caller=True)
+        branch_found = not status
+        if branch_found:
+            git_output = git_output.strip()
+        else:
+            git_output = ''
+        return branch_found, git_output
+
+    @staticmethod
+    def _git_current_tag():
+        """Determines the name tag corresponding to HEAD (if any).
+
+        Returns a tuple, (tag_found, tag_name), where tag_found is a
+        logical specifying whether we found a tag name corresponding to
+        HEAD. (If tag_found is False, then tag_name is ''.)
+        """
+        # git describe --exact-match --tags HEAD
+        cmd = ['git', 'describe', '--exact-match', '--tags', 'HEAD']
+        status, git_output = execute_subprocess(cmd,
+                                                output_to_caller=True,
+                                                status_to_caller=True)
+        tag_found = not status
+        if tag_found:
+            git_output = git_output.strip()
+        else:
+            git_output = ''
+        return tag_found, git_output
 
     @staticmethod
     def _git_showref_tag(ref):
@@ -647,6 +652,7 @@ class GitRepository(Repository):
                '{0}^{1}'.format(ref, '{commit}'), ]
         status, git_output = execute_subprocess(cmd, status_to_caller=True,
                                                 output_to_caller=True)
+        git_output = git_output.strip()
         return status, git_output
 
     @staticmethod

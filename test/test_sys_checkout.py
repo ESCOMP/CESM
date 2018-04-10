@@ -83,6 +83,7 @@ SUB_EXTERNALS_PATH = 'src'
 CFG_NAME = 'externals.cfg'
 CFG_SUB_NAME = 'sub-externals.cfg'
 README_NAME = 'readme.txt'
+REMOTE_BRANCH_FEATURE2 = 'feature2'
 
 SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 
@@ -130,7 +131,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1')
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch='feature2')
+                            branch=REMOTE_BRANCH_FEATURE2)
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_opt',
                             tag='tag1', required=False)
@@ -149,7 +150,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1')
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch='feature2')
+                            branch=REMOTE_BRANCH_FEATURE2)
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
                             ref_hash='60b1cc1a38d63')
@@ -191,7 +192,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1')
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch='feature2')
+                            branch=REMOTE_BRANCH_FEATURE2)
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
                             ref_hash='60b1cc1a38d63')
@@ -207,7 +208,8 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1', path=SUB_EXTERNALS_PATH)
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch='feature2', path=SUB_EXTERNALS_PATH)
+                            branch=REMOTE_BRANCH_FEATURE2,
+                            path=SUB_EXTERNALS_PATH)
 
         self._write_config(dest_dir, filename=CFG_SUB_NAME)
 
@@ -327,6 +329,31 @@ class GenerateExternalsDescriptionCfgV1(object):
             execute_subprocess(cmd)
             cmd = ['git', 'commit', '-m', msg, ]
             execute_subprocess(cmd)
+        os.chdir(cwd)
+
+    @staticmethod
+    def create_commit(dest_dir, repo_name, local_tracking_branch=None):
+        """Make a commit on whatever is currently checked out.
+
+        This is used to test sync state changes from local commits on
+        detached heads and tracking branches.
+
+        """
+        cwd = os.getcwd()
+        repo_root = os.path.join(dest_dir, EXTERNALS_NAME)
+        repo_root = os.path.join(repo_root, repo_name)
+        os.chdir(repo_root)
+        if local_tracking_branch:
+            cmd = ['git', 'checkout', '-b', local_tracking_branch, ]
+            execute_subprocess(cmd)
+
+        msg = 'work on great new feature!'
+        with open(README_NAME, 'a') as handle:
+            handle.write(msg)
+        cmd = ['git', 'add', README_NAME, ]
+        execute_subprocess(cmd)
+        cmd = ['git', 'commit', '-m', msg, ]
+        execute_subprocess(cmd)
         os.chdir(cwd)
 
     def update_branch(self, dest_dir, name, branch, repo_type=None,
@@ -601,6 +628,10 @@ class BaseTestSysCheckout(unittest.TestCase):
         name = './{0}/simp_tag'.format(directory)
         self._check_generic_ok_dirty_required(tree, name)
 
+    def _check_simple_tag_modified(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_tag'.format(directory)
+        self._check_generic_modified_ok_required(tree, name)
+
     def _check_simple_branch_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_branch'.format(directory)
         self._check_generic_empty_default_required(tree, name)
@@ -620,6 +651,10 @@ class BaseTestSysCheckout(unittest.TestCase):
     def _check_simple_hash_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_hash'.format(directory)
         self._check_generic_ok_clean_required(tree, name)
+
+    def _check_simple_hash_modified(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_hash'.format(directory)
+        self._check_generic_modified_ok_required(tree, name)
 
     def _check_simple_req_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_req'.format(directory)
@@ -672,6 +707,12 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_tag_ok(tree)
         self._check_simple_branch_ok(tree)
         self._check_simple_hash_ok(tree)
+
+    def _check_container_simple_required_out_of_sync(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_modified(tree)
+        self._check_simple_branch_modified(tree)
+        self._check_simple_hash_modified(tree)
 
     def _check_container_simple_optional_pre_checkout(self, overall, tree):
         self.assertEqual(overall, 0)
@@ -941,6 +982,47 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_simple_required_post_checkout(overall, tree)
 
+    def test_container_simple_detached_sync(self):
+        """Verify that a container with simple subrepos generates the correct
+        out of sync status when making commits from a detached head
+        state.
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # status of empty repo
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_pre_checkout(overall, tree)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
+
+        # make a commit on the detached head of the tag and hash externals
+        self._generator.create_commit(under_test_dir, 'simp_tag')
+        self._generator.create_commit(under_test_dir, 'simp_hash')
+        self._generator.create_commit(under_test_dir, 'simp_branch')
+
+        # status of repo, branch, tag and hash should all be out of sync!
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_out_of_sync(overall, tree)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        # same pre-checkout out of sync status
+        self._check_container_simple_required_out_of_sync(overall, tree)
+
+        # now status should be in-sync
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
+
     def test_container_remote_branch(self):
         """Verify that a container with remote branch change works
 
@@ -957,7 +1039,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # update the config file to point to a different remote with
         # the same branch
         self._generator.update_branch(under_test_dir, 'simp_branch',
-                                      'feature2', SIMPLE_FORK_NAME)
+                                      REMOTE_BRANCH_FEATURE2, SIMPLE_FORK_NAME)
 
         # status of simp_branch should be out of sync
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
@@ -1066,7 +1148,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # update the config file to point to a different remote with
         # the same branch
         self._generator.update_branch(under_test_dir, 'simp_branch',
-                                      'feature2', SIMPLE_FORK_NAME)
+                                      REMOTE_BRANCH_FEATURE2, SIMPLE_FORK_NAME)
         # checkout
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.checkout_args)
