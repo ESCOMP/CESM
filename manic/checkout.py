@@ -315,7 +315,7 @@ def main(args):
     logging.info('Beginning of %s', program_name)
 
     load_all = False
-    if args.optional or args.components:
+    if args.optional:
         load_all = True
 
     root_dir = os.path.abspath(os.getcwd())
