@@ -20,7 +20,7 @@ from manic.externals_description import create_externals_description
 from manic.externals_description import read_externals_description_file
 from manic.externals_status import check_safe_to_update_repos
 from manic.sourcetree import SourceTree
-from manic.utils import printlog
+from manic.utils import printlog, fatal_error
 from manic.global_constants import VERSION_SEPERATOR, LOG_FILE_NAME
 
 if sys.hexversion < 0x02070000:
@@ -243,6 +243,10 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     #
     # user options
     #
+    parser.add_argument("components", nargs="*",
+                        help="Specific component(s) to checkout. By default"
+                        "all required externals are checked out.")
+
     parser.add_argument('-e', '--externals', nargs='?',
                         default='Externals.cfg',
                         help='The externals description filename. '
@@ -316,7 +320,12 @@ def main(args):
 
     root_dir = os.path.abspath(os.getcwd())
     external_data = read_externals_description_file(root_dir, args.externals)
-    external = create_externals_description(external_data)
+    external = create_externals_description(external_data, components=args.components)
+
+    for comp in args.components:
+        if comp not in external.keys():
+            fatal_error("No component {} found in {}".format(comp, args.externals))
+
 
     source_tree = SourceTree(root_dir, external)
     printlog('Checking status of externals: ', end='')
@@ -354,7 +363,10 @@ The following are two options for how to proceed:
             printlog(msg)
             printlog('-' * 70)
         else:
-            source_tree.checkout(args.verbose, load_all)
+            if not args.components:
+                source_tree.checkout(args.verbose, load_all)
+            for comp in args.components:
+                source_tree.checkout(args.verbose, load_all, load_comp=comp)
             printlog('')
 
     logging.info('%s completed without exceptions.', program_name)

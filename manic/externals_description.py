@@ -91,16 +91,16 @@ def read_externals_description_file(root_dir, file_name):
     return externals_description
 
 
-def create_externals_description(model_data, model_format='cfg'):
+def create_externals_description(model_data, model_format='cfg', components=None):
     """Create the a externals description object from the provided data
     """
     externals_description = None
     if model_format == 'dict':
-        externals_description = ExternalsDescriptionDict(model_data, )
+        externals_description = ExternalsDescriptionDict(model_data, components=components)
     elif model_format == 'cfg':
         major, _, _ = get_cfg_schema_version(model_data)
         if major == 1:
-            externals_description = ExternalsDescriptionConfigV1(model_data)
+            externals_description = ExternalsDescriptionConfigV1(model_data, components=components)
         else:
             msg = ('Externals description file has unsupported schema '
                    'version "{0}".'.format(major))
@@ -419,7 +419,7 @@ class ExternalsDescriptionDict(ExternalsDescription):
 
     """
 
-    def __init__(self, model_data):
+    def __init__(self, model_data, components=None):
         """Parse a native dictionary into a externals description.
         """
         ExternalsDescription.__init__(self)
@@ -430,6 +430,11 @@ class ExternalsDescriptionDict(ExternalsDescription):
         self._input_minor = 0
         self._input_patch = 0
         self._verify_schema_version()
+        if components:
+            for k in model_data.items():
+                if k not in components:
+                    del model_data[k]
+
         self.update(model_data)
         self._check_user_input()
 
@@ -440,8 +445,8 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
 
     """
 
-    def __init__(self, model_data):
-        """Convert the xml into a standardized dict that can be used to
+    def __init__(self, model_data, components=None):
+        """Convert the config data into a standardized dict that can be used to
         construct the source objects
 
         """
@@ -453,7 +458,7 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
             get_cfg_schema_version(model_data)
         self._verify_schema_version()
         self._remove_metadata(model_data)
-        self._parse_cfg(model_data)
+        self._parse_cfg(model_data, components=components)
         self._check_user_input()
 
     @staticmethod
@@ -465,7 +470,7 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
         """
         model_data.remove_section(DESCRIPTION_SECTION)
 
-    def _parse_cfg(self, cfg_data):
+    def _parse_cfg(self, cfg_data, components=None):
         """Parse a config_parser object into a externals description.
         """
         def list_to_dict(input_list, convert_to_lower_case=True):
@@ -482,6 +487,8 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
 
         for section in cfg_data.sections():
             name = config_string_cleaner(section.lower().strip())
+            if components and name not in components:
+                continue
             self[name] = {}
             self[name].update(list_to_dict(cfg_data.items(section)))
             self[name][self.REPO] = {}
