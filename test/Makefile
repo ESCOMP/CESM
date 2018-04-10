@@ -39,7 +39,7 @@ PYLINT_ARGS=-j 2 --rcfile=.pylint.rc
 
 # code coverage
 COVERAGE=coverage
-COVERAGE_ARGS=--rcfile=.coveragerc --append
+COVERAGE_ARGS=--rcfile=.coveragerc
 
 # source files
 SRC = \
@@ -92,10 +92,13 @@ lint : FORCE
 stylint : style lint
 
 .PHONY : coverage
+# Need to use a single coverage run with a single pattern rather than
+# using two separate commands with separate patterns for test_unit_*.py
+# and test_sys_*.py: The latter clobbers some results from the first
+# run, even if we use the --append flag to 'coverage run'.
 coverage : FORCE
 	$(PYPATH) $(COVERAGE) erase
-	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_unit_*.py'
-	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_sys_*.py'
+	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_*.py'
 	$(PYPATH) $(COVERAGE) html
 
 #
