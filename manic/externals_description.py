@@ -446,7 +446,7 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
     """
 
     def __init__(self, model_data, components=None):
-        """Convert the xml into a standardized dict that can be used to
+        """Convert the config data into a standardized dict that can be used to
         construct the source objects
 
         """
