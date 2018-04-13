@@ -1,4 +1,242 @@
 ===============================================================
+Tag name: cesm2_0_alpha10d
+Originator(s): CSEG
+Date: 13 April 2018
+One-line Summary: clm, pop and cice answer changes
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_179/components/cam             **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180403                                   **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.29                           **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_52                                     **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev006                                          **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180412                 **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65                                               --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                             --
+
+manage_externals                   v1.1.3                                                                                     **
+
+cam
+    Cheryl Craig 2018-04-03 - trunk_tags/cam5_4_179 - components/cam (cesm2_0_alpha10d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_179
+
+    Cleanup of files in inputdata and namelist_definition file
+
+
+cice
+    Chris Fischer 2018-04-13 - cice5_20180403 - components/cice (cesm2_0_alpha10d)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20180403
+
+    All compsets using active CICE will change due to default r_snw value change.
+
+
+cime
+    Chris Fischer 2018-04-12 - cime5.4.0-alpha.29 - cime (cesm2_0_alpha10d)
+    https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.29
+
+    Depends on cism2_1_51
+
+        - Fix variable initialization.
+        - Add model doi url to seq_infodata and to cpl history global attributes.
+        - Remove the LOGDIR variable and stop copying logs back to the case directory.
+        - Fix env_mach_specific.sh file when module init is None.
+        - Support renamed glimmer-cism directory; add README files to SourceMods directories.
+        - Add f10_f10_mg37 grid.
+        - Update casename restrictions.
+        - Update statistical ensemble test for new verison of CESM.
+        - Add PEM test to cime developer.
+        - Add inputdata servers for grid ftp, ftp, and wget.
+        - Use --no-logging in call to checkout_externals.
+        - Add support for stampede2-skx and stampede2-knl at TACC.
+        - split_test_py
+        - Merge commit '20e3277dd143e4058ffa0ef610180c199cbb6ea1'
+        - E3SM split.
+        - PEA and PEM need to call case_setup for case2.
+        - Revert small piece of #2299.
+        - Fixes the potential leak reported by address sanitizer in PIO.
+        - Reorganize Users Guide part 1 and 2 content.
+
+
+cism
+    William Sacks 2018-04-12 - cism2_1_52 - components/cism (cesm2_0_alpha10d)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_52
+
+    Update externals used in standalone checkout
+
+    No effect within CESM
+
+
+    William Sacks 2018-04-12 - cism2_1_51 - components/cism (cesm2_0_alpha10d)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_51
+
+    Rename glimmer-cism directory to source_cism
+
+    Depends on a cime update (can be moved to a later alpha tag if that helps with the dependency)
+
+
+clm
+    William Sacks 2018-04-09 - clm5.0.dev006 - components/clm (cesm2_0_alpha10d)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev006
+
+    Don't allocate memory for zero-weight pfts and urban
+
+    Limited answer changes:
+        - Vector output is not directly comparable, because dimension sizes
+          differ (DIMSIZEDIFF when comparing clm h1 or h2 files)
+        - I1850Clm50Sp cases change substantially due to fix of #320
+        - Cases with carbon isotope bombspike change due to fix of #317
+        - In some situations, cases that use init_interp now but did not
+          before can change answers by roundoff due to #330
+
+
+    William Sacks 2018-04-09 - clm5.0.dev005 - components/clm (cesm2_0_alpha10d)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev005
+
+    Fixes for init_interp
+
+    Changes answers for cases with use_init_interp = .true. (note that Cecile's recent B1850 cases have NOT been using init_interp)
+
+
+    Erik Kluzek 2018-04-05 - clm5.0.dev004 - components/clm (cesm2_0_alpha10d)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev004
+
+    Fix a variety of important bugs. Answers appear to be different only because the fill-value field is different on the history files for a few fiels.
+
+
+    Erik Kluzek 2018-03-09 - clm5.0.dev003 - components/clm (cesm2_0_alpha10d)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev003
+
+    Fix an energy imbalance over snow and lake
+
+
+pop
+    Alper Altuntas 2018-04-03 - trunk_tags/cesm_pop_2_1_20180405 - components/pop (cesm2_0_alpha10d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_201804??
+
+    - Enabled PBC for tidal mixing.
+    - JRA (and CORE2) forcing updates: new ic, sfwf,  ebm_params files.
+    - update testlist (rm all bluewaters and eos tests, add JRA tests)
+    - correct tavg_SST2 unit.
+
+    Testing:    
+    - aux_pop on cheyenne/intel. all except gx1v7 bit for bit. gx1v7 differs due to new ic and sfwf files.
+    - G.TL319_t13.startup two-month smoke test for tidal PBC.
+
+
+    Alper Altuntas 2018-03-22 - trunk_tags/cesm_pop_2_1_20180322/ - components/pop (cesm2_0_alpha10d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/cesm_pop_2_1_20180322
+
+    - Adds new tidal mixing methods, options, variables, energy datasets.
+    - New CVMix tag (adds new tidal methods)
+    - New Geothermal options, variables, options
+
+    test: aux_pop, cheyenne (intel)
+    answer changes due to modified initialization calling sequence.
+
+
+    Michael Levy 2018-04-04 - /trunk_tags/cesm_pop_2_1_20180406 - components/pop (cesm2_0_alpha10d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//trunk_tags/cesm_pop_2_1_201804??b
+
+    1. Some POP changes
+    -- atm D14C default values use CMIP6 lat_band values
+    -- marbl_in is now read line-by-line on master and each line is broadcast
+       (rather than slurping entire file into string and then breaking into array)
+    -- PHYS-CYCLE cases are created correctly and ECO-PHYS-CYCLE was added
+    -- some gx1v7 initial condition files were outdated, now all match gx1v6
+    -- introduce box_atm_trace_gas_mod, and support box_atm_co2 as atm_co2_opt
+    -- implement fe_bioavail fix
+    2. Lots of MARBL updates
+    -- Fix bug in restoring (ALK restoring was not being applied)
+    -- Use in situ temperature instead of potential temperature
+    -- Add divide-by-0 checks in the code
+    -- Fix denominator of POP_bury_coeff computation
+    -- Change kinetic fraction during gas transfer to match CMIP 6 settings
+    -- Fix bug in how budget terms are computed when running with multiple calcifiers or silicifiers
+    -- MARBL now tells POP what diagnostics should be included in tavg
+    -- Ca{13,14}CO3 diagnostics are only defined for autotrophs that are calcifiers
+    -- CISO calcium carbonate burial is now similar to the non-isotope burial
+    -- Introduce more carbon diagnostics (fluxes replaced with full-depth and 100m vertical integrals)
+    -- DO{13,14}C in ciso module refers to DOC + DOCr (and has been renamed DO{13,14}Ctot)
+    -- MARBL will abort if mass balance conservation is violated
+       (rather than relying on user to check integrals)
+    -- Additional FESEDFLUX diagnostic
+       (forcing field provided by POP is now available in history file)
+    -- new tunings to account for new fe_bioavail
+
+    Answer changing for all compsets using POP2%ECO
+
+
+    Alper Altuntas 2018-04-11 - /trunk_tags/cesm_pop_2_1_20180412 - components/pop (cesm2_0_alpha10d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//trunk_tags/cesm_pop_2_1_20180412
+
+    - update from testlist v.1 (phased out as of cime5.4.0-alpha.25) to v.2
+    - correct exp_hab_zetar allocation both in CVMix and POP.
+    - bugfix for enable START_DATE on last day of month or year. (klindsay)
+
+    Testing: aux_pop on cheyenne (intel). bit-for-bit
+
+
+manage_externals
+    manic-v1.1.3
+        Add --quiet argument to improve performance.
+    manic-v1.1.2
+        Add optional argument to only process components listed on the command line
+
+         checkout_externals cam clm 
+
+        will only process externals associated with the listed components cam and clm.
+
+        Also add a test of the new functionality.
+
+    manic-v1.1.1
+        Rework two aspects of the logic for git repositories; both of these can
+        change behavior in some cases when printing status:
+
+            Determining whether the local checkout is in-sync with the expected
+            reference from the configuration file: Now we always convert the
+            expected reference to a hash and compare that with the
+            currently-checked-out hash. Previously, we sometimes did the
+            comparison using names, e.g., just ensuring that you're on the right
+            branch.
+
+            Determining the current ref name (e.g., the branch or tag currently
+            checked out). Now we use a number of plumbing commands rather than
+            relying on regex parsing of 'git branch -vv'. The previous regex
+            parsing was fragile and hard to maintain, and was the source of a
+            number of bugs. In addition, differences between git v. 1 and git
+            v. 2 meant that the result was incorrect in some cases -
+            particularly, in the case where we have "detached from foo" (which is
+            the text that always appeared for a detached head in v 1, but in v 2
+            means we are no longer at foo).
+
+        This results in some subtle changes to status output. One particular
+        change is: If we're on a tracking branch, checkout_externals -S -v
+        will show the name of the local branch rather than the tracked
+        branch. (This is more accurate, because we may not actually be at the
+        head of the tracking branch.)
+
+        Also some other minor changes to documentation and running code coverage.
+
+    manic-1.1.0 
+        Add schema support for explicitly specifying a git hash. This schema change is
+        backwards compatible with older input files, but adds new functionality that
+        can not be used with prior versions of manage_externals.
+
+    manic-1.0.2
+        Bugfix tag 1.0.2 for manage_externals
+
+        Includes bugfixes for:
+
+            svn and git authentication requests may not be displayed to the user on
+            some machines. Add a timeout limit to subprocess calls.
+
+            explicit configuration file schema version checking.
+
+            Update readme and help, including working with local repositories, comments
+            in externals files, switching repository types not supported.
+
+
+===============================================================
 Tag name: cesm2_0_alpha10c
 Originator(s): CSEG
 Date: 2 April 2018
