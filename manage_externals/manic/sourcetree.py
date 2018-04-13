@@ -19,7 +19,7 @@ from .global_constants import VERBOSITY_VERBOSE
 
 class _External(object):
     """
-    _External represents an external object in side a SourceTree
+    _External represents an external object inside a SourceTree
     """
 
     # pylint: disable=R0902

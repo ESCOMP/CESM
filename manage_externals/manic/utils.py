@@ -12,6 +12,7 @@ import logging
 import os
 import subprocess
 import sys
+import time
 
 from .global_constants import LOCAL_PATH_INDICATOR, LOG_FILE_NAME
 
@@ -198,6 +199,82 @@ def expand_local_url(url, field):
 # subprocess
 #
 # ---------------------------------------------------------------------
+_TIMEOUT_MSG = """ Timout errors typically occur when svn or git requires
+authentication to access a private repository. On some systems, svn
+and git requests for authentication information will not be displayed
+to the user.  In this case, the program will appear to hang and
+generate a timeout error. Ensure you can run svn and git manually and
+access all repositories without entering your authentication
+information."""
+
+_TIMEOUT_SEC = 300
+_POLL_DELTA_SEC = 0.02
+
+
+def _poll_subprocess(commands, status_to_caller, output_to_caller,
+                     timeout_sec=_TIMEOUT_SEC):
+    """Create a subprocess and poll the process until complete.
+
+    Impose a timeout limit and checkout process output for known
+    conditions that require user interaction.
+
+    NOTE: the timeout_delta has significant impact on run time. If it
+    is too long, and the many quick local subprocess calls will
+    drastically increase the run time, especially in tests.
+
+    NOTE: This function is broken out into for ease of
+    understanding. It does no error checking. It should only be called
+    from execute_subprocess, never directly.
+
+    """
+    logging.info(' '.join(commands))
+    output = []
+    start = time.time()
+
+    proc = subprocess.Popen(commands,
+                            shell=False,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            universal_newlines=True)
+    while proc.poll() is None:
+        time.sleep(_POLL_DELTA_SEC)
+        if time.time() - start > timeout_sec:
+            proc.kill()
+            time.sleep(_POLL_DELTA_SEC * 5)
+            msg = ("subprocess call to  '{0}' has exceeded timeout limit of "
+                   "{1} seconds.\n{2}".format(commands[0], timeout_sec,
+                                              _TIMEOUT_MSG))
+            fatal_error(msg)
+    finish = time.time()
+
+    run_time_msg = "run time : {0:.2f} seconds".format(finish - start)
+    logging.info(run_time_msg)
+    output = proc.stdout.read()
+    log_process_output(output)
+    status = proc.returncode
+
+    # NOTE(bja, 2018-03) need to cleanup open files. In python3 use
+    # "with subprocess.Popen(...) as proc:", but that is not available
+    # with python2 unless we create a context manager.
+    proc.stdout.close()
+
+    if status != 0:
+        raise subprocess.CalledProcessError(returncode=status,
+                                            cmd=commands,
+                                            output=output)
+
+    if status_to_caller and output_to_caller:
+        ret_value = (status, output)
+    elif status_to_caller:
+        ret_value = status
+    elif output_to_caller:
+        ret_value = output
+    else:
+        ret_value = None
+
+    return ret_value
+
+
 def execute_subprocess(commands, status_to_caller=False,
                        output_to_caller=False):
     """Wrapper around subprocess.check_output to handle common
@@ -211,20 +288,19 @@ def execute_subprocess(commands, status_to_caller=False,
     return code, otherwise execute_subprocess treats non-zero return
     status as an error and raises an exception.
 
+    NOTE(bja, 2018-03) we are polling the running process to avoid
+    having it hang indefinitely if there is input that we don't
+    detect. Some large checkouts are multiple minutes long. For now we
+    are setting the timeout interval to five minutes.
+
     """
     msg = 'In directory: {0}\nexecute_subprocess running command:'.format(
         os.getcwd())
     logging.info(msg)
     logging.info(commands)
-    return_to_caller = status_to_caller or output_to_caller
-    status = -1
-    output = ''
     try:
-        logging.info(' '.join(commands))
-        output = subprocess.check_output(commands, stderr=subprocess.STDOUT,
-                                         universal_newlines=True)
-        log_process_output(output)
-        status = 0
+        ret_value = _poll_subprocess(
+            commands, status_to_caller, output_to_caller)
     except OSError as error:
         msg = failed_command_msg(
             'Command execution failed. Does the executable exist?',
@@ -243,27 +319,20 @@ def execute_subprocess(commands, status_to_caller=False,
         # simple status check. If returning, it is the callers
         # responsibility determine if an error occurred and handle it
         # appropriately.
-        if not return_to_caller:
+        if status_to_caller and output_to_caller:
+            ret_value = (error.returncode, error.output)
+        elif status_to_caller:
+            ret_value = error.returncode
+        elif output_to_caller:
+            ret_value = error.output
+        else:
             msg_context = ('Process did not run successfully; '
                            'returned status {0}'.format(error.returncode))
-            msg = failed_command_msg(
-                msg_context,
-                commands,
-                output=error.output)
+            msg = failed_command_msg(msg_context, commands,
+                                     output=error.output)
             logging.error(error)
-            logging.error(msg)
             log_process_output(error.output)
             fatal_error(msg)
-        status = error.returncode
-
-    if status_to_caller and output_to_caller:
-        ret_value = (status, output)
-    elif status_to_caller:
-        ret_value = status
-    elif output_to_caller:
-        ret_value = output
-    else:
-        ret_value = None
 
     return ret_value
 
