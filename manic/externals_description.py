@@ -91,16 +91,19 @@ def read_externals_description_file(root_dir, file_name):
     return externals_description
 
 
-def create_externals_description(model_data, model_format='cfg', components=None):
+def create_externals_description(
+        model_data, model_format='cfg', components=None):
     """Create the a externals description object from the provided data
     """
     externals_description = None
     if model_format == 'dict':
-        externals_description = ExternalsDescriptionDict(model_data, components=components)
+        externals_description = ExternalsDescriptionDict(
+            model_data, components=components)
     elif model_format == 'cfg':
         major, _, _ = get_cfg_schema_version(model_data)
         if major == 1:
-            externals_description = ExternalsDescriptionConfigV1(model_data, components=components)
+            externals_description = ExternalsDescriptionConfigV1(
+                model_data, components=components)
         else:
             msg = ('Externals description file has unsupported schema '
                    'version "{0}".'.format(major))

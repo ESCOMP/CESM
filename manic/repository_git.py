@@ -694,7 +694,7 @@ class GitRepository(Repository):
     def _git_clone(url, repo_dir_name, verbosity):
         """Run git clone for the side effect of creating a repository.
         """
-        cmd = ['git', 'clone', url, repo_dir_name]
+        cmd = ['git', 'clone', '--quiet', url, repo_dir_name]
         if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
@@ -710,7 +710,7 @@ class GitRepository(Repository):
     def _git_fetch(remote_name):
         """Run the git fetch command to for the side effect of updating the repo
         """
-        cmd = ['git', 'fetch', '--tags', remote_name]
+        cmd = ['git', 'fetch', '--quiet', '--tags', remote_name]
         execute_subprocess(cmd)
 
     @staticmethod
@@ -721,7 +721,7 @@ class GitRepository(Repository):
         form 'origin/my_feature', or 'tag1'.
 
         """
-        cmd = ['git', 'checkout', ref]
+        cmd = ['git', 'checkout', '--quiet', ref]
         if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
