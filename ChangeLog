@@ -6,7 +6,7 @@ One-line Summary: clm, pop and cice answer changes
 
 components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_179/components/cam             **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180403                                   **
-cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.29                           **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.30                           **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_52                                     **
 components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev006                                          **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
@@ -31,6 +31,13 @@ cice
 
 
 cime
+    Chris Fischer 2018-04-17 - cime5.4.0-alpha.30 - cime (cesm2_0_alpha10d)
+    https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.30
+
+        - Change the CESM inputdata server precedence order to gridftp, svn, ftp, wget.
+        - Fix totalpes to properly include threads.
+        - Refactor BUILD_THREADED case value.
+
     Chris Fischer 2018-04-12 - cime5.4.0-alpha.29 - cime (cesm2_0_alpha10d)
     https://github.com/ESMCI/cime/tags/cime5.4.0-alpha.29
 
@@ -175,6 +182,8 @@ pop
 
     Testing: aux_pop on cheyenne (intel). bit-for-bit
 
+cime_config
+    Update refcases.
 
 manage_externals
     manic-v1.1.3
