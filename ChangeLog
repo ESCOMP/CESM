@@ -6,11 +6,11 @@ One-line Summary: clm, pop and cice answer changes
 
 components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_179/components/cam             **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180403                                   **
-cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.30                           **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.31                           **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_52                                     **
-components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev006                                          **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev005                                          **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
-components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180412                 **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180419                 **
 components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65                                               --
 components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                             --
 
@@ -82,20 +82,6 @@ cism
 
 
 clm
-    William Sacks 2018-04-09 - clm5.0.dev006 - components/clm (cesm2_0_alpha10d)
-    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev006
-
-    Don't allocate memory for zero-weight pfts and urban
-
-    Limited answer changes:
-        - Vector output is not directly comparable, because dimension sizes
-          differ (DIMSIZEDIFF when comparing clm h1 or h2 files)
-        - I1850Clm50Sp cases change substantially due to fix of #320
-        - Cases with carbon isotope bombspike change due to fix of #317
-        - In some situations, cases that use init_interp now but did not
-          before can change answers by roundoff due to #330
-
-
     William Sacks 2018-04-09 - clm5.0.dev005 - components/clm (cesm2_0_alpha10d)
     https://github.com/ESCOMP/ctsm/tags/clm5.0.dev005
 
@@ -117,6 +103,12 @@ clm
 
 
 pop
+    Chris Fischer 2018-04-19 - trunk_tags/cesm_pop_2_1_20180419 - components/pop (cesm2_0_alpha10d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180419
+  
+    - Fix testlist_pop.xml
+
+
     Alper Altuntas 2018-04-03 - trunk_tags/cesm_pop_2_1_20180405 - components/pop (cesm2_0_alpha10d)
     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_201804??
 
@@ -181,9 +173,6 @@ pop
     - bugfix for enable START_DATE on last day of month or year. (klindsay)
 
     Testing: aux_pop on cheyenne (intel). bit-for-bit
-
-cime_config
-    Update refcases.
 
 manage_externals
     manic-v1.1.3
