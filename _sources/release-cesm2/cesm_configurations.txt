@@ -66,7 +66,7 @@ needed for the model configuration (e.g., the active land component
 forced with atmospheric data does not need ice, ocn, or glc components,
 so ice, ocn, and glc stubs are used).
 
-The CESM components can be summarized as follows:
+The CESM2 components can be summarized as follows:
 
 .. csv-table:: "CESM model components"
    :header: "Component Generic Type", "Component Generic Name", "Component Name", "Component Type", "Description"
@@ -101,10 +101,10 @@ The CESM components can be summarized as follows:
    "coupler", "cpl", "cpl", "active", "The `CESM coupler <http://esmci.github.io/cime/driver_cpl/index.html>`_ was built primarily through a collaboration of the NCAR CESM Software Engineering Group and the Argonne National Laboratory (ANL). The MCT coupling library provides much of the infrastructure."
 
 
-CESM Component Sets
--------------------
+CESM2 Component Sets
+--------------------
 
-The CESM components can be combined in numerous ways to carry out
+The CESM2 components can be combined in numerous ways to carry out
 various scientific or software experiments. A particular mix of
 components, *along with* component-specific configuration and/or
 namelist settings is called a `component set or compset
@@ -125,8 +125,8 @@ with the ``--compsets`` option will also provide a listing of the
 supported out-of-the-box component sets for the local version of CESM.
 
 
-CESM Grids
-----------
+CESM2 Grids
+-----------
 
 The `supported grid resolutions
 <http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html>`_ are
@@ -165,8 +165,8 @@ grid <http://www.cesm.ucar.edu/models/cesm1.0/cesm/cesm_doc_1_0_4/x42.html>`_ is
 grid with three poles that are all centered over land.
 
 
-CESM Machines
--------------
+CESM2 Machines
+--------------
 
 Scripts for `supported machines
 <http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html>`_ and
@@ -193,8 +193,8 @@ process. The machines available in each of these categories changes as
 access to machines change over time.
 
 
-CESM Validation
----------------
+CESM2 Validation
+----------------
 
 Although CESM can be run out-of-the-box for a variety of resolutions,
 component combinations, and machines, MOST combinations of component

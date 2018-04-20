@@ -1,10 +1,10 @@
 .. _quickstart:
 
 ====================================
- Quick Start (CESM Model Workflow)
+ Quick Start (CESM2 Model Workflow)
 ====================================
 
-The following quick start guide is for versions of CESM that have
+The following quick start guide is for versions of CESM2 that have
 already been ported to the local target machine. CESM2 is built on the
 CIME (Common Infrastructure for Modeling Earth) framework.
 
@@ -32,14 +32,14 @@ These definitions are required to understand this section:
 -  ``$EXEROOT`` refers to the build directory. (``$EXEROOT`` IS NORMALLY
    NOT THE SAME AS ``$CASEROOT``).
 
--  ``$RUNDIR`` refers to the directory where CESM actually runs. This is
+-  ``$RUNDIR`` refers to the directory where CESM2 actually runs. This is
    normally set to ``$EXEROOT``/../run. (Note: changing ``$EXEROOT`` does not
    change ``$RUNDIR`` as these are independent variables. However by default
    they are both located under ``$CIME_OUTPUT_ROOT``)
 
-This is the procedure for quickly setting up and running a CESM case.
+This is the procedure for quickly setting up and running a CESM2 case.
 
-Download CESM  (see `Downloading CESM <downloading_cesm.html>`_).
+Download CESM2 (see `Downloading CESM2 <downloading_cesm.html>`_).
 
 Select a component set, and a resolution for your case.  Details of available
 component sets and resolutions are available from the `query_config`_ tool located
@@ -52,7 +52,7 @@ in the ``$CIMEROOT/scripts`` directory
 
 See the `supported component sets <http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html>`_,
 `supported model resolutions <http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html>`_ and `supported
-machines <http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html>`_ for a complete list of CESM
+machines <http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html>`_ for a complete list of CESM2
 supported component sets, grids and computational platforms.
 
 Create a case
@@ -114,7 +114,7 @@ Run the build script.
 
 Users of the NCAR cheyenne system should consider using 
 the `qcmd <https://dailyb.cisl.ucar.edu/bulletins/cisl-adds-qcmd-script-launching-resource-intensive-compilation-jobs>`_
-to compile CESM on a compute node as follows:
+to compile CESM2 on a compute node as follows:
 
 ::
 
@@ -136,7 +136,7 @@ Submit the job to the batch queue using the **case.submit** command.
 When the job is complete, review the following directories and files
 
 ``$RUNDIR``, this directory is set in the ``env_build.xml`` file. This is the
-location where CESM was run. There should be log files there for every
+location where CESM2 was run. There should be log files there for every
 component (i.e. of the form cpl.log.yymmdd-hhmmss). Each component writes
 its own log file. Also see whether any restart or history files were
 written. To check that a run completed successfully, check the last

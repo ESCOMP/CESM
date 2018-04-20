@@ -6,25 +6,26 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CESM2 Configurations &mdash; CESM Quickstart Guide: release-cesm2 documentation</title>
+    <title>CESM2 Configurations &mdash; CESM  documentation</title>
     
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     'release-cesm2',
+        URL_ROOT:    '../',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="CESM Quickstart Guide: release-cesm2 documentation" href="index.html" />
-    <link rel="next" title="Quick Start (CESM Model Workflow)" href="quickstart.html" />
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CESM  documentation" href="../index.html" />
+    <link rel="up" title="CESM2 Quickstart Guide" href="index.html" />
+    <link rel="next" title="Quick Start (CESM2 Model Workflow)" href="quickstart.html" />
     <link rel="prev" title="Downloading CESM2" href="downloading_cesm.html" /> 
   </head>
   <body role="document">
@@ -32,15 +33,16 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="quickstart.html" title="Quick Start (CESM Model Workflow)"
+          <a href="quickstart.html" title="Quick Start (CESM2 Model Workflow)"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="downloading_cesm.html" title="Downloading CESM2"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CESM Quickstart Guide: release-cesm2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">CESM  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CESM2 Quickstart Guide</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -102,7 +104,7 @@ exist only to satisfy interface requirements when the component is not
 needed for the model configuration (e.g., the active land component
 forced with atmospheric data does not need ice, ocn, or glc components,
 so ice, ocn, and glc stubs are used).</p>
-<p>The CESM components can be summarized as follows:</p>
+<p>The CESM2 components can be summarized as follows:</p>
 <table border="1" class="colwidths-given docutils" id="id1">
 <caption><span class="caption-text">&#8220;CESM model components&#8221;</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
@@ -286,9 +288,9 @@ so ice, ocn, and glc stubs are used).</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="cesm-component-sets">
-<h2>CESM Component Sets<a class="headerlink" href="#cesm-component-sets" title="Permalink to this headline">¶</a></h2>
-<p>The CESM components can be combined in numerous ways to carry out
+<div class="section" id="cesm2-component-sets">
+<h2>CESM2 Component Sets<a class="headerlink" href="#cesm2-component-sets" title="Permalink to this headline">¶</a></h2>
+<p>The CESM2 components can be combined in numerous ways to carry out
 various scientific or software experiments. A particular mix of
 components, <em>along with</em> component-specific configuration and/or
 namelist settings is called a <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html">component set or compset</a>.  CESM
@@ -304,8 +306,8 @@ complete list of supported compset options. Running <strong>query_config</strong
 with the <code class="docutils literal"><span class="pre">--compsets</span></code> option will also provide a listing of the
 supported out-of-the-box component sets for the local version of CESM.</p>
 </div>
-<div class="section" id="cesm-grids">
-<h2>CESM Grids<a class="headerlink" href="#cesm-grids" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cesm2-grids">
+<h2>CESM2 Grids<a class="headerlink" href="#cesm2-grids" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html">supported grid resolutions</a> are
 specified in CESM by setting an overall model resolution.  Once the
 overall model resolution is set, components will read in appropriate
@@ -339,8 +341,8 @@ Similarly, the <a class="reference external" href="http://www.cesm.ucar.edu/mode
 grid</a> is a latitude/longitude
 grid with three poles that are all centered over land.</p>
 </div>
-<div class="section" id="cesm-machines">
-<h2>CESM Machines<a class="headerlink" href="#cesm-machines" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cesm2-machines">
+<h2>CESM2 Machines<a class="headerlink" href="#cesm2-machines" title="Permalink to this headline">¶</a></h2>
 <p>Scripts for <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html">supported machines</a> and
 userdefined machines are provided with the CESM release. Supported
 machines have machine specific files and settings added to the CESM
@@ -362,8 +364,8 @@ CESM. Supported machines have undergone the full CESM porting
 process. The machines available in each of these categories changes as
 access to machines change over time.</p>
 </div>
-<div class="section" id="cesm-validation">
-<h2>CESM Validation<a class="headerlink" href="#cesm-validation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cesm2-validation">
+<h2>CESM2 Validation<a class="headerlink" href="#cesm2-validation" title="Permalink to this headline">¶</a></h2>
 <p>Although CESM can be run out-of-the-box for a variety of resolutions,
 component combinations, and machines, MOST combinations of component
 sets, resolutions, and machines have not undergone rigorous scientific
@@ -385,14 +387,14 @@ and documentation.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">CESM2 Configurations</a><ul>
 <li><a class="reference internal" href="#cesm2-components">CESM2 Components</a></li>
-<li><a class="reference internal" href="#cesm-component-sets">CESM Component Sets</a></li>
-<li><a class="reference internal" href="#cesm-grids">CESM Grids</a></li>
-<li><a class="reference internal" href="#cesm-machines">CESM Machines</a></li>
-<li><a class="reference internal" href="#cesm-validation">CESM Validation</a></li>
+<li><a class="reference internal" href="#cesm2-component-sets">CESM2 Component Sets</a></li>
+<li><a class="reference internal" href="#cesm2-grids">CESM2 Grids</a></li>
+<li><a class="reference internal" href="#cesm2-machines">CESM2 Machines</a></li>
+<li><a class="reference internal" href="#cesm2-validation">CESM2 Validation</a></li>
 </ul>
 </li>
 </ul>
@@ -402,17 +404,17 @@ and documentation.</p>
                         title="previous chapter">Downloading CESM2</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="quickstart.html"
-                        title="next chapter">Quick Start (CESM Model Workflow)</a></p>
+                        title="next chapter">Quick Start (CESM2 Model Workflow)</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/cesm_configurations.txt"
+      <li><a href="../_sources/release-cesm2/cesm_configurations.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
+    <form class="search" action="../search.html" method="get">
       <div><input type="text" name="q" /></div>
       <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
@@ -428,15 +430,16 @@ and documentation.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="quickstart.html" title="Quick Start (CESM Model Workflow)"
+          <a href="quickstart.html" title="Quick Start (CESM2 Model Workflow)"
              >next</a> |</li>
         <li class="right" >
           <a href="downloading_cesm.html" title="Downloading CESM2"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CESM Quickstart Guide: release-cesm2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">CESM  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >CESM2 Quickstart Guide</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
