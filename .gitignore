@@ -11,3 +11,6 @@ components/
 
 # generated python files
 *.pyc
+
+# ignore for the merge to master and orphaning of the gh-pages branch
+doc/build

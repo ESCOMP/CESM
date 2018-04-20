@@ -6,6 +6,10 @@ See the CESM web site for documentation and information:
 
 http://www.cesm.ucar.edu
 
+The CESM Quickstart Guide is available at:
+
+http://escomp.github.io/cesm
+
 This repository provides tools for managing the external components that
 make up a CESM tag - alpha, beta and release. CESM tag creation should
 be coordinated through CSEG at NCAR.
@@ -181,3 +185,12 @@ CAM as an example):
 
 It's a good idea to commit your **Externals.cfg** file changes. See the above
 documentation, `Committing your change to Externals.cfg`_.
+
+Developer setup
+===============
+
+Developers who have not already done so should follow the recommended
+`one-time <https://github.com/esmci/cime/wiki/CIME-Git-Workflow#configure-git-one-time>`_
+setup directions for git. Developers may also want to set up
+`ssh <https://help.github.com/articles/connecting-to-github-with-ssh/>`_
+keys and switch to using the ``git@github.com:ESCOMP/cesm.git`` form of the github URLs.
