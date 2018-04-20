@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Quick Start (CESM Model Workflow) &mdash; CESM Quickstart Guide: release-cesm2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'release-cesm2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CESM Quickstart Guide: release-cesm2 documentation" href="index.html" />
+    <link rel="prev" title="CESM2 Configurations" href="cesm_configurations.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cesm_configurations.html" title="CESM2 Configurations"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CESM Quickstart Guide: release-cesm2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="quick-start-cesm-model-workflow">
+<span id="quickstart"></span><h1>Quick Start (CESM Model Workflow)<a class="headerlink" href="#quick-start-cesm-model-workflow" title="Permalink to this headline">¶</a></h1>
+<p>The following quick start guide is for versions of CESM that have
+already been ported to the local target machine. CESM2 is built on the
+CIME (Common Infrastructure for Modeling Earth) framework.</p>
+<p>Please refer to the CIME <a class="reference external" href="http://esmci.github.io/cime/users_guide/porting-cime">porting</a> documentation if CIME has not
+yet been ported to the target machine.</p>
+<p>If you are new to CESM2, please consider reading the
+<a class="reference external" href="https://esmci.github.io/cime/index.html">CIME Case Control System Part 1: Basic Usage guide</a> first.</p>
+<p>These definitions are required to understand this section:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">$COMPSET</span></code> refers to the component set.</li>
+<li><code class="docutils literal"><span class="pre">$GRID</span></code> refers to the model resolution.</li>
+<li><code class="docutils literal"><span class="pre">$MACHINE</span></code> refers to the target machine.</li>
+<li><code class="docutils literal"><span class="pre">$CIMEROOT</span></code> refers to the CIME root directory.</li>
+<li><code class="docutils literal"><span class="pre">$CASE</span></code> refers to the case name.</li>
+<li><code class="docutils literal"><span class="pre">$CASEROOT</span></code> refers to the full pathname of the root directory where the
+case (<code class="docutils literal"><span class="pre">$CASE</span></code>) will be created.</li>
+<li><code class="docutils literal"><span class="pre">$EXEROOT</span></code> refers to the build directory. (<code class="docutils literal"><span class="pre">$EXEROOT</span></code> IS NORMALLY
+NOT THE SAME AS <code class="docutils literal"><span class="pre">$CASEROOT</span></code>).</li>
+<li><code class="docutils literal"><span class="pre">$RUNDIR</span></code> refers to the directory where CESM actually runs. This is
+normally set to <code class="docutils literal"><span class="pre">$EXEROOT</span></code>/../run. (Note: changing <code class="docutils literal"><span class="pre">$EXEROOT</span></code> does not
+change <code class="docutils literal"><span class="pre">$RUNDIR</span></code> as these are independent variables. However by default
+they are both located under <code class="docutils literal"><span class="pre">$CIME_OUTPUT_ROOT</span></code>)</li>
+</ul>
+<p>This is the procedure for quickly setting up and running a CESM case.</p>
+<p>Download CESM  (see <a class="reference external" href="downloading_cesm.html">Downloading CESM</a>).</p>
+<p>Select a component set, and a resolution for your case.  Details of available
+component sets and resolutions are available from the <a class="reference external" href="http://esmci.github.io/cime/users_guide/introduction-and-overview.html#discovering-available-cases-with-query-config">query_config</a> tool located
+in the <code class="docutils literal"><span class="pre">$CIMEROOT/scripts</span></code> directory</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&gt; cd $CIMEROOT/scripts
+&gt; ./query_config --help
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html">supported component sets</a>,
+<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html">supported model resolutions</a> and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html">supported
+machines</a> for a complete list of CESM
+supported component sets, grids and computational platforms.</p>
+<div class="section" id="create-a-case">
+<h2>Create a case<a class="headerlink" href="#create-a-case" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://esmci.github.io/cime/users_guide/create-a-case.html">create_newcase</a> command creates a case directory containing the
+scripts and XML files to configure a case (see below) for the requested
+resolution, component set, and machine. <strong>create_newcase</strong> has several
+required arguments (invoke <strong>create_newcase &#8211;help</strong> for help).</p>
+<p>If running on a supported machine, (<code class="docutils literal"><span class="pre">$MACHINE</span></code>), that machine will
+normally be recognized automatically and therefore it is not required
+to specify the <code class="docutils literal"><span class="pre">--machine</span></code> argument to <strong>create_newcase</strong>, then
+invoke <strong>create_newcase</strong> as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&gt; create_newcase --case $CASEROOT --compset $COMPSET --res $GRID
+</pre></div>
+</div>
+<p>If running on a new target machine, see
+<a class="reference external" href="http://esmci.github.io/cime/users_guide/porting-cime.html">the CIME porting guide</a>.</p>
+</div>
+<div class="section" id="setting-up-the-case-run-script">
+<h2>Setting up the case run script<a class="headerlink" href="#setting-up-the-case-run-script" title="Permalink to this headline">¶</a></h2>
+<p>Issuing the <a class="reference external" href="http://esmci.github.io/cime/users_guide/setting-up-a-case.html">case.setup</a> command creates a <code class="docutils literal"><span class="pre">$CASEROOT/case.run</span></code> script
+along with namelist <code class="docutils literal"><span class="pre">user_nl_xxx</span></code> files, where xxx denotes the set of components
+for the given case configuration. Before invoking <strong>case.setup</strong>, modify
+the <code class="docutils literal"><span class="pre">env_mach_pes.xml</span></code> file in $CASEROOT using the <a class="reference external" href="http://esmci.github.io/cime/Tools_user/xmlchange.html">xmlchange</a> command
+as needed for the experiment.</p>
+<p>cd to the <code class="docutils literal"><span class="pre">$CASEROOT</span></code> directory.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&gt; cd $CASEROOT
+</pre></div>
+</div>
+<p>Modify settings in <code class="docutils literal"><span class="pre">env_mach_pes.xml</span></code> (optional). (Note: To edit any of
+the env xml files, use the <a class="reference external" href="http://esmci.github.io/cime/Tools_user/xmlchange.html">xmlchange</a> command.
+invoke <strong>xmlchange &#8211;help</strong> for help.)</p>
+<p>Invoke the <strong>case.setup</strong> command.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="o">./</span><span class="n">case</span><span class="o">.</span><span class="n">setup</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-the-executable-using-the-case-build-command">
+<h2>Build the executable using the case.build command<a class="headerlink" href="#build-the-executable-using-the-case-build-command" title="Permalink to this headline">¶</a></h2>
+<p>Modify build settings in <code class="docutils literal"><span class="pre">env_build.xml</span></code> (optional).</p>
+<p>Run the build script.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="o">./</span><span class="n">case</span><span class="o">.</span><span class="n">build</span>
+</pre></div>
+</div>
+<p>Users of the NCAR cheyenne system should consider using
+the <a class="reference external" href="https://dailyb.cisl.ucar.edu/bulletins/cisl-adds-qcmd-script-launching-resource-intensive-compilation-jobs">qcmd</a>
+to compile CESM on a compute node as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">qcmd</span> <span class="o">./</span><span class="n">case</span><span class="o">.</span><span class="n">build</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-the-case">
+<h2>Run the case<a class="headerlink" href="#run-the-case" title="Permalink to this headline">¶</a></h2>
+<p>Modify runtime settings in <code class="docutils literal"><span class="pre">env_run.xml</span></code> (optional). In particular, set
+the <code class="docutils literal"><span class="pre">$DOUT_S</span></code> variable to FALSE to turn off short term archiving.</p>
+<p>Submit the job to the batch queue using the <strong>case.submit</strong> command.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="o">./</span><span class="n">case</span><span class="o">.</span><span class="n">submit</span>
+</pre></div>
+</div>
+<p>When the job is complete, review the following directories and files</p>
+<p><code class="docutils literal"><span class="pre">$RUNDIR</span></code>, this directory is set in the <code class="docutils literal"><span class="pre">env_build.xml</span></code> file. This is the
+location where CESM was run. There should be log files there for every
+component (i.e. of the form cpl.log.yymmdd-hhmmss). Each component writes
+its own log file. Also see whether any restart or history files were
+written. To check that a run completed successfully, check the last
+several lines of the cpl.log file for the string &#8221; SUCCESSFUL
+TERMINATION OF CPL7-cesm &#8221;.</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">$DOUT_S_ROOT/$CASE/logs</span></code></p>
+<p>The log files should have been copied into this directory if the run completed successfully
+and the short-term archiver is turned on with <code class="docutils literal"><span class="pre">$DOUT_S</span> <span class="pre">=</span> <span class="pre">TRUE</span></code>. Otherwise, the log files
+are in the <code class="docutils literal"><span class="pre">$RUNDIR</span></code>.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">$CASEROOT</span></code></p>
+<p>There could be standard out and/or standard error files output from the batch system.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">$CASEROOT/CaseDocs</span></code></p>
+<p>The case namelist files are copied into this directory from the <code class="docutils literal"><span class="pre">$RUNDIR</span></code>.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">$CASEROOT/timing</span></code></p>
+<p>There should be a couple of timing files there that summarize the model performance.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">$DOUT_S_ROOT/$CASE</span></code></p>
+<p>This is the short term archive directory. If <code class="docutils literal"><span class="pre">$DOUT_S</span></code> is
+FALSE, then no archive directory should exist. If <code class="docutils literal"><span class="pre">$DOUT_S</span></code> is TRUE, then
+log, history, and restart files should have been copied into a directory
+tree here.</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Quick Start (CESM Model Workflow)</a><ul>
+<li><a class="reference internal" href="#create-a-case">Create a case</a></li>
+<li><a class="reference internal" href="#setting-up-the-case-run-script">Setting up the case run script</a></li>
+<li><a class="reference internal" href="#build-the-executable-using-the-case-build-command">Build the executable using the case.build command</a></li>
+<li><a class="reference internal" href="#run-the-case">Run the case</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cesm_configurations.html"
+                        title="previous chapter">CESM2 Configurations</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/quickstart.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cesm_configurations.html" title="CESM2 Configurations"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CESM Quickstart Guide: release-cesm2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, U.S. National Science Foundation.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+    </div>
+  </body>
+</html>
