@@ -1,4 +1,61 @@
 ===============================================================
+Tag name: cesm2_0_alpha10e
+Originator(s): CSEG
+Date: 23 April 2018
+One-line Summary: CAM answer changes. Update components for model_doi_url
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_182/components/cam             **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180418                                   --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.4.0.alpha.31                           --
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_55                                     **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev005                                          --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180419                 --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65                                               --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                             --
+
+manage_externals                   v1.1.3                                                                                     --
+
+cam
+    Steve Goldhaber 2018-04-16 - trunk_tags/cam5_4_181 - components/cam (cesm2_0_alpha10e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_181
+
+    QNEG output reimplementation -- log output replaced with summaries and history variables
+    Namelist reformatting and cleanup for release
+    History fixes to include DOI (needs CIME update for finalization) and improved error reporting for history output configurations
+
+
+    Cheryl Craig 2018-04-06 - trunk_tags/cam5_4_180 - components/cam (cesm2_0_alpha10e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_180
+
+    Fix for CAM's cold model top
+
+    Matches Cecile's #289 run
+
+    All CAM6 will have climate changing answers
+
+
+    Francis Vitt 2018-04-17 - trunk_tags/cam5_4_182 - components/cam (cesm2_0_alpha10e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/cam5_4_182
+
+    Add option to turn off ridge scheme vertical diffusion, adjust non-LTE Fomichev CO2 limiter, fix TROP_Z
+
+
+cice
+    David Bailey 2018-04-16 - cice5_20180418 - components/cice (cesm2_0_alpha10e)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20180416
+
+    Add model_doi_url. This requires the CIME tag. Also fix some python syntax issues.
+    Also, fix attributes on sicompstren history variable.
+
+
+cism
+    William Sacks 2018-04-13 - cism2_1_53 - components/cism (cesm2_0_alpha10e)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_53
+
+    Add model_doi_url
+
+===============================================================
 Tag name: cesm2_0_alpha10d
 Originator(s): CSEG
 Date: 13 April 2018
