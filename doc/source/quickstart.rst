@@ -25,6 +25,8 @@ These definitions are required to understand this section:
 -  ``$CIMEROOT`` refers to the CIME root directory.
 
 -  ``$CASE`` refers to the case name.
+   See `CESM2 Experiment Casenames  <http://www.cesm.ucar.edu/models/cesm2.0/cesm/naming_conventions.html#casenames>`_
+   for details regarding CESM experiment case naming conventions.  
 
 -  ``$CASEROOT`` refers to the full pathname of the root directory where the
    case (``$CASE``) will be created.
@@ -37,6 +39,11 @@ These definitions are required to understand this section:
    change ``$RUNDIR`` as these are independent variables. However by default
    they are both located under ``$CIME_OUTPUT_ROOT``)
 
+-  ``$DOUT_S_ROOT`` refers to the short term archive path location on local disk.
+   This path is used by the case.st_archive script when ``$DOUT_S = TRUE``.
+   See `CESM Model Output File Locations <http://www.cesm.ucar.edu/models/cesm2.0/cesm/naming_conventions.html#fileOutput>`_
+   for details regarding the component model output filenames and locations. 
+
 This is the procedure for quickly setting up and running a CESM2 case.
 
 Download CESM2 (see `Downloading CESM2 <downloading_cesm.html>`_).
@@ -45,7 +52,7 @@ Select a component set, and a resolution for your case.  Details of available
 component sets and resolutions are available from the `query_config`_ tool located
 in the ``$CIMEROOT/scripts`` directory
 
-::
+.. code-block:: console
 
     > cd $CIMEROOT/scripts
     > ./query_config --help
@@ -68,7 +75,7 @@ normally be recognized automatically and therefore it is not required
 to specify the ``--machine`` argument to **create_newcase**, then
 invoke **create_newcase** as follows:
 
-::
+.. code-block:: console
 
     > create_newcase --case $CASEROOT --compset $COMPSET --res $GRID 
 
@@ -86,7 +93,7 @@ as needed for the experiment.
 
 cd to the ``$CASEROOT`` directory.
 
-::
+.. code-block:: console
 
     > cd $CASEROOT
 
@@ -96,7 +103,7 @@ invoke **xmlchange --help** for help.)
 
 Invoke the **case.setup** command.
 
-::
+.. code-block:: console
 
     > ./case.setup  
 
@@ -108,7 +115,7 @@ Modify build settings in ``env_build.xml`` (optional).
 
 Run the build script.
 
-::
+.. code-block:: console
 
     > ./case.build 
 
@@ -116,7 +123,7 @@ Users of the NCAR cheyenne system should consider using
 the `qcmd <https://dailyb.cisl.ucar.edu/bulletins/cisl-adds-qcmd-script-launching-resource-intensive-compilation-jobs>`_
 to compile CESM2 on a compute node as follows:
 
-::
+.. code-block:: console
 
     > qcmd ./case.build
 
@@ -129,7 +136,7 @@ the ``$DOUT_S`` variable to FALSE to turn off short term archiving.
 
 Submit the job to the batch queue using the **case.submit** command.
 
-::
+.. code-block:: console
 
     > ./case.submit
 

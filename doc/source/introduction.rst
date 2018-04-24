@@ -20,7 +20,7 @@ possible, individual sections stand on their own and the `CIME`_
 documentation guide can be scanned and sections read in a relatively
 ad hoc order.
 
-::
+.. code-block:: console 
 
     Throughout the guide, this presentation style indicates shell
     commands and options, fragments of code, namelist variables, etc.
@@ -87,30 +87,31 @@ installing and running CESM2.
 
 -  UNIX style operating system such as CNL, AIX or Linux
 
--  python >= 2.7 and perl 5 scripting languages
+-  python >= 2.7
 
--  subversion client version (1.8 or greater recommended) for downloading CAM and POP. 
+-  perl 5 
+
+-  subversion client (version 1.8 or greater) for downloading CAM and POP
 
 -  git client (1.8 or greater recommended)
 
--  Fortran (2008 recommended, 90 required) and C compilers. 
+-  Fortran compiler with support for Fortran 2003
+
+-  C compiler
 
 -  MPI (although CESM does not absolutely require it for running on one processor)
 
--  `NetCDF 4.3 or
-   newer <http://www.unidata.ucar.edu/software/netcdf/>`__.
+-  `NetCDF 4.3 or newer <http://www.unidata.ucar.edu/software/netcdf/>`_.
 
--  `ESMF 5.2.0 or newer (optional) <http://www.earthsystemmodeling.org/>`__.
+-  `ESMF 5.2.0 or newer (optional) <http://www.earthsystemmodeling.org/>`_.
 
--  `pnetcdf 1.7.0 is required and 1.8.1 is optional but recommended <http://trac.mcs.anl.gov/projects/parallel-netcdf/>`__
+-  `pnetcdf 1.7.0 is required and 1.8.1 is optional but recommended <http://trac.mcs.anl.gov/projects/parallel-netcdf/>`_
 
--  `Trilinos <http://trilinos.sandia.gov/>`__ may be required for
-   certain configurations 
+-  `Trilinos <http://trilinos.gov/>`_ may be required for certain configurations 
 
--  `LAPACK <http://www.netlib.org/lapack/>`__ or a vendor supplied
-   equivalent may also be required for some configurations.
+-  `LAPACK <http://www.netlib.org/lapack/>`_ and `BLAS <http://www.netlib.org/blas/>`_
 
--  `CMake 2.8.6 or newer <http://www.cmake.org/>`__ 
+-  `CMake 2.8.6 or newer <http://www.cmake.org/>`_ 
 
 .. warning:: NetCDF must be built with the same Fortran compiler as CESM. In the netCDF build the FC environment variable specifies which Fortran compiler to use. CESM is written mostly in Fortran, netCDF is written in C. Because there is no standard way to call a C program from a Fortran program, the Fortran to C layer between CESM and netCDF will vary depending on which Fortran compiler you use for CESM. When afunction in the netCDF library is called from a Fortran application, the netCDF Fortran API calls the netCDF C library. If you do not use the same compiler to build netCDF and CESM you will in most cases get errors from netCDF saying certain netCDF functions cannot be found.
 
@@ -118,6 +119,6 @@ Parallel-netCDF, also referred to as pnetcdf, is optional. If a user
 chooses to use pnetcdf, version 1.7.0 or later should be used with CESM.
 It is a library that is file-format compatible with netCDF, and provides
 higher performance by using MPI-IO. Pnetcdf is enabled by setting the
-``$PNETCDF_PATH`` variable in the Macros file. 
+``$PNETCDF_PATH`` variable in the ``Macros.make`` file. 
 
 .. _CIME: http://esmci.github.io/cime

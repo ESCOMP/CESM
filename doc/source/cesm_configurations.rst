@@ -114,9 +114,7 @@ supported out-of-the-box.
 
 The compset name usually has a well defined first letter followed by
 some characters that are indicative of the configuration setup. Each
-compset name has a corresponding short name. An exception to this rule
-is the use of "G" as a second letter to indicate use of the active glc
-model, CISM.
+compset name has a corresponding short name. 
 
 See `supported component sets
 <http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html>`_ for a
@@ -206,7 +204,7 @@ These control runs should be scientifically reproducible on the
 original platform or other platforms. Bit-for-bit reproducibility
 cannot be guaranteed due to variations in compiler or system
 versions. Users should carry out their own `port validations
-<http://esmci.github.io/cime/users_guide/porting-cime.html#validating-your-port>_`
+<http://esmci.github.io/cime/users_guide/porting-cime.html#validating-your-port>`_
 on any platform prior to doing scientific runs or scientific analysis
 and documentation.
 
