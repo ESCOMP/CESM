@@ -27,7 +27,7 @@ With valid git and svn clients installed on the machine where CESM will be
 built and run, the user may download the latest version of the release
 code:
 
-::
+.. code-block:: console
 
     > git clone https://escomp.github.com/cesm/branches my_cesm_sandbox
     > cd my_cesm_sandbox
@@ -37,25 +37,25 @@ CESM repository which may include in-test development code. We recommend
 that users should check out a currently supported CESM release tag.
 To list the currently supported CESM2 release tags type:
 
-::
+.. code-block:: console
 
     > git tag
 
 To checkout a specific CESM release tag type:
 
-:: 
+.. code-block:: console 
 
     > git checkout release-cesm2.0.0
 
 Alternatively, you can clone a release directly 
 
-::
+.. code-block:: console
 
     > git clone -b release-cesm2.0.0  https://escomp.github.com/cesm/branches my_cesm_sandbox
 
 then run the **checkout_externals** script from /path/to/my_cesm_sandbox.
 
-::
+.. code-block:: console
 
     > ./manage_externals/checkout_externals
 
@@ -66,7 +66,7 @@ Details regarding the CESM checkout process are available in the README
 at the bottom of the `http://github.com/ESCOMP/cesm <http://github.com/ESCOMP/cesm>`_ page.
 To see more details regarding the checkout_externals script from the command line, type:
 
-::
+.. code-block:: console
 
     > ./manage_externals/checkout_externals --help
 
@@ -90,14 +90,14 @@ entry of this information will not be required for a given machine.
 
 To ensure a successful download, make sure the last line of the ``manage_externals.log`` file contains:
 
-::
+.. code-block:: console
 
 	INFO : 2018-04-03 15:36:19 : checkout_externals completed without exceptions.
 
 In addition, you can run **checkout_externals** script with the following options
 to ensure that the checkout process is complete:
 
-::
+.. code-block:: console
 
     > ./manage_externals/checkout_externals -S -v
  
