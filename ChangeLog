@@ -1,4 +1,182 @@
 ===============================================================
+Tag name: cesm2_0_alpha10f
+Originator(s): CSEG
+Date: 02 May 2018
+One-line Summary: CLM answer changes, "final" POP, final model_doi_url changes
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_185/components/cam             **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180424                                   **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.6.3                                    **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_55                                     --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev008                                          **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180501                 **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_65                                               --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                             --
+
+manage_externals                   v1.1.3                                                                                     --
+
+cam
+    Francis Vitt 2018-05-01 - trunk_tags/cam5_4_185 - components/cam (cesm2_0_alpha10f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_185
+
+    Removed O3S from WACCM and CAM-Chem chemistry mechanisms and other misc changes
+    - remove diagnostic O3S species from WACCM and CAM-Chem chemical mechanisms
+    - add default CTEM history fields to the h0 monthly files
+    - use MERRA2 meteorology data in FCSD compset
+    - minor changes in history specifiers in WACCMX compsets
+    - correct typo in qneg4
+
+    Mostly B4B.  The only exception is FCSD which now uses MERRA2 met data.
+
+    Might also see baseline failures in WACCM and CAM-Chem compsets:
+    The removal of O3S from the dry deposition list caused differences to be detected only in the dry deposition fields cpl.hi.* file (the dry dep states are shifted by one).
+
+
+    Cheryl Craig 2018-04-30 - trunk_tags/cam5_4_184 - components/cam (cesm2_0_alpha10f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_184
+
+    Brian Eaton's tag:
+
+    mods for DART mode
+
+
+    Cheryl Craig 2018-04-30 - trunk_tags/cam5_4_183 - components/cam (cesm2_0_alpha10f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_183
+
+    Francis' tag:
+
+    Update volcanic forcings for WACCM
+
+    there are slight changes in pre-industrial volcanic forcing for WACCM
+
+
+cice
+    David Bailey 2018-04-24 - cice5_20180424 - components/cice (cesm2_0_alpha10f)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20180424
+
+    Add Youngsung's halo updates and add T62_s11 test to aux_cice.
+
+
+cime
+    Chris Fischer 2018-05-02 - cime5.6.3 - cime (cesm2_0_alpha10f)
+    https://github.com/ESMCI/cime/tags/cime5.6.3
+
+    - Fix config write of logical.
+
+
+    Chris Fischer 2018-05-01 - cime5.6.2 - cime (cesm2_0_alpha10f)
+    https://github.com/ESMCI/cime/tags/cime5.6.2
+
+    - Refine distinction of E vs Q compset.
+    - Update load balance tool.
+
+    Chris Fischer 2018-05-01 - cime5.6.1 - cime (cesm2_0_alpha10f)
+    https://github.com/ESMCI/cime/tags/cime5.6.1
+
+        - Refine cheyenne retry method.
+        - Save submit options for resubmit.
+        - Need schema description for NODE_FAIL_REGEX.
+        - Use nodefail code for cheyenne.
+        - Make st_archive handle DART's restart history files.
+        - Check input logic fix.
+        - Only check for rundir if not a test.
+        - Jgfouca/branch for acme split 2018-04-26.
+        - Correct equations of the form **(1/3) to be **(1.0_R8/3.0_R8) to evaluate correctly.
+              Changes answer in unused code.
+        - Remove debug print statements.
+        - Revert change to cheyenne mpt.
+        - Remove manage_testlist.
+        - Testreporter fix.
+        - Match entire string for XML attribute selectors for env_mach_specific.
+        - Fix undefined variable in some circumstances.
+        - wait_for_tests needs to upload case2 logs if there are some
+        - Another fix for testreporter.py.
+
+
+clm
+    Erik Kluzek 2018-04-16 - clm5.0.dev008 - components/clm (cesm2_0_alpha10f)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev008
+
+    Nitrogen bug fix. Small change to answers for CLM5-Bgc.
+
+
+    Erik Kluzek 2018-04-16 - clm5.0.dev007 - components/clm (cesm2_0_alpha10f)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev007
+
+    Answer changing things needed for CLM. Update cism (changes answers). Update FATES (changes answers for fates). Use default orbit (changes answers for testing). Fix initial condition files (changes answers).
+
+
+    William Sacks 2018-04-09 - clm5.0.dev006 - components/clm (cesm2_0_alpha10f)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev006
+
+    Don't allocate memory for zero-weight pfts and urban
+
+    Limited answer changes:
+        - Vector output is not directly comparable, because dimension sizes
+          differ (DIMSIZEDIFF when comparing clm h1 or h2 files)
+        - I1850Clm50Sp cases change substantially due to fix of #320
+        - Cases with carbon isotope bombspike change due to fix of #317
+        - In some situations, cases that use init_interp now but did not
+          before can change answers by roundoff due to #330
+
+
+pop
+    Alper Altuntas 2018-05-01 - trunk_tags/cesm_pop_2_1_20180501 - components/pop (cesm2_0_alpha10f)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/cesm_pop_2_1_20180501
+
+    - debug tidal_mixing module for cases where ltidal_mixing is false by default.
+    - print error msg if pop decomp not set for the ocn grid.
+    - add tx0.1v3 size to generate_pop_decomp.xml.
+    - add/change tx0.1v3 namelist defaults.
+    - update default nox_flux_monthly_input and nhy_flux_monthly_input
+    - add new test suite: aux_pop_tripole
+    - add new compsets for high-res testing: C_HR, C_JRA, C_JRA_HR, GIAF_HR
+    - unset verbose ocn.vmix.tavg.csh to prevent build-namelist printing the entire script
+
+    Michael Levy 2018-04-05 - /trunk_tags/cesm_pop_2_1_20180427 - components/pop (cesm2_0_alpha10f)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//trunk_tags/cesm_pop_2_1_201804??b
+
+    PENULTIMATE MARBL UPDATE BEFORE CESM 2 CODE FREEZE
+
+    bit-for-bit changes
+    -- clean up CISO zooplankton diagnostics (better names & they are not per-zoo diags)
+    -- add reference to CISO paper in marbl_ciso_mod
+    -- only apply NHx surface emissions if lapply_nhx_surface_emis is true
+    -- add biomass-weighted average of limitation factors to diagnostic output
+    -- instead of full 3D diagnostic field for limitation factors, just return surface value
+    -- include grazing of zooplankton terms in ciso dtracer computations
+       (requires new CESM test in POP's cime_config/)
+    -- Clean up interface to marbl_ciso (reduce duplicate computations in set_interior)
+    -- Threshold when caco3_bury_thres_opt = 'omega_calc' now tunable
+    -- Increase default value for Jint_Ctot_thres_molpm2pyr
+
+    potential answer change
+    -- Fix computation of POP production term: POP%prod(k) should be non-negative, but negative values were
+       not being properly handled. Also, when setting negative values to zero, need to take phosphate from
+       DOP otherwise mass balance (conservation) checks fail. POP%prod only goes negative in some tests,
+       though, and it is hard to know ahead of time which tests will pass or fail.
+
+
+    Alper Altuntas 2018-04-23 - /trunk_tags/cesm_pop_2_1_20180430 - components/pop (cesm2_0_alpha10f)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//trunk_tags/cesm_pop_2_1_201804??
+
+    add model_doi_url. unsuppress error msg from build-namelist
+
+
+    Michael Levy 2018-04-19 - /trunk_tags/cesm_pop_2_1_201804?? - components/pop (cesm2_0_alpha10f)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//trunk_tags/cesm_pop_2_1_201804??
+
+    FINAL MARBL UPDATES FOR CESM 2 CODE FREEZE
+
+    Definitely going in:
+    -- fix bug where initializing base tracers and ciso tracers from different restart files breaks running means
+
+    Wishlist (we probably won't have these done by May 11 in which case we'll wait till after release):
+    -- poc_remin sometimes has a very small magnitude negative value
+    -- loops should run to kmt, not km
+
+===============================================================
 Tag name: cesm2_0_alpha10e
 Originator(s): CSEG
 Date: 23 April 2018
