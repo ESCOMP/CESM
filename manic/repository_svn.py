@@ -207,7 +207,7 @@ then rerun checkout_externals.
         is_dirty = False
         try:
             xml_status = ET.fromstring(svn_output)
-        except:
+        except BaseException:
             fatal_error("SVN returned invalid XML message {}".format(svn_output))
         xml_target = xml_status.find('./target')
         entries = xml_target.findall('./entry')
