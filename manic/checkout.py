@@ -359,6 +359,13 @@ The following are two options for how to proceed:
 (2) Alternatively, you do not have to rely on {program_name}. Instead, you
     can manually update out-of-sync externals (labeled with 's' above)
     as described in the configuration file {config_file}.
+
+
+The external repositories labeled with '?' above are not under version
+control using the expected protocol. If you are sure you want to switch
+protocols, and you don't have any work you need to save from this
+directory, then run "rm -rf [directory]" before re-running the
+checkout_externals tool.
 """.format(program_name=program_name, config_file=args.externals)
 
             printlog('-' * 70)
