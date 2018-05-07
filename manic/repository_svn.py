@@ -205,7 +205,10 @@ then rerun checkout_externals.
         # pylint: enable=invalid-name
 
         is_dirty = False
-        xml_status = ET.fromstring(svn_output)
+        try:
+            xml_status = ET.fromstring(svn_output)
+        except BaseException:
+            fatal_error("SVN returned invalid XML message {}".format(svn_output))
         xml_target = xml_status.find('./target')
         entries = xml_target.findall('./entry')
         for entry in entries:
@@ -270,7 +273,7 @@ then rerun checkout_externals.
         """
         Switch branches for in an svn sandbox
         """
-        cmd = ['svn', 'switch', url]
+        cmd = ['svn', 'switch', '--quiet', url]
         if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)

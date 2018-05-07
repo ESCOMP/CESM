@@ -320,12 +320,14 @@ def main(args):
 
     root_dir = os.path.abspath(os.getcwd())
     external_data = read_externals_description_file(root_dir, args.externals)
-    external = create_externals_description(external_data, components=args.components)
+    external = create_externals_description(
+        external_data, components=args.components)
 
     for comp in args.components:
         if comp not in external.keys():
-            fatal_error("No component {} found in {}".format(comp, args.externals))
-
+            fatal_error(
+                "No component {} found in {}".format(
+                    comp, args.externals))
 
     source_tree = SourceTree(root_dir, external)
     printlog('Checking status of externals: ', end='')
