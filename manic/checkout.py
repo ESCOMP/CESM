@@ -279,8 +279,15 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
                         help='DEVELOPER: output additional debugging '
                         'information to the screen and log file.')
 
-    parser.add_argument('--no-logging', action='store_true',
-                        help='DEVELOPER: disable logging.')
+    logging_group = parser.add_mutually_exclusive_group()
+
+    logging_group.add_argument('--logging', dest='do_logging',
+                               action='store_true',
+                               help='DEVELOPER: enable logging.')
+    logging_group.add_argument('--no-logging', dest='do_logging',
+                               action='store_false', default=False,
+                               help='DEVELOPER: disable logging '
+                               '(this is the default)')
 
     if args:
         options = parser.parse_args(args)
@@ -305,7 +312,7 @@ def main(args):
     *before* executing the checkout command - i.e., the status that it
     used to determine if it's safe to proceed with the checkout.
     """
-    if not args.no_logging:
+    if args.do_logging:
         logging.basicConfig(filename=LOG_FILE_NAME,
                             format='%(levelname)s : %(asctime)s : %(message)s',
                             datefmt='%Y-%m-%d %H:%M:%S',
