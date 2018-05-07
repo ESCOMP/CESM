@@ -4,9 +4,9 @@ Originator(s): CSEG
 Date: 02 May 2018
 One-line Summary: CLM answer changes, "final" POP, final model_doi_url changes
 
-components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_185/components/cam             **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/refcaseup_tags/refcaseup01_cam5_4_186**
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180424                                   **
-cime                               https://github.com/CESM-Development/cime/tree/cime5.6.3                                    **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.6.4                                    **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_55                                     --
 components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev008                                          **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
@@ -17,6 +17,23 @@ components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trun
 manage_externals                   v1.1.3                                                                                     --
 
 cam
+    Erik Kluzek 2018-05-07 - branch_tags/refcaseup_tags/refcaseup01_cam5_4_186 - components/cam (cesm2_0_alpha10f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/refcaseup_tags/refcaseup01_cam5_4_186
+
+    Update refcases to work with clm5.0.dev006, and update the clm external
+
+    Cheryl Craig 2018-05-04 - trunk_tags/cam5_4_186 - components/cam (cesm2_0_alpha10f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_186
+
+    - Use the externals in cesm2_0_alpha10e, with the exception of cime which is using a newer tag
+    - Now that the supported="false" flag is available, tests that are for unsupported runs now use this flag, but can be
+      in the aux_cam test suite.
+    - Use the 10 degree files for the 13 month regression test
+    - Turn on using the DOI info(WILL BE COMPLETED IN NEXT TAG)
+    - Remove invalid 60 level ncdata file from 30 level specification
+    - In buildnml, have informative message use the logger.info instead of logger.debug setting
+    - Fix a couple of diagnostics in clubb and gw_drag
+
     Francis Vitt 2018-05-01 - trunk_tags/cam5_4_185 - components/cam (cesm2_0_alpha10f)
     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_185
 
@@ -59,6 +76,13 @@ cice
 
 
 cime
+    Kate Thayer-Calder 2018-05-07 - cime5.6.4 - cime (cesm2_0_alpha10f)
+    https://github.com/ESMCI/cime/tags/https://github.com/ESMCI/cime/tree/cime5.6.3
+
+    - allow unknown queues only with --force and set with defaults
+    - st_archive interactive resubmit fix
+    - clean should not look for mpilibs
+
     Chris Fischer 2018-05-02 - cime5.6.3 - cime (cesm2_0_alpha10f)
     https://github.com/ESMCI/cime/tags/cime5.6.3
 
