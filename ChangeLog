@@ -6,7 +6,7 @@ One-line Summary: CLM answer changes, "final" POP, final model_doi_url changes
 
 components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/refcaseup_tags/refcaseup01_cam5_4_186**
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180424                                   **
-cime                               https://github.com/CESM-Development/cime/tree/cime5.6.4                                    **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.6.5                                    **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_55                                     --
 components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev008                                          **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_30                                         --
@@ -76,8 +76,13 @@ cice
 
 
 cime
+    Kate Thayer-Calder 2018-05-07 - cime5.6.5 - cime (cesm2_0_alpha10f)
+    https://github.com/ESMCI/cime/tags/cime5.6.5
+
+    Jim forgot to push to pr 2552
+
     Kate Thayer-Calder 2018-05-07 - cime5.6.4 - cime (cesm2_0_alpha10f)
-    https://github.com/ESMCI/cime/tags/https://github.com/ESMCI/cime/tree/cime5.6.3
+    https://github.com/ESMCI/cime/tree/cime5.6.3
 
     - allow unknown queues only with --force and set with defaults
     - st_archive interactive resubmit fix
