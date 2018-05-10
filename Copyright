@@ -26,11 +26,12 @@ POP,SCRIP,CICE	Los Alamos National	Copyright 2008	Los Alamos National Security, 
 					National 
 					Security, LLC
 		
-Glimmer-CISM 	LANL/U.			Copyright	GNU General Public License
-		Bristol/U.		2004-2010, 
-		Edinburgh/U.		GNU General 
-		Montana/U.		Public License 
-		Swansea 
+CISM            NCAR/LANL/ORNL/SNL/     Copyright       GNU Lesser General Public License v. 3
+                LBNL/NYU/U. Bristol/    2004-2018,      CISM is free software: you can redistribute it
+                U. Edinburgh/           GNU Lesser      and/or modify it under the terms of the GNU
+                U. Montana/U. Swansea   General Public  Lesser General Public License as published by the
+                                        License v. 3    Free Software Foundation, either version 3 of the
+                                                        License, or (at your option) any later version.
 		 
 AER RRTMG	Atmospheric		Copyright	AER RRTMG Copyright
     		and			2002-2010, 
