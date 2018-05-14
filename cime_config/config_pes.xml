@@ -958,7 +958,7 @@
   </grid>
   <grid name="a%0.9x1.25.+l%0.9x1.25.+oi%gx1" >
     <mach name="cheyenne">
-      <pes pesize="any" compset="CAM.+CLM.+CICE.+POP.+WW3">
+      <pes pesize="any" compset="CAM.*\d_.*CLM.+CICE.+POP.+WW3">
 	<comment>about 6.5ypd expected</comment>
 	<ntasks>
 	  <ntasks_atm>-16</ntasks_atm>
@@ -988,6 +988,39 @@
 	  <rootpe_ocn>-16</rootpe_ocn>
 	  <rootpe_glc>0</rootpe_glc>
 	  <rootpe_wav>-15</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+      <pes pesize="any" compset="CAM60%WC.+CLM.+CICE.+POP.+WW3">
+	<comment></comment>
+	<ntasks>
+	  <ntasks_atm>1152</ntasks_atm>
+	  <ntasks_lnd>864</ntasks_lnd>
+	  <ntasks_rof>864</ntasks_rof>
+	  <ntasks_ice>252</ntasks_ice>
+	  <ntasks_ocn>36</ntasks_ocn>
+	  <ntasks_glc>1152</ntasks_glc>
+	  <ntasks_wav>36</ntasks_wav>
+	  <ntasks_cpl>1152</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>3</nthrds_atm>
+	  <nthrds_lnd>3</nthrds_lnd>
+	  <nthrds_rof>3</nthrds_rof>
+	  <nthrds_ice>3</nthrds_ice>
+	  <nthrds_ocn>3</nthrds_ocn>
+	  <nthrds_glc>3</nthrds_glc>
+	  <nthrds_wav>3</nthrds_wav>
+	  <nthrds_cpl>3</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>864</rootpe_ice>
+	  <rootpe_ocn>1152</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>1116</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
