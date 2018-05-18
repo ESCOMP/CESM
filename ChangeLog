@@ -1,4 +1,238 @@
 ===============================================================
+Tag name: cesm2_0_alpha10g
+Originator(s): CSEG
+Date: 17 May 2018
+One-line Summary: Final changes for code freeze.
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/cam_cesm2_0_rel_tags/cam_cesm2_0_rel_02  **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180424                                       --
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_0_rel_02                              **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.01                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/clm5.0.dev012                                              **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_31                                             **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180514                     **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_66                                                   **
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_180115                                 --
+
+manage_externals                   v1.1.3                                                                                         --
+
+
+cam
+    Cheryl Craig 2018-05-14 - trunk_tags/cam5_4_191 - components/cam (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_191
+
+    Update the SST files
+    Update the F2000climo and FHIST compsets
+
+
+    Cheryl Craig 2018-05-13 - trunk_tags/cam5_4_190 - components/cam (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_190
+
+    CO emission file update
+    FW1850 fixed
+
+
+    Cheryl Craig 2018-05-07 - trunk_tags/cam5_4_189 - components/cam (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_189
+
+    Updates for new CLM refcases
+
+
+    Cheryl Craig 2018-05-07 - trunk_tags/cam5_4_188 - components/cam (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_187
+
+    SCAM updates 
+
+    Answer changes for SCAM only
+
+
+    Brian Eaton 2018-05-04 - trunk_tags/cam5_4_187 - components/cam (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam5_4_187
+
+    Update COSP code to use source from github repo.
+    Fix model_doi_url and other misc fixes.
+
+
+    Cheryl Craig 2018-05-16 - branch_tags/cam_cesm2_0_rel_tags/cam_cesm2_0_rel_01 - components/cam (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_01
+
+    Removal of items not destined for the release
+
+
+    Cheryl Craig 2018-05-16 - branch_tags/cam_cesm2_0_rel_tags/cam_cesm2_0_rel_00 - components/cam (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_00
+
+    Copy of cam5_4_191 for the release
+
+
+    Cheryl Craig 2018-05-17 - branch_tags/cam_cesm2_0_rel_tags/cam_cesm2_0_rel_02 - components/cam (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/cam_cesm2_0_rel_tags/cam_cesm2_0_rel_02
+
+    Steve's tag
+
+    Additional removal of items not destined for the release
+
+
+cime
+    Chris Fischer 2018-05-17 - cime_cesm2_0_rel_02 - cime (cesm2_0_alpha10g)
+    https://github.com/ESMCI/cime/tags/cime_cesm2_0_rel_01
+
+    One more tag before testing starts
+        - Update to GNU 7.3.0 on cheyenne
+    GNU on Cheyenne will change answers
+
+
+    Chris Fischer 2018-05-15 - cime_cesm2_0_rel_01 - cime (cesm2_0_alpha10g)
+    https://github.com/ESMCI/cime/tags/cime_cesm2_0_rel_01
+
+
+    First release canadidate
+         - Move cam section out of config archive.
+         - Add commas to output using --value.
+         - Fix multisubmit tests were not resubmitting.
+         - A new script to add additional metadata for stat ensemble test.
+         - Fix formatting issue.
+         - Update iyear for 2000 runs.
+         - Merge branch 'master' of github.com:ESMCI/cime.
+         - Grids are needed for cime standalone testing.
+         - Update mapping tools.
+
+
+    Chris Fischer 2018-05-14 - cime5.6.7 - cime (cesm2_0_alpha10g)
+    https://github.com/ESMCI/cime/tags/cime5.6.7
+
+        - xmlquery fix.
+        - Fixes an issue when selecting mpilib on cheyenne.
+        - Fixed some print format bugs left over from the string rewrite of a year ago.
+        - Documentation updates, including major updates to --help for scripts.
+        - Need to append config files.
+        - Get model_version working.
+        - Adds T85_T85_mg17 grid.
+        - Correct spelling of protocol.
+
+
+    Kate Thayer-Calder 2018-05-10 - cime5.6.6 - cime (cesm2_0_alpha10g)
+    https://github.com/ESMCI/cime/tags/cime5.6.6
+
+    Fixes for the Nag compiler, updates, and move the flag that indicates an xml file needs to be rewritten from the case object 
+    to the individual file objects and before writing a value confirm that that value is not already the same as the file value.
+
+
+cism
+    William Sacks 2018-05-11 - release-cesm2.0.01 - components/cism (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/cism-wrapper/tags/release-v2.1.01
+
+    Final parameter tweaks for evolving ice sheet
+
+    Changes answers for cases with CISM2%EVOLVE
+
+    For CISM2%NOEVOLVE, no meaningful changes, but changes answers for
+     these cism fields (presumably due to the change in dt):
+         - internal_time
+         - tstep_count
+
+
+    William Sacks 2018-05-11 - release-cesm2.0.00 - components/cism (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_59
+
+    Point to cism release branch with redacted code
+
+
+    William Sacks 2018-05-08 - cism2_1_57 - components/cism (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_57
+
+    Final cleanup for CISM
+
+    Changes answers for cases with CISM2%EVOLVE, but not for the typical NOEVOLVE cases
+
+
+    William Sacks 2018-05-08 - cism2_1_56 - components/cism (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_56
+
+    Update cime and clm externals used in standalone checkout; update T compset test resolution
+
+    Baselines will BFAIL for T compset tests
+
+
+    William Sacks 2018-05-03 - cism2_1_55 - components/cism (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_55
+
+    Update source_cism external
+
+    In principle could change answers by roundoff for cases with CISM2%EVOLVE,
+    but I didn't see any answer changes in my testing
+
+
+    William Sacks 2018-04-30 - cism2_1_54 - components/cism (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_54
+
+    Move CISM to new github repo
+
+
+clm
+    Erik Kluzek 2018-05-07 - clm5.0.dev010 - components/clm (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/ctsm/tags/https://github.com/ESCOMP/ctsm/tree/clm5.0.dev011
+
+    Update cime version used in CLM. Add model_doi_url. 
+    Any non-answer changing things needed for CLM. 
+    Orbit for testing was already changed in clm5.0.dev007 so won't change answers. 
+    Update mosart, rtm, cism.
+
+
+    William Sacks 2018-05-16 - clm5.0.dev012 - components/clm (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev012
+
+    Fix max daylength for varying orbital parameters
+
+    Changes answers for multi-year HIST cases
+
+
+    Erik Kluzek 2018-05-11 - clm5.0.dev011 - components/clm (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev011
+
+    Update the ndep file for 1850, update cism, new PE layouts for f45, f09, and f19
+
+
+    William Sacks 2018-04-30 - clm5.0.dev009 - components/clm (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/ctsm/tags/clm5.0.dev010
+
+    New init_interp method
+
+
+mosart
+    Erik Kluzek 2018-04-13 - mosart1_0_31 - components/mosart (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_31
+
+    Add model_doi_url
+
+
+pop
+    Michael Levy 2018-05-12 - /trunk_tags/cesm_pop_2_1_20180514 - components/pop (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//trunk_tags/cesm_pop_2_1_20180514
+
+    FINAL MARBL UPDATES FOR CESM 2 CODE FREEZE
+
+    -- fix bug where initializing base tracers and ciso tracers from different restart files breaks running means
+    -- Add new MARBL diagnostic (calcToFloor)
+    -- build-namelist only calls xmlchange for CPL_I2O_PER_CAT if value doesn't match what is in env_build.xml
+    -- New riverine forcing files for gx3v7 (to go with new maps)
+    -- Better PE layout on hobart (gx3v7 uses 24 cores, which is only half a node)
+    -- Add hobart_nag test to prealpha
+    -- Add gx1v7 test to aux_pop_MARBL on hobart
+
+
+    Alper Altuntas 2018-05-12 - /trunk_tags/cesm_pop_2_1_20180512/ - components/pop (cesm2_0_alpha10g)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//trunk_tags/cesm_pop_2_1_20180512/
+
+    Update to POP's halo update that improves model performance.
+
+
+rtm
+    Erik Kluzek 2018-04-13 - rtm1_0_66 - components/rtm (cesm2_0_alpha10g)
+    https://github.com/ESCOMP/rivrtm/tags/rtm1_0_66
+
+    Add model_doi_url
+===============================================================
 Tag name: cesm2_0_alpha10f
 Originator(s): CSEG
 Date: 02 May 2018
