@@ -14,7 +14,7 @@ import subprocess
 import sys
 import time
 
-from .global_constants import LOCAL_PATH_INDICATOR, LOG_FILE_NAME
+from .global_constants import LOCAL_PATH_INDICATOR
 
 # ---------------------------------------------------------------------
 #
@@ -362,8 +362,5 @@ def failed_command_msg(msg_context, command, output=None):
 
     if output:
         errmsg += 'See above for output from failed command.\n'
-
-    errmsg += 'Please check the log file {log} for more details.'.format(
-        log=LOG_FILE_NAME)
 
     return errmsg
