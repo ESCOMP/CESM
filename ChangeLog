@@ -1,4 +1,89 @@
 ===============================================================
+Tag name: cesm2_0_alpha10h
+Originator(s): CSEG
+Date: 22 May 2018
+One-line Summary: Release tags for all externals
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_02                      **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_01                                 **
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_0_rel_03                              **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.01                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.01                                          **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.00                                       **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_0_rel_n01                    **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00                                          **
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/release_tags/ww3_cesm2_0_rel_01                       **
+
+manage_externals                   v1.1.3                                                                                         --
+
+cam
+    Steve Goldhaber 2018-05-18 - release_tags/cam_cesm2_0_rel_02 - components/cam (cesm2_0_alpha10h)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_02
+
+    There may be roundoff differences for compsets using CAM-SE.
+
+
+cice
+    David Bailey 2018-05-18 - cice5_cesm2_0_rel_01 - components/cice (cesm2_0_alpha10h)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_cesm2_0_rel_01
+
+    First release tag for CICE5 component.
+
+
+cime
+    Chris Fischer 2018-05-21 - cime_cesm2_0_rel_03 - cime (cesm2_0_alpha10h)
+    https://github.com/ESMCI/cime/tags/cime_cesm2_0_rel_03
+
+        - Update environment modules for Cori.
+        - Change PRE.f09_f09.ADESP_TEST.hobart_nag test to f19_f19.
+        - Tweaks to cism-specific documentation.
+        - Update for Sphinx v1.7 and doc version 5.6.
+        - Doc updates.
+
+
+cism
+    William Sacks 2018-05-18 - release-cesm2.0.01 - components/cism (cesm2_0_alpha10h)
+    https://github.com/ESCOMP/cism-wrapper/tags/release-cesm2.0.01
+
+    (Same as tag in alpha10g)
+
+
+clm
+    Erik Kluzek 2018-05-18 - release-clm5.0.01 - components/clm (cesm2_0_alpha10h)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.01
+
+    First release branch update for CLM. Identical to clm5.0dev012 other than the addition of a release ChangeLog
+
+
+mosart
+    Erik Kluzek 2018-05-21 - release-cesm2.0.00 - components/mosart (cesm2_0_alpha10h)
+    https://github.com/ESCOMP/mosart/tags/mosart_cesm2_0_rel_01
+
+    First release branch of mosart, same as mosart1_0_31
+
+
+pop
+    Michael Levy 2018-05-21 - release_tags/pop2_cesm2_0_rel_n01 - components/pop (cesm2_0_alpha10h)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_0_rel_n01
+
+    First release tag for POP
+
+
+rtm
+    Erik Kluzek 2018-05-21 - release-cesm2.0.00 - components/rtm (cesm2_0_alpha10h)
+    https://github.com/ESCOMP/rtm/tags/rtm_cesm2_0_rel_01
+
+    First release branch of rtm, same as rtm1_0_66
+
+
+ww3
+    Chris Fischer 2018-05-21 - release_tags/ww3_cesm2_0_rel_01 - components/ww3 (cesm2_0_alpha10h)
+    https://svn-ccsm-models.cgd.ucar.edu/ww3/release_tags/ww3_cesm2-0_rel_01
+
+    Release tag for ww3
+
+
+===============================================================
 Tag name: cesm2_0_alpha10g
 Originator(s): CSEG
 Date: 17 May 2018
