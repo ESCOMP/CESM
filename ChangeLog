@@ -1,4 +1,42 @@
 ===============================================================
+Tag name: cesm2_0_beta10
+Originator(s): CSEG
+Date: 25 May 2018
+One-line Summary: Last beta tag before cesm2.0.0 release
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_02/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_01
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_0_rel_03
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.01
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.01
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.00
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_0_rel_n01 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01
+
+
+Answer Changes introduced with this tag when compared to cesm2_0_beta09:
+- All CAM6 compsets which use emissions will have answer changes.
+- Answer changes for all cases with CISM2%EVOLVE GNU on Cheyenne
+- CLM and POP answer changes
+- CISM: Changes answers for cases with CISM2%EVOLVE, and some cases with CISM1%EVOLVE. For tests with NOEVOLVE: 
+  some cases will show answer changes in CISM diagnostic fields, but no changes that feed back to the rest of 
+  the system clm5.0.dev002 changes answers for two diagnostic fields: SNOWLIQ, SNOWICE Expected to change 
+  answers for non-B 1850 compsets in CESM
+- New IC for f09_g16 Clm40 and for all Clm45/Clm50
+
+Problems identified after tag creation:
+- T85z30_T85 grid used for a test on hobart, needs to have mask added to it.
+- No mapping file for ne30_g16.X.cheyenne_pgi.
+- Update to gnu7.3.0 on cheyenne causing some gnu tests to fail. 
+- F2000climo failing namelist comparisons due to extra white space in cam use_cases namelist 
+- ERS.T62_g37.G.cheyenne_gnu.pop-cice hanging, issue with using openmpi. Passes if CPL ROOTPE is 0. 
+- ne30_g17 grid isn't being supported at this time. 
+- No atm ncdata defined for f45_g37.B1850 and ne120_g16.B1850. 
+- There are known issues for the pgi and cray compilers.
+===============================================================
 Tag name: cesm2_0_alpha10h
 Originator(s): CSEG
 Date: 22 May 2018
