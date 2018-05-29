@@ -29,7 +29,7 @@ code:
 
 .. code-block:: console
 
-    > git clone https://escomp.github.com/cesm/branches my_cesm_sandbox
+    > git clone https://github.com/ESCOMP/cesm.git my_cesm_sandbox
     > cd my_cesm_sandbox
 
 By default, this command places you at the head of the master branch of
@@ -51,7 +51,7 @@ Alternatively, you can clone a release directly
 
 .. code-block:: console
 
-    > git clone -b release-cesm2.0.0  https://escomp.github.com/cesm/branches my_cesm_sandbox
+    > git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
 
 then run the **checkout_externals** script from /path/to/my_cesm_sandbox.
 
