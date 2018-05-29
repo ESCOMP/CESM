@@ -125,7 +125,7 @@ to compile CESM2 on a compute node as follows:
 
 .. code-block:: console
 
-    > qcmd ./case.build
+    > qcmd -- ./case.build
 
 
 Run the case
