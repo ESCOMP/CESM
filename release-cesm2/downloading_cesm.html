@@ -1,33 +1,23 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Downloading CESM2 &mdash; CESM  documentation</title>
-    
+    <title>Downloading CESM2 &#8212; CESM  documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="CESM  documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="CESM2 Configurations" href="cesm_configurations.html" />
     <link rel="prev" title="Introduction" href="introduction.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -40,7 +30,7 @@
         <li class="right" >
           <a href="introduction.html" title="Introduction"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -68,35 +58,35 @@ and <a class="reference external" href="https://git-scm.com/downloads">git downl
 <p>With valid git and svn clients installed on the machine where CESM will be
 built and run, the user may download the latest version of the release
 code:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">&gt;</span> git clone https://escomp.github.com/cesm/branches my_cesm_sandbox
-<span class="gp">&gt;</span> <span class="nb">cd</span> my_cesm_sandbox
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/ESCOMP/cesm.git my_cesm_sandbox</span>
+<span class="go">cd my_cesm_sandbox</span>
 </pre></div>
 </div>
 <p>By default, this command places you at the head of the master branch of
 CESM repository which may include in-test development code. We recommend
 that users should check out a currently supported CESM release tag.
 To list the currently supported CESM2 release tags type:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">&gt;</span> git tag
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git tag</span>
 </pre></div>
 </div>
 <p>To checkout a specific CESM release tag type:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">&gt;</span> git checkout release-cesm2.0.0
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git checkout release-cesm2.0.0</span>
 </pre></div>
 </div>
 <p>Alternatively, you can clone a release directly</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">&gt;</span> git clone -b release-cesm2.0.0  https://escomp.github.com/cesm/branches my_cesm_sandbox
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox</span>
 </pre></div>
 </div>
 <p>then run the <strong>checkout_externals</strong> script from /path/to/my_cesm_sandbox.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">&gt;</span> ./manage_externals/checkout_externals
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals</span>
 </pre></div>
 </div>
-<p>The <strong>checkout_externals</strong> script will read the configuration file called <code class="docutils literal"><span class="pre">externals.cfg</span></code> and
+<p>The <strong>checkout_externals</strong> script will read the configuration file called <code class="docutils literal notranslate"><span class="pre">externals.cfg</span></code> and
 will download all the external component models and CIME into /path/to/my_cesm_sandbox.</p>
 <p>Details regarding the CESM checkout process are available in the README
 at the bottom of the <a class="reference external" href="http://github.com/ESCOMP/cesm">http://github.com/ESCOMP/cesm</a> page.
 To see more details regarding the checkout_externals script from the command line, type:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">&gt;</span> ./manage_externals/checkout_externals --help
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals --help</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -104,26 +94,26 @@ To see more details regarding the checkout_externals script from the command lin
 <p class="last">When contacting the Subversion server for the first time, you may need to accept an authentication certification.</p>
 </div>
 <p>Be aware that the request is set to the current machine login id and you
-must enter the CESM registered default username of &#8216;guestuser&#8217; by
-pressing the &#8216;Enter&#8217; key when prompted for a Username.</p>
+must enter the CESM registered default username of ‘guestuser’ by
+pressing the ‘Enter’ key when prompted for a Username.</p>
 <p>You may be prompted up to 3 times for the username and password when
 checking out the code for the first time from the Subversion server.
 This is because the code is distributed across a number of different
 Subversion repositories and each repository requires authentication.</p>
 <p>Once correctly entered, the username and password will be cached in a
-protected subdirectory of the user&#8217;s home directory so that repeated
+protected subdirectory of the user’s home directory so that repeated
 entry of this information will not be required for a given machine.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">If a problem was encountered during checkout_externals, which may happen with an older version of the svn client software, it may appear to have downloaded successfully, but in fact only a partial checkout has occurred.</p>
 </div>
-<p>To ensure a successful download, make sure the last line of the <code class="docutils literal"><span class="pre">manage_externals.log</span></code> file contains:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">INFO : 2018-04-03 15:36:19 : checkout_externals completed without exceptions.</span>
+<p>To ensure a successful download, make sure the last line of the <code class="docutils literal notranslate"><span class="pre">manage_externals.log</span></code> file contains:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">INFO : 2018-04-03 15:36:19 : checkout_externals completed without exceptions.</span>
 </pre></div>
 </div>
 <p>In addition, you can run <strong>checkout_externals</strong> script with the following options
 to ensure that the checkout process is complete:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">&gt;</span> ./manage_externals/checkout_externals -S -v
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals -S -v</span>
 </pre></div>
 </div>
 <p>You should now have a complete copy of the CESM2 source code in your /path/to/my_cesm_sandbox.</p>
@@ -141,21 +131,21 @@ for the code repository for CESM registered users.</p>
 <p>Datasets can be downloaded on a case by case basis as needed and CESM
 provides tools to check and download input data automatically.</p>
 <p>A local input data directory should exist on the local disk, and it also
-needs to be set in the CESM scripts via the variable <code class="docutils literal"><span class="pre">$DIN_LOC_ROOT.</span></code>
+needs to be set in the CESM scripts via the variable <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT.</span></code>
 For supported machines, this variable is preset. For generic machines,
 this variable is set as an argument to <strong>create_newcase</strong>. It is recommended that all users
-of a given filesystem share the same <code class="docutils literal"><span class="pre">$DIN_LOC_ROOT</span></code> directory.</p>
-<p>The files in the subdirectories of <code class="docutils literal"><span class="pre">$DIN_LOC_ROOT</span></code> should be
+of a given filesystem share the same <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> directory.</p>
+<p>The files in the subdirectories of <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> should be
 write-protected. This prevents these files from being accidentally
-modified or deleted. The directories in <code class="docutils literal"><span class="pre">$DIN_LOC_ROOT</span></code> should generally
+modified or deleted. The directories in <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> should generally
 be group writable, so the directory can be shared among multiple users.</p>
 <p>As part of the process of generating the CESM executable, the utility,
 <strong>check_input_data</strong> located in each case directory
 is called, and it attempts to locate all required input data for the
 case based upon file lists generated by components. If the required
-data is not found on local disk in <code class="docutils literal"><span class="pre">$DIN_LOC_ROOT</span></code>, then the data
+data is not found on local disk in <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code>, then the data
 will be downloaded automatically by the scripts or it can be
-downloaded by the user by invoking <strong>check_input_data</strong> with the <code class="docutils literal"><span class="pre">--download</span></code>
+downloaded by the user by invoking <strong>check_input_data</strong> with the <code class="docutils literal notranslate"><span class="pre">--download</span></code>
 command argument. If you want to download the input data manually you
 should do it before you build CESM.</p>
 <p>It is possible for users to download the data using svn subcommands
@@ -192,18 +182,20 @@ to ensure that only the required datasets are downloaded.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/downloading_cesm.txt"
+      <li><a href="_sources/downloading_cesm.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -222,12 +214,12 @@ to ensure that only the required datasets are downloaded.</p>
         <li class="right" >
           <a href="introduction.html" title="Introduction"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2018, U.S. National Science Foundation.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2018, U.S. National Science Foundation.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>

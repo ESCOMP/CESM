@@ -24,8 +24,6 @@ ad hoc order.
 
     Throughout the guide, this presentation style indicates shell
     commands and options, fragments of code, namelist variables, etc.
-    Where examples from an interactive shell session are presented,
-    lines starting with '>' indicate the shell prompt.
 
 Please feel free to provide feedback to the `CESM forum <https://bb.cgd.ucar.edu/>`_ about how to improve the
 documentation. 

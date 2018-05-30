@@ -1,33 +1,23 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>CESM2 Configurations &mdash; CESM  documentation</title>
-    
+    <title>CESM2 Configurations &#8212; CESM  documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="CESM  documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Quick Start (CESM2 Model Workflow)" href="quickstart.html" />
     <link rel="prev" title="Downloading CESM2" href="downloading_cesm.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -40,7 +30,7 @@
         <li class="right" >
           <a href="downloading_cesm.html" title="Downloading CESM2"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -77,9 +67,9 @@ and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/
 <p>In addition CESM2 is accompanied by a <a class="reference external" href="http://esmci.github.io/cime/driver_cpl/index.html">driver/coupler (cpl7)</a> that coordinates
 the time evolution of geophysical components and periocially permits
 the components to exchange data.  Each component is represented in one
-of several modes: &#8220;active,&#8221; &#8220;data,&#8221; &#8220;dead,&#8221; or &#8220;stub&#8221; that permits the
+of several modes: “active,” “data,” “dead,” or “stub” that permits the
 whole system to activate and deactive component feedbacks by allowing
-for a variety of &#8220;plug and play&#8221; combinations.</p>
+for a variety of “plug and play” combinations.</p>
 <p>During the course of a CESM run, the model components integrate forward
 in time, periodically exchanging information with the coupler.
 The coupler meanwhile receives fields from the component models,
@@ -104,7 +94,7 @@ forced with atmospheric data does not need ice, ocn, or glc components,
 so ice, ocn, and glc stubs are used).</p>
 <p>The CESM2 components can be summarized as follows:</p>
 <table border="1" class="colwidths-given docutils" id="id1">
-<caption><span class="caption-text">&#8220;CESM model components&#8221;</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-text">“CESM model components”</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="12%" />
 <col width="10%" />
@@ -215,13 +205,13 @@ so ice, ocn, and glc stubs are used).</p>
 <td>ocn</td>
 <td>xocn</td>
 <td>dead</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>ocean</td>
 <td>ocn</td>
 <td>socn</td>
 <td>stub</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>sea-ice</td>
 <td>ice</td>
@@ -245,7 +235,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>ice</td>
 <td>sice</td>
 <td>stub</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>land-ice</td>
 <td>glc</td>
@@ -299,7 +289,7 @@ some characters that are indicative of the configuration setup. Each
 compset name has a corresponding short name.</p>
 <p>See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html">supported component sets</a> for a
 complete list of supported compset options. Running <strong>query_config</strong>
-with the <code class="docutils literal"><span class="pre">--compsets</span></code> option will also provide a listing of the
+with the <code class="docutils literal notranslate"><span class="pre">--compsets</span></code> option will also provide a listing of the
 supported out-of-the-box component sets for the local version of CESM.</p>
 </div>
 <div class="section" id="cesm2-grids">
@@ -330,8 +320,8 @@ component. The ocean and ice models run on either a Greenland dipole or
 a tripole grid. The Greenland Pole grid is a
 latitude/longitude grid, with the North Pole displaced over Greenland to
 avoid singularity problems in the ocn and ice models. The low-resolution
-Greenland pole mesh from CCSM3 is illustrated in <a class="reference external" href="http://journals.ametsoc.org/doi/pdf/10.1175/JCLI3744.1">Yeager et al., &#8220;The
-Low-Resolution CCSM3&#8221;, AMS (2006), Figure 1b.,
+Greenland pole mesh from CCSM3 is illustrated in <a class="reference external" href="http://journals.ametsoc.org/doi/pdf/10.1175/JCLI3744.1">Yeager et al., “The
+Low-Resolution CCSM3”, AMS (2006), Figure 1b.,
 Web.</a>
 Similarly, the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm1.0/cesm/cesm_doc_1_0_4/x42.html">Poseidon tripole
 grid</a> is a latitude/longitude
@@ -347,14 +337,14 @@ out-of-the-box. Machines are supported in CESM on an individual basis
 and are usually listed by their common site-specific name. To get a
 machine ported and functionally supported in CESM, local batch, run,
 environment, and compiler information must be configured in the CESM
-scripts. The machine name &#8220;userdefined&#8221; machines refer to any machine
+scripts. The machine name “userdefined” machines refer to any machine
 that the user defines and requires that a user edit the resulting xml
 files to fill in information required for the target platform. This
 functionality is handy in accelerating the porting process and quickly
 getting a case running on a new platform. For more information on
 porting, see the <a class="reference external" href="http://esmci.github.io/cime/users_guide/porting-cime.html">CIME porting guide</a>.  The
 list of available machines are documented in <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html">CESM supported machines</a>.
-Running <strong>query_config</strong> with the <code class="docutils literal"><span class="pre">--machines</span></code> option will also show
+Running <strong>query_config</strong> with the <code class="docutils literal notranslate"><span class="pre">--machines</span></code> option will also show
 the list of all machines for the current local version of
 CESM. Supported machines have undergone the full CESM porting
 process. The machines available in each of these categories changes as
@@ -403,18 +393,20 @@ and documentation.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/cesm_configurations.txt"
+      <li><a href="_sources/cesm_configurations.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -433,12 +425,12 @@ and documentation.</p>
         <li class="right" >
           <a href="downloading_cesm.html" title="Downloading CESM2"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2018, U.S. National Science Foundation.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2018, U.S. National Science Foundation.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>
