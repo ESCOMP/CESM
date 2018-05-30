@@ -117,11 +117,6 @@
     <lname>1850_CAM60_CLM45%BGC_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BPRP</lname>
   </compset>
 
-<!--  <compset> -->
-<!--    <alias>BHISTC4L40CNRBDRD</alias> -->
-<!--    <lname>HIST_CAM40_CLM40%CN_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BDRD</lname> -->
-<!--  </compset> -->
-
   <!-- BG compsets: evolving ice sheet -->
 
   <compset>
