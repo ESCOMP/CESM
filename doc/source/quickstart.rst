@@ -54,8 +54,8 @@ in the ``$CIMEROOT/scripts`` directory
 
 .. code-block:: console
 
-    > cd $CIMEROOT/scripts
-    > ./query_config --help
+    cd $CIMEROOT/scripts
+    ./query_config --help
 
 See the `supported component sets <http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html>`_,
 `supported model resolutions <http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html>`_ and `supported
@@ -77,7 +77,7 @@ invoke **create_newcase** as follows:
 
 .. code-block:: console
 
-    > create_newcase --case $CASEROOT --compset $COMPSET --res $GRID 
+    create_newcase --case $CASEROOT --compset $COMPSET --res $GRID 
 
 If running on a new target machine, see
 `the CIME porting guide <http://esmci.github.io/cime/users_guide/porting-cime.html>`_.
@@ -95,7 +95,7 @@ cd to the ``$CASEROOT`` directory.
 
 .. code-block:: console
 
-    > cd $CASEROOT
+    cd $CASEROOT
 
 Modify settings in ``env_mach_pes.xml`` (optional). (Note: To edit any of
 the env xml files, use the `xmlchange`_ command.
@@ -105,7 +105,7 @@ Invoke the **case.setup** command.
 
 .. code-block:: console
 
-    > ./case.setup  
+    ./case.setup  
 
 
 Build the executable using the case.build command
@@ -117,7 +117,7 @@ Run the build script.
 
 .. code-block:: console
 
-    > ./case.build 
+    ./case.build 
 
 Users of the NCAR cheyenne system should consider using 
 the `qcmd <https://dailyb.cisl.ucar.edu/bulletins/cisl-adds-qcmd-script-launching-resource-intensive-compilation-jobs>`_
@@ -125,7 +125,7 @@ to compile CESM2 on a compute node as follows:
 
 .. code-block:: console
 
-    > qcmd -- ./case.build
+    qcmd -- ./case.build
 
 
 Run the case
@@ -138,7 +138,7 @@ Submit the job to the batch queue using the **case.submit** command.
 
 .. code-block:: console
 
-    > ./case.submit
+    ./case.submit
 
 When the job is complete, review the following directories and files
 

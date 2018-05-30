@@ -29,8 +29,8 @@ code:
 
 .. code-block:: console
 
-    > git clone https://github.com/ESCOMP/cesm.git my_cesm_sandbox
-    > cd my_cesm_sandbox
+    git clone https://github.com/ESCOMP/cesm.git my_cesm_sandbox
+    cd my_cesm_sandbox
 
 By default, this command places you at the head of the master branch of
 CESM repository which may include in-test development code. We recommend
@@ -39,25 +39,25 @@ To list the currently supported CESM2 release tags type:
 
 .. code-block:: console
 
-    > git tag
+    git tag
 
 To checkout a specific CESM release tag type:
 
 .. code-block:: console 
 
-    > git checkout release-cesm2.0.0
+    git checkout release-cesm2.0.0
 
 Alternatively, you can clone a release directly 
 
 .. code-block:: console
 
-    > git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
+    git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
 
 then run the **checkout_externals** script from /path/to/my_cesm_sandbox.
 
 .. code-block:: console
 
-    > ./manage_externals/checkout_externals
+    ./manage_externals/checkout_externals
 
 The **checkout_externals** script will read the configuration file called ``externals.cfg`` and
 will download all the external component models and CIME into /path/to/my_cesm_sandbox. 
@@ -68,7 +68,7 @@ To see more details regarding the checkout_externals script from the command lin
 
 .. code-block:: console
 
-    > ./manage_externals/checkout_externals --help
+    ./manage_externals/checkout_externals --help
 
 
 .. warning:: When contacting the Subversion server for the first time, you may need to accept an authentication certification.
@@ -99,7 +99,7 @@ to ensure that the checkout process is complete:
 
 .. code-block:: console
 
-    > ./manage_externals/checkout_externals -S -v
+    ./manage_externals/checkout_externals -S -v
  
 
 You should now have a complete copy of the CESM2 source code in your /path/to/my_cesm_sandbox. 
