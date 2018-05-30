@@ -1125,6 +1125,41 @@
 	</rootpe>
       </pes>
     </mach>
+    <mach name="stampede2-skx">
+      <pes pesize="any" compset="CAM.+CLM.+CICE.+POP.+WW3">
+	<comment>about 6.5ypd expected</comment>
+	<ntasks>
+	  <ntasks_atm>-10</ntasks_atm>
+	  <ntasks_lnd>-8</ntasks_lnd>
+	  <ntasks_rof>-8</ntasks_rof>
+	  <ntasks_ice>-2</ntasks_ice>
+	  <ntasks_ocn>-2</ntasks_ocn>
+	  <ntasks_glc>-10</ntasks_glc>
+	  <ntasks_wav>-1</ntasks_wav>
+	  <ntasks_cpl>-10</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>-8</rootpe_ice>
+	  <rootpe_ocn>-10</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>-12</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+    </mach>
     <mach name="edison">
       <pes pesize="any" compset="CAM.+CLM.+CICE.+POP.+WW3">
 	<comment>about 17ypd expected</comment>
