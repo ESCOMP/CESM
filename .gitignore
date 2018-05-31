@@ -1,6 +1,5 @@
 # managed directories that are checked out by the externals tool
 cime/
-cime_config/
 components/
 
 # generated local files
@@ -12,3 +11,6 @@ components/
 
 # generated python files
 *.pyc
+
+# ignore for the merge to master and orphaning of the gh-pages branch
+doc/build

@@ -19,18 +19,28 @@ class Repository(object):
         self._protocol = repo[ExternalsDescription.PROTOCOL]
         self._tag = repo[ExternalsDescription.TAG]
         self._branch = repo[ExternalsDescription.BRANCH]
+        self._hash = repo[ExternalsDescription.HASH]
         self._url = repo[ExternalsDescription.REPO_URL]
 
         if self._url is EMPTY_STR:
             fatal_error('repo must have a URL')
 
-        if self._tag is EMPTY_STR and self._branch is EMPTY_STR:
-            fatal_error('repo must have either a branch or a tag element')
+        if ((self._tag is EMPTY_STR) and (self._branch is EMPTY_STR) and
+                (self._hash is EMPTY_STR)):
+            fatal_error('{0} repo must have a branch, tag or hash element')
 
-        if self._tag is not EMPTY_STR and self._branch is not EMPTY_STR:
-            fatal_error('repo cannot have both a tag and a branch element')
+        ref_count = 0
+        if self._tag is not EMPTY_STR:
+            ref_count += 1
+        if self._branch is not EMPTY_STR:
+            ref_count += 1
+        if self._hash is not EMPTY_STR:
+            ref_count += 1
+        if ref_count != 1:
+            fatal_error('repo {0} must have exactly one of '
+                        'tag, branch or hash.'.format(self._name))
 
-    def checkout(self, base_dir_path, repo_dir_name):  # pylint: disable=unused-argument
+    def checkout(self, base_dir_path, repo_dir_name, verbosity):  # pylint: disable=unused-argument
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
@@ -43,14 +53,6 @@ class Repository(object):
 
     def status(self, stat, repo_dir_path):  # pylint: disable=unused-argument
         """Report the status of the repo
-
-        """
-        msg = ('DEV_ERROR: status method must be implemented in all '
-               'repository classes! {0}'.format(self.__class__.__name__))
-        fatal_error(msg)
-
-    def verbose_status(self, repo_dir_path):  # pylint: disable=unused-argument
-        """Display the raw repo status to the user.
 
         """
         msg = ('DEV_ERROR: status method must be implemented in all '
@@ -71,3 +73,8 @@ class Repository(object):
         """Public access of repo branch.
         """
         return self._branch
+
+    def hash(self):
+        """Public access of repo hash.
+        """
+        return self._hash

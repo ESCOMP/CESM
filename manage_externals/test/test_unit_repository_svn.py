@@ -63,7 +63,6 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
                      'https://svn-ccsm-models.cgd.ucar.edu/',
                  ExternalsDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 ExternalsDescription.BRANCH: ''
                  }
 
         data = {self._name:
@@ -84,16 +83,20 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """
         svn_output = SVN_INFO_MOSART
         expected_url = self._repo.url()
-        result = self._repo._check_url(svn_output, expected_url)
+        result, current_version = \
+            self._repo._check_url(svn_output, expected_url)
         self.assertEqual(result, ExternalStatus.STATUS_OK)
+        self.assertEqual(current_version, 'mosart/trunk_tags/mosart1_0_26')
 
     def test_check_url_different(self):
         """Test that we correctly reject an incorrect URL.
         """
         svn_output = SVN_INFO_CISM
         expected_url = self._repo.url()
-        result = self._repo._check_url(svn_output, expected_url)
+        result, current_version = \
+            self._repo._check_url(svn_output, expected_url)
         self.assertEqual(result, ExternalStatus.MODEL_MODIFIED)
+        self.assertEqual(current_version, 'glc/trunk_tags/cism2_1_37')
 
     def test_check_url_none(self):
         """Test that we can handle an empty string for output, e.g. not an svn
@@ -102,8 +105,10 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         """
         svn_output = EMPTY_STR
         expected_url = self._repo.url()
-        result = self._repo._check_url(svn_output, expected_url)
+        result, current_version = \
+            self._repo._check_url(svn_output, expected_url)
         self.assertEqual(result, ExternalStatus.UNKNOWN)
+        self.assertEqual(current_version, '')
 
 
 class TestSvnRepositoryCheckSync(unittest.TestCase):
@@ -121,7 +126,6 @@ class TestSvnRepositoryCheckSync(unittest.TestCase):
                      'https://svn-ccsm-models.cgd.ucar.edu/',
                  ExternalsDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
-                 ExternalsDescription.BRANCH: EMPTY_STR
                  }
 
         data = {self._name:
@@ -415,6 +419,13 @@ class TestSVNStatusXML(unittest.TestCase):
    props="none">
 </wc-status>
 </entry>
+<entry
+   path="junk.txt">
+<wc-status
+   item="unversioned"
+   props="none">
+</wc-status>
+</entry>
 </target>
 </status>'''
 
@@ -447,13 +458,14 @@ class TestSVNStatusXML(unittest.TestCase):
         self.assertTrue(is_dirty)
 
     def test_xml_status_dirty_unversion(self):
-        """Verify that svn status output is consindered dirty when there is a
-        unversioned file.
+        """Verify that svn status output ignores unversioned files when making
+        the clean/dirty decision.
+
         """
         svn_output = self.SVN_STATUS_XML_DIRTY_UNVERSION
         is_dirty = SvnRepository.xml_status_is_dirty(
             svn_output)
-        self.assertTrue(is_dirty)
+        self.assertFalse(is_dirty)
 
     def test_xml_status_dirty_added(self):
         """Verify that svn status output is consindered dirty when there is a
@@ -476,7 +488,7 @@ class TestSVNStatusXML(unittest.TestCase):
 
     def test_xml_status_dirty_clean(self):
         """Verify that svn status output is consindered clean when there are
-        no dirty files.
+        no 'dirty' files. This means accepting untracked and externals.
 
         """
         svn_output = self.SVN_STATUS_XML_CLEAN

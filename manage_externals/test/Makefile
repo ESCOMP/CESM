@@ -39,7 +39,7 @@ PYLINT_ARGS=-j 2 --rcfile=.pylint.rc
 
 # code coverage
 COVERAGE=coverage
-COVERAGE_ARGS=--rcfile=.coveragerc --append
+COVERAGE_ARGS=--rcfile=.coveragerc
 
 # source files
 SRC = \
@@ -71,10 +71,10 @@ test : utest stest
 #
 .PHONY : readme
 readme : $(CHECKOUT_EXE)
-	echo '-- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --\n' > $(README)
-	echo -n '[![Build Status](https://travis-ci.org/NCAR/manage_externals.svg?branch=master)](https://travis-ci.org/NCAR/manage_externals)' >> $(README)
-	echo '[![Coverage Status](https://coveralls.io/repos/github/NCAR/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/NCAR/manage_externals?branch=master)' >> $(README)
-	echo '```\n' >> $(README)
+	printf "%s\n\n" "-- AUTOMATICALLY GENERATED FILE. DO NOT EDIT --" > $(README)
+	printf "%s" '[![Build Status](https://travis-ci.org/ESMCI/manage_externals.svg?branch=master)](https://travis-ci.org/ESMCI/manage_externals)' >> $(README)
+	printf "%s" '[![Coverage Status](https://coveralls.io/repos/github/ESMCI/manage_externals/badge.svg?branch=master)](https://coveralls.io/github/ESMCI/manage_externals?branch=master)' >> $(README)
+	printf "\n%s\n" '```' >> $(README)
 	$(CHECKOUT_EXE) --help >> $(README)
 
 #
@@ -85,14 +85,20 @@ style : FORCE
 	$(AUTOPEP8) $(AUTOPEP8_ARGS) --recursive $(SRC) $(TEST_DIR)/test_*.py
 
 .PHONY : lint
-lint : style
+lint : FORCE
 	$(PYLINT) $(PYLINT_ARGS) $(SRC) $(TEST_DIR)/test_*.py
 
+.PHONY : stylint
+stylint : style lint
+
 .PHONY : coverage
+# Need to use a single coverage run with a single pattern rather than
+# using two separate commands with separate patterns for test_unit_*.py
+# and test_sys_*.py: The latter clobbers some results from the first
+# run, even if we use the --append flag to 'coverage run'.
 coverage : FORCE
 	$(PYPATH) $(COVERAGE) erase
-	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_unit_*.py'
-	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_sys_*.py'
+	$(PYPATH) $(COVERAGE) run $(COVERAGE_ARGS) $(TEST_ARGS) --pattern 'test_*.py'
 	$(PYPATH) $(COVERAGE) html
 
 #

@@ -6,6 +6,10 @@ See the CESM web site for documentation and information:
 
 http://www.cesm.ucar.edu
 
+The CESM Quickstart Guide is available at:
+
+http://escomp.github.io/cesm
+
 This repository provides tools for managing the external components that
 make up a CESM tag - alpha, beta and release. CESM tag creation should
 be coordinated through CSEG at NCAR.
@@ -27,23 +31,28 @@ To obtain the CESM2.0 code you need to do the following:
 
 #. Clone the repository. ::
 
-      > git clone https://github.com/escomp/cesm.git my_cesm_sandbox
+      git clone https://github.com/escomp/cesm.git my_cesm_sandbox
 
    This will create a directory ``my_cesm_sandbox/`` in your current working directory.
 
 #. Go into the newly created CESM repository and determine what version of CESM you want.
    To see what cesm tags are available, simply issue the **git tag** command. ::
 
-      > cd my_cesm_sandbox
-      > git tag
+      cd my_cesm_sandbox
+      git tag
 
 #. Do a git checkout of the tag you want. If you want to checkout cesm2.0.beta07, you would issue the following. ::
 
-      > git checkout cesm2.0.beta07
+      git checkout cesm2.0.beta07
+
+   (It is normal and expected to get a message about being in 'detached
+   HEAD' state. For now you can ignore this, but it becomes important if
+   you want to make changes to your Externals.cfg file and commit those
+   changes to a branch.)
 
 #. Run the script **manage_externals/checkout_externals**. ::
 
-      > ./manage_externals/checkout_externals
+      ./manage_externals/checkout_externals
 
    The **checkout_externals** script is a package manager that will
    populate the cesm directory with the relevant versions of each of the
@@ -56,19 +65,19 @@ To see full details of how to set up a case, compile and run, see the CIME docum
 More details on checkout_externals
 ----------------------------------
 
-The file **CESM.cfg** in your top-level CESM directory tells
+The file **Externals.cfg** in your top-level CESM directory tells
 **checkout_externals** which tag/branch of each component should be
 brought in to generate your sandbox. (This file serves the same purpose
 as SVN_EXTERNAL_DIRECTORIES when CESM was in a subversion repository.)
 
 NOTE: Just like svn externals, checkout_externals will always attempt
-to make the working copy exactly match the externals description. If
-you manually modify an external without updating CESM.cfg, e.g. switch
-to a different tag, then rerunning checkout_externals will switch you
-back to the external described in CESM.cfg. See below
-documentation `Customizing your CESM sandbox`_ for more details.
+to make the working copy exactly match the externals description. For
+example, if you manually modify an external without updating Externals.cfg,
+(e.g. switch to a different tag), then rerunning checkout_externals
+will automatically restore the externals described in Externals.cfg. See
+below documentation `Customizing your CESM sandbox`_ for more details.
 
-**You need to rerun checkout_externals whenever CESM.cfg has
+**You need to rerun checkout_externals whenever Externals.cfg has
 changed** (unless you have already manually updated the relevant
 external(s) to have the correct branch/tag checked out). Common times
 when this is needed are:
@@ -81,14 +90,14 @@ when this is needed are:
 **checkout_externals** must be run from the root of the source
 tree. For example, if you cloned CESM with::
 
-  > git clone https://github.com/escomp/cesm.git my_cesm_sandbox
+  git clone https://github.com/escomp/cesm.git my_cesm_sandbox
 
 then you must run **checkout_externals** from
 ``/path/to/my_cesm_sandbox``.
 
 To see more details of **checkout_externals**, issue ::
 
-  > ./manage_externals/checkout_externals --help
+  ./manage_externals/checkout_externals --help
 
 Customizing your CESM sandbox
 =============================
@@ -103,8 +112,8 @@ MODIFICATIONS** it is simple to change your sandbox. Say that you
 checked out cesm2.0.beta07 but really wanted to have cesm2.0.beta08;
 you would simply do the following::
 
-  > git checkout cesm2.0.beta08
-  > ./manage_externals/checkout_externals
+  git checkout cesm2.0.beta08
+  ./manage_externals/checkout_externals
 
 You should **not** use this method if you have made any source code
 changes, or if you have any ongoing CESM cases that were created from
@@ -114,7 +123,7 @@ clone**.
 Pointing to a different version of a component
 ----------------------------------------------
 
-Each entry in **CESM.cfg** has the following form (we use CAM as an
+Each entry in **Externals.cfg** has the following form (we use CAM as an
 example below)::
  
   [cam]
@@ -126,18 +135,18 @@ example below)::
 
 Each entry specifies either a tag or a branch. To point to a new tag:
 
-#. Modify the relevant entry/entries in **CESM.cfg** (e.g., changing
+#. Modify the relevant entry/entries in **Externals.cfg** (e.g., changing
    ``cam5_4_143`` to ``cam5_4_144`` above)
 
 #. Checkout the new component(s)::
 
-     > ./manage_externals/checkout_externals
+     ./manage_externals/checkout_externals
 
 Keep in mind that changing individual components from a tag may result
 in an invalid model (won't compile, won't run, not scientifically
 meaningful) and is unsupported.
 
-Committing your change to CESM.cfg
+Committing your change to Externals.cfg
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After making this change, it's a good idea to commit the change in your
@@ -146,9 +155,9 @@ repository, then commit it. (Unlike with subversion, branches are stored
 locally unless you explicitly push them up to github. Feel free to
 create whatever local branches you'd like.) For example::
 
-  > git checkout -b my_cesm_branch
-  > git add CESM.cfg
-  > git commit -m "Update CAM to cam5_4_144"
+  git checkout -b my_cesm_branch
+  git add Externals.cfg
+  git commit -m "Update CAM to cam5_4_144"
 
 Modifying a component
 ---------------------
@@ -162,7 +171,7 @@ CAM as an example):
    repository. Let's assume you have created this branch and called it
    **my_branch**.
 
-#. Update **CESM.cfg** to point to your branch. You can replace the
+#. Update **Externals.cfg** to point to your branch. You can replace the
    **tag** entry with a **branch** entry, as follows::
 
      [cam]
@@ -174,7 +183,16 @@ CAM as an example):
 
 #. Checkout your branch::
 
-     > ./manage_externals/checkout_externals
+     ./manage_externals/checkout_externals
 
-It's a good idea to commit your **CESM.cfg** file changes. See the above
-documentation, `Committing your change to CESM.cfg`_.
+It's a good idea to commit your **Externals.cfg** file changes. See the above
+documentation, `Committing your change to Externals.cfg`_.
+
+Developer setup
+===============
+
+Developers who have not already done so should follow the recommended
+`one-time <https://github.com/esmci/cime/wiki/CIME-Git-Workflow#configure-git-one-time>`_
+setup directions for git. Developers may also want to set up
+`ssh <https://help.github.com/articles/connecting-to-github-with-ssh/>`_
+keys and switch to using the ``git@github.com:ESCOMP/cesm.git`` form of the github URLs.

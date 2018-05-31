@@ -1,0 +1,12 @@
+Use the following commands to auto-build the html documentation from the main
+cesm/doc directory:
+
+>make clean
+>make html
+
+The build/html files should be copied to the appropriate release or
+development https://github.com/ESCOMP/cesm gh-pages orphan branch
+subdirectory and commited to that branch separately.
+
+Only the doc/source files are stored with the code on the master
+branch.

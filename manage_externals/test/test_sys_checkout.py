@@ -34,6 +34,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
 
+import logging
 import os
 import os.path
 import shutil
@@ -44,7 +45,8 @@ from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
 from manic.externals_status import ExternalStatus
 from manic.repository_git import GitRepository
 from manic.utils import printlog, execute_subprocess
-from manic.global_constants import LOCAL_PATH_INDICATOR
+from manic.global_constants import LOCAL_PATH_INDICATOR, VERBOSITY_DEFAULT
+from manic.global_constants import LOG_FILE_NAME
 from manic import checkout
 
 # ConfigParser was renamed in python2 to configparser. In python2,
@@ -81,6 +83,7 @@ SUB_EXTERNALS_PATH = 'src'
 CFG_NAME = 'externals.cfg'
 CFG_SUB_NAME = 'sub-externals.cfg'
 README_NAME = 'readme.txt'
+REMOTE_BRANCH_FEATURE2 = 'feature2'
 
 SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 
@@ -88,6 +91,10 @@ SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 def setUpModule():  # pylint: disable=C0103
     """Setup for all tests in this module. It is called once per module!
     """
+    logging.basicConfig(filename=LOG_FILE_NAME,
+                        format='%(levelname)s : %(asctime)s : %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S',
+                        level=logging.DEBUG)
     repo_root = os.path.join(os.getcwd(), TMP_REPO_DIR_NAME)
     repo_root = os.path.abspath(repo_root)
     # delete if it exists from previous runs
@@ -111,7 +118,7 @@ class GenerateExternalsDescriptionCfgV1(object):
     """
 
     def __init__(self):
-        self._schema_version = '1.0.0'
+        self._schema_version = '1.1.0'
         self._config = None
 
     def container_full(self, dest_dir):
@@ -124,17 +131,13 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1')
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch='feature2')
+                            branch=REMOTE_BRANCH_FEATURE2)
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_opt',
                             tag='tag1', required=False)
 
         self.create_section(MIXED_REPO_NAME, 'mixed_req',
-                            tag='tag1', externals=CFG_SUB_NAME)
-
-        self.create_section(MIXED_REPO_NAME, 'mixed_opt',
-                            tag='tag1', externals=CFG_SUB_NAME,
-                            required=False)
+                            branch='master', externals=CFG_SUB_NAME)
 
         self._write_config(dest_dir)
 
@@ -147,7 +150,10 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1')
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch='feature2')
+                            branch=REMOTE_BRANCH_FEATURE2)
+
+        self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
+                            ref_hash='60b1cc1a38d63')
 
         self._write_config(dest_dir)
 
@@ -186,7 +192,10 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1')
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch='feature2')
+                            branch=REMOTE_BRANCH_FEATURE2)
+
+        self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
+                            ref_hash='60b1cc1a38d63')
 
         self._write_config(dest_dir)
 
@@ -199,7 +208,8 @@ class GenerateExternalsDescriptionCfgV1(object):
                             tag='tag1', path=SUB_EXTERNALS_PATH)
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch='feature2', path=SUB_EXTERNALS_PATH)
+                            branch=REMOTE_BRANCH_FEATURE2,
+                            path=SUB_EXTERNALS_PATH)
 
         self._write_config(dest_dir, filename=CFG_SUB_NAME)
 
@@ -227,6 +237,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                          self._schema_version)
 
     def create_section(self, repo_type, name, tag='', branch='',
+                       ref_hash='',
                        required=True, path=EXTERNALS_NAME, externals=''):
         """Create a config section with autofilling some items and handling
         optional items.
@@ -250,6 +261,9 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         if branch:
             self._config.set(name, ExternalsDescription.BRANCH, branch)
+
+        if ref_hash:
+            self._config.set(name, ExternalsDescription.HASH, ref_hash)
 
         if externals:
             self._config.set(name, ExternalsDescription.EXTERNALS, externals)
@@ -315,6 +329,31 @@ class GenerateExternalsDescriptionCfgV1(object):
             execute_subprocess(cmd)
             cmd = ['git', 'commit', '-m', msg, ]
             execute_subprocess(cmd)
+        os.chdir(cwd)
+
+    @staticmethod
+    def create_commit(dest_dir, repo_name, local_tracking_branch=None):
+        """Make a commit on whatever is currently checked out.
+
+        This is used to test sync state changes from local commits on
+        detached heads and tracking branches.
+
+        """
+        cwd = os.getcwd()
+        repo_root = os.path.join(dest_dir, EXTERNALS_NAME)
+        repo_root = os.path.join(repo_root, repo_name)
+        os.chdir(repo_root)
+        if local_tracking_branch:
+            cmd = ['git', 'checkout', '-b', local_tracking_branch, ]
+            execute_subprocess(cmd)
+
+        msg = 'work on great new feature!'
+        with open(README_NAME, 'a') as handle:
+            handle.write(msg)
+        cmd = ['git', 'add', README_NAME, ]
+        execute_subprocess(cmd)
+        cmd = ['git', 'commit', '-m', msg, ]
+        execute_subprocess(cmd)
         os.chdir(cwd)
 
     def update_branch(self, dest_dir, name, branch, repo_type=None,
@@ -486,17 +525,30 @@ class BaseTestSysCheckout(unittest.TestCase):
         dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
                                 test_dir_name)
         # pylint: disable=W0212
-        GitRepository._git_clone(parent_repo_dir, dest_dir)
+        GitRepository._git_clone(parent_repo_dir, dest_dir, VERBOSITY_DEFAULT)
         return dest_dir
 
     @staticmethod
-    def _add_file_to_repo(under_test_dir, filename):
+    def _add_file_to_repo(under_test_dir, filename, tracked):
         """Add a file to the repository so we can put it into a dirty state
 
         """
-        dirty_path = os.path.join(under_test_dir, filename)
-        with open(dirty_path, 'w') as tmp:
+        cwd = os.getcwd()
+        os.chdir(under_test_dir)
+        with open(filename, 'w') as tmp:
             tmp.write('Hello, world!')
+
+        if tracked:
+            # NOTE(bja, 2018-01) brittle hack to obtain repo dir and
+            # file name
+            path_data = filename.split('/')
+            repo_dir = os.path.join(path_data[0], path_data[1])
+            os.chdir(repo_dir)
+            tracked_file = path_data[2]
+            cmd = ['git', 'add', tracked_file]
+            execute_subprocess(cmd)
+
+        os.chdir(cwd)
 
     @staticmethod
     def execute_cmd_in_dir(under_test_dir, args):
@@ -576,6 +628,10 @@ class BaseTestSysCheckout(unittest.TestCase):
         name = './{0}/simp_tag'.format(directory)
         self._check_generic_ok_dirty_required(tree, name)
 
+    def _check_simple_tag_modified(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_tag'.format(directory)
+        self._check_generic_modified_ok_required(tree, name)
+
     def _check_simple_branch_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_branch'.format(directory)
         self._check_generic_empty_default_required(tree, name)
@@ -586,6 +642,18 @@ class BaseTestSysCheckout(unittest.TestCase):
 
     def _check_simple_branch_modified(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_branch'.format(directory)
+        self._check_generic_modified_ok_required(tree, name)
+
+    def _check_simple_hash_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_hash'.format(directory)
+        self._check_generic_empty_default_required(tree, name)
+
+    def _check_simple_hash_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_hash'.format(directory)
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_simple_hash_modified(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_hash'.format(directory)
         self._check_generic_modified_ok_required(tree, name)
 
     def _check_simple_req_empty(self, tree, directory=EXTERNALS_NAME):
@@ -604,6 +672,18 @@ class BaseTestSysCheckout(unittest.TestCase):
         name = './{0}/simp_opt'.format(directory)
         self._check_generic_ok_clean_optional(tree, name)
 
+    def _check_mixed_ext_branch_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/mixed_req'.format(directory)
+        self._check_generic_empty_default_required(tree, name)
+
+    def _check_mixed_ext_branch_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/mixed_req'.format(directory)
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_mixed_ext_branch_modified(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/mixed_req'.format(directory)
+        self._check_generic_modified_ok_required(tree, name)
+
     # ----------------------------------------------------------------
     #
     # Check results for groups of externals under specific conditions
@@ -613,17 +693,26 @@ class BaseTestSysCheckout(unittest.TestCase):
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree)
         self._check_simple_branch_empty(tree)
+        self._check_simple_hash_empty(tree)
 
     def _check_container_simple_required_checkout(self, overall, tree):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree)
         self._check_simple_branch_empty(tree)
+        self._check_simple_hash_empty(tree)
 
     def _check_container_simple_required_post_checkout(self, overall, tree):
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree)
         self._check_simple_branch_ok(tree)
+        self._check_simple_hash_ok(tree)
+
+    def _check_container_simple_required_out_of_sync(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_modified(tree)
+        self._check_simple_branch_modified(tree)
+        self._check_simple_hash_modified(tree)
 
     def _check_container_simple_optional_pre_checkout(self, overall, tree):
         self.assertEqual(overall, 0)
@@ -649,34 +738,110 @@ class BaseTestSysCheckout(unittest.TestCase):
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree)
         self._check_simple_branch_modified(tree)
+        self._check_simple_hash_ok(tree)
 
     def _check_container_simple_optional_st_dirty(self, overall, tree):
         self.assertEqual(overall, 0)
         self._check_simple_tag_dirty(tree)
         self._check_simple_branch_ok(tree)
 
-    def _check_mixed_sub_simple_required_pre_checkout(self, overall, tree):
+    def _check_container_full_pre_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_empty(tree)
+        self._check_simple_branch_empty(tree)
+        self._check_simple_opt_empty(tree)
+        self._check_mixed_ext_branch_required_pre_checkout(overall, tree)
+
+    def _check_container_component_post_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_opt_ok(tree)
+        self._check_simple_tag_empty(tree)
+        self._check_simple_branch_empty(tree)
+
+    def _check_container_component_post_checkout2(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_opt_ok(tree)
+        self._check_simple_tag_empty(tree)
+        self._check_simple_branch_ok(tree)
+
+    def _check_container_full_post_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_branch_ok(tree)
+        self._check_simple_opt_empty(tree)
+        self._check_mixed_ext_branch_required_post_checkout(overall, tree)
+
+    def _check_container_full_pre_checkout_ext_change(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_branch_ok(tree)
+        self._check_simple_opt_empty(tree)
+        self._check_mixed_ext_branch_required_pre_checkout_ext_change(
+            overall, tree)
+
+    def _check_container_full_post_checkout_subext_modified(
+            self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_branch_ok(tree)
+        self._check_simple_opt_empty(tree)
+        self._check_mixed_ext_branch_required_post_checkout_subext_modified(
+            overall, tree)
+
+    def _check_mixed_ext_branch_required_pre_checkout(self, overall, tree):
+        # Note, this is the internal tree status just before checkout
+        self.assertEqual(overall, 0)
+        self._check_mixed_ext_branch_empty(tree, directory=EXTERNALS_NAME)
+        # NOTE: externals/mixed_req/src should not exist in the tree
+        # since this is the status before checkout of mixed_req.
+
+    def _check_mixed_ext_branch_required_post_checkout(self, overall, tree):
+        # Note, this is the internal tree status just before checkout
+        self.assertEqual(overall, 0)
+        self._check_mixed_ext_branch_ok(tree, directory=EXTERNALS_NAME)
+        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
+                                         SUB_EXTERNALS_PATH)
+        self._check_simple_branch_ok(tree, directory=check_dir)
+
+    def _check_mixed_ext_branch_required_pre_checkout_ext_change(
+            self, overall, tree):
+        # Note, this is the internal tree status just after change the
+        # externals description file, but before checkout
+        self.assertEqual(overall, 0)
+        self._check_mixed_ext_branch_modified(tree, directory=EXTERNALS_NAME)
+        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
+                                         SUB_EXTERNALS_PATH)
+        self._check_simple_branch_ok(tree, directory=check_dir)
+
+    def _check_mixed_ext_branch_required_post_checkout_subext_modified(
+            self, overall, tree):
+        # Note, this is the internal tree status just after change the
+        # externals description file, but before checkout
+        self.assertEqual(overall, 0)
+        self._check_mixed_ext_branch_ok(tree, directory=EXTERNALS_NAME)
+        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
+                                         SUB_EXTERNALS_PATH)
+        self._check_simple_branch_modified(tree, directory=check_dir)
+
+    def _check_mixed_cont_simple_required_pre_checkout(self, overall, tree):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_empty(tree, directory=EXTERNALS_NAME)
-        self._check_simple_tag_empty(tree, directory=SUB_EXTERNALS_PATH)
         self._check_simple_branch_empty(tree, directory=SUB_EXTERNALS_PATH)
 
-    def _check_mixed_sub_simple_required_checkout(self, overall, tree):
+    def _check_mixed_cont_simple_required_checkout(self, overall, tree):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
         self._check_simple_tag_empty(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_empty(tree, directory=EXTERNALS_NAME)
-        self._check_simple_tag_empty(tree, directory=SUB_EXTERNALS_PATH)
         self._check_simple_branch_empty(tree, directory=SUB_EXTERNALS_PATH)
 
-    def _check_mixed_sub_simple_required_post_checkout(self, overall, tree):
+    def _check_mixed_cont_simple_required_post_checkout(self, overall, tree):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_ok(tree, directory=EXTERNALS_NAME)
-        self._check_simple_tag_ok(tree, directory=SUB_EXTERNALS_PATH)
         self._check_simple_branch_ok(tree, directory=SUB_EXTERNALS_PATH)
 
 
@@ -785,7 +950,9 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._check_container_simple_required_checkout(overall, tree)
 
         # add a file to the repo
-        self._add_file_to_repo(under_test_dir, 'externals/simp_tag/tmp.txt')
+        tracked = True
+        self._add_file_to_repo(under_test_dir, 'externals/simp_tag/tmp.txt',
+                               tracked)
 
         # checkout: pre-checkout status should be dirty, did not
         # modify working copy.
@@ -797,6 +964,76 @@ class TestSysCheckout(BaseTestSysCheckout):
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
         self._check_container_simple_optional_st_dirty(overall, tree)
+
+    def test_container_simple_untracked(self):
+        """Verify that a container with simple subrepos and a untracked files
+        is not considered 'dirty' and will attempt an update.
+
+        """
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
+
+        # add a file to the repo
+        tracked = False
+        self._add_file_to_repo(under_test_dir, 'externals/simp_tag/tmp.txt',
+                               tracked)
+
+        # checkout: pre-checkout status should be clean, ignoring the
+        # untracked file.
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
+
+        # verify status is still clean
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
+
+    def test_container_simple_detached_sync(self):
+        """Verify that a container with simple subrepos generates the correct
+        out of sync status when making commits from a detached head
+        state.
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # status of empty repo
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_pre_checkout(overall, tree)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
+
+        # make a commit on the detached head of the tag and hash externals
+        self._generator.create_commit(under_test_dir, 'simp_tag')
+        self._generator.create_commit(under_test_dir, 'simp_hash')
+        self._generator.create_commit(under_test_dir, 'simp_branch')
+
+        # status of repo, branch, tag and hash should all be out of sync!
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_out_of_sync(overall, tree)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        # same pre-checkout out of sync status
+        self._check_container_simple_required_out_of_sync(overall, tree)
+
+        # now status should be in-sync
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
 
     def test_container_remote_branch(self):
         """Verify that a container with remote branch change works
@@ -814,7 +1051,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # update the config file to point to a different remote with
         # the same branch
         self._generator.update_branch(under_test_dir, 'simp_branch',
-                                      'feature2', SIMPLE_FORK_NAME)
+                                      REMOTE_BRANCH_FEATURE2, SIMPLE_FORK_NAME)
 
         # status of simp_branch should be out of sync
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
@@ -831,9 +1068,11 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_simple_required_post_checkout(overall, tree)
 
-    def test_container_remote_tag(self):
+    def test_container_remote_tag_same_branch(self):
         """Verify that a container with remote tag change works. The new tag
-        should not be in the original repo, only the new remote fork.
+        should not be in the original repo, only the new remote
+        fork. The new tag is automatically fetched because it is on
+        the branch.
 
         """
         # create repo
@@ -850,6 +1089,44 @@ class TestSysCheckout(BaseTestSysCheckout):
         # repo!
         self._generator.update_tag(under_test_dir, 'simp_branch',
                                    'forked-feature-v1', SIMPLE_FORK_NAME)
+
+        # status of simp_branch should be out of sync
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_sb_modified(overall, tree)
+
+        # checkout new externals
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_sb_modified(overall, tree)
+
+        # status should be synced
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_simple_required_post_checkout(overall, tree)
+
+    def test_container_remote_tag_fetch_all(self):
+        """Verify that a container with remote tag change works. The new tag
+        should not be in the original repo, only the new remote
+        fork. It should also not be on a branch that will be fetch,
+        and therefore not fetched by default with 'git fetch'. It will
+        only be retreived by 'git fetch --tags'
+
+        """
+        # create repo
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+        self._generator.container_simple_required(under_test_dir)
+
+        # checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_required_checkout(overall, tree)
+
+        # update the config file to point to a different remote with
+        # the tag instead of branch. Tag MUST NOT be in the original
+        # repo!
+        self._generator.update_tag(under_test_dir, 'simp_branch',
+                                   'abandoned-feature', SIMPLE_FORK_NAME)
 
         # status of simp_branch should be out of sync
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
@@ -883,7 +1160,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # update the config file to point to a different remote with
         # the same branch
         self._generator.update_branch(under_test_dir, 'simp_branch',
-                                      'feature2', SIMPLE_FORK_NAME)
+                                      REMOTE_BRANCH_FEATURE2, SIMPLE_FORK_NAME)
         # checkout
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.checkout_args)
@@ -908,24 +1185,83 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_simple_required_post_checkout(overall, tree)
 
-    @unittest.skip('test development inprogress')
     def test_container_full(self):
         """Verify that 'full' container with simple and mixed subrepos
         generates the correct initial status.
 
+        The mixed subrepo has a sub-externals file with different
+        sub-externals on different branches.
+
         """
+        # create the test repository
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+
+        # create the top level externals file
         self._generator.container_full(under_test_dir)
-        overall, tree = self.execute_cmd_in_dir(
-            under_test_dir, self.status_args)
-        self.assertEqual(overall, 0)
-        overall, tree = self.execute_cmd_in_dir(
-            under_test_dir, self.checkout_args)
-        self.assertEqual(overall, 0)
-        overall, tree = self.execute_cmd_in_dir(
-            under_test_dir, self.status_args)
-        self.assertEqual(overall, 0)
-        _ = tree
+
+        # inital checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_full_pre_checkout(overall, tree)
+
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_full_post_checkout(overall, tree)
+
+        # update the mixed-use repo to point to different branch
+        self._generator.update_branch(under_test_dir, 'mixed_req',
+                                      'new-feature', MIXED_REPO_NAME)
+
+        # check status out of sync for mixed_req, but sub-externals
+        # are still in sync
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_full_pre_checkout_ext_change(overall, tree)
+
+        # run the checkout. Now the mixed use external and it's
+        # sub-exterals should be changed. Returned status is
+        # pre-checkout!
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_full_pre_checkout_ext_change(overall, tree)
+
+        # check status out of sync for mixed_req, and sub-externals
+        # are in sync.
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_full_post_checkout(overall, tree)
+
+    def test_container_component(self):
+        """Verify that optional component checkout works
+        """
+        # create the test repository
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+
+        # create the top level externals file
+        self._generator.container_full(under_test_dir)
+
+        # inital checkout, first try a nonexistant component argument noref
+        checkout_args = ['simp_opt', 'noref']
+        checkout_args.extend(self.checkout_args)
+
+        with self.assertRaises(RuntimeError):
+            self.execute_cmd_in_dir(under_test_dir, checkout_args)
+
+        checkout_args = ['simp_opt']
+        checkout_args.extend(self.checkout_args)
+
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                checkout_args)
+
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_component_post_checkout(overall, tree)
+        checkout_args.append('simp_branch')
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                checkout_args)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_component_post_checkout2(overall, tree)
 
     def test_mixed_simple(self):
         """Verify that a mixed use repo can serve as a 'full' container,
@@ -937,18 +1273,20 @@ class TestSysCheckout(BaseTestSysCheckout):
         under_test_dir = self.setup_test_repo(MIXED_REPO_NAME)
         # create top level externals file
         self._generator.mixed_simple_base(under_test_dir)
-        # create sub-externals file
-        self._sub_generator.mixed_simple_sub(under_test_dir)
+        # NOTE: sub-externals file is already in the repo so we can
+        # switch branches during testing. Since this is a mixed-repo
+        # serving as the top level container repo, we can't switch
+        # during this test.
 
         # checkout
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.checkout_args)
-        self._check_mixed_sub_simple_required_checkout(overall, tree)
+        self._check_mixed_cont_simple_required_checkout(overall, tree)
 
         # verify status is clean and unmodified
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
-        self._check_mixed_sub_simple_required_post_checkout(overall, tree)
+        self._check_mixed_cont_simple_required_post_checkout(overall, tree)
 
 
 class TestSysCheckoutSVN(BaseTestSysCheckout):
@@ -1010,6 +1348,12 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
         self._check_svn_tag_modified(tree)
         self._check_svn_branch_dirty(tree)
 
+    def _check_container_simple_svn_sb_clean_st_mod(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_svn_tag_modified(tree)
+        self._check_svn_branch_ok(tree)
+
     @staticmethod
     def have_svn_access():
         """Check if we have svn access so we can enable tests that use svn.
@@ -1062,26 +1406,33 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_simple_svn_post_checkout(overall, tree)
 
-        # add a file to the repo
+        # add an untracked file to the repo
+        tracked = False
         self._add_file_to_repo(under_test_dir,
-                               'externals/svn_branch/tmp.txt')
+                               'externals/svn_branch/tmp.txt', tracked)
+
+        # run a no-op checkout: pre-checkout status should be clean,
+        # ignoring the untracked file.
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_simple_svn_post_checkout(overall, tree)
 
         # update description file to make the branch into a tag and
-        # trigger a modified status
+        # trigger a modified sync status
         self._generator.update_svn_branch(under_test_dir, 'svn_tag',
                                           'tags/cesm2.0.beta07')
 
-        # checkout: pre-checkout status should be dirty and modified,
-        # did not modify working copy.
+        # checkout: pre-checkout status should be clean and modified,
+        # will modify working copy.
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.checkout_args)
-        self._check_container_simple_svn_sb_dirty_st_mod(overall, tree)
+        self._check_container_simple_svn_sb_clean_st_mod(overall, tree)
 
-        # verify status is still dirty and modified with verbose, last
-        # checkout did not modify working dir state.
+        # verify status is still clean and unmodified, last
+        # checkout modified the working dir state.
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.verbose_args)
-        self._check_container_simple_svn_sb_dirty_st_mod(overall, tree)
+        self._check_container_simple_svn_post_checkout(overall, tree)
 
 
 class TestSysCheckoutErrors(BaseTestSysCheckout):
