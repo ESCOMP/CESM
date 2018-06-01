@@ -88,19 +88,49 @@ entry of this information will not be required for a given machine.
 
 .. warning:: If a problem was encountered during checkout_externals, which may happen with an older version of the svn client software, it may appear to have downloaded successfully, but in fact only a partial checkout has occurred. 
 
-To ensure a successful download, make sure the last line of the ``manage_externals.log`` file contains:
+To confirm a successful download of all components, you can run ``checkout_externals``
+with the status flag to show the status of the externals:
 
 .. code-block:: console
 
-	INFO : 2018-04-03 15:36:19 : checkout_externals completed without exceptions.
+    ./manage_externals/checkout_externals -S
 
-In addition, you can run **checkout_externals** script with the following options
-to ensure that the checkout process is complete:
+This should show a clean status for all externals, with no characters in the first two
+columns of output, as in this example:
 
 .. code-block:: console
 
-    ./manage_externals/checkout_externals -S -v
- 
+   Processing externals description file : Externals.cfg
+   Processing externals description file : Externals_CLM.cfg
+   Processing externals description file : Externals_POP.cfg
+   Processing externals description file : Externals_CISM.cfg
+   Checking status of externals: clm, fates, ptclm, mosart, ww3, cime, cice, pop, cvmix, marbl, cism, source_cism, rtm, cam,
+       ./cime
+       ./components/cam
+       ./components/cice
+       ./components/cism
+       ./components/cism/source_cism
+       ./components/clm
+       ./components/clm/src/fates
+       ./components/clm/tools/PTCLM
+       ./components/mosart
+       ./components/pop
+       ./components/pop/externals/CVMix
+       ./components/pop/externals/MARBL
+       ./components/rtm
+       ./components/ww3
+
+If there were problems obtaining an external, you might instead see something like:
+
+.. code-block:: console
+
+   e-  ./components/cam
+
+For more information, run:
+
+.. code-block:: console
+
+   ./manage_externals/checkout_externals --help
 
 You should now have a complete copy of the CESM2 source code in your /path/to/my_cesm_sandbox. 
 
