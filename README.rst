@@ -54,25 +54,16 @@ Installing, building and running CESM requires:
 
 Details on Fortran compiler versions
 ------------------------------------
-
 The Fortran compiler must support Fortran 2003 features. However, even
 among mainstream Fortran compilers that claim to support Fortran 2003,
 we have found numerous bugs. Thus, many compiler versions do *not* build
 or run CESM properly (see
 https://wiki.ucar.edu/display/ccsm/Fortran+Compiler+Bug+List for more
-details).
+details on older Fortran compiler versions).
 
-We regularly test CESM with the following Fortran compiler versions:
-
-* Intel (ifort) versions ???
-
-* Gnu (gfortran) versions ???
-
-* PGI (pgfortran) versions ???
-    
-* NAG (nagfor) versions ???
-
-* Others???
+CESM2 is tested on several different systems with newer Fortran compilers:
+Please see `CESM2.0 Compiler/Machine Tests <https://docs.google.com/spreadsheets/d/15QUqsXD1Z0K_rYNTlykBvjTRt8s0XcQw0cfAj9DZbj0/edit#gid=0>`_
+for a spreadsheet of the current results.
 
 More details on porting CESM
 ----------------------------
