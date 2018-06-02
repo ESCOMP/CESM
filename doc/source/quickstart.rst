@@ -7,7 +7,6 @@
 The following quick start guide is for versions of CESM2 that have
 already been ported to the local target machine. CESM2 is built on the
 CIME (Common Infrastructure for Modeling Earth) framework.
-
 Please refer to the `CIME Porting Documentation <http://esmci.github.io/cime/users_guide/porting-cime.html>`_ if CIME has not
 yet been ported to the target machine. 
 
@@ -45,18 +44,13 @@ shell environment or as the ``--project`` argument to **create_newcase**.
 
 If running on a supported machine, that machine will
 normally be recognized automatically and therefore it is not required
-to specify the ``--machine`` argument to **create_newcase**, then
-invoke **create_newcase** as follows:
+to specify the ``--machine`` argument to **create_newcase**. 
+
+Invoke **create_newcase** as follows:
 
 .. code-block:: console
 
     ./create_newcase --case $CASEROOT --compset $COMPSET --res $GRID
-
-An example on NCAR machine cheyenne:
-
-.. code-block:: console
-
-    ./create_newcase --case /glade/scratch/[username]/cases/b.e20.B1850.f19_g17.test --compset B1850 --res f19_g17 
 
 where:
 
@@ -64,22 +58,25 @@ where:
 
 -  ``$GRID`` refers to the model `resolution <http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html>`_.
 
--  ``$CASEROOT`` refers to the full pathname of the root directory where the
-   case (``$CASE``) will be created. In the example above, the ``$CASEROOT = /glade/scratch/[username]/cases/A.f19_g17.test``
-   where [username] is your cheyenne login name.
+-  ``$CASEROOT`` refers to the full path of the root directory where the
+   case (``$CASE``) will be created. 
 
 -  ``$CASE`` refers to the case name, which is the basename of $CASEROOT.
    See `CESM2 Experiment Casenames  <http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames>`_
-   for details regarding CESM experiment case naming conventions.  In the example above, ``$CASE = A.f19_g17.test``.
+   for details regarding CESM experiment case naming conventions. 
 
-The ``--run-unsupported`` argument force the creation of a case that is not tested or supported by CESM developers. 
+An example on NCAR machine cheyenne with``$CASEROOT = /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test``
+and $USER set to your cheyenne login name is:
 
+.. code-block:: console
+
+    ./create_newcase --case /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test --compset B1850 --res f19_g17 
 
 
 Setting up the case run script
 ==============================
 
-Issuing the `case.setup`_ command creates a ``$CASEROOT/case.run`` script
+Issuing the `case.setup`_ command creates scripts needed to run the model
 along with namelist ``user_nl_xxx`` files, where xxx denotes the set of components
 for the given case configuration. Before invoking **case.setup**, modify
 the ``env_mach_pes.xml`` file in CASEROOT using the `xmlchange`_ command
@@ -114,7 +111,7 @@ Run the build script.
     ./case.build 
 
 Users of the NCAR cheyenne system should consider using 
-the `qcmd <https://dailyb.cisl.ucar.edu/bulletins/cisl-adds-qcmd-script-launching-resource-intensive-compilation-jobs>`_
+`qcmd <https://www2.cisl.ucar.edu/resources/computational-systems/cheyenne/running-jobs/submitting-jobs-pbs>`_
 to compile CESM2 on a compute node as follows:
 
 .. code-block:: console
@@ -132,7 +129,7 @@ which can be queried using:
 Run the case
 ============
 
-Modify runtime settings in ``env_run.xml`` (optional). In particular, set
+Modify runtime settings in ``env_run.xml`` (optional). In particular, you can set
 the ``$DOUT_S`` variable to FALSE to turn off short term archiving.
 
 Submit the job to the batch queue using the **case.submit** command.
@@ -141,17 +138,23 @@ Submit the job to the batch queue using the **case.submit** command.
 
     ./case.submit
 
-When the job is complete, review the following directories and files:
+When the job is complete, review the following directories and files
+(Note: **xmlquery** can be run with a list or comma separated names
+and no spaces):
+
+.. code-block:: console
+
+   ./xmlquery RUNDIR,CASE,CASEROOT,DOUT_S,DOUT_S_ROOT
 
 - ``$RUNDIR``
 
   This directory is set in the ``env_run.xml`` file. This is the
   location where CESM2 was run. There should be log files there for every
-  component (i.e. of the form cpl.log.yymmdd-hhmmss). Each component writes
-  its own log file. Also see whether any restart or history files were
+  component (i.e. of the form cpl.log.yymmdd-hhmmss) if ``$DOUT_S == FALSE``. 
+  Each component writes its own log file. Also see whether any restart or history files were
   written. To check that a run completed successfully, check the last
   several lines of the cpl.log file for the string " SUCCESSFUL
-  TERMINATION OF CPL7-cesm ".
+  TERMINATION OF CPL7-cesm ". 
 
 - ``$DOUT_S_ROOT/$CASE``
 
@@ -182,6 +185,18 @@ When the job is complete, review the following directories and files:
 - ``$CASEROOT/timing``
 
   There should be a couple of timing files there that summarize the model performance.
+
+By default, the model is set to run for 5 days based on the $STOP_N and $STOP_OPTION variables:
+
+.. code-block:: console
+
+   ./xmlquery STOP_N,STOP_OPTION
+
+These default settings will not allow the model to run long enough to produce 
+monthly history climatology files but can be useful in 
+`troubleshooting  <http://esmci.github.io/cime/users_guide/troubleshooting.html>`_
+runtime problems before submitting for a longer time.
+
 
 .. _CIME: http://esmci.github.io/cime
 .. _porting: http://esmci.github.io/cime/users_guide/porting-cime
