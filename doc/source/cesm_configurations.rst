@@ -36,7 +36,7 @@ and an external system processing component
   
 In addition CESM2 is accompanied by a `driver/coupler (cpl7)
 <http://esmci.github.io/cime/driver_cpl/index.html>`_ that coordinates
-the time evolution of geophysical components and periocially permits
+the time evolution of geophysical components and periodically permits
 the components to exchange data.  Each component is represented in one
 of several modes: "active," "data," "dead," or "stub" that permits the
 whole system to activate and deactive component feedbacks by allowing

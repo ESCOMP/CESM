@@ -7,20 +7,15 @@
 Downloading the code and scripts
 --------------------------------
 
-Starting with CESM2, releases are available through a public github
+Starting with CESM2, releases are available through a public GitHub
 repository, `http://github.com/ESCOMP/cesm <http://github.com/ESCOMP/cesm>`_. 
 
-Be aware that for release CESM2.0.0, the CAM and POP models are still
-distributed via a NCAR hosted Subversion server and require a separate
-authentication step for `CESM registered users
-<http://www.cesm.ucar.edu/models/register/register.html>`_.
-
-Access to the code requires both git and Subversion client software
-in place that is compatible with github and our Subversion server software, such
-as a recent version of the command line clients, git and svn. Currently, our
-Subversion server software is at version 1.8.17. We recommend using svn and git clients at
-version 1.8 or later, though older versions may suffice. For more information or to
-download open source tools, visit `Subversion <http://subversion.tigris.org/>`_
+Access to the code requires both git and Subversion client software in
+place that is compatible with GitHub and our Subversion server
+software.  You will need access to the command line clients, ``git``
+(v1.8 or greater) and ``svn`` (v1.8 or greater).  Currently, our Subversion server
+software is at version 1.8.17. For more information or to download
+open source tools, visit `Subversion <http://subversion.tigris.org/>`_
 and `git downloads <https://git-scm.com/downloads>`_.
 
 With valid git and svn clients installed on the machine where CESM will be
@@ -29,17 +24,14 @@ code:
 
 .. code-block:: console
 
-    git clone https://github.com/ESCOMP/cesm.git my_cesm_sandbox
+    git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
     cd my_cesm_sandbox
 
-By default, this command places you at the head of the master branch of
-CESM repository which may include in-test development code. We recommend
-that users should check out a currently supported CESM release tag.
-To list the currently supported CESM2 release tags type:
+To checkout a previous version of CESM, first view the available versions:
 
 .. code-block:: console
 
-    git tag
+    git tag --list 'release-cesm2*'
 
 To checkout a specific CESM release tag type:
 
@@ -47,23 +39,18 @@ To checkout a specific CESM release tag type:
 
     git checkout release-cesm2.0.0
 
-Alternatively, you can clone a release directly 
-
-.. code-block:: console
-
-    git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
-
-then run the **checkout_externals** script from /path/to/my_cesm_sandbox.
+Finally, to checkout all the individual model components,
+run the **checkout_externals** script from /path/to/my_cesm_sandbox.
 
 .. code-block:: console
 
     ./manage_externals/checkout_externals
 
-The **checkout_externals** script will read the configuration file called ``externals.cfg`` and
+The **checkout_externals** script will read the configuration file called ``Externals.cfg`` and
 will download all the external component models and CIME into /path/to/my_cesm_sandbox. 
 
-Details regarding the CESM checkout process are available in the README
-at the bottom of the `http://github.com/ESCOMP/cesm <http://github.com/ESCOMP/cesm>`_ page.
+Details regarding the CESM checkout process are available in the CESM GitHub repo
+`README <http://github.com/ESCOMP/cesm/blob/master/README.rst>`_
 To see more details regarding the checkout_externals script from the command line, type:
 
 .. code-block:: console
@@ -120,28 +107,29 @@ columns of output, as in this example:
        ./components/rtm
        ./components/ww3
 
+You should now have a complete copy of the CESM2 source code in your /path/to/my_cesm_sandbox. 
+
 If there were problems obtaining an external, you might instead see something like:
 
 .. code-block:: console
 
    e-  ./components/cam
 
-For more information, run:
+This might happen if there was an unexpected interruption while downloading.  
+First try rerunning ``./manage_externals/checkout_externals``.
+If there is still a problem, try running with logging turned on using:
 
 .. code-block:: console
 
-   ./manage_externals/checkout_externals --help
+   ./manage_externals/checkout_externals --logging
 
-You should now have a complete copy of the CESM2 source code in your /path/to/my_cesm_sandbox. 
-
+Check the ``manage_externals.log`` file to see what errors are reported.
 
 Downloading input data
 ----------------------
 
-Input datasets are needed to run the model. CESM input data will be made
-available through a separate Subversion input data repository. The
-username and password for the input data repository will be the same as
-for the code repository for CESM registered users.
+Input datasets are needed to run the model. CESM input data are
+available through a separate Subversion input data repository.
 
 .. warning:: The input data repository contains datasets for many configurations and resolutions and is well over 10 TByte in total size. DO NOT try to download the entire dataset.
 
