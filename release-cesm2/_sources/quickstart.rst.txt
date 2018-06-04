@@ -65,8 +65,8 @@ where:
    See `CESM2 Experiment Casenames  <http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames>`_
    for details regarding CESM experiment case naming conventions. 
 
-An example on NCAR machine cheyenne with``$CASEROOT = /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test``
-and $USER set to your cheyenne login name is:
+An example on NCAR machine cheyenne with ``$USER`` set to your cheyenne login name
+and``$CASEROOT = /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test`` is:
 
 .. code-block:: console
 
@@ -139,7 +139,7 @@ Submit the job to the batch queue using the **case.submit** command.
     ./case.submit
 
 When the job is complete, review the following directories and files
-(Note: **xmlquery** can be run with a list or comma separated names
+(Note: **xmlquery** can be run with a list of comma separated names
 and no spaces):
 
 .. code-block:: console

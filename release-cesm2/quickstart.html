@@ -82,8 +82,8 @@ case (<code class="docutils literal notranslate"><span class="pre">$CASE</span><
 See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames">CESM2 Experiment Casenames</a>
 for details regarding CESM experiment case naming conventions.</li>
 </ul>
-<p>An example on NCAR machine cheyenne with``$CASEROOT = /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test``
-and $USER set to your cheyenne login name is:</p>
+<p>An example on NCAR machine cheyenne with <code class="docutils literal notranslate"><span class="pre">$USER</span></code> set to your cheyenne login name
+and``$CASEROOT = /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test`` is:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./create_newcase --case /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test --compset B1850 --res f19_g17</span>
 </pre></div>
 </div>
@@ -135,7 +135,7 @@ the <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span><
 </pre></div>
 </div>
 <p>When the job is complete, review the following directories and files
-(Note: <strong>xmlquery</strong> can be run with a list or comma separated names
+(Note: <strong>xmlquery</strong> can be run with a list of comma separated names
 and no spaces):</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./xmlquery RUNDIR,CASE,CASEROOT,DOUT_S,DOUT_S_ROOT</span>
 </pre></div>
