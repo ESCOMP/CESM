@@ -43,8 +43,8 @@
 <span id="id1"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="how-to-use-this-document">
 <h2>How To Use This Document<a class="headerlink" href="#how-to-use-this-document" title="Permalink to this headline">¶</a></h2>
-<p>This guide instructs both novice and experienced users on downloading, building and
-running <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0">CESM2</a>.</p>
+<p>This guide instructs both novice and experienced users on downloading,
+building and running <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0">CESM2</a>.</p>
 <p>CESM2 is built on the <a class="reference external" href="http://github.com/ESMCI/cime">CIME framework</a>.</p>
 <p>The majority of the CESM2 User’s Guide is contained in the <a class="reference external" href="http://esmci.github.io/cime">CIME</a> documentation.</p>
 <p>If you are a new user, we recommend reading the first few sections of
@@ -55,6 +55,13 @@ ad hoc order.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Throughout the guide, this presentation style indicates shell</span>
 <span class="go">commands and options, fragments of code, namelist variables, etc.</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The “$” prefix for all capatalized words is a CESM documentation
+convention used to indicate either a placeholder for an expected
+input value to a command or a value defined in the CESM XML
+settings.</p>
 </div>
 <p>Please feel free to provide feedback to the <a class="reference external" href="https://bb.cgd.ucar.edu/">CESM forum</a> about how to improve the
 documentation.</p>
@@ -107,8 +114,8 @@ installing and running CESM2.</p>
 <li>UNIX style operating system such as CNL, AIX or Linux</li>
 <li>python &gt;= 2.7</li>
 <li>perl 5</li>
-<li>subversion client (version 1.8 or greater) for downloading CAM and POP</li>
-<li>git client (1.8 or greater recommended)</li>
+<li>subversion client (version 1.8 or greater) for downloading CAM, POP, and WW3</li>
+<li>git client (1.8 or greater)</li>
 <li>Fortran compiler with support for Fortran 2003</li>
 <li>C compiler</li>
 <li>MPI (although CESM does not absolutely require it for running on one processor)</li>
@@ -121,7 +128,7 @@ installing and running CESM2.</p>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">NetCDF must be built with the same Fortran compiler as CESM. In the netCDF build the FC environment variable specifies which Fortran compiler to use. CESM is written mostly in Fortran, netCDF is written in C. Because there is no standard way to call a C program from a Fortran program, the Fortran to C layer between CESM and netCDF will vary depending on which Fortran compiler you use for CESM. When afunction in the netCDF library is called from a Fortran application, the netCDF Fortran API calls the netCDF C library. If you do not use the same compiler to build netCDF and CESM you will in most cases get errors from netCDF saying certain netCDF functions cannot be found.</p>
+<p class="last">NetCDF must be built with the same Fortran compiler as CESM. In the netCDF build the FC environment variable specifies which Fortran compiler to use. CESM is written mostly in Fortran, netCDF is written in C. Because there is no standard way to call a C program from a Fortran program, the Fortran to C layer between CESM and netCDF will vary depending on which Fortran compiler you use for CESM. When a function in the netCDF library is called from a Fortran application, the netCDF Fortran API calls the netCDF C library. If you do not use the same compiler to build netCDF and CESM you will in most cases get errors from netCDF saying certain netCDF functions cannot be found.</p>
 </div>
 <p>Parallel-netCDF, also referred to as pnetcdf, is optional. If a user
 chooses to use pnetcdf, version 1.7.0 or later should be used with CESM.

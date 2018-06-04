@@ -43,48 +43,39 @@
 <span id="downloading"></span><h1>Downloading CESM2<a class="headerlink" href="#downloading-cesm2" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="downloading-the-code-and-scripts">
 <h2>Downloading the code and scripts<a class="headerlink" href="#downloading-the-code-and-scripts" title="Permalink to this headline">¶</a></h2>
-<p>Starting with CESM2, releases are available through a public github
+<p>Starting with CESM2, releases are available through a public GitHub
 repository, <a class="reference external" href="http://github.com/ESCOMP/cesm">http://github.com/ESCOMP/cesm</a>.</p>
-<p>Be aware that for release CESM2.0.0, the CAM and POP models are still
-distributed via a NCAR hosted Subversion server and require a separate
-authentication step for <a class="reference external" href="http://www.cesm.ucar.edu/models/register/register.html">CESM registered users</a>.</p>
-<p>Access to the code requires both git and Subversion client software
-in place that is compatible with github and our Subversion server software, such
-as a recent version of the command line clients, git and svn. Currently, our
-Subversion server software is at version 1.8.17. We recommend using svn and git clients at
-version 1.8 or later, though older versions may suffice. For more information or to
-download open source tools, visit <a class="reference external" href="http://subversion.tigris.org/">Subversion</a>
+<p>Access to the code requires both git and Subversion client software in
+place that is compatible with GitHub and our Subversion server
+software.  You will need access to the command line clients, <code class="docutils literal notranslate"><span class="pre">git</span></code>
+(v1.8 or greater) and <code class="docutils literal notranslate"><span class="pre">svn</span></code> (v1.8 or greater).  Currently, our Subversion server
+software is at version 1.8.17. For more information or to download
+open source tools, visit <a class="reference external" href="http://subversion.tigris.org/">Subversion</a>
 and <a class="reference external" href="https://git-scm.com/downloads">git downloads</a>.</p>
 <p>With valid git and svn clients installed on the machine where CESM will be
 built and run, the user may download the latest version of the release
 code:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/ESCOMP/cesm.git my_cesm_sandbox</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox</span>
 <span class="go">cd my_cesm_sandbox</span>
 </pre></div>
 </div>
-<p>By default, this command places you at the head of the master branch of
-CESM repository which may include in-test development code. We recommend
-that users should check out a currently supported CESM release tag.
-To list the currently supported CESM2 release tags type:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git tag</span>
+<p>To checkout a previous version of CESM, first view the available versions:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git tag --list &#39;release-cesm2*&#39;</span>
 </pre></div>
 </div>
 <p>To checkout a specific CESM release tag type:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git checkout release-cesm2.0.0</span>
 </pre></div>
 </div>
-<p>Alternatively, you can clone a release directly</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox</span>
-</pre></div>
-</div>
-<p>then run the <strong>checkout_externals</strong> script from /path/to/my_cesm_sandbox.</p>
+<p>Finally, to checkout all the individual model components,
+run the <strong>checkout_externals</strong> script from /path/to/my_cesm_sandbox.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals</span>
 </pre></div>
 </div>
-<p>The <strong>checkout_externals</strong> script will read the configuration file called <code class="docutils literal notranslate"><span class="pre">externals.cfg</span></code> and
+<p>The <strong>checkout_externals</strong> script will read the configuration file called <code class="docutils literal notranslate"><span class="pre">Externals.cfg</span></code> and
 will download all the external component models and CIME into /path/to/my_cesm_sandbox.</p>
-<p>Details regarding the CESM checkout process are available in the README
-at the bottom of the <a class="reference external" href="http://github.com/ESCOMP/cesm">http://github.com/ESCOMP/cesm</a> page.
+<p>Details regarding the CESM checkout process are available in the CESM GitHub repo
+<a class="reference external" href="http://github.com/ESCOMP/cesm/blob/master/README.rst">README</a>
 To see more details regarding the checkout_externals script from the command line, type:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals --help</span>
 </pre></div>
@@ -107,23 +98,51 @@ entry of this information will not be required for a given machine.</p>
 <p class="first admonition-title">Warning</p>
 <p class="last">If a problem was encountered during checkout_externals, which may happen with an older version of the svn client software, it may appear to have downloaded successfully, but in fact only a partial checkout has occurred.</p>
 </div>
-<p>To ensure a successful download, make sure the last line of the <code class="docutils literal notranslate"><span class="pre">manage_externals.log</span></code> file contains:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">INFO : 2018-04-03 15:36:19 : checkout_externals completed without exceptions.</span>
+<p>To confirm a successful download of all components, you can run <code class="docutils literal notranslate"><span class="pre">checkout_externals</span></code>
+with the status flag to show the status of the externals:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals -S</span>
 </pre></div>
 </div>
-<p>In addition, you can run <strong>checkout_externals</strong> script with the following options
-to ensure that the checkout process is complete:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals -S -v</span>
+<p>This should show a clean status for all externals, with no characters in the first two
+columns of output, as in this example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Processing externals description file : Externals.cfg</span>
+<span class="go">Processing externals description file : Externals_CLM.cfg</span>
+<span class="go">Processing externals description file : Externals_POP.cfg</span>
+<span class="go">Processing externals description file : Externals_CISM.cfg</span>
+<span class="go">Checking status of externals: clm, fates, ptclm, mosart, ww3, cime, cice, pop, cvmix, marbl, cism, source_cism, rtm, cam,</span>
+<span class="go">    ./cime</span>
+<span class="go">    ./components/cam</span>
+<span class="go">    ./components/cice</span>
+<span class="go">    ./components/cism</span>
+<span class="go">    ./components/cism/source_cism</span>
+<span class="go">    ./components/clm</span>
+<span class="go">    ./components/clm/src/fates</span>
+<span class="go">    ./components/clm/tools/PTCLM</span>
+<span class="go">    ./components/mosart</span>
+<span class="go">    ./components/pop</span>
+<span class="go">    ./components/pop/externals/CVMix</span>
+<span class="go">    ./components/pop/externals/MARBL</span>
+<span class="go">    ./components/rtm</span>
+<span class="go">    ./components/ww3</span>
 </pre></div>
 </div>
 <p>You should now have a complete copy of the CESM2 source code in your /path/to/my_cesm_sandbox.</p>
+<p>If there were problems obtaining an external, you might instead see something like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">e-  ./components/cam</span>
+</pre></div>
+</div>
+<p>This might happen if there was an unexpected interruption while downloading.
+First try rerunning <code class="docutils literal notranslate"><span class="pre">./manage_externals/checkout_externals</span></code>.
+If there is still a problem, try running with logging turned on using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals --logging</span>
+</pre></div>
+</div>
+<p>Check the <code class="docutils literal notranslate"><span class="pre">manage_externals.log</span></code> file to see what errors are reported.</p>
 </div>
 <div class="section" id="downloading-input-data">
 <h2>Downloading input data<a class="headerlink" href="#downloading-input-data" title="Permalink to this headline">¶</a></h2>
-<p>Input datasets are needed to run the model. CESM input data will be made
-available through a separate Subversion input data repository. The
-username and password for the input data repository will be the same as
-for the code repository for CESM registered users.</p>
+<p>Input datasets are needed to run the model. CESM input data are
+available through a separate Subversion input data repository.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The input data repository contains datasets for many configurations and resolutions and is well over 10 TByte in total size. DO NOT try to download the entire dataset.</p>
