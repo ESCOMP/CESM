@@ -60,19 +60,6 @@ To see more details regarding the checkout_externals script from the command lin
 
 .. warning:: When contacting the Subversion server for the first time, you may need to accept an authentication certification.
 
-Be aware that the request is set to the current machine login id and you
-must enter the CESM registered default username of 'guestuser' by
-pressing the 'Enter' key when prompted for a Username.
-
-You may be prompted up to 3 times for the username and password when
-checking out the code for the first time from the Subversion server.
-This is because the code is distributed across a number of different
-Subversion repositories and each repository requires authentication.
-
-Once correctly entered, the username and password will be cached in a
-protected subdirectory of the user's home directory so that repeated
-entry of this information will not be required for a given machine.
-
 .. warning:: If a problem was encountered during checkout_externals, which may happen with an older version of the svn client software, it may appear to have downloaded successfully, but in fact only a partial checkout has occurred. 
 
 To confirm a successful download of all components, you can run ``checkout_externals``
