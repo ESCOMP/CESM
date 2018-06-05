@@ -1,4 +1,95 @@
 ===============================================================
+Tag name: cesm2.0.0-rc.01
+Originator(s): CSEG
+Date: 5 June 2018
+One-line Summary: Release candidate for cesm2.0.0 
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_08/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_02
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_0_rel_04
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.01
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.01
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.00
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_0_rel_n02 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01
+
+am
+    Cheryl Craig 2018-06-05 - release_tags/cam_cesm2_0_rel_08 - components/cam (cesm2.0.0-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_08
+
+    For Steve
+
+    Put back in QSC5 and QSC4 two degree aquaplanet test which were inadvertently removed in rel_07
+
+
+    Cheryl Craig 2018-06-05 - release_tags/cam_cesm2_0_rel_07 - components/cam (cesm2.0.0-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_07
+
+    For Brian and Steve
+
+    Remove failing SE aquaplanet test
+    Fix in build-namelist for inputdata list output
+
+
+    Steve Goldhaber 2018-05-31 - release_tags/cam_cesm2_0_rel_06 - components/cam (cesm2.0.0-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_06
+
+    Fix bug in axial angular momentum diagnostics
+
+
+    Cheryl Craig 2018-05-29 - release_tags/cam_cesm2_0_rel_05 - components/cam (cesm2.0.0-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_05
+
+    Increase time limit for DART test
+    Force dtime to be an integer in buildnml (fixes issue on bluewaters)
+
+
+    Cheryl Craig 2018-05-25 - release_tags/cam_cesm2_0_rel_04 - components/cam (cesm2.0.0-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_04
+
+    Fix testing grid
+
+
+    Cheryl Craig 2018-05-24 - release_tags/cam_cesm2_0_rel_03 - components/cam (cesm2.0.0-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_03
+
+    Increase time limit on two tests
+    Remove F2000climo test using ne30
+    Add QPC6 and QSC6 ne30 tests
+
+
+cice
+    Chris Fischer 2018-05-30 - cice5_cesm2_0_rel_02 - components/cice (cesm2.0.0-rc.01)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_cesm2_0_rel_02
+
+     Inputdata fix
+
+
+cime
+    Chris Fischer 2018-06-05 - cime_cesm2_0_rel_04 - cime (cesm2.0.0-rc.01)
+    https://github.com/ESMCI/cime/tags/cime_cesm2_0_rel_04
+
+    Hopefully only doc updates
+
+
+    James Edwards 2018-05-30 - cime_cesm2_0_rel_04 - cime (cesm2.0.0-rc.01)
+    https://github.com/ESMCI/cime/tags/cime_cesm2_0_rel_04
+
+    Remove rtm and mosart from config_archive.xml (now handled in components)
+    Add grid f05_f05_mg17
+    Remove MPI_TYPE_CREATE_INDEXED_BLOCK from pio1, now handled in mpi-serial
+
+
+pop
+    Michael Levy 2018-05-24 - release_tags/pop2_cesm2_0_rel_n02 - components/pop (cesm2.0.0-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_0_rel_n02
+
+    Get MARBL external from public github repository, not from subversion mirror.
+    Fix/remove bad POP compsets
+===============================================================
 Tag name: cesm2_0_beta10
 Originator(s): CSEG
 Date: 25 May 2018
