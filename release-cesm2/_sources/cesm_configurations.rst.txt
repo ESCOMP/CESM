@@ -130,14 +130,14 @@ The `supported grid resolutions
 <http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html>`_ are
 specified in CESM by setting an overall model resolution.  Once the
 overall model resolution is set, components will read in appropriate
-grids files and the coupler will read in appropriate mapping weights
+grid files and the coupler will read in appropriate mapping weights
 files. Coupler mapping weights are always generated externally in
 CESM. The components will send the grid data to the coupler at
 initialization, and the coupler will check that the component grids
 are consistent with each other and with the mapping weights files.
 
 In CESM2, the ocean and ice must be on the same grid, but the
-atmosphere and land and river runoff can each be on different grids.
+atmosphere, land, river runoff and land ice can each be on different grids.
 Each component determines its own unique grid decomposition based upon
 the total number of pes or processing elements assigned to that component.
 
@@ -149,7 +149,7 @@ they can be interpolated from regular lon/lat grids in the data models.
 The finite volume is generally associated with
 atmosphere and land models but the data ocean and data ice models are
 also supported on that grid. The cubed sphere grid is used only by the
-active atmosphere model, cam. And the displaced pole and tripole grids
+active atmosphere model, cam. The displaced pole and tripole grids
 are used by the ocean and ice models. Not every grid can be run by every
 component. The ocean and ice models run on either a Greenland dipole or
 a tripole grid. The Greenland Pole grid is a
