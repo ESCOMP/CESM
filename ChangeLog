@@ -1,12 +1,12 @@
 ===============================================================
 Tag name: cesm2.0.0-rc.01
 Originator(s): CSEG
-Date: 5 June 2018
+Date: 6 June 2018
 One-line Summary: Release candidate for cesm2.0.0 
 
 Component tags used for this CESM beta tag :
 
-components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_08/components/cam
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_09/components/cam
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_02
 cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_0_rel_04
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.01
@@ -16,7 +16,12 @@ components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/rel
 components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
 components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01
 
-am
+cam
+    Cheryl Craig 2018-06-05 - release_tags/cam_cesm2_0_rel_09 - components/cam (cesm2.0.0-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_09
+
+    Put CAM's externals into release_tags so they can be accessed without needing a password
+
     Cheryl Craig 2018-06-05 - release_tags/cam_cesm2_0_rel_08 - components/cam (cesm2.0.0-rc.01)
     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_08
 
