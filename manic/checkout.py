@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Tool to assemble respositories represented in a model-description file.
+Tool to assemble repositories represented in a model-description file.
 
 If loaded as a module (e.g., in a component's buildcpp), it can be used
 to check the validity of existing subdirectories and load missing sources.
@@ -48,16 +48,8 @@ def commandline_arguments(args=None):
     description = '''
 
 %(prog)s manages checking out groups of externals from revision
-control based on a externals description file. By default only the
+control based on an externals description file. By default only the
 required externals are checkout out.
-
-Operations performed by manage_externals utilities are explicit and
-data driven. %(prog)s will always make the working copy *exactly*
-match what is in the externals file when modifying the working copy of
-a repository.
-
-If %(prog)s isn't doing what you expected, double check the contents
-of the externals description file.
 
 Running %(prog)s without the '--status' option will always attempt to
 synchronize the working copy to exactly match the externals description.
@@ -76,7 +68,7 @@ obtained a sub-project via a checkout of another project:
     $ git clone git@github.com/{SOME_ORG}/some-project some-project-dev
 
 and you need to checkout the sub-project externals, then the root of the
-source tree is /path/to/some-project-dev. Do *NOT* run %(prog)s
+source tree remains /path/to/some-project-dev. Do *NOT* run %(prog)s
 from within /path/to/some-project-dev/sub-project
 
 The root of the source tree will be referred to as `${SRC_ROOT}` below.
@@ -109,7 +101,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     description file:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/%(prog)s --excernals my-externals.cfg
+        $ ./manage_externals/%(prog)s --externals my-externals.cfg
 
   * Status summary of the repositories managed by %(prog)s:
 
@@ -178,8 +170,9 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
     Note: 'externals_only' will only process the external's own
     external description file without trying to manage a repository
-    for the component. This is used for retreiving externals for
-    standalone components like cam and clm. If the source root of the
+    for the component. This is used for retrieving externals for
+    standalone components like cam and ctsm which also serve as
+    sub-components within a larger project. If the source root of the
     externals_only component is the same as the main source root, then
     the local path must be set to '.', the unix current working
     directory, e. g. 'local_path = .'
@@ -219,21 +212,40 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
 
   * externals (string) : used to make manage_externals aware of
     sub-externals required by an external. This is a relative path to
-    the external's root directory. For example, the main externals
-    description has an external checkout out at 'src/useful_library'.
-    useful_library requires additional externals to be complete.
-    Those additional externals are managed from the source root by the
-    externals description file pointed 'useful_library/sub-xternals.cfg',
-    Then the main 'externals' field in the top level repo should point to
-    'sub-externals.cfg'.
+    the external's root directory. For example, if LIBX is often used
+    as a sub-external, it might have an externals file (for its
+    externals) called Externals_LIBX.cfg. To use libx as a standalone
+    checkout, it would have another file, Externals.cfg with the
+    following entry:
 
-  * Lines begining with '#' or ';' are comments and will be ignored.
+    [ libx ]
+    local_path = .
+    protocol = externals_only
+    externals = Externals_LIBX.cfg
+    required = True
+
+    Now, %(prog)s will process Externals.cfg and also process
+    Externals_LIBX.cfg as if it was a sub-external.
+
+  * Lines beginning with '#' or ';' are comments and will be ignored.
 
 # Obtaining this tool, reporting issues, etc.
 
   The master repository for manage_externals is
   https://github.com/ESMCI/manage_externals. Any issues with this tool
   should be reported there.
+
+# Troubleshooting
+
+Operations performed by manage_externals utilities are explicit and
+data driven. %(prog)s will always attempt to make the working copy
+*exactly* match what is in the externals file when modifying the
+working copy of a repository.
+
+If %(prog)s is not doing what you expected, double check the contents
+of the externals description file or examine the output of
+./manage_externals/%(prog)s --status
+
 '''
 
     parser = argparse.ArgumentParser(
@@ -244,7 +256,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     # user options
     #
     parser.add_argument("components", nargs="*",
-                        help="Specific component(s) to checkout. By default"
+                        help="Specific component(s) to checkout. By default, "
                         "all required externals are checked out.")
 
     parser.add_argument('-e', '--externals', nargs='?',
@@ -258,9 +270,9 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
                         'optional externals.')
 
     parser.add_argument('-S', '--status', action='store_true', default=False,
-                        help='Output status of the repositories managed by '
+                        help='Output the status of the repositories managed by '
                         '%(prog)s. By default only summary information '
-                        'is provided. Use verbose output to see details.')
+                        'is provided. Use the verbose option to see details.')
 
     parser.add_argument('-v', '--verbose', action='count', default=0,
                         help='Output additional information to '
