@@ -32,7 +32,7 @@ Installing, building and running CESM requires:
 
 * subversion client (we have tested with versions 1.6.11 and newer)
 
-* python2 version 2.7 or newer
+* python2 version 2.7 or newer (cime supports python3, but some CESM components are not python3-compliant)
 
 * perl version 5
 
