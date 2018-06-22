@@ -129,8 +129,31 @@ which can be queried using:
 Run the case
 ============
 
-Modify runtime settings in ``env_run.xml`` (optional). In particular, you can set
-the ``$DOUT_S`` variable to FALSE to turn off short term archiving.
+Modify runtime settings in ``env_run.xml`` (optional). Two settings you may want to change
+now are:
+
+1. Run length: By default, the model is set to run for 5 days based on the ``$STOP_N`` and
+   ``$STOP_OPTION`` variables:
+
+   .. code-block:: console
+
+      ./xmlquery STOP_OPTION,STOP_N
+
+   These default settings can be useful in `troubleshooting
+   <http://esmci.github.io/cime/users_guide/troubleshooting.html>`_ runtime problems
+   before submitting for a longer time, but will not allow the model to run long enough to
+   produce monthly history climatology files. In order to produce history files, increase
+   the run length to a month or longer:
+
+   .. code-block:: console
+
+      ./xmlchange STOP_OPTION=nmonths,STOP_N=1
+
+2. You can set the ``$DOUT_S`` variable to FALSE to turn off short term archiving:
+
+   .. code-block:: console
+
+      ./xmlchange DOUT_S=FALSE
 
 Submit the job to the batch queue using the **case.submit** command.
 
@@ -153,8 +176,8 @@ and no spaces):
   component (i.e. of the form cpl.log.yymmdd-hhmmss) if ``$DOUT_S == FALSE``. 
   Each component writes its own log file. Also see whether any restart or history files were
   written. To check that a run completed successfully, check the last
-  several lines of the cpl.log file for the string " SUCCESSFUL
-  TERMINATION OF CPL7-cesm ". 
+  several lines of the cpl.log file for the string "SUCCESSFUL
+  TERMINATION OF CPL7-cesm".
 
 - ``$DOUT_S_ROOT/$CASE``
 
@@ -185,17 +208,6 @@ and no spaces):
 - ``$CASEROOT/timing``
 
   There should be a couple of timing files there that summarize the model performance.
-
-By default, the model is set to run for 5 days based on the $STOP_N and $STOP_OPTION variables:
-
-.. code-block:: console
-
-   ./xmlquery STOP_N,STOP_OPTION
-
-These default settings will not allow the model to run long enough to produce 
-monthly history climatology files but can be useful in 
-`troubleshooting  <http://esmci.github.io/cime/users_guide/troubleshooting.html>`_
-runtime problems before submitting for a longer time.
 
 
 .. _CIME: http://esmci.github.io/cime
