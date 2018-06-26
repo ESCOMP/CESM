@@ -31,42 +31,51 @@ See the `supported component sets <http://www.cesm.ucar.edu/models/cesm2.0/confi
 machines <http://www.cesm.ucar.edu/models/cesm2.0/config/machines.html>`_ for a complete list of CESM2
 supported component sets, grids and computational platforms.
 
+.. note:: 
+
+   Variables presented as ``$VAR`` in this guide typically refer to variables in XML files
+   in a CESM case. From within a case directory, you can determine the value of such a
+   variable with ``./xmlquery VAR``. In some instances, ``$VAR`` refers to a shell
+   variable or some other variable; we try to make these exceptions clear.
+
 Create a case
 ==============
 
-The `create_newcase`_ command creates a case directory containing the
-scripts and XML files to configure a case (see below) for the requested
-resolution, component set, and machine. **create_newcase** has several
-required arguments (invoke **create_newcase --help** for help).
+The `create_newcase`_ command creates a case directory containing the scripts and XML
+files to configure a case (see below) for the requested resolution, component set, and
+machine. **create_newcase** has three required arguments: ``--case``, ``--compset`` and
+``--res`` (invoke **create_newcase --help** for help).
 
-The ``$PROJECT`` variable must be specified in either your 
-shell environment or as the ``--project`` argument to **create_newcase**.
+On machines where a project or account code is needed (including NCAR's machines), you
+must either specify the ``--project`` argument to **create_newcase** or set the
+``$PROJECT`` variable in your shell environment.
 
 If running on a supported machine, that machine will
-normally be recognized automatically and therefore it is not required
+normally be recognized automatically and therefore it is *not* required
 to specify the ``--machine`` argument to **create_newcase**. 
 
 Invoke **create_newcase** as follows:
 
 .. code-block:: console
 
-    ./create_newcase --case $CASEROOT --compset $COMPSET --res $GRID
+    ./create_newcase --case CASEROOT --compset COMPSET --res GRID
 
 where:
 
--  ``$COMPSET`` refers to the `component set <http://www.cesm.ucar.edu/models/cesm2.0/config/compsets.html>`_.
+- ``CASEROOT`` is the full path specifying where the case should be created. If not an
+  absolute path, then the case is created in a location relative to the current working
+  directory. This path is also referred to as the *case directory*. The name of the case
+  (``$CASE``) will be the last path component (i.e., basename) of ``CASEROOT``. See `CESM2
+  Experiment Casenames
+  <http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames>`_ for
+  details regarding CESM experiment case naming conventions.
 
--  ``$GRID`` refers to the model `resolution <http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html>`_.
+- ``COMPSET`` is the `component set <http://www.cesm.ucar.edu/models/cesm2.0/config/compsets.html>`_.
 
--  ``$CASEROOT`` refers to the full path of the root directory where the
-   case (``$CASE``) will be created. 
+- ``GRID`` is the model `resolution <http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html>`_.
 
--  ``$CASE`` refers to the case name, which is the basename of $CASEROOT.
-   See `CESM2 Experiment Casenames  <http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames>`_
-   for details regarding CESM experiment case naming conventions. 
-
-An example on NCAR machine cheyenne with ``$USER`` set to your cheyenne login name
-and``$CASEROOT = /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test`` is:
+Here is an example on NCAR machine cheyenne with the ``$USER`` shell environment variable
+set to your cheyenne login name:
 
 .. code-block:: console
 
@@ -79,14 +88,14 @@ Setting up the case run script
 Issuing the `case.setup`_ command creates scripts needed to run the model
 along with namelist ``user_nl_xxx`` files, where xxx denotes the set of components
 for the given case configuration. Before invoking **case.setup**, modify
-the ``env_mach_pes.xml`` file in CASEROOT using the `xmlchange`_ command
+the ``env_mach_pes.xml`` file in the case directory using the `xmlchange`_ command
 as needed for the experiment.
 
-cd to the ``$CASEROOT`` directory.
+cd to the case directory. Following the example from above:
 
 .. code-block:: console
 
-    cd $CASEROOT
+    cd /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test
 
 Modify settings in ``env_mach_pes.xml`` (optional). (Note: To edit any of
 the env xml files, use the `xmlchange`_ command.
@@ -161,9 +170,11 @@ Submit the job to the batch queue using the **case.submit** command.
 
     ./case.submit
 
-When the job is complete, review the following directories and files
-(Note: **xmlquery** can be run with a list of comma separated names
-and no spaces):
+When the job is complete, most output will *NOT* be written under the case directory, but
+instead under some other directories (on NCAR's cheyenne machine, these other directories
+will be in ``/glade/scratch/$USER``). Review the following directories and files, whose
+locations can be found with **xmlquery** (note: **xmlquery** can be run with a list of
+comma separated names and no spaces):
 
 .. code-block:: console
 
@@ -186,7 +197,7 @@ and no spaces):
   See `CESM Model Output File Locations <http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#modelOutputLocations>`_
   for details regarding the component model output filenames and locations. 
 
-  ``$DOUT_S_ROOT/$CASE`` is the short term archive directory for this ``$CASE``. If ``$DOUT_S`` is
+  ``$DOUT_S_ROOT/$CASE`` is the short term archive directory for this case. If ``$DOUT_S`` is
   FALSE, then no archive directory should exist. If ``$DOUT_S`` is TRUE, then
   log, history, and restart files should have been copied into a directory
   tree here.
@@ -207,7 +218,7 @@ and no spaces):
 
 - ``$CASEROOT/timing``
 
-  There should be a couple of timing files there that summarize the model performance.
+  There should be two timing files there that summarize the model performance.
 
 
 .. _CIME: http://esmci.github.io/cime
