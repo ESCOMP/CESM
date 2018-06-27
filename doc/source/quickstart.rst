@@ -58,15 +58,18 @@ Invoke **create_newcase** as follows:
 
 .. code-block:: console
 
-    ./create_newcase --case CASEROOT --compset COMPSET --res GRID
+    ./create_newcase --case CASENAME --compset COMPSET --res GRID
 
 where:
 
-- ``CASEROOT`` is the full path specifying where the case should be created. If not an
-  absolute path, then the case is created in a location relative to the current working
-  directory. This path is also referred to as the *case directory*. The name of the case
-  (``$CASE``) will be the last path component (i.e., basename) of ``CASEROOT``. See `CESM2
-  Experiment Casenames
+- ``CASENAME`` defines the name of your case (stored in the ``$CASE`` XML variable). This
+  is a very important piece of metadata that will be used in filenames, internal metadata
+  and directory paths. **create_newcase** will create the *case directory* with the same
+  name as the ``CASENAME``. If ``CASENAME`` is simply a name (not a path), the case
+  directory is created in the directory where you executed create_newcase. If ``CASENAME``
+  is a relative or absolute path, the case directory is created there, and the name of the
+  case will be the last component of the path. The full path to the case directory will be
+  stored in the ``$CASEROOT`` XML variable. See `CESM2 Experiment Casenames
   <http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames>`_ for
   details regarding CESM experiment case naming conventions.
 
