@@ -126,8 +126,8 @@ provides tools to check and download input data automatically.
 A local input data directory should exist on the local disk, and it also 
 needs to be set in the CESM scripts via the variable ``$DIN_LOC_ROOT.``
 For supported machines, this variable is preset. For generic machines,
-this variable is set as an argument to **create_newcase**. It is recommended that all users
-of a given filesystem share the same ``$DIN_LOC_ROOT`` directory.
+this variable is set via the ``--input-dir`` argument to **create_newcase**.
+It is recommended that all users of a given filesystem share the same ``$DIN_LOC_ROOT`` directory.
 
 The files in the subdirectories of ``$DIN_LOC_ROOT`` should be
 write-protected. This prevents these files from being accidentally

@@ -28,10 +28,10 @@ ad hoc order.
 
 .. note:: 
 
-   The "$" prefix for all capatalized words is a CESM documentation
-   convention used to indicate either a placeholder for an expected
-   input value to a command or a value defined in the CESM XML
-   settings.
+   Variables presented as ``$VAR`` in this guide typically refer to variables in XML files
+   in a CESM case. From within a case directory, you can determine the value of such a
+   variable with ``./xmlquery VAR``. In some instances, ``$VAR`` refers to a shell
+   variable or some other variable; we try to make these exceptions clear.
     
 Please feel free to provide feedback to the `CESM forum <https://bb.cgd.ucar.edu/>`_ about how to improve the
 documentation. 
@@ -125,6 +125,6 @@ Parallel-netCDF, also referred to as pnetcdf, is optional. If a user
 chooses to use pnetcdf, version 1.7.0 or later should be used with CESM.
 It is a library that is file-format compatible with netCDF, and provides
 higher performance by using MPI-IO. Pnetcdf is enabled by setting the
-``$PNETCDF_PATH`` variable in the ``Macros.make`` file. 
+``$PNETCDF_PATH`` Makefile variable in the ``Macros.make`` file.
 
 .. _CIME: http://esmci.github.io/cime
