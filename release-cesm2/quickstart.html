@@ -57,33 +57,45 @@ in the <code class="docutils literal notranslate"><span class="pre">my_cesm_sand
 <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html">supported model resolutions</a> and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/machines.html">supported
 machines</a> for a complete list of CESM2
 supported component sets, grids and computational platforms.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Variables presented as <code class="docutils literal notranslate"><span class="pre">$VAR</span></code> in this guide typically refer to variables in XML files
+in a CESM case. From within a case directory, you can determine the value of such a
+variable with <code class="docutils literal notranslate"><span class="pre">./xmlquery</span> <span class="pre">VAR</span></code>. In some instances, <code class="docutils literal notranslate"><span class="pre">$VAR</span></code> refers to a shell
+variable or some other variable; we try to make these exceptions clear.</p>
+</div>
 <div class="section" id="create-a-case">
 <h2>Create a case<a class="headerlink" href="#create-a-case" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="http://esmci.github.io/cime/users_guide/create-a-case.html">create_newcase</a> command creates a case directory containing the
-scripts and XML files to configure a case (see below) for the requested
-resolution, component set, and machine. <strong>create_newcase</strong> has several
-required arguments (invoke <strong>create_newcase –help</strong> for help).</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">$PROJECT</span></code> variable must be specified in either your
-shell environment or as the <code class="docutils literal notranslate"><span class="pre">--project</span></code> argument to <strong>create_newcase</strong>.</p>
+<p>The <a class="reference external" href="http://esmci.github.io/cime/users_guide/create-a-case.html">create_newcase</a> command creates a case directory containing the scripts and XML
+files to configure a case (see below) for the requested resolution, component set, and
+machine. <strong>create_newcase</strong> has three required arguments: <code class="docutils literal notranslate"><span class="pre">--case</span></code>, <code class="docutils literal notranslate"><span class="pre">--compset</span></code> and
+<code class="docutils literal notranslate"><span class="pre">--res</span></code> (invoke <strong>create_newcase –help</strong> for help).</p>
+<p>On machines where a project or account code is needed (including NCAR’s machines), you
+must either specify the <code class="docutils literal notranslate"><span class="pre">--project</span></code> argument to <strong>create_newcase</strong> or set the
+<code class="docutils literal notranslate"><span class="pre">$PROJECT</span></code> variable in your shell environment.</p>
 <p>If running on a supported machine, that machine will
-normally be recognized automatically and therefore it is not required
+normally be recognized automatically and therefore it is <em>not</em> required
 to specify the <code class="docutils literal notranslate"><span class="pre">--machine</span></code> argument to <strong>create_newcase</strong>.</p>
 <p>Invoke <strong>create_newcase</strong> as follows:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./create_newcase --case $CASEROOT --compset $COMPSET --res $GRID</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./create_newcase --case CASENAME --compset COMPSET --res GRID</span>
 </pre></div>
 </div>
 <p>where:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">$COMPSET</span></code> refers to the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/compsets.html">component set</a>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">$GRID</span></code> refers to the model <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html">resolution</a>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">$CASEROOT</span></code> refers to the full path of the root directory where the
-case (<code class="docutils literal notranslate"><span class="pre">$CASE</span></code>) will be created.</li>
-<li><code class="docutils literal notranslate"><span class="pre">$CASE</span></code> refers to the case name, which is the basename of $CASEROOT.
-See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames">CESM2 Experiment Casenames</a>
-for details regarding CESM experiment case naming conventions.</li>
+<li><code class="docutils literal notranslate"><span class="pre">CASENAME</span></code> defines the name of your case (stored in the <code class="docutils literal notranslate"><span class="pre">$CASE</span></code> XML variable). This
+is a very important piece of metadata that will be used in filenames, internal metadata
+and directory paths. <strong>create_newcase</strong> will create the <em>case directory</em> with the same
+name as the <code class="docutils literal notranslate"><span class="pre">CASENAME</span></code>. If <code class="docutils literal notranslate"><span class="pre">CASENAME</span></code> is simply a name (not a path), the case
+directory is created in the directory where you executed create_newcase. If <code class="docutils literal notranslate"><span class="pre">CASENAME</span></code>
+is a relative or absolute path, the case directory is created there, and the name of the
+case will be the last component of the path. The full path to the case directory will be
+stored in the <code class="docutils literal notranslate"><span class="pre">$CASEROOT</span></code> XML variable. See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames">CESM2 Experiment Casenames</a> for
+details regarding CESM experiment case naming conventions.</li>
+<li><code class="docutils literal notranslate"><span class="pre">COMPSET</span></code> is the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/compsets.html">component set</a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">GRID</span></code> is the model <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html">resolution</a>.</li>
 </ul>
-<p>An example on NCAR machine cheyenne with <code class="docutils literal notranslate"><span class="pre">$USER</span></code> set to your cheyenne login name
-and``$CASEROOT = /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test`` is:</p>
+<p>Here is an example on NCAR machine cheyenne with the <code class="docutils literal notranslate"><span class="pre">$USER</span></code> shell environment variable
+set to your cheyenne login name:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./create_newcase --case /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test --compset B1850 --res f19_g17</span>
 </pre></div>
 </div>
@@ -93,10 +105,10 @@ and``$CASEROOT = /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test`` is:</p>
 <p>Issuing the <a class="reference external" href="http://esmci.github.io/cime/users_guide/setting-up-a-case.html">case.setup</a> command creates scripts needed to run the model
 along with namelist <code class="docutils literal notranslate"><span class="pre">user_nl_xxx</span></code> files, where xxx denotes the set of components
 for the given case configuration. Before invoking <strong>case.setup</strong>, modify
-the <code class="docutils literal notranslate"><span class="pre">env_mach_pes.xml</span></code> file in CASEROOT using the <a class="reference external" href="http://esmci.github.io/cime/Tools_user/xmlchange.html">xmlchange</a> command
+the <code class="docutils literal notranslate"><span class="pre">env_mach_pes.xml</span></code> file in the case directory using the <a class="reference external" href="http://esmci.github.io/cime/Tools_user/xmlchange.html">xmlchange</a> command
 as needed for the experiment.</p>
-<p>cd to the <code class="docutils literal notranslate"><span class="pre">$CASEROOT</span></code> directory.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd $CASEROOT</span>
+<p>cd to the case directory. Following the example from above:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test</span>
 </pre></div>
 </div>
 <p>Modify settings in <code class="docutils literal notranslate"><span class="pre">env_mach_pes.xml</span></code> (optional). (Note: To edit any of
@@ -128,15 +140,37 @@ which can be queried using:</p>
 </div>
 <div class="section" id="run-the-case">
 <h2>Run the case<a class="headerlink" href="#run-the-case" title="Permalink to this headline">¶</a></h2>
-<p>Modify runtime settings in <code class="docutils literal notranslate"><span class="pre">env_run.xml</span></code> (optional). In particular, you can set
-the <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span></code> variable to FALSE to turn off short term archiving.</p>
+<p>Modify runtime settings in <code class="docutils literal notranslate"><span class="pre">env_run.xml</span></code> (optional). Two settings you may want to change
+now are:</p>
+<ol class="arabic">
+<li><p class="first">Run length: By default, the model is set to run for 5 days based on the <code class="docutils literal notranslate"><span class="pre">$STOP_N</span></code> and
+<code class="docutils literal notranslate"><span class="pre">$STOP_OPTION</span></code> variables:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./xmlquery STOP_OPTION,STOP_N</span>
+</pre></div>
+</div>
+<p>These default settings can be useful in <a class="reference external" href="http://esmci.github.io/cime/users_guide/troubleshooting.html">troubleshooting</a> runtime problems
+before submitting for a longer time, but will not allow the model to run long enough to
+produce monthly history climatology files. In order to produce history files, increase
+the run length to a month or longer:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./xmlchange STOP_OPTION=nmonths,STOP_N=1</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">You can set the <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span></code> variable to FALSE to turn off short term archiving:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./xmlchange DOUT_S=FALSE</span>
+</pre></div>
+</div>
+</li>
+</ol>
 <p>Submit the job to the batch queue using the <strong>case.submit</strong> command.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./case.submit</span>
 </pre></div>
 </div>
-<p>When the job is complete, review the following directories and files
-(Note: <strong>xmlquery</strong> can be run with a list of comma separated names
-and no spaces):</p>
+<p>When the job is complete, most output will <em>NOT</em> be written under the case directory, but
+instead under some other directories (on NCAR’s cheyenne machine, these other directories
+will be in <code class="docutils literal notranslate"><span class="pre">/glade/scratch/$USER</span></code>). Review the following directories and files, whose
+locations can be found with <strong>xmlquery</strong> (note: <strong>xmlquery</strong> can be run with a list of
+comma separated names and no spaces):</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./xmlquery RUNDIR,CASE,CASEROOT,DOUT_S,DOUT_S_ROOT</span>
 </pre></div>
 </div>
@@ -147,15 +181,15 @@ location where CESM2 was run. There should be log files there for every
 component (i.e. of the form cpl.log.yymmdd-hhmmss) if <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span> <span class="pre">==</span> <span class="pre">FALSE</span></code>.
 Each component writes its own log file. Also see whether any restart or history files were
 written. To check that a run completed successfully, check the last
-several lines of the cpl.log file for the string ” SUCCESSFUL
-TERMINATION OF CPL7-cesm “.</p>
+several lines of the cpl.log file for the string “SUCCESSFUL
+TERMINATION OF CPL7-cesm”.</p>
 </li>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">$DOUT_S_ROOT/$CASE</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">$DOUT_S_ROOT</span></code> refers to the short term archive path location on local disk.
 This path is used by the case.st_archive script when <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span> <span class="pre">=</span> <span class="pre">TRUE</span></code>.
 See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#modelOutputLocations">CESM Model Output File Locations</a>
 for details regarding the component model output filenames and locations.</p>
-<p><code class="docutils literal notranslate"><span class="pre">$DOUT_S_ROOT/$CASE</span></code> is the short term archive directory for this <code class="docutils literal notranslate"><span class="pre">$CASE</span></code>. If <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span></code> is
+<p><code class="docutils literal notranslate"><span class="pre">$DOUT_S_ROOT/$CASE</span></code> is the short term archive directory for this case. If <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span></code> is
 FALSE, then no archive directory should exist. If <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span></code> is TRUE, then
 log, history, and restart files should have been copied into a directory
 tree here.</p>
@@ -172,17 +206,9 @@ are in the <code class="docutils literal notranslate"><span class="pre">$RUNDIR<
 <p>The case namelist files are copied into this directory from the <code class="docutils literal notranslate"><span class="pre">$RUNDIR</span></code>.</p>
 </li>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">$CASEROOT/timing</span></code></p>
-<p>There should be a couple of timing files there that summarize the model performance.</p>
+<p>There should be two timing files there that summarize the model performance.</p>
 </li>
 </ul>
-<p>By default, the model is set to run for 5 days based on the $STOP_N and $STOP_OPTION variables:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./xmlquery STOP_N,STOP_OPTION</span>
-</pre></div>
-</div>
-<p>These default settings will not allow the model to run long enough to produce
-monthly history climatology files but can be useful in
-<a class="reference external" href="http://esmci.github.io/cime/users_guide/troubleshooting.html">troubleshooting</a>
-runtime problems before submitting for a longer time.</p>
 </div>
 </div>
 

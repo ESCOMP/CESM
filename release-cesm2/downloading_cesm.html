@@ -142,8 +142,8 @@ provides tools to check and download input data automatically.</p>
 <p>A local input data directory should exist on the local disk, and it also
 needs to be set in the CESM scripts via the variable <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT.</span></code>
 For supported machines, this variable is preset. For generic machines,
-this variable is set as an argument to <strong>create_newcase</strong>. It is recommended that all users
-of a given filesystem share the same <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> directory.</p>
+this variable is set via the <code class="docutils literal notranslate"><span class="pre">--input-dir</span></code> argument to <strong>create_newcase</strong>.
+It is recommended that all users of a given filesystem share the same <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> directory.</p>
 <p>The files in the subdirectories of <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> should be
 write-protected. This prevents these files from being accidentally
 modified or deleted. The directories in <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> should generally
