@@ -39,6 +39,24 @@
       </pes>
     </mach>
   </grid>
+
+  <grid name="any">
+    <mach name="cori-knl">
+      <pes pesize="any" compset="any">
+	<comment>use 2 hyperthreads per core</comment>
+	<nthrds>
+	  <nthrds_atm>2</nthrds_atm>
+	  <nthrds_lnd>2</nthrds_lnd>
+	  <nthrds_rof>2</nthrds_rof>
+	  <nthrds_ice>2</nthrds_ice>
+	  <nthrds_ocn>2</nthrds_ocn>
+	  <nthrds_glc>2</nthrds_glc>
+	  <nthrds_wav>2</nthrds_wav>
+	  <nthrds_cpl>2</nthrds_cpl>
+	</nthrds>
+      </pes>
+    </mach>
+  </grid>
   <grid name="a%1.9x2.5.+l%1.9x2.5.+oi%gx1">
     <mach name="any">
       <pes pesize="any" compset="any">
@@ -62,6 +80,43 @@
 	  <nthrds_glc>1</nthrds_glc>
 	  <nthrds_wav>1</nthrds_wav>
 	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>-2</rootpe_ice>
+	  <rootpe_ocn>-4</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>0</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+    </mach>
+  </grid>
+  <grid name="a%1.9x2.5.+l%1.9x2.5.+oi%gx1">
+    <mach name="cori-knl">
+      <pes pesize="any" compset="any">
+	<comment>none</comment>
+	<ntasks>
+	  <ntasks_atm>-4</ntasks_atm>
+	  <ntasks_lnd>-2</ntasks_lnd>
+	  <ntasks_rof>-2</ntasks_rof>
+	  <ntasks_ice>-2</ntasks_ice>
+	  <ntasks_ocn>-2</ntasks_ocn>
+	  <ntasks_glc>-1</ntasks_glc>
+	  <ntasks_wav>-1</ntasks_wav>
+	  <ntasks_cpl>-4</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>2</nthrds_atm>
+	  <nthrds_lnd>2</nthrds_lnd>
+	  <nthrds_rof>2</nthrds_rof>
+	  <nthrds_ice>2</nthrds_ice>
+	  <nthrds_ocn>2</nthrds_ocn>
+	  <nthrds_glc>2</nthrds_glc>
+	  <nthrds_wav>2</nthrds_wav>
+	  <nthrds_cpl>2</nthrds_cpl>
 	</nthrds>
 	<rootpe>
 	  <rootpe_atm>0</rootpe_atm>
@@ -905,6 +960,43 @@
 	  <nthrds_glc>1</nthrds_glc>
 	  <nthrds_wav>1</nthrds_wav>
 	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>-4</rootpe_ice>
+	  <rootpe_ocn>-8</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>0</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+    </mach>
+  </grid>
+  <grid name="a%0.9x1.25.+l%0.9x1.25.+oi%gx1" >
+    <mach name='cori-knl'>
+      <pes pesize="any" compset="any">
+	<comment>none</comment>
+	<ntasks>
+	  <ntasks_atm>-8</ntasks_atm>
+	  <ntasks_lnd>-4</ntasks_lnd>
+	  <ntasks_rof>-4</ntasks_rof>
+	  <ntasks_ice>-4</ntasks_ice>
+	  <ntasks_ocn>-1</ntasks_ocn>
+	  <ntasks_glc>-8</ntasks_glc>
+	  <ntasks_wav>-8</ntasks_wav>
+	  <ntasks_cpl>-8</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>2</nthrds_atm>
+	  <nthrds_lnd>2</nthrds_lnd>
+	  <nthrds_rof>2</nthrds_rof>
+	  <nthrds_ice>2</nthrds_ice>
+	  <nthrds_ocn>2</nthrds_ocn>
+	  <nthrds_glc>2</nthrds_glc>
+	  <nthrds_wav>2</nthrds_wav>
+	  <nthrds_cpl>2</nthrds_cpl>
 	</nthrds>
 	<rootpe>
 	  <rootpe_atm>0</rootpe_atm>
