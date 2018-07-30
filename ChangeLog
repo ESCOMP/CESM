@@ -1,6 +1,87 @@
 ===============================================================
 Tag name: cesm2.0.0-rc.01
 Originator(s): CSEG
+Date: 30 July 2018
+One-line Summary: Release candidate for cesm2.0.1 
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_0_rel_10/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_02
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_0_rel_05
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-cesm2.0.02
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.00
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_0_rel_n04 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01
+
+cime
+    Chris Fischer 2018-07-24 - cime_cesm2_0_rel_05 - cime (cesm2.0.1-rc.01)
+    https://github.com/ESMCI/cime/tags/cime_cesm2_rel_05
+
+    Machine updates
+
+
+cism
+    William Sacks 2018-07-08 - release-cesm2.0.04 - components/cism (cesm2.0.1-rc.01)
+    https://github.com/ESCOMP/cism-wrapper/tags/release-cesm2.0.04
+
+    Fixes for new NAG compiler on hobart
+
+
+    William Sacks 2018-07-07 - release-cesm2.0.03 - components/cism (cesm2.0.1-rc.01)
+    https://github.com/ESCOMP/cism-wrapper/tags/release-cesm2.0.03
+
+    Minor updates to source_cism; support additional config options
+
+
+    William Sacks 2018-07-07 - release-cesm2.0.02 - components/cism (cesm2.0.1-rc.01)
+    https://github.com/ESCOMP/cism-wrapper/tags/release-cesm2.0.02
+
+    Update externals used in standalone checkout
+
+    No effect in CESM
+
+
+clm
+    Erik Kluzek 2018-07-26 - release-cesm2.0.02 - components/clm (cesm2.0.1-rc.01)
+    https://github.com/ESCOMP/ctsm/tags/release-cesm2.0.04
+
+    Bring in release-clm5.0.04 without the two answer changing things in it.
+    So this updates cime as needed for hobart upgrade and glade changes.
+    It fixes a couple issues including a bug in the number of history tapes.
+    It also changes the way grid cell averaging is done for NFIX diagnostic 
+    fields which changes answers for those specific fields only on clm history files.
+
+
+    Erik Kluzek 2018-06-12 - release-clm5.0.03 - components/clm (cesm2.0.1-rc.01)
+    https://github.com/ESCOMP/ctsm/tags/release-cesm2.0.02
+
+    Fix an issue with data assimilation. Update externals being pointed to.
+
+    Work on CLM tools for input files. Some changes to CLM testing.
+
+    Update README files.
+
+
+pop
+    Michael Levy 2018-07-06 - release_tags/pop2_cesm2_0_rel_n04 - components/pop (cesm2.0.1-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_0_rel_n04
+
+    NAG 6.2 debug test is capturing error in time_management.F90 that wasn't caught by 6.1.
+
+
+    Michael Levy 2018-06-08 - release_tags/pop2_cesm2_0_rel_n03 - components/pop (cesm2.0.1-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_0_rel_n03
+
+    There is one python file that is not py3 compliant.
+    Also, point to a different MARBL tag  that does not change any source code
+    -- tag name references cesm2.0
+    -- provide sphinx documentation (rst files only)
+===============================================================
+Tag name: cesm2.0.0-rc.01
+Originator(s): CSEG
 Date: 6 June 2018
 One-line Summary: Release candidate for cesm2.0.0 
 
