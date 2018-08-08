@@ -24,7 +24,7 @@ code:
 
 .. code-block:: console
 
-    git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
+    git clone -b release-cesm2.0.1 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
     cd my_cesm_sandbox
 
 To checkout a previous version of CESM, first view the available versions:
@@ -33,7 +33,7 @@ To checkout a previous version of CESM, first view the available versions:
 
     git tag --list 'release-cesm2*'
 
-To checkout a specific CESM release tag type:
+To checkout a specific CESM release tag type, for example CESM2.0.0:
 
 .. code-block:: console 
 
