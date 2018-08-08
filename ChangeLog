@@ -1,4 +1,173 @@
 ===============================================================
+Tag name: cesm2_1-alpha01a
+Originator(s): CSEG
+Date: 6 June 2018
+One-line Summary: First release candidate for cesm2.1.0 
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_10/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180807
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_0_rel_05
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.06
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.00
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180804 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01
+
+cam
+    Francis Vitt 2018-08-06 - trunk_tags/cam6_0_010 - components/cam (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_010
+
+     Update CAM forcing files for 1850 compsets
+
+
+    Francis Vitt 2018-08-02 - trunk_tags/cam6_0_009 - components/cam (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_009
+
+    WACCM and CAM-Chem compset updates; correction to gravity wave diagnostic
+
+    SD compsets change answers
+
+
+    Brian Eaton 2018-07-18 - trunk_tags/cam6_0_006 - components/cam (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_006
+
+    Update SE/CSLAM.
+
+    All configurations using SE dycore have answer changes.
+
+
+    Brian Eaton 2018-07-16 - trunk_tags/cam6_0_005 - components/cam (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_005
+
+    Bug fix in MG2 evaporation of rain number.
+
+    All configs using cam6 physics have answers changes.
+
+
+    Brian Eaton 2018-07-12 - trunk_tags/cam6_0_004 - components/cam (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_004
+
+    . update hobart testing to nag-6.2
+    . misc fixes
+      - update size of mode_defs array from 60 to 120 
+      - initializations of integer(iMap) arrays to zero have been changed
+        to use 0_iMap instead of a default 0.
+      - remove initialization of cam_out%tbot to posinf
+
+
+    Brian Eaton 2018-07-09 - trunk_tags/cam6_0_003 - components/cam (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_003
+
+    update emissions for WACCM, CAM-Chem -- answers change for these configurations
+    update cime external
+
+
+    Francis Vitt 2018-07-31 - trunk_tags/cam6_0_007 - components/cam (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/cam6_0_007
+
+    Updates to CAMChem and SD compsets; add PM2.5 diagnostic
+
+     - add PM2.5 diagnostics (2.5 micrometer particulate matter)
+     - add extended VBS SOA chemistry mechanism
+     - add compsets:
+        . FCvbsxHIST -- CAMChem with extended VBS SOA scheme
+        . FCfireHIST -- CAMChem with active CLM fire emissions
+     - use MERRA meteorology in all SD compsets
+     - add support for half-degree SD CAMChem
+     - change start date of FCHIST to 1995-01-01
+
+    Answer changing for *SD* and FCHIST compsets
+
+
+cice
+    David Bailey 2018-08-07 - cice5_20180807 - components/cice (cesm2_1_alpha01a)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20180807
+
+    This is all diagnostic history output. So, history comparisons will change,
+    but will be otherwise bfb.
+
+
+cism
+    William Sacks 2018-07-08 - release-cesm2.0.04 - components/cism (cesm2_1_alpha01a)
+    https://github.com/ESCOMP/cism-wrapper/tags/release-cesm2.0.04
+
+    Fixes for new NAG compiler on hobart
+
+
+    William Sacks 2018-07-07 - release-cesm2.0.03 - components/cism (cesm2_1_alpha01a)
+    https://github.com/ESCOMP/cism-wrapper/tags/release-cesm2.0.03
+
+    Minor updates to source_cism; support additional config options
+
+
+    William Sacks 2018-07-07 - release-cesm2.0.02 - components/cism (cesm2_1_alpha01a)
+    https://github.com/ESCOMP/cism-wrapper/tags/release-cesm2.0.02
+
+    Update externals used in standalone checkout
+
+    No effect in CESM
+
+
+clm
+    Erik Kluzek 2018-08-06 - release-clm5.0.06 - components/clm (cesm2_1_alpha01a)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.06
+
+    Bring in changes from ctsm1.0.dev006 and ctsm1.0.dev007. The first one is a set of simple fixes
+    that are bit-for-bit. The second is to consistently startup glaciers the same way for startup or
+    hybrid cases. The first part is certainly bit-for-bit. For the second standard testing only showed
+    a difference in two tests.
+
+
+    Erik Kluzek 2018-08-06 - release-clm5.0.05 - components/clm (cesm2_1_alpha01a)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.05
+
+    Update ndep for 1850 and last year in streams for IHist cases
+
+
+    Erik Kluzek 2018-07-06 - release-clm5.0.04 - components/clm (cesm2_1_alpha01a)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.02
+
+    Brings in updates from a few CTSM master tags ctsm1.0.dev002/3/4. 
+    Updates ndep for 1850 and clm5_0, and fixes an issue with Nitrogen fixation fluxes. 
+    Also brings in update to cime and cism, and some non-answer changing things, new diagnostic fields.
+
+
+pop
+    Michael Levy 2018-08-06 - trunk_tags/cesm_pop_2_1_20180804 - components/pop (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180804
+
+    * correct IAGE reset when lrobert_filter=.true.
+    * add CMIP tracer budget diagnostics
+    * move submeso and diag_gm_bolus-dependent tavg vars into separate tavg_contents files
+    * update 1850 Ndep forcing from recent coupled B1850 WACCM run
+    * correct EBM tavg vars
+    * enable some 2D EBM tavg vars by default
+
+
+    Michael Levy 2018-07-20 - trunk_tags/cesm_pop_2_1_20180720 - components/pop (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180720
+
+    Add support for running CESM 2.1 with the CESM 2.0 BGC tunings
+
+
+    Michael Levy 2018-07-19 - /trunk_tags/cesm_pop_2_1_20180716 - components/pop (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//trunk_tags/cesm_pop_2_1_20180716
+
+    Almost-final BGC tunings for CMIP6
+    (will need one more tag to update some forcing datasets after WACCM run finishes)
+
+    Changes answers for all ecosystem compsets.
+    Also includes a bugfix for the Robert Filter, so changes answers for all gx1v[67] resolution runs.
+
+
+    Alper Altuntas 2018-07-05 - /trunk_tags/cesm_pop_2_1_20180705 - components/pop (cesm2_1_alpha01a)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//trunk_tags/cesm_pop_2_1_20180705
+
+    Add optional NDEP modifier for POP compsets.
+===============================================================
 Tag name: cesm2.0.0-rc.01
 Originator(s): CSEG
 Date: 6 June 2018
