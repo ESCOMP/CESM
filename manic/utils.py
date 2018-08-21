@@ -65,13 +65,15 @@ def last_n_lines(the_string, n_lines, truncation_message=None):
 
     lines = the_string.splitlines(True)
     if len(lines) <= n_lines:
-        return the_string
+        return_val = the_string
     else:
         lines_subset = lines[-n_lines:]
         str_truncated = ''.join(lines_subset)
         if truncation_message:
             str_truncated = truncation_message + '\n' + str_truncated
-        return str_truncated
+        return_val = str_truncated
+
+    return return_val
 
 
 def indent_string(the_string, indent_level):
@@ -119,9 +121,9 @@ def str_to_bool(bool_str):
     """
     value = None
     str_lower = bool_str.lower()
-    if (str_lower == 'true') or (str_lower == 't'):
+    if str_lower in ('true', 't'):
         value = True
-    elif (str_lower == 'false') or (str_lower == 'f'):
+    elif str_lower in ('false', 'f'):
         value = False
     if value is None:
         msg = ('ERROR: invalid boolean string value "{0}". '
