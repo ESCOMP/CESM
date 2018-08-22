@@ -17,6 +17,7 @@ matrix:
       # NOTE(bja, 2017-11) update is slow, 2.7.12 installed by default, good enough!
       # - brew update
       # - brew outdated python2 || brew upgrade python2
+      - pip install virtualenv
       - virtualenv env -p python2
       - source env/bin/activate
 install:
@@ -29,4 +30,3 @@ script:
 after_success:
   - cd test; make coverage
   - cd test; coveralls
-  
