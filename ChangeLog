@@ -1,4 +1,21 @@
 ===============================================================
+Tag name: cesm2_1-alpha01b
+Originator(s): CSEG
+Date: 6 June 2018
+One-line Summary: Second release candidate for cesm2.1.0 
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_13/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180807
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_0_rel_05
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.07
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.00
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180804 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01
+===============================================================
 Tag name: cesm2_1-alpha01a
 Originator(s): CSEG
 Date: 6 June 2018
