@@ -1,7 +1,7 @@
 ===============================================================
-Tag name: cesm2_1-alpha01b
+Tag name: cesm2_1_alpha01b
 Originator(s): CSEG
-Date: 6 June 2018
+Date: 29 August 2018
 One-line Summary: Second release candidate for cesm2.1.0 
 
 Component tags used for this CESM beta tag :
@@ -15,6 +15,49 @@ components/mosart                  https://github.com/ESCOMP/mosart/tree/release
 components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180804 
 components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
 components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01
+
+cam
+    Brian Eaton 2018-08-27 - trunk_tags/cam6_0_013 - components/cam (cesm2_1_alpha01b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_013
+
+    . Fix bug that so that the hist_cam6 use case will set the fossil fuel
+      dataset when the BGC component is included in the compset.  This bug
+      affected the BHIST compset, but the CO2 cycle is diagnostic (BDRD) and
+      doesn't impact the climate.
+
+    . Update the CO2 fossil fuel emission data set to use CMIP6 data.
+
+    . Refactor handling of co2 surface flux datasets to use recent CAM utils
+      chemistry/utils/input_data_utils.F90 for time axis handling
+      control/ncdio_atm.F90 for file IO
+
+    . Add FHIST_BDRD and F1850_BDRD compsets to exercise CO2 cycle.
+
+    . Update manage_externals.
+
+    The only answer changes are in compsets that include BGC%BDRD.  The diagnostic CO2 values will be different.  But this does not feed back into the climate.
+
+
+    Francis Vitt 2018-08-15 - trunk_tags/cam6_0_012 - components/cam (cesm2_1_alpha01b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_012
+
+    WACCMX enhancements and bug fixes
+
+    Answer changing for WACCMX compsets (FX*)
+
+
+    Brian Eaton 2018-08-10 - trunk_tags/cam6_0_011 - components/cam (cesm2_1_alpha01b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_011
+
+    . modify archiving of cam.i files (initial files)
+    . fix for running with threads in cam standalone
+
+
+clm
+    Erik Kluzek 2018-08-13 - release-clm5.0.07 - components/clm (cesm2_1_alpha01b)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.07
+
+    Duplicate tag as previous one, but pointing to the branch rather than an arbitrary commit.
 ===============================================================
 Tag name: cesm2_1-alpha01a
 Originator(s): CSEG
