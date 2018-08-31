@@ -1,6 +1,91 @@
 ===============================================================
 Tag name: cesm2_2_alpha01b
 Originator(s): CSEG
+Date: 31 August 2018
+One-line Summary: New pause/resume implementation 
+
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/pause_resume_tags/pause_resume01_cam6_0_012/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_02
+cime                               https://github.com/CESM-Development/cime/tree/cime5.7.3
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_63
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev010
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.00
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20180830
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01
+
+cam
+    Steve Goldhaber 2018-08-22 - branch_tags/pause_resume_tags/pause_resume01_cam6_0_012 - components/cam (cesm2_2_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/pause_resume_tags/pause_resume01_cam6_0_012
+
+    Re-implementation of post data assimilation signal handling to be compatible with new CIME implementation.
+    Depends on CIME 5.7.2
+
+
+cime
+    Chris Fischer 2018-08-30 - cime5.7.3 - cime (cesm2_2_alpha01c)
+    https://github.com/ESMCI/cime/tags/cime5.7.3
+
+        - Fix pruning of test_hists with refcase in their name.
+        - Do not report BFAIL for a test that is missing a file.
+        - Fix use of test_utils.
+        - Rewrite array code as loops to appease NAG.
+        - Make a new grid to ensure ADWAV works with f19_f19.
+        - Add options to cs.status to allow just summarizing failures.
+        - Fix DAE test for scripts_regression_tests.
+
+
+    Steve Goldhaber 2018-08-22 - cime5.7.2 - cime (cesm2_2_alpha01c)
+    https://github.com/ESMCI/cime/tags/5.7.2
+
+    Re-implementation of pause/resume and post data assimilation functionality.
+    Note that this tag is incompatible with current trunk versions of CAM and CLM.
+    CAM branch tag branch_tags/pause_resume_tags/pause_resume01_cam6_0_012 is compatible with cime5.7.2
+    A compatible CLM tag is also needed (tentatively ctsm1.0.dev010).
+
+
+clm
+    William Sacks 2018-08-29 - ctsm1.0.dev010 - components/clm (cesm2_2_alpha01c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev010
+
+    - Update cime used in standalone checkout
+    - Update pause-resume implementation for compatibility with latest cime
+
+    Depends on cime5.7.2 or later
+
+
+    William Sacks 2018-08-22 - ctsm1.0.dev009 - components/clm (cesm2_2_alpha01c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev009
+
+    Fix initialization of AnnET in InitAccVars
+
+
+pop
+    Michael Levy 2018-08-30 - trunk_tags/cesm_pop_2_1_20180830 - components/pop (cesm2_2_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180830
+
+    MARBL refactor
+
+
+    Michael Levy 2018-08-29 - trunk_tags/cesm_pop_2_1_20180829 - components/pop (cesm2_2_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180829
+
+    Update manage_externals to v1.1.5
+
+
+    Michael Levy 2018-08-29 - trunk_tags/cesm_pop_2_1_20180804 - components/pop (cesm2_2_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180804
+
+    * correct IAGE reset when lrobert_filter=.true.
+    * add CMIP tracer budget diagnostics
+    * move submeso and diag_gm_bolus-dependent tavg vars into separate tavg_contents files
+    * update 1850 Ndep forcing from recent coupled B1850 WACCM run
+    * correct EBM tavg vars
+    * enable some 2D EBM tavg vars by default
+===============================================================
+Tag name: cesm2_2_alpha01b
+Originator(s): CSEG
 Date: 20 August 2018
 One-line Summary: Continued changes to cesm2.2 development.
 
