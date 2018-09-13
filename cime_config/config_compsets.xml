@@ -46,7 +46,7 @@
 
   <compset>
     <alias>B1850</alias>
-    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
     <science_support grid="f09_g17_gl4"/>
   </compset>
 
@@ -68,7 +68,7 @@
 
   <compset>
     <alias>BHIST</alias>
-    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
     <science_support grid="f09_g17_gl4"/>
   </compset>
 
@@ -187,43 +187,43 @@
     </entry>
     <entry id="RUN_REFDATE">
       <values match="first">
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >0130-01-01</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >0130-01-01</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >0130-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >0130-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >0130-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >0130-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"           >0010-01-01</value>
       </values>
     </entry>
 
     <entry id="RUN_TYPE">
       <values match="first">
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >hybrid</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >hybrid</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >hybrid</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >hybrid</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >hybrid</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >hybrid</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"           >hybrid</value>
       </values>
     </entry>
 
     <entry id="RUN_REFCASE">
       <values match="first">
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >b.e20.B1850.f09_g17.pi_control.all.297</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >b.e20.B1850.f09_g17.pi_control.all.297</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >b.e20.B1850.f09_g17.pi_control.all.297_transient_v2</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >b.e20.B1850.f09_g17.pi_control.all.297</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >b.e20.B1850.f09_g17.pi_control.all.297</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >b.e20.B1850.f09_g17.pi_control.all.297_transient_v2</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"           >b.e21.BW1850.f09_g17.CMIP6-piControl.001</value>
       </values>
     </entry>
 
     <entry id="RUN_REFDIR">
       <values match="first">
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >cesm2_init</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >cesm2_init</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >cesm2_init</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >cesm2_init</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >cesm2_init</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >cesm2_init</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"           >cesm2_init</value>
       </values>
     </entry>
 
     <entry id="CLM_NAMELIST_OPTS"> <!--need because ref case is non-transient -->
       <values>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3">use_init_interp=.true.</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3">use_init_interp=.true.</value>
       </values>
     </entry>
 
