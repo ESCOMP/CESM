@@ -1,4 +1,119 @@
 ===============================================================
+Tag name: cesm2_1_alpha01c
+Originator(s): CSEG
+Date: 1 October 2018
+One-line Summary: Third release candidate for cesm2.1.0 
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_19/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20180807
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_0_rel_05
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.08
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.00
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180926 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01
+
+cam
+    Francis Vitt 2018-09-28 - trunk_tags/cam6_0_019 - components/cam (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_019
+
+    Update CAM forcings in historical simulations
+
+
+    Brian Eaton 2018-09-25 - trunk_tags/cam6_0_018 - components/cam (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_018
+
+    . update COSP with a bug fix
+    . add diagnostic fields for LW radiation
+
+
+    Brian Eaton 2018-09-22 - trunk_tags/cam6_0_017 - components/cam (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_017
+
+    . add aircraft emissions to co2_cycle.  This only changes diagnostic CO2 output when the BGC%BDRD component is used.
+    . fixes for EUL dycore with simple physics.
+
+
+    Francis Vitt 2018-09-21 - trunk_tags/cam6_0_016 - components/cam (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_016
+
+     Misc updates to WACCM and CAM-Chem compsets
+
+
+    Brian Eaton 2018-09-17 - trunk_tags/cam6_0_015 - components/cam (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_015
+
+    . Fix bug in longitude coordinate creation for physics grid.  Refactor some
+      memory management in the coordinate creation code for physics grid and FV
+      grids.
+
+
+    Francis Vitt 2018-09-06 - trunk_tags/cam6_0_014 - components/cam (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_014
+
+    Fix D-region chemistry bug; update volcanic emissions inputs; other misc changes
+
+    FWmad* and FWsc* compsets have changed answers
+
+
+cesm
+    Chris Fischer 2018-09-28 - cesm2_1_alpha01c - (cesm2_1_alpha01c)
+    https://github.com/ESCOMP/cesm/tags/cesm2_1_alpha01c
+
+    Enable POP CMIP6 diagnostic tracers in B1850, BHIST compsets   PR #73
+
+
+clm
+    Erik Kluzek 2018-08-13 - release-clm5.0.08 - components/clm (cesm2_1_alpha01c)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.08
+
+    Update ndep for transient also use it for 1850 as well.
+
+
+pop
+    Michael Levy 2018-09-13 - trunk_tags/cesm_pop_2_1_20180926 - components/pop (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_201809??
+
+    updated ndep forcing files are from CESM 2.1 BWHIST runs, and span 1849-2015
+
+    introduce new test into cheyenne/intel, aux_pop and aux_pop_MARBL:
+    ERS.T62_g17.C1850ECO.cheyenne_intel.pop-ecosys_ocn_transient_1850_2000
+
+    Testing: aux_pop on cheyenne/intel
+    tests pass, including baseline comparison to cesm_pop_2_1_20180921
+      (new test fails NLCOMP and BASELINE)
+
+
+    Alper Altuntas 2018-09-21 - trunk_tags/cesm_pop_2_1_20180912 - components/pop (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180912
+
+    add coordinates to tavg_TEMP2 (for CMIP6 diags)
+
+
+    Michael Levy 2018-09-13 - trunk_tags/cesm_pop_2_1_20180912 - components/pop (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180912
+
+    Updates for configuring / using the abiotic DIC / DIC14 tracer module
+    -- if OCN_TRANSIENT='1850-2000' then set abio_atm_co2_opt='drv_diag', abio_atm_d14c_opt='file'
+    -- add ABIO-DIC modifier to POP2 in compset longnames, enable abio_dic_dic14 if it is present
+    -- extend pattern matching to allow POP2 compset modifiers to be in arbitrary order
+    -- add abio_dic_dic14_restfile_fallback namelist var (default is CMIP6 B1850 control for gx1v7)
+
+
+    Michael Levy 2018-08-30 - trunk_tags/cesm_pop_2_1_20180830 - components/pop (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180830
+
+    MARBL refactor
+
+
+    Michael Levy 2018-08-29 - trunk_tags/cesm_pop_2_1_20180829 - components/pop (cesm2_1_alpha01c)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180829
+
+    Update manage_externals to v1.1.5
+===============================================================
 Tag name: cesm2_1_alpha01b
 Originator(s): CSEG
 Date: 29 August 2018
