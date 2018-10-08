@@ -1050,7 +1050,7 @@
   </grid>
   <grid name="a%0.9x1.25.+l%0.9x1.25.+oi%gx1" >
     <mach name="cheyenne">
-      <pes pesize="any" compset="CAM.*\d_.*CLM.+CICE.+POP.+WW3">
+      <pes pesize="any" compset="CAM[^%]*\d_.*CLM.+CICE.+POP.+WW3">
 	<comment>about 6.5ypd expected</comment>
 	<ntasks>
 	  <ntasks_atm>-16</ntasks_atm>
