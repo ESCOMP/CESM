@@ -1,0 +1,5 @@
+Note that this includes CMIP6_B1850_HIGHFREQ rather than just
+CMIP6_B1850: We assume that CMIP6_B1850_HIGHFREQ does everything that
+CMIP6_B1850 does plus some additional stuff for high-frequency
+output. So, if CMIP6_B1850_HIGHFREQ works, then we can be fairly
+confident that CMIP6_B1850 works, too.

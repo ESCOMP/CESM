@@ -1,0 +1,5 @@
+Note that this includes CMIP6_BHIST_HIGHFREQ rather than just
+CMIP6_BHIST: We assume that CMIP6_BHIST_HIGHFREQ does everything that
+CMIP6_BHIST does plus some additional stuff for high-frequency
+output. So, if CMIP6_BHIST_HIGHFREQ works, then we can be fairly
+confident that CMIP6_BHIST works, too.
