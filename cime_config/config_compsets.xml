@@ -241,6 +241,8 @@
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >b.e20.B1850.f09_g17.pi_control.all.297</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >b.e20.B1850.f09_g17.pi_control.all.297</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >b.e20.B1850.f09_g17.pi_control.all.297_transient_v2</value>
+        <!-- NOTE: The REFCASE b.e21.B1850.f09_g17.CMIP6-piControl.001 REQUIRES certain settings of glacier_region_behavior namelist
+                   item in CLM for it to even RUN -->
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%4xCO2.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"           >b.e21.B1850.f09_g17.CMIP6-piControl.001</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%1PCT.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"           >b.e21.B1850.f09_g17.CMIP6-piControl.001</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*%4xCO2.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"           >b.e21.BW1850.f09_g17.CMIP6-piControl.001</value>
