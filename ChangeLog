@@ -1,4 +1,168 @@
 ===============================================================
+Tag name: cesm2_1_alpha01d
+Originator(s): CSEG
+Date: 12 October 2018
+One-line Summary: Fourth release candidate for cesm2.1.0 
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_26/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20181008
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_1_rel_02
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.08
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.01
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20181004 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.00
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_181001
+
+cam
+    Cheryl Craig 2018-10-10 - trunk_tags/cam6_0_026 - components/cam (cesm2_1_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_026
+
+    Fixes for 4xCO2 and 1PCT compsets
+
+
+    Cheryl Craig 2018-10-09 - trunk_tags/cam6_0_025 - components/cam (cesm2_1_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_025
+
+    Minor fix for %1PCT and %4xCO2 tests
+
+    Change F1850 to use %SP (answer changing for F1850)
+
+    Add the CMIP6_BHIST, CMIP6_B1850 and CMIP6_GENERIC usermods_dirs
+
+
+    Francis Vitt 2018-10-09 - trunk_tags/cam6_0_024 - components/cam (cesm2_1_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_024
+
+    New options for specified dynamics
+    New FSD compset
+
+
+    Cheryl Craig 2018-10-08 - trunk_tags/cam6_0_023 - components/cam (cesm2_1_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_023
+
+    Update CESM and WACCM compsets for CESM2.1 release
+
+    Includes adding CAM60 designators for %1PCT and %4xCOS
+
+    Answer changing for F2000climo
+
+    Requires: https://github.com/ESCOMP/cesm/pull/76
+
+
+    Cheryl Craig 2018-10-08 - trunk_tags/cam6_0_022 - components/cam (cesm2_1_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_022
+
+    For John Truesdale
+
+    SCAM updates, phython3 compatibility and passes phylint; update cime used in CAM standalone checkouts
+
+    Answer changing for SCAM
+
+
+    Francis Vitt 2018-10-03 - trunk_tags/cam6_0_021 - components/cam (cesm2_1_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_021
+
+    WACCMX gravity waves
+
+
+    Francis Vitt 2018-10-03 - trunk_tags/cam6_0_020 - components/cam (cesm2_1_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_0_020
+
+    WACCMX steady state electron and ion temperature
+
+
+cesm
+    Chris Fischer 2018-10-03 - cesm2_1_alpha0d - (cesm2_1_alpha01d)
+    https://github.com/ESCOMP/cesm/tags/cesm2_1_alpha0d
+
+    Add a top-level cmip6 usermods directory #75
+        SMS_D_Ld1.f09_g17.B1850.*.allactive-cmip6 will fail until components are updated.
+    Add 4xCO2 and 1PCT compsets #76
+    Fix pes layout and tests for BCO2x4 and B1PCT compsets.
+       
+
+
+cice
+    David Bailey 2018-10-08 - cice5_20181008 - components/cice (cesm2_1_alpha01d)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20181008
+
+    This contains a number of history file changes as well as some hobart testing changes.
+
+
+cime
+    Chris Fischer 2018-10-12 - cime_cesm2_1_rel_02 - cime (cesm2_1_alpha01d)
+    https://github.com/ESMCI/cime/tags/cesm2_1_rel_02
+
+        - Add a default value of idmap_ignore for certain mapping files.
+        - Improve clean function.
+        - Add ability for testfile to contain comments.
+        - Clean and alphabetize (by MACH name) the config/cesm/machines/*.xml files. 
+        - Improve case clone functionality.
+        - Improve error message for issues in user_nl_* namelist files.
+        - Write cpl.hr2x files at ENDOFRUN when forecast is < 24 hours.
+        - Backporting PR #2833(Propagate logging settings to submitted jobs) to maint-5.6 branch.
+        - Remove overzelous debug code.
+        - Change default for flux_convergence for all but 1 degree case.
+
+
+    Chris Fischer 2018-10-02 - cime_cesm2_0_rel_06 - cime (cesm2_1_alpha01d)
+    https://github.com/ESMCI/cime/tags/cesm2_0_rel_06
+
+        - Archive_metadata updates for CMIP6 experiments.
+        - OS is not generic env var.
+        - New machines at ETH and CSCS.
+        - Update ESMF library on cheyenne.
+        - Fix documentation for histaux_r2x namelist variable.
+        - Dont allow zero ntasks nthrds.
+        - Add lapack and blas libraries to pgi compile on cheyenne.
+        - Updates for compatibility with XML to html tools.
+        - Remove additional rad->deg conversion to radians when creating ocean
+          domain files.
+        - ESMF logging fix.
+
+
+    Erik Kluzek 2018-08-13 - cime_cesm2_1_rel_01 - cime (cesm2_1_alpha01d)
+    https://github.com/ESMCI/cime/tags/ cime_cesm2_0_rel_06
+
+    CIME updated with new CMIP6 datasets for datm:
+    - CMIP6 prescribed aerosols (in same format as CMIP5 datasets) for 1850, and transient
+    - CMIP6 CO2 for transient
+
+    Cime issues: #2687 #2688
+
+    - Better format for seq_flds_YYY_{fluxes,states} log messages.
+    - Attach the instance number to 'cpl' in cpl history file names.
+    - Fix inputdata issue for multi_instance cases.
+
+
+mosart
+    James Edwards 2018-10-01 - release-cesm2.0.01 - components/mosart (cesm2_1_alpha01d)
+    https://github.com/ESCOMP/mosart/tags/xxx
+
+    py3 compatibility, fix for cime #2822. Add in 8th degree mosart. 
+    Fix fill value issue, and xlf compiler issue.
+
+
+pop
+    Alper Altuntas 2018-10-05 - trunk_tags/cesm_pop_2_1_20181004 - components/pop (cesm2_1_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20181004
+
+    A fix for cime issue #2822 and run the cime interface scripts through py3 pylint. 
+    Also, added a multi-instance C1850ECO test in aux_pop.
+
+    all b4b except the new test.
+
+
+ww3
+    James Edwards 2018-10-01 - trunk_tags/ww3_181001 - components/ww3 (cesm2_1_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/ww3/ww3_181001
+
+    py3 compatibility, update for cime #2822
+
+===============================================================
 Tag name: cesm2_1_alpha01c
 Originator(s): CSEG
 Date: 1 October 2018
