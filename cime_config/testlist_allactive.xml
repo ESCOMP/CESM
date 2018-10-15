@@ -380,7 +380,7 @@
       <machine name="cheyenne" compiler="intel" category="prealpha">
         <options>
           <option name="wallclock">0:30</option>
-          <option name="comment">Debug test exercising the CMIP6_B1850_HIGHFREQ usermods directory</option>
+          <option name="comment">Debug test exercising the cmip6_picontrol_outputhighfreq usermods directory</option>
         </options>
       </machine>
     </machines>
@@ -390,7 +390,7 @@
       <machine name="cheyenne" compiler="intel" category="prealpha">
         <options>
           <option name="wallclock">0:30</option>
-          <option name="comment">Debug test exercising the CMIP6_BHIST_HIGHFREQ usermods directory</option>
+          <option name="comment">Debug test exercising the cmip6_histcontrol_outputhighfreq usermods directory</option>
         </options>
       </machine>
     </machines>

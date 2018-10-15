@@ -1,5 +1,6 @@
-Note that this includes CMIP6_BHIST_HIGHFREQ rather than just
-CMIP6_BHIST: We assume that CMIP6_BHIST_HIGHFREQ does everything that
-CMIP6_BHIST does plus some additional stuff for high-frequency
-output. So, if CMIP6_BHIST_HIGHFREQ works, then we can be fairly
-confident that CMIP6_BHIST works, too.
+Note that this includes cmip6_histcontrol_outputhighfreq rather than
+just cmip6_histcontrol_outputbase or cmip6_histcontrol_outputdeck: We
+assume that cmip6_histcontrol_outputhighfreq does everything that the
+others do plus some additional stuff for high-frequency output. So, if
+cmip6_histcontrol_outputhighfreq works, then we can be fairly confident
+that the others work, too.
