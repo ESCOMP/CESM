@@ -133,7 +133,7 @@
       <option name="wallclock"> 01:00 </option>
     </options>
   </test>
-  <test name="SMS_Ld1" grid="f09_g17" compset="BW4xCO2" testmods="allactive/cmip6">
+  <test name="SMS_Ld1" grid="f09_g17" compset="BWCO2x4" testmods="allactive/cmip6">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="bwaccm"/>
