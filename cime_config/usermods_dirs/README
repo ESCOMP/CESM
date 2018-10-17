@@ -1,0 +1,2 @@
+Directories here can be included in a case via the --user-mods-dir
+argument to create_newcase, or via the CPL_USER_MODS XML variable.
