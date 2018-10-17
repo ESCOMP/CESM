@@ -1,5 +1,0 @@
-This testmods directory tests the use of the trilinos solver.
-
-Note: We also want to allow the case where cism is built using
-CISM_USE_TRILINOS=TRUE, but trilinos isn't actually chosen at runtime. However,
-for now I don't feel it's worth actually having a test of that combination.
