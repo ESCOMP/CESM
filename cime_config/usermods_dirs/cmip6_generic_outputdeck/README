@@ -1,6 +1,0 @@
-This usermods directory contains configuration settings that are a good
-starting point for most CMIP6 runs. However, they'll probably need to be
-modified for any particular experiment.
-
-Note that these settings include output settings for a typical DECK
-experiment. This can lead to very large output volumes.

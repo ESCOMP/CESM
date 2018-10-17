@@ -1,4 +1,0 @@
-This usermods directory contains configuration settings that are a good
-starting point for most CMIP6 runs, for which you want high-frequency
-output (e.g., daily and higher frequency). However, they'll probably
-need to be modified for any particular experiment.
