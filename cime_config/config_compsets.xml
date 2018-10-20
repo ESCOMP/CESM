@@ -51,6 +51,14 @@
     <science_support grid="f09_g17"/>
   </compset>
 
+  <!-- Same as B1850, but with cmip6-related modifiers for some components -->
+  <compset>
+    <alias>B1850cmip6</alias>
+    <lname>1850_CAM60_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f09_g17_gl4"/>
+    <science_support grid="f09_g17"/>
+  </compset>
+
   <compset>
     <alias>BCO2x4</alias>
     <lname>1850_CAM60%4xCO2_CLM50%BGC-CROP_CICE_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>

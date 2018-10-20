@@ -1,7 +1,0 @@
-This usermods directory contains configuration settings that are a good
-starting point for most CMIP6 runs. However, they'll probably need to be
-modified for any particular experiment.
-
-Note that these settings have some, but not all of the output settings
-used in a typical CMIP6 experiment. Thus, this usermods directory is a
-good starting point if you want reduced output volume.

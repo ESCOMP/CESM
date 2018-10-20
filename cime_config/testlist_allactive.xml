@@ -375,22 +375,12 @@
       <option name="wallclock">  00:30 </option>
     </options>
   </test>
-  <test name="SMS_D_Ld1" grid="f09_g17" compset="B1850" testmods="allactive/cmip6_picontrol">
+  <test name="SMS_D_Ld1" grid="f09_g17" compset="B1850cmip6" testmods="allactive/defaultio_min">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha">
         <options>
           <option name="wallclock">0:30</option>
-          <option name="comment">Debug test exercising the cmip6_picontrol usermods directory</option>
-        </options>
-      </machine>
-    </machines>
-  </test>
-  <test name="SMS_D_Ld1" grid="f09_g17" compset="BHIST" testmods="allactive/cmip6_histcontrol">
-    <machines>
-      <machine name="cheyenne" compiler="intel" category="prealpha">
-        <options>
-          <option name="wallclock">0:30</option>
-          <option name="comment">Debug test exercising the cmip6_histcontrol usermods directory</option>
+          <option name="comment">Debug test exercising B1850cmip6</option>
         </options>
       </machine>
     </machines>
