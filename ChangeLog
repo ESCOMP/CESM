@@ -1,5 +1,166 @@
 ===============================================================
-Tag name: cesm2_2_alpha01b
+Tag name: cesm2_2_alpha01d
+Originator(s): CSEG
+Date: 22 October 2018
+One-line Summary: Misc. changes 
+
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/pause_resume_tags/pause_resume01_cam6_0_012/components/cam   --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_02                                         --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.7.4                                                **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_63                                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev012                                                     **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03                                               **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20180830                                  **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02                                                  **
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01                                 --
+
+cesm
+    Chris Fischer 2018-10-17 - cesm2_2_alpha01d - (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/cesm/tags/cesm2_2_alpha01d
+
+    Remove unused testmods
+    Remove no-longer-needed b1850 usermods directory
+
+
+cime
+    Chris Fischer 2018-10-23 - cime5.7.4 - cime (cesm2_2_alpha01d)
+    https://github.com/ESMCI/cime/tags/cime5.7.4
+
+        - Remove all references to BATCHQUERY and BATCHSUBMIT.
+        - Bug fix.
+        - Update to CIME statistical ensemble test ensemble generation scripts.
+        - Fix debug builds for pio.
+        - Remove commented-out code
+        - Merge ACME split 2018-10-16
+        - Fix floating-point mpiprocs for Python 3.
+        - Fix floating-point mpiprocs for Python 3.
+        - Merge latest nuopc-cmeps development.
+        - Don't exceed maximum MPI tag value.
+        - maint-5.6 merge.
+        - Propagate logging settings to submitted jobs.
+        - mlchange: Give user guidance on what to do next.
+        - Dont hide ctest output in run_tests.py.
+        - Add FUNIT fake test.
+        - Improve continue run checks in case_submit.
+        - Some minor cleanup for nmlgen.py.
+        - ntasks_per_inst should never be <=0
+        - one more driver issue
+        - another driver issue
+        - fix e3sm cdash issue
+        - fix cdash issues
+        - Merge of the nuopc development branch.
+        - OS is not an environment variable on all systems.
+        - Add Daint and Euler machines.
+        - Merge acme split 2018-09-10.
+        - Fix ESMF library before version 8 build.
+        - Add /cluster/torque/bin to path on hobart.
+
+
+clm
+    Erik Kluzek 2018-10-04 - ctsm1.0.dev012 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev012
+
+    Add snow-free fields for snowmip, fix several issues.
+    Update CO2 input for tool that converts to streams for cime.
+    Skip first startup time-steps for an hour, needed by WACCMX.
+    Have a WACCMX test for fast time-step and use of ESMF_LIB.
+    Do only FAST calculation of human stress. Other issues.
+
+
+    William Sacks 2018-09-12 - ctsm1.0.dev011 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev011
+
+    Add water tracer consistency checks, and other water tracer work
+
+
+mosart
+    Erik Kluzek 2018-10-19 - release-cesm2.0.03 - components/mosart (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/mosart/tags/release-cesm2.0.03
+
+    Remove ability to write single precision history files, because of issues with it.
+
+
+    Erik Kluzek 2018-10-17 - release-cesm2.0.02 - components/mosart (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/mosart/tags/release-cesm2.0.02
+
+    Fix an issue with python3
+
+
+    Erik Kluzek 2018-10-08 - release-cesm2.0.01 - components/mosart (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/mosart/tags/release-cesm2.0.01
+
+    py3 fix, fill value fix, xlf compiler fix, 8th degree mosart
+
+    Changes answers for ERP_P72x2_Lm36.f10_f10_musgs.I2000Clm50BgcCrop.cheyenne_intel.clm-clm50cropIrrigMonth_interp
+
+
+pop
+    Michael Levy 2018-10-15 - trunk_tags/cesm_pop_2_1_20181015 - components/pop (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20181015
+
+    Update CVMix to improve performance
+
+
+    Alper Altuntas 2018-10-05 - trunk_tags/cesm_pop_2_1_20181004 - components/pop (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20181004
+
+    A fix for cime issue #2822 and run the cime interface scripts through py3 pylint
+    Also, added a multi-instance C1850ECO test in aux_pop.
+
+    all b4b except the new test
+
+
+    Michael Levy 2018-09-13 - trunk_tags/cesm_pop_2_1_20180926 - components/pop (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_201809??
+
+    updated ndep forcing files are from CESM 2.1 BWHIST runs, and span 1849-2015
+
+    introduce new test into cheyenne/intel, aux_pop and aux_pop_MARBL:
+    ERS.T62_g17.C1850ECO.cheyenne_intel.pop-ecosys_ocn_transient_1850_2000
+
+    Testing: aux_pop on cheyenne/intel
+    tests pass, including baseline comparison to cesm_pop_2_1_20180921
+      (new test fails NLCOMP and BASELINE)
+
+
+    Michael Levy 2018-09-13 - trunk_tags/cesm_pop_2_1_20180912 - components/pop (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20180912
+
+    Updates for configuring / using the abiotic DIC / DIC14 tracer module
+    -- if OCN_TRANSIENT='1850-2000' then set abio_atm_co2_opt='drv_diag', abio_atm_d14c_opt='file'
+    -- add ABIO-DIC modifier to POP2 in compset longnames, enable abio_dic_dic14 if it is present
+    -- extend pattern matching to allow POP2 compset modifiers to be in arbitrary order
+    -- add abio_dic_dic14_restfile_fallback namelist var (default is CMIP6 B1850 control for gx1v7)
+
+
+    Alper Altuntas 2018-09-21 - trunk_tags/cesm_pop_2_1_20180921 - components/pop (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/cesm_pop_2_1_20180921
+
+    add coordinates to tavg_TEMP2 (for CMIP6 diags)
+
+
+rtm
+    Erik Kluzek 2018-10-17 - release-cesm2.0.02 - components/rtm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/rtm/tags/release-cesm2.0.02
+
+    Fix an issue with nag compiler
+
+
+    Erik Kluzek 2018-10-08 - release-cesm2.0.01 - components/rtm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/rtm/tags/release-cesm2.0.01
+
+    py3 fix, fill value fix, xlf compiler fix
+
+
+    Changes answers for following tests:
+
+    ERP_Ld5.f10_f10_musgs.I2000Clm50Vic.cheyenne_gnu.clm-decStart
+    ERP_P36x2_D_Ld5.f10_f10_musgs.IHistClm45BgcCruGs.cheyenne_intel.clm-decStart.
+    ERS_Ly5_P72x1.f10_f10_musgs.IHistClm45BgcCrop.cheyenne_intel.clm-cropMonthOutput.
+    SMS_D_Lm6.f45_f45_mg37.I2000Clm45Fates.cheyenne_intel.clm-FatesColdDef
+===============================================================
+Tag name: cesm2_2_alpha01c
 Originator(s): CSEG
 Date: 31 August 2018
 One-line Summary: New pause/resume implementation 
