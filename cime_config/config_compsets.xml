@@ -38,12 +38,6 @@
 
   <!-- 1850 compsets Default, Mosart, Wave for CESM2 -->
 
-
-  <compset>
-    <alias>B1850Ws</alias>
-    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
-  </compset>
-
   <compset>
     <alias>B1850</alias>
     <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
@@ -109,11 +103,6 @@
   </compset>
 
   <compset>
-    <alias>BHISTWs</alias>
-    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
-  </compset>
-
-  <compset>
     <alias>BC5L45BGC</alias>
     <lname>2000_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
   </compset>
@@ -165,12 +154,6 @@
   <compset>
     <alias>B1850G</alias>
     <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%EVOLVE_WW3_BGC%BDRD</lname>
-  </compset>
-
-  <!-- This is just needed for testing multi-instance, because WW3 currently does not support multi-instance -->
-  <compset>
-    <alias>B1850GWs</alias>
-    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%EVOLVE_SWAV_BGC%BDRD</lname>
   </compset>
 
   <!-- Include one CISM1 compset, mainly for testing purposes, to make sure that
