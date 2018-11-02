@@ -302,9 +302,13 @@
       </values>
     </entry>
 
-    <entry id="CLM_NAMELIST_OPTS"> <!--need because ref case is non-transient -->
+    <entry id="CLM_NAMELIST_OPTS">
       <values>
+        <!-- not sure if this is needed, but it was used in the official BW1850 run for CMIP6, so including it here to get identical behavior to that run -->
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%WCTS_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3">use_init_interp=.true.</value>
+        <!-- need because ref case is non-transient -->
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO.*MOSART_CISM2%NOEVOLVE_WW3">use_init_interp=.true.</value>
+        <!-- need because ref case is non-transient -->
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">use_init_interp=.true.</value>
       </values>
     </entry>
