@@ -56,13 +56,11 @@
   <compset>
     <alias>BCO2x4cmip6</alias>
     <lname>1850_CAM60%4xCO2_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
-    <science_support grid="f09_g17"/>
   </compset>
 
   <compset>
     <alias>B1PCTcmip6</alias>
     <lname>1850_CAM60%1PCT_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
-    <science_support grid="f09_g17"/>
   </compset>
 
   <compset>
@@ -83,36 +81,36 @@
   <compset>
     <alias>BWsc1850</alias>
     <lname>1850_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
-    <science_support grid="f09_g17_gl4"/>
   </compset>
 
   <compset>
     <alias>BWscHIST</alias>
     <lname>HIST_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
-    <science_support grid="f09_g17_gl4"/>
   </compset>
 
   <compset>
     <alias>BWCO2x4cmip6</alias>
     <lname>1850_CAM60%WCTS%4xCO2_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
-    <science_support grid="f09_g17"/>
   </compset>
 
   <compset>
     <alias>BW1PCTcmip6</alias>
     <lname>1850_CAM60%WCTS%1PCT_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
-    <science_support grid="f09_g17"/>
   </compset>
 
   <compset>
     <alias>BWHIST</alias>
     <lname>HIST_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <science_support grid="f09_g17_gl4"/>
+    <science_support grid="f09_g17"/>
   </compset>
 
   <!-- Same as BWHIST, but with cmip6-related modifiers for some components -->
   <compset>
     <alias>BWHISTcmip6</alias>
     <lname>HIST_CAM60%WCTS_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <science_support grid="f09_g17_gl4"/>
+    <science_support grid="f09_g17"/>
   </compset>
 
   <compset>
