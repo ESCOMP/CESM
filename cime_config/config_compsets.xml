@@ -247,9 +247,9 @@
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >0014-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*%4xCO2.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"    >0070-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*%1PCT.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"     >0070-01-01</value>
-	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >0010-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >0010-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60%WC.*_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">0134-01-01</value>
-	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60%WC.*_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">0056-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60%WC.*_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">0056-01-01</value>
 
       </values>
     </entry>
