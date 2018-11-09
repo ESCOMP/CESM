@@ -1,0 +1,11 @@
+! The changes here are needed in order to get restart tests to pass: Without these
+! changes, POP outputs a 'once' file at the start of the run, and this causes a mismatch
+! between the base and restart runs (because different files exist in each of these
+! runs). The changes below do more than just disabling the 'once' file, but since there
+! doesn't seem to be an easy way to just disable the 'once' file, we're using these more
+! substantial changes.
+
+& tavg_nml
+    ltavg_ignore_extra_streams = .true.
+    n_tavg_streams = 1
+/
