@@ -375,14 +375,6 @@
       <option name="wallclock"> 00:45 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="f09_g17_gl4" compset="J1850G" testmods="allactive/cism/test_coupling">
-    <machines>
-      <machine name="cheyenne" compiler="gnu" category="prebeta"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 00:30 </option>
-    </options>
-  </test>
   <test name="SMS_Ld7" grid="f09_g17" compset="B1850" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
