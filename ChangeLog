@@ -10,7 +10,7 @@ components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/tru
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20181109
 cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_1_rel_03
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
-components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.08
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.12
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
 components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20181022 
 components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02
