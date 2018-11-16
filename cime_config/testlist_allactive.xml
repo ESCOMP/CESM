@@ -222,6 +222,15 @@
       <option name="wallclock"> 00:30 </option>
     </options>
   </test>
+  <test name="ERS_Ld5" grid="f09_g17" compset="BWCO2x4cmip6" testmods="allactive/defaultio_min">
+    <machines>
+      <machine name="cheyenne"   compiler="gnu" category="prebeta"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30 </option>
+      <option name="comment">Restart test exercising BWCO2x4cmip6</option>
+    </options>
+  </test>
     <test name="ERS_Ld5" grid="f09_g17" compset="B1PCTcmip6" testmods="allactive/defaultio_min">
     <machines>
       <machine name="bluewaters" compiler="pgi"   category="prebeta"/>
@@ -399,6 +408,16 @@
         <options>
           <option name="wallclock">0:30</option>
           <option name="comment">Debug test exercising B1850cmip6</option>
+        </options>
+      </machine>
+    </machines>
+  </test>
+  <test name="ERS_Ld5" grid="f09_g17" compset="BWHISTcmip6" testmods="allactive/defaultio_min">
+    <machines>
+      <machine name="cheyenne" compiler="gnu" category="prebeta">
+        <options>
+          <option name="wallclock">0:30</option>
+          <option name="comment">Restart test exercising BW1850cmip6</option>
         </options>
       </machine>
     </machines>
