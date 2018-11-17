@@ -8,7 +8,7 @@ Component tags used for this CESM beta tag :
 
 components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_02/components/cam
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20181109
-cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_1_rel_04
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_1_rel_05
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
 components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.13
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
@@ -43,6 +43,12 @@ cesm
 
 
 cime
+    Chris Fischer 2018-11-16 - cime_cesm2_1_rel_05 - cime (cesm2_1_alpha01f)
+    https://github.com/ESMCI/cime/tags/cime_cesm2_1_rel_04
+
+    Do not include time of day in cpl auxiliary hist file names
+
+
     Chris Fischer 2018-11-13 - cime_cesm2_1_rel_04 - cime (cesm2_1_alpha01f)
     https://github.com/ESMCI/cime/tags/cime_cesm2_1_rel_04
 
