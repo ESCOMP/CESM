@@ -37,7 +37,11 @@
   </help>
 
   <!-- 1850 compsets Default, Mosart, Wave for CESM2 -->
-
+  <compset>
+    <alias>B1850-tutorial</alias>
+    <lname>1850_CAM40_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f19_g37_gl4"/>
+  </compset>
 
   <compset>
     <alias>B1850Ws</alias>
