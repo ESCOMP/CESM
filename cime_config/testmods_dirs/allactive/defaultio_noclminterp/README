@@ -1,0 +1,24 @@
+This testmod is designed for ERI tests of compset-grid combinations that
+set CLM's use_init_interp = .true. by default (which is done because
+this is needed for compatibility with the hybrid refcase used for that
+compset-grid combination). The problem with this setting is that, in the
+branch portion of the ERI test, CLM dies with an error message if
+use_init_interp is true:
+
+   ERROR: Can only set use_init_interp if finidat is set
+
+(because finidat is NOT set in a branch run).
+
+Currently, ERI tests do a startup run for the ref1 case, so we don't
+actually need the use_init_interp setting that we would normally need
+for this compset-grid combination. So it's safe to simply turn off
+use_init_interp for all of the cases in this ERI test.
+
+Note that we cannot turn off use_init_interp via user_nl_clm, because
+CLM_NAMELIST_OPTS takes precedence over user_nl_clm. We could append
+'use_init_interp=.false.' to CLM_NAMELIST_OPTS, but that would still
+leave the problem of init_interp_method: if that is set at all when
+use_init_interp=.false., then we get an error during build-namelist. So
+we need to remove the init_interp_method setting entirely; once we are
+going to the trouble of doing that, we might as well just remove
+use_init_interp, too.

@@ -1,0 +1,5 @@
+# Remove any settings of use_init_interp and init_interp_method from CLM_NAMELIST_OPTS
+# (see README for rationale)
+clm_namelist_orig=`./xmlquery --value CLM_NAMELIST_OPTS`
+clm_namelist_new=`echo $clm_namelist_orig | sed -e 's/use_init_interp *= *[^ ]*//' -e 's/init_interp_method *= *[^ ]*//'`
+./xmlchange CLM_NAMELIST_OPTS="$clm_namelist_new"
