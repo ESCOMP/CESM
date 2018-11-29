@@ -6,17 +6,33 @@ One-line Summary: Final alpha tag before first release tag.
 
 Component tags used for this CESM beta tag :
 
-components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_02/components/cam
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_05/components/cam
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20181109
-cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_1_rel_05
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_1_rel_06
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
-components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.13
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.14
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
 components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_1_rel_n01 
 components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02
 components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/release_tags/ww3_cesm2_1_rel_01
 
 cam
+    Brian Eaton 2018-11-26 - release_tags/cam_cesm2_1_rel_04 - components/cam (cesm2_1_alpha01f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_04
+
+    Fixes for simple models w/ EUL dycore.
+    BFB except:
+    1) Eulerian dycore with analytic baroclinic wave ICs and terminator
+       chemistry. 
+    2) Eulerian dycore with moist simple physics (kessler or tj2016).
+
+
+    Brian Eaton 2018-11-21 - release_tags/cam_cesm2_1_rel_03 - components/cam (cesm2_1_alpha01f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_03
+
+    Workaround to add aircraft CO2 emissions file used by BGC to cam.input_data_list
+
+
     Brian Eaton 2018-11-06 - release_tags/cam_cesm2_1_rel_01 - components/cam (cesm2_1_alpha01f)
     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_01
 
@@ -25,6 +41,14 @@ cam
     . Disable ability of SE dycore to run with topography or with the new CSLAM
       advection and physics grid.  The dycore may still be run for simple
       models and aquaplanet mode using the GLL advection.
+
+
+    Cheryl Craig 2018-11-26 - release_tags/cam_cesm2_1_rel_05 - components/cam (cesm2_1_alpha01f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_05
+
+    Change how SDYN is selected in CAM from a time component to a CAM qualifier
+
+    SD compsets change answers
 
 
     Cheryl Craig 2018-11-15 - release_tags/cam_cesm2_1_rel_02 - components/cam (cesm2_1_alpha01f)
@@ -40,9 +64,17 @@ cesm
     Use cmip6 refcases for standard B1850 and BHIST compsets
         - changes answers for B1850, BHIST, BW1850, BWHIST and BWma1850 at f09_g17
         - Add tests for BWHISTcmip6 and BWCO2x4cmips
+    Fix use_init_interp with B1850 ERI test.
 
 
 cime
+    Chris Fischer 2018-11-27 - cime_cesm2_1_rel_06 - cime (cesm2_1_alpha01f)
+    https://github.com/ESMCI/cime/tags/cime_cesm2_1_rel_06
+
+    Update addmetadata for POP-ECT.
+    Fix new pylint errors 
+
+
     Chris Fischer 2018-11-16 - cime_cesm2_1_rel_05 - cime (cesm2_1_alpha01f)
     https://github.com/ESMCI/cime/tags/cime_cesm2_1_rel_04
 
@@ -57,6 +89,12 @@ cime
 
 
 clm
+    Erik Kluzek 2018-11-27 - release-clm5.0.14 - components/clm (cesm2_1_alpha01f)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.14
+
+    Fix 1850 f05 SP surface dataset, needed for CAM SDYN cases.
+
+
     Erik Kluzek 2018-10-08 - release-clm5.0.13 - components/clm (cesm2_1_alpha01f)
     https://github.com/ESCOMP/ctsm/tags/release-clm5.0.11
 
