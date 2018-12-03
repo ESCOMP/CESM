@@ -1,4 +1,57 @@
 ===============================================================
+Tag name: cesm2_1_beta01
+Originator(s): CSEG
+Date: 3 Dec 2018
+One-line Summary: Beta tag for cesm2.1.0 release
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_05/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20181109
+cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_1_rel_06
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.14
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_1_rel_n01 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/release_tags/ww3_cesm2_1_rel_01
+
+Answer Changes introduced with this tag when compared to cesm2_0_beta10:
+
+    -B1850, BHIST, BW1850, BWHIST and BWma1850 at f09_g17
+CAM
+    -1850 compsets
+    -WACCM and CAM-Chem
+    -Specified Dynamics
+    -FCHIST
+    -All CAM6 
+    -WACCMX, gravity waves, steady state electron and ion temperature
+    -FWmad* and FWsc* compsets 
+    -Change F1850 to use %SP (answer changing for F1850)
+    -F2000climo
+    -SCAM 
+    -Update middle atmosphere chemistry mechanisms
+    -Some simple physics configurations.
+CLM
+    -1850 compsets
+    -Update ndep for transient also use it for 1850 as well.
+    -Pick up correct finidat for cases coupled to CAM.
+    -Fix for non-prognostic-crop transient cases.
+POP
+    -Correct IAGE reset when lrobert_filter=.true.
+    -Add CMIP tracer budget diagnostics.
+    -Move submeso and diag_gm_bolus-dependent tavg vars into separate tavg_contents files.
+    -Update 1850 Ndep forcing from recent coupled B1850 WACCM run.
+    -Correct EBM tavg vars.
+    -All ecosystem compsets.
+    -Also includes a bugfix for the Robert Filter, so changes answers for all gx1v[67] resolution runs.
+
+Problems identified after tag creation:
+    - CAM-SE tests failing because CAM-SE not supported.
+    - There are known issues for the pgi and cray compilers.
+
+===============================================================
+
 Tag name: cesm2_1_alpha01f
 Originator(s): CSEG
 Date: 5 November 2018
