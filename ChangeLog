@@ -8,7 +8,7 @@ Component tags used for this CESM beta tag :
 
 components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_05/components/cam
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20181109
-cime                               https://github.com/CESM-Development/cime/tree/cime_cesm2_1_rel_06
+cime                               https://github.com/CESM-Development/cime/tree/cime5.6.10_cesm2_1_rel_06
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
 components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.14
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
