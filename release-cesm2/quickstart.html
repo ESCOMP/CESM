@@ -53,8 +53,8 @@ in the <code class="docutils literal notranslate"><span class="pre">my_cesm_sand
 <span class="go">./query_config --help</span>
 </pre></div>
 </div>
-<p>See the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/compsets.html">supported component sets</a>,
-<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html">supported model resolutions</a> and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/machines.html">supported
+<p>See the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/config/compsets.html">supported component sets</a>,
+<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/config/grids.html">supported model resolutions</a> and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/config/machines.html">supported
 machines</a> for a complete list of CESM2
 supported component sets, grids and computational platforms.</p>
 <div class="admonition note">
@@ -89,10 +89,10 @@ name as the <code class="docutils literal notranslate"><span class="pre">CASENAM
 directory is created in the directory where you executed create_newcase. If <code class="docutils literal notranslate"><span class="pre">CASENAME</span></code>
 is a relative or absolute path, the case directory is created there, and the name of the
 case will be the last component of the path. The full path to the case directory will be
-stored in the <code class="docutils literal notranslate"><span class="pre">$CASEROOT</span></code> XML variable. See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames">CESM2 Experiment Casenames</a> for
+stored in the <code class="docutils literal notranslate"><span class="pre">$CASEROOT</span></code> XML variable. See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/naming_conventions.html#casenames">CESM2 Experiment Casenames</a> for
 details regarding CESM experiment case naming conventions.</li>
-<li><code class="docutils literal notranslate"><span class="pre">COMPSET</span></code> is the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/compsets.html">component set</a>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">GRID</span></code> is the model <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html">resolution</a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">COMPSET</span></code> is the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/config/compsets.html">component set</a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">GRID</span></code> is the model <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/config/grids.html">resolution</a>.</li>
 </ul>
 <p>Here is an example on NCAR machine cheyenne with the <code class="docutils literal notranslate"><span class="pre">$USER</span></code> shell environment variable
 set to your cheyenne login name:</p>
@@ -187,7 +187,7 @@ TERMINATION OF CPL7-cesm”.</p>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">$DOUT_S_ROOT/$CASE</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">$DOUT_S_ROOT</span></code> refers to the short term archive path location on local disk.
 This path is used by the case.st_archive script when <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span> <span class="pre">=</span> <span class="pre">TRUE</span></code>.
-See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#modelOutputLocations">CESM Model Output File Locations</a>
+See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/naming_conventions.html#modelOutputLocations">CESM Model Output File Locations</a>
 for details regarding the component model output filenames and locations.</p>
 <p><code class="docutils literal notranslate"><span class="pre">$DOUT_S_ROOT/$CASE</span></code> is the short term archive directory for this case. If <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span></code> is
 FALSE, then no archive directory should exist. If <code class="docutils literal notranslate"><span class="pre">$DOUT_S</span></code> is TRUE, then

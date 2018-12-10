@@ -48,14 +48,15 @@ repository, <a class="reference external" href="http://github.com/ESCOMP/cesm">h
 <p>Access to the code requires both git and Subversion client software in
 place that is compatible with GitHub and our Subversion server
 software.  You will need access to the command line clients, <code class="docutils literal notranslate"><span class="pre">git</span></code>
-(v1.8 or greater) and <code class="docutils literal notranslate"><span class="pre">svn</span></code> (v1.8 or greater).  Currently, our Subversion server
+(v1.8 or greater) and <code class="docutils literal notranslate"><span class="pre">svn</span></code> (v1.8 or greater but less than v1.11).
+Currently, our Subversion server
 software is at version 1.8.17. For more information or to download
 open source tools, visit <a class="reference external" href="http://subversion.tigris.org/">Subversion</a>
 and <a class="reference external" href="https://git-scm.com/downloads">git downloads</a>.</p>
 <p>With valid git and svn clients installed on the machine where CESM will be
 built and run, the user may download the latest version of the release
 code:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone -b release-cesm2.0.1 https://github.com/ESCOMP/cesm.git my_cesm_sandbox</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone -b release-cesm2.1.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox</span>
 <span class="go">cd my_cesm_sandbox</span>
 </pre></div>
 </div>
@@ -63,8 +64,8 @@ code:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git tag --list &#39;release-cesm2*&#39;</span>
 </pre></div>
 </div>
-<p>To checkout a specific CESM release tag type, for example CESM2.0.0:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git checkout release-cesm2.0.0</span>
+<p>To checkout a specific CESM release tag type, for example CESM2.0.1:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git checkout release-cesm2.0.1</span>
 </pre></div>
 </div>
 <p>Finally, to checkout all the individual model components,

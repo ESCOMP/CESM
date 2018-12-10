@@ -43,22 +43,22 @@
 <span id="configurations"></span><h1>CESM2 Configurations<a class="headerlink" href="#cesm2-configurations" title="Permalink to this headline">¶</a></h1>
 <p>The CESM system can be configured a number of different ways from both
 a science and technical perspective. CESM supports numerous
-<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html">resolutions</a>, and
-<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html">component sets</a>.  In
+<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/grids.html">resolutions</a>, and
+<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html">component sets</a>.  In
 addition, each model component has input options to configure specific
-<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/component_xml/index.html">model settings</a>
-and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/component_namelists/index.html">parameterizations</a>.</p>
+<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/component_xml/index.html">model settings</a>
+and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/component_namelists/index.html">parameterizations</a>.</p>
 <div class="section" id="cesm2-components">
 <h2>CESM2 Components<a class="headerlink" href="#cesm2-components" title="Permalink to this headline">¶</a></h2>
 <p>CESM2 consists of seven geophysical model components:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/atmosphere">atmosphere (atm)</a></li>
-<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/sea-ice">sea-ice (ice)</a></li>
-<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/land">land (lnd)</a></li>
-<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/river">river (rof)</a></li>
-<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/ocean">ocean (ocn),</a></li>
-<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/land-ice">land-ice (glc)</a></li>
-<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/wave">ocean-wave (wav)</a></li>
+<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/atmosphere">atmosphere (atm)</a></li>
+<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/sea-ice">sea-ice (ice)</a></li>
+<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/land">land (lnd)</a></li>
+<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/river">river (rof)</a></li>
+<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/ocean">ocean (ocn),</a></li>
+<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/land-ice">land-ice (glc)</a></li>
+<li><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/wave">ocean-wave (wav)</a></li>
 </ul>
 <p>and an external system processing component</p>
 <ul class="simple">
@@ -115,7 +115,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>atm</td>
 <td>cam</td>
 <td>active</td>
-<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/atmosphere/">Community Atmosphere Model (CAM)</a> is a global atmospheric general circulation model developed from the NCAR CCM3.</td>
+<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/atmosphere/">Community Atmosphere Model (CAM)</a> is a global atmospheric general circulation model developed from the NCAR CCM3.</td>
 </tr>
 <tr class="row-odd"><td>atmosphere</td>
 <td>atm</td>
@@ -139,7 +139,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>lnd</td>
 <td>clm</td>
 <td>active</td>
-<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/land/">Community Land Model (CLM)</a> is the result of a collaborative project between scientists in the Terrestrial Sciences Section of the Climate and Global Dynamics Division (CGD) at NCAR and the CESM Land Model Working Group. Other principal working groups that also contribute to the CLM are Biogeochemistry, Paleoclimate, and Climate Change and Assessment.</td>
+<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/land/">Community Land Model (CLM)</a> is the result of a collaborative project between scientists in the Terrestrial Sciences Section of the Climate and Global Dynamics Division (CGD) at NCAR and the CESM Land Model Working Group. Other principal working groups that also contribute to the CLM are Biogeochemistry, Paleoclimate, and Climate Change and Assessment.</td>
 </tr>
 <tr class="row-odd"><td>land</td>
 <td>lnd</td>
@@ -163,13 +163,13 @@ so ice, ocn, and glc stubs are used).</p>
 <td>rof</td>
 <td>rtm</td>
 <td>active</td>
-<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/river/">river transport model (RTM)</a> was previously part of CLM and was developed to route total runoff from the land surface model to either the active ocean or marginal seas which enables the hydrologic cycle to be closed (Branstetter 2001, Branstetter and Famiglietti 1999). This is needed to model ocean convection and circulation, which is affected by freshwater input.</td>
+<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/river/">river transport model (RTM)</a> was previously part of CLM and was developed to route total runoff from the land surface model to either the active ocean or marginal seas which enables the hydrologic cycle to be closed (Branstetter 2001, Branstetter and Famiglietti 1999). This is needed to model ocean convection and circulation, which is affected by freshwater input.</td>
 </tr>
 <tr class="row-odd"><td>river</td>
 <td>rof</td>
 <td>mosart</td>
 <td>active</td>
-<td><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/river/">MOdel for Scale Adaptive River Transport (MOSART)</a> , a new large-scale river routing model. MOSART improves the magnitude and timing of river flow simulations.</td>
+<td><a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/river/">MOdel for Scale Adaptive River Transport (MOSART)</a> , a new large-scale river routing model. MOSART improves the magnitude and timing of river flow simulations.</td>
 </tr>
 <tr class="row-even"><td>river</td>
 <td>rof</td>
@@ -193,7 +193,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>ocn</td>
 <td>pop</td>
 <td>active</td>
-<td>The ocean model is an extension of the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/ocean/">Parallel Ocean Program (POP)</a> Version 2 from Los Alamos National Laboratory (LANL).</td>
+<td>The ocean model is an extension of the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/ocean/">Parallel Ocean Program (POP)</a> Version 2 from Los Alamos National Laboratory (LANL).</td>
 </tr>
 <tr class="row-even"><td>ocean</td>
 <td>ocn</td>
@@ -217,7 +217,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>ice</td>
 <td>cice</td>
 <td>active</td>
-<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/sea-ice/">sea-ice component (CICE)</a> is an extension of the Los Alamos National Laboratory (LANL) sea-ice model and was developed though collaboration within the CESM Polar Climate Working Group (PCWG). In CESM, CICE can run as a fully prognostic component or in prescribed mode where ice coverage (normally climatological) is read in.</td>
+<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/sea-ice/">sea-ice component (CICE)</a> is an extension of the Los Alamos National Laboratory (LANL) sea-ice model and was developed though collaboration within the CESM Polar Climate Working Group (PCWG). In CESM, CICE can run as a fully prognostic component or in prescribed mode where ice coverage (normally climatological) is read in.</td>
 </tr>
 <tr class="row-even"><td>sea-ice</td>
 <td>ice</td>
@@ -241,7 +241,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>glc</td>
 <td>cism</td>
 <td>active</td>
-<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/land-ice/">CISM component</a> is an extension of the Glimmer ice sheet model.</td>
+<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/land-ice/">CISM component</a> is an extension of the Glimmer ice sheet model.</td>
 </tr>
 <tr class="row-even"><td>land-ice</td>
 <td>glc</td>
@@ -253,7 +253,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>wav</td>
 <td>wav</td>
 <td>ww3</td>
-<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/wave/">ww3</a> component adds prognostic ocean waves to the system</td>
+<td>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/wave/">ww3</a> component adds prognostic ocean waves to the system</td>
 </tr>
 <tr class="row-even"><td>ocean-wave</td>
 <td>wav</td>
@@ -281,20 +281,20 @@ so ice, ocn, and glc stubs are used).</p>
 <p>The CESM2 components can be combined in numerous ways to carry out
 various scientific or software experiments. A particular mix of
 components, <em>along with</em> component-specific configuration and/or
-namelist settings is called a <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html">component set or compset</a>.  CESM
+namelist settings is called a <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html">component set or compset</a>.  CESM
 has a shorthand naming convention for component sets that are
 supported out-of-the-box.</p>
 <p>The compset name usually has a well defined first letter followed by
 some characters that are indicative of the configuration setup. Each
 compset name has a corresponding short name.</p>
-<p>See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html">supported component sets</a> for a
+<p>See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html">supported component sets</a> for a
 complete list of supported compset options. Running <strong>query_config</strong>
 with the <code class="docutils literal notranslate"><span class="pre">--compsets</span></code> option will also provide a listing of the
 supported out-of-the-box component sets for the local version of CESM.</p>
 </div>
 <div class="section" id="cesm2-grids">
 <h2>CESM2 Grids<a class="headerlink" href="#cesm2-grids" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html">supported grid resolutions</a> are
+<p>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/grids.html">supported grid resolutions</a> are
 specified in CESM by setting an overall model resolution.  Once the
 overall model resolution is set, components will read in appropriate
 grid files and the coupler will read in appropriate mapping weights
@@ -329,7 +329,7 @@ grid with three poles that are all centered over land.</p>
 </div>
 <div class="section" id="cesm2-machines">
 <h2>CESM2 Machines<a class="headerlink" href="#cesm2-machines" title="Permalink to this headline">¶</a></h2>
-<p>Scripts for <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html">supported machines</a> and
+<p>Scripts for <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html">supported machines</a> and
 userdefined machines are provided with the CESM release. Supported
 machines have machine specific files and settings added to the CESM
 scripts and are machines that should run CESM cases
@@ -343,7 +343,7 @@ files to fill in information required for the target platform. This
 functionality is handy in accelerating the porting process and quickly
 getting a case running on a new platform. For more information on
 porting, see the <a class="reference external" href="http://esmci.github.io/cime/users_guide/porting-cime.html">CIME porting guide</a>.  The
-list of available machines are documented in <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html">CESM supported machines</a>.
+list of available machines are documented in <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html">CESM supported machines</a>.
 Running <strong>query_config</strong> with the <code class="docutils literal notranslate"><span class="pre">--machines</span></code> option will also show
 the list of all machines for the current local version of
 CESM. Supported machines have undergone the full CESM porting
