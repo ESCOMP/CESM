@@ -13,7 +13,8 @@ repository, `http://github.com/ESCOMP/cesm <http://github.com/ESCOMP/cesm>`_.
 Access to the code requires both git and Subversion client software in
 place that is compatible with GitHub and our Subversion server
 software.  You will need access to the command line clients, ``git``
-(v1.8 or greater) and ``svn`` (v1.8 or greater).  Currently, our Subversion server
+(v1.8 or greater) and ``svn`` (v1.8 or greater but less than v1.11).  
+Currently, our Subversion server
 software is at version 1.8.17. For more information or to download
 open source tools, visit `Subversion <http://subversion.tigris.org/>`_
 and `git downloads <https://git-scm.com/downloads>`_.
@@ -24,7 +25,7 @@ code:
 
 .. code-block:: console
 
-    git clone -b release-cesm2.0.1 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
+    git clone -b release-cesm2.1.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
     cd my_cesm_sandbox
 
 To checkout a previous version of CESM, first view the available versions:
@@ -33,11 +34,11 @@ To checkout a previous version of CESM, first view the available versions:
 
     git tag --list 'release-cesm2*'
 
-To checkout a specific CESM release tag type, for example CESM2.0.0:
+To checkout a specific CESM release tag type, for example CESM2.0.1:
 
 .. code-block:: console 
 
-    git checkout release-cesm2.0.0
+    git checkout release-cesm2.0.1
 
 Finally, to checkout all the individual model components,
 run the **checkout_externals** script from /path/to/my_cesm_sandbox.
