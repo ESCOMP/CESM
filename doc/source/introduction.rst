@@ -9,7 +9,7 @@ How To Use This Document
 
 This guide instructs both novice and experienced users on downloading,
 building and running `CESM2
-<http://www.cesm.ucar.edu/models/cesm2.0>`_.
+<http://www.cesm.ucar.edu/models/cesm2>`_.
 
 CESM2 is built on the `CIME framework <http://github.com/ESMCI/cime>`_.
 
@@ -64,7 +64,7 @@ component, CESM allows researchers to conduct fundamental research
 into the Earth's past, present, and future climate states.
 
 CESM can be run on a number of different `hardware platforms
-<http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html>`__, and
+<http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html>`__, and
 has a relatively flexible design with respect to `processor layout
 <http://esmci.github.io/cime/users_guide/pes-threads.html>`__
 of components.
@@ -97,7 +97,7 @@ installing and running CESM2.
 
 -  perl 5 
 
--  subversion client (version 1.8 or greater) for downloading CAM, POP, and WW3
+-  subversion client (version 1.8 or greater but less than v1.11) for downloading CAM, POP, and WW3
 
 -  git client (1.8 or greater)
 

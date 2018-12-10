@@ -26,9 +26,9 @@ in the ``my_cesm_sandbox/cime/scripts`` directory
     cd my_cesm_sandbox/cime/scripts
     ./query_config --help
 
-See the `supported component sets <http://www.cesm.ucar.edu/models/cesm2.0/config/compsets.html>`_,
-`supported model resolutions <http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html>`_ and `supported
-machines <http://www.cesm.ucar.edu/models/cesm2.0/config/machines.html>`_ for a complete list of CESM2
+See the `supported component sets <http://www.cesm.ucar.edu/models/cesm2/config/compsets.html>`_,
+`supported model resolutions <http://www.cesm.ucar.edu/models/cesm2/config/grids.html>`_ and `supported
+machines <http://www.cesm.ucar.edu/models/cesm2/config/machines.html>`_ for a complete list of CESM2
 supported component sets, grids and computational platforms.
 
 .. note:: 
@@ -70,12 +70,12 @@ where:
   is a relative or absolute path, the case directory is created there, and the name of the
   case will be the last component of the path. The full path to the case directory will be
   stored in the ``$CASEROOT`` XML variable. See `CESM2 Experiment Casenames
-  <http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#casenames>`_ for
+  <http://www.cesm.ucar.edu/models/cesm2/naming_conventions.html#casenames>`_ for
   details regarding CESM experiment case naming conventions.
 
-- ``COMPSET`` is the `component set <http://www.cesm.ucar.edu/models/cesm2.0/config/compsets.html>`_.
+- ``COMPSET`` is the `component set <http://www.cesm.ucar.edu/models/cesm2/config/compsets.html>`_.
 
-- ``GRID`` is the model `resolution <http://www.cesm.ucar.edu/models/cesm2.0/config/grids.html>`_.
+- ``GRID`` is the model `resolution <http://www.cesm.ucar.edu/models/cesm2/config/grids.html>`_.
 
 Here is an example on NCAR machine cheyenne with the ``$USER`` shell environment variable
 set to your cheyenne login name:
@@ -197,7 +197,7 @@ comma separated names and no spaces):
 
   ``$DOUT_S_ROOT`` refers to the short term archive path location on local disk.
   This path is used by the case.st_archive script when ``$DOUT_S = TRUE``.
-  See `CESM Model Output File Locations <http://www.cesm.ucar.edu/models/cesm2.0/naming_conventions.html#modelOutputLocations>`_
+  See `CESM Model Output File Locations <http://www.cesm.ucar.edu/models/cesm2/naming_conventions.html#modelOutputLocations>`_
   for details regarding the component model output filenames and locations. 
 
   ``$DOUT_S_ROOT/$CASE`` is the short term archive directory for this case. If ``$DOUT_S`` is
