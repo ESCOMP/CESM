@@ -60,6 +60,14 @@
     <alias>BWHIST</alias>
     <lname>HIST_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
   </compset>
+  <compset>
+    <alias>BWaerchem-1950HC</alias>
+    <lname>HIST_CAM60%WCTS%AERCHEM-1950HC_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+  </compset>
+  <compset>
+    <alias>BWaerchem-piNTCF</alias>
+    <lname>HIST_CAM60%WCTS%AERCHEM-piNTCF_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+  </compset>
 
   <compset>
     <alias>BWma1850</alias>
@@ -176,9 +184,10 @@
 
   <entries>
     <entry id="RUN_STARTDATE">
-      <values>
+      <values match="first">
         <value compset="1850_"     >0001-01-01</value>
         <value compset="2000_"     >0001-01-01</value>
+        <value compset="HIST_CAM60%WCTS%AERCHEM-1950HC">1950-01-01</value>
         <value compset="HIST_"     >1850-01-01</value>
         <value compset="5505_"     >1955-01-01</value>
         <value compset="RCP[2468]_">2005-01-01</value>
@@ -190,6 +199,7 @@
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >0130-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >0130-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >0130-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60%WCTS%AERCHEM-1950HC_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP"           >1950-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"           >0010-01-01</value>
       </values>
     </entry>
@@ -199,6 +209,7 @@
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >hybrid</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >hybrid</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >hybrid</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60%WCTS%AERCHEM-1950HC_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP"           >hybrid</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"           >hybrid</value>
       </values>
     </entry>
@@ -208,6 +219,7 @@
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >b.e20.B1850.f09_g17.pi_control.all.297</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%null_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD"    >b.e20.B1850.f09_g17.pi_control.all.297</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD"     >b.e20.B1850.f09_g17.pi_control.all.297_transient_v2</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60%WCTS%AERCHEM-1950HC_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP"           >b.e21.BWHIST.f09_g17.CMIP6-historical-WACCM.001</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"           >b.e21.BW1850.f09_g17.CMIP6-piControl.001</value>
       </values>
     </entry>
@@ -224,6 +236,7 @@
     <entry id="CLM_NAMELIST_OPTS"> <!--need because ref case is non-transient -->
       <values>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3">use_init_interp=.true.</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WCTS%AERCHEM-piNTCF_CLM50%BGC-CROP">use_init_interp=.true.</value>
       </values>
     </entry>
 
