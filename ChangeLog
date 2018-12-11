@@ -5,15 +5,57 @@ Date: 22 October 2018
 One-line Summary: Misc. changes 
 
 
-components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/pause_resume_tags/pause_resume01_cam6_0_012/components/cam   --
-components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_02                                         --
-cime                               https://github.com/CESM-Development/cime/tree/cime5.7.4                                                **
-components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_63                                                 --
-components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev012                                                     **
-components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03                                               **
-components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20180830                                  **
-components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02                                                  **
-components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01                                 --
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_004/components/cam         **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_02                         --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.7.5                                **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_64                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev020                                     **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03                               **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20180830                  **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02                                  **
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01                 --
+
+cam
+    Francis Vitt 2018-12-06 - trunk_tags/cam6_1_004 - components/cam (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_004
+
+     Use CLM50 in WACCMX compsets since CLM40 is deprecated beyond CESM2.1
+     Fix bug in physics_update for WACCMX
+      - variable physics parameters need to be updated before use in physics_update
+     Misc cleanup
+
+    Changes answers for WACCMX
+
+
+    Brian Eaton 2018-11-30 - trunk_tags/cam6_1_003 - components/cam (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_003
+
+    workaround for cam.input_data_list
+
+
+    Brian Eaton 2018-11-29 - trunk_tags/cam6_1_002 - components/cam (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_002
+
+    Merged changes from release branch.  BFB except SD compsets and some simplified model configurations with the Eulerian dycore.
+
+
+    Brian Eaton 2018-11-12 - trunk_tags/cam6_1_001 - components/cam (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_001
+
+    . merge mods on pause_resume branch to CAM's trunk.
+
+
+    Brian Eaton 2018-11-02 - branch_tags/pause_resume_tags/pause_resume03_cam6_0_012 - components/cam (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/pause_resume_tags/pause_resume03_cam6_0_012
+
+    . minor code fixes inside DEBUG conditionals in mo_fstrat.F90
+
+
+    Brian Eaton 2018-11-01 - branch_tags/pause_resume_tags/pause_resume02_cam6_0_012 - components/cam (cesm2_2_alpha01d)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/pause_resume_tags/pause_resume02_cam6_0_012
+
+    fix syntax inside a DEBUG conditional
+
 
 cesm
     Chris Fischer 2018-10-17 - cesm2_2_alpha01d - (cesm2_2_alpha01d)
@@ -21,9 +63,16 @@ cesm
 
     Remove unused testmods
     Remove no-longer-needed b1850 usermods directory
+    Remove stub wave all active compsets.
 
 
 cime
+    William Sacks 2018-11-01 - cime5.7.5 - cime (cesm2_2_alpha01d)
+    https://github.com/ESMCI/cime/tags/cime5.7.5
+
+    Miscellaneous minor bug fixes, including getting mpi-serial working again
+
+
     Chris Fischer 2018-10-23 - cime5.7.4 - cime (cesm2_2_alpha01d)
     https://github.com/ESMCI/cime/tags/cime5.7.4
 
@@ -57,7 +106,75 @@ cime
         - Add /cluster/torque/bin to path on hobart.
 
 
+cism
+    Erik Kluzek 2018-12-10 - cism2_1_64 - components/cism (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_64
+
+    Some changes so that we can do simulations up to 214,747 years. Fixing
+    the limitations that didn't allow it to restart beyond year 9,999. This
+    required changes to the namelist build as well as some code changes. Going
+    beyond the 214,747 limit would require changes to CIME.
+
+
 clm
+    William Sacks 2018-12-03 - ctsm1.0.dev020 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev020
+
+    New options for irrigation and crop fsat
+
+    Changes answers for some CLM50 cold start cases (and potential for other minor answer changes)
+
+
+    William Sacks 2018-11-30 - ctsm1.0.dev019 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev019
+
+    Rework cold start initialization of wa and zwt
+
+    Changes answers for CLM50 cold start or transient (HIST) cases
+
+
+    William Sacks 2018-11-30 - ctsm1.0.dev018 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev018
+
+    Water tracer updates for initial things in driver loop
+
+    Roundoff-level changes in sensible heat flux
+
+
+    William Sacks 2018-11-30 - ctsm1.0.dev017 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev017
+
+    From Sam Levis and Erik Kluzek: Allow collapsing crops to generic crop
+
+
+    William Sacks 2018-11-01 - ctsm1.0.dev016 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev016
+
+    Update cime, fix FATES DEBUG token, add script to easily run system tests
+
+    Changes answers in a standalone checkout due to cime update, but should be bit-for-bit in CESM
+
+
+    William Sacks 2018-10-28 - ctsm1.0.dev015 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev015
+
+    CMIP6 compset modifiers, usermods for typical output, and other output enhancements
+
+
+    William Sacks 2018-10-26 - ctsm1.0.dev014 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev014
+
+    Miscellaneous minor, bit-for-bit bug fixes
+
+
+    Erik Kluzek 2018-10-08 - ctsm1.0.dev013 - components/clm (cesm2_2_alpha01d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev013
+
+    Fix the fact that transient Bgc and SP cases had constant crop area in time
+
+    Changes answers for clm45/clm50 transient cases without crop (Bgc, or Sp)
+
+
     Erik Kluzek 2018-10-04 - ctsm1.0.dev012 - components/clm (cesm2_2_alpha01d)
     https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev012
 
