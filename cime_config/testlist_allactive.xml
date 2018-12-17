@@ -133,6 +133,30 @@
       <option name="wallclock"> 01:00 </option>
     </options>
   </test>
+
+  <test name="SMS_D_Ln9" grid="f09_g17" compset="BWaerchem-1950HC" testmods="allactive/default">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="aerchem"/>
+      <machine name="cheyenne" compiler="intel" category="prebeta"/>
+    </machines>
+  </test>
+  <test name="ERS_Ld5" grid="f09_g17" compset="BWaerchem-1950HC" testmods="allactive/default">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="aerchem_ers"/>
+    </machines>
+  </test>
+  <test name="SMS_D_Ln9" grid="f09_g17" compset="BWaerchem-piNTCF" testmods="allactive/default">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="aerchem"/>
+      <machine name="cheyenne" compiler="intel" category="prealpha"/>
+    </machines>
+  </test>
+  <test name="ERS_Ld5" grid="f09_g17" compset="BWaerchem-piNTCF" testmods="allactive/default">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="aerchem_ers"/>
+    </machines>
+  </test>
+ 
   <test name="SMS_Ld5" grid="f19_g17" compset="BWma1850" testmods="allactive/default">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
