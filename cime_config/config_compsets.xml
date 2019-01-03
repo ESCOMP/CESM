@@ -41,13 +41,11 @@
   <compset>
     <alias>B1850</alias>
     <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
-    <science_support grid="f09_g17_gl4"/>
   </compset>
 
   <compset>
     <alias>BW1850</alias>
     <lname>1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
-    <science_support grid="f09_g17_gl4"/>
   </compset>
   <compset>
     <alias>BWma1850</alias>
@@ -57,7 +55,6 @@
   <compset>
     <alias>BHIST</alias>
     <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
-    <science_support grid="f09_g17_gl4"/>
   </compset>
 
   <compset>
