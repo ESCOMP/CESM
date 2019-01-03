@@ -7,14 +7,14 @@
 The CESM system can be configured a number of different ways from both
 a science and technical perspective. CESM supports numerous
 `resolutions
-<http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html>`_, and
+<http://www.cesm.ucar.edu/models/cesm2/cesm/grids.html>`_, and
 `component sets
-<http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html>`_.  In
+<http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html>`_.  In
 addition, each model component has input options to configure specific
 `model settings
-<http://www.cesm.ucar.edu/models/cesm2.0/component_xml/index.html>`_
+<http://www.cesm.ucar.edu/models/cesm2/component_xml/index.html>`_
 and `parameterizations
-<http://www.cesm.ucar.edu/models/cesm2.0/component_namelists/index.html>`_.
+<http://www.cesm.ucar.edu/models/cesm2/component_namelists/index.html>`_.
 
 
 CESM2 Components
@@ -22,13 +22,13 @@ CESM2 Components
 
 CESM2 consists of seven geophysical model components: 
 
-- `atmosphere (atm) <http://www.cesm.ucar.edu/models/cesm2.0/atmosphere>`_
-- `sea-ice (ice) <http://www.cesm.ucar.edu/models/cesm2.0/sea-ice>`_
-- `land (lnd) <http://www.cesm.ucar.edu/models/cesm2.0/land>`_
-- `river (rof) <http://www.cesm.ucar.edu/models/cesm2.0/river>`_
-- `ocean (ocn), <http://www.cesm.ucar.edu/models/cesm2.0/ocean>`_
-- `land-ice (glc) <http://www.cesm.ucar.edu/models/cesm2.0/land-ice>`_
-- `ocean-wave (wav) <http://www.cesm.ucar.edu/models/cesm2.0/wave>`_
+- `atmosphere (atm) <http://www.cesm.ucar.edu/models/cesm2/atmosphere>`_
+- `sea-ice (ice) <http://www.cesm.ucar.edu/models/cesm2/sea-ice>`_
+- `land (lnd) <http://www.cesm.ucar.edu/models/cesm2/land>`_
+- `river (rof) <http://www.cesm.ucar.edu/models/cesm2/river>`_
+- `ocean (ocn), <http://www.cesm.ucar.edu/models/cesm2/ocean>`_
+- `land-ice (glc) <http://www.cesm.ucar.edu/models/cesm2/land-ice>`_
+- `ocean-wave (wav) <http://www.cesm.ucar.edu/models/cesm2/wave>`_
 
 and an external system processing component
 
@@ -72,30 +72,30 @@ The CESM2 components can be summarized as follows:
    :header: "Component Generic Type", "Component Generic Name", "Component Name", "Component Type", "Description"
    :widths: 12, 10, 10, 10, 60
 
-   "atmosphere","atm","cam", "active","The `Community Atmosphere Model (CAM) <http://www.cesm.ucar.edu/models/cesm2.0/atmosphere/>`_ is a global atmospheric general circulation model developed from the NCAR CCM3."                                                                                                                                      
+   "atmosphere","atm","cam", "active","The `Community Atmosphere Model (CAM) <http://www.cesm.ucar.edu/models/cesm2/atmosphere/>`_ is a global atmospheric general circulation model developed from the NCAR CCM3."                                                                                                                                      
    "atmosphere","atm","datm", "data", "The `data atmosphere <http://esmci.github.io/cime/data_models/data-atm.html>`_ component is a pure data component that reads in atmospheric forcing data"
    "atmosphere","atm", "xatm", "dead", "Used only for testing the driver/coupler"
    "atmosphere","atm", "satm", "stub", "Used only to satisy the interface requirements"
-   "land", "lnd", "clm", "active", "The `Community Land Model (CLM) <http://www.cesm.ucar.edu/models/cesm2.0/land/>`_ is the result of a collaborative project between scientists in the Terrestrial Sciences Section of the Climate and Global Dynamics Division (CGD) at NCAR and the CESM Land Model Working Group. Other principal working groups that also contribute to the CLM are Biogeochemistry, Paleoclimate, and Climate Change and Assessment."
+   "land", "lnd", "clm", "active", "The `Community Land Model (CLM) <http://www.cesm.ucar.edu/models/cesm2/land/>`_ is the result of a collaborative project between scientists in the Terrestrial Sciences Section of the Climate and Global Dynamics Division (CGD) at NCAR and the CESM Land Model Working Group. Other principal working groups that also contribute to the CLM are Biogeochemistry, Paleoclimate, and Climate Change and Assessment."
    "land", "lnd", "dlnd", "data", "The `data land component <http://esmci.github.io/cime/data_models/data-lnd.html>`_ is a purely data-land component (reading in coupler history data for atm/land fluxes and land albedos produced by a previous run, or snow surface mass balance fields) or both."
    "land", "lnd", "xlnd", "dead", "Used only for testing the driver/coupler"
    "land", "lnd", "slnd", "stub", "Used only to satisy the interface requirements"
-   "river", "rof", "rtm", "active", "The `river transport model (RTM) <http://www.cesm.ucar.edu/models/cesm2.0/river/>`_ was previously part of CLM and was developed to route total runoff from the land surface model to either the active ocean or marginal seas which enables the hydrologic cycle to be closed (Branstetter 2001, Branstetter and Famiglietti 1999). This is needed to model ocean convection and circulation, which is affected by freshwater input."
-   "river", "rof", "mosart", "active", "`MOdel for Scale Adaptive River Transport (MOSART) <http://www.cesm.ucar.edu/models/cesm2.0/river/>`_ , a new large-scale river routing model. MOSART improves the magnitude and timing of river flow simulations."
+   "river", "rof", "rtm", "active", "The `river transport model (RTM) <http://www.cesm.ucar.edu/models/cesm2/river/>`_ was previously part of CLM and was developed to route total runoff from the land surface model to either the active ocean or marginal seas which enables the hydrologic cycle to be closed (Branstetter 2001, Branstetter and Famiglietti 1999). This is needed to model ocean convection and circulation, which is affected by freshwater input."
+   "river", "rof", "mosart", "active", "`MOdel for Scale Adaptive River Transport (MOSART) <http://www.cesm.ucar.edu/models/cesm2/river/>`_ , a new large-scale river routing model. MOSART improves the magnitude and timing of river flow simulations."
    "river", "rof", "drof", "data", "The `data runoff model <http://esmci.github.io/cime/data_models/data-river.html>`_ was previously part of the data land model and functions as a purely data-runoff model (reading in runoff data)."
    "river", "rof", "xrof", "dead", "Used only for testing the driver/coupler"
    "river", "rof", "srof", "stub", "Used only to satisy the interface requirements"
-   "ocean", "ocn", "pop", "active", "The ocean model is an extension of the `Parallel Ocean Program (POP) <http://www.cesm.ucar.edu/models/cesm2.0/ocean/>`_ Version 2 from Los Alamos National Laboratory (LANL)."
+   "ocean", "ocn", "pop", "active", "The ocean model is an extension of the `Parallel Ocean Program (POP) <http://www.cesm.ucar.edu/models/cesm2/ocean/>`_ Version 2 from Los Alamos National Laboratory (LANL)."
    "ocean", "ocn", "docn", "data", "The `data ocean <http://esmci.github.io/cime/data_models/data-ocean.html>`_ component has two distinct modes of operation. It can run as a pure data model, reading ocean SSTs (normally climatological) from input datasets, interpolating in space and time, and then passing these to the coupler. Alternatively, docn can compute updated SSTs based on a slab ocean model where bottom ocean heat flux convergence and boundary layer depths are read in and used with the atmosphere/ocean and ice/ocean fluxes obtained from the coupler."
    "ocean", "ocn", "xocn", "dead"
    "ocean", "ocn", "socn", "stub"
-   "sea-ice", "ice", "cice", "active", "The `sea-ice component (CICE) <http://www.cesm.ucar.edu/models/cesm2.0/sea-ice/>`_ is an extension of the Los Alamos National Laboratory (LANL) sea-ice model and was developed though collaboration within the CESM Polar Climate Working Group (PCWG). In CESM, CICE can run as a fully prognostic component or in prescribed mode where ice coverage (normally climatological) is read in."
+   "sea-ice", "ice", "cice", "active", "The `sea-ice component (CICE) <http://www.cesm.ucar.edu/models/cesm2/sea-ice/>`_ is an extension of the Los Alamos National Laboratory (LANL) sea-ice model and was developed though collaboration within the CESM Polar Climate Working Group (PCWG). In CESM, CICE can run as a fully prognostic component or in prescribed mode where ice coverage (normally climatological) is read in."
    "sea-ice", "ice", "dice", "data", "The `data ice <http://esmci.github.io/cime/data_models/data-seaice.html>`_ component is a partially prognostic model. The model reads in ice coverage and receives atmospheric forcing from the coupler, and then it calculates the ice/atmosphere and ice/ocean fluxes. The data ice component acts very similarly to CICE running in prescribed mode."
    "sea-ice", "ice", "xice", "dead", "Used only for testing the driver/coupler"
    "sea-ice", "ice", "sice", "stub"
-   "land-ice", "glc", "cism", "active", The `CISM component <http://www.cesm.ucar.edu/models/cesm2.0/land-ice/>`_ is an extension of the Glimmer ice sheet model.                                                                                                                                                                                        
+   "land-ice", "glc", "cism", "active", The `CISM component <http://www.cesm.ucar.edu/models/cesm2/land-ice/>`_ is an extension of the Glimmer ice sheet model.                                                                                                                                                                                        
    "land-ice", "glc", "sglc", "stub", "Used only to satisy the interface requirements"
-   "ocean-wave", "wav", "wav", "ww3","The `ww3 <http://www.cesm.ucar.edu/models/cesm2.0/wave/>`_ component adds prognostic ocean waves to the system" 
+   "ocean-wave", "wav", "wav", "ww3","The `ww3 <http://www.cesm.ucar.edu/models/cesm2/wave/>`_ component adds prognostic ocean waves to the system" 
    "ocean-wave", "wav", "xwav", "dead", "Used only for testing the driver/coupler"
    "ocean-wave", "wav", "swav", "stub", "Used only to satisy the interface requirements"
    "coupler", "cpl", "cpl", "active", "The `CESM coupler <http://esmci.github.io/cime/driver_cpl/index.html>`_ was built primarily through a collaboration of the NCAR CESM Software Engineering Group and the Argonne National Laboratory (ANL). The MCT coupling library provides much of the infrastructure."
@@ -108,7 +108,7 @@ The CESM2 components can be combined in numerous ways to carry out
 various scientific or software experiments. A particular mix of
 components, *along with* component-specific configuration and/or
 namelist settings is called a `component set or compset
-<http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html>`_.  CESM
+<http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html>`_.  CESM
 has a shorthand naming convention for component sets that are
 supported out-of-the-box.
 
@@ -117,7 +117,7 @@ some characters that are indicative of the configuration setup. Each
 compset name has a corresponding short name. 
 
 See `supported component sets
-<http://www.cesm.ucar.edu/models/cesm2.0/cesm/compsets.html>`_ for a
+<http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html>`_ for a
 complete list of supported compset options. Running **query_config**
 with the ``--compsets`` option will also provide a listing of the
 supported out-of-the-box component sets for the local version of CESM.
@@ -127,7 +127,7 @@ CESM2 Grids
 -----------
 
 The `supported grid resolutions
-<http://www.cesm.ucar.edu/models/cesm2.0/cesm/grids.html>`_ are
+<http://www.cesm.ucar.edu/models/cesm2/cesm/grids.html>`_ are
 specified in CESM by setting an overall model resolution.  Once the
 overall model resolution is set, components will read in appropriate
 grid files and the coupler will read in appropriate mapping weights
@@ -167,7 +167,7 @@ CESM2 Machines
 --------------
 
 Scripts for `supported machines
-<http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html>`_ and
+<http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html>`_ and
 userdefined machines are provided with the CESM release. Supported
 machines have machine specific files and settings added to the CESM
 scripts and are machines that should run CESM cases
@@ -183,7 +183,7 @@ getting a case running on a new platform. For more information on
 porting, see the `CIME porting guide
 <http://esmci.github.io/cime/users_guide/porting-cime.html>`_.  The
 list of available machines are documented in `CESM supported machines
-<http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html>`_.
+<http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html>`_.
 Running **query_config** with the ``--machines`` option will also show
 the list of all machines for the current local version of
 CESM. Supported machines have undergone the full CESM porting
