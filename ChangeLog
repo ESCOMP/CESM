@@ -1,4 +1,108 @@
 ===============================================================
+Tag name: cesm2_2_alpha01e
+Originator(s): CSEG
+Date: 07 January 2019
+One-line Summary: clm and cam changes 
+
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_010/components/cam         **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_02                         --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.7.6                                **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_64                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev021                                     **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03                               --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20181219                  **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02                                  --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01                 --
+
+cam
+    Brian Eaton 2018-12-28 - trunk_tags/cam6_1_010 - components/cam (cesm2_2_alpha01e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_010
+
+    Update SE/CSLAM.
+
+    SE/CSLAM changes answers.  Everything else is BFB.
+
+
+    Francis Vitt 2018-12-20 - trunk_tags/cam6_1_009 - components/cam (cesm2_2_alpha01e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_009
+
+     Add O3S diagnostic chemical tracer
+
+    CAM-Chem and WACCM baselines will fail due to differences in the x2a_Sl_dd* fields in the *.cpl.hi.*.nc
+    Climate is bit-fot-bit unchanged.
+
+
+    Brian Eaton 2018-12-19 - trunk_tags/cam6_1_008 - components/cam (cesm2_2_alpha01e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_008
+
+    . mods for NUOPC compatibility
+
+
+    Brian Eaton 2018-12-17 - trunk_tags/cam6_1_007 - components/cam (cesm2_2_alpha01e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_007
+
+    Replace MCT specific indices by coupler independent flags.
+
+
+    Francis Vitt 2018-12-14 - trunk_tags/cam6_1_006 - components/cam (cesm2_2_alpha01e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_006
+
+    Corrections to DEBUG code
+
+
+    Cheryl Craig 2018-12-17 - trunk_tags/cam6_1_005 - components/cam (cesm2_2_alpha01e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_005
+
+    Add nudging tools
+
+
+cesm
+    Chris Fischer 2019-01-07 - cesm2_2_alpha01e - (cesm2_2_alpha01e)
+    https://github.com/ESCOMP/cesm/tags/cesm2_2_alpha01e
+
+    Remove out-of-the-box refcases.  Changes answers for all-active compset that used refcases.
+
+
+cime
+    Chris Fischer 2019-01-07 - cime5.7.6 - cime (cesm2_2_alpha01e)
+    https://github.com/ESMCI/cime/tags/cime5.7.6
+
+        - case.cmpgen_namelists needs to be able to write to the case
+        - Improve errors messages coming from generic_xml.
+        - Update to the latest pio2 master from https://github.com/NCAR/ParallelIO
+          pio hash is 317963f
+        - Improve the logic of the continue run check.
+        - Merge latest maint-5.6 changes into master.
+        - Make sure optional arg exists before using.
+        - Improve error/exception handling throughout CIME.
+        - Update esmf in mapping master.
+        - Minor fix for e3sm_cime_mgmt.
+        - Fix issues found in cesm testing.
+        - Big improvement to robustness of CIME's XML handling.
+        - Correct timer merge issue.
+        - Fix PFS generate issue.
+        - Nuopc merge to master.
+        - Merge branch for acme split 2018-11-27.
+        - Resolve conflicts.
+        - Merge latest maint-5.6 changes into master.
+        - Fix new pylint errors.
+
+
+clm
+    William Sacks 2018-12-27 - ctsm1.0.dev021 - components/clm (cesm2_2_alpha01e)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev021
+
+    Added tracer ratio capability and included it in consistency checks
+
+
+pop
+    Alper Altuntas 2018-12-19 - trunk_tags/cesm_pop_2_1_20181219 - components/pop (cesm2_2_alpha01e)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//pop2/trunk_tags/cesm_pop_2_1_20181219
+
+    Add the 48yr/day PE layout spacecurve decomposition for gx1v7
+
+===============================================================
 Tag name: cesm2_2_alpha01d
 Originator(s): CSEG
 Date: 14 December 2018
