@@ -64,6 +64,13 @@ cesm
     Remove out-of-the-box refcases.  Changes answers for all-active compset that used refcases.
 
 
+cice
+    Chris Fischer 2019-01-07 - cice5_20190107 - components/cice (cesm2_2_alpha01e)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190107
+
+    Fix setting of DECOMPTYPE
+
+
 cime
     Chris Fischer 2019-01-07 - cime5.7.6 - cime (cesm2_2_alpha01e)
     https://github.com/ESMCI/cime/tags/cime5.7.6
