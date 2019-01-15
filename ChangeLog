@@ -11,7 +11,7 @@ cime                               https://github.com/CESM-Development/cime/tree
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_64                                 --
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev021                                     **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03                               --
-components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20181219                  **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20190115                  **
 components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02                                  --
 components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01                 --
 
@@ -134,6 +134,12 @@ clm
 
 
 pop
+    Chris Fischer 2019-01-15 - trunk_tags/cesm_pop_2_1_20190115 - components/pop (cesm2_2_alpha01e)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20190115
+
+    Allow buildcpp to rewrite case env_build.xml
+
+
     Alper Altuntas 2018-12-19 - trunk_tags/cesm_pop_2_1_20181219 - components/pop (cesm2_2_alpha01e)
     https://svn-ccsm-models.cgd.ucar.edu/pop2//pop2/trunk_tags/cesm_pop_2_1_20181219
 
