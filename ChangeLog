@@ -1,13 +1,13 @@
 ===============================================================
 Tag name: cesm2_2_alpha01e
 Originator(s): CSEG
-Date: 07 January 2019
+Date: 15 January 2019
 One-line Summary: clm and cam changes 
 
 
-components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_010/components/cam         **
-components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_0_rel_02                         --
-cime                               https://github.com/CESM-Development/cime/tree/cime5.7.6                                **
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_011/components/cam         **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190114                               **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.7.7                                **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_64                                 --
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev021                                     **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03                               --
@@ -16,6 +16,14 @@ components/rtm                     https://github.com/ESCOMP/rtm/tree/release-ce
 components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01                 --
 
 cam
+    Cheryl Craig 2019-01-14 - trunk_tags/cam6_1_011 - components/cam (cesm2_2_alpha01e)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_011
+
+    buildlib mod for cime interface change
+    remove REFCASEs until next CESM release
+     - This changes answers for all CAM compsets which used BGC_CROP
+
+
     Brian Eaton 2018-12-28 - trunk_tags/cam6_1_010 - components/cam (cesm2_2_alpha01e)
     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_010
 
@@ -65,6 +73,12 @@ cesm
 
 
 cice
+    Chris Fischer 2019-01-15 - cice5_20190114 - components/cice (cesm2_2_alpha01e)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190114
+
+    Fix for buildlib.
+
+
     Chris Fischer 2019-01-07 - cice5_20190107 - components/cice (cesm2_2_alpha01e)
     https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190107
 
@@ -72,6 +86,22 @@ cice
 
 
 cime
+    Chris Fischer 2019-01-14 - cime5.7.7 - cime (cesm2_2_alpha01e)
+    https://github.com/ESMCI/cime/tags/cime5.7.7
+
+        - Minor fix to e3sm_cime_mgmt to properly handle exe files.
+        - Merge branch for acme split 2019-01-14.
+        - e3sm_cime_mgmt: big upgrade/refactor to auto conf handling
+        - Add expected failure annotations to cs.status output.
+        - Bringing the latest nuopc development to master.
+        - Changes for PGI 18.4.
+        - Bring in the latest pio1 from external .
+        - Fix Case context manager enforcement.
+        - Update to pio 130c564.
+        - docn_comp_mod needs fix for optional variable.
+        - Remove support for CLM4.0.
+
+
     Chris Fischer 2019-01-07 - cime5.7.6 - cime (cesm2_2_alpha01e)
     https://github.com/ESMCI/cime/tags/cime5.7.6
 
