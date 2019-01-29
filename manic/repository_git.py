@@ -12,6 +12,7 @@ from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
 from .global_constants import VERBOSITY_VERBOSE
 from .repository import Repository
 from .externals_status import ExternalStatus
+from .externals_description import ExternalsDescription, git_submodule_status
 from .utils import expand_local_url, split_remote_url, is_remote_url
 from .utils import fatal_error, printlog
 from .utils import execute_subprocess
@@ -41,25 +42,35 @@ class GitRepository(Repository):
         Parse repo (a <repo> XML element).
         """
         Repository.__init__(self, component_name, repo)
+        self._gitmodules = None
+        self._submods = None
 
     # ----------------------------------------------------------------
     #
     # Public API, defined by Repository
     #
     # ----------------------------------------------------------------
-    def checkout(self, base_dir_path, repo_dir_name, verbosity):
+    def checkout(self, base_dir_path, repo_dir_name, verbosity, recursive):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
-        If the repo destination directory does not exist, checkout the correce
+        If the repo destination directory does not exist, checkout the correct
         branch or tag.
         """
         repo_dir_path = os.path.join(base_dir_path, repo_dir_name)
         repo_dir_exists = os.path.exists(repo_dir_path)
         if (repo_dir_exists and not os.listdir(
                 repo_dir_path)) or not repo_dir_exists:
-            self._clone_repo(base_dir_path, repo_dir_name, verbosity)
-        self._checkout_ref(repo_dir_path, verbosity)
+            self._clone_repo(base_dir_path, repo_dir_name, verbosity, recursive)
+        self._checkout_ref(repo_dir_path, verbosity, recursive)
+        gmpath = os.path.join(repo_dir_path,
+                              ExternalsDescription.GIT_SUBMODULES_FILENAME)
+        if os.path.exists(gmpath):
+            self._gitmodules = gmpath
+            self._submods = git_submodule_status(repo_dir_path)
+        else:
+            self._gitmodules = None
+            self._submods = None
 
     def status(self, stat, repo_dir_path):
         """
@@ -72,17 +83,27 @@ class GitRepository(Repository):
         if os.path.exists(repo_dir_path):
             self._status_summary(stat, repo_dir_path)
 
+    def submodules_file(self, repo_path=None):
+        if repo_path is not None:
+            gmpath = os.path.join(repo_path,
+                                  ExternalsDescription.GIT_SUBMODULES_FILENAME)
+            if os.path.exists(gmpath):
+                self._gitmodules = gmpath
+                self._submods = git_submodule_status(repo_path)
+
+        return self._gitmodules
+
     # ----------------------------------------------------------------
     #
     # Internal work functions
     #
     # ----------------------------------------------------------------
-    def _clone_repo(self, base_dir_path, repo_dir_name, verbosity):
+    def _clone_repo(self, base_dir_path, repo_dir_name, verbosity, recursive):
         """Prepare to execute the clone by managing directory location
         """
         cwd = os.getcwd()
         os.chdir(base_dir_path)
-        self._git_clone(self._url, repo_dir_name, verbosity)
+        self._git_clone(self._url, repo_dir_name, verbosity, recursive)
         os.chdir(cwd)
 
     def _current_ref(self):
@@ -282,36 +303,40 @@ class GitRepository(Repository):
         remote_name = "{0}_{1}".format(base_name, repo_name)
         return remote_name
 
-    def _checkout_ref(self, repo_dir, verbosity):
+    def _checkout_ref(self, repo_dir, verbosity, submodules):
         """Checkout the user supplied reference
+        if <submodules> is True, recursively initialize and update
+        the repo's submodules
         """
         # import pdb; pdb.set_trace()
         cwd = os.getcwd()
         os.chdir(repo_dir)
         if self._url.strip() == LOCAL_PATH_INDICATOR:
-            self._checkout_local_ref(verbosity)
+            self._checkout_local_ref(verbosity, submodules)
         else:
-            self._checkout_external_ref(verbosity)
+            self._checkout_external_ref(verbosity, submodules)
+
         os.chdir(cwd)
 
-    def _checkout_local_ref(self, verbosity):
+    def _checkout_local_ref(self, verbosity, submodules):
         """Checkout the reference considering the local repo only. Do not
         fetch any additional remotes or specify the remote when
         checkout out the ref.
-
+        if <submodules> is True, recursively initialize and update
+        the repo's submodules
         """
         if self._tag:
             ref = self._tag
         elif self._branch:
             ref = self._branch
-        else:
-            ref = self._hash
 
         self._check_for_valid_ref(ref)
-        self._git_checkout_ref(ref, verbosity)
+        self._git_checkout_ref(ref, verbosity, submodules)
 
-    def _checkout_external_ref(self, verbosity):
+    def _checkout_external_ref(self, verbosity, submodules):
         """Checkout the reference from a remote repository
+        if <submodules> is True, recursively initialize and update
+        the repo's submodules
         """
         if self._tag:
             ref = self._tag
@@ -326,14 +351,14 @@ class GitRepository(Repository):
             self._git_remote_add(remote_name, self._url)
         self._git_fetch(remote_name)
 
-        # NOTE(bja, 2018-03) we need to send seperate ref and remote
+        # NOTE(bja, 2018-03) we need to send separate ref and remote
         # name to check_for_vaild_ref, but the combined name to
         # checkout_ref!
         self._check_for_valid_ref(ref, remote_name)
 
         if self._branch:
             ref = '{0}/{1}'.format(remote_name, ref)
-        self._git_checkout_ref(ref, verbosity)
+        self._git_checkout_ref(ref, verbosity, submodules)
 
     def _check_for_valid_ref(self, ref, remote_name=None):
         """Try some basic sanity checks on the user supplied reference so we
@@ -687,43 +712,109 @@ class GitRepository(Repository):
         git_output = execute_subprocess(cmd, output_to_caller=True)
         return git_output
 
+    @staticmethod
+    def _git_version():
+        """Run the git --version command to obtain the git version.
+        """
+        cmd = ['git', '--version']
+        git_output = execute_subprocess(cmd, output_to_caller=True)
+        if git_output:
+            ver_strings = git_output.split(' ')[-1].split('.')
+            # Convert version to a set of integers
+            try:
+                version = list()
+                for item in ver_strings:
+                    version.append(int(item))
+
+            except ValueError:
+                version = None
+        else:
+            version = None
+
+        return version
+
+    @staticmethod
+    def has_submodules(repo_dir_path=None):
+        """Return True iff the repository at <repo_dir_path> (or the current
+        directory if <repo_dir_path> is None) has a '.gitmodules' file
+        """
+        if repo_dir_path is None:
+            fname = ExternalsDescription.GIT_SUBMODULES_FILENAME
+        else:
+            fname = os.path.join(repo_dir_path,
+                                 ExternalsDescription.GIT_SUBMODULES_FILENAME)
+
+        return os.path.exists(fname)
+
     # ----------------------------------------------------------------
     #
     # system call to git for sideffects modifying the working tree
     #
     # ----------------------------------------------------------------
     @staticmethod
-    def _git_clone(url, repo_dir_name, verbosity):
+    def _git_clone(url, repo_dir_name, verbosity, recursive):
         """Run git clone for the side effect of creating a repository.
         """
-        cmd = ['git', 'clone', '--quiet', url, repo_dir_name]
+        cmd = ['git', 'clone', '--quiet']
+        subcmd = None
+        if recursive:
+            # Add commands to process any .gitmodules files
+            ver = GitRepository._git_version()
+            if (ver[0] > 2) or ((ver[0] == 2) and (ver[1] >= 13)):
+                # Assume version 3 will use current syntax
+                cmd.append('--recurse-submodules')
+            elif ver[0] == 2:
+                # Version 2.1 through version 2.12
+                cmd.append('--recursive')
+            elif (ver[1] >= 6) or ((ver[1] == 6) and (len(ver) > 2) and (ver[2] >= 5)):
+                cmd.append('--recursive')
+            else:
+                # Old versions
+                subcmd = ['git', 'submodule', 'update', '--init', '--recursive']
+
+        cmd.extend([url, repo_dir_name])
         if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
+        if subcmd is not None:
+            os.chdir(repo_dir_name)
+            execute_subprocess(subcmd)
 
     @staticmethod
     def _git_remote_add(name, url):
-        """Run the git remote command to for the side effect of adding a remote
+        """Run the git remote command for the side effect of adding a remote
         """
         cmd = ['git', 'remote', 'add', name, url]
         execute_subprocess(cmd)
 
     @staticmethod
     def _git_fetch(remote_name):
-        """Run the git fetch command to for the side effect of updating the repo
+        """Run the git fetch command for the side effect of updating the repo
         """
         cmd = ['git', 'fetch', '--quiet', '--tags', remote_name]
         execute_subprocess(cmd)
 
     @staticmethod
-    def _git_checkout_ref(ref, verbosity):
-        """Run the git checkout command to for the side effect of updating the repo
+    def _git_checkout_ref(ref, verbosity, submodules):
+        """Run the git checkout command for the side effect of updating the repo
 
         Param: ref is a reference to a local or remote object in the
         form 'origin/my_feature', or 'tag1'.
 
         """
         cmd = ['git', 'checkout', '--quiet', ref]
+        if verbosity >= VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
+        execute_subprocess(cmd)
+        if submodules:
+            GitRepository._git_update_submodules(verbosity)
+
+    @staticmethod
+    def _git_update_submodules(verbosity):
+        """Run git submodule update for the side effect of updating this
+        repo's submodules.
+        """
+        cmd = ['git', 'submodule', 'update', '--init', '--recursive']
         if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)

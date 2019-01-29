@@ -56,7 +56,7 @@ class SvnRepository(Repository):
     # Public API, defined by Repository
     #
     # ----------------------------------------------------------------
-    def checkout(self, base_dir_path, repo_dir_name, verbosity):
+    def checkout(self, base_dir_path, repo_dir_name, verbosity, recursive):  # pylint: disable=unused-argument
         """Checkout or update the working copy
 
         If the repo destination directory exists, switch the sandbox to
@@ -138,9 +138,7 @@ in the new revision.
 
 To recover: Clean up the above directory (resolving conflicts, etc.),
 then rerun checkout_externals.
-""".format(cwd=repo_dir_path,
-                message=message,
-                status=status)
+""".format(cwd=repo_dir_path, message=message, status=status)
 
             fatal_error(errmsg)
 
