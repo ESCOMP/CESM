@@ -1,4 +1,90 @@
 ===============================================================
+Tag name: cesm2.1.1-rc.01
+Originator(s): CSEG
+Date: 3 Dec 2018
+One-line Summary: Fisrt release candidate for cesm2.1.1
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_11/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20181204
+cime                               https://github.com/CESM-Development/cime/tree/cime5.6.10_cesm2_1_rel_06
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.17
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_1_rel_n01 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02
+
+cam
+    Francis Vitt 2019-02-05 - release_tags/cam_cesm2_1_rel_11 - components/cam (cesm2.1.1-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_??
+
+    WACCM compsets
+
+    Fix to allow dry/wet mmr changes to run in debug mode.
+
+
+    Chris Fischer 2019-02-08 - release_tags/cam_cesm2_1_rel_10 - components/cam (cesm2.1.1-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_10
+
+    fix the fix in gw_tend
+
+
+    Chris Fischer 2019-02-08 - release_tags/cam_cesm2_1_rel_09 - components/cam (cesm2.1.1-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_09
+
+    treat all tracers as wet in gravity wave drag code
+
+
+    Chris Fischer 2019-02-08 - release_tags/cam_cesm2_1_rel_08 - components/cam (cesm2.1.1-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_08
+
+    tracers as wet in vertical diffusion and clubb
+
+
+    Chris Fischer 2019-02-08 - release_tags/cam_cesm2_1_rel_07 - components/cam (cesm2.1.1-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_07
+
+    tracers as wet in vertical diffusion and clubb
+
+
+    Chris Fischer 2019-02-08 - release_tags/cam_cesm2_1_rel_06 - components/cam (cesm2.1.1-rc.01)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_06
+
+    tracers as wet in vertical diffusion and clubb
+
+
+cice
+    David Bailey 2019-02-05 - cice5_20190204 - components/cice (cesm2.1.1-rc.01)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190204
+
+    This just fixes the option to have ice_ic set to 'none' or 'default'.
+
+
+    Chris Fischer 2019-02-08 - cice5_20190107 - components/cice (cesm2.1.1-rc.01)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190107
+
+    Fix setting of DECOMPTYPE
+
+
+clm
+    Erik Kluzek 2019-02-05 - release-clm5.0.17 - components/clm (cesm2.1.1-rc.01)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.17
+
+    History fields for vertically-resolved sums of soil C and N, and minor fixes
+
+
+    Erik Kluzek 2019-02-05 - release-clm5.0.16 - components/clm (cesm2.1.1-rc.01)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.16
+
+    PtVg and ssp_rcp future scenario options and Antarctica wetlands fix to mksurfdata, and option to dribble crop harvest XSMRPOOL flux to atmosphere
+
+
+    William Sacks 2018-12-06 - release-clm5.0.15 - components/clm (cesm2.1.1-rc.01)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.15
+
+    Option for rain-to-snow to immediately run off in some regions
+===============================================================
 Tag name: cesm2_1_beta01
 Originator(s): CSEG
 Date: 3 Dec 2018
