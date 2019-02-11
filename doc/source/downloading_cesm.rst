@@ -59,7 +59,12 @@ To see more details regarding the checkout_externals script from the command lin
     ./manage_externals/checkout_externals --help
 
 
-.. warning:: When contacting the Subversion server for the first time, you may need to accept an authentication certification.
+.. warning:: When contacting the Subversion server for the first time, you may need to
+             accept an authentication certification. If you experience problems such as
+             ``checkout_externals`` hanging: Run ``svn ls
+             https://svn-ccsm-models.cgd.ucar.edu/ww3/release_tags``, permanently
+             accepting the certificate when prompted, then retry the CESM download
+             (starting over at the top of these instructions).
 
 .. warning:: If a problem was encountered during checkout_externals, which may happen with an older version of the svn client software, it may appear to have downloaded successfully, but in fact only a partial checkout has occurred. 
 
