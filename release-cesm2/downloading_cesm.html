@@ -9,10 +9,12 @@
     <title>Downloading CESM2 &#8212; CESM  documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="CESM2 Configurations" href="cesm_configurations.html" />
@@ -83,7 +85,12 @@ To see more details regarding the checkout_externals script from the command lin
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">When contacting the Subversion server for the first time, you may need to accept an authentication certification.</p>
+<p class="last">When contacting the Subversion server for the first time, you may need to
+accept an authentication certification. If you experience problems such as
+<code class="docutils literal notranslate"><span class="pre">checkout_externals</span></code> hanging: Run <code class="docutils literal notranslate"><span class="pre">svn</span> <span class="pre">ls</span>
+<span class="pre">https://svn-ccsm-models.cgd.ucar.edu/ww3/release_tags</span></code>, permanently
+accepting the certificate when prompted, then retry the CESM download
+(starting over at the top of these instructions).</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -174,7 +181,7 @@ to ensure that only the required datasets are downloaded.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Downloading CESM2</a><ul>
 <li><a class="reference internal" href="#downloading-the-code-and-scripts">Downloading the code and scripts</a></li>
@@ -229,7 +236,7 @@ to ensure that only the required datasets are downloaded.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, U.S. National Science Foundation.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>
