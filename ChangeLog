@@ -1,4 +1,138 @@
 ===============================================================
+Tag name: cesm2_2_alpha01f
+Originator(s): CSEG
+Date: 25 February 2019
+One-line Summary: More changes to CTSM and others 
+
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_014/components/cam         **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190114                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.7.8                                **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_64                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev027                                     **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03                               --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20190222                  **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02                                  --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01                 --
+
+cam
+    Francis Vitt 2019-02-05 - trunk_tags/cam6_1_014 - components/cam (cesm2_2_alpha01f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_014
+
+    Mods for running WACCMX with CAM6 physics
+
+
+    Francis Vitt 2019-01-29 - trunk_tags/cam6_1_013 - components/cam (cesm2_2_alpha01f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_013
+
+    Updates to ion chemistry in middle atmosphere chemistry mechanisms
+
+
+    Brian Eaton 2019-01-24 - trunk_tags/cam6_1_012 - components/cam (cesm2_2_alpha01f)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_012
+
+    . Fix output of FV initial files to have dry mass mixing ratios for dry constituents.  Add backwards compatibility feature for old initial files with wrong mmr type.
+    . Change WACCM constituents from wet to dry.  Both chemistry and radiation expect dry mmr.
+    . Add conversions from dry to wet mmr in the parameterizations that assume wet mmr inputs.
+    . These changes don't impact the old cam3/cam4 nor the simple physics packages.
+
+
+cesm
+    Chris Fischer 2019-02-25 - cesm2_2_alpha01f - (cesm2_2_alpha01f)
+    https://github.com/ESCOMP/cesm/tags/cesm2_2_alpha01f
+
+    Two small sphinx documentation tweaks related to ESMCI/manage_externals#115
+
+
+cime
+    Chris Fischer 2019-02-25 - cime5.7.8 - cime (cesm2_2_alpha01f)
+    https://github.com/ESMCI/cime/tags/cime5.7.8
+
+        - Split the cesm/config_grids.xml file into 4 parts add new schema.
+        - Add ne30np4 and ne30pg3 grid support
+        - Fix deprecated flag.
+        - Merge to latest pio2 version.
+        - Fix issues with centos7-linux build.
+        - Merge in latest nuopc-cmeps development code.
+        - Merge maint-5.6
+        - Port to athena.
+        - Fix CIME dashboad regression tests.
+        - Port to new cgd system izumi.
+        - Report missing variables in cprnc(cprnc changes on machines backed outed to fix failing tests)
+        - Avoid an error message when CIME_MODEL is cesm - CAM_TARGET is not defined.
+        - Modifications to allow for E3SM developer tests for the SE SCM.
+        - Add a test for tools/configure.
+        - Minor JRA & CORE2 DATM forcing changes
+        - Remove debug print
+        - Fix test issue for cesm.
+        - Better handling of file permissions when copying files.
+
+
+clm
+    Negin Sobhani 2019-02-21 - ctsm1.0.dev027 - components/clm (cesm2_2_alpha01f)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev027
+
+    Non-constant time initialization for soil hydrology types are moved to SoilHydrologyType.F90.
+
+
+    Negin Sobhani 2019-02-21 - ctsm1.0.dev026 - components/clm (cesm2_2_alpha01f)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev026
+
+    Collapse unmanaged PFTs to the N most dominant
+
+
+    William Sacks 2019-01-23 - ctsm1.0.dev025 - components/clm (cesm2_2_alpha01f)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev025
+
+    History fields for vertically-resolved sums of soil C and N, and minor fixes
+
+
+    William Sacks 2019-01-15 - ctsm1.0.dev024 - components/clm (cesm2_2_alpha01f)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev024
+
+    Remove unnecessary restart variables
+
+
+    William Sacks 2019-01-11 - ctsm1.0.dev023 - components/clm (cesm2_2_alpha01f)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev023
+
+    Remove CLM4.0
+
+    Depends on the cime changes in https://github.com/ESMCI/cime/pull/2968
+
+
+    William Sacks 2019-01-08 - ctsm1.0.dev022 - components/clm (cesm2_2_alpha01f)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev022
+
+    Set tracer version of irrigation fluxes
+
+    - Roundoff-level changes in the diagnostic field, QIRRIG_FROM_SURFACE, for many tests
+
+    - Otherwise just changes answers when groundwater irrigation or water tracers are enabled
+    (neither is included in CESM prealpha/prebeta tests)
+
+
+pop
+    Alper Altuntas 2019-02-22 - trunk_tags//cesm_pop_2_1_20190222 - components/pop (cesm2_2_alpha01f)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags//cesm_pop_2_1_20190222
+
+    Add support for OCN_TRANSIENT=ssp126,ssp585
+
+    testing:aux_pop on cheyenne/intel
+
+
+    Alper Altuntas 2019-01-18 - /trunk_tags/cesm_pop_2_1_20190118 - components/pop (cesm2_2_alpha01f)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2//pop2/trunk_tags/cesm_pop_2_1_20190118
+
+    Minor forcing changes:
+    -Set sfwf_weak_restore to 4 years for CORE2 and 1 year for JRA
+    -Remove several unnecessary _HIRES ifdefs
+    -(Additional CORE2 and JRA forcing changes in CIME PR #2984)
+
+    answer changes in all forced casesdue to changes in sfwf_weak_restore and coldair_outbreak_mod
+
+
+===============================================================
 Tag name: cesm2_2_alpha01e
 Originator(s): CSEG
 Date: 15 January 2019
