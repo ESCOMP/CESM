@@ -6,7 +6,7 @@ One-line Summary: More changes to CTSM and others
 
 
 components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_014/components/cam         **
-components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190114                               --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190204                               **
 cime                               https://github.com/CESM-Development/cime/tree/cime5.7.8                                **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_64                                 --
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev027                                     **
@@ -44,6 +44,13 @@ cesm
     Two small sphinx documentation tweaks related to ESMCI/manage_externals#115
 
 
+cice
+    Chris Fischer 2019-02-26 - cice5_20190204 - components/cice (cesm2_2_alpha01f)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190204
+
+    Fix bug in setting DECOMPTYPE for pts_mode
+
+
 cime
     Chris Fischer 2019-02-25 - cime5.7.8 - cime (cesm2_2_alpha01f)
     https://github.com/ESMCI/cime/tags/cime5.7.8
@@ -58,7 +65,7 @@ cime
         - Port to athena.
         - Fix CIME dashboad regression tests.
         - Port to new cgd system izumi.
-        - Report missing variables in cprnc(cprnc changes on machines backed outed to fix failing tests)
+        - Report missing variables in cprnc(cprnc changes on machines backed out to fix failing tests)
         - Avoid an error message when CIME_MODEL is cesm - CAM_TARGET is not defined.
         - Modifications to allow for E3SM developer tests for the SE SCM.
         - Add a test for tools/configure.
