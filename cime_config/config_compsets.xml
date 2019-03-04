@@ -45,7 +45,7 @@
 
   <compset>
     <alias>BW1850</alias>
-    <lname>1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
   </compset>
   <compset>
     <alias>BWma1850</alias>
