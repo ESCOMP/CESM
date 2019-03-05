@@ -89,12 +89,13 @@
       <option name="wallclock"> 00:40 </option>
     </options>
   </test>
-  <test name="IRT" grid="f09_g17" compset="BRCP85L45BGCR" testmods="allactive/defaultio">
+  <test name="IRT" grid="f09_g17_gl4" compset="BSSP585cmip6" testmods="allactive/defaultio">
     <machines>
-      <machine name="cheyenne" compiler="intel" category="prebeta"/>
+      <machine name="cheyenne" compiler="gnu" category="prebeta"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30 </option>
+      <option name="comment">Testing CMIP6 future scenario SSP5-RCP8.5 with CMIP6 usermods turned on</option>
     </options>
   </test>
   <test name="IRT_Ld7" grid="f09_g17" compset="BHIST" testmods="allactive/defaultio">
@@ -318,12 +319,13 @@
       <option name="wallclock"> 02:00 </option>
     </options>
   </test>
-  <test name="ERS_Ld7" grid="f09_g17" compset="BRCP85L45BGCR" testmods="allactive/defaultio">
+  <test name="ERS_Ld7" grid="f09_g17" compset="BSSP585" testmods="allactive/defaultio">
     <machines>
       <machine name="edison" compiler="intel" category="prebeta"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30 </option>
+      <option name="comment">Restart test for CMIP6 future scenario SSP5-RCP8.5</option>
     </options>
   </test>
   <test name="NCK_Ld5" grid="f19_g17" compset="BC5L45BGCR" testmods="allactive/defaultio">
@@ -453,12 +455,21 @@
       </machine>
     </machines>
   </test>
+  <test name="SMS_D_Ld1" grid="f09_g17_gl4" compset="BSSP585" testmods="allactive/defaultio">
+    <machines>
+      <machine name="cheyenne" compiler="gnu" category="prebeta"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30 </option>
+      <option name="comment">Debug test for CMIP6 future scenario SSP5-RCP8.5</option>
+    </options>
+  </test>
   <test name="IRT_Ld5" grid="f09_g17" compset="BHISTcmip6" testmods="allactive/defaultio_min">
     <machines>
       <machine name="cheyenne" compiler="gnu" category="prealpha">
         <options>
           <option name="wallclock">0:30</option>
-          <option name="comment">Debug test exercising B1850cmip6</option>
+          <option name="comment">exercising B1850cmip6</option>
         </options>
       </machine>
     </machines>
