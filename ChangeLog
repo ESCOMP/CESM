@@ -1,4 +1,71 @@
 ===============================================================
+Tag name: cesm2_2_beta01
+Originator(s): CSEG
+Date: 5 March 2019
+One-line Summary: Post CESM2.1 updates
+
+Component tags used for this CESM beta tag :
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_014/components/cam         
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190204                               
+cime                               https://github.com/CESM-Development/cime/tree/cime5.7.8                                
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_64                                 
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev027                                     
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03                               
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20190222                  
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02                                  
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01                 
+
+
+Answer Changes introduced with this tag when compared to cesm2_1_beta01:
+CIME
+   Minor JRA & CORE2 DATM forcing changes
+CAM
+   - Begin separating SoilHydrology flux calculations Changes answers for all non-clm40 cases.
+   - WACCMX enhancements and bug fixes.
+   - Update CAM forcing files for 1850 compsets.
+   - WACCM and CAM-Chem compset updates; correction to gravity wave diagnostic SD compsets change answers.
+   - Fixes a SCAM bug and replaces bad T42 ocean domain file.
+   - Answer changing for *SD* and FCHIST compsets.
+   - All configurations using SE dycore have answer changes.
+   - Bug fix in MG2 evaporation of rain number.  All configs using cam6 physics have answers changes.
+   - Update emissions for WACCM, CAM-Chem.
+   - Use CLM50 in WACCMX compsets.
+   - SD compsets and some simplified model configurations with the Eulerian dycore.
+   - All CAM compsets which used BGC_CROP.
+   - Updates to ion chemistry in middle atmosphere chemistry mechanisms.
+   - Fix output of FV initial files to have dry mass mixing ratios for dry constituents.
+   - Change WACCM constituents from wet to dry.
+   - Add conversions from dry to wet mmr in the parameterizations that assume wet mmr inputs.
+
+CLM
+   - Update with latest nitrogen deposition for 1850 and update last year for streams for transient historical cases.
+   - Avoid glacier dynamic landunit adjustments in first time step, Changes answers for Startup / Hybrid runs that include CISM.
+   - New ndep file for clm5_0 and 1850. Fix an issue with clm5_0 Nitrogen Fixation flux fields.
+   - Changes answers for some CLM50 cold start cases.
+   - Roundoff-level changes in sensible heat flux.
+   - Changes answers for clm45/clm50 transient cases without crop (Bgc, or Sp).
+   - Roundoff-level changes in the diagnostic field, QIRRIG_FROM_SURFACE.
+
+POP
+   - Changes answers for all ecosystem compsets.
+   - Correct IAGE reset when lrobert_filter=.true.
+   - Update 1850 Ndep forcing from recent coupled B1850 WACCM run.
+   - Correct EBM tavg vars.
+   - All forced casesdue to changes in sfwf_weak_restore and coldair_outbreak_mod.
+
+
+Problems identified after tag creation:
+- PGI and Intel tests across multiple nodes on hobart are failing 
+- SSP tests failing with "Cannot modify case" 
+- PEA_P1_Ld3.T31_g37.X tests need to be changed to f19_g37. 
+- SMS_Ld1.f09_g17.BW1850 fails in pop, BW1850 compset name needs to be fixed. 
+- IRT_N3_PM3_Ld7.f19_g17.BHIST.cheyenne_intel.allactive-defaultio, issue with
+  use_init_interp in clm. CTSM issue #544 
+- ERP_Ln9.f05_f05_mg17.FCSD.cheyenne_intel.cam-outfrq9s, missing inputdata file
+  that needs to be generated. 
+- There are known issues for the pgi and cray compilers.
+
+===============================================================
 Tag name: cesm2_2_alpha01f
 Originator(s): CSEG
 Date: 25 February 2019
