@@ -141,6 +141,22 @@
       <option name="wallclock"> 00:30 </option>
     </options>
   </test>
+  <test name="ERS_Ld3" grid="f09_g17" compset="BWSSP245cmip6" testmods="allactive/defaultio_min">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="bwaccm"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30 </option>
+    </options>
+  </test>
+  <test name="ERS_Ld3" grid="f09_g17" compset="BWSSP370cmip6" testmods="allactive/defaultio_min">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="bwaccm"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30 </option>
+    </options>
+  </test>
   <test name="ERS_Ld3" grid="f09_g17" compset="BWSSP585cmip6" testmods="allactive/defaultio_min">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
@@ -159,6 +175,24 @@
     </options>
   </test>
   <test name="SMS_D_Ln9" grid="f09_g17" compset="BWSSP126cmip6" testmods="allactive/defaultio_min">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="prebeta"/>
+      <machine name="cheyenne" compiler="intel" category="bwaccm"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30 </option>
+    </options>
+  </test>
+  <test name="SMS_D_Ln9" grid="f09_g17" compset="BWSSP245cmip6" testmods="allactive/defaultio_min">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="prebeta"/>
+      <machine name="cheyenne" compiler="intel" category="bwaccm"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30 </option>
+    </options>
+  </test>
+  <test name="SMS_D_Ln9" grid="f09_g17" compset="BWSSP370cmip6" testmods="allactive/defaultio_min">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="bwaccm"/>
