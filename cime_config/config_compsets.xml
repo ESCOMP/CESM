@@ -12,7 +12,7 @@
     The notation for the compset longname is
     TIME_ATM[%phys]_LND[%phys]_ICE[%phys]_OCN[%phys]_ROF[%phys]_GLC[%phys]_WAV[%phys][_ESP%phys][_BGC%phys]
     Where for the specific compsets below the following is supported
-    TIME = Time period (e.g. 2000, HIST, RCP8...)
+    TIME = Time period (e.g. 2000, HIST, SSP585...)
     ATM  = [CAM40, CAM50, CAM60]
     LND  = [CLM45, CLM50, SLND]
     ICE  = [CICE, DICE, SICE]
@@ -163,19 +163,19 @@
     <lname>1850_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
   </compset>
 
+  <!-- CMIP6 future scenarios with standard CAM (not WACCM) -->
   <compset>
-    <alias>BRCP85L45BGCR</alias>
-    <lname>RCP8_CAM60_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
+    <alias>BSSP585</alias>
+    <lname>BSSP585_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f09_g17_gl4"/>
+    <science_support grid="f09_g17"/>
   </compset>
-
+  <!-- Same as above, but with cmip6-related modifiers for some components -->
   <compset>
-    <alias>BRCP85C5L45BGC</alias>
-    <lname>RCP8_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
-  </compset>
-
-  <compset>
-    <alias>BC5L45BGCR</alias>
-    <lname>2000_CAM50_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
+    <alias>BSSP585cmip6</alias>
+    <lname>SSP585_CAM60_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f09_g17_gl4"/>
+    <science_support grid="f09_g17"/>
   </compset>
 
   <!-- Climate Simulation Lab compsets for Keith Lindsay -->
@@ -238,8 +238,8 @@
         <value compset="2000_"     >0001-01-01</value>
         <value compset="HIST_"     >1850-01-01</value>
         <value compset="5505_"     >1955-01-01</value>
-        <value compset="RCP[2468]_">2005-01-01</value>
         <value compset="2013_"     >2013-01-01</value>
+        <value compset="SSP"       >2015-01-01</value>
         <value compset="SSP(1-2.6|5-8.5)_">2015-01-01</value>
         <value compset="SSP5-3.4_" >2040-01-01</value>
       </values>
