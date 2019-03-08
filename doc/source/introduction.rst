@@ -9,7 +9,7 @@ How To Use This Document
 
 This guide instructs both novice and experienced users on downloading,
 building and running `CESM2
-<http://www.cesm.ucar.edu/models/cesm2.0>`_.
+<http://www.cesm.ucar.edu/models/cesm2>`_.
 
 CESM2 is built on the `CIME framework <http://github.com/ESMCI/cime>`_.
 
@@ -28,10 +28,10 @@ ad hoc order.
 
 .. note:: 
 
-   The "$" prefix for all capatalized words is a CESM documentation
-   convention used to indicate either a placeholder for an expected
-   input value to a command or a value defined in the CESM XML
-   settings.
+   Variables presented as ``$VAR`` in this guide typically refer to variables in XML files
+   in a CESM case. From within a case directory, you can determine the value of such a
+   variable with ``./xmlquery VAR``. In some instances, ``$VAR`` refers to a shell
+   variable or some other variable; we try to make these exceptions clear.
     
 Please feel free to provide feedback to the `CESM forum <https://bb.cgd.ucar.edu/>`_ about how to improve the
 documentation. 
@@ -64,7 +64,7 @@ component, CESM allows researchers to conduct fundamental research
 into the Earth's past, present, and future climate states.
 
 CESM can be run on a number of different `hardware platforms
-<http://www.cesm.ucar.edu/models/cesm2.0/cesm/machines.html>`__, and
+<http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html>`__, and
 has a relatively flexible design with respect to `processor layout
 <http://esmci.github.io/cime/users_guide/pes-threads.html>`__
 of components.
@@ -97,7 +97,7 @@ installing and running CESM2.
 
 -  perl 5 
 
--  subversion client (version 1.8 or greater) for downloading CAM, POP, and WW3
+-  subversion client (version 1.8 or greater but less than v1.11) for downloading CAM, POP, and WW3
 
 -  git client (1.8 or greater)
 
@@ -125,6 +125,6 @@ Parallel-netCDF, also referred to as pnetcdf, is optional. If a user
 chooses to use pnetcdf, version 1.7.0 or later should be used with CESM.
 It is a library that is file-format compatible with netCDF, and provides
 higher performance by using MPI-IO. Pnetcdf is enabled by setting the
-``$PNETCDF_PATH`` variable in the ``Macros.make`` file. 
+``$PNETCDF_PATH`` Makefile variable in the ``Macros.make`` file.
 
 .. _CIME: http://esmci.github.io/cime

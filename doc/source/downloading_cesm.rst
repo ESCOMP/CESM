@@ -13,7 +13,8 @@ repository, `http://github.com/ESCOMP/cesm <http://github.com/ESCOMP/cesm>`_.
 Access to the code requires both git and Subversion client software in
 place that is compatible with GitHub and our Subversion server
 software.  You will need access to the command line clients, ``git``
-(v1.8 or greater) and ``svn`` (v1.8 or greater).  Currently, our Subversion server
+(v1.8 or greater) and ``svn`` (v1.8 or greater but less than v1.11).  
+Currently, our Subversion server
 software is at version 1.8.17. For more information or to download
 open source tools, visit `Subversion <http://subversion.tigris.org/>`_
 and `git downloads <https://git-scm.com/downloads>`_.
@@ -24,7 +25,7 @@ code:
 
 .. code-block:: console
 
-    git clone -b release-cesm2.0.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
+    git clone -b release-cesm2.1.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
     cd my_cesm_sandbox
 
 To checkout a previous version of CESM, first view the available versions:
@@ -33,11 +34,11 @@ To checkout a previous version of CESM, first view the available versions:
 
     git tag --list 'release-cesm2*'
 
-To checkout a specific CESM release tag type:
+To checkout a specific CESM release tag type, for example CESM2.0.1:
 
 .. code-block:: console 
 
-    git checkout release-cesm2.0.0
+    git checkout release-cesm2.0.1
 
 Finally, to checkout all the individual model components,
 run the **checkout_externals** script from /path/to/my_cesm_sandbox.
@@ -58,7 +59,12 @@ To see more details regarding the checkout_externals script from the command lin
     ./manage_externals/checkout_externals --help
 
 
-.. warning:: When contacting the Subversion server for the first time, you may need to accept an authentication certification.
+.. warning:: When contacting the Subversion server for the first time, you may need to
+             accept an authentication certification. If you experience problems such as
+             ``checkout_externals`` hanging: Run ``svn ls
+             https://svn-ccsm-models.cgd.ucar.edu/ww3/release_tags``, permanently
+             accepting the certificate when prompted, then retry the CESM download
+             (starting over at the top of these instructions).
 
 .. warning:: If a problem was encountered during checkout_externals, which may happen with an older version of the svn client software, it may appear to have downloaded successfully, but in fact only a partial checkout has occurred. 
 
@@ -126,8 +132,8 @@ provides tools to check and download input data automatically.
 A local input data directory should exist on the local disk, and it also 
 needs to be set in the CESM scripts via the variable ``$DIN_LOC_ROOT.``
 For supported machines, this variable is preset. For generic machines,
-this variable is set as an argument to **create_newcase**. It is recommended that all users
-of a given filesystem share the same ``$DIN_LOC_ROOT`` directory.
+this variable is set via the ``--input-dir`` argument to **create_newcase**.
+It is recommended that all users of a given filesystem share the same ``$DIN_LOC_ROOT`` directory.
 
 The files in the subdirectories of ``$DIN_LOC_ROOT`` should be
 write-protected. This prevents these files from being accidentally
