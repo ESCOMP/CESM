@@ -1,4 +1,153 @@
 ===============================================================
+Tag name: cesm2.1.1-rc.02
+Originator(s): CSEG
+Date: 3 Dec 2018
+One-line Summary: Second release candidate for cesm2.1.1
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_17/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20181204
+cime                               https://github.com/CESM-Development/cime/tree/cime5.6.13
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.20
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20190306
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02
+
+
+cam
+    Cheryl Craig 2019-03-07 - release_tags/cam_cesm2_1_rel_17 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_17
+
+    Updates to the SSP585 use_case
+
+
+    Francis Vitt 2019-03-06 - release_tags/cam_cesm2_1_rel_16 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_16
+
+    Change compset match string for WACCM SSP compsets
+
+     The long name of the SSP compsets will no longer include "-" and "." characters.
+     The compset string match in cime_config/config_component.xml was adjusted
+     accordingly.  
+
+
+    Cheryl Craig 2019-03-05 - release_tags/cam_cesm2_1_rel_15 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_15
+
+    Add CAM information for SSP585 future scenario
+
+
+    Brian Eaton 2019-02-27 - release_tags/cam_cesm2_1_rel_13 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_13
+
+    Another fix for co2_cycle constituents.  Only the co2_cycle constituent mixing ratios change.  These are not currently feeding back into the simulation.
+
+
+    Brian Eaton 2019-02-13 - release_tags/cam_cesm2_1_rel_12 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_12
+
+    Add diagnostic output for aircraft CO2 emissions (off by default).
+    Disable qneg3 for CO2 cycle tracers.
+
+
+    Cheryl Craig 2019-03-01 - release_tags/cam_cesm2_1_rel_14 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_14
+
+    Francis Vitt tag:
+    Updates to WACCM CMIP6 future scenario compsets
+
+
+cesm
+    Erik Kluzek 2019-02-12 - cesm2.1.1-rc02 - (cesm2.1.1-rc.02)
+    https://github.com/ESCOMP/cesm/tags/cesm2.1.1-rc01?
+
+    Add WACCM future scenario compsets: BWSSP245cmip6, BWSSP370cmip6
+
+    Add SSP5-8.5 compset and tests for all-active
+
+    This is dependent on other components being able to handle them: cam, ctsm, pop
+
+
+    James Edwards 2019-02-12 - cesm2.1.1 - (cesm2.1.1-rc.02)
+    https://github.com/ESCOMP/cesm/tags/cesm2.1.1
+
+    Add bluewaters pe layout
+
+
+cime
+    Chris Fischer 2019-03-13 - cime5.6.13 - cime (cesm2.1.1-rc.02)
+    https://github.com/ESMCI/cime/tags/cime5.6.13
+
+        - Only download chksum file(s) if requested.
+        - mpiexec_mpt argument fix on cheyenne
+
+
+    Erik Kluzek 2019-02-12 - cime5.6.12 - cime (cesm2.1.1-rc.02)
+    https://github.com/ESMCI/cime/tags/cime5.6.12?
+
+        - Fix issue with chksum option, update cheyenne.
+        - Add checksum support for inputdata.
+        - PIO performance optimization merge.
+        - Move the logic to check and update batch options.
+        - Update Ensemble Consistency Test README.
+        - Update to archive_metadata stand-alone functionality.
+        - Consolidate inputdata for stamepede2 and lonestar5.
+        - Port to tacc system lonestar5.
+        - Initial port to izumi.
+        - Allow specifying directives to use for an unknown queue.
+        - Update bluewaters machine interface.
+        - Minor update to archive_metadata.
+        - Change the default RUN_REFDIR from ccsm4_init to cesm2_init.
+        - cd to correct directory after running create_clone.
+        - List mpi-serial's include directory before any system-level includes.
+        - Fix nag & pgi CAM COSP build.
+        - Do not allow trailing / in filename.
+        - Update the version of ESMF used by the mapping tools on cheyenne.
+        - Update fv1.9x2.5,gx1v7 grids.
+        - _PNETCDF needs to be defined in csm_share build.
+
+
+    James Edwards 2019-02-11 - cime5.6.11 - cime (cesm2.1.1-rc.02)
+    https://github.com/ESMCI/cime/tags/cime5.6.11
+
+    minor changes for cime
+
+
+clm
+    Erik Kluzek 2019-03-07 - release-clm5.0.20 - components/clm (cesm2.1.1-rc.02)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.20
+
+    Some important answer changing updates: New surface datasets, removal of old CMIP5 rcp's/only support CMIP6 ssp_rcp combos. reseeding fix, QSNOEVAP fix. ndep update
+
+
+    Erik Kluzek 2019-02-05 - release-clm5.0.19 - components/clm (cesm2.1.1-rc.02)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.19
+
+    Update cime to use cime-5.6.12 that works on cheyenne after the Mar/5th/2019 downtime.
+
+
+    Erik Kluzek 2019-02-05 - release-clm5.0.18 - components/clm (cesm2.1.1-rc.02)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.18
+
+    More updates to surface dataset generation. Add noanthro datasets and contrib tools directory
+
+
+pop
+    Alper Altuntas 2019-03-05 - trunk_tags//cesm_pop_2_1_20190306 - components/pop (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags//cesm_pop_2_1_201903??
+
+    fixes for ssp126,ssp585
+
+
+    Chris Fischer 2018-12-19 - trunk_tags/cesm_pop_2_1_20190222 - components/pop (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/cesm_pop_2_1_20181219
+
+    Add support for OCN_TRANSIENT=ssp126,ssp585
+
+    testing:aux_pop on cheyenne/intel
+===============================================================
 Tag name: cesm2.1.1-rc.01
 Originator(s): CSEG
 Date: 3 Dec 2018
