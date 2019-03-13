@@ -1,4 +1,72 @@
 ===============================================================
+Tag name: cesm2_2_alpha02a
+Originator(s): CSEG
+Date: 13 March 2019
+One-line Summary: Cheyenne update fix, cam and ctsm tags
+
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_016/components/cam         **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190204                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.7.9                                **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_64                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev030                                     **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03                               --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20190222                  --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02                                  --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_cesm2_0_rel_01                 --
+
+cam
+    Brian Eaton 2019-03-11 - trunk_tags/cam6_1_016 - components/cam (cesm2_2_alpha02a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_016
+
+    Update component externals to cesm2_2_alpha01f, and update to cime5.7.9 for cheyenne runtime env.
+
+
+    Francis Vitt 2019-02-27 - trunk_tags/cam6_1_015 - components/cam (cesm2_2_alpha02a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_015
+
+    Add error checking for O3S loss; CESM2.1.1 compset updates
+
+
+cesm
+    Chris Fischer 2019-03-05 - cesm2_2_alpha02a - (cesm2_2_alpha02a)
+    https://github.com/ESCOMP/cesm/tags/cesm2_2_alpha02a
+
+    Fix BW1850 compset
+
+
+cime
+    William Sacks 2019-03-08 - cime5.7.9 - cime (cesm2_2_alpha02a)
+    https://github.com/ESMCI/cime/tags/cime5.7.9
+
+    Changes include:
+        - Fix cheyenne for recent machine update (from maint-5.6 merge)
+        - New inputdata chksum feature (from maint-5.6 merge)
+        - Update NYF CORE2 DROF data stream file
+        - Update support for CAM-SE grids
+        - Misc changes from E3SM split
+        - Misc additional changes from maint-5.6 branch
+
+    Answer changes: roundoff differences and namelist changes in NYF forced cases for mct (from #3020)
+
+
+clm
+    William Sacks 2019-03-08 - ctsm1.0.dev030 - components/clm (cesm2_2_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev030
+
+    Update CIME; hookup expected test fails
+
+    No answer changes in a CESM context (only answer changes came from the cime update)
+
+
+    William Sacks 2019-02-26 - ctsm1.0.dev028 - components/clm (cesm2_2_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev028
+
+    Interpolate out-of-the-box initial conditions and remove expensive tests
+
+    Changes answers for cases that still use use_init_interp = .true.
+    This means answer changes for most non-hybrid, non-f09_g17 cases
+===============================================================
 Tag name: cesm2_2_beta01
 Originator(s): CSEG
 Date: 5 March 2019
