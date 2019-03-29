@@ -257,7 +257,7 @@
       <values match="first">
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">0134-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">0501-01-01</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%4xCO2.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">0501-01-01</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60%4xCO2.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">0501-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%1PCT.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD" >0501-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >0014-01-01</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*%4xCO2.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"    >0070-01-01</value>
@@ -277,8 +277,7 @@
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%4xCO2.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">hybrid</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%1PCT.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD" >hybrid</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >hybrid</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*%4xCO2.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"    >hybrid</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*%1PCT.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"     >hybrid</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*%4xCO2.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"    >hybrid</value> <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WC.*%1PCT.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"     >hybrid</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60%WC.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">hybrid</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60%WC.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">hybrid</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="SSP[0-9]+_CAM60.*_CLM50%BGC-CROP.*CICE.*POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">hybrid</value>
@@ -286,32 +285,26 @@
     </entry>
 
     <entry id="RUN_REFCASE">
-      <values match="first">
-        <!-- Refcase b.e20.B1850.f09_g17.pi_control.all.299_merge_v2 is compatible with
+        <!-- All of the refcase are compatible with
              CLM option CMIP6DECK. We use it even without that option, but need to set
-             CLM's use_init_interp (below) when using it without CMIP6DECK. -->
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">b.e20.B1850.f09_g17.pi_control.all.299_merge_v3</value>
-        <!-- Refcase b.e21.B1850.f09_g17.CMIP6-piControl.001 is used with or without CLM
-             option CMIP6DECK. It was designed for use with CMIP6DECK, but this refcase
-             requires CLM interpolation in either case (because we're going from a
-             non-transient to a transient case), so it's fine to use it without the
-             CMIP6DECK option, too. -->
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"
-compset="HIST_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">b.e21.B1850.f09_g17.CMIP6-piControl.001_v2</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="_CAM60%4xCO2.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">b.e21.B1850.f09_g17.CMIP6-piControl.001_v2</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="_CAM60%1PCT.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD" >b.e21.B1850.f09_g17.CMIP6-piControl.001_v2</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >b.e21.BWsc1850.test.002_v2</value>
-        <!-- Refcase b.e21.BW1850.f09_g17.CMIP6-piControl.001_V2 is compatible with or
-             without CLM option CMIP6WACCMDECK; however, in some cases, this option is
-             used to distinguish between the refcase/refdate used for cmip6-specific
-             compsets vs. the refcase/refdate used in non-cmip6-specific compsets. -->
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="_CAM60%WC.*%4xCO2.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3" >b.e21.BW1850.f09_g17.CMIP6-piControl.001_v2</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="_CAM60%WC.*%1PCT.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3" >b.e21.BW1850.f09_g17.CMIP6-piControl.001_v2</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60%WC.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e20.B1850.f09_g17.pi_control.all.299_merge_v3waccm</value>
+             CLM's use_init_interp (below) when using it without CMIP6DECK (so answers qill bw identical). -->
+      <values match="first">
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e20.B1850.f09_g17.pi_control.all.299_merge_v3</value>
+        <!-- This REFCASE >b.e21.B1850.f09_g17.CMIP6-piControl.001_v3hist is used for going from 1850 control to historical.
+             It was interpoalted from the control case to the transient one.
+         -->
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.B1850.f09_g17.CMIP6-piControl.001_v3hist</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%4xCO2.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.B1850.f09_g17.CMIP6-piControl.001_v2</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%1PCT.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3" >b.e21.B1850.f09_g17.CMIP6-piControl.001_v2</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >b.e21.BWsc1850.test.002_v2</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >b.e21.BWsc1850.test.002_v2</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%WC.*%4xCO2.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3" >b.e21.BW1850.f09_g17.CMIP6-piControl.001_v2</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%WC.*%1PCT.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3" >b.e21.BW1850.f09_g17.CMIP6-piControl.001_v2</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%WC.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e20.B1850.f09_g17.pi_control.all.299_merge_v3waccm</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WC.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BW1850.f09_g17.CMIP6-piControl.001_v2</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP(126|245|370|585)_CAM60%WCTS_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BWHIST.f09_g17.CMIP6-historical-WACCM.001_v2</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="SSP534_CAM60%WCTS_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.001</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="SSP[0-9]+_CAM60.*_CLM50%BGC-CROP.*_CICE.*POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BHIST.f09_g17.CMIP6-historical.010</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP534_CAM60%WCTS_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.001</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP[0-9]+_CAM60.*_CLM50%BGC-CROP.*_CICE.*POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BHIST.f09_g17.CMIP6-historical.010_v2</value>
       </values>
     </entry>
 
@@ -329,6 +322,20 @@ compset="HIST_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="SSP[0-9]+_CAM60.*_CLM50%BGC-CROP.*CICE.*POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">cesm2_init</value>
       </values>
     </entry>
+
+   <entry id="CLM_NAMELIST_OPTS">
+     <values match="first">
+       <!-- Need to use init_interp for compssets without CLM option CMIP6DECK
+            because ref case has virtual Antarctica glaciers. So this is required 
+            to get identical answers -->
+       <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60_CLM50%BGC-CROP_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3" >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
+       <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"    >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
+       <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"    >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
+       <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP585_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"       >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
+       <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60_CLM50%BGC-CROP_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
+
+     </values>
+   </entry>
 
   </entries>
 
