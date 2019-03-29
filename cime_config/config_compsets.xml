@@ -180,6 +180,13 @@
     <science_support grid="f09_g17_gl4"/>
     <science_support grid="f09_g17"/>
   </compset>
+
+  <compset>
+    <alias>BSSP126</alias>
+    <lname>SSP126_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f09_g17_gl4"/>
+    <science_support grid="f09_g17"/>
+  </compset>
   <!-- Same as above, but with cmip6-related modifiers for some components -->
   <compset>
     <alias>BSSP585cmip6</alias>
@@ -188,6 +195,12 @@
     <science_support grid="f09_g17"/>
   </compset>
 
+  <compset>
+    <alias>BSSP126cmip6</alias>
+    <lname>SSP126_CAM60_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f09_g17_gl4"/>
+    <science_support grid="f09_g17"/>
+  </compset>
   <!-- Climate Simulation Lab compsets for Keith Lindsay -->
 
   <compset>
