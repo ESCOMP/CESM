@@ -317,8 +317,7 @@
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WC.*_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BW1850.f09_g17.CMIP6-piControl.001_v2</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP(126|245|370|585)_CAM60%WCTS_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BWHIST.f09_g17.CMIP6-historical-WACCM.001_v2</value>
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP534_CAM60%WCTS_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.001</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP585_CAM60.*_CLM50%BGC-CROP.*_CICE.*POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BHIST.f09_g17.CMIP6-historical.010_v2</value>
-        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP126_CAM60.*_CLM50%BGC-CROP.*_CICE.*POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BHIST.f09_g17.CMIP6-historical.010_v3ssp126</value>
+        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP.*_CAM60.*_CLM50%BGC-CROP.*_CICE.*POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.BHIST.f09_g17.CMIP6-historical.010_v2</value>
       </values>
     </entry>
 
