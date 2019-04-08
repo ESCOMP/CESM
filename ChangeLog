@@ -1,4 +1,138 @@
 ===============================================================
+Tag name: cesm2_2_alpha02b
+Originator(s): CSEG
+Date: 8 April 2019
+One-line Summary: Build update
+
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/cam6_1_016_buildlibupdate_tags/cam6_1_016_buildlibupdate_n01/components/cam         **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190322                               **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.1                                **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_67                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/bldlib4cime58.n01_ctsm1.0.dev030                   **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/bldlib4cime58.n01_mosart1_0_31                   **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/pop_2_1_20190325                  **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/bldlib4cime58.n01_rtm1_0_66 	                  **
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_190402 	                  **
+
+cam
+    Cheryl Craig 2019-03-12 - branch_tags/cam6_1_016_buildlibupdate_tags/cam6_1_016_buildlibupdate_n01 - components/cam (cesm2_2_alpha02b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/branch_tags/cam6_1_016_buildlibupdate_tags/cam6_1_016_buildlibupdate_n01
+
+    From Jim Edwards
+
+    Cleanup of build
+
+    (Will go onto CAM trunk after this CESM alpha tag is created)
+
+
+cice
+    Chris Fischer 2019-04-08 - cice5_20190322 - components/cice (cesm2_2_alpha02b)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190322
+
+     Fix some SIMIP history fields.
+
+
+    Chris Fischer 2019-04-08 - cice5_20190321 - components/cice (cesm2_2_alpha02b)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190321
+
+     CIME updates from Jim for buildlib.
+
+
+    David Bailey 2019-03-21 - cice5_20190318 - components/cice (cesm2_2_alpha02b)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190318
+
+    Head of CICE trunk. This will be BFB with cesm2.1.1.
+
+
+cime
+    James Edwards 2019-03-14 - cime5.8.1 - cime (cesm2_2_alpha02b)
+    https://github.com/ESMCI/cime/tags/https://github.com/ESMCI/cime/tree/cime5.8.1
+
+        - Support optional components by filling in stub models for any missing component class
+        - Merge maint-5.6 branch.
+        - Fix issue with xmllint.
+        - Use installed pio libraries.
+        - Make FIELDLIST message more informative.
+        - ACME merge 2019-03-29
+        - cprnc: allow differences in field lists for time-constant fields.
+        - Merge maint-5.6 branch.
+        - Add ne0CONUSne30x8_ne0CONUSne30x8_mg17 grid alias.
+        - Merge in latest nuopc-cmeps development.
+        - The check for an rpointer.drv file did not consider multidriver mode.
+        - Fix ./case.build --clean.
+        - PET and ERP tests were not setting compile_threaded correctly.
+        - Implement 'share' field of test suites.
+
+
+    James Edwards 2019-03-11 - cime5.8.0 - cime (cesm2_2_alpha02b)
+    https://github.com/ESMCI/cime/tags/cime5.8.0
+
+    Will require updates to buildlib for all external components
+
+        - Merge maint-5.6 branch.
+        - Cleanup of build.
+
+
+cism
+    Kate Thayer-Calder 2019-04-01 - cism2_1_67 - components/cism (cesm2_2_alpha02b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_67
+
+    Adds the ability to write time average history fields and updates to cime (buildlib change)
+
+
+clm
+    Erik Kluzek 2019-04-04 - bldlib4cime58.n01_ctsm1.0.dev030 - components/clm (cesm2_2_alpha02b)
+    https://github.com/ESCOMP/ctsm/tags/bldlib4cime58.n01_ctsm1.0.dev030
+
+    Jim Edwards update for buildlib needed for going to cime5.8.0
+
+
+mosart
+    Chris Fischer 2019-03-29 - bldlib4cime58.n01_mosart1_0_31 - components/mosart (cesm2_2_alpha02b)
+    https://github.com/ESCOMP/mosart/tags/release-cesm2.0.04
+
+    buildlib change for cime/master to go to cime5.8.0
+
+
+pop
+    Michael Levy 2019-03-22 - trunk_tags/cesm_pop_2_1_20190325 - components/pop (cesm2_2_alpha02b)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20190325
+
+    Jim's buildlib updates
+
+
+    Michael Levy 2019-03-22 - trunk_tags/cesm_pop_2_1_20190322 - components/pop (cesm2_2_alpha02b)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20190323
+
+    MARBL updates (not bit-for-bit in POP%ECO compsets with intel or nag compilers)
+
+
+    Michael Levy 2019-03-22 - trunk_tags/cesm_pop_2_1_20190306 - components/pop (cesm2_2_alpha02b)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20190306
+
+    fixes for ssp126,ssp585
+
+
+    Michael Levy 2019-03-22 - trunk_tags/cesm_pop_2_1_20190323 - components/pop (cesm2_2_alpha02b)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/runk_tags/cesm_pop_2_1_20190325b
+
+    Remove duplicate code in io_pio.F90
+
+
+rtm
+    Chris Fischer 2019-03-29 - bldlib4cime58.n01_rtm1_0_66 - components/rtm (cesm2_2_alpha02b)
+    https://github.com/ESCOMP/rtm/tags/release-cesm2.0.03
+
+    buildlib change for cime/master cime5.8.0
+
+
+ww3
+    Chris Fischer 2019-03-29 - trunk_tags/ww3_190402 - components/ww3 (cesm2_2_alpha02b)
+    https://svn-ccsm-models.cgd.ucar.edu/ww3/branches/ww3_181001_buildlib
+
+     	buildlib change for cime/master 
+===============================================================
 Tag name: cesm2_2_alpha02a
 Originator(s): CSEG
 Date: 13 March 2019
