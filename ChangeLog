@@ -51,6 +51,7 @@ cime
 
         - Support optional components by filling in stub models for any missing component class
         - Merge maint-5.6 branch.
+  	     A compset answer changes
         - Fix issue with xmllint.
         - Use installed pio libraries.
         - Make FIELDLIST message more informative.
