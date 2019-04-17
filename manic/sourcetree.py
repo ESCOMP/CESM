@@ -64,7 +64,8 @@ class _External(object):
         if self._externals:
             self._create_externals_sourcetree()
         repo = create_repository(
-            name, ext_description[ExternalsDescription.REPO], svn_ignore_ancestry)
+            name, ext_description[ExternalsDescription.REPO],
+            svn_ignore_ancestry=svn_ignore_ancestry)
         if repo:
             self._repo = repo
 

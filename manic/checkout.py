@@ -355,7 +355,7 @@ def main(args):
                 "No component {} found in {}".format(
                     comp, args.externals))
 
-    source_tree = SourceTree(root_dir, external, args.svn_ignore_ancestry)
+    source_tree = SourceTree(root_dir, external, svn_ignore_ancestry=args.svn_ignore_ancestry)
     printlog('Checking status of externals: ', end='')
     tree_status = source_tree.status()
     printlog('')

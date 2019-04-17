@@ -37,7 +37,7 @@ class SvnRepository(Repository):
     """
     RE_URLLINE = re.compile(r'^URL:')
 
-    def __init__(self, component_name, repo, ignore_ancestry):
+    def __init__(self, component_name, repo, ignore_ancestry=False):
         """
         Parse repo (a <repo> XML element).
         """
@@ -277,7 +277,7 @@ then rerun checkout_externals.
         """
         cmd = ['svn', 'switch', '--quiet']
         if ignore_ancestry:
-          cmd.append('--ignore-ancestry')
+            cmd.append('--ignore-ancestry')
         cmd.append(url)
         if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
