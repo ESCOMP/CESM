@@ -280,6 +280,13 @@ of the externals description file or examine the output of
                         'used up to two times, increasing the '
                         'verbosity level each time.')
 
+    parser.add_argument('--svn-ignore-ancestry', action='store_true', default=False,
+                        help='By default, subversion will abort if a component is '
+                        'already checked out and there is no common ancestry with '
+                        'the new URL. This flag passes the "--ignore-ancestry" flag '
+                        'to the svn switch call. (This is not recommended unless '
+                        'you are sure about what you are doing.)')
+
     #
     # developer options
     #
@@ -348,7 +355,7 @@ def main(args):
                 "No component {} found in {}".format(
                     comp, args.externals))
 
-    source_tree = SourceTree(root_dir, external)
+    source_tree = SourceTree(root_dir, external, svn_ignore_ancestry=args.svn_ignore_ancestry)
     printlog('Checking status of externals: ', end='')
     tree_status = source_tree.status()
     printlog('')
