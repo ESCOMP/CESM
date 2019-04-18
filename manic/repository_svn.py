@@ -37,11 +37,12 @@ class SvnRepository(Repository):
     """
     RE_URLLINE = re.compile(r'^URL:')
 
-    def __init__(self, component_name, repo):
+    def __init__(self, component_name, repo, ignore_ancestry=False):
         """
         Parse repo (a <repo> XML element).
         """
         Repository.__init__(self, component_name, repo)
+        self._ignore_ancestry = ignore_ancestry
         if self._branch:
             self._url = os.path.join(self._url, self._branch)
         elif self._tag:
@@ -69,7 +70,7 @@ class SvnRepository(Repository):
         if os.path.exists(repo_dir_path):
             cwd = os.getcwd()
             os.chdir(repo_dir_path)
-            self._svn_switch(self._url, verbosity)
+            self._svn_switch(self._url, self._ignore_ancestry, verbosity)
             # svn switch can lead to a conflict state, but it gives a
             # return code of 0. So now we need to make sure that we're
             # in a clean (non-conflict) state.
@@ -270,11 +271,14 @@ then rerun checkout_externals.
         execute_subprocess(cmd)
 
     @staticmethod
-    def _svn_switch(url, verbosity):
+    def _svn_switch(url, ignore_ancestry, verbosity):
         """
         Switch branches for in an svn sandbox
         """
-        cmd = ['svn', 'switch', '--quiet', url]
+        cmd = ['svn', 'switch', '--quiet']
+        if ignore_ancestry:
+            cmd.append('--ignore-ancestry')
+        cmd.append(url)
         if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
