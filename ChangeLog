@@ -1,3 +1,39 @@
+================================================================================
+Tag name: ihesp_regional_master_190418
+Originator(s): kauff
+Date: 2019 Apr 18
+One-line Summary: add mods necessary to run on ada at TAMU
+
+in cime/config/cesm/machines
+   config_batch.xml, config_compilers.xml, config_machines.xml
+in wrf_ihesp
+   configure.wrf.ada
+
+================================================================================
+Tag name: ihesp_regional_master_190410
+Originator(s): kauff
+Date: 2019 Apr 10
+One-line Summary: first working version
+
+merge mods from github.com/NCAR/TAMURegionalCESM - fluxMods branch into  
+   cesm, cime, ctsm (now have mods necessary to run rcesm)
+merge mods from github.com/NCAR/TAMURegionalCESM - master branch into  
+   wrf, roms
+
+================================================================================
+Tag name: ihesp_regional_master_190409
+Originator(s): kauff
+Date: 2019 Apr  9
+One-line Summary:  initial import of code 
+
+wrf  from github.com/NCAR/TAMURegionalCESM - fluxMods branch
+roms from github.com/NCAR/TAMURegionalCESM - fluxMods branch
+cesm, cime, ctsm unmodified from cesm2.1.0 tag (don't have rcesm mods)
+
+================================================================================
+new ihesp_regional_master branch 
+================================================================================
+
 ===============================================================
 Tag name: cesm2_1_beta01
 Originator(s): CSEG
