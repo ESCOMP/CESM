@@ -11,7 +11,7 @@ from .externals_description import ExternalsDescription
 from .utils import fatal_error
 
 
-def create_repository(component_name, repo_info):
+def create_repository(component_name, repo_info, svn_ignore_ancestry=False):
     """Determine what type of repository we have, i.e. git or svn, and
     create the appropriate object.
 
@@ -20,7 +20,7 @@ def create_repository(component_name, repo_info):
     if protocol == 'git':
         repo = GitRepository(component_name, repo_info)
     elif protocol == 'svn':
-        repo = SvnRepository(component_name, repo_info)
+        repo = SvnRepository(component_name, repo_info, ignore_ancestry=svn_ignore_ancestry)
     elif protocol == 'externals_only':
         repo = None
     else:
