@@ -394,8 +394,7 @@
        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60_CLM50%BGC-CROP_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3" >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"    >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"    >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
-       <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP585_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"       >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
-       <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP126_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"       >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
+       <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="SSP[0-9]+_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"       >use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
        <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60_CLM50%BGC-CROP_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">use_init_interp=.true.  init_interp_method='use_finidat_areas'</value>
         <!-- Need because ref case did not include CLM wetland masking fix -->
         <value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BPRP">use_init_interp=.true.</value>
