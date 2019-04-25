@@ -64,8 +64,8 @@ VERSION_ITEM = 'schema_version'
 
 
 def read_externals_description_file(root_dir, file_name):
-    """Given a file name containing an externals description and
-    read it into it's internal representation.
+    """Read a file containing an externals description and
+    create its internal representation.
 
     """
     root_dir = os.path.abspath(root_dir)
@@ -139,10 +139,12 @@ class LstripReader(object):
         """Return the next line or raise StopIteration"""
         if self._index >= self._num_lines:
             raise StopIteration
-        else:
-            self._index = self._index + 1
-            return self._lines[self._index - 1]
 
+        self._index = self._index + 1
+        return self._lines[self._index - 1]
+
+    def __next__(self):
+        return self.next()
 
 def git_submodule_status(repo_dir):
     """Run the git submodule status command to obtain submodule hashes.

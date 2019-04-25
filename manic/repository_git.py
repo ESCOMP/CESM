@@ -61,7 +61,7 @@ class GitRepository(Repository):
         repo_dir_exists = os.path.exists(repo_dir_path)
         if (repo_dir_exists and not os.listdir(
                 repo_dir_path)) or not repo_dir_exists:
-            self._clone_repo(base_dir_path, repo_dir_name, verbosity, recursive)
+            self._clone_repo(base_dir_path, repo_dir_name, verbosity)
         self._checkout_ref(repo_dir_path, verbosity, recursive)
         gmpath = os.path.join(repo_dir_path,
                               ExternalsDescription.GIT_SUBMODULES_FILENAME)
@@ -98,12 +98,12 @@ class GitRepository(Repository):
     # Internal work functions
     #
     # ----------------------------------------------------------------
-    def _clone_repo(self, base_dir_path, repo_dir_name, verbosity, recursive):
+    def _clone_repo(self, base_dir_path, repo_dir_name, verbosity):
         """Prepare to execute the clone by managing directory location
         """
         cwd = os.getcwd()
         os.chdir(base_dir_path)
-        self._git_clone(self._url, repo_dir_name, verbosity, recursive)
+        self._git_clone(self._url, repo_dir_name, verbosity)
         os.chdir(cwd)
 
     def _current_ref(self):
@@ -329,6 +329,8 @@ class GitRepository(Repository):
             ref = self._tag
         elif self._branch:
             ref = self._branch
+        else:
+            ref = self._hash
 
         self._check_for_valid_ref(ref)
         self._git_checkout_ref(ref, verbosity, submodules)
@@ -713,27 +715,6 @@ class GitRepository(Repository):
         return git_output
 
     @staticmethod
-    def _git_version():
-        """Run the git --version command to obtain the git version.
-        """
-        cmd = ['git', '--version']
-        git_output = execute_subprocess(cmd, output_to_caller=True)
-        if git_output:
-            ver_strings = git_output.split(' ')[-1].split('.')
-            # Convert version to a set of integers
-            try:
-                version = list()
-                for item in ver_strings:
-                    version.append(int(item))
-
-            except ValueError:
-                version = None
-        else:
-            version = None
-
-        return version
-
-    @staticmethod
     def has_submodules(repo_dir_path=None):
         """Return True iff the repository at <repo_dir_path> (or the current
         directory if <repo_dir_path> is None) has a '.gitmodules' file
@@ -752,25 +733,11 @@ class GitRepository(Repository):
     #
     # ----------------------------------------------------------------
     @staticmethod
-    def _git_clone(url, repo_dir_name, verbosity, recursive):
+    def _git_clone(url, repo_dir_name, verbosity):
         """Run git clone for the side effect of creating a repository.
         """
         cmd = ['git', 'clone', '--quiet']
         subcmd = None
-        if recursive:
-            # Add commands to process any .gitmodules files
-            ver = GitRepository._git_version()
-            if (ver[0] > 2) or ((ver[0] == 2) and (ver[1] >= 13)):
-                # Assume version 3 will use current syntax
-                cmd.append('--recurse-submodules')
-            elif ver[0] == 2:
-                # Version 2.1 through version 2.12
-                cmd.append('--recursive')
-            elif (ver[1] >= 6) or ((ver[1] == 6) and (len(ver) > 2) and (ver[2] >= 5)):
-                cmd.append('--recursive')
-            else:
-                # Old versions
-                subcmd = ['git', 'submodule', 'update', '--init', '--recursive']
 
         cmd.extend([url, repo_dir_name])
         if verbosity >= VERBOSITY_VERBOSE:

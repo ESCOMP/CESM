@@ -64,6 +64,8 @@ class SvnRepository(Repository):
 
         If the repo destination directory does not exist, checkout the
         correct branch or tag.
+        NB: <recursive> is include as an argument for compatibility with
+            git functionality (repository_git.py)
 
         """
         repo_dir_path = os.path.join(base_dir_path, repo_dir_name)

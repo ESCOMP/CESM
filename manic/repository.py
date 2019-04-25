@@ -46,6 +46,8 @@ class Repository(object):
         correct URL, correct branch or tag), and possibly update the source.
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
+        NB: <recursive> is include as an argument for compatibility with
+            git functionality (repository_git.py)
         """
         msg = ('DEV_ERROR: checkout method must be implemented in all '
                'repository classes! {0}'.format(self.__class__.__name__))
@@ -59,7 +61,8 @@ class Repository(object):
                'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
 
-    def submodules_file(self): # pylint: disable=no-self-use
+    def submodules_file(self, repo_path=None):
+        # pylint: disable=no-self-use,unused-argument
         """Stub for use by non-git VC systems"""
         return None
 
