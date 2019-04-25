@@ -188,6 +188,8 @@ def parse_submodules_desc_section(section_items, file_path):
     return path, url
 
 def read_gitmodules_file(root_dir, file_name):
+    # pylint: disable=deprecated-method
+    # Disabling this check because the method is only used for python2
     """Read a .gitmodules file and convert it to be compatible with an
     externals description.
     """
