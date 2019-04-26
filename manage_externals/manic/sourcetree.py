@@ -24,7 +24,7 @@ class _External(object):
 
     # pylint: disable=R0902
 
-    def __init__(self, root_dir, name, ext_description):
+    def __init__(self, root_dir, name, ext_description, svn_ignore_ancestry):
         """Parse an external description file into a dictionary of externals.
 
         Input:
@@ -36,6 +36,8 @@ class _External(object):
             correspond to something in the path.
 
             ext_description : dict - source ExternalsDescription object
+
+            svn_ignore_ancestry : bool - use --ignore-externals with svn switch
 
         """
         self._name = name
@@ -62,7 +64,8 @@ class _External(object):
         if self._externals:
             self._create_externals_sourcetree()
         repo = create_repository(
-            name, ext_description[ExternalsDescription.REPO])
+            name, ext_description[ExternalsDescription.REPO],
+            svn_ignore_ancestry=svn_ignore_ancestry)
         if repo:
             self._repo = repo
 
@@ -231,7 +234,7 @@ class SourceTree(object):
     SourceTree represents a group of managed externals
     """
 
-    def __init__(self, root_dir, model):
+    def __init__(self, root_dir, model, svn_ignore_ancestry=False):
         """
         Build a SourceTree object from a model description
         """
@@ -239,7 +242,7 @@ class SourceTree(object):
         self._all_components = {}
         self._required_compnames = []
         for comp in model:
-            src = _External(self._root_dir, comp, model[comp])
+            src = _External(self._root_dir, comp, model[comp], svn_ignore_ancestry)
             self._all_components[comp] = src
             if model[comp][ExternalsDescription.REQUIRED]:
                 self._required_compnames.append(comp)
