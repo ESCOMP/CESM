@@ -781,7 +781,10 @@ class GitRepository(Repository):
         """Run git submodule update for the side effect of updating this
         repo's submodules.
         """
-        cmd = ['git', 'submodule', 'update', '--init', '--recursive']
-        if verbosity >= VERBOSITY_VERBOSE:
-            printlog('    {0}'.format(' '.join(cmd)))
-        execute_subprocess(cmd)
+        # First, verify that we have a .gitmodules file
+        if os.path.exists(ExternalsDescription.GIT_SUBMODULES_FILENAME):
+            cmd = ['git', 'submodule', 'update', '--init', '--recursive']
+            if verbosity >= VERBOSITY_VERBOSE:
+                printlog('    {0}'.format(' '.join(cmd)))
+
+            execute_subprocess(cmd)
