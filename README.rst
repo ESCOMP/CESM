@@ -14,6 +14,8 @@ This repository provides tools for managing the external components that
 make up a CESM tag - alpha, beta and release. CESM tag creation should
 be coordinated through CSEG at NCAR.
 
+This repository is also connected to slack at http://cesm2.slack.com
+
 .. sectnum::
 
 .. contents::
@@ -40,7 +42,7 @@ Installing, building and running CESM requires:
 
 * Fortran and C compilers
 
-  * See `Details on Fortran compiler versions`_ below for more information 
+  * See `Details on Fortran compiler versions`_ below for more information
 
 * LAPACK and BLAS libraries
 
@@ -176,7 +178,7 @@ Pointing to a different version of a component
 
 Each entry in **Externals.cfg** has the following form (we use CAM as an
 example below)::
- 
+
   [cam]
   tag = trunk_tags/cam5_4_143/components/cam
   protocol = svn
