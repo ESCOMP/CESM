@@ -1,22 +1,68 @@
+
 ===============================================================
 Tag name: cesm2.1.1-rc.02
 Originator(s): CSEG
-Date: 3 Dec 2018
+Date: 4 April 2018
 One-line Summary: Second release candidate for cesm2.1.1
 
 Component tags used for this CESM beta tag :
 
-components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_17/components/cam
-components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20181204
-cime                               https://github.com/CESM-Development/cime/tree/cime5.6.13
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_24/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/CESM-Development/cime/tree/cime5.6.14
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
 components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.20
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
-components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20190306
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_1_rel_n02
 components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02
 
-
 cam
+    Brian Eaton 2019-03-29 - release_tags/cam_cesm2_1_rel_24 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_24
+
+    . Bug fix in code that was added to verify that both vector components are
+      output when interpolated output is requested.  This only impacts SE.
+
+    . Bug fix for issue raised on BB about missing outfld call for DP_CLD when
+      clubb is used.
+
+
+    Cheryl Craig 2019-03-29 - release_tags/cam_cesm2_1_rel_23 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_23
+
+    Fix one more typo and update the H2O file to a more recent one
+
+
+    Cheryl Craig 2019-03-29 - release_tags/cam_cesm2_1_rel_22 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_22
+
+    Fix typos and update the tracer_cnst filename to a more recent file
+
+
+    Cheryl Craig 2019-03-29 - release_tags/cam_cesm2_1_rel_21 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_21
+
+    Create CAM's SSP126 use_case
+
+
+    Brian Eaton 2019-03-16 - release_tags/cam_cesm2_1_rel_20 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_20
+
+    Update clm to release-clm5.0.20 and also update REFCASES pointed to by CAM for compsets.
+
+
+    Brian Eaton 2019-03-15 - release_tags/cam_cesm2_1_rel_19 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_19
+
+    New fix for mixing_ratio attribute problem which avoids needing to have it on the restart file.  Changing the restart file always risks unintended consequences.
+
+
+    Erik Kluzek 2019-03-14 - release_tags/cam_cesm2_1_rel_18 - components/cam (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_18
+
+    Bug fix for mixing_ratio attribute in history/initial files written after a restart.  The attribute needed to be added to the restart file.
+
+
     Cheryl Craig 2019-03-07 - release_tags/cam_cesm2_1_rel_17 - components/cam (cesm2.1.1-rc.02)
     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_17
 
@@ -60,6 +106,13 @@ cam
 
 
 cesm
+    Erik Kluzek 2019-03-14 - cesm2.1.1-rc02 - (cesm2.1.1-rc.02)
+    https://github.com/ESCOMP/cesm/tags/cesm2.1.1-rc02.5?
+
+    Update REFCASES for B compsets due to new surface datasets in CLM tag
+    Add B1850_BPRP, B1850_BPRPcmip6
+
+
     Erik Kluzek 2019-02-12 - cesm2.1.1-rc02 - (cesm2.1.1-rc.02)
     https://github.com/ESCOMP/cesm/tags/cesm2.1.1-rc01?
 
@@ -76,7 +129,25 @@ cesm
     Add bluewaters pe layout
 
 
+cice
+    David Bailey 2019-03-18 - cice5_cesm2_1_1_20190321 - components/cice (cesm2.1.1-rc.02)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190318
+
+     I have fixed three SIMIP history diagnostic variables here: sidmassevapsubl, sndmasssubl, and sndmasssnf.
+    These were multiplied by density and shouldn't have been. This will change answers for these three history
+    (diagnostic) variables only. I have also added some MOM grid support from Alper. Needed to update the tag here.
+
+
 cime
+    Chris Fischer 2019-04-08 - cime5.6.14 - cime (cesm2.1.1-rc.02)
+    https://github.com/ESMCI/cime/tags/cime5.6.14
+
+        - Update modules for cori.
+        - Update A compsets to avoid needing a 6GB inputdata file for testing.
+        - Minor bug fixes for xml interface.
+        - Update modules for cheyenne pgi.
+
+
     Chris Fischer 2019-03-13 - cime5.6.13 - cime (cesm2.1.1-rc.02)
     https://github.com/ESMCI/cime/tags/cime5.6.13
 
@@ -121,6 +192,8 @@ clm
 
     Some important answer changing updates: New surface datasets, removal of old CMIP5 rcp's/only support CMIP6 ssp_rcp combos. reseeding fix, QSNOEVAP fix. ndep update
 
+    This update requires a new CAM tag to update REFCASES pointed to by CAM, and the same for CESM as well.
+
 
     Erik Kluzek 2019-02-05 - release-clm5.0.19 - components/clm (cesm2.1.1-rc.02)
     https://github.com/ESCOMP/ctsm/tags/release-clm5.0.19
@@ -141,12 +214,21 @@ pop
     fixes for ssp126,ssp585
 
 
+    Michael Levy 2019-03-22 - release_tags/pop2_cesm2_1_rel_n02 - components/pop (cesm2.1.1-rc.02)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_1_rel_n02
+
+    Trunk will be used for CESM 2.2 development (CIME compatibility, answer-changing MARBL updates, etc)
+    so I created https://svn-ccsm-models.cgd.ucar.edu/pop2/branches/cesm2_1_x_rel and am tagging it in
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags
+
+
     Chris Fischer 2018-12-19 - trunk_tags/cesm_pop_2_1_20190222 - components/pop (cesm2.1.1-rc.02)
     https://svn-ccsm-models.cgd.ucar.edu/pop2/cesm_pop_2_1_20181219
 
     Add support for OCN_TRANSIENT=ssp126,ssp585
 
     testing:aux_pop on cheyenne/intel
+
 ===============================================================
 Tag name: cesm2.1.1-rc.01
 Originator(s): CSEG
