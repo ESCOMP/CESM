@@ -1,3 +1,92 @@
+===============================================================
+Tag name: cesm2.1.1-rc.03
+Originator(s): CSEG
+Date: 15 May 2019 
+One-line Summary: Third release candidate for cesm2.1.1
+
+Component tags used for this CESM beta tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_27/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/CESM-Development/cime/tree/cime5.6.15
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.22
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_1_rel_n04
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02
+
+
+cam
+    Cheryl Craig 2019-04-15 - release_tags/cam_cesm2_1_rel_26 - components/cam (cesm2.1.1-rc.03)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_??
+
+    Add SSP245 and SSP370
+    Modifications to SSP126
+
+
+    Francis Vitt 2019-04-30 - release_tags/cam_cesm2_1_rel_27 - components/cam (cesm2.1.1-rc.03)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_27
+
+    Corrections to SAD; update for 2-degrees configurations
+
+
+    Francis Vitt 2019-04-11 - release_tags/cam_cesm2_1_rel_25 - components/cam (cesm2.1.1-rc.03)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_25
+
+    Changes for 2-degrees configurations
+
+
+cesm
+    Chris Fischer 2019-04-10 - cesm2.1.1-rc.03 - (cesm2.1.1-rc.03)
+    https://github.com/ESCOMP/cesm/tags/cesm2.1.1-rc.03
+
+    Update to manage_externals v1.1.6.  Add ability to pass --ignore-ancestry to svn switch
+    archive_metadata update
+    Add more SSP compsets: SSP245, SSP370
+
+
+
+cime
+    Chris Fischer 2019-04-26 - cime5.6.15 - cime (cesm2.1.1-rc.03)
+    https://github.com/ESMCI/cime/tags/cime5.6.15
+
+        - Improve reporting of invalid settings in REFCASE when GET_REFCASE=TRUE.
+        - Remove ESMF modules on edison.
+        - Fix issue with setting 2 io tasks.
+        - maint-5.6 archive_metadata update.
+
+
+clm
+    Erik Kluzek 2019-04-23 - release-clm5.0.22 - components/clm (cesm2.1.1-rc.03)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.22
+
+    Fix the Carbon isotope bug. Changes answers for compsets with "cmip6" 
+    and/or Carbon isotopes on (use_c13/use_c14=T).
+
+
+    Erik Kluzek 2019-04-11 - release-clm5.0.21 - components/clm (cesm2.1.1-rc.03)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.21
+
+    Fix issue #664 and update fates.
+    Two new ndep files for SSP's: SSP245 and SSP370
+
+
+pop
+    Michael Levy 2019-04-12 - release_tags/pop2_cesm2_1_rel_n04 - components/pop (cesm2.1.1-rc.03)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_1_rel_n04
+
+    Add support for OCN_TRANSIENT=ssp245,ssp370
+
+
+    Michael Levy 2019-04-10 - release_tags/pop2_cesm2_1_rel_n03 - components/pop (cesm2.1.1-rc.03)
+    https://svn-ccsm-models.cgd.ucar.edu/pop2/release_tags/pop2_cesm2_1_rel_n03
+
+    Add support for more pe-layouts
+    -- having a task where nblocks_clinic = 0 no longer aborts
+    -- better support for tasks where 1 <= nblocks_clinic < max_blocks_clinic
+       (prior to this tag these cases failed DEBUG tests, unsure if they ran
+       outside of DEBUG mode)
+
 
 ===============================================================
 Tag name: cesm2.1.1-rc.02
