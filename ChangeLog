@@ -1,4 +1,26 @@
 ===============================================================
+Tag name: ihesp_embedded_master_190515
+Originator(s): kauff
+Date: 2019-May-15
+One-line Summary: start of ecesm model branch "ihesp_embedded-master"
+
+ecesm is the same as cesm2.1 except there is a new ocean component
+that is an ocean-coupler (ocpl) that embeds a regional roms model 
+into a global pop model. The ocpl is an ocean component that connects 
+to the standard cesm coupler.  The ocpl takes data from the cpl and 
+sends it to roms and pop, manages the coupling between roms to pop, 
+merges their surface states, and sends this composite ocean state to 
+the cesm coupler as if it were simply one global ocean model.
+
+The Externals.cfg file will continue to contain pop, but will also 
+have a roms component and the new ocpl component.
+This initial tag collects all the required component models (ie. adds
+roms and ocpl to the Externals.cfg file), but does not yet run.
+
+
+===============================================================
+embedded-cesm branched from cesm2.1.0 release
+===============================================================
 Tag name: cesm2_1_beta01
 Originator(s): CSEG
 Date: 3 Dec 2018
