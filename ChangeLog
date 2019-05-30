@@ -1,6 +1,70 @@
 ===============================================================
 Tag name: cesm2.1.1-rc.04
 Originator(s): CSEG
+Date: 30 May 2019 
+One-line Summary: Fifth release candidate for cesm2.1.1
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_29/components/cam
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.17
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.25
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n04
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.02
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cam
+    Francis Vitt 2019-05-29 - release_tags/cam_cesm2_1_rel_29 - components/cam (cesm2.1.1-rc.05)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_29
+
+    Change format of prescribed ozone file to NETCDF-3
+
+
+cime
+    Chris Fischer 2019-05-29 - cime5.6.17 - cime (cesm2.1.1-rc.05)
+    https://github.com/ESMCI/cime/tags/cime5.6.17
+
+        - Update archive_metadata strip to lstrip.
+        - Correct error messages from wget interface.
+        - Fix README
+
+
+clm
+    Erik Kluzek 2019-05-24 - release-clm5.0.25 - components/clm (cesm2.1.1-rc.05)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.25
+
+    Point to Historical Carbon isotope files that are in NetCDF-3 format rather than NetCDF-4 format.
+    Some machines have problems with this format.
+
+
+pop
+    Alper Altuntas 2019-05-29 - pop2_cesm2_1_rel_n06 - components/pop (cesm2.1.1-rc.05)
+    https://github.com/ESCOMP/POP2-CESM/tags/pop2_cesm2_1_rel_n0X
+
+    Point to Historical Carbon isotope files that are in NetCDF-3 format rather than NetCDF-4 format.
+    Some machines have problems with this format.
+
+
+    Chris Fischer 2019-05-28 - pop2_cesm2_1_rel_n05 - components/pop (cesm2.1.1-rc.05)
+    https://github.com/ESCOMP/POP2-CESM/tags/pop2_cesm2_1_rel_n05
+
+    -Switch to GitHub!
+    -fix rpointer logic in buildnml
+    -fix marbl_in for multi-instance runs
+
+
+ww3
+    Alper Altuntas 2019-05-30 - ww3_cesm2_1_rel_01 - components/ww3 (cesm2.1.1-rc.05)
+    https://github.com/ESCOMP/WW3-CESM/tags/ww3_cesm2_1_rel_01
+
+    Switch to github
+
+===============================================================
+Tag name: cesm2.1.1-rc.04
+Originator(s): CSEG
 Date: 22 May 2019 
 One-line Summary: Fourth release candidate for cesm2.1.1
 
