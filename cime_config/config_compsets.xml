@@ -174,13 +174,13 @@
   </compset>
 
   <compset>
-    <alias>BWma1850cmip6</alias>
-    <lname>1850_CAM60%WCCM_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <alias>BWma1850</alias>
+    <lname>1850_CAM60%WCCM_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
-    <alias>BWmaHISTcmip6</alias>
-    <lname>HIST_CAM60%WCCM_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <alias>BWmaHIST</alias>
+    <lname>HIST_CAM60%WCCM_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>

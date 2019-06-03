@@ -318,7 +318,7 @@
       <option name="wallclock"> 01:00 </option>
     </options>
   </test>
-  <test name="SMS_Ld5" grid="f19_g17" compset="BWma1850cmip6" testmods="allactive/default">
+  <test name="SMS_Ld5" grid="f19_g17" compset="BWma1850" testmods="allactive/default">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="bwaccm"/>
@@ -327,25 +327,7 @@
       <option name="wallclock"> 01:00 </option>
     </options>
   </test>
-  <test name="SMS_Ld1" grid="f09_g17" compset="BWma1850cmip6" testmods="allactive/default">
-    <machines>
-      <machine name="cheyenne" compiler="intel" category="prebeta"/>
-      <machine name="cheyenne" compiler="intel" category="bwaccm"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 01:00 </option>
-    </options>
-  </test>
-  <test name="SMS_Ld5" grid="f19_g17" compset="BWmaHISTcmip6" testmods="allactive/default">
-    <machines>
-      <machine name="cheyenne" compiler="intel" category="prebeta"/>
-      <machine name="cheyenne" compiler="intel" category="bwaccm"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 01:00 </option>
-    </options>
-  </test>
-  <test name="SMS_Ld1" grid="f09_g17" compset="BWmaHISTcmip6" testmods="allactive/default">
+  <test name="SMS_Ld5" grid="f19_g17" compset="BWmaHIST" testmods="allactive/default">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="bwaccm"/>
@@ -458,14 +440,6 @@
     <options>
       <option name="wallclock"> 00:30 </option>
       <option name="comment">Restart test for CMIP6 future scenario SSP5-RCP8.5</option>
-    </options>
-  </test>
-  <test name="NCK_Ld5" grid="f19_g17" compset="BC5L45BGCR" testmods="allactive/defaultio">
-    <machines>
-      <machine name="cheyenne" compiler="gnu" category="prebeta"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 00:30 </option>
     </options>
   </test>
   <test name="NCK_Ld5" grid="f19_g17" compset="B1850G" testmods="allactive/cism/test_coupling">
