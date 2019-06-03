@@ -94,7 +94,7 @@
       <machine name="cheyenne" compiler="gnu" category="prebeta"/>
     </machines>
     <options>
-      <option name="wallclock"> 00:30 </option>
+      <option name="wallclock"> 01:00 </option>
       <option name="comment">Testing CMIP6 future scenario SSP5-RCP8.5 with CMIP6 usermods turned on</option>
     </options>
   </test>
