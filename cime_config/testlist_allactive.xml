@@ -212,7 +212,6 @@
   </test>
   <test name="SMS_D_Ln9" grid="f09_g17" compset="BWSSP534oscmip6" testmods="allactive/defaultio_min">
     <machines>
-      <machine name="cheyenne" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="bwaccm"/>
     </machines>
     <options>
@@ -257,7 +256,6 @@
   </test>
   <test name="SMS_D_Ln9" grid="f09_g17" compset="BWSSP534os" testmods="allactive/defaultio_min">
     <machines>
-      <machine name="cheyenne" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="bwaccm"/>
     </machines>
     <options>
