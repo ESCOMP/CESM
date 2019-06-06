@@ -8,7 +8,7 @@ Component tags used for this CESM release candidate tag :
 
 components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/release_tags/cam_cesm2_1_rel_29/components/cam
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
-cime                               https://github.com/ESMCI/cime/tree/cime5.6.18
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.19
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
 components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.25
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
@@ -24,6 +24,13 @@ cam
 
 
 cime
+    Chris Fischer 2019-06-06 - cime5.6.19 - cime (cesm2.1.1-rc.05)
+    https://github.com/ESMCI/cime/tags/cime5.6.19
+
+        - Remove changes to case_run, fix a module issue on cori-knl.
+        - Fix was not py2 compatible, this one is.
+
+
     Chris Fischer 2019-06-05 - cime5.6.18 - cime (cesm2.1.1-rc.05)
     https://github.com/ESMCI/cime/tags/cime5.6.18
 
