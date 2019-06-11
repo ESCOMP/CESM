@@ -85,7 +85,7 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     description file:
 
         $ cd ${SRC_ROOT}
-        $ ./manage_externals/checkout_externals --excernals my-externals.cfg
+        $ ./manage_externals/checkout_externals --externals my-externals.cfg
 
   * Status summary of the repositories managed by checkout_externals:
 
