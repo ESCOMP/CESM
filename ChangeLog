@@ -7,7 +7,7 @@ One-line Summary: Several updates
 
 components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_026/components/cam         **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190322                               --
-cime                               https://github.com/CESM-Development/cime/tree/cime5.8.3                                **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.4                                **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 **
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev049                                     **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_33                                     **
@@ -94,6 +94,21 @@ cesm
 
 
 cime
+
+    Chris Fischer 2019-06-24 - cime5.8.4 - cime (cesm2_2_alpha03a)
+    https://github.com/ESMCI/cime/tags/cime5.8.4
+
+        - Update Theia job scheduler to Slurm.
+        - Fix liner error.
+        - Update to the latest pio2 development version 2.4.4, set pio2 as default.
+        - Add the external files in the nuopc directory to code_checker.
+        - Require ids in namelist definition files to be lower case.
+        - Build groups need to be hashable for cesm.
+        - Move an Include statement in the Makefile.
+        - ACME merge 2019-06-10
+        - Change nodefail test to allow for nuopc file name difference from mct.
+
+Erik Kluzek 2019-06-07 - cime5.8.3 - cime (cesm2_2_alpha03a)
     Erik Kluzek 2019-06-07 - cime5.8.3 - cime (cesm2_2_alpha03a)
     https://github.com/ESMCI/cime/tags/cime5.8.3
 
