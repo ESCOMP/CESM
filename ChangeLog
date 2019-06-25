@@ -1,4 +1,14 @@
 ===============================================================
+Tag name: ihesp_embedded_master_190625
+Originator(s): kauff
+Date: 2019-June-25
+One-line Summary: updated branches from cesm2.1.1 code base
+
+Doesn't work yet -- but externals for pop, roms, cime all 
+setup to use new ihesp-embedded-master branches and tags
+ie. git repo structure is fully in place
+
+===============================================================
 Tag name: ihesp_embedded_master_190515
 Originator(s): kauff
 Date: 2019-May-15
