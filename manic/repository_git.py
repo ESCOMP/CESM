@@ -369,7 +369,8 @@ class GitRepository(Repository):
         """Use git read-tree to thin the working tree."""
         cwd = os.getcwd()
 
-        cmd = ['cp', self._sparse, os.path.join(repo_dir, '.git/info/sparse-checkout')]
+        cmd = ['cp', self._sparse, os.path.join(repo_dir,
+                                                '.git/info/sparse-checkout')]
         if verbosity >= VERBOSITY_VERBOSE:
             printlog('    {0}'.format(' '.join(cmd)))
         execute_subprocess(cmd)
