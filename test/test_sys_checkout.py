@@ -47,7 +47,7 @@ from manic.externals_status import ExternalStatus
 from manic.repository_git import GitRepository
 from manic.utils import printlog, execute_subprocess
 from manic.global_constants import LOCAL_PATH_INDICATOR, VERBOSITY_DEFAULT
-from manic.global_constants import LOG_FILE_NAME, EMPTY_STR
+from manic.global_constants import LOG_FILE_NAME
 from manic import checkout
 
 # ConfigParser was renamed in python2 to configparser. In python2,
@@ -88,6 +88,8 @@ REMOTE_BRANCH_FEATURE2 = 'feature2'
 
 SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 
+# Disable too-many-public-methods error
+# pylint: disable=R0904
 
 def setUpModule():  # pylint: disable=C0103
     """Setup for all tests in this module. It is called once per module!
