@@ -16,7 +16,7 @@
     ATM  = [CAM40, CAM50, CAM60]
     LND  = [CLM45, CLM50, SLND]
     ICE  = [CICE, DICE, SICE]
-    OCN  = [DOCN, ,AQUAP, SOCN]
+    OCN  = [POP2, DOCN, ,AQUAP, SOCN, NEMO]
     ROF  = [RTM, MOSART, SROF]
     GLC  = [CISM1, CISM2, SGLC]
     WAV  = [WW3, DWAV, XWAV, SWAV]
@@ -333,6 +333,19 @@
     <alias>B1850G1</alias>
     <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%EVOLVE_WW3_BGC%BDRD</lname>
   </compset>
+
+  <!-- NEMO coupled cases -->
+
+  <compset>
+    <alias>B1850NEMO</alias>
+    <lname>1850_CAM60_CLM45%BGC_CICE_NEMO_RTM_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>B20TRNEMO</alias>
+    <lname>20TR_CAM60_CLM45%BGC_CICE_NEMO_RTM_SGLC_SWAV</lname>
+  </compset>
+
 
   <!-- Prognostic wave -->
 
