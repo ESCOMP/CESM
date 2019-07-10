@@ -34,7 +34,7 @@
   </test>
   <test name="SMS_N3_PM3_Ld2" grid="f19_g17" compset="BHIST" testmods="allactive/defaultio">
     <machines>
-      <machine name="cheyenne" compiler="gnu" category="aux_cime_baselines"/>
+      <machine name="cheyenne" compiler="intel" category="aux_cime_baselines"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30 </option>
