@@ -40,12 +40,14 @@ class Repository(object):
             fatal_error('repo {0} must have exactly one of '
                         'tag, branch or hash.'.format(self._name))
 
-    def checkout(self, base_dir_path, repo_dir_name, verbosity):  # pylint: disable=unused-argument
+    def checkout(self, base_dir_path, repo_dir_name, verbosity, recursive):  # pylint: disable=unused-argument
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the source.
         If the repo destination directory does not exist, checkout the correce
         branch or tag.
+        NB: <recursive> is include as an argument for compatibility with
+            git functionality (repository_git.py)
         """
         msg = ('DEV_ERROR: checkout method must be implemented in all '
                'repository classes! {0}'.format(self.__class__.__name__))
@@ -58,6 +60,11 @@ class Repository(object):
         msg = ('DEV_ERROR: status method must be implemented in all '
                'repository classes! {0}'.format(self.__class__.__name__))
         fatal_error(msg)
+
+    def submodules_file(self, repo_path=None):
+        # pylint: disable=no-self-use,unused-argument
+        """Stub for use by non-git VC systems"""
+        return None
 
     def url(self):
         """Public access of repo url.
@@ -78,3 +85,13 @@ class Repository(object):
         """Public access of repo hash.
         """
         return self._hash
+
+    def name(self):
+        """Public access of repo name.
+        """
+        return self._name
+
+    def protocol(self):
+        """Public access of repo protocol.
+        """
+        return self._protocol
