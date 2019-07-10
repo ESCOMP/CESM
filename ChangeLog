@@ -1,4 +1,206 @@
 ===============================================================
+Tag name: cesm2_2_alpha03b
+Originator(s): CSEG
+Date: 10 July 2019
+One-line Summary: CLM updates
+
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_027/components/cam         **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190322                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.1                                --
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev049                                     --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_33                                     **
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20190410             --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_69 	                                  **
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_190402 	                  --
+
+cam
+    Francis Vitt 2019-07-08 - trunk_tags/cam6_1_027 - components/cam (cesm2_2_alpha03b)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_027
+
+    Namelist settings for 2-degrees; corrections to chemistry mechanisms
+
+
+cism
+    Erik Kluzek 2019-06-11 - cism2_1_68 - components/cism (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_68
+
+    Couple small bug fixes. katec will make this.
+
+
+clm
+    Erik Kluzek 2019-06-23 - ctsm1.0.dev049 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev049
+
+    Just update to cime with intel-19 on cheyenne and latest mosart tag.
+
+
+    Erik Kluzek 2019-06-21 - ctsm1.0.dev048 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev048
+
+    Update to latest cime (but using intel-17 on cheyenne), and latest rtm, mosart and cism tags.
+    Brings buildlib updates to CTSM master.
+
+    Depends on: rtm1_0_68, mosart1_0_33, cism1_0_68, cime5.8.3
+
+
+    William Sacks 2019-06-15 - ctsm1.0.dev047 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev047
+
+    Fix runaway snow depth increase
+
+
+    William Sacks 2019-06-15 - ctsm1.0.dev046 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev046
+
+    Separate the two uses of h2osno
+
+
+    William Sacks 2019-06-04 - ctsm1.0.dev045 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev045
+
+    Use updated h2osno in SnowCapping
+
+
+    William Sacks 2019-06-04 - ctsm1.0.dev044 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev044
+
+    Make wetland snow resetting behavior more explicit
+
+
+    Erik Kluzek 2019-06-04 - ctsm1.0.dev043 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev043
+
+    Fix the FUN bug, changes answers for Clm50Bgc compsets.
+
+
+    Erik Kluzek 2019-06-04 - ctsm1.0.dev042 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev042
+
+    Rename, correct, and simplify parameters dewmx and sno_stor_max
+
+
+    William Sacks 2019-05-17 - ctsm1.0.dev041 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev041
+
+    Add water tracers to CanopyHydrologyMod
+
+
+    William Sacks 2019-05-03 - ctsm1.0.dev040 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev040
+
+    Move a bunch of hard-coded parameters to netcdf input file
+
+    Changes answers for all cases with CLM
+
+
+    William Sacks 2019-05-01 - ctsm1.0.dev039 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev039
+
+    Remove excess canopy liquid/snow regardless of temperature
+
+    Changes answers for all cases
+
+
+    William Sacks 2019-05-01 - ctsm1.0.dev038 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev038
+
+    Add support for NWP compsets and NLDAS grid
+
+
+    William Sacks 2019-04-29 - ctsm1.0.dev037 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev037
+
+    Change year alignment for present-day I compsets
+
+    May change answers for I2000 and I1Pt compsets
+    (in a CESM context, the main behavior changes are due to a cime update;
+    the CTSM-specific changes involve changing the years on output files; I'm not sure if this triggers baseline failures)
+
+
+    William Sacks 2019-04-29 - ctsm1.0.dev036 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev036
+
+    From Erik: fix for C isotope bug
+
+    Changes answers for transient cases with C isotopes on
+
+
+    William Sacks 2019-04-22 - ctsm1.0.dev035 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev035
+
+    Change h2ocan to a purely diagnostic variable
+
+    Changes answers for all cases
+
+
+    William Sacks 2019-04-20 - ctsm1.0.dev034 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev034
+
+    Change clm4_5: Use Justin Perket snow on vegetation
+
+    Changes answers for all CLM45 compsets
+
+
+    Erik Kluzek 2019-04-11 - ctsm1.0.dev033 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev033
+
+    Changes to run faster for NWP with new namelist options: n_dom_landunits, collapse_urbuan, and toosmall_* (for different landunits: urb, soil, crop, glc, wet)
+
+
+    Negin Sobhani 2019-04-08 - ctsm1.0.dev032 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev032
+
+    Fix balance check errors (issue CTSM #55) in BalanceCheckMod.F90 to check for possible errors over all columns/patches for maximum error and compare to the error threshhold. 
+
+    run_sys_tests.py:  for every case in a test, all directories related to that case including bld/ and run/ directories are nested under the case
+    directory under $SCRATCH/tests-[testID]/[case-name]....
+
+
+    William Sacks 2019-03-13 - ctsm1.0.dev031 - components/clm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev031
+
+    Subtract virtual states to reduce dynbal fluxes for transient glaciers
+
+    Changes answers substantially for cases with transient glaciers (CISM2%EVOLVE).
+
+    Changes answers by roundoff for Hist, Dv and Fates
+
+    For all cases: changes answers in a few CLM diagnostic fields
+
+
+mosart
+    Erik Kluzek 2019-04-11 - mosart1_0_33 - components/mosart (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_33
+
+    Changes needed in buildlib for cime5.8 update to trunk. As well as changes from Bill Sacks for the NLDAS2 grid.
+
+
+    Erik Kluzek 2019-04-11 - mosart1_0_32 - components/mosart (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_32
+
+    Changes from release branch onto trunk
+
+
+rtm
+    Erik Kluzek 2019-07-03 - rtm1_0_69 - components/rtm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_69
+
+    Fix cold starts and remove mosart from files.
+
+
+    Erik Kluzek 2019-04-11 - rtm1_0_68 - components/rtm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_68
+
+    cime5.8 buildlib updates to trunk
+
+
+    Erik Kluzek 2019-04-11 - rtm1_0_67 - components/rtm (cesm2_2_alpha03b)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_67
+
+    Changes from release branch to trunk
+===============================================================
 Tag name: cesm2_2_alpha03a
 Originator(s): CSEG
 Date: 24 June 2019
