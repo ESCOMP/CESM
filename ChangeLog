@@ -1,4 +1,79 @@
 ===============================================================
+Tag name: cesm2_2_alpha03c
+Originator(s): CSEG
+Date: 12 July 2019
+One-line Summary: CIME updates
+
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_027/components/cam         -0
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190322                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.5                                **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev049                                     --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_33                                     --
+components/pop                     https://svn-ccsm-models.cgd.ucar.edu/pop2/trunk_tags/cesm_pop_2_1_20190410             --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_69 	                                  --
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_190402 	                  --
+
+cime
+    Chris Fischer 2019-07-12 - cime5.8.5 - cime (cesm2_2_alpha03c)
+    https://github.com/ESMCI/cime/tags/cime5.8.5
+
+        - Add support to run SE CONUS grid with mt12 mask.
+        - ne120 SE grid updates.
+        - Changes needed for nuopc/mct mom6 validation.
+        - Case insensitive user_nl.
+        - ACME merge 2019-06-25.
+
+
+    Chris Fischer 2019-06-24 - cime5.8.4 - cime (cesm2_2_alpha03c)
+    https://github.com/ESMCI/cime/tags/cime5.8.4
+
+        - Update Theia job scheduler to Slurm.
+        - Fix liner error.
+        - Update to the latest pio2 development version 2.4.4, set pio2 as default.
+        - Add the external files in the nuopc directory to code_checker.
+        - Require ids in namelist definition files to be lower case.
+        - Build groups need to be hashable for cesm.
+        - Move an Include statement in the Makefile.
+        - ACME merge 2019-06-10
+        - Change nodefail test to allow for nuopc file name difference from mct.
+
+
+    Erik Kluzek 2019-06-07 - cime5.8.3 - cime (cesm2_2_alpha03c)
+    https://github.com/ESMCI/cime/tags/cime5.8.3
+
+    I2000 compsets have a different ALIGN year, so change answers. Update to intel/19 on cheyenne which also changes answers.
+
+        - Add logic to control activation of glcshelf_c2_ice.
+        - Fix nuopc build, update for stamepede esmf lib.
+        - Fixes for nuopc scripts_regressions_tests.
+        - Merge branch master.
+        - Merge branch master.
+        - Merge acme split 2019-5-28
+        - Remove the nuopc driver and mediator to a separate repository https://github.com/ESCOMP/CMEPS.git
+        - New documentation explaining how to invoked the --user-mods-dir option to create_newcase.
+        - Update cheyenne intel compiler, add DOI.
+        - Provide default for the number of create_test parallel jobs.
+        - Use truncated division operator in SEQ SystemTest for py2+3 compatibility.
+        - Merge maint-5.6.
+        - Merge acme split 2019-05-14.
+        - Fix typo.
+        - Send the case2 TestStatus.log updates to the case1 file.
+        - Small upgrade to e3sm_cime_mgmt.
+        - Optional arguments run_exe and run_misc_suffix not required.
+        - Fix ConfigParser fails with some saved submit_options.
+        - Allow custom run_exe and run_misc_suffix.
+        - Nuopc cmeps.
+        - Add NLDAS2 datm forcing option.
+        - Change DATM_CLMNCEP_YR_ALIGN for present-day compsets.
+        - Merge acme split 2019-04-29
+        - Fix for edison.
+        - Update modules cheyenne.
+        - Poperly link nag f90.
+
+
+===============================================================
 Tag name: cesm2_2_alpha03b
 Originator(s): CSEG
 Date: 10 July 2019
