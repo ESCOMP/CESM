@@ -1,3 +1,25 @@
+
+================================================================================
+Tag name: ihesp_regional_master_190715
+Originator(s): Yun
+Date: 2019 July 15
+One-line Summary: add support to new grid (wrf3k) txlw3k, add new comms for futurn ensemble communication
+
+in cime
+   config/cesm/config_grids.xml
+   src/drivers/mct/shr/seq_comm_mct.F90
+in CLM_ihesp
+   bld/namelist_files/namelist_defaults_clm4_0.xml
+   bld/namelist_files/namelist_definition_clm4_0.xml
+   cime_config/config_compsets.xml
+   cime_config/config_pes.xml
+in wrf_ihesp/
+   cime_config/config_pes.xml
+   bld/wrf.buildnml.csh
+in roms_ihesp/
+   bld/roms.buildnml.csh
+   makefile
+
 ================================================================================
 Tag name: ihesp_regional_master_190418
 Originator(s): kauff
