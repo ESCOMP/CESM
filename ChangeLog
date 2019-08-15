@@ -1,4 +1,42 @@
 ===============================================================
+Tag name: cesm2_2_beta03
+Originator(s): CSEG
+Date: 14 Aug 2019
+One-line Summary: Component and build updates 
+
+Component tags used for this CESM beta tag :
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_027/components/cam         
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190322                               
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.5                                
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev049                                     
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_33                                     
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20190410                              
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_69 	                                  
+components/ww3                     https://svn-ccsm-models.cgd.ucar.edu/ww3/trunk_tags/ww3_190402 	                  
+
+Answer Changes introduced with this tag when compared to cesm2_2_beta02:
+SE configurations for CAM.
+Changes answers for all CAM6 runs.
+WACCM-X enhancements for CAM
+Corrections to aerosol surface area densities used in chemistry for CAM
+Changes answers for all cases with CLM
+
+
+
+Problems identified after tag creation:
+- Some cheyenne gnu tests are running out of memory.
+- BWma1850 compset is defined incorrectly.
+- NAG compilir on izumi and hobart not working for cam.
+- PGI and Intel tests across multiple nodes on hobart are failing 
+- PEA_P1_Ld3.T31_g37.X tests need to be changed to f19_g37. 
+- IRT_N3_PM3_Ld7.f19_g17.BHIST.cheyenne_intel.allactive-defaultio, issue with
+  use_init_interp in clm. CTSM issue #544
+- ERP_Ln9.f05_f05_mg17.FCSD.cheyenne_intel.cam-outfrq9s, missing inputdata file
+  that needs to be generated.
+- There are known issues for the pgi and cray compilers.
+
+===============================================================
 Tag name: cesm2_2_alpha03c
 Originator(s): CSEG
 Date: 12 July 2019
