@@ -1,4 +1,16 @@
 ===============================================================
+Tag name: ihesp_embedded_master_190815
+Originator(s): kauff
+Date: 2019-Aug-15
+One-line Summary: builds and runs on cheyenne
+
+Data from coupler (on pop grid) is mapped to roms
+Both pop & roms advance in time
+Data from roms is mapped to pop grid and merged with pop data
+merged ocn states (on pop grid) are sent to coupler
+NOT HAPPENING YET: coupling between roms & pop
+
+===============================================================
 Tag name: ihesp_embedded_master_190625
 Originator(s): kauff
 Date: 2019-June-25
