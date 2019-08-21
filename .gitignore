@@ -1,6 +1,7 @@
 # managed directories that are checked out by the externals tool
 cime/
 components/
+libraries/
 
 # generated local files
 *.log
