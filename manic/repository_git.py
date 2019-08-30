@@ -316,7 +316,10 @@ class GitRepository(Repository):
         else:
             self._checkout_external_ref(verbosity, submodules)
 
+        if self._sparse:
+            self._sparse_checkout(repo_dir, verbosity)
         os.chdir(cwd)
+
 
     def _checkout_local_ref(self, verbosity, submodules):
         """Checkout the reference considering the local repo only. Do not
@@ -361,6 +364,20 @@ class GitRepository(Repository):
         if self._branch:
             ref = '{0}/{1}'.format(remote_name, ref)
         self._git_checkout_ref(ref, verbosity, submodules)
+
+    def _sparse_checkout(self, repo_dir, verbosity):
+        """Use git read-tree to thin the working tree."""
+        cwd = os.getcwd()
+
+        cmd = ['cp', self._sparse, os.path.join(repo_dir,
+                                                '.git/info/sparse-checkout')]
+        if verbosity >= VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
+        execute_subprocess(cmd)
+        os.chdir(repo_dir)
+        self._git_sparse_checkout(verbosity)
+
+        os.chdir(cwd)
 
     def _check_for_valid_ref(self, ref, remote_name=None):
         """Try some basic sanity checks on the user supplied reference so we
@@ -775,6 +792,18 @@ class GitRepository(Repository):
         execute_subprocess(cmd)
         if submodules:
             GitRepository._git_update_submodules(verbosity)
+
+    @staticmethod
+    def _git_sparse_checkout(verbosity):
+        """Configure repo via read-tree."""
+        cmd = ['git', 'config', 'core.sparsecheckout', 'true']
+        if verbosity >= VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
+        execute_subprocess(cmd)
+        cmd = ['git', 'read-tree', '-mu', 'HEAD']
+        if verbosity >= VERBOSITY_VERBOSE:
+            printlog('    {0}'.format(' '.join(cmd)))
+        execute_subprocess(cmd)
 
     @staticmethod
     def _git_update_submodules(verbosity):

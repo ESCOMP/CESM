@@ -45,6 +45,7 @@ class _External(object):
         self._externals = EMPTY_STR
         self._externals_sourcetree = None
         self._stat = ExternalStatus()
+        self._sparse = None
         # Parse the sub-elements
 
         # _path : local path relative to the containing source tree
