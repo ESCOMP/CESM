@@ -44,21 +44,61 @@
   </compset>
 
   <compset>
+    <alias>B1950C5</alias>
+    <lname>1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>B1950TRC5</alias>
+    <lname>1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
     <alias>BHISTC5</alias>
     <lname>HIST_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV</lname>
   </compset>
 
   <entries>
     <entry id="RUN_STARTDATE">
-      <values>
-        <value compset="1850_"     >0001-01-01</value>
-        <value compset="2000_"     >0001-01-01</value>
-        <value compset="HIST_"     >1850-01-01</value>
-        <value compset="5505_"     >1955-01-01</value>
-        <value compset="RCP[2468]_">2005-01-01</value>
-        <value compset="2013_"     >2013-01-01</value>
+<values>
+<value compset="1850_"     >0001-01-01</value>
+<value compset="1950_"     >0001-01-01</value>
+<value compset="1950TR_"   >1950-01-01</value>
+<value compset="2000_"     >0001-01-01</value>
+<value compset="HIST_"     >1850-01-01</value>
+<value compset="5505_"     >1955-01-01</value>
+<value compset="RCP[2468]_">2005-01-01</value>
+<value compset="2013_"     >2013-01-01</value>
+</values>
+</entry>
+
+    <entry id="RUN_REFDATE">
+	<values match="first">
+	<value  compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">0021-01-01</value>
       </values>
     </entry>
-  </entries>
+
+
+    <entry id="RUN_TYPE">
+      <values match="first">
+        <value  compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">hybrid</value>
+      </values>
+    </entry>
+
+    <entry id="RUN_REFCASE">
+      <values match="first">
+        <value  compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">B.E.13.B1850C5.ne120_t12.sehires38.003</value>
+      </values>
+    </entry>
+
+    <entry id="RUN_REFDIR">
+      <values match="first">
+        <value  compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">ccsm4_init</value>
+</values>
+   </entry>
+
+
+
+</entries>
 
 </compsets>
