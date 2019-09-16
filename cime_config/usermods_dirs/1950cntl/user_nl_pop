@@ -1,0 +1,2 @@
+ init_ts_file = '${DIN_LOC_ROOT}/ocn/pop/tx0.1v2/TEMP-SALT_1950-1954_jan-avg_EN411.g10.tx0.1v2.c190514.nc'
+ init_ts_file_fmt = 'nc'
