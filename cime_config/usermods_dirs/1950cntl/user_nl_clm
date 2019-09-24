@@ -1,1 +1,1 @@
-finidat = '/scratch1/06091/nanr/CESM/inputdata/ccsm4_init/FAMIPC5_ne120_79to05_03_omp2/2000-01-01/FAMIPC5_ne120_79to05_03_omp2.clm2.r.2000-01-01-00000.IP.nc'
+finidat = '${DIN_LOC_ROOT}/ccsm4_init/B.E.13.B1850C5.ne120_t12.sehires38.003/0021-01-01/B.E.13.B1850C5.ne120_t12.sehires38.003.clm2.r.0021-01-01-00000.IP-2000.nc'
