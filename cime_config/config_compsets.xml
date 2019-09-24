@@ -46,6 +46,7 @@
   <compset>
     <alias>B1950C5</alias>
     <lname>1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV</lname>
+    <science_support grid="ne120_t12"/>
   </compset>
 
   <compset>
