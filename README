@@ -1,4 +1,4 @@
-The gh-pages orphan branch of the http://github.com/ESCOMP/cesm repository
+The gh-pages orphan branch of the http://github.com/ESCOMP/CESM repository
 holds the sphinx built html files from the master/doc branch.
 
 Releases and development builds should be stored in different subdirectories

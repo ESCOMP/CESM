@@ -9,12 +9,10 @@
     <title>Downloading CESM2 &#8212; CESM  documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="CESM2 Configurations" href="cesm_configurations.html" />
@@ -46,7 +44,7 @@
 <div class="section" id="downloading-the-code-and-scripts">
 <h2>Downloading the code and scripts<a class="headerlink" href="#downloading-the-code-and-scripts" title="Permalink to this headline">¶</a></h2>
 <p>Starting with CESM2, releases are available through a public GitHub
-repository, <a class="reference external" href="http://github.com/ESCOMP/cesm">http://github.com/ESCOMP/cesm</a>.</p>
+repository, <a class="reference external" href="http://github.com/ESCOMP/CESM">http://github.com/ESCOMP/CESM</a>.</p>
 <p>Access to the code requires both git and Subversion client software in
 place that is compatible with GitHub and our Subversion server
 software.  You will need access to the command line clients, <code class="docutils literal notranslate"><span class="pre">git</span></code>
@@ -58,7 +56,7 @@ and <a class="reference external" href="https://git-scm.com/downloads">git downl
 <p>With valid git and svn clients installed on the machine where CESM will be
 built and run, the user may download the latest version of the release
 code:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone -b release-cesm2.1.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone -b release-cesm2.1.1 https://github.com/ESCOMP/CESM.git my_cesm_sandbox</span>
 <span class="go">cd my_cesm_sandbox</span>
 </pre></div>
 </div>
@@ -78,7 +76,7 @@ run the <strong>checkout_externals</strong> script from /path/to/my_cesm_sandbox
 <p>The <strong>checkout_externals</strong> script will read the configuration file called <code class="docutils literal notranslate"><span class="pre">Externals.cfg</span></code> and
 will download all the external component models and CIME into /path/to/my_cesm_sandbox.</p>
 <p>Details regarding the CESM checkout process are available in the CESM GitHub repo
-<a class="reference external" href="http://github.com/ESCOMP/cesm/blob/master/README.rst">README</a>
+<a class="reference external" href="http://github.com/ESCOMP/CESM/blob/master/README.rst">README</a>
 To see more details regarding the checkout_externals script from the command line, type:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals --help</span>
 </pre></div>
@@ -181,7 +179,7 @@ to ensure that only the required datasets are downloaded.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
+  <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Downloading CESM2</a><ul>
 <li><a class="reference internal" href="#downloading-the-code-and-scripts">Downloading the code and scripts</a></li>
@@ -236,7 +234,7 @@ to ensure that only the required datasets are downloaded.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, U.S. National Science Foundation.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>
