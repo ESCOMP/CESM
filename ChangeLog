@@ -1,4 +1,261 @@
 ===============================================================
+Tag name: cesm2_2_alpha04a
+Originator(s): CSEG
+Date: 1 October 2019
+One-line Summary: CAM and CTSM updates, add fms and mom.
+
+
+components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_033/components/cam         **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190322                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.11                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev067                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20190820                               **
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20190821                                    **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_33                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20190730                              **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_69 	                                  --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402 	                                  **
+
+cam
+    Francis Vitt 2019-09-12 - trunk_tags/cam6_1_032 - components/cam (cesm2_2_alpha04a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/tunk_tags/cam6_1_032
+
+    Add capability to read emissions datasets on unstructured grids
+
+
+    Kate Thayer-Calder 2019-08-15 - trunk_tags/cam6_1_030 - components/cam (cesm2_2_alpha04a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/tunk_tags/cam6_1_030
+
+    Bringing in MG3 microphysics as an option for cam. Slight reorganization of MG code within CAM. All tests pass with no answer changes, except for the one new MG3 aux_cam test.
+
+
+    Brian Eaton 2019-09-13 - trunk_tags/cam6_1_033 - components/cam (cesm2_2_alpha04a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_033
+
+    fixed DART restart
+
+
+    Brian Eaton 2019-08-01 - trunk_tags/cam6_1_029 - components/cam (cesm2_2_alpha04a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/trunk_tags/cam6_1_029
+
+    Updates to SE.
+    Updates to AM conservation option in FV dycore.
+    Answers change for all SE configurations.
+    Answers change for runs with the AM conservation option on (off by default, and off for production runs).
+
+
+    Chris Fischer 2019-08-01 - trunk_tags/cam6_1_028 - components/cam (cesm2_2_alpha04a)
+    https://svn-ccsm-models.cgd.ucar.edu/cam1/cam6_1_028
+
+    Update support for ne120np4, ne120np4.pg3, and ne0CONUSne30x8 grids.  Changes answer
+    for those grids.
+
+
+cime
+    Chris Fischer 2019-08-29 - cime5.8.9 - cime (cesm2_2_alpha04a)
+    https://github.com/ESMCI/cime/tags/cime5.8.9
+
+    Fix NAG runtime failures for CAM debug tests.
+
+
+    Chris Fischer 2019-08-26 - cime5.8.8 - cime (cesm2_2_alpha04a)
+    https://github.com/ESMCI/cime/tags/cime5.8.8
+
+        - Merge maint-5.6 branch.
+        - Add support for ne120pg3 using tx01.v3 mask.
+        - ACME merge 2019-08-20.
+        - Fix bad compset.
+        - Update ncpl and cpl_seq_option for mom6.
+        - Improve the config_compilers.xml schema.
+        - Overindented line fixed.
+        - ACME merge 2019-08-07.
+        - PIO2 update.
+        - Make sure output_root path is abspath.
+        - Use correct mask for ne16pg3 resolution.
+        - Changes to have TG compset with NUOPC cap work correctly.
+        - Point to new mapping files for r05 <-> f10 mapping.  Answer Changes
+        - Fix some test fails.
+        - ACME merge 2019-07-22
+        - Remove test SMS.T42_T42.S when testing with nuopc driver.
+
+
+    Chris Fischer 2019-10-01 - cime5.8.11 - cime (cesm2_2_alpha04a)
+    https://github.com/ESMCI/cime/tags/cime5.8.11
+
+        - Correct the way esmf is built to avoid library mismatch.
+        - Update gnu compiler on cheyenne, bit for bit.
+
+
+    Chris Fischer 2019-09-26 - cime5.8.10 - cime (cesm2_2_alpha04a)
+    https://github.com/ESMCI/cime/tags/cime5.8.10
+
+        - Don't call mpi_bcast on null communicator.
+        - Fix nag compiler flags.
+        - Fix issue with workflow prior to run on master.
+        - Merge maint-5.6.
+        - Update esmf paths on cheyenne for nuopc.
+        - Fix issue in scripts_regression_tests.py.
+        - Fix issue 3232
+        - Update DROF(JRA) to MOM6 mapping file.
+        - acme split 2019-09-05 merge.
+        - Clean up some issues in scripts_regression_tests.py.
+        - Add /cluster/torque/bin to path on izumi
+
+
+clm
+    Erik Kluzek 2019-09-26 - ctsm1.0.dev067 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev067
+
+    Add config_archive.xml to CTSM.
+
+
+    William Sacks 2019-09-20 - ctsm1.0.dev066 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev066
+
+    Add water tracers to SnowCapping
+
+
+    William Sacks 2019-09-14 - ctsm1.0.dev065 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev065
+
+    Add water tracers to SnowWater
+
+
+    William Sacks 2019-09-09 - ctsm1.0.dev064 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev064
+
+    User defined top-two snow layers
+
+    Roundoff-level changes for all cases
+
+
+    Erik Kluzek 2019-09-06 - ctsm1.0.dev063 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev063
+
+    Fix fire bug for Clm50Bgc, and two other issues.
+
+
+    William Sacks 2019-09-04 - ctsm1.0.dev062 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev062
+
+    Move hobart tests to izumi
+
+
+    Erik Kluzek 2019-09-02 - ctsm1.0.dev061 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev060
+
+    A list of simple bit-for-bit bug fixes. Including a new params file. Also deprecated Dynamic Vegetation
+    so if you use it you have to add -ignore_warnings to CLM_BLDNML_OPTS.
+
+
+    William Sacks 2019-08-29 - ctsm1.0.dev060 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev060
+
+    In SnowWater, truncate small h2osoi residuals
+
+    In principle, could change answers for any test. In practice, answer changes were only observed in a few long tests.
+
+
+    William Sacks 2019-08-24 - ctsm1.0.dev059 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev059
+
+    Continue adding water tracers to LakeHydrology
+
+
+    William Sacks 2019-08-22 - ctsm1.0.dev058 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev058
+
+    Soil texture interpolation bug-fix
+
+    Changes answers for all non-Clm45 cases
+
+
+    William Sacks 2019-08-20 - ctsm1.0.dev057 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev057
+
+    Fix frac_sno bugs
+
+
+    William Sacks 2019-08-16 - ctsm1.0.dev056 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev056
+
+    Start adding water tracers to LakeHydrology, and related refactoring
+
+
+    William Sacks 2019-08-06 - ctsm1.0.dev055 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev055
+
+    Modularize snow cover fraction method
+
+
+    William Sacks 2019-08-02 - ctsm1.0.dev054 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev054
+
+    Fix interpolation of surfdat soil layers so we can use interpolation for 10SL case
+
+
+    William Sacks 2019-08-01 - ctsm1.0.dev053 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev053
+
+    Soil layer definition clean-up and user-defined option
+
+    Only changes answers for Nwp compsets (which I don't think are invoked in prealpha/prebeta tests)
+
+
+    William Sacks 2019-07-22 - ctsm1.0.dev052 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev052
+
+    Fix rare soil color bug in mksurfdata_map
+
+
+    William Sacks 2019-07-19 - ctsm1.0.dev051 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev051
+
+    Update water tracers for remainder of first stage of hydrology
+
+    Roundoff-level changes in a few diagnostic fields and in sensible heat flux sent to coupler
+
+
+    William Sacks 2019-07-15 - ctsm1.0.dev050 - components/clm (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev050
+
+    dz --> dz_lake bug-fix in LakeTemperatureMod.F90
+
+    bfb except one CLM diagnostic field in BGC cases: WTGQ
+
+
+fms
+    Alper Altuntas 2019-08-21 - fi_20190820 - libraries/fms (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20190820
+
+    First FMS tag to be included in CESM.
+
+
+mom
+    Alper Altuntas 2019-08-21 - mi_20190821 - components/mom (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20190821
+
+    First mom6 tag to be included in CESM.
+
+    Dependencies: a CMEPS tag including commit 56249742 or later.
+
+
+pop
+    Michael Levy 2019-07-30 - cesm_pop_2_1_20190730 - components/pop (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20190730
+
+    Update POP to use latest version of MARBL
+    (includes option for adding coccolithophores to autotrophs)
+
+
+ww3
+    Chris Fischer 2019-07-17 - ww3_190402 - components/ww3 (cesm2_2_alpha04a)
+    https://github.com/ESCOMP/WW3-CESM/tags/??
+
+    Move ww3 to git
+
+===============================================================
 Tag name: cesm2_2_beta03
 Originator(s): CSEG
 Date: 14 Aug 2019
