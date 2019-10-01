@@ -5,7 +5,7 @@ cesm/doc directory:
 >make html
 
 The build/html files should be copied to the appropriate release or
-development https://github.com/ESCOMP/cesm gh-pages orphan branch
+development https://github.com/ESCOMP/CESM gh-pages orphan branch
 subdirectory and commited to that branch separately.
 
 Only the doc/source files are stored with the code on the master
