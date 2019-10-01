@@ -8,7 +8,7 @@ Downloading the code and scripts
 --------------------------------
 
 Starting with CESM2, releases are available through a public GitHub
-repository, `http://github.com/ESCOMP/cesm <http://github.com/ESCOMP/cesm>`_. 
+repository, `http://github.com/ESCOMP/CESM <http://github.com/ESCOMP/CESM>`_. 
 
 Access to the code requires both git and Subversion client software in
 place that is compatible with GitHub and our Subversion server
@@ -25,7 +25,7 @@ code:
 
 .. code-block:: console
 
-    git clone -b release-cesm2.1.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
+    git clone -b release-cesm2.1.1 https://github.com/ESCOMP/CESM.git my_cesm_sandbox
     cd my_cesm_sandbox
 
 To checkout a previous version of CESM, first view the available versions:
@@ -51,7 +51,7 @@ The **checkout_externals** script will read the configuration file called ``Exte
 will download all the external component models and CIME into /path/to/my_cesm_sandbox. 
 
 Details regarding the CESM checkout process are available in the CESM GitHub repo
-`README <http://github.com/ESCOMP/cesm/blob/master/README.rst>`_
+`README <http://github.com/ESCOMP/CESM/blob/master/README.rst>`_
 To see more details regarding the checkout_externals script from the command line, type:
 
 .. code-block:: console
