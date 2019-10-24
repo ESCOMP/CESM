@@ -1,4 +1,96 @@
 ===============================================================
+Tag name: cesm2_2_alpha04b
+Originator(s): CSEG
+Date: 24 October 2019
+One-line Summary: MOM addition and CICE update.
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_003                                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190821                               **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.13                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev067                                     --
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20190820                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20190927                                    **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_33                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20190730                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_69 	                                  --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402 	                                  --
+
+cam
+    Cheryl Craig 2019-10-23 - cam6_2_003 - components/cam (cesm2_2_alpha04b)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_003
+
+    Update AQP11 to AQPCONST and ww3 external to git
+
+    Must be used in conjunction with PR 3257
+
+
+    Francis Vitt 2019-10-22 - cam6_2_002 - components/cam (cesm2_2_alpha04b)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_002
+
+    Misc WACCM(X) updates and bug fixes
+
+
+    Cheryl Craig 2019-10-21 - cam6_2_001 - components/cam (cesm2_2_alpha04b)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_001
+
+    Add aquaplanet Radiative Convective Equilibrium (RCE)
+
+    Requires cime5.8.12  (will NOT work when PR 3257 brought in - will need updated CAM tag)
+
+
+cice
+    David Bailey 2019-08-21 - cice5_20190821 - components/cice (cesm2_2_alpha04b)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20190821
+
+    This changes answers due to a few NUOPC related changes for MOM6.
+
+
+cime
+    Chris Fischer 2019-10-24 - cime5.8.13 - cime (cesm2_2_alpha04b)
+    https://github.com/ESMCI/cime/tags/cime5.8.13
+
+        - Add --xml to query_config.
+        - Add option --only-job to case.submit.
+        - Fix an issue with Lockedfile error when case.submit is used with the --no-batch flag.
+        - Change globally uniform SST mode from AQP11 to AQPCONST.
+
+
+    Chris Fischer 2019-10-24 - cime5.8.12 - cime (cesm2_2_alpha04b)
+    https://github.com/ESMCI/cime/tags/cime5.8.12
+
+        - Add missing domain files for T5_T5_mg37 grid.
+        - Merge maint-5.6 to master 2019-11-10.
+        - Updates for cam testing updates.
+        - Fix nuopc esmf paths.
+
+
+mom
+    Alper Altuntas 2019-09-27 - mi_20190927 - components/mom (cesm2_2_alpha04b)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20190927
+
+    Status: Answer changes in MOM6 cases
+
+    MOM_interface Updates Summary:
+    - Set USE_STORED_SLOPES = False for tx0.66v1 and gx1v6
+    - Add hires tx0.25v1 grid and improvements in MOM_RPS module
+
+    MOM6 Updates Summary:
+    - Create ncar fork of doxygen
+    - Merge dev master candidate 2019 08 30
+
+
+    Alper Altuntas 2019-09-16 - mi_20190912 - components/mom (cesm2_2_alpha04b)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20190912
+
+    Changes in MOM_interface and MOM6:
+    - switch to new input staging implementation
+    - changes in nuopc cap and GME
+
+    answer changes in MOM6 compsets
+
+===============================================================
 Tag name: cesm2_2_alpha04a
 Originator(s): CSEG
 Date: 1 October 2019
