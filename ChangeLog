@@ -1,4 +1,149 @@
 ===============================================================
+Tag name: cesm2_2_alpha04c
+Originator(s): CSEG
+Date: 24 October 2019
+One-line Summary: ctsm and Externals.cfg updates
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_004                                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20190821                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.14                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev079                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20190820                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20190927                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_35                                     **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20190730                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_70 	                                  **
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402 	                                  --
+
+cam
+    Francis Vitt 2019-10-30 - cam6_2_004 - components/cam (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_004
+
+    Use Heelis high-latitude electric potential model in WACCM
+
+    * WACCM is answer changing, otherwise BFB
+
+
+cime
+    Chris Fischer 2019-11-11 - cime5.8.14 - cime (cesm2_2_alpha04c)
+    https://github.com/ESMCI/cime/tags/cime5.8.14
+
+        - Revert "initialize albdif and albdir in seq_flux_mct"
+        - Initialize albdif and albdir in seq_flux_mct.
+        - Clean up env_batch.
+        - Test too short.
+        - set mpilib for custom test.
+        - Shorten the cime developer tests.
+        - Update time of day string in ERI test.
+        - Shr code cleanup.
+        - Update for compatibility with latest CMEPS.
+        - Omit broken netcdf4 on cheyenne with mpt.
+        - Exclude .ref1 and .ref2 from TestStatus files and move get_test_status_files to a common place.
+        - Fix issue with e3sm field.
+        - Minor fix to e3sm_cime_mgmt to properly handle submodules.
+        - Refactor how run_cmd handles strings.
+        - ACME merge 2019-10-25.
+
+    BFB except for X compsets with nuopc
+
+
+clm
+    William Sacks 2019-11-04 - ctsm1.0.dev079 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev079
+
+    Change a few uses of shr_kind to work with the latest cime.
+
+
+    William Sacks 2019-10-31 - ctsm1.0.dev078 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev078
+
+    Fix rootr calculation with use_hydrstress true
+
+    Changes answers for Clm50Bgc cases
+
+
+    William Sacks 2019-10-27 - ctsm1.0.dev077 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev077
+
+    Consistently use frac_sno_eff rather than frac_sno in qg calculations
+
+
+    William Sacks 2019-10-25 - ctsm1.0.dev076 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev076
+
+    Set frac_sno_eff=0 if frac_sno is 0; avoid unnecessary calls to QSat
+
+    Just changes answers for one diagnostic field, FSNO_EFF
+
+
+    William Sacks 2019-10-25 - ctsm1.0.dev075 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev075
+
+    Lakes: Adjust frac_sno after updating 0-layer snow pack for dew & sublimation
+
+
+    William Sacks 2019-10-23 - ctsm1.0.dev074 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev074
+
+    For lakes: when reading finidat, set frac_sno=1 if h2osno_total > 0
+
+
+    William Sacks 2019-10-22 - ctsm1.0.dev073 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev073
+
+    Fix bug in calculation of dqgdT
+
+
+    William Sacks 2019-10-15 - ctsm1.0.dev072 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev072
+
+    Add nuopc cap
+
+
+    William Sacks 2019-10-11 - ctsm1.0.dev071 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev071
+
+    Split CanopyTemperature into separate pieces
+
+
+    William Sacks 2019-10-09 - ctsm1.0.dev070 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev070
+
+    Fix for writing 0-d variables with PIO2
+
+
+    William Sacks 2019-10-07 - ctsm1.0.dev069 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev069
+
+    Misc. code cleanup and minor bug fixes
+
+    Changes answers for a few CLM diagnostic fields, but nothing else
+
+
+    William Sacks 2019-10-01 - ctsm1.0.dev068 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev068
+
+    Add water tracers to CombineSnowLayers, DivideSnowLayers, ZeroEmptySnowLayers
+
+
+mosart
+    Erik Kluzek 2019-11-05 - mosart1_0_35 - components/mosart (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_35
+
+    Add code of conduct.
+
+    Fix for SHR_KIND_* needed for cime update. Fix 1/8th degree grid, fix cold starts. Move hobart tests to izumi.
+
+
+rtm
+    Erik Kluzek 2019-11-05 - rtm1_0_70 - components/rtm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_70
+
+    Fix for SHR_KIND_* needed for the cime update.
+    Switch hobart tests for izumi.
+===============================================================
 Tag name: cesm2_2_alpha04b
 Originator(s): CSEG
 Date: 24 October 2019
