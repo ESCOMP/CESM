@@ -25,6 +25,11 @@ cam
 
     * WACCM is answer changing, otherwise BFB
 
+cice
+    Chris Fischer 2019-11-12 - cice5_20191106 - components/cice (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20191106
+
+    fix referencing shr_kind_in
 
 cime
     Chris Fischer 2019-11-11 - cime5.8.14 - cime (cesm2_2_alpha04c)
