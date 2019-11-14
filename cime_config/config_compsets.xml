@@ -76,6 +76,7 @@
     <entry id="RUN_REFDATE">
 	<values match="first">
 	<value  compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">0021-01-01</value>
+	<value  compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">0048-01-01</value>
       </values>
     </entry>
 
@@ -83,18 +84,21 @@
     <entry id="RUN_TYPE">
       <values match="first">
         <value  compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">hybrid</value>
+        <value  compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">hybrid</value>
       </values>
     </entry>
 
     <entry id="RUN_REFCASE">
       <values match="first">
         <value  compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">B.E.13.B1850C5.ne120_t12.sehires38.003</value>
+        <value  compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">B.E.13.B1950C5.ne120_t12.cesm-ihesp-1950cntl.009</value>
       </values>
     </entry>
 
     <entry id="RUN_REFDIR">
       <values match="first">
         <value  compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">ccsm4_init</value>
+        <value  compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">ccsm4_init</value>
 </values>
    </entry>
 
