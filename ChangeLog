@@ -1,4 +1,139 @@
 ===============================================================
+Tag name: cesm2.1.2-rc.02
+Originator(s): CSEG
+Date: 25 Nov 2019 
+One-line Summary: CAM/CIME tags towards cesm2.1.2
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_38
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.26
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.28
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n04
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.03
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cam
+    Francis Vitt 2019-10-11 - cam_cesm2_1_rel_34 - components/cam (cesm2.1.2-rc.02)
+    https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_34
+
+     Add support for 1.9x2.5 FWmaSD (WACCM middle atmosphere chemistry with
+     specified dynamics)
+
+     Correct "-chem" configure option in CAM_CONFIG_OPTS for FXmad* compsets
+      -- the 'additive' modifier for CAM_CONFIG_OPTS caused the setting to be
+         "-chem waccm_ma -chem waccm_mad" for CAM40%WXIED (WACCM-X with
+         D-region chemistry).  The change here distiguishes "CAM40%WXIE" from
+         "CAM40%WXIED" so that only waccm_mad is selected for CAM40%WXIED.
+
+
+    Cheryl Craig 2019-09-30 - cam_cesm2_1_rel_32 - components/cam (cesm2.1.2-rc.02)
+    https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_32
+
+    Add aquaplanet Radiative Convective Equilibrium (RCE)
+
+    Requires cime5.6.24
+
+
+    Francis Vitt 2019-11-25 - cam_cesm2_1_rel_38 - components/cam (cesm2.1.2-rc.02)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_1_rel_38
+
+    Update initial conditions for CAM and WACCM-MA compsets at 2-degrees
+
+
+    Cheryl Craig 2019-11-06 - cam_cesm2_1_rel_37 - components/cam (cesm2.1.2-rc.02)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_1_rel_37
+
+    Update Externals.cfg in CAM checkouts to use ww3 from git instead of svn
+
+
+    Cheryl Craig 2019-10-28 - cam_cesm2_1_rel_36 - components/cam (cesm2.1.2-rc.02)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_1_rel_36
+
+    Update AQP11 to AQPCONST
+
+    Requires cime5.6.25
+
+
+    Cheryl Craig 2019-10-28 - cam_cesm2_1_rel_35 - components/cam (cesm2.1.2-rc.02)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_1_rel_35
+
+    For Brian Eaton
+
+    COSP updates
+    Answer changing for COSP
+
+
+cesm
+    Chris Fischer 2019-11-21 - cesm2.1.2-rc.02 - (cesm2.1.2-rc.02)
+    https://github.com/ESCOMP/cesm/tags/cesm2.1.2-rc.02
+
+    Updates from Mike Mills for 2-degrees resolution
+
+       Changes answers for
+          SMS_D_Ln9.f19_g17.BCO2x4cmip6.cheyenne_intel (Overall: PASS) details:
+          SMS_D_Ln9.f19_g17.BWma1PCTcmip6.cheyenne_intel (Overall: PASS) details:
+          SMS_Ld1.f19_g17.B1PCTcmip6.cheyenne_intel (Overall: PASS) details:
+          SMS_Ld1.f19_g17.BWma1PCTcmip6.cheyenne_intel (Overall: PASS) details:
+          SMS_Ld1.f19_g17.BWmaCO2x4cmip6.cheyenne_intel (Overall: PASS) details:
+
+
+cime
+    Chris Fischer 2019-11-25 - cime5.6.26 - cime (cesm2.1.2-rc.02)
+    https://github.com/ESMCI/cime/tags/cime5.6.26
+
+        - Add path for PFUNIT on izumi and add path for batch commands to $PATH.
+        - Initialize albdif and albdir
+
+
+    Chris Fischer 2019-10-25 - cime5.6.25 - cime (cesm2.1.2-rc.02)
+    https://github.com/ESMCI/cime/tags/cime5.6.25
+
+        - Cherry-picked AQPCONST changes.
+        - Fix mpi_bcast in seq_flux_mct.
+
+
+    Chris Fischer 2019-10-04 - cime5.6.24 - cime (cesm2.1.2-rc.02)
+    https://github.com/ESMCI/cime/tags/cime5.6.24
+
+        - Add namelist for minimum wind speed for atmOcn fluxes.
+        - Address objection to using case in workflow.
+        - Fix case of workflow job prior to case.run or case.test.
+        - Fix bug in SCAM.
+
+
+    Chris Fischer 2019-10-04 - cime5.6.23 - cime (cesm2.1.2-rc.02)
+    https://github.com/ESMCI/cime/tags/cime5.6.23
+
+    climate changing for C & G compsets
+        - Change rce_sst to fixed_sst to better reflect its purpose.
+        - Fix wallclocks in testlists.
+        - Archive metadata add support for lens experiment type.
+        - Changes to support Radiative Convective Equilibrium.
+        - Add support for CMIP6 OMIP, update JRA forcing files.
+        - Make the streams file legitiment xml files.
+
+
+    Chris Fischer 2019-08-26 - cime5.6.22 - cime (cesm2.1.2-rc.02)
+    https://github.com/ESMCI/cime/tags/cime5.6.22
+
+        - Fix nag on izumi.
+        - Update for cori modules.
+        - Update regex to match changing cheyenne login name.
+
+
+clm
+    Erik Kluzek 2019-08-20 - release-clm5.0.28 - components/clm (cesm2.1.2-rc.02)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.28
+
+    Add in the missing prescribed test directory. 
+    Change so that use_init_interp=T can be allowed for branches.
+    Get prescribed streams to be threadsafe.
+
+===============================================================
 Tag name: cesm2.1.2-rc.01
 Originator(s): CSEG
 Date: 14 Aug 2019 
@@ -10,7 +145,7 @@ components/cam                     https://svn-ccsm-models.cgd.ucar.edu/cam1/rel
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
 cime                               https://github.com/ESMCI/cime/tree/cime5.6.21
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
-components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.25
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.27
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
 components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n04
 components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.03
