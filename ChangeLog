@@ -1,3 +1,60 @@
+================================================================================
+Tag name: ihesp_regional_master_191203
+Originator(s): Yun Liu
+Date: 2019 Dec 3
+one-line summary: fix 2 bugs:
+1 update the domain file/surface file for update grids running in txlw9k ( wrf 9km setting)
+2 fix the bug in cime to calculate u10x/u10y
+
+in cime: ihesp_regional_master_191203
+      update the domain filename for running txlw9k
+#       config/cesm/config_grids.xml
+      fix the bug for calculating u10x/u10y
+#       .../src/share/util/shr_flux_mod.F90
+in clm: ihesp_regional_master_191203
+      update the surface filemane for running txlw9k 
+#       .../bld/namelist_files/namelist_defaults_clm4_0.xml 
+
+================================================================================
+Tag name: ihesp_regional_master_191114
+Originator(s): Yun Liu
+Date: 2019 nov 14
+One-line Summary: add support to lonestar5.tamu.utexas.edu; update roms domain to let CLM hand lake grids;
+add synchronization for ensemble run (multi-driver);fix bug on import br and psim form coupler to wrf.
+
+in cime: ihesp_regional_master_191114
+       add synchronization for ensemble run (multi-drive)
+#            .../src/drivers/mct/main/cime_comp_mod.F90
+       add support for lonestar.tamu.utexas.edu
+#       modified:   config/cesm/machines/config_batch.xml
+#       modified:   config/cesm/machines/config_compilers.xml
+#       modified:   config/cesm/machines/config_machines.xml
+       update roms domain to let CLM hand lake grids, *** make sure provide corresponding mapping, domain and surface file in inputdata
+#       config/cesm/config_grids.xml
+
+in ihesp/CTSM:ihesp_regional_master_191114
+       update the surface file for clm4.0 for new configuration including lake grids
+#       bld/namelist_files/namelist_defaults_clm4_0.xml  
+
+in ihesp/wrf_ihesp: master_191114 
+     import br and psim from coupler to coupler (a bug, the correspond code did not merge in previous version)
+#        main/atm_comp_mct.F
+     add support for lonestar.tamu.utexas.edu
+#        new file:   configure.wrf.lonestar5
+     update the structure of inputdata bo better support RCESM case study, because RCESM simulations start from different year and month asking for different bry/ini files.
+     For example: the Hurrican case for each year. SO we can identify the files by staorage them in different directories identified by the name of YYYYMM. Link it to the
+     run directory by wrf.buildnml.csh
+#        bld/wrf.buildnml.csh     
+
+in ihesp/roms_ihesp: master_191114
+      update roms head file to consist with previous version ( from Jaison/ Raffaele)
+#        modified:   Apps/gom3x/gom3x.h
+#        new file:   Apps/gom3x/gom3x.h.nonudging --> the same as gom3x.h
+#        new file:   Apps/gom3x/gom3x.h.nudging   --> a setting for nudge the T,S
+     update the structure of inputdata bo better support RCESM case study, because RCESM simulations start from different year and month asking for different bry/ini files.
+     For example: the Hurrican case for each year. SO we can identify the files by staorage them in different directories identified by the name of YYYYMM. Link it to the
+     run directory by roms.buildnml.csh
+#        bld/roms.buildnml.csh
 
 ================================================================================
 Tag name: ihesp_regional_master_190715
