@@ -1,4 +1,19 @@
 ===============================================================
+Tag name: ihesp_embedded_master_191211
+Originator(s): kauff
+Date: 2019-Dec-11
+One-line Summary: one-way pop->roms coupling works
+
+one-way pop->roms coupling works for 1 year simulation on cheyenne
+
+3d data extracted from pop, mapped to roms BC curtains, sent to roms, 
+new roms code clobbers normal roms input BC data with data from ocpl
+Involves new pop/roms mapping files, roms IC and BC data files
+and new tags:
+ocpl:          master_191211
+roms: embedded-master_191211
+
+===============================================================
 Tag name: ihesp_embedded_master_190815
 Originator(s): kauff
 Date: 2019-Aug-15
