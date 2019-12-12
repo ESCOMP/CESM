@@ -1,4 +1,44 @@
 ===============================================================
+Tag name: cesm2.1.2-rc.03
+Originator(s): CSEG
+Date: 12 Dec 2019 
+One-line Summary: More tags towards cesm2.1.2 release, first cesm2-le tag.
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_38
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.28
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/release-cesm2.0.04
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.29
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.03
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n04
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.03
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cime
+    Chris Fischer 2019-12-12 - cime5.6.28 - cime (cesm2.1.2-rc.03)
+    https://github.com/ESMCI/cime/tags/cime5.6.28
+
+        - Update CIME_OUTPUT_ROOT for aleph.
+        - Update exp_types.
+
+
+    Chris Fischer 2019-12-12 - cime5.6.27 - cime (cesm2.1.2-rc.03)
+    https://github.com/ESMCI/cime/tags/cime5.6.27
+
+        - Change sst_aquap11 to sst_aquap_constant.
+    Answer changes for RCE
+
+
+clm
+    Erik Kluzek 2019-11-19 - release-clm5.0.29 - components/clm (cesm2.1.2-rc.03)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.29
+
+    Answer changes needed for prescribed soil-moisture and LAI. As well as changes for 1850 ndep and urbantv defaults for clm4_5.
+
+===============================================================
 Tag name: cesm2.1.2-rc.02
 Originator(s): CSEG
 Date: 25 Nov 2019 
