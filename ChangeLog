@@ -5,11 +5,11 @@ Date: 24 October 2019
 One-line Summary: ctsm and Externals.cfg updates
 
 
-components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_004                                          **
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_007                                          **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20191106                               **
 cime                               https://github.com/CESM-Development/cime/tree/cime5.8.14                               **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
-components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev079                                     **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev080                                     **
 components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20190820                               --
 components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20190927                                    --
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_35                                     **
@@ -18,6 +18,21 @@ components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_70 
 components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402 	                                  --
 
 cam
+    Brian Eaton 2019-12-06 - cam6_2_006 - components/cam (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_006
+
+    Update SILHS; fix CLUBB/SILHS performance problem.
+    BFB except SILHS changes answers.
+
+
+    Brian Eaton 2019-12-03 - cam6_2_005 - components/cam (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_005
+
+    SE updates; new analytic IC functionality.
+
+    BFB except SE dycore changes answers.
+
+
     Francis Vitt 2019-10-30 - cam6_2_004 - components/cam (cesm2_2_alpha04c)
     https://github.com/ESCOMP/CAM/tags/cam6_2_004
 
@@ -25,13 +40,33 @@ cam
 
     * WACCM is answer changing, otherwise BFB
 
+
+    Chris Fischer 2019-12-19 - cam6_1_007 - components/cam (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/CAM/tags/cam6_1_007
+
+    inputdata netcdf4 files converted and NUOPC cap changes
+
+
 cice
     Chris Fischer 2019-11-12 - cice5_20191106 - components/cice (cesm2_2_alpha04c)
     https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20191106
 
     fix referencing shr_kind_in
 
+
 cime
+    William Sacks 2019-12-02 - cime5.8.15 - cime (cesm2_2_alpha04c)
+    https://github.com/ESMCI/cime/tags/cime5.8.15
+
+        - Modifications for UFS Global Mid-range Weather application
+        - Changes for nuopc mediator updates
+        - Fix clean build for CLM
+        - Fix dlnd for gnu
+        - Documentation updates for building pFUnit
+
+    Depends on ctsm1.0.dev080
+
+
     Chris Fischer 2019-11-11 - cime5.8.14 - cime (cesm2_2_alpha04c)
     https://github.com/ESMCI/cime/tags/cime5.8.14
 
@@ -55,6 +90,19 @@ cime
 
 
 clm
+    William Sacks 2019-12-02 - ctsm1.0.dev080 - components/clm (cesm2_2_alpha04c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev080
+
+    (1) Update to latest version of externals. This includes a significant
+        cime update. (No impact in CESM testing.)
+
+    (2) Minor fixes to get things working with the latest version of cime.
+
+    (3) Fix from Mariana Vertenstein to get NUOPC cap working, fixes to
+        externals cfg files to allow running NUOPC cases out of the box, and
+        add a NUOPC test.
+
+
     William Sacks 2019-11-04 - ctsm1.0.dev079 - components/clm (cesm2_2_alpha04c)
     https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev079
 
@@ -148,6 +196,7 @@ rtm
 
     Fix for SHR_KIND_* needed for the cime update.
     Switch hobart tests for izumi.
+
 ===============================================================
 Tag name: cesm2_2_alpha04b
 Originator(s): CSEG
