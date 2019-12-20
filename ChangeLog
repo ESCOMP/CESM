@@ -7,7 +7,7 @@ One-line Summary: ctsm and Externals.cfg updates
 
 components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_007                                          **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20191106                               **
-cime                               https://github.com/CESM-Development/cime/tree/cime5.8.14                               **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.15                               **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev080                                     **
 components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20190820                               --
