@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+"""Describes the CESM version and any local modifications"""
+
+from __future__ import print_function
+
+import os
+import argparse
+import subprocess
+
+def commandline_args():
+    """Parse and return command-line arguments
+    """
+
+    # We don't really need an argument parser, since there currently aren't any
+    # arguments. But providing this allows supporting a '--help' option with a
+    # description.
+
+    description = """
+Script for describing the CESM version and any local modifications
+
+Simply run:
+
+    ./describe_version
+
+without any arguments.
+
+You may want to redirect the output to a file, such as:
+
+    ./describe_version > current_version.txt
+"""
+
+    parser = argparse.ArgumentParser(
+        description=description,
+        formatter_class=argparse.RawTextHelpFormatter)
+
+    args = parser.parse_args()
+    return args
+
+def main():
+    """Main function for describe_version"""
+    # We currently don't actually need any arguments, but call this to allow '--help' usage
+    _ = commandline_args()
+
+    # Allow this script to run correctly even if invoked from some other directory; note that
+    # we assume that the script resides in the top level of the CESM checkout.
+    cesmroot = os.path.dirname(os.path.realpath(__file__))
+
+    separator = 72*'-' + '\n'
+
+    # The '--long' option to git describe forces it to always show the hash, even if we're
+    # on a tag.
+    git_describe = subprocess.check_output(['git', 'describe', '--long'],
+                                           cwd=cesmroot,
+                                           universal_newlines=True)
+    print(separator + 'git describe:\n' + git_describe + separator)
+
+    git_status = subprocess.check_output(['git', 'status'],
+                                         cwd=cesmroot,
+                                         universal_newlines=True)
+    print(separator + 'git status:\n' + git_status + separator)
+
+    manic = os.path.join('manage_externals', 'checkout_externals')
+    # Give '--verbose' twice to give very verbose output, showing all modified files in
+    # each external.
+    manage_externals_status = subprocess.check_output([manic, '--status', '--verbose', '--verbose'],
+                                                      cwd=cesmroot,
+                                                      universal_newlines=True)
+    print(separator + 'manage_externals status:\n' + manage_externals_status + separator)
+
+if __name__ == "__main__":
+    main()
