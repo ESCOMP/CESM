@@ -1,0 +1,20 @@
+!-----------------------------------------------------------------------
+! Users should ONLY USE user_nl_cism to change namelist variables for
+! any of the namelists in cism_in and the namelist-like sections in
+! cism.config.
+!
+! Users should add ALL user specific namelist changes below using the
+! following syntax:
+!
+!   namelist_var = new_namelist_value 
+!
+! Note that there is no distinction between variables that will appear
+! in cism_in and those that will appear in cism.config: simply add a new
+! variable setting here, and it will be added to the appropriate place
+! in cism_in or cism.config.
+!
+! For example to change the value of evolution to 0, add the following
+! below:
+!
+!   evolution = 0
+!----------------------------------------------------------------------------------

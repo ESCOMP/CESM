@@ -1,0 +1,30 @@
+!------------------------------------------------------------------------
+! Users should ONLY USE user_nl_cpl to change namelists variables
+! for namelist variables in drv_in (except for the ones below) and
+! any keyword/values in seq_maps.rc
+! Users should add ALL user specific namelist and seq_maps.rc changes below
+! using the following syntax
+!   namelist_var = new_namelist_value
+! or
+!   mapname = new_map_name
+! For example to change the default value of ocn2atm_fmapname to 'foo' use
+!   ocn2atm_fmapname =  'foo'
+!
+! Note that some namelist variables MAY NOT be changed in user_nl_cpl - 
+! they are defined in a $CASEROOT xml file and must be changed with
+! xmlchange.
+!
+! For example, rather than set username to 'foo' in user_nl_cpl, call
+! ./xmlchange USER=foo
+!------------------------------------------------------------------------
+! BT 15 March 19: items from previous MH development runs
+!----------------------------------------------------------------------------------
+! Turn on output to run off-line land ice simulations
+!------------------------------
+  histaux_l2x1yrg = .true.
+!-------------------------------------------
+! items from previous MH development runs
+!-------------------------------------------
+  orb_iyear = -125050
+  orb_iyear_align = -125050
+  orb_mode = "fixed_year"

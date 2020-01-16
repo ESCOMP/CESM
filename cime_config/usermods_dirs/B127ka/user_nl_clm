@@ -1,0 +1,109 @@
+!----------------------------------------------------------------------------------
+! Users should add all user specific namelist changes below in the form of 
+! namelist_var = new_namelist_value 
+!
+! EXCEPTIONS: 
+! Set use_cndv           by the compset you use and the CLM_BLDNML_OPTS -dynamic_vegetation setting
+! Set use_vichydro       by the compset you use and the CLM_BLDNML_OPTS -vichydro           setting
+! Set use_cn             by the compset you use and CLM_BLDNML_OPTS -bgc  setting
+! Set use_crop           by the compset you use and CLM_BLDNML_OPTS -crop setting
+! Set spinup_state       by the CLM_BLDNML_OPTS -bgc_spinup      setting
+! Set irrigate           by the CLM_BLDNML_OPTS -irrig .true.    setting
+! Set co2_ppmv           with CCSM_CO2_PPMV                      option
+! Set dtime              with L_NCPL                             option
+! Set fatmlndfrc         with LND_DOMAIN_PATH/LND_DOMAIN_FILE    options
+! Set finidat            with RUN_REFCASE/RUN_REFDATE/RUN_REFTOD options for hybrid or branch cases
+!                        (includes $inst_string for multi-ensemble cases)
+!                        or with CLM_FORCE_COLDSTART to do a cold start
+!                        or set it with an explicit filename here.
+! Set maxpatch_glcmec    with GLC_NEC                            option
+! Set glc_do_dynglacier  with GLC_TWO_WAY_COUPLING               env variable
+!----------------------------------------------------------------------------------
+! Settings from output stream items from the PI control
+! /gpfs/fs1/work/cmip6/cases/cesm2.1-exp003/b.e21.B1850.f09_g17.CMIP6-piControl.001/user_nl_clm
+! Since crop model is off, removed PCT_CFT, GRAINC_TO_FOOD, NFERTILIZATION, CROPPROD1C per e-mail from Keith Olson
+!----------------------------------------------------------------------------------
+! h0 stream (monthly average, gridcell-level)
+! Emon, Lmon, LIMon
+hist_fexcl1 = 'PCT_GLC_MEC', 'SOIL1C_vr', 'SOIL1N_vr', 'SOIL2C_vr', 'SOIL2N_vr', 'SOIL3C_vr', 'SOIL3N_vr', 'CWDC_vr', 'CWDN_vr', 'LITR1C_vr', 'LITR1N_vr', 'LITR2C_vr', 'LITR2N_vr', 'LITR3C_vr', 'LITR3N_vr','PCT_NAT_PFT','SMIN_NO3_vr','CONC_O2_UNSAT','CONC_O2_SAT','SMIN_NH4_vr','SMINN_vr'
+
+! h0 stream ICE variables and other variables inactive by default (monthly average, gridcell-level)
+! Emon, Lmon, LIMon
+hist_fincl1 = 'EFLX_LH_TOT_ICE', 'FIRE_ICE', 'FLDS_ICE', 'FSH_ICE', 'FSNO_ICE', 'FSR_ICE', 'QFLX_SUB_SNOW_ICE', 'QRUNOFF_ICE', 'QSNOFRZ_ICE', 'QSNOMELT_ICE', 'RAIN_ICE', 'SNOW_ICE', 'SNOWICE_ICE', 'SNOWLIQ_ICE', 'SNOTXMASS_ICE', 'TG_ICE', 'TOPO_COL_ICE', 'TSA_ICE', 'TSOI_ICE', 'LEAFC_TO_LITTER', 'FROOTC_TO_LITTER','LITR1C_TO_SOIL1C','LITR1N_TO_SOIL1N','LITR2C_TO_SOIL1C','LITR2N_TO_SOIL1N','LITR3C_TO_SOIL2C','LITR3N_TO_SOIL2N','DWT_WOOD_PRODUCTC_GAIN_PATCH'
+
+! h1 stream (monthly average, finest sub-grid)
+! Emon, Lmon
+hist_fincl2 = 'GPP', 'NPP', 'AGNPP', 'TLAI', 'TOTVEGC', 'TSA','TREFMNAV','TREFMXAV', 'BTRANMN', 'NPP_NUPTAKE', 'Vcmx25Z', 'FCTR', 'FCEV', 'FGEV', 'FSH', 'FIRE', 'FSR', 'FIRA', 'FSA', 'AR', 'HR', 'VEGWP', 'HTOP',
+'GSSUNLN', 'GSSHALN', 'TSKIN'
+
+! h2 stream (monthly average, landunit-level)
+! Emon
+! TOT_WOODPRODC:I, CROPPROD1C:I, and NEE are not available at the landunit level
+hist_fincl3 = 'FSR', 'H2OSNO', 'Q2M', 'SNOWDP', 'TSA', 'TREFMNAV', 'TREFMXAV', 'TG', 'QRUNOFF', 'FSH', 'FIRE', 'FIRA', 'FGR', 'EFLX_LH_TOT', 'RH2M', 'TLAI', 'GPP', 'NPP', 'SOILWATER_10CM', 'TOTSOILLIQ', 'TOTSOILICE', 'AR', 'HR', 'DWT_CONV_CFLUX_PATCH', 'WOOD_HARVESTC', 'U10', 'DWT_WOOD_PRODUCTC_GAIN_PATCH', 'SLASH_HARVESTC', 'TSOI_10CM', 'COL_FIRE_CLOSS', 'DWT_SLASH_CFLUX', 'QIRRIG', 'URBAN_HEAT', 'WASTEHEAT', 'HTOP', 'TSKIN'
+
+! h3 stream (yearly average, gridcell-level)
+! Eyr
+hist_fincl4 =  'PCT_GLC_MEC', 'SOIL1C_vr', 'SOIL1N_vr', 'SOIL2C_vr', 'SOIL2N_vr', 'SOIL3C_vr', 'SOIL3N_vr', 'CWDC_vr', 'CWDN_vr', 'LITR1C_vr', 'LITR1N_vr', 'LITR2C_vr', 'LITR2N_vr', 'LITR3C_vr', 'LITR3N_vr', 'QICE_FORC', 'TSRF_FORC', 'TOPO_FORC','PCT_NAT_PFT','PCT_LANDUNIT','TOTLITC:I','TOT_WOODPRODC:I','TOTSOMC:I','TOTVEGC:I','FSNO_ICE'
+
+! h4 stream (yearly average, landunit-level)
+! Eyr landuse tiles
+hist_fincl5 = 'TOTSOMC:I', 'TOTSOMC_1m:I', 'TOTECOSYSC:I', 'TOTVEGC:I', 'WOODC:I', 'TOTLITC:I', 'LIVECROOTC:I', 'DEADCROOTC:I', 'FROOTC:I'
+
+! BT 12 April 2019 Added these and corresponding changes to the 4 history namelist values below, based on user_nl_clm.fincls file
+hist_fincl6 = 'FSNO', 'TSKIN'
+hist_fincl8 = 'FIRE:X'
+hist_fincl9 = 'FIRE:M'
+
+hist_mfilt = 1,1,1,1,1,365,8760,365,365
+hist_dov2xy = .true.,.false.,.false.,.true.,.false.,.false.,.true.,.false.,.false.
+hist_nhtfrq = 0,0,0,-8760,-8760,-24,-1,-24,-24
+hist_type1d_pertape = ' ',' ','LAND',' ','LAND','LAND',' ',' ',' '
+!----------------------------------------------------------------------------------
+! BT 15 March 19: items from previous MH development runs
+!----------------------------------------------------------------------------------
+! Settings from cmip6_glaciers_virtual_antarctica
+!----------------------------------------------------------------------------------
+! This differs from the default in that it turns on virtual columns over Antarctica
+! This is desired so that we have the output needed to drive a later offline CISM Antarctica simulation
+! However, this increases the cost of CLM by about 10%
+
+glacier_region_behavior = 'single_at_atm_topo', 'virtual', 'virtual', 'virtual'
+!----------------------------------------------------------------------------------
+! Use off-line spun up land file for i.c.'s
+!----------------------------------------------------------------------------------
+
+!----------------------------------------------------------------------------------
+! From Erik K. for no_anthro set up 15Nov18
+!----------------------------------------------------------------------------------
+fsurdat = '/glade/p/cesmdata/cseg/inputdata/lnd/clm2/surfdata_map/surfdata_0.9x1.25_hist_16pfts_nourb_CMIP6_simyrPtVg_c181114.nc'
+use_init_interp = .true.
+
+use_c13 = .true.
+use_c14 = .true.
+use_c13_timeseries = .true.
+use_c14_bombspike = .true.
+
+! From Erik K. for no_anthro set up 15Nov18
+urban_hac='OFF'
+
+calc_human_stress_indices='NONE'
+!calc_human_stress_indices=.false.
+
+stream_fldfilename_popdens='/glade/p/cesmdata/cseg/inputdata/lnd/clm2/firedata/clmforc.no_anthro_zero_hdm_1x1_simyr1925_181113.nc'
+pot_hmn_ign_counts_alpha=0.0
+do_harvest=.false.
+stream_year_first_urbantv=1850
+stream_year_last_urbantv=1850
+stream_year_first_ndep=1850
+stream_year_last_ndep=1850
+irrigate=.false.
+cropfire_a1=0.0
+popdensmapalgo = 'nn'
+stream_year_first_popdens = 1925
+stream_year_last_popdens = 1925
+
+!----------------------------------------------------------------------------------
+! Esther's carbon isotope files
+!----------------------------------------------------------------------------------
+!#######atm_c13_filename = '/gpfs/fs1/work/tomas/cmip6/midHolo/carbon_isotopes/atm_delta_C13_CMIP6_6ka_yearly_c181218.nc'
+!#######atm_c14_filename = '/gpfs/fs1/work/tomas/cmip6/midHolo/carbon_isotopes/atm_delta_C14_CMIP6_3x1_global_6ka_yearly_c181218.nc'

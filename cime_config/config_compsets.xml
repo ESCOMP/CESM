@@ -54,6 +54,20 @@
   </compset>
 
   <compset>
+    <alias>BmidH</alias>
+    <lname>midH_CAM60_CLM50%BGC_CICE_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f09_g17_gl4"/>
+    <science_support grid="f09_g17"/>
+  </compset>
+
+  <compset>
+    <alias>B127ka</alias>
+    <lname>127ka_CAM60_CLM50%BGC_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f09_g17_gl4"/>
+    <science_support grid="f09_g17"/>
+  </compset>
+
+  <compset>
     <alias>BCO2x4cmip6</alias>
     <lname>1850_CAM60%4xCO2_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
   </compset>
@@ -482,6 +496,13 @@
         <value grid="a%1.9x2.5_l%1.9x2.5_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%WCCM%(4xCO2|1PCT)_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3">use_init_interp=.true.</value>
         <value grid="a%1.9x2.5_l%1.9x2.5_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">use_init_interp=.true.</value>
         <value grid="a%1.9x2.5_l%1.9x2.5_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="_CAM60%WCCM_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">use_init_interp=.true.</value>
+     </values>
+   </entry>
+
+   <entry id="CPL_USER_MODS">
+     <values match="last">
+       <value compset="midH_"   >$SRCROOT/cime_config/usermods_dirs/BmidH</value>
+       <value compset="127ka_"   >$SRCROOT/cime_config/usermods_dirs/B127ka</value>
      </values>
    </entry>
 
