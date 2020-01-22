@@ -1,4 +1,0 @@
-Put source mods for the source_cism library in this subdirectory.
-This includes any files from $COMP_ROOT_DIR_GLC/source_cism. Anything
-else (e.g., mods to source_glc or drivers) goes in the src.cism
-directory, NOT in this subdirectory.
