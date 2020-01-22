@@ -3,3 +3,6 @@
 ./xmlchange RUN_REFDATE="0501-01-01"
 ./xmlchange GET_REFCASE="TRUE"
 ./xmlchange CCSM_CO2_PPMV="275.0"
+./xmlchange CAM_NML_USE_CASE="1850_cam6"
+./xmlchange CLM_NML_USE_CASE="1850_control"
+./xmlchange MOSART_SIMYR="-simyr 1850"
