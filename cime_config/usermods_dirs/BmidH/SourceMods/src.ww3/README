@@ -1,9 +1,0 @@
-Put source mods for the ww3 library in this directory.
-
-WARNING: SourceMods are not kept under version control, and can easily
-become out of date if changes are made to the source code on which they
-are based. We only recommend using SourceMods for small, short-term
-changes that just apply to one or two cases. For larger or longer-term
-changes, including gradual, incremental changes towards a final
-solution, we highly recommend making changes in the main source tree,
-leveraging version control (git or svn).
