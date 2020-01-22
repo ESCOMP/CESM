@@ -1,4 +1,123 @@
 ===============================================================
+Tag name: cesm2.1.2-rc.04
+Originator(s): CSEG
+Date: 12 Dec 2019 
+One-line Summary: Final release candidate.
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_41
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.29
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism-release-cesm2.1.2_01
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.30
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.04
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n09
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.04
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cam
+    Cheryl Craig 2020-01-07 - cam_cesm2_1_rel_41 - components/cam (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_1_rel_41
+
+    misc changes for release
+     - Fix bug in MG metadata
+     - Fix path for chemmech file
+     - Fix definitions of seq_flux_mct_albdir and seq_flux_mct_albdif
+     - Bug fix for Q925 in cam_diagnostics
+
+
+    Brian Eaton 2020-01-06 - cam_cesm2_1_rel_40 - components/cam (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_1_rel_40
+
+    Add updates to axial angular momentum conservation/fixer requested by NorESM group.
+    BFB except when AM conservation and/or fixer is turned on (both off by default).
+
+
+cesm
+    Chris Fischer 2020-01-22 - cesm2.1.2-rc.04 - (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/cesm/tags/cesm2.1.2-rc.04
+
+    Add paleo compset B127ka and BmidH.
+    Add describe_version script
+    Changes needed to finish 2deg DECK
+
+
+cime
+    Chris Fischer 2020-01-21 - cime5.6.29 - cime (cesm2.1.2-rc.04)
+    https://github.com/ESMCI/cime/tags/cime5.6.29
+
+        - Stampede2 module updates.
+        - Restore 2.1.1 behavior for JRA compsets.
+        - Allow writing T-forcing cplhist files even when running with SGLC.
+        - Updates for the cesm2 ensemble run on aleph.
+        - Convert user requested walltime to match walltime_format.
+
+
+cism
+    Kate Thayer-Calder 2020-01-13 - cism-release-cesm2.1.2_01 - components/cism (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism-release-cesm2.1.2_01
+
+    B4B bug fixes to the time manager to support longer runs, update test list to do correct wall clock times and change Hobart to Izumi
+
+
+clm
+    Erik Kluzek 2019-11-19 - release-clm5.0.30 - components/clm (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/ctsm/tags/release-clm5.0.30
+
+    Small updates. Update esxternals: mosart, rtm, cime, cism to versions in cesm2.1.2 tag. Also a change to prescribed soil-moisture.
+
+
+mosart
+    Erik Kluzek 2019-12-18 - release-cesm2.0.04 - components/mosart (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/mosart/tags/release-cesm2.0.04
+
+    Bring in a bug-fix for cold-starts
+
+
+pop
+    Michael Levy 2020-01-21 - pop2_cesm2_1_rel_n09 - components/pop (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/POP2-CESM/tags/pop2_cesm2_1_rel_n09
+
+    I forgot to update change log in last tag...
+
+
+    Michael Levy 2020-01-21 - pop2_cesm2_1_rel_n08 - components/pop (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/POP2-CESM/tags/pop2_cesm2_1_rel_n07
+
+    Add support for CMIP6 OMIP (datm-pop-cice) compsets
+
+    new compsets (and tests in aux_pop and aux_pop_MARBL):
+    * G1850ECOIAF_JRA: enable ecosys with JRA forcing
+    * GOMIPECOIAF: follow OMIP protocols with CORE IAF forcing and ecosys
+    * GOMIPECOIAF_JRA: follow OMIP protocols with JRA forcing and ecosys
+    * C1850ECO_ECOCESM20: ecosys configured with CESM2.0 settings
+
+    OMIP protocols specify that transient forcing (atmospheric CO2, pCFC, pSF6, dust/black carbon deposition, nitrogen deposition) is synchronized with sixth (last) cycle of the forcing
+
+    Relies on a CIME tag containing https://github.com/ESMCI/cime/pull/3361
+
+    ----
+
+    Climate changing for C & G compsets (except OCN_GRID=gx3v7, CORE normal year forcing, and no ecosys); bit-for-bit with OMIP submissions
+
+
+    Alper Altuntas 2020-01-14 - pop2_cesm2_1_rel_n07 - components/pop (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/POP2-CESM/tags/pop2_cesm2_1_rel_n07
+
+    Added a patch for closing the momentum budget.
+
+    No answer changes
+
+
+rtm
+    Erik Kluzek 2020-01-13 - release-cesm2.0.04 - components/rtm (cesm2.1.2-rc.04)
+    https://github.com/ESCOMP/rtm/tags/release-cesm2.0.04
+
+    Brings in updates from rtm1_0_70, moving testing to izumi and fixing wallclock times in tests.
+
+===============================================================
 Tag name: cesm2.1.2-rc.03
 Originator(s): CSEG
 Date: 12 Dec 2019 
