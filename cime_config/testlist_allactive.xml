@@ -326,6 +326,22 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
+  <test name="ERS_Ld5" grid="f09_g17" compset="B127ka" testmods="allactive/defaultio_min">
+    <machines>
+      <machine name="cheyenne" compiler="intel" category="prebeta"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 01:00:00 </option>
+    </options>
+  </test>
+  <test name="ERS_Ld5" grid="f09_g17" compset="BmidH" testmods="allactive/defaultio_min">
+    <machines>
+      <machine name="cheyenne" compiler="gnu" category="prebeta"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 01:00:00 </option>
+    </options>
+  </test>
   <test name="IRT_Ld7" grid="f09_g17" compset="BHIST" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
