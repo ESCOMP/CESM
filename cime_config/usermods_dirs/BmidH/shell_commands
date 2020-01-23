@@ -1,0 +1,5 @@
+./xmlchange RUN_TYPE="hybrid"
+./xmlchange RUN_REFCASE="b.e21.B1850.f09_g17.PMIP4-midHolo.001"
+./xmlchange RUN_REFDATE="0501-01-01"
+./xmlchange GET_REFCASE="TRUE"
+./xmlchange CCSM_CO2_PPMV="264.4"

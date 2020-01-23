@@ -1,0 +1,59 @@
+!----------------------------------------------------------------------------------
+! Users should add all user specific namelist changes after these comments 
+! in the form of 
+!   namelist_var = new_namelist_value 
+! *** EXCEPT FOR ***
+! 1. DO NOT CHANGE iyear0, imonth0, iday0, ihour0 
+! 2. DO NOT CHANGE any tavg_nml namelist variables below - copy any of the files
+!      $SRCROOT/components/pop/input_templates/ocn.base.tavg.csh  
+!      $SRCROOT/components/pop/input_templates/ocn.ecosys.tavg.csh  
+!      $SRCROOT/components/pop/input_templates/ocn.iage.tavg.csh  
+!      $SRCROOT/components/pop/input_templates/ocn.cfc.tavg.csh 
+!      $SRCROOT/components/pop/input_templates/ocn.abio_dic_dic14.tavg.csh
+!      $SRCROOT/components/pop/input_templates/ocn.ciso.tavg.csh  
+!      $SRCROOT/components/pop/input_templates/ocn.IRF.tavg.csh  
+!    into $CASEROOT/SourceMods/src.pop and edit them there. Invoke preview-namelist
+!    to see the changes in CaseDocs/pop_in
+! Also
+! 3. WARNING: The present code makes assumptions about the region boundaries -- 
+!    do not change transport_reg2_names unless you know exactly what you are doing
+! 4. NOTE: a handful of pop namelist variabes have the same names in multiple pop 
+!    namelists - these are the following
+!      ah              (hmix_del4t_nml, hmix_del2t_nml, hmix_gm_nml)
+!      am              (hmix_del4u_nml, hmix_del2u_nml)
+!      lauto_hmix      (hmix_del4t_nml, hmix_del2t_nml,
+!                       hmix_del4u_nml, hmix_del2u_nml)
+!      lvariable_hmix  (hmix_del4t_nml, hmix_del2t_nml, 
+!                       hmix_del4u_nml, hmix_del2u_nml)
+!      rich_mix        ( vmix_rich_nml,   vmix_kpp_nml)
+!      tracer_init_ext (    ecosys_nml,       iage_nml,     cfc_nml)
+!      gas_flux_fice   (    ecosys_nml,        cfc_nml)
+!      gas_flux_ws     (    ecosys_nml,        cfc_nml)
+!      gas_flux_ap     (    ecosys_nml,        cfc_nml)
+!
+!    If any of the above are to be modified here namelist_var shoud be as follows    
+!      ah => ah&hmix_del4t_nml, ah&hmix_del2t_nml, ah&hmix_gm_nml  
+!      am => am&hmix_del4u_nml, am&hmix_del2u_nml  
+!      lauto_hmix => lauto_hmix&del4t_nml, lauto_hmix&del2t_nml, 
+!                    lauto_hmix&del4u_nml, lauto_hmix&del2u_nml
+!      lvariable_hmix => lvariable_hmix&del4t_nml, lvariable_hmix&del2t_nml, 
+!                        lvariable_hmix&del4u_nml, lvariable_hmix&del2u_nml
+!      rich_mix => rich_mix&vmix_rich_nml, rich_mix&vmix_kpp_nml  
+!
+!    Example - if you change the default value of ah to 0.7e7 in the
+!    namelist hmix_del2t - you would add the following line below
+!      ah&hmix_del2t_nml = 0.7e7
+!
+!    Note that tracer_init_ext, gas_flux_fice, gas_glux_ws, and gas_flux_ap are
+!    Fortran derived types, so you also need to specify their components (and
+!    tracer_init_ext is an array, to further complicate things). For example
+!      tracer_init_ext(5)%scale_factor&ecosys_nml = 1.1
+!      gas_flux_ap%default_val&cfc_nml = 0
+! 4. To preview the namelists, invoke $CASEROOT preview-namelists and look at 
+!    $CASEROOT/CaseDocs/pop_in
+!----------------------------------------------------------------------------------
+! BT 15 March 19: items from previous MH development runs
+!----------------------------------------------------------------------------------
+abio_atm_co2_opt = 'drv_diag'
+!#######abio_atm_d14c_filename = '/gpfs/fs1/work/tomas/cmip6/midHolo/carbon_isotopes/atm_delta_C14_CMIP6_3x1_global_6ka_yearly_c181218.nc'
+!#######abio_atm_d14c_opt = 'file'

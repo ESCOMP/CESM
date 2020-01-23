@@ -1,0 +1,9 @@
+!----------------------------------------------------------------------------------
+! Users should add all user specific namelist changes below in the form of 
+!   namelist_var = new_namelist_value 
+! Note - that it does not matter what namelist group the namelist_var belongs to
+!----------------------------------------------------------------------------------
+histfreq = 'm','d','x','x','x'
+histfreq_n = 1,1,1,1,1
+
+f_CMIP = 'mdxxx'
