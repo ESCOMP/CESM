@@ -54,14 +54,14 @@
   </compset>
 
   <compset>
-    <alias>BmidH</alias>
+    <alias>BMH6kcmip6</alias>
     <lname>midH_CAM60_CLM50%BGC_CICE_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
     <science_support grid="f09_g17_gl4"/>
     <science_support grid="f09_g17"/>
   </compset>
 
   <compset>
-    <alias>B127ka</alias>
+    <alias>BLIG127kcmip6</alias>
     <lname>127ka_CAM60_CLM50%BGC_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
     <science_support grid="f09_g17_gl4"/>
     <science_support grid="f09_g17"/>
@@ -501,8 +501,8 @@
 
    <entry id="CPL_USER_MODS">
      <values match="last">
-       <value compset="midH_"   >$SRCROOT/cime_config/usermods_dirs/BmidH</value>
-       <value compset="127ka_"   >$SRCROOT/cime_config/usermods_dirs/B127ka</value>
+       <value compset="midH_"   >$SRCROOT/cime_config/usermods_dirs/BMH6kcmip6</value>
+       <value compset="127ka_"   >$SRCROOT/cime_config/usermods_dirs/BLIG127kcmip6</value>
      </values>
    </entry>
 
