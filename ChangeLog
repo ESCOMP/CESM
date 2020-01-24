@@ -9,7 +9,7 @@ Component tags used for this CESM release candidate tag :
 
 components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_41
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
-cime                               https://github.com/ESMCI/cime/tree/cime5.6.29
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.30
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism-release-cesm2.1.2_01
 components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.30
 components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.04
@@ -45,6 +45,12 @@ cesm
 
 
 cime
+    Chris Fischer 2020-01-24 - cime5.6.30 - cime (cesm2.1.2-rc.04)
+    https://github.com/ESMCI/cime/tags/cime5.6.30
+
+        - Add timeouts for ftp and wget logins.
+        - Fix chmod command in safe_copy
+
     Chris Fischer 2020-01-21 - cime5.6.29 - cime (cesm2.1.2-rc.04)
     https://github.com/ESMCI/cime/tags/cime5.6.29
 
