@@ -299,18 +299,20 @@ class SourceTree(object):
         for comp in load_comps:
             printlog('{0}, '.format(comp), end='')
             stat = self._all_components[comp].status()
+            stat_final = {}
             for name in stat.keys():
                 # check if we need to append the relative_path_base to
                 # the path so it will be sorted in the correct order.
-                if not stat[name].path.startswith(relative_path_base):
-                    stat[name].path = os.path.join(relative_path_base,
-                                                   stat[name].path)
-                    # store under key = updated path, and delete the
-                    # old key.
-                    comp_stat = stat[name]
-                    del stat[name]
-                    stat[comp_stat.path] = comp_stat
-            summary.update(stat)
+                if stat[name].path.startswith(relative_path_base):
+                    # use as is, without any changes to path
+                    stat_final[name] = stat[name]
+                else:
+                    # append relative_path_base to path and store under key = updated path
+                    modified_path = os.path.join(relative_path_base,
+                                                 stat[name].path)
+                    stat_final[modified_path] = stat[name]
+                    stat_final[modified_path].path = modified_path
+            summary.update(stat_final)
 
         return summary
 
