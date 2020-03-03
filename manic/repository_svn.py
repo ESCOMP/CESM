@@ -220,9 +220,8 @@ then rerun checkout_externals.
                 continue
             if item == SVN_UNVERSIONED:
                 continue
-            else:
-                is_dirty = True
-                break
+            is_dirty = True
+            break
         return is_dirty
 
     # ----------------------------------------------------------------
