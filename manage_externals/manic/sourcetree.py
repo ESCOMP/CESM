@@ -11,11 +11,11 @@ from .externals_description import ExternalsDescription
 from .externals_description import read_externals_description_file
 from .externals_description import create_externals_description
 from .repository_factory import create_repository
+from .repository_git import GitRepository
 from .externals_status import ExternalStatus
 from .utils import fatal_error, printlog
 from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
 from .global_constants import VERBOSITY_VERBOSE
-
 
 class _External(object):
     """
@@ -45,6 +45,7 @@ class _External(object):
         self._externals = EMPTY_STR
         self._externals_sourcetree = None
         self._stat = ExternalStatus()
+        self._sparse = None
         # Parse the sub-elements
 
         # _path : local path relative to the containing source tree
@@ -61,13 +62,19 @@ class _External(object):
 
         self._required = ext_description[ExternalsDescription.REQUIRED]
         self._externals = ext_description[ExternalsDescription.EXTERNALS]
-        if self._externals:
-            self._create_externals_sourcetree()
+        # Treat a .gitmodules file as a backup externals config
+        if not self._externals:
+            if GitRepository.has_submodules(self._repo_dir_path):
+                self._externals = ExternalsDescription.GIT_SUBMODULES_FILENAME
+
         repo = create_repository(
             name, ext_description[ExternalsDescription.REPO],
             svn_ignore_ancestry=svn_ignore_ancestry)
         if repo:
             self._repo = repo
+
+        if self._externals and (self._externals.lower() != 'none'):
+            self._create_externals_sourcetree()
 
     def get_name(self):
         """
@@ -125,7 +132,7 @@ class _External(object):
             if self._externals and self._externals_sourcetree:
                 # we expect externals and they exist
                 cwd = os.getcwd()
-                # SourceTree expecteds to be called from the correct
+                # SourceTree expects to be called from the correct
                 # root directory.
                 os.chdir(self._repo_dir_path)
                 ext_stats = self._externals_sourcetree.status(self._local_path)
@@ -148,7 +155,7 @@ class _External(object):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the external.
-        If the repo destination directory does not exist, checkout the correce
+        If the repo destination directory does not exist, checkout the correct
         branch or tag.
         If load_all is True, also load all of the the externals sub-externals.
         """
@@ -183,13 +190,14 @@ class _External(object):
                 checkout_verbosity = verbosity - 1
             else:
                 checkout_verbosity = verbosity
-            self._repo.checkout(self._base_dir_path,
-                                self._repo_dir_name, checkout_verbosity)
+
+            self._repo.checkout(self._base_dir_path, self._repo_dir_name,
+                                checkout_verbosity, self.clone_recursive())
 
     def checkout_externals(self, verbosity, load_all):
         """Checkout the sub-externals for this object
         """
-        if self._externals:
+        if self.load_externals():
             if self._externals_sourcetree:
                 # NOTE(bja, 2018-02): the subtree externals objects
                 # were created during initial status check. Updating
@@ -200,6 +208,24 @@ class _External(object):
                 self._externals_sourcetree = None
             self._create_externals_sourcetree()
             self._externals_sourcetree.checkout(verbosity, load_all)
+
+    def load_externals(self):
+        'Return True iff an externals file should be loaded'
+        load_ex = False
+        if os.path.exists(self._repo_dir_path):
+            if self._externals:
+                if self._externals.lower() != 'none':
+                    load_ex = os.path.exists(os.path.join(self._repo_dir_path,
+                                                          self._externals))
+
+        return load_ex
+
+    def clone_recursive(self):
+        'Return True iff any .gitmodules files should be processed'
+        # Try recursive unless there is an externals entry
+        recursive = not self._externals
+
+        return recursive
 
     def _create_externals_sourcetree(self):
         """
@@ -213,6 +239,15 @@ class _External(object):
 
         cwd = os.getcwd()
         os.chdir(self._repo_dir_path)
+        if self._externals.lower() == 'none':
+            msg = ('Internal: Attempt to create source tree for '
+                   'externals = none in {}'.format(self._repo_dir_path))
+            fatal_error(msg)
+
+        if not os.path.exists(self._externals):
+            if GitRepository.has_submodules():
+                self._externals = ExternalsDescription.GIT_SUBMODULES_FILENAME
+
         if not os.path.exists(self._externals):
             # NOTE(bja, 2017-10) this check is redundent with the one
             # in read_externals_description_file!
@@ -224,10 +259,10 @@ class _External(object):
         externals_root = self._repo_dir_path
         model_data = read_externals_description_file(externals_root,
                                                      self._externals)
-        externals = create_externals_description(model_data)
+        externals = create_externals_description(model_data,
+                                                 parent_repo=self._repo)
         self._externals_sourcetree = SourceTree(externals_root, externals)
         os.chdir(cwd)
-
 
 class SourceTree(object):
     """
@@ -264,18 +299,20 @@ class SourceTree(object):
         for comp in load_comps:
             printlog('{0}, '.format(comp), end='')
             stat = self._all_components[comp].status()
+            stat_final = {}
             for name in stat.keys():
                 # check if we need to append the relative_path_base to
                 # the path so it will be sorted in the correct order.
-                if not stat[name].path.startswith(relative_path_base):
-                    stat[name].path = os.path.join(relative_path_base,
-                                                   stat[name].path)
-                    # store under key = updated path, and delete the
-                    # old key.
-                    comp_stat = stat[name]
-                    del stat[name]
-                    stat[comp_stat.path] = comp_stat
-            summary.update(stat)
+                if stat[name].path.startswith(relative_path_base):
+                    # use as is, without any changes to path
+                    stat_final[name] = stat[name]
+                else:
+                    # append relative_path_base to path and store under key = updated path
+                    modified_path = os.path.join(relative_path_base,
+                                                 stat[name].path)
+                    stat_final[modified_path] = stat[name]
+                    stat_final[modified_path].path = modified_path
+            summary.update(stat_final)
 
         return summary
 
