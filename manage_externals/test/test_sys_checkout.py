@@ -88,6 +88,8 @@ REMOTE_BRANCH_FEATURE2 = 'feature2'
 
 SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 
+# Disable too-many-public-methods error
+# pylint: disable=R0904
 
 def setUpModule():  # pylint: disable=C0103
     """Setup for all tests in this module. It is called once per module!
@@ -183,6 +185,25 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         self.write_config(dest_dir)
 
+    def container_sparse(self, dest_dir):
+        """Create a container with a full external and a sparse external
+
+        """
+        # Create a file for a sparse pattern match
+        sparse_filename = 'sparse_checkout'
+        with open(os.path.join(dest_dir, sparse_filename), 'w') as sfile:
+            sfile.write('readme.txt')
+
+        self.create_config()
+        self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
+                            tag='tag2')
+
+        sparse_relpath = '../../{}'.format(sparse_filename)
+        self.create_section(SIMPLE_REPO_NAME, 'simp_sparse',
+                            tag='tag2', sparse=sparse_relpath)
+
+        self.write_config(dest_dir)
+
     def mixed_simple_base(self, dest_dir):
         """Create a mixed-use base externals file with only simple externals.
 
@@ -239,7 +260,8 @@ class GenerateExternalsDescriptionCfgV1(object):
 
     def create_section(self, repo_type, name, tag='', branch='',
                        ref_hash='', required=True, path=EXTERNALS_NAME,
-                       externals='', repo_path=None, from_submodule=False):
+                       externals='', repo_path=None, from_submodule=False,
+                       sparse=''):
         # pylint: disable=too-many-branches
         """Create a config section with autofilling some items and handling
         optional items.
@@ -286,6 +308,9 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         if externals:
             self._config.set(name, ExternalsDescription.EXTERNALS, externals)
+
+        if sparse:
+            self._config.set(name, ExternalsDescription.SPARSE, sparse)
 
         if from_submodule:
             self._config.set(name, ExternalsDescription.SUBMODULE, "True")
@@ -710,6 +735,14 @@ class BaseTestSysCheckout(unittest.TestCase):
         name = './{0}/mixed_req'.format(directory)
         self._check_generic_modified_ok_required(tree, name)
 
+    def _check_simple_sparse_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_sparse'.format(directory)
+        self._check_generic_empty_default_required(tree, name)
+
+    def _check_simple_sparse_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_sparse'.format(directory)
+        self._check_generic_ok_clean_required(tree, name)
+
     # ----------------------------------------------------------------
     #
     # Check results for groups of externals under specific conditions
@@ -870,6 +903,23 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_branch_ok(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_ok(tree, directory=SUB_EXTERNALS_PATH)
 
+    def _check_container_sparse_pre_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_empty(tree)
+        self._check_simple_sparse_empty(tree)
+
+    def _check_container_sparse_post_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_sparse_ok(tree)
+
+    def _check_file_exists(self, repo_dir, pathname):
+        "Check that <pathname> exists in <repo_dir>"
+        self.assertTrue(os.path.exists(os.path.join(repo_dir, pathname)))
+
+    def _check_file_absent(self, repo_dir, pathname):
+        "Check that <pathname> does not exist in <repo_dir>"
+        self.assertFalse(os.path.exists(os.path.join(repo_dir, pathname)))
 
 class TestSysCheckout(BaseTestSysCheckout):
     """Run systems level tests of checkout_externals
@@ -1234,6 +1284,14 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_full_post_checkout(overall, tree)
 
+        # Check existance of some files
+        subrepo_path = os.path.join('externals', 'simp_tag')
+        self._check_file_exists(under_test_dir,
+                                os.path.join(subrepo_path, 'readme.txt'))
+        self._check_file_absent(under_test_dir, os.path.join(subrepo_path,
+                                                             'simple_subdir',
+                                                             'subdir_file.txt'))
+
         # update the mixed-use repo to point to different branch
         self._generator.update_branch(under_test_dir, 'mixed_req',
                                       'new-feature', MIXED_REPO_NAME)
@@ -1313,6 +1371,40 @@ class TestSysCheckout(BaseTestSysCheckout):
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
         self._check_mixed_cont_simple_required_post_checkout(overall, tree)
+
+    def test_container_sparse(self):
+        """Verify that 'full' container with simple subrepo
+        can run a sparse checkout and generate the correct initial status.
+
+        """
+        # create the test repository
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+
+        # create the top level externals file
+        self._generator.container_sparse(under_test_dir)
+
+        # inital checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_sparse_pre_checkout(overall, tree)
+
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_sparse_post_checkout(overall, tree)
+
+        # Check existance of some files
+        subrepo_path = os.path.join('externals', 'simp_tag')
+        self._check_file_exists(under_test_dir,
+                                os.path.join(subrepo_path, 'readme.txt'))
+        self._check_file_exists(under_test_dir, os.path.join(subrepo_path,
+                                                             'simple_subdir',
+                                                             'subdir_file.txt'))
+        subrepo_path = os.path.join('externals', 'simp_sparse')
+        self._check_file_exists(under_test_dir,
+                                os.path.join(subrepo_path, 'readme.txt'))
+        self._check_file_absent(under_test_dir, os.path.join(subrepo_path,
+                                                             'simple_subdir',
+                                                             'subdir_file.txt'))
 
 
 class TestSysCheckoutSVN(BaseTestSysCheckout):

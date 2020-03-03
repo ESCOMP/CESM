@@ -227,6 +227,21 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     Now, %(prog)s will process Externals.cfg and also process
     Externals_LIBX.cfg as if it was a sub-external.
 
+  * from_submodule (True / False) : used to pull the repo_url, local_path,
+    and hash properties for this external from the .gitmodules file in
+    this repository. Note that the section name (the entry in square
+    brackets) must match the name in the .gitmodules file.
+    If from_submodule is True, the protocol must be git and no repo_url,
+    local_path, hash, branch, or tag entries are allowed.
+    Default: False
+
+  * sparse (string) : used to control a sparse checkout. This optional
+    entry should point to a filename (path relative to local_path) that
+    contains instructions on which repository paths to include (or
+    exclude) from the working tree.
+    See the "SPARSE CHECKOUT" section of https://git-scm.com/docs/git-read-tree
+    Default: sparse checkout is disabled
+
   * Lines beginning with '#' or ';' are comments and will be ignored.
 
 # Obtaining this tool, reporting issues, etc.
