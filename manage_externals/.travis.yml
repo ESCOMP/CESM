@@ -1,0 +1,32 @@
+# NOTE(bja, 2017-11) travis-ci dosen't support python language builds
+#  on mac os. As a work around, we use built-in python on linux, and
+#  declare osx a 'generic' language, and create our own python env.
+
+language: python
+os: linux
+python: 
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+matrix:
+  include:
+  - os: osx
+    language: generic
+    before_install:
+      # NOTE(bja, 2017-11) update is slow, 2.7.12 installed by default, good enough!
+      # - brew update
+      # - brew outdated python2 || brew upgrade python2
+      - pip install virtualenv
+      - virtualenv env -p python2
+      - source env/bin/activate
+install:
+  - pip install -r test/requirements.txt
+before_script:
+  - git --version
+script:
+  - cd test; make test
+  - cd test; make lint
+after_success:
+  - cd test; make coverage
+  - cd test; coveralls
