@@ -21,6 +21,7 @@ class Repository(object):
         self._branch = repo[ExternalsDescription.BRANCH]
         self._hash = repo[ExternalsDescription.HASH]
         self._url = repo[ExternalsDescription.REPO_URL]
+        self._sparse = repo[ExternalsDescription.SPARSE]
 
         if self._url is EMPTY_STR:
             fatal_error('repo must have a URL')

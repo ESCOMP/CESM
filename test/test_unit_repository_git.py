@@ -547,7 +547,8 @@ class TestGitCreateRemoteName(unittest.TestCase):
                        ExternalsDescription.TAG:
                        'very_useful_tag',
                        ExternalsDescription.BRANCH: EMPTY_STR,
-                       ExternalsDescription.HASH: EMPTY_STR, }
+                       ExternalsDescription.HASH: EMPTY_STR,
+                       ExternalsDescription.SPARSE: EMPTY_STR, }
         self._repo = GitRepository('test', self._rdata)
 
     def test_remote_git_proto(self):
