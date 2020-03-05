@@ -1,4 +1,29 @@
 ===============================================================
+Tag name: cesm2.1.3-rc.01
+Originator(s): CSEG
+Date: 5 Mar 2020 
+One-line Summary: cesm2.1.3 release, address python 3.8 issues.
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_41
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.32
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism-release-cesm2.1.2_02
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.30
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.04
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n09
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.04
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cesm
+    Chris Fischer 2020-03-04 - cesm2.1.3-rc.01 - (cesm2.1.3-rc.01)
+    https://github.com/ESCOMP/cesm/tags/cesm2.1.3-rc.01
+
+    Update manage externals to v1.1.8 to address python 3.8 issues.
+
+===============================================================
 Tag name: cesm2.1.2-rc.04
 Originator(s): CSEG
 Date: 14 Feb 2020 
