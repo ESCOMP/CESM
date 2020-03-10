@@ -1,4 +1,211 @@
 ===============================================================
+Tag name: cesm2_2_alpha04d
+Originator(s): CSEG
+Date: 10 March 2020
+One-line Summary: Misc updates
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_014                                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20191106                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.16                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev084                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200221                               **
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200309                                    **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_35                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200107                              **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_70 	                                  --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402 	                                  --
+ 
+
+cam
+    Cheryl Craig 2020-02-19 - cam6_2_014 - components/cam (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_014
+
+    fix empty_htapes bug
+    MG3 minor changes
+
+
+    Francis Vitt 2020-02-12 - cam6_2_013 - components/cam (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_013
+
+    Refactor WACCM physics efield module to workaround intel/19.0.2 issue
+
+    - new tests:
+         aux_cam: ERP_Ln9.ne30pg3_ne30pg3_mg17.FW2000climo.cheyenne_intel.cam-outfrq9s_wcm_ne30
+         prealpha: SMS_Ln9.ne30_ne30_mg17.FW2000climo.cheyenne_intel.cam-outfrq9s_wcm_ne30
+
+
+    Francis Vitt 2020-02-05 - cam6_2_012 - components/cam (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_012
+
+    Add lunar tides forcings -- turned off by default
+
+
+    Cheryl Craig 2020-01-22 - cam6_2_011 - components/cam (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_011
+
+    Introduce cam_snapshot 
+    Fix bug for chemmech file with incorrect directory path
+
+
+    Brian Eaton 2020-01-14 - cam6_2_010 - components/cam (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_010
+
+    . This change is to allow adding new SE grids to the CESM system without
+      needing to update CAM's horiz_grid.xml file.
+    . Bug fix for Q925 diagnostic output.
+
+
+    Kate Thayer-Calder 2020-01-10 - cam6_2_009 - components/cam (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_009
+
+    - Fixed wrong units in the history metadata for ADRAIN and ADSNOW.
+    - Cleaned up "if-statements" so they only apply to mg3 with hail and graupel turned on (no ability to run mg3 without hail or graupel turned on).
+    - Removed a test to check tendencies in the case where mg3 is run without hail or graupel (this configuration is not supported).
+    - Removed a warning that checks for "large" in-cloud hail and graupel is removed, because it is not applicable to high-resolution simulations.
+    Answers remain b4b
+
+
+    Brian Eaton 2020-01-07 - cam6_2_008 - components/cam (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_008
+
+    . Fix bug for reversed vertical order in several outputs with cosp_ht
+      vertical coordinate (reported by Brian Medeiros).
+    . Update to COSP tag v2.1.4cesm.
+    . Add Cloudsat diagnostics.
+
+    Answers are BFB.  Diagnostic output for COSP variables w/ cosp_ht dimension are different.
+
+
+cesm
+    Chris Fischer 2020-03-04 - cesm2_2_alpha04c - (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/cesm/tags/cesm2_2_alpha04c
+
+    Update manage externals to v1.1.8.
+
+
+cime
+    Chris Fischer 2020-02-27 - cime5.8.16 - cime (cesm2_2_alpha04d)
+    https://github.com/ESMCI/cime/tags/cime5.8.16
+
+        - Add SE grids for CAM.
+        - Improved cprnc build process.
+        - FV3 port to CAM.
+        - Fix izumi submit.
+        - maint-5.6 branch merge(2020-02-20).
+        - Fix the -n parameter to mpirun in chgres workflow template.
+        - Initial port of CIME to Hera for the UFS MR Weather App.
+        - Add rpath for netcdf.
+        - Update laramie modules.
+        - Fix typo.
+        - Fix pylint issue.
+        - Add ic_filepath to config_inputdata.
+        - Change homebrew to macos.
+        - Non-netcdf files should not be compared with cprnc.
+        - Fix an issue in downloading inputdata.
+        - Update cheyenne build.
+        - More updates of macros.
+        - Update macros.
+        - Strictly ufs updates.
+        - Fix for post-processing to work with netcdf files.
+        - Fix auto-triage.
+        - Add D0 to all namelist values added in PR 3231 and 3251.
+        - Revert "Update nuopc esmf".
+        - More fixes for UFS release.
+        - Put MAX_MPITASKS_PER_NODE back to config_workflow.xml.
+        - Fix chgres issue on cheyenne.
+        - Update for UFS model.
+        - Allow writing T-forcing cplhist files even when running with SGLC.
+        - Update nuopc esmf.
+        - Fix misspelling in comment.
+        - Fix issue with resubmit on systems that use ssh.
+        - Move orbital updates to nuopc caps and update nuopc dmodels.
+        - Latest developments from the CIME_MODEL=ufs project.
+        - Fix issue when input_ic_root is None.
+        - Fix misleading output casestatus.
+        - More work related with UFS.
+        - Update description for FORCE_BUILD_SMP.
+        - Revert "update esmf and netcdf on cheyenne".
+        - Remove redundant logic in _get_extension.
+        - Pop hist dd fix.
+        - Homebrew build fix.
+        - Cheyenne machine updates.
+        - Correction in get_model().
+        - Update ufs config_files.
+        - Implement automatic test traiging in e3sm test infrastructure.
+        - Rename fv3gfs to ufsatm.
+        - Extend archiving support to accept a regex pattern as well as a cesm style file extension.
+        - Updates needed to get aux_clm tests working with CMEPS.
+        - Add trouble shooting doc.
+        - Updates input directory for UFS application.
+        - Changes to build fv3gfs standalone using cime.
+        - Support new inputdata for ufs model.
+        - Fixed Empty .cesm_proj file results in a crash.
+        - Improve scripts_regression_tests test cleanup.
+
+
+clm
+    Negin Sobhani 2020-02-20 - ctsm1.0.dev084 - components/clm (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev084
+
+    Resolve Issue #811: Bounds assertion for ciso when threading is on.
+
+
+    Negin Sobhani 2020-02-06 - ctsm1.0.dev083 - components/clm (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev083
+
+    Some BFB Fixes: Resolve issues #683, #874, #878, #885, #745, #838
+
+
+    William Sacks 2020-02-01 - ctsm1.0.dev082 - components/clm (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev082
+
+    From Keith Oleson: Rename variables to avoid confusion; fix QSNOEVAP diagnostic
+
+    Just changes answers for CLM history field, QSNOEVAP
+
+
+    William Sacks 2020-01-14 - ctsm1.0.dev081 - components/clm (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev081
+
+    From Sam Levis: Speed up restart writes
+
+
+fms
+    Alper Altuntas 2020-02-21 - fi_20200221 - libraries/fms (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20200221
+
+    Fixes intel debug mode and gnu builds
+
+
+mom
+    Alper Altuntas 2020-03-04 - mi_20200309 - components/mom (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_202003??
+
+    - More updates before OMWG winter meeting.
+
+
+    Alper Altuntas 2020-02-21 - mi_20200221 - components/mom (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20200221
+
+    - Updates in GME and lateral diffusion modules
+    - Changes in runtime parameters.
+    - Merge dev master candidate 2019 12 17 
+    - More misc fixes and updates.
+
+
+pop
+    Alper Altuntas 2020-01-07 - cesm_pop_2_1_20200107 - components/pop (cesm2_2_alpha04d)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20200107
+
+    Tag Summary: Fix BSF diagnostics for large NTHRDS and NTASKS (PR #18)
+                 Fix tx0.1v3_transport_contents (PR #19)
+                 Rebase cesm2_1_x_rel changes onto master (PR #7)
+
+    Testing: aux_pop on cheyenne, bfb
+
+===============================================================
 Tag name: cesm2_2_alpha04c
 Originator(s): CSEG
 Date: 24 October 2019
