@@ -1,4 +1,5 @@
 ===============================================================
+
 Tag name: cesm2_2_alpha04d
 Originator(s): CSEG
 Date: 10 March 2020
@@ -7,7 +8,7 @@ One-line Summary: Misc updates
 
 components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_014                                          **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20191106                               --
-cime                               https://github.com/CESM-Development/cime/tree/cime5.8.16                               **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.17                               **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev084                                     **
 components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200221                               **
@@ -86,6 +87,16 @@ cesm
 
 
 cime
+    William Sacks 2020-03-15 - cime5.8.17 - cime (cesm2_2_alpha04d)
+    https://github.com/ESMCI/cime/tags/cime5.8.17
+
+        - Separate mct and nuopc data, xcpl and stub components
+        - Update pio2
+        - Documentation: provide a version dropdown menu and change theme
+        - Add ne5pg2_ne5pg2_mg37 grid
+        - Fix some issues
+
+
     Chris Fischer 2020-02-27 - cime5.8.16 - cime (cesm2_2_alpha04d)
     https://github.com/ESMCI/cime/tags/cime5.8.16
 
