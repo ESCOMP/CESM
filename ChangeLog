@@ -1,5 +1,77 @@
 ===============================================================
 
+Tag name: cesm2_2_alpha04e
+Originator(s): CSEG
+Date: 25 March 2020
+One-line Summary: CAM and NUOPC updates
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_017                                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20191106                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.18                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev086                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200221                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200309                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_36                                     **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200318                              **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_71 	                                  **
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402 	                                  --
+
+cam
+    Brian Eaton 2020-03-16 - cam6_2_017 - components/cam (cesm2_2_alpha04e)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_017
+
+    SE grid updates and bug fix in sponge layer.  Answer changing for all SE dycore tests due to bug fix.
+
+
+cime
+    William Sacks 2020-03-20 - cime5.8.18 - cime (cesm2_2_alpha04e)
+    https://github.com/ESMCI/cime/tags/cime5.8.18
+
+    Small tag from Chris Fischer: Add ne5np4.pg4 grid
+
+
+clm
+    William Sacks 2020-03-20 - ctsm1.0.dev086 - components/clm (cesm2_2_alpha04e)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev086
+
+    NUOPC cap updates (variable year orbital) and minor fixes to pio interface
+
+    Changes answers for some NUOPC cases; otherwise bit-for-bit
+
+
+    William Sacks 2020-03-16 - ctsm1.0.dev085 - components/clm (cesm2_2_alpha04e)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev085
+
+    Update to latest version of cime
+
+    No impact in CESM testing
+
+
+mosart
+    William Sacks 2020-03-16 - mosart1_0_36 - components/mosart (cesm2_2_alpha04e)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_36
+
+    Updates to NUOPC cap
+
+
+pop
+    Alper Altuntas 2020-03-18 - cesm_pop_2_1_20200318 - components/pop (cesm2_2_alpha04e)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20200318
+
+    - Bring in NUOPC cap
+    - Fix bad compset name in cesm2_1 testlist
+    - remove unknown* and same_as* from input_data_list
+
+
+rtm
+    William Sacks 2020-03-16 - rtm1_0_71 - components/rtm (cesm2_2_alpha04e)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_71
+
+    Add NUOPC cap
+===============================================================
+
 Tag name: cesm2_2_alpha04d
 Originator(s): CSEG
 Date: 10 March 2020
