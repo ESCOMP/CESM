@@ -219,6 +219,17 @@
     <science_support grid="f09_g17"/>
   </compset>
 
+  <!-- Extensions to 2300 -->
+  <compset>
+    <alias>BWSSP585extcmip6</alias>
+    <lname>SSP585EXT_CAM60%WCTS_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+  </compset>
+
+  <compset>
+    <alias>BWSSP534osextcmip6</alias>
+    <lname>SSP585EXT_CAM60%WCTS_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+  </compset>
+
   <!-- Same as BWHIST, but with cmip6-related modifiers for some components -->
   <compset>
     <alias>BWHISTcmip6</alias>
