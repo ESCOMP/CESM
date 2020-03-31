@@ -2,8 +2,8 @@
 
 Tag name: cesm2_2_alpha04f
 Originator(s): CSEG
-Date: 25 March 2020
-One-line Summary: CAM and NUOPC updates
+Date: 31 March 2020
+One-line Summary: CAM CLUBB update
 
 
 components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_018                                          **
