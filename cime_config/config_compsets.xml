@@ -227,7 +227,7 @@
 
   <compset>
     <alias>BWSSP534osextcmip6</alias>
-    <lname>SSP585EXT_CAM60%WCTS_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <lname>SSP534EXT_CAM60%WCTS_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
   </compset>
 
   <!-- Same as BWHIST, but with cmip6-related modifiers for some components -->
