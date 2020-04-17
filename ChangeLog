@@ -1,4 +1,43 @@
 ===============================================================
+Tag name: cesm2_2_beta04
+Originator(s): CSEG
+Date: 17 April 2020
+One-line Summary: Component and build updates, add MOM, FMS
+
+Component tags used for this CESM beta tag :
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_018  
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20191106
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.19
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68 
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev086 
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200221
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200309 
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_36
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200407  
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_71
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402 
+
+Answer Changes introduced with this tag when compared to cesm2_2_beta03:
+CAM
+	All CAM-SE configurations, AM conservation option on, WACCM(X), SILHS, CLUBB
+CLM
+	All configurations.
+CICE
+	All configurations.
+POP
+	Climate-changing for gx1v7, climate-changing when ecosys_on = .true.
+
+Problems identified after tag creation:
+- Grid configuration issues for ne30_ne30_mg17.QSC6, T31_g37.X
+- f09_g17_gl4.J1850G datm forcing data missing/updated.
+- BWma1850 compset is defined incorrectly.
+- IRT_N3_PM3_Ld7.f19_g17.BHIST.cheyenne_intel.allactive-defaultio, issue with
+  use_init_interp in clm. CTSM issue #544
+- ERP_Ln9.f05_f05_mg17.FCSD.cheyenne_intel.cam-outfrq9s, missing inputdata file
+  that needs to be generated.
+- There are known issues for the pgi and cray compilers.
+
+===============================================================
 
 Tag name: cesm2_2_alpha04g
 Originator(s): CSEG
