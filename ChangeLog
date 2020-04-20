@@ -8,7 +8,7 @@ One-line Summary: Major E3SM cime update
 
 components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_018                                          --
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20191106                               --
-cime                               https://github.com/CESM-Development/cime/tree/cime5.8.21                               **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.20                               **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev086                                     --
 components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200221                               --
@@ -17,20 +17,6 @@ components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1
 components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200407                              --
 components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_71                                           --
 components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402                                     --
-
-Chris Fischer 2020-04-17 - cime5.8.21 - cime (cesm2_2_alpha05a)
-https://github.com/ESMCI/cime/tags/cime5.8.21
-
-    - Use shrmap by reference instead of copy.
-    - nuopc_updates for scripts_regression_tests, esmf on cheyenne
-    - e3sm_cime_mgmt hotfix for both-removed conflicts
-    - Allow for specification of vertical grid in ATM_GRID.
-    - Recognize when a machine listed in config_machines.xml has no entries.
-    - Fix case reset on some machines.
-    - Fix pylint issues.
-    - Bring back the setting of dlnd strm_domdir and strm_domfil to null.
-    - Bugfixes and changes that permit cmeps to run without a mediator.
-    - Some changes to cprnc's CMakeLists.txt.
 
 
 William Sacks 2020-03-20 - cime5.8.20 - cime (cesm2_2_alpha05a)
