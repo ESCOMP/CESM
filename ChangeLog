@@ -38,7 +38,7 @@ cime
         - Fix pylint issues.
         - Bring back the setting of dlnd strm_domdir and strm_domfil to null.
         - Bugfixes and changes that permit cmeps to run without a mediator.
-             Machine updates changes answers on cheyenne
+             Machine updates changes answers on cheyenne, ECT test passes.
         - Some changes to cprnc's CMakeLists.txt.
 
 ===============================================================
