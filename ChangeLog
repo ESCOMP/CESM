@@ -3,7 +3,7 @@
 Tag name: cesm2_2_alpha05b
 Originator(s): CSEG
 Date: 24 April 2020
-One-line Summary: Major E3SM cime update
+One-line Summary: Cheyenne machine updates, answer changing, ECT test passes.
 
 
 components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_018                                          --
