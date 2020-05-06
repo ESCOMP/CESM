@@ -346,6 +346,21 @@
     <lname>20TR_CAM60_CLM45%BGC_CICE_NEMO_RTM_SGLC_SWAV</lname>
   </compset>
 
+  <compset>
+    <alias>BHISTNEMO</alias>
+    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_NEMO_MOSART_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BWHISTNEMO</alias>
+    <lname>HIST_CAM60%WCTS_CLM50%BGC-CROP_CICE_NEMO_MOSART_SGLC_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BWmaHISTNEMO</alias>
+    <lname>HIST_CAM60%WCCM_CLM50%BGC-CROP_CICE_NEMO_MOSART_SGLC_SWAV</lname>
+  </compset>
+
 
   <!-- Prognostic wave -->
 
