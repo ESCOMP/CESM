@@ -1,5 +1,158 @@
 ===============================================================
 
+Tag name: cesm2_2_alpha05c
+Originator(s): CSEG
+Date: 5 May 2020
+One-line Summary: Component updates.
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_024                                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.23                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev093                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200221                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200309                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_36                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200407                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_71                                           --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402                                     --
+
+cam
+    Francis Vitt 2020-05-06 - cam6_2_024 - components/cam (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_024
+
+    Remove open file statements in MAM code
+
+
+    Francis Vitt 2020-05-05 - cam6_2_023 - components/cam (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_023
+
+    WACCM 2000climo compsets
+
+
+    Cheryl Craig 2020-04-23 - cam6_2_022 - components/cam (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_022
+
+    Update externals for CAM checkouts - no effect for CESM checkouts
+
+
+    Francis Vitt 2020-04-17 - cam6_2_021 - components/cam (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_021
+
+     Aerosol wet removal options
+
+     - Bug fix for error in using ESMF library in subroutine set_time_float_from_date
+       issue #92
+
+
+    Brian Eaton 2020-04-08 - cam6_2_020 - components/cam (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_020
+
+    Fixes in COSP MODIS simulator.
+    Simulations are all BFB.  The MODIS diagnostic fields have diffs.
+
+
+    Cheryl Craig 2020-04-07 - cam6_2_019 - components/cam (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_019
+
+    mods for CCPP kessler
+
+
+cesm
+    Chris Fischer 2020-05-01 - cesm2_2_alpha05c - (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/cesm/tags/cesm2_2_alpha05c
+
+    Add %NDEP to POP for BWma1850 compset.
+
+
+cice
+    David Bailey 2020-04-30 - cice5_20200430 - components/cice (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20200430
+
+    This tag brings in the following:
+
+    1. Changes the tolerance on the energy convergence in the thermodynamics (bfb).
+
+    2. Change the precision of the time variable on the history files. This fixes a bug with hourly history. (non-bfb for the time variable on history files only)
+
+    3. Changes to turn on CICE4 physics via the compset option (%CICE4) (bfb, mlevy)
+
+    4. Changes to turn on fix for non positive definite maps like patch mapping for fluxes and states. (bfb, mlevy)
+
+    5. Various NUOPC driver changes (bfb)
+
+
+cime
+    Chris Fischer 2020-05-05 - cime5.8.23 - cime (cesm2_2_alpha05c)
+    https://github.com/ESMCI/cime/tags/cime5.8.??
+
+        - Improvement to scripts regression tests on the Melvin machine.
+        - Fix atm level spec so that it does not match 1x1_brazil.
+        - Document provenance from COARE/Fairall surface flux scheme option.
+        - Add missing ROF2OCN grid for r05_TO_gx3v7.
+        - Updates to CIME used for 0.1 degree JRA-forced G run with BGC enabled.
+        - FV3 bug fix and Makefile update.
+        - Update cheyenne ESMF libs.
+        - case.setup: fix merge error from prev PR.
+        - case.setup: fix case.setup --clean.
+        - First steps to ESMF data models.
+        - Allow user to specify an extra machines directory in create_newcase.
+        - Remove code specific to ORNL machine.
+
+
+clm
+    Erik Kluzek 2020-05-01 - ctsm1.0.dev093 - components/clm (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev093
+
+    Move changes from release-clm5.0 branch to master. Updated surface datasets.
+
+
+    Erik Kluzek 2020-04-27 - ctsm1.0.dev092 - components/clm (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev092
+
+    Update cime to version in cesm2_2_beta04.
+
+    Update manage externals. Fix two small issues in CTSM.
+
+
+    William Sacks 2020-04-24 - ctsm1.0.dev091 - components/clm (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev091
+
+    Increase tolerance on near-zero truncation for a snow state update
+
+    In principle can change answers, but no answer changes were observed in the test suite
+
+
+    William Sacks 2020-04-24 - ctsm1.0.dev090 - components/clm (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev090
+
+    (From Negin) Refactoring banded diagonal matrix and solve system in SoilTemperature module
+
+
+    William Sacks 2020-04-07 - ctsm1.0.dev089 - components/clm (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev089
+
+    Bring documentation source to master
+
+
+    William Sacks 2020-04-07 - ctsm1.0.dev088 - components/clm (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev088
+
+    Fix bug in snow aerosol numerics (causes occasional HUGE aerosol values)
+
+    Potentially changes answers for all cases, but in practice only shows up in a small number of tests
+
+
+    William Sacks 2020-04-06 - ctsm1.0.dev087 - components/clm (cesm2_2_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev087
+
+    Change hard-coded soil layers in phenology to use a target depth
+
+    Bit-for-bit for most configurations. Just changes answers for non-SP cases with NWP
+    or non-standard soil layer structure. (Probably bit-for-bit in all prealpha / prebeta tests.)
+===============================================================
+
 Tag name: cesm2_2_alpha05b
 Originator(s): CSEG
 Date: 24 April 2020
