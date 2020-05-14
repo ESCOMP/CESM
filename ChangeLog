@@ -2,7 +2,7 @@
 Tag name: cesm2_2_beta05
 Originator(s): CSEG
 Date: 14 May 2020
-One-line Summary: Component and build updates, add MOM, FMS
+One-line Summary: E3SM merge, machine updates, CTSM, CAM, and CICE updates.
 
 Component tags used for this CESM beta tag :
 components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_024  
