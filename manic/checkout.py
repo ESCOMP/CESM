@@ -279,6 +279,9 @@ of the externals description file or examine the output of
                         help='The externals description filename. '
                         'Default: %(default)s.')
 
+    parser.add_argument('-x', '--exclude', nargs='*',
+                        help='Component(s) listed in the externals file which should be ignored.' )
+
     parser.add_argument('-o', '--optional', action='store_true', default=False,
                         help='By default only the required externals '
                         'are checked out. This flag will also checkout the '
@@ -362,7 +365,7 @@ def main(args):
     root_dir = os.path.abspath(os.getcwd())
     external_data = read_externals_description_file(root_dir, args.externals)
     external = create_externals_description(
-        external_data, components=args.components)
+        external_data, components=args.components, exclude=args.exclude)
 
     for comp in args.components:
         if comp not in external.keys():
