@@ -280,7 +280,7 @@ of the externals description file or examine the output of
                         'Default: %(default)s.')
 
     parser.add_argument('-x', '--exclude', nargs='*',
-                        help='Component(s) listed in the externals file which should be ignored.' )
+                        help='Component(s) listed in the externals file which should be ignored.')
 
     parser.add_argument('-o', '--optional', action='store_true', default=False,
                         help='By default only the required externals '
