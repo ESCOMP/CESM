@@ -1347,6 +1347,23 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_component_post_checkout2(overall, tree)
 
+    def test_container_exclude_component(self):
+        """Verify that optional component checkout works
+        """
+        # create the test repository
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+
+        # create the top level externals file
+        self._generator.container_full(under_test_dir)
+
+        # inital checkout, first try a nonexistant component argument noref
+        checkout_args = ['--exclude simp_opt']
+        checkout_args.extend(self.checkout_args)
+
+        overall, tree = self.execute_cmd_in_dir(under_test_dir, checkout_args)
+
+        self._check_container_component_post_checkout2(overall, tree)
+
     def test_mixed_simple(self):
         """Verify that a mixed use repo can serve as a 'full' container,
         pulling in a set of externals and a seperate set of sub-externals.
