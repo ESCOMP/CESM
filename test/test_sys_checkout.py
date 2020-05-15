@@ -819,8 +819,13 @@ class BaseTestSysCheckout(unittest.TestCase):
 
     def _check_container_component_post_checkout2(self, overall, tree):
         self.assertEqual(overall, 0)
-        self._check_simple_opt_ok(tree)
         self._check_simple_tag_empty(tree)
+        self._check_simple_branch_ok(tree)
+
+    def _check_container_component_post_checkout3(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self.assertFalse("simp_opt" in tree)
+        self._check_simple_tag_ok(tree)
         self._check_simple_branch_ok(tree)
 
     def _check_container_full_post_checkout(self, overall, tree):
@@ -1348,7 +1353,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._check_container_component_post_checkout2(overall, tree)
 
     def test_container_exclude_component(self):
-        """Verify that optional component checkout works
+        """Verify that exclude component checkout works
         """
         # create the test repository
         under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
@@ -1357,12 +1362,13 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._generator.container_full(under_test_dir)
 
         # inital checkout, first try a nonexistant component argument noref
-        checkout_args = ['--exclude simp_opt']
+        checkout_args = ['--exclude','simp_opt']
         checkout_args.extend(self.checkout_args)
-
+        save_checkout_args = self.checkout_args
+        self.checkout_args = checkout_args
         overall, tree = self.execute_cmd_in_dir(under_test_dir, checkout_args)
-
-        self._check_container_component_post_checkout2(overall, tree)
+        self._check_container_component_post_checkout3(overall, tree)
+        self.checkout_args = save_checkout_args
 
     def test_mixed_simple(self):
         """Verify that a mixed use repo can serve as a 'full' container,
