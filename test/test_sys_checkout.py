@@ -1362,7 +1362,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._generator.container_full(under_test_dir)
 
         # inital checkout, exclude simp_opt
-        checkout_args = ['--exclude','simp_opt', '--logging']
+        checkout_args = ['--exclude', 'simp_opt']
         checkout_args.extend(self.checkout_args)
         overall, tree = self.execute_cmd_in_dir(under_test_dir, checkout_args)
         checkout_args.append("--status")
