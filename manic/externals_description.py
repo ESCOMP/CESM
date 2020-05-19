@@ -722,11 +722,12 @@ class ExternalsDescriptionDict(ExternalsDescription):
         self._input_patch = 0
         self._verify_schema_version()
         if components:
-            for key in model_data.items():
+            for key in list(model_data.keys()):
                 if key not in components:
                     del model_data[key]
+
         if exclude:
-            for key in model_data.items():
+            for key in list(model_data.keys()):
                 if key in exclude:
                     del model_data[key]
 

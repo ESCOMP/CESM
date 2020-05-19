@@ -412,7 +412,7 @@ class TestCreateExternalsDescription(unittest.TestCase):
         ext = create_externals_description(desc, model_format='dict')
         self.assertIsInstance(ext, ExternalsDescriptionDict)
 
-    def test_container_component_dict(self):
+    def test_cfg_component_dict(self):
         """Verify that create_externals_description works with a dictionary
         """
         # create the top level externals file
@@ -425,7 +425,7 @@ class TestCreateExternalsDescription(unittest.TestCase):
         self.assertTrue('simp_opt' in external)
         self.assertTrue('mixed_req' in external)
 
-    def test_container_exclude_component_dict(self):
+    def test_cfg_exclude_component_dict(self):
         """Verify that exclude component checkout works with a dictionary
         """
         # create the top level externals file
@@ -440,7 +440,7 @@ class TestCreateExternalsDescription(unittest.TestCase):
         self.assertFalse('simp_opt' in external)
         self.assertTrue('mixed_req' in external)
 
-    def test_container_opt_component_dict(self):
+    def test_cfg_opt_component_dict(self):
         """Verify that exclude component checkout works with a dictionary
         """
         # create the top level externals file
