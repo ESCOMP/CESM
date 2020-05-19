@@ -342,7 +342,8 @@ class TestCreateExternalsDescription(unittest.TestCase):
         # NOTE(goldy, 2019-03) Should test other possible keywords such as
         # fetchRecurseSubmodules, ignore, and shallow
 
-    def setup_dict_config(self):
+    @staticmethod
+    def setup_dict_config():
         """Create the full container dictionary with simple and mixed use
         externals
 
