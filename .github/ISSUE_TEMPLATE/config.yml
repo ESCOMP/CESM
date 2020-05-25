@@ -3,3 +3,6 @@ contact_links:
   - name: CESM forums
     url: https://bb.cgd.ucar.edu/cesm/
     about: For support with model use, troubleshooting, etc., please use the CESM forums
+  - name: CAM issue
+    url: https://github.com/ESCOMP/CAM/issues
+    about: Issue with CAM (Community Atmosphere Model)
