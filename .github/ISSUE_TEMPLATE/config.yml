@@ -7,8 +7,8 @@ contact_links:
     url: https://github.com/ESMCI/cime/issues/new/choose
     about: Issue with CIME (scripting infrastructure, share code, etc.)
   - name: CAM issue
-    url: https://github.com/ESCOMP/CAM/issues/new/choose
-    about: Issue with CAM (Community Atmosphere Model)
+    url: https://bb.cgd.ucar.edu/cesm/forums/cam.133/
+    about: Issue with CAM (Community Atmosphere Model) - please report via forums
   - name: CTSM / CLM issue
     url: https://github.com/ESCOMP/CTSM/issues/new/choose
     about: Issue with CTSM / CLM (Community Terrestrial Systems Model / Community Land Model)
