@@ -1,4 +1,89 @@
 ===============================================================
+
+Tag name: cesm2_2_alpha06a
+Originator(s): CSEG
+Date: 29 May 2020
+One-line Summary: cam and ctsm updates.
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_028                                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.23                               --
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev098                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200221                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200309                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_36                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200407                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_71                                           --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402                                     --
+
+
+cam
+    Brian Eaton 2020-05-26 - cam6_2_028 - components/cam (cesm2_2_alpha06a)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_028
+
+    CAM-SE updates: new initial conditions and hi-res topo files, clubb parameters and bug fix.
+
+    SE changes answers, otherwise BFB.
+
+
+    Francis Vitt 2020-05-20 - cam6_2_027 - components/cam (cesm2_2_alpha06a)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_027
+
+    Add air-sea exchange module for chemical tracers; update chemistry preprocessor
+
+
+    Kate Thayer-Calder 2020-05-12 - cam6_2_026 - components/cam (cesm2_2_alpha06a)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_026
+
+    Moved MG microphysics to external repo
+
+
+    John Truesdale 2020-05-11 - cam6_2_025 - components/cam (cesm2_2_alpha06a)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_025
+
+    Minor updates to SCAM - remove unused variables, scam namelist options to log file and correct issue #130.
+
+
+clm
+    Erik Kluzek 2020-05-28 - ctsm1.0.dev098 - components/clm (cesm2_2_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev098
+
+    Support for FV3 grids: C24, C48, C96, C192, C384
+
+
+    William Sacks 2020-05-25 - ctsm1.0.dev097 - components/clm (cesm2_2_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev097
+
+    Add two bioenergy crops (switchgrass and miscanthus)
+
+    Just changes answers for auxiliary (h1) history files for transient (historical or SSP) CLM50 crop cases
+    (due to dimension length differences on these vector history files)
+
+
+    William Sacks 2020-05-22 - ctsm1.0.dev096 - components/clm (cesm2_2_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev096
+
+    (From Sam Levis) Gridcell-level balance checks for carbon and nitrogen
+
+
+    William Sacks 2020-05-21 - ctsm1.0.dev095 - components/clm (cesm2_2_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev095
+
+    Update cime and cmeps externals; rework initialization of CNFire object
+
+    No answer changes expected in the CESM context
+    (only answer changes are due to standalone externals updates)
+
+
+    William Sacks 2020-05-15 - ctsm1.0.dev094 - components/clm (cesm2_2_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev094
+
+    Minor bug fixes needed for latest cime
+
+
+===============================================================
 Tag name: cesm2_2_beta05
 Originator(s): CSEG
 Date: 14 May 2020
