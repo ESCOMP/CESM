@@ -46,6 +46,26 @@ cam
     Minor updates to SCAM - remove unused variables, scam namelist options to log file and correct issue #130.
 
 
+cime
+    Chris Fischer 2020-06-03 - cime5.8.24 - cime (cesm2_2_alpha06a)
+    https://github.com/ESMCI/cime/tags/cime5.8.24
+
+        - Machine configuration updates for izumi.
+        - Add Makefile target to write various flags.
+        - Improve PET test baseline generation and comparison.
+        - Allow gptl build to recognize ESMF_LIBDIR.
+        - When writing .env_mach_specific files, only write settings for main job.
+        - Start adding option for MizuRoute.
+        - Merge ACME branch 2020-05-15.
+        - Allow compiler to modify MAX_TASKS_PER_NODE and MAX_MPITASKS_PER_NODE.
+        - Improve cime buildlib function debug logging.
+        - Fix cime_model to stdout issue.
+        - Extend allowed string length.
+        - Fix div0s in cprnc comparisons.
+        - Change type to double for derived vars in cprnc.
+        - Fix typo.
+
+
 clm
     Erik Kluzek 2020-05-28 - ctsm1.0.dev098 - components/clm (cesm2_2_alpha06a)
     https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev098
