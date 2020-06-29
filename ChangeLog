@@ -1,5 +1,131 @@
 ===============================================================
 
+Tag name: cesm2_2_alpha06b
+Originator(s): CSEG
+Date: 29 June 2020
+One-line Summary: cam and ctsm updates.
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_033                                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.27                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev101                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200221                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200309                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_36                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200407                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_71                                           --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190402                                     --
+
+
+cam
+    Cheryl Craig 2020-06-04 - cam6_2_029 - components/cam (cesm2_2_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/https://github.com/ESCOMP/CAM/tree/cam6_2_029
+
+    Update cime version and compilers for CAM standalone
+
+    PGI changes answers for CAM standalone runs, but these changes do not impact the CESM tests
+
+
+    Francis Vitt 2020-06-25 - cam6_2_033 - components/cam (cesm2_2_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_033
+
+    Chemistry updates
+
+    dependency: cime5.8.26 for dry deposition updates
+
+
+    Francis Vitt 2020-06-09 - cam6_2_032 - components/cam (cesm2_2_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_033
+
+    WACCM-X compsets for CESM2.2
+
+    Baselines for WACCM-X change
+
+
+    Francis Vitt 2020-06-09 - cam6_2_031 - components/cam (cesm2_2_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_031
+
+    Aerosol convection processes; ChangeLog template update
+
+
+    Brian Eaton 2020-06-08 - cam6_2_030 - components/cam (cesm2_2_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_030
+
+    . Fix a floating point issue in GW drag that seems to be responsible for
+      instabilities in WACCM configurations with the SE dycore.
+
+    Only simple physics configurations are BFB.  All baseline comparisons for
+    configurations using cam4, cam5, or cam6 physics are expected to failed.
+
+
+cime
+    Chris Fischer 2020-06-16 - cime5.8.26 - cime (cesm2_2_alpha06b)
+    https://github.com/ESMCI/cime/tags/cime5.8.26
+
+        - One line bug fix for regional amazon grid and nuopc rpointer name.
+        - scorpio (e3sm pio2 version) does not support the PIO_SHORT type added to the pio2 library.
+        - Add mvsource script.
+        - Add support for compressed ERA5 data streams.
+        - Major refactor of nuopc datamodel caps and share code.
+        - Changes to add NCAR's Casper/DAV systems to the machine lists.
+        - Updates to dry deposition data.  Changes answers.
+        - Updates to the latest pio2 code.
+        - Allow a user supplied config_grids.xml file.
+        - Pleiades machines updates.
+        - Improved error message for incorrect setting of cime model.
+
+
+    Chris Fischer 2020-06-08 - cime5.8.25 - cime (cesm2_2_alpha06b)
+    https://github.com/ESMCI/cime/tags/cime5.8.25
+
+        - Change grid alias for arctic var-res grids.
+        - Couples HYCOM with data atmosphere for UFS HAFS application.
+
+
+    Chris Fischer 2020-06-24 - cime5.8.27 - cime (cesm2_2_alpha06b)
+    https://github.com/ESMCI/cime/tags/cam5.8.27
+
+        - Rename ne30pg3 grid name to ne30np4.pg3
+        - ERA5 data stream related changes.
+        - Fix link order for cdeps.
+        - Give the file name that results in the "empty read-only file" error.
+        - Uncomment error check.
+        - Use pio1 even for mpi-serial cases in CESM.
+        - Fix print format issue and turn off debug flags.
+        - Update paths for cdeps.
+        - Merge branch 'master' of https://github.com/ESMCI/cime.
+        - Minor adjust to cdeps link step.
+        - Add cmake to cheyenne modules, point to CDEPS buildlib.
+        - Updates for cdeps streams
+        - Remove nuopc data models to new repo CDEPS.
+        - Fixed and cleaned-up scripts_regression_tests.py test Q_TestBlessTestResults with CIME_MODEL = cesm.
+
+
+clm
+    Erik Kluzek 2020-06-17 - ctsm1.0.dev101 - components/clm (cesm2_2_alpha06b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev101
+
+    Add more variables to the parameter file
+
+
+    William Sacks 2020-06-09 - ctsm1.0.dev100 - components/clm (cesm2_2_alpha06b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev100
+
+    Deallocate memory after running init_interp
+
+
+    William Sacks 2020-06-08 - ctsm1.0.dev099 - components/clm (cesm2_2_alpha06b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev099
+
+    Update cime for izumi updates; change definition of PEM test on izumi
+
+    This will be bfb in the CESM context, because answer changes only arise from the cime update.
+    However, note that baselines won't exist for test PEM_Ld1.f10_f10_musgs.I2000Clm50BgcCropGs.izumi_intel.clm-crop,
+    because this test is new (replacing PEM_Ld1.f10_f10_musgs.I2000Clm50BgcCrop.izumi_intel.clm-crop).
+===============================================================
+
 Tag name: cesm2_2_alpha06a
 Originator(s): CSEG
 Date: 29 May 2020
