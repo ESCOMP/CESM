@@ -394,15 +394,18 @@ def main(args):
 
 The following are two options for how to proceed:
 
-(1) Go into each external that is not in a clean state and issue either
-    an 'svn status' or a 'git status' command. Either revert or commit
-    your changes so that all externals are in a clean state. (Note,
-    though, that it is okay to have untracked files in your working
+(1) Go into each external that is not in a clean state and issue either a 'git status' or
+    an 'svn status' command (depending on whether the external is managed by git or
+    svn). Either revert or commit your changes so that all externals are in a clean
+    state. (To revert changes in git, follow the instructions given when you run 'git
+    status'.) (Note, though, that it is okay to have untracked files in your working
     directory.) Then rerun {program_name}.
 
-(2) Alternatively, you do not have to rely on {program_name}. Instead, you
-    can manually update out-of-sync externals (labeled with 's' above)
-    as described in the configuration file {config_file}.
+(2) Alternatively, you do not have to rely on {program_name}. Instead, you can manually
+    update out-of-sync externals (labeled with 's' above) as described in the
+    configuration file {config_file}. (For example, run 'git fetch' and 'git checkout'
+    commands to checkout the appropriate tags for each external, as given in
+    {config_file}.)
 
 
 The external repositories labeled with '?' above are not under version
