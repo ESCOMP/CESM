@@ -39,3 +39,6 @@ contact_links:
   - name: FMS issue
     url: https://github.com/ESCOMP/FMS_interface/issues/new/choose
     about: Issue with FMS in CESM
+  - name: CESM Experiments Database issue
+    url: https://github.com/NCAR/CESM_expdb2/issues/new/choose
+    about: Issue with the CESM Experiments Database
