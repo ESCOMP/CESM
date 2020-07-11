@@ -1,5 +1,88 @@
 ===============================================================
 
+Tag name: cesm2_2_alpha06c
+Originator(s): CSEG
+Date: 11 July 2020
+One-line Summary: clm and pop updates.
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_033                                          --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.28                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_68                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev104                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200221                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200309                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_36                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200709b                             **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_71                                           --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     **
+
+cime
+    Chris Fischer 2020-06-30 - cime5.8.28 - cime (cesm2_2_alpha06c)
+    https://github.com/ESMCI/cime/tags/cime5.8.28
+
+        - Update some domain and mapping files.
+        - Improve error message for create newcase test option.
+        - Clean up screen output & logging in check_input_data.
+
+
+clm
+    William Sacks 2020-06-26 - ctsm1.0.dev104 - components/clm (cesm2_2_alpha06c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev104
+
+    Add LILAC
+
+
+    Erik Kluzek 2020-06-02 - ctsm1.0.dev102 - components/clm (cesm2_2_alpha06c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev100
+
+    Some important bug fixes for clm5_0. clm5_0 changes answers, clm4_5 remains the same.
+
+
+    William Sacks 2020-06-30 - ctsm1.0.dev103 - components/clm (cesm2_2_alpha06c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.de103
+
+    (From Sam Levis) Gridcell-level CH4 balance checks
+
+
+pop
+    Alper Altuntas 2020-05-13 - cesm_pop_2_1_20200709 - components/pop (cesm2_2_alpha06c)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20200709
+
+    WW3-forced entrainment changes
+
+
+    Michael Levy 2020-06-24 - cesm_pop_2_1_20200628 - components/pop (cesm2_2_alpha06c)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20200628
+
+    Update abio_dic_dic14 tracer module to provide additional tavg fields
+    necessary for Keith L's Newton-Krylov solver
+
+
+    Michael Levy 2020-07-09 - cesm_pop_2_1_20200709b - components/pop (cesm2_2_alpha06c)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20200709b
+
+    New tunings for BGC.
+
+    Also update MARBL to fix missing kind specifiers in some constants
+    (We had held off on this change in the past because it is answer changing)
+
+
+    Michael Levy 2020-05-19 - cesm_pop_2_1_20200603 - components/pop (cesm2_2_alpha06c)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20200603
+
+    Fix bug in how iron flux forcing is computed (answer changing for all compsets with ecosys tracer module except those using OCN_BGC_CONFIG="cesm2.0")
+
+
+ww3
+    Michael Levy 2020-06-29 - ww3_200710 - components/ww3 (cesm2_2_alpha06c)
+    https://github.com/ESCOMP/WW3-CESM/tags/ww3_200710
+
+    Fix bug that prevents gnu from running when DEBUG=TRUE
+
+===============================================================
+
 Tag name: cesm2_2_alpha06b
 Originator(s): CSEG
 Date: 29 June 2020
