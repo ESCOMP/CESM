@@ -392,7 +392,7 @@ def main(args):
             # exit gracefully
             msg = """The external repositories labeled with 'M' above are not in a clean state.
 
-The following are two options for how to proceed:
+The following are three options for how to proceed:
 
 (1) Go into each external that is not in a clean state and issue either a 'git status' or
     an 'svn status' command (depending on whether the external is managed by git or
@@ -406,6 +406,11 @@ The following are two options for how to proceed:
     configuration file {config_file}. (For example, run 'git fetch' and 'git checkout'
     commands to checkout the appropriate tags for each external, as given in
     {config_file}.)
+
+(3) You can also use {program_name} to manage most, but not all externals: You can specify
+    one or more externals to ignore using the '-x' or '--exclude' argument to
+    {program_name}. Excluding externals labeled with 'M' will allow {program_name} to
+    update the other, non-excluded externals.
 
 
 The external repositories labeled with '?' above are not under version
