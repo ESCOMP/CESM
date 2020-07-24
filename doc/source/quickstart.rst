@@ -152,7 +152,7 @@ now are:
       ./xmlquery STOP_OPTION,STOP_N
 
    These default settings can be useful in `troubleshooting
-   <http://esmci.github.io/cime/users_guide/troubleshooting.html>`_ runtime problems
+   <http://esmci.github.io/cime/versions/master/html/users_guide/troubleshooting.html>`_ runtime problems
    before submitting for a longer time, but will not allow the model to run long enough to
    produce monthly history climatology files. In order to produce history files, increase
    the run length to a month or longer:
