@@ -7,7 +7,7 @@
 The following quick start guide is for versions of CESM2 that have
 already been ported to the local target machine. CESM2 is built on the
 CIME (Common Infrastructure for Modeling Earth) framework.
-Please refer to the `CIME Porting Documentation <http://esmci.github.io/cime/users_guide/porting-cime.html>`_ if CIME has not
+Please refer to the `CIME Porting Documentation <http://esmci.github.io/cime/versions/master/html/users_guide/porting-cime.html>`_ if CIME has not
 yet been ported to the target machine. 
 
 If you are new to CESM2, please consider reading the
