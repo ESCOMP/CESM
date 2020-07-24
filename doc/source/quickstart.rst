@@ -15,7 +15,7 @@ If you are new to CESM2, please consider reading the
 
 This is the procedure for quickly setting up and running a CESM2 case.
 
-Download CESM2 (see `Downloading CESM2 <downloading_cesm.html>`_).
+Download CESM2 (see `Downloading CESM2 <downloading_cesm.rst>`_).
 
 Select a component set, and a resolution for your case.  Details of available
 component sets and resolutions are available from the `query_config`_ tool located
@@ -226,7 +226,7 @@ comma separated names and no spaces):
 
 .. _CIME: http://esmci.github.io/cime
 .. _porting: http://esmci.github.io/cime/users_guide/porting-cime
-.. _query_config: http://esmci.github.io/cime/users_guide/introduction-and-overview.html#discovering-available-cases-with-query-config
-.. _create_newcase: http://esmci.github.io/cime/users_guide/create-a-case.html
-.. _xmlchange: http://esmci.github.io/cime/Tools_user/xmlchange.html
-.. _case.setup: http://esmci.github.io/cime/users_guide/setting-up-a-case.html
+.. _query_config: http://esmci.github.io/cime/versions/master/html/users_guide/introduction-and-overview.html#discovering-available-cases-with-query-config
+.. _create_newcase: http://esmci.github.io/cime/versions/master/html/users_guide/create-a-case.html
+.. _xmlchange: http://esmci.github.io/cime/versions/master/html/Tools_user/xmlchange.html
+.. _case.setup: http://esmci.github.io/cime/versions/master/html/users_guide/setting-up-a-case.html
