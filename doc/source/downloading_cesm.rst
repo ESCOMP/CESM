@@ -16,7 +16,7 @@ software.  You will need access to the command line clients, ``git``
 (v1.8 or greater) and ``svn`` (v1.8 or greater but less than v1.11).  
 Currently, our Subversion server
 software is at version 1.8.17. For more information or to download
-open source tools, visit `Subversion <http://subversion.tigris.org/>`_
+open source tools, visit `Subversion <http://subversion.apache.org/>`_
 and `git downloads <https://git-scm.com/downloads>`_.
 
 With valid git and svn clients installed on the machine where CESM will be
