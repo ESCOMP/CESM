@@ -225,7 +225,6 @@ comma separated names and no spaces):
 
 
 .. _CIME: http://esmci.github.io/cime
-.. _porting: http://esmci.github.io/cime/users_guide/porting-cime
 .. _query_config: http://esmci.github.io/cime/versions/master/html/users_guide/introduction-and-overview.html#discovering-available-cases-with-query-config
 .. _create_newcase: http://esmci.github.io/cime/versions/master/html/users_guide/create-a-case.html
 .. _xmlchange: http://esmci.github.io/cime/versions/master/html/Tools_user/xmlchange.html
