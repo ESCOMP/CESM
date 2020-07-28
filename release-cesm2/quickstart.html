@@ -9,10 +9,12 @@
     <title>Quick Start (CESM2 Model Workflow) &#8212; CESM  documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="CESM2 Configurations" href="cesm_configurations.html" /> 
@@ -40,14 +42,14 @@
 <p>The following quick start guide is for versions of CESM2 that have
 already been ported to the local target machine. CESM2 is built on the
 CIME (Common Infrastructure for Modeling Earth) framework.
-Please refer to the <a class="reference external" href="http://esmci.github.io/cime/users_guide/porting-cime.html">CIME Porting Documentation</a> if CIME has not
+Please refer to the <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/users_guide/porting-cime.html">CIME Porting Documentation</a> if CIME has not
 yet been ported to the target machine.</p>
 <p>If you are new to CESM2, please consider reading the
 <a class="reference external" href="https://esmci.github.io/cime/index.html">CIME Case Control System Part 1: Basic Usage guide</a> first.</p>
 <p>This is the procedure for quickly setting up and running a CESM2 case.</p>
-<p>Download CESM2 (see <a class="reference external" href="downloading_cesm.html">Downloading CESM2</a>).</p>
+<p>Download CESM2 (see <a class="reference external" href="downloading_cesm.rst">Downloading CESM2</a>).</p>
 <p>Select a component set, and a resolution for your case.  Details of available
-component sets and resolutions are available from the <a class="reference external" href="http://esmci.github.io/cime/users_guide/introduction-and-overview.html#discovering-available-cases-with-query-config">query_config</a> tool located
+component sets and resolutions are available from the <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/users_guide/introduction-and-overview.html#discovering-available-cases-with-query-config">query_config</a> tool located
 in the <code class="docutils literal notranslate"><span class="pre">my_cesm_sandbox/cime/scripts</span></code> directory</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd my_cesm_sandbox/cime/scripts</span>
 <span class="go">./query_config --help</span>
@@ -66,7 +68,7 @@ variable or some other variable; we try to make these exceptions clear.</p>
 </div>
 <div class="section" id="create-a-case">
 <h2>Create a case<a class="headerlink" href="#create-a-case" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="http://esmci.github.io/cime/users_guide/create-a-case.html">create_newcase</a> command creates a case directory containing the scripts and XML
+<p>The <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/users_guide/create-a-case.html">create_newcase</a> command creates a case directory containing the scripts and XML
 files to configure a case (see below) for the requested resolution, component set, and
 machine. <strong>create_newcase</strong> has three required arguments: <code class="docutils literal notranslate"><span class="pre">--case</span></code>, <code class="docutils literal notranslate"><span class="pre">--compset</span></code> and
 <code class="docutils literal notranslate"><span class="pre">--res</span></code> (invoke <strong>create_newcase –help</strong> for help).</p>
@@ -102,17 +104,17 @@ set to your cheyenne login name:</p>
 </div>
 <div class="section" id="setting-up-the-case-run-script">
 <h2>Setting up the case run script<a class="headerlink" href="#setting-up-the-case-run-script" title="Permalink to this headline">¶</a></h2>
-<p>Issuing the <a class="reference external" href="http://esmci.github.io/cime/users_guide/setting-up-a-case.html">case.setup</a> command creates scripts needed to run the model
+<p>Issuing the <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/users_guide/setting-up-a-case.html">case.setup</a> command creates scripts needed to run the model
 along with namelist <code class="docutils literal notranslate"><span class="pre">user_nl_xxx</span></code> files, where xxx denotes the set of components
 for the given case configuration. Before invoking <strong>case.setup</strong>, modify
-the <code class="docutils literal notranslate"><span class="pre">env_mach_pes.xml</span></code> file in the case directory using the <a class="reference external" href="http://esmci.github.io/cime/Tools_user/xmlchange.html">xmlchange</a> command
+the <code class="docutils literal notranslate"><span class="pre">env_mach_pes.xml</span></code> file in the case directory using the <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/Tools_user/xmlchange.html">xmlchange</a> command
 as needed for the experiment.</p>
 <p>cd to the case directory. Following the example from above:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test</span>
 </pre></div>
 </div>
 <p>Modify settings in <code class="docutils literal notranslate"><span class="pre">env_mach_pes.xml</span></code> (optional). (Note: To edit any of
-the env xml files, use the <a class="reference external" href="http://esmci.github.io/cime/Tools_user/xmlchange.html">xmlchange</a> command.
+the env xml files, use the <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/Tools_user/xmlchange.html">xmlchange</a> command.
 invoke <strong>xmlchange –help</strong> for help.)</p>
 <p>Invoke the <strong>case.setup</strong> command.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./case.setup</span>
@@ -148,7 +150,7 @@ now are:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./xmlquery STOP_OPTION,STOP_N</span>
 </pre></div>
 </div>
-<p>These default settings can be useful in <a class="reference external" href="http://esmci.github.io/cime/users_guide/troubleshooting.html">troubleshooting</a> runtime problems
+<p>These default settings can be useful in <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/users_guide/troubleshooting.html">troubleshooting</a> runtime problems
 before submitting for a longer time, but will not allow the model to run long enough to
 produce monthly history climatology files. In order to produce history files, increase
 the run length to a month or longer:</p>
@@ -218,7 +220,7 @@ are in the <code class="docutils literal notranslate"><span class="pre">$RUNDIR<
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Quick Start (CESM2 Model Workflow)</a><ul>
 <li><a class="reference internal" href="#create-a-case">Create a case</a></li>
@@ -269,7 +271,7 @@ are in the <code class="docutils literal notranslate"><span class="pre">$RUNDIR<
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, U.S. National Science Foundation.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

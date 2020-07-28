@@ -9,10 +9,12 @@
     <title>CESM2 Configurations &#8212; CESM  documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Quick Start (CESM2 Model Workflow)" href="quickstart.html" />
@@ -46,8 +48,8 @@ a science and technical perspective. CESM supports numerous
 <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/grids.html">resolutions</a>, and
 <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html">component sets</a>.  In
 addition, each model component has input options to configure specific
-<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/component_xml/index.html">model settings</a>
-and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/component_namelists/index.html">parameterizations</a>.</p>
+<a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/settings/current">model settings</a>
+and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/settings/current">parameterizations</a>.</p>
 <div class="section" id="cesm2-components">
 <h2>CESM2 Components<a class="headerlink" href="#cesm2-components" title="Permalink to this headline">¶</a></h2>
 <p>CESM2 consists of seven geophysical model components:</p>
@@ -64,7 +66,7 @@ and <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/co
 <ul class="simple">
 <li>external system processing (esp)</li>
 </ul>
-<p>In addition CESM2 is accompanied by a <a class="reference external" href="http://esmci.github.io/cime/driver_cpl/index.html">driver/coupler (cpl7)</a> that coordinates
+<p>In addition CESM2 is accompanied by a <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/driver_cpl/index.html">driver/coupler (cpl7)</a> that coordinates
 the time evolution of geophysical components and periodically permits
 the components to exchange data.  Each component is represented in one
 of several modes: “active,” “data,” “dead,” or “stub” that permits the
@@ -121,7 +123,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>atm</td>
 <td>datm</td>
 <td>data</td>
-<td>The <a class="reference external" href="http://esmci.github.io/cime/data_models/data-atm.html">data atmosphere</a> component is a pure data component that reads in atmospheric forcing data</td>
+<td>The <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/data_models/data-atm.html">data atmosphere</a> component is a pure data component that reads in atmospheric forcing data</td>
 </tr>
 <tr class="row-even"><td>atmosphere</td>
 <td>atm</td>
@@ -145,7 +147,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>lnd</td>
 <td>dlnd</td>
 <td>data</td>
-<td>The <a class="reference external" href="http://esmci.github.io/cime/data_models/data-lnd.html">data land component</a> is a purely data-land component (reading in coupler history data for atm/land fluxes and land albedos produced by a previous run, or snow surface mass balance fields) or both.</td>
+<td>The <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/data_models/data-lnd.html">data land component</a> is a purely data-land component (reading in coupler history data for atm/land fluxes and land albedos produced by a previous run, or snow surface mass balance fields) or both.</td>
 </tr>
 <tr class="row-even"><td>land</td>
 <td>lnd</td>
@@ -175,7 +177,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>rof</td>
 <td>drof</td>
 <td>data</td>
-<td>The <a class="reference external" href="http://esmci.github.io/cime/data_models/data-river.html">data runoff model</a> was previously part of the data land model and functions as a purely data-runoff model (reading in runoff data).</td>
+<td>The <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/data_models/data-river.html">data runoff model</a> was previously part of the data land model and functions as a purely data-runoff model (reading in runoff data).</td>
 </tr>
 <tr class="row-odd"><td>river</td>
 <td>rof</td>
@@ -199,7 +201,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>ocn</td>
 <td>docn</td>
 <td>data</td>
-<td>The <a class="reference external" href="http://esmci.github.io/cime/data_models/data-ocean.html">data ocean</a> component has two distinct modes of operation. It can run as a pure data model, reading ocean SSTs (normally climatological) from input datasets, interpolating in space and time, and then passing these to the coupler. Alternatively, docn can compute updated SSTs based on a slab ocean model where bottom ocean heat flux convergence and boundary layer depths are read in and used with the atmosphere/ocean and ice/ocean fluxes obtained from the coupler.</td>
+<td>The <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/data_models/data-ocean.html">data ocean</a> component has two distinct modes of operation. It can run as a pure data model, reading ocean SSTs (normally climatological) from input datasets, interpolating in space and time, and then passing these to the coupler. Alternatively, docn can compute updated SSTs based on a slab ocean model where bottom ocean heat flux convergence and boundary layer depths are read in and used with the atmosphere/ocean and ice/ocean fluxes obtained from the coupler.</td>
 </tr>
 <tr class="row-odd"><td>ocean</td>
 <td>ocn</td>
@@ -223,7 +225,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>ice</td>
 <td>dice</td>
 <td>data</td>
-<td>The <a class="reference external" href="http://esmci.github.io/cime/data_models/data-seaice.html">data ice</a> component is a partially prognostic model. The model reads in ice coverage and receives atmospheric forcing from the coupler, and then it calculates the ice/atmosphere and ice/ocean fluxes. The data ice component acts very similarly to CICE running in prescribed mode.</td>
+<td>The <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/data_models/data-seaice.html">data ice</a> component is a partially prognostic model. The model reads in ice coverage and receives atmospheric forcing from the coupler, and then it calculates the ice/atmosphere and ice/ocean fluxes. The data ice component acts very similarly to CICE running in prescribed mode.</td>
 </tr>
 <tr class="row-odd"><td>sea-ice</td>
 <td>ice</td>
@@ -271,7 +273,7 @@ so ice, ocn, and glc stubs are used).</p>
 <td>cpl</td>
 <td>cpl</td>
 <td>active</td>
-<td>The <a class="reference external" href="http://esmci.github.io/cime/driver_cpl/index.html">CESM coupler</a> was built primarily through a collaboration of the NCAR CESM Software Engineering Group and the Argonne National Laboratory (ANL). The MCT coupling library provides much of the infrastructure.</td>
+<td>The <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/driver_cpl/index.html">CESM coupler</a> was built primarily through a collaboration of the NCAR CESM Software Engineering Group and the Argonne National Laboratory (ANL). The MCT coupling library provides much of the infrastructure.</td>
 </tr>
 </tbody>
 </table>
@@ -342,7 +344,7 @@ that the user defines and requires that a user edit the resulting xml
 files to fill in information required for the target platform. This
 functionality is handy in accelerating the porting process and quickly
 getting a case running on a new platform. For more information on
-porting, see the <a class="reference external" href="http://esmci.github.io/cime/users_guide/porting-cime.html">CIME porting guide</a>.  The
+porting, see the <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/users_guide/porting-cime.html">CIME porting guide</a>.  The
 list of available machines are documented in <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html">CESM supported machines</a>.
 Running <strong>query_config</strong> with the <code class="docutils literal notranslate"><span class="pre">--machines</span></code> option will also show
 the list of all machines for the current local version of
@@ -360,7 +362,7 @@ component sets and resolutions and are documented on the release page.
 These control runs should be scientifically reproducible on the
 original platform or other platforms. Bit-for-bit reproducibility
 cannot be guaranteed due to variations in compiler or system
-versions. Users should carry out their own <a class="reference external" href="http://esmci.github.io/cime/users_guide/porting-cime.html#validating-your-port">port validations</a>
+versions. Users should carry out their own <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/users_guide/porting-cime.html#validating-your-port">port validations</a>
 on any platform prior to doing scientific runs or scientific analysis
 and documentation.</p>
 </div>
@@ -372,7 +374,7 @@ and documentation.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">CESM2 Configurations</a><ul>
 <li><a class="reference internal" href="#cesm2-components">CESM2 Components</a></li>
@@ -430,7 +432,7 @@ and documentation.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, U.S. National Science Foundation.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>
