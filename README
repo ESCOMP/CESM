@@ -1,6 +1,4 @@
-The gh-pages orphan branch of the http://github.com/ESCOMP/CESM repository
-holds the sphinx built html files from the master/doc branch.
+Versions of the documentation are stored in the versions subdirectory.
 
-Releases and development builds should be stored in different subdirectories
-and the top-level index.html should be updated with the link to the 
-current release subdirectory.
+The release-cesm2 sym link exists to maintain old links that pointed to
+this location.
