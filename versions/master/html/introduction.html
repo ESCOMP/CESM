@@ -1,0 +1,211 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Introduction &#8212; CESM  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Downloading CESM2" href="downloading_cesm.html" />
+    <link rel="prev" title="CESM2 Quickstart Guide" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="downloading_cesm.html" title="Downloading CESM2"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CESM2 Quickstart Guide"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction">
+<span id="id1"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-use-this-document">
+<h2>How To Use This Document<a class="headerlink" href="#how-to-use-this-document" title="Permalink to this headline">¶</a></h2>
+<p>This guide instructs both novice and experienced users on downloading,
+building and running <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2">CESM2</a>.</p>
+<p>CESM2 is built on the <a class="reference external" href="http://github.com/ESMCI/cime">CIME framework</a>.</p>
+<p>The majority of the CESM2 User’s Guide is contained in the <a class="reference external" href="http://esmci.github.io/cime">CIME</a> documentation.</p>
+<p>If you are a new user, we recommend reading the first few sections of
+the <a class="reference external" href="http://esmci.github.io/cime">CIME</a> documentation which is written so that, as much as
+possible, individual sections stand on their own and the <a class="reference external" href="http://esmci.github.io/cime">CIME</a>
+documentation guide can be scanned and sections read in a relatively
+ad hoc order.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Throughout the guide, this presentation style indicates shell</span>
+<span class="go">commands and options, fragments of code, namelist variables, etc.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Variables presented as <code class="docutils literal notranslate"><span class="pre">$VAR</span></code> in this guide typically refer to variables in XML files
+in a CESM case. From within a case directory, you can determine the value of such a
+variable with <code class="docutils literal notranslate"><span class="pre">./xmlquery</span> <span class="pre">VAR</span></code>. In some instances, <code class="docutils literal notranslate"><span class="pre">$VAR</span></code> refers to a shell
+variable or some other variable; we try to make these exceptions clear.</p>
+</div>
+<p>Please feel free to provide feedback to the <a class="reference external" href="https://bb.cgd.ucar.edu/">CESM forum</a> about how to improve the
+documentation.</p>
+</div>
+<div class="section" id="cesm-model-version-naming-conventions">
+<h2>CESM Model Version Naming Conventions<a class="headerlink" href="#cesm-model-version-naming-conventions" title="Permalink to this headline">¶</a></h2>
+<p>CESM model release versions include three numbers separated by a period (.)
+- CESM X.Y.Z</p>
+<ul class="simple">
+<li>X - corresponds to the major release number indicating significant
+science changes.</li>
+<li>Y - corresponds to the addition of new infrastructure and new science
+capabilities for targeted components.</li>
+<li>Z - corresponds to release bug fixes and machine updates.</li>
+</ul>
+<p>When refering to CESM2, it is understood that the all versions of the
+CESM2.Y.Z series of models are included.</p>
+<div class="section" id="cesm-overview">
+<h3>CESM Overview<a class="headerlink" href="#cesm-overview" title="Permalink to this headline">¶</a></h3>
+<p>The Community Earth System Model (CESM) is a coupled climate model for
+simulating Earth’s climate system. Composed of separate models
+simultaneously simulating the Earth’s atmosphere, ocean, land, river
+run-off, land-ice, and sea-ice, plus one central coupler/moderator
+component, CESM allows researchers to conduct fundamental research
+into the Earth’s past, present, and future climate states.</p>
+<p>CESM can be run on a number of different <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html">hardware platforms</a>, and
+has a relatively flexible design with respect to <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/users_guide/pes-threads.html">processor layout</a>
+of components.</p>
+<p>The CESM project is a cooperative effort among U.S. climate
+researchers.  Primarily supported by the <a class="reference external" href="https://www.nsf.gov/">National Science
+Foundation(NSF)</a> and centered at the <a class="reference external" href="https://ncar.ucar.edu/">National
+Center for Atmospheric Research (NCAR)</a> in
+Boulder, Colorado, the CESM project enjoys close collaborations with
+the <a class="reference external" href="https://energy.gov/">U.S. Department of Energy (DOE)</a> and the
+<a class="reference external" href="http://www.nasa.gov">National Aeronautics and Space Administration (NASA)</a>.  Scientific development of the CESM is guided
+by the CESM working groups, which meet twice a year. The main CESM
+workshop is held each year in June to showcase results from the
+various working groups and coordinate future CESM developments among
+the working groups. The <a class="reference external" href="http://www.cesm.ucar.edu/">CESM website</a>
+provides more information on the CESM project, such as the management
+structure, the scientific working groups, downloadable source code,
+and online archives of data from previous CESM experiments.</p>
+</div>
+</div>
+<div class="section" id="cesm2-software-operating-system-prerequisites">
+<h2>CESM2 Software/Operating System Prerequisites<a class="headerlink" href="#cesm2-software-operating-system-prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>The following are the external system and software requirements for
+installing and running CESM2.</p>
+<ul class="simple">
+<li>UNIX style operating system such as CNL, AIX or Linux</li>
+<li>python &gt;= 2.7</li>
+<li>perl 5</li>
+<li>subversion client (version 1.8 or greater but less than v1.11) for downloading CAM, POP, and WW3</li>
+<li>git client (1.8 or greater)</li>
+<li>Fortran compiler with support for Fortran 2003</li>
+<li>C compiler</li>
+<li>MPI (although CESM does not absolutely require it for running on one processor)</li>
+<li><a class="reference external" href="http://www.unidata.ucar.edu/software/netcdf/">NetCDF 4.3 or newer</a>.</li>
+<li><a class="reference external" href="http://www.earthsystemmodeling.org/">ESMF 5.2.0 or newer (optional)</a>.</li>
+<li><a class="reference external" href="http://trac.mcs.anl.gov/projects/parallel-netcdf/">pnetcdf 1.7.0 is required and 1.8.1 is optional but recommended</a></li>
+<li><a class="reference external" href="https://trilinos.github.io/">Trilinos</a> may be required for certain configurations</li>
+<li><a class="reference external" href="http://www.netlib.org/lapack/">LAPACK</a> and <a class="reference external" href="http://www.netlib.org/blas/">BLAS</a></li>
+<li><a class="reference external" href="http://www.cmake.org/">CMake 2.8.6 or newer</a></li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">NetCDF must be built with the same Fortran compiler as CESM. In the netCDF build the FC environment variable specifies which Fortran compiler to use. CESM is written mostly in Fortran, netCDF is written in C. Because there is no standard way to call a C program from a Fortran program, the Fortran to C layer between CESM and netCDF will vary depending on which Fortran compiler you use for CESM. When a function in the netCDF library is called from a Fortran application, the netCDF Fortran API calls the netCDF C library. If you do not use the same compiler to build netCDF and CESM you will in most cases get errors from netCDF saying certain netCDF functions cannot be found.</p>
+</div>
+<p>Parallel-netCDF, also referred to as pnetcdf, is optional. If a user
+chooses to use pnetcdf, version 1.7.0 or later should be used with CESM.
+It is a library that is file-format compatible with netCDF, and provides
+higher performance by using MPI-IO. Pnetcdf is enabled by setting the
+<code class="docutils literal notranslate"><span class="pre">$PNETCDF_PATH</span></code> Makefile variable in the <code class="docutils literal notranslate"><span class="pre">Macros.make</span></code> file.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#how-to-use-this-document">How To Use This Document</a></li>
+<li><a class="reference internal" href="#cesm-model-version-naming-conventions">CESM Model Version Naming Conventions</a><ul>
+<li><a class="reference internal" href="#cesm-overview">CESM Overview</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cesm2-software-operating-system-prerequisites">CESM2 Software/Operating System Prerequisites</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">CESM2 Quickstart Guide</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="downloading_cesm.html"
+                        title="next chapter">Downloading CESM2</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/introduction.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="downloading_cesm.html" title="Downloading CESM2"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CESM2 Quickstart Guide"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CESM  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, U.S. National Science Foundation.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+    </div>
+  </body>
+</html>
