@@ -1,0 +1,5 @@
+{% extends "!footer.html" %}
+{% block extrafooter %}
+    {{ super() }}
+<script>var version_json_loc = "{{ pathto('../../versions.json', 1) }}";</script>
+{% endblock %}
