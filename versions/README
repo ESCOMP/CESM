@@ -1,0 +1,8 @@
+The latest-production sym link should point to the directory containing
+the documentation for the latest production release. This is not
+necessarily the latest release: see
+http://www.cesm.ucar.edu/about/support.html for definition of production
+releases. Note that the description of this latest production release is
+given in versions.json, so if you update the link, you should also
+update the line in that file that looks like this:
+    "latest-production": "Latest Production Release (CESM2.1)",
