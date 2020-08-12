@@ -1,5 +1,184 @@
 ===============================================================
 
+Tag name: cesm2_2_alpha06d
+Originator(s): CSEG
+Date: 12 August 2020
+One-line Summary: cam and cime updates
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_040                                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.30                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_69                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev106                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               **
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200730                                    **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_36                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200730                              **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_71                                           --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     --
+
+cam
+    Cheryl Craig 2020-06-29 - cam6_2_036 - components/cam (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    Use Gregorian calendar in nudged compsets
+
+     * FC*nudged compsets change answers
+
+
+    Cheryl Craig 2020-06-26 - cam6_2_034 - components/cam (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    For Brian Eaton:
+
+    SE updates and refactor physconst.
+
+    All SE configurations change answers due to dycore updates.  WACCM-X changes answers due to roundoff level change in the air properties introduced by refactored physconst code.
+
+
+    Cheryl Craig 2020-06-26 - cam6_2_039 - components/cam (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    For John Truesdale:
+
+    FV3-CAM port:
+       Externals.cfg
+           Updated dependency on clm tag ctsm1.0.dev098
+           New dependency on fms tag fi20200609
+       Externals_CAM.cfg
+           New dependency on atmos_cubed_physics tag fv3_cesm.04
+     
+
+
+    Cheryl Craig 2020-06-26 - cam6_2_037 - components/cam (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    Changes for Simple Models from Christiane.
+    Fixes for SE/WACCM-X.
+
+    BFB except some simple physics configurations.
+
+
+    Cheryl Craig 2020-06-26 - cam6_2_035 - components/cam (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    Set default ne30 (npg = 0, 2,and 3) emissions files for historical compsets.
+
+
+    Cheryl Craig 2020-08-06 - cam6_2_040 - components/cam (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_040?
+
+    For Brian Eaton
+
+    Fix bug in SE/CSLAM interpolated output
+
+
+    Cheryl Craig 2020-07-21 - cam6_2_038 - components/cam (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_038
+
+    Update CAM externals for standalone checkouts
+
+    While this is answer changing for CAM checkouts, it will have no effect on CESM jobs
+
+
+cime
+    Michael Levy 2020-07-28 - cime5.8.30 - cime (cesm2_2_alpha06d)
+    https://github.com/ESMCI/cime/tags/cime5.8.??
+
+        - Fix single-variable integer output in cprnc.
+        - Changes required for noaa hafs app.
+        - Improve check_input_data.py to use os.path.isfile().
+        - Remove hard-wired nuopc mapping files except for required custom ones.
+        - Fix python 3 issue.
+        - Nag build fix.
+        - Remove the FoX library. It's now handled by CDEPS.
+        - Fix issue that the es3m config_files.xml points to several non-existent xml files.
+        - Reorder drof options.
+        - Update the pio2 external library.
+        - Add support to the data runoff model for E3SM Cryosphere.
+        - Fix G_TestBuildSystem test.
+        - Better logic when compset is tested in aux_ test.
+        - Another hotfix for e3sm.
+        - PET Test Baseline Generation and Comparison Improvement.
+        - Archive atm_chunk_costs with other performance data.
+        - Use SRCROOT instead of CIMEROOT in key places.
+
+
+    Michael Levy 2020-07-17 - cime5.8.29 - cime (cesm2_2_alpha06d)
+    https://github.com/ESMCI/cime/tags/cime5.8.??
+
+    Update ATM2OCN maps for high-res JRA-forced ocean runs
+    MOM6 changes answers.
+
+        - Minor fix to 'wget' mode of downloading CESM input data.
+        - stampede2 and cori machine updates.
+        - Modifications in MCT to support MOSART stratification.
+        - Add default ATM_NCPL=72 for ne45 (E3SM).
+        - Remove E3SM CIME subtree managent tools and libraries.
+        - Emergency hotfix for e3sm.
+        - CIME changes to support SCREAM.
+        - Update TL319 -> tx0.1v3 ATM2OCN map.
+        - Fix build clean for e3sm.
+        - Make hist_utils a bit more robust to existing cprnc.out files.
+        - Pet test system tests common fix.
+        - Branch for acme split 2020-07-16 merge.
+        - Gptl threaded.
+        - Reapply PR #3591
+        - Addition of new aux_cdeps tests to CDEPS.
+        - Make cprnc rpath system more robust.
+        - buildlib.cprnc make sure to call cprnc through wrapper.
+        - Branch for acme split 2020-07-07 merge.
+        - Refactor ensemble.py and single_run.py for python3.
+        - Dict has_key is removed in python3.
+        - Update TFREEZE_SALTWATER_OPTION value for MOM6.
+        - Set PIO_REARR_COMM_TYPE: coll for mpi-serial.
+
+
+cism
+    Kate Thayer-Calder 2020-08-11 - cism2_1_69 - components/cism (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_69
+
+    Updating externals and a few off-line build scripts for CISM-wrapper.
+
+
+clm
+    Erik Kluzek 2020-06-26 - ctsm1.0.dev106 - components/clm (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev106
+
+    Some bit-for-bit changes and bug fixes needed for the CESM2.2.0 release.
+
+
+    Erik Kluzek 2020-06-26 - ctsm1.0.dev105 - components/clm (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev105
+
+    Add support for several new SE grids.
+
+    Required for the CAM FV3 tag
+
+
+fms
+    John Truesdale 2020-07-01 - fi_20200609 - libraries/fms (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20200609
+
+    Add CESM SHR global constants to FMS.  Needed for fv3 commit.
+
+
+mom
+    Alper Altuntas 2020-05-20 - mi_20200724 - components/mom (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_2020????
+
+    Final MOM6 tag for CESM2.2.
+
+
+pop
+    Michael Levy 2020-06-02 - cesm_pop_2_1_20200730 - components/pop (cesm2_2_alpha06d)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20200???
+
+    New compset configured for tx0.1v3 (CICE4 and SWAV) plus BGC
+
+===============================================================
+
 Tag name: cesm2_2_alpha06c
 Originator(s): CSEG
 Date: 11 July 2020
