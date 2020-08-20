@@ -1,5 +1,118 @@
 ===============================================================
 
+Tag name: cesm2_2_alpha06e
+Originator(s): CSEG
+Date: 20 August 2020
+One-line Summary: Updates for CLM to separate out CLM and CAM potential answer changes
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam6_2_043                                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.31                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_69                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev107                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200820                                    **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_37                                     **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200730                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_72                                           **
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     --
+
+cam
+    Cheryl Craig 2020-08-04 - cam6_2_042 - components/cam (cesm2_2_alpha06e)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    For Francis Vitt:
+
+    Bring in CLM's dev107 changes
+
+    The answer changes for FXHIST will only be for CAM standalone checkouts
+
+
+    Cheryl Craig 2020-06-26 - cam6_2_041 - components/cam (cesm2_2_alpha06e)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    For Chris Fischer
+
+    Testing migration
+
+
+    Cheryl Craig 2020-08-17 - cam6_2_043 - components/cam (cesm2_2_alpha06e)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_042
+
+    For Brian Eaton:
+    Fix FV initialization bug.  Add functionality to us_standard_atmosphere.
+
+
+cesm
+    Chris Fischer 2020-08-19 - cesm2_2_alpha06e - (cesm2_2_alpha06e)
+    https://github.com/ESCOMP/cesm/tags/cesm2_2_alpha06e
+
+    Updates the CMEPS and CDEPS hashes and makes these components optional since they are not needed with the mct driver.
+
+
+cime
+    Erik Kluzek 2020-08-11 - cime5.8.31 - cime (cesm2_2_alpha06e)
+    https://github.com/ESMCI/cime/tags/cime5.8.31?
+
+    Change default end year for GSW forcing to 2013 for some compsets. 
+    Add note about the 2014 problems.
+    Fix FV3/SE grid issues.
+    Remove fox build.
+
+        - Fix FV3 grid problem and by default end the GSWP3 forcing in 2013.
+        - CMEPS driver env var.
+        - Add flexibility in dlnd domain_fracname.
+        - Fix K_TestCimeCase scripts regression tests on Mappy.
+        - Add cuda entries.
+        - Remove fox build from makefile.
+        - Revert PR #3658.
+        - shell_commands useds before env_test.xml is written.
+        - Revert dlnd source code to how it was prior to PR 3619.
+        - Add a warning if the user attempts to change a value set by env_test.xml.
+        - Skip over namelist vars ending with "input_data" in check_input_data.
+        - CIME changes to support upcoming addition of MALI gis1to10km configuration.
+        - Changes needed to have cdeps 3d stream input working.
+
+
+clm
+    Erik Kluzek 2020-07-16 - ctsm1.0.dev107 - components/clm (cesm2_2_alpha06e)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev107
+
+    BUG FIX: Change last year for ndep to 2015 rather than 2005.
+
+    Also bring in interpolated initial conditions.
+
+    This will fix the FXHIST test
+
+    This changes answers for HIST-Bgc compsets in testing. 
+    I thought it wouldn't for our short tests, but it does.
+
+
+mom
+    Alper Altuntas 2020-08-20 - mi_20200820 - components/mom (cesm2_2_alpha06e)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20200820
+
+    Minor MOM_interface and MOM6 changes pre-release.
+
+
+mosart
+    Erik Kluzek 2020-07-28 - mosart1_0_37 - components/mosart (cesm2_2_alpha06e)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_37
+
+    BUG FIX: to convert a NetCDF-4 file to NetCDF-5
+
+    Also bring in some simple nuopc updates.
+
+
+rtm
+    Erik Kluzek 2020-08-10 - rtm1_0_72 - components/rtm (cesm2_2_alpha06e)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_71
+
+    NUOPC update
+
+===============================================================
+
 Tag name: cesm2_2_alpha06d
 Originator(s): CSEG
 Date: 12 August 2020
@@ -12,7 +125,7 @@ cime                               https://github.com/CESM-Development/cime/tree
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_69                                 **
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm1.0.dev106                                     **
 components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               **
-components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200730                                    **
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200724                                    **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_36                                     --
 components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200730                              **
 components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_71                                           --
