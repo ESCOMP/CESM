@@ -142,6 +142,8 @@
 
   <!-- fully coupled MOM6 runs -->
   <compset>
+    <!-- MOM is an optional component of CESM and is not checked out by default
+	 use checkout_externals mom to add it -->
     <alias>B1850MOM</alias>
     <lname>1850_CAM60_CLM50%BGC-CROP_CICE_MOM6_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
   </compset>
