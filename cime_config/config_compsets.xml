@@ -153,7 +153,7 @@
 
   <compset>
      <alias>J1850G</alias>
-     <lname>1850_DATM%CRU_CLM50%BGC-CROP_CICE_POP2_MOSART_CISM2%EVOLVE_SWAV</lname>
+     <lname>1850_DATM%CRUv7_CLM50%BGC-CROP_CICE_POP2_MOSART_CISM2%EVOLVE_SWAV</lname>
   </compset>
 
   <entries>
