@@ -80,8 +80,8 @@
 
     <entry id="RUN_REFDATE">
 	<values match="first">
-<value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%gland4_w%ww3a_m%tx0.1v2"      compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">0021-01-01</value>
-<value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%gland4_w%ww3a_m%tx0.1v2"      compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">0055-01-01</value>
+	  <value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%null_w%null_m%tx0.1v2"      compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">0021-01-01</value>
+	  <value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%null_w%null_m%tx0.1v2"      compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">0055-01-01</value>
       </values>
     </entry>
 
@@ -95,8 +95,8 @@
 
     <entry id="RUN_REFCASE">
       <values match="first">
-        <value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%gland4_w%ww3a_m%tx0.1v2" compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">B.E.13.B1850C5.ne120_t12.sehires38.003</value>
-        <value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%gland4_w%ww3a_m%tx0.1v2" compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">B.E.13.B1950C5.ne120_t12.cesm-ihesp-1950cntl.009</value>
+        <value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%null_w%null_m%tx0.1v2" compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">B.E.13.B1850C5.ne120_t12.sehires38.003</value>
+        <value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%null_w%null_m%tx0.1v2" compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">B.E.13.B1950C5.ne120_t12.cesm-ihesp-1950cntl.009</value>
       </values>
     </entry>
 
