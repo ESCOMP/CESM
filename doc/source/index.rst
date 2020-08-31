@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-CESM2 Quickstart Guide
-======================
+|version| Quickstart Guide
+==========================
 
 .. important::
    **There are separate versions of this documentation for each maintained CESM
