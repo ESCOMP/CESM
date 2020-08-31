@@ -6,6 +6,10 @@
 CESM2 Quickstart Guide
 ======================
 
+.. important::
+   **There are separate versions of this documentation for each maintained CESM
+   release. Use the menu at the top left to select the version of CESM you are using.**
+
 Table of contents
 -----------------
 
