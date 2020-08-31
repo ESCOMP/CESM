@@ -5318,6 +5318,9 @@ div[class^='highlight'] pre {
 .wy-side-nav-search > div.version > div.version-dropdown {
   position: relative;
   display: inline-block;
+  background-color: #f2f2f2;
+  color: #343131 !important;
+  border-radius: 5px;
 }
 .wy-side-nav-search > div.version > div.version-dropdown > select {
   max-width: 8em;
@@ -5330,7 +5333,10 @@ div[class^='highlight'] pre {
   font-family: "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
   font-size: 1em;
   font-weight: normal;
+  /*
   color: rgba(255, 255, 255, 0.3);
+  */
+  color: #343131 !important;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
