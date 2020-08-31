@@ -64,7 +64,7 @@ author = u'Staff of NSF/NCAR CESM Software Engineering Group'
 # built documents.
 #
 # The short X.Y version.
-version = u'master'
+version = u'CESM Latest Development Code'
 # The full version, including alpha/beta/rc tags.
 release = u'master'
 
