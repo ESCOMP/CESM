@@ -1,8 +1,8 @@
 .. _downloading:
 
-===================
- Downloading CESM2
-===================
+=======================
+ Downloading |version|
+=======================
 
 Downloading the code and scripts
 --------------------------------
