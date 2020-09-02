@@ -89,14 +89,6 @@
       <option name="wallclock"> 00:40 </option>
     </options>
   </test>
-  <test name="IRT" grid="f09_g17" compset="BRCP85L45BGCR" testmods="allactive/defaultio">
-    <machines>
-      <machine name="cheyenne" compiler="intel" category="prebeta"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 00:30:00 </option>
-    </options>
-  </test>
   <test name="IRT_Ld7" grid="f09_g17" compset="BHIST" testmods="allactive/defaultio">
     <machines>
       <machine name="bluewaters" compiler="pgi" category="prebeta"/>
@@ -141,7 +133,7 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
-  <test name="ERS_Ld5" grid="f19_g17" compset="E1850L45TEST" testmods="cice/default">
+  <test name="ERS_Ld5" grid="f19_g17" compset="E1850TEST" testmods="cice/default">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
@@ -183,22 +175,6 @@
     </machines>
     <options>
       <option name="wallclock"> 02:00:00 </option>
-    </options>
-  </test>
-  <test name="ERS_Ld7" grid="f09_g17" compset="BRCP85L45BGCR" testmods="allactive/defaultio">
-    <machines>
-      <machine name="edison" compiler="intel" category="prebeta"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 00:30 </option>
-    </options>
-  </test>
-  <test name="NCK_Ld5" grid="f19_g17" compset="BC5L45BGCR" testmods="allactive/defaultio">
-    <machines>
-      <machine name="cheyenne" compiler="gnu" category="prebeta"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 00:30:00 </option>
     </options>
   </test>
   <test name="NCK_Ld5" grid="f19_g17" compset="B1850G" testmods="allactive/cism/test_coupling">
