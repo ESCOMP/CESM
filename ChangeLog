@@ -1,5 +1,99 @@
 ===============================================================
 
+Tag name: cesm2_2_alpha06f
+Originator(s): CSEG
+Date: 3 September 2020
+One-line Summary: CAM, CLM, CIME, and MOM updates.
+
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_2_rel_00                                  **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/ESMCI/cime/tree/cime5.8.32                                          **
+components/cism                    https://github.com/ESCOMP/CISM-wrapper/tree/cism2_1_69                                 --
+components/clm                     https://github.com/ESCOMP/CTSM/tree/release-cesm2.2.01                                 **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200826                                    **
+components/mosart                  https://github.com/ESCOMP/MOSART/tree/mosart1_0_37                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200730                              --
+components/rtm                     https://github.com/ESCOMP/RTM/tree/rtm1_0_72                                           --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     --
+
+cam
+    Cheryl Craig 2020-08-27 - cam_cesm2_2_rel_00 - components/cam (cesm2_2_alpha06f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_000
+
+    Tag for the head of cam_development for when we freeze the code for the CESM2.2 release  
+
+    No mods for this tag, it will simply be a tag
+
+
+    Cheryl Craig 2020-08-25 - cam6_2_044 - components/cam (cesm2_2_alpha06f)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    Provide appropriate IC files for FXHIST compset
+
+    Bug fix for FXHIST
+    Answer changing for FXHIST only
+
+
+    Cheryl Craig 2020-08-24 - cam6_2_045 - components/cam (cesm2_2_alpha06f)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    For Brian Dobbins
+
+    Update PE layouts and minor bug fixes
+
+
+    Cheryl Craig 2020-07-22 - cam6_2_046 - components/cam (cesm2_2_alpha06f)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_???
+
+    For Steve
+
+    Remove CAM standalone testing capabilities
+
+
+cesm
+    Erik Kluzek 2020-08-11 - cesm2_2_alpha06f - (cesm2_2_alpha06f)
+    https://github.com/ESCOMP/cesm/tags/cesm2_2_alpha06f
+
+    Update for JG compset to use CRUv7 rather than v4.
+
+
+cime
+    Chris Fischer 2020-08-24 - cime5.8.32 - cime (cesm2_2_alpha06f)
+    https://github.com/ESMCI/cime/tags/cime5.8.32
+
+        - Support concurrent env XML changes during case.run.
+        - Allow for a sh format file to be sourced and incorporated into the cime environment.
+        - Avoid artificial limit on string lengths in shr_string_listMerge.
+        - Don't try to set a variable from env_test.xml if it does not otherwise exist in the case.
+        - Fix logic in cdeps build.
+        - New cdeps stream schema and stream definition file.
+
+
+clm
+    Erik Kluzek 2020-08-25 - release-cesm2.2.01 - components/clm (cesm2_2_alpha06f)
+    https://github.com/ESCOMP/ctsm/tags/release-cesm2.2.01
+
+    Fix bug with FMOZ test case
+    Update cime
+    Fix CLM offline tools and make sure they are tested
+
+
+    Erik Kluzek 2020-08-11 - ctsm1.0.dev108 - components/clm (cesm2_2_alpha06f)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev108?
+
+    New default PE layouts for new SE/FV3 grids
+
+
+mom
+    Alper Altuntas 2020-08-26 - mi_20200826 - components/mom (cesm2_2_alpha06f)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20200826
+
+    Minor fix in mom.input_data_list for custom INPUTDIRs
+
+===============================================================
+
 Tag name: cesm2_2_alpha06e
 Originator(s): CSEG
 Date: 20 August 2020
