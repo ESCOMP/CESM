@@ -1,3 +1,22 @@
+Tag name: ihesp_regional_master_200911
+Originator(s): Yun Liu
+Date: 2020 Sep 11
+one-line summary: fix bugs on wrf, update config_machines.xml for ada
+1 wrf running for leap year
+2 update the cordinator projection for wrf receive vector from cpl
+3 update the package for Python on ada
+4 update the name of boundary/initial data directory: now use YYYYMMDDHH
+
+in cime:ihesp_regional_master_200911
+#      config/cesm/machines/config_machines.xml
+in WRF:ihesp_regional_master_200911
+     bld/wrf.buildnml.csh     update bdy/ini directory 
+     main/atm_comp_mct.F      coordinator projection for vector from cpl
+     phys/module_radiation_driver.F  fix bug for leap year
+
+in roms:ihesp_regional_master_200911
+     bld/roms.buildnml.csh    update bdy/ini directory: YYYYMMDDHH
+
 ================================================================================
 Tag name: ihesp_regional_master_191203
 Originator(s): Yun Liu
