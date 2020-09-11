@@ -1,4 +1,53 @@
 ===============================================================
+Tag name: cesm2_2_beta06
+Originator(s): CSEG
+Date: 11 September 2020
+One-line Summary: E3SM merge, machine updates, CTSM, CAM, and CICE updates.
+
+Component tags used for this CESM beta tag :
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_2_rel_00 
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430
+cime                               https://github.com/ESMCI/cime/tree/cime5.8.32
+components/cism                    https://github.com/ESCOMP/CISM-wrapper/tree/cism2_1_69
+components/clm                     https://github.com/ESCOMP/CTSM/tree/release-cesm2.2.01
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609 
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200826
+components/mosart                  https://github.com/ESCOMP/MOSART/tree/mosart1_0_37
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200730
+components/rtm                     https://github.com/ESCOMP/RTM/tree/rtm1_0_72  
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710
+
+
+Answer Changes introduced with this tag when compared to cesm2_2_beta05:
+    - CAM-SE
+    - Simple CAM Models
+    - FC*nudged Gregorian calendar update
+    - CAM chemistry
+    - cam4,5,6 fix floating point issue in GW drag
+    - WACCM-X
+    - Transient CLM50 crop cases
+    - CLM50 important bug fixes
+    - POP from BGC tunings 
+    - POP bug fix in iron flux forcing
+    - POP WW3-forced entrainment changes
+    - Updated ATM2OCN maps for high-res JRA-forced ocean runs
+    - JG compset use CRUv7 forcings
+
+Problems identified after tag creation:
+- Several prebeta intel tests on izumi failing with SIGSEGV.
+- SMS_D_Ln9.ne0CONUSne30x8_ne0CONUSne30x8_mt12.FCnudged.cheyenne_intel.cam-outfrq9s_refined_camchem 
+  fails since it's only setup for the release.
+- SMS_D_Ln9.T42_T42.FSCAM.cheyenne_intel.cam-scam_mpace_outfrq9s test failed, 
+  should be fixed in next tag.
+- SMS_D_Ln9.f09_f09_mg17.FCHIST.cheyenne_intel.cam-outfrq9s_ocnemis test failed 
+  because an inputdata file was missing from the inputdata list.
+- ERP_D_Ld3.f09_g17.I2000Clm50SpGs.cheyenne_intel.clm-prescribed had a local inputdata file changed.
+- GMOM and CMOM have mismatching inputfile names cause test to fail.
+- ERI.f19_g17_rx1.DTEST.izumi_intel.cice-default failing with SIGSEGV since izumi update.
+- PGI and Intel tests across multiple nodes on hobart are failing 
+- There are known issues for the pgi and cray compilers.
+
+===============================================================
 
 Tag name: cesm2_2_alpha06f
 Originator(s): CSEG
