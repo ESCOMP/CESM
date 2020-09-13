@@ -1,8 +1,8 @@
 .. _configurations:
 
-======================
- CESM2 Configurations
-======================
+===============================
+CESM Configurations (|version|)
+===============================
 
 The CESM system can be configured a number of different ways from both
 a science and technical perspective. CESM supports numerous
