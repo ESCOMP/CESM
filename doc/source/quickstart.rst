@@ -1,8 +1,8 @@
 .. _quickstart:
 
-====================================
- Quick Start (CESM2 Model Workflow)
-====================================
+============================================
+Quick Start: CESM Model Workflow (|version|)
+============================================
 
 The following quick start guide is for versions of CESM2 that have
 already been ported to the local target machine. CESM2 is built on the
