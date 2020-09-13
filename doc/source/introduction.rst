@@ -1,8 +1,8 @@
 .. _introduction:
 
-==============
- Introduction
-==============
+========================
+Introduction (|version|)
+========================
 
 How To Use This Document
 ------------------------
