@@ -336,77 +336,83 @@ so ice, ocn, and glc stubs are used).</p>
 </tr>
 <tr class="row-even"><td><p>ocean</p></td>
 <td><p>ocn</p></td>
+<td><p>mom6</p></td>
+<td><p>active</p></td>
+<td><p>Based on the <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/ocean/">Modular Ocean Model version 6</a>; an early functional release is available starting in CESM2.2.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ocean</p></td>
+<td><p>ocn</p></td>
 <td><p>docn</p></td>
 <td><p>data</p></td>
 <td><p>The <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/data_models/data-ocean.html">data ocean</a> component has two distinct modes of operation. It can run as a pure data model, reading ocean SSTs (normally climatological) from input datasets, interpolating in space and time, and then passing these to the coupler. Alternatively, docn can compute updated SSTs based on a slab ocean model where bottom ocean heat flux convergence and boundary layer depths are read in and used with the atmosphere/ocean and ice/ocean fluxes obtained from the coupler.</p></td>
 </tr>
-<tr class="row-odd"><td><p>ocean</p></td>
+<tr class="row-even"><td><p>ocean</p></td>
 <td><p>ocn</p></td>
 <td><p>xocn</p></td>
 <td><p>dead</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>ocean</p></td>
+<tr class="row-odd"><td><p>ocean</p></td>
 <td><p>ocn</p></td>
 <td><p>socn</p></td>
 <td><p>stub</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>sea-ice</p></td>
+<tr class="row-even"><td><p>sea-ice</p></td>
 <td><p>ice</p></td>
 <td><p>cice</p></td>
 <td><p>active</p></td>
 <td><p>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/sea-ice/">sea-ice component (CICE)</a> is an extension of the Los Alamos National Laboratory (LANL) sea-ice model and was developed though collaboration within the CESM Polar Climate Working Group (PCWG). In CESM, CICE can run as a fully prognostic component or in prescribed mode where ice coverage (normally climatological) is read in.</p></td>
 </tr>
-<tr class="row-even"><td><p>sea-ice</p></td>
+<tr class="row-odd"><td><p>sea-ice</p></td>
 <td><p>ice</p></td>
 <td><p>dice</p></td>
 <td><p>data</p></td>
 <td><p>The <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/data_models/data-seaice.html">data ice</a> component is a partially prognostic model. The model reads in ice coverage and receives atmospheric forcing from the coupler, and then it calculates the ice/atmosphere and ice/ocean fluxes. The data ice component acts very similarly to CICE running in prescribed mode.</p></td>
 </tr>
-<tr class="row-odd"><td><p>sea-ice</p></td>
+<tr class="row-even"><td><p>sea-ice</p></td>
 <td><p>ice</p></td>
 <td><p>xice</p></td>
 <td><p>dead</p></td>
 <td><p>Used only for testing the driver/coupler</p></td>
 </tr>
-<tr class="row-even"><td><p>sea-ice</p></td>
+<tr class="row-odd"><td><p>sea-ice</p></td>
 <td><p>ice</p></td>
 <td><p>sice</p></td>
 <td><p>stub</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>land-ice</p></td>
+<tr class="row-even"><td><p>land-ice</p></td>
 <td><p>glc</p></td>
 <td><p>cism</p></td>
 <td><p>active</p></td>
 <td><p>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/land-ice/">CISM component</a> is an extension of the Glimmer ice sheet model.</p></td>
 </tr>
-<tr class="row-even"><td><p>land-ice</p></td>
+<tr class="row-odd"><td><p>land-ice</p></td>
 <td><p>glc</p></td>
 <td><p>sglc</p></td>
 <td><p>stub</p></td>
 <td><p>Used only to satisy the interface requirements</p></td>
 </tr>
-<tr class="row-odd"><td><p>ocean-wave</p></td>
+<tr class="row-even"><td><p>ocean-wave</p></td>
 <td><p>wav</p></td>
 <td><p>wav</p></td>
 <td><p>ww3</p></td>
 <td><p>The <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/wave/">ww3</a> component adds prognostic ocean waves to the system</p></td>
 </tr>
-<tr class="row-even"><td><p>ocean-wave</p></td>
+<tr class="row-odd"><td><p>ocean-wave</p></td>
 <td><p>wav</p></td>
 <td><p>xwav</p></td>
 <td><p>dead</p></td>
 <td><p>Used only for testing the driver/coupler</p></td>
 </tr>
-<tr class="row-odd"><td><p>ocean-wave</p></td>
+<tr class="row-even"><td><p>ocean-wave</p></td>
 <td><p>wav</p></td>
 <td><p>swav</p></td>
 <td><p>stub</p></td>
 <td><p>Used only to satisy the interface requirements</p></td>
 </tr>
-<tr class="row-even"><td><p>coupler</p></td>
+<tr class="row-odd"><td><p>coupler</p></td>
 <td><p>cpl</p></td>
 <td><p>cpl</p></td>
 <td><p>active</p></td>
