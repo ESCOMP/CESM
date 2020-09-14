@@ -38,6 +38,7 @@ import logging
 import os
 import os.path
 import shutil
+import sys
 import unittest
 
 from manic.externals_description import ExternalsDescription
@@ -535,12 +536,26 @@ class BaseTestSysCheckout(unittest.TestCase):
 
         self._test_id = self.id().split('.')[-1]
 
+        # find root
+        if os.path.exists(os.path.join(os.getcwd(), 'checkout_externals')):
+            root_dir = os.path.abspath(os.getcwd())
+        else:
+            # maybe we are in a subdir, search up
+            root_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+            while os.path.basename(root_dir):
+                if os.path.exists(os.path.join(root_dir, 'checkout_externals')):
+                    break
+                root_dir = os.path.dirname(root_dir)
+
+        if not os.path.exists(os.path.join(root_dir, 'checkout_externals')):
+            raise RuntimeError('Cannot find checkout_externals')
+
         # path to the executable
-        self._checkout = os.path.join('../checkout_externals')
-        self._checkout = os.path.abspath(self._checkout)
+        self._checkout = os.path.join(root_dir, 'checkout_externals')
 
         # directory where we have test repositories
-        self._bare_root = os.path.join(os.getcwd(), BARE_REPO_ROOT_NAME)
+        test_dir = os.path.join(root_dir, 'test')
+        self._bare_root = os.path.join(test_dir, BARE_REPO_ROOT_NAME)
         self._bare_root = os.path.abspath(self._bare_root)
 
         # set into the environment so var will be expanded in externals files
@@ -1610,8 +1625,9 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         cwd = os.getcwd()
         fork_repo_dir = os.path.join(self._bare_root, SIMPLE_FORK_NAME)
         simple_repo_dir = os.path.join(self._bare_root, SIMPLE_REPO_NAME)
-        self._simple_ext_fork_name = SIMPLE_FORK_NAME.split('.')[0]
-        self._simple_ext_name = SIMPLE_REPO_NAME.split('.')[0]
+        self._simple_ext_fork_name = os.path.splitext(SIMPLE_FORK_NAME)[0]
+        self._simple_ext_name = os.path.join('sourc',
+                                             os.path.splitext(SIMPLE_REPO_NAME)[0])
         os.chdir(self._repo_dir)
         # Add a branch with a subrepo
         cmd = ['git', 'branch', self._bare_branch_name, 'master']
@@ -1632,7 +1648,8 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         execute_subprocess(cmd)
         cmd = ['git', 'checkout', self._config_branch_name]
         execute_subprocess(cmd)
-        cmd = ['git', 'submodule', 'add', simple_repo_dir]
+        cmd = ['git', 'submodule', 'add', '--name', SIMPLE_REPO_NAME,
+               simple_repo_dir, self._simple_ext_name]
         execute_subprocess(cmd)
         # Checkout feature2
         os.chdir(self._simple_ext_name)
