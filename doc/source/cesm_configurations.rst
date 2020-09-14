@@ -86,6 +86,7 @@ The CESM2 components can be summarized as follows:
    "river", "rof", "xrof", "dead", "Used only for testing the driver/coupler"
    "river", "rof", "srof", "stub", "Used only to satisy the interface requirements"
    "ocean", "ocn", "pop", "active", "The ocean model is an extension of the `Parallel Ocean Program (POP) <http://www.cesm.ucar.edu/models/cesm2/ocean/>`_ Version 2 from Los Alamos National Laboratory (LANL)."
+   "ocean", "ocn", "mom6", "active", "Based on the `Modular Ocean Model version 6 <http://www.cesm.ucar.edu/models/cesm2/ocean/>`_; an early functional release is available starting in CESM2.2."
    "ocean", "ocn", "docn", "data", "The `data ocean <http://esmci.github.io/cime/versions/master/html/data_models/data-ocean.html>`_ component has two distinct modes of operation. It can run as a pure data model, reading ocean SSTs (normally climatological) from input datasets, interpolating in space and time, and then passing these to the coupler. Alternatively, docn can compute updated SSTs based on a slab ocean model where bottom ocean heat flux convergence and boundary layer depths are read in and used with the atmosphere/ocean and ice/ocean fluxes obtained from the coupler."
    "ocean", "ocn", "xocn", "dead"
    "ocean", "ocn", "socn", "stub"
