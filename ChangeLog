@@ -1,4 +1,52 @@
 ===============================================================
+Tag name: cesm2.2.0-rc.01
+Originator(s): CSEG
+Date: 15 September 2020 
+One-line Summary: cesm2.2.0 release.
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_2_rel_02 
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430
+cime                               https://github.com/ESMCI/cime/tree/cime5.8.32
+components/cism                    https://github.com/ESCOMP/CISM-wrapper/tree/cism2_1_69
+components/clm                     https://github.com/ESCOMP/CTSM/tree/release-cesm2.2.01
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609 
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200908
+components/mosart                  https://github.com/ESCOMP/MOSART/tree/mosart1_0_37
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200730
+components/rtm                     https://github.com/ESCOMP/RTM/tree/rtm1_0_72  
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710
+
+cam
+    Cheryl Craig 2020-09-08 - cam_cesm2_2_rel_02 - components/cam (cesm2.2.0-rc.01)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_2_rel_??
+
+    For Steve Goldhaber
+
+    Fix failing FSCAM test with bug introduced in cam6_2_046
+
+    Fix FCHIST failing test
+
+    Bug in WACCM-SE when molecular diffusion is > 0.  Add an endrun so users can't run this configuration.
+
+
+    Francis Vitt 2020-07-15 - cam_cesm2_2_rel_01 - components/cam (cesm2.2.0-rc.01)
+    https://github.com/ESCOMP/CAM/tags/cam6_2_0??
+
+    Set up branch run refcases for FCnudged (and maybe FCHIST) compsets on CONUS refined grid.
+
+    ** This is a tag on the CESM2.2 branch only
+
+
+mom
+    Alper Altuntas 2020-09-10 - mi_20200908 - components/mom (cesm2.2.0-rc.01)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20200908
+
+    Update mom.input_data_list
+
+===============================================================
 Tag name: cesm2_2_beta06
 Originator(s): CSEG
 Date: 11 September 2020
