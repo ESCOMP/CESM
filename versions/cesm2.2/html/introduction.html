@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction (CESM2.2) &mdash; CESM CESM2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="CESM CESM2.2 documentation" href="index.html"/>
+        <link rel="next" title="Downloading CESM (CESM2.2)" href="downloading_cesm.html"/>
+        <link rel="prev" title="CESM Quickstart Guide (CESM2.2)" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CESM
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                
+                  <div class="version-dropdown">
+                    <select class="version-list" id="version-list">
+                      <option value=''>CESM2.2</option>
+                      
+                        
+                      
+                        
+                          <option value="">[placeholder]</option>
+                        
+                      
+                    </select>
+                  </div>
+                
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction (CESM2.2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use-this-document">How To Use This Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cesm-model-version-naming-conventions">CESM Model Version Naming Conventions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cesm-overview">CESM Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cesm2-software-operating-system-prerequisites">CESM2 Software/Operating System Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="downloading_cesm.html">Downloading CESM (CESM2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cesm_configurations.html">CESM Configurations (CESM2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start: CESM Model Workflow (CESM2.2)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CESM</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Introduction (CESM2.2)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction-version">
+<span id="introduction"></span><h1>Introduction (CESM2.2)<a class="headerlink" href="#introduction-version" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-use-this-document">
+<h2>How To Use This Document<a class="headerlink" href="#how-to-use-this-document" title="Permalink to this headline">¶</a></h2>
+<p>This guide instructs both novice and experienced users on downloading,
+building and running <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2">CESM2</a>.</p>
+<p>CESM2 is built on the <a class="reference external" href="http://github.com/ESMCI/cime">CIME framework</a>.</p>
+<p>The majority of the CESM2 User’s Guide is contained in the <a class="reference external" href="http://esmci.github.io/cime">CIME</a> documentation.</p>
+<p>If you are a new user, we recommend reading the first few sections of
+the <a class="reference external" href="http://esmci.github.io/cime">CIME</a> documentation which is written so that, as much as
+possible, individual sections stand on their own and the <a class="reference external" href="http://esmci.github.io/cime">CIME</a>
+documentation guide can be scanned and sections read in a relatively
+ad hoc order.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Throughout the guide, this presentation style indicates shell</span>
+<span class="go">commands and options, fragments of code, namelist variables, etc.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Variables presented as <code class="docutils literal notranslate"><span class="pre">$VAR</span></code> in this guide typically refer to variables in XML files
+in a CESM case. From within a case directory, you can determine the value of such a
+variable with <code class="docutils literal notranslate"><span class="pre">./xmlquery</span> <span class="pre">VAR</span></code>. In some instances, <code class="docutils literal notranslate"><span class="pre">$VAR</span></code> refers to a shell
+variable or some other variable; we try to make these exceptions clear.</p>
+</div>
+<p>Please feel free to provide feedback to the <a class="reference external" href="https://bb.cgd.ucar.edu/">CESM forum</a> about how to improve the
+documentation.</p>
+</div>
+<div class="section" id="cesm-model-version-naming-conventions">
+<h2>CESM Model Version Naming Conventions<a class="headerlink" href="#cesm-model-version-naming-conventions" title="Permalink to this headline">¶</a></h2>
+<p>CESM model release versions include three numbers separated by a period (.)
+- CESM X.Y.Z</p>
+<ul class="simple">
+<li><p>X - corresponds to the major release number indicating significant
+science changes.</p></li>
+<li><p>Y - corresponds to the addition of new infrastructure and new science
+capabilities for targeted components.</p></li>
+<li><p>Z - corresponds to release bug fixes and machine updates.</p></li>
+</ul>
+<p>When refering to CESM2, it is understood that the all versions of the
+CESM2.Y.Z series of models are included.</p>
+<div class="section" id="cesm-overview">
+<h3>CESM Overview<a class="headerlink" href="#cesm-overview" title="Permalink to this headline">¶</a></h3>
+<p>The Community Earth System Model (CESM) is a coupled climate model for
+simulating Earth’s climate system. Composed of separate models
+simultaneously simulating the Earth’s atmosphere, ocean, land, river
+run-off, land-ice, and sea-ice, plus one central coupler/moderator
+component, CESM allows researchers to conduct fundamental research
+into the Earth’s past, present, and future climate states.</p>
+<p>CESM can be run on a number of different <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html">hardware platforms</a>, and
+has a relatively flexible design with respect to <a class="reference external" href="http://esmci.github.io/cime/versions/master/html/users_guide/pes-threads.html">processor layout</a>
+of components.</p>
+<p>The CESM project is a cooperative effort among U.S. climate
+researchers.  Primarily supported by the <a class="reference external" href="https://www.nsf.gov/">National Science
+Foundation(NSF)</a> and centered at the <a class="reference external" href="https://ncar.ucar.edu/">National
+Center for Atmospheric Research (NCAR)</a> in
+Boulder, Colorado, the CESM project enjoys close collaborations with
+the <a class="reference external" href="https://energy.gov/">U.S. Department of Energy (DOE)</a> and the
+<a class="reference external" href="http://www.nasa.gov">National Aeronautics and Space Administration (NASA)</a>.  Scientific development of the CESM is guided
+by the CESM working groups, which meet twice a year. The main CESM
+workshop is held each year in June to showcase results from the
+various working groups and coordinate future CESM developments among
+the working groups. The <a class="reference external" href="http://www.cesm.ucar.edu/">CESM website</a>
+provides more information on the CESM project, such as the management
+structure, the scientific working groups, downloadable source code,
+and online archives of data from previous CESM experiments.</p>
+</div>
+</div>
+<div class="section" id="cesm2-software-operating-system-prerequisites">
+<h2>CESM2 Software/Operating System Prerequisites<a class="headerlink" href="#cesm2-software-operating-system-prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>The following are the external system and software requirements for
+installing and running CESM2.</p>
+<ul class="simple">
+<li><p>UNIX style operating system such as CNL, AIX or Linux</p></li>
+<li><p>python &gt;= 2.7</p></li>
+<li><p>perl 5</p></li>
+<li><p>subversion client (version 1.8 or greater but less than v1.11) for downloading CAM, POP, and WW3</p></li>
+<li><p>git client (1.8 or greater)</p></li>
+<li><p>Fortran compiler with support for Fortran 2003</p></li>
+<li><p>C compiler</p></li>
+<li><p>MPI (although CESM does not absolutely require it for running on one processor)</p></li>
+<li><p><a class="reference external" href="http://www.unidata.ucar.edu/software/netcdf/">NetCDF 4.3 or newer</a>.</p></li>
+<li><p><a class="reference external" href="http://www.earthsystemmodeling.org/">ESMF 5.2.0 or newer (optional)</a>.</p></li>
+<li><p><a class="reference external" href="http://trac.mcs.anl.gov/projects/parallel-netcdf/">pnetcdf 1.7.0 is required and 1.8.1 is optional but recommended</a></p></li>
+<li><p><a class="reference external" href="https://trilinos.github.io/">Trilinos</a> may be required for certain configurations</p></li>
+<li><p><a class="reference external" href="http://www.netlib.org/lapack/">LAPACK</a> and <a class="reference external" href="http://www.netlib.org/blas/">BLAS</a></p></li>
+<li><p><a class="reference external" href="http://www.cmake.org/">CMake 2.8.6 or newer</a></p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>NetCDF must be built with the same Fortran compiler as CESM. In the netCDF build the FC environment variable specifies which Fortran compiler to use. CESM is written mostly in Fortran, netCDF is written in C. Because there is no standard way to call a C program from a Fortran program, the Fortran to C layer between CESM and netCDF will vary depending on which Fortran compiler you use for CESM. When a function in the netCDF library is called from a Fortran application, the netCDF Fortran API calls the netCDF C library. If you do not use the same compiler to build netCDF and CESM you will in most cases get errors from netCDF saying certain netCDF functions cannot be found.</p>
+</div>
+<p>Parallel-netCDF, also referred to as pnetcdf, is optional. If a user
+chooses to use pnetcdf, version 1.7.0 or later should be used with CESM.
+It is a library that is file-format compatible with netCDF, and provides
+higher performance by using MPI-IO. Pnetcdf is enabled by setting the
+<code class="docutils literal notranslate"><span class="pre">$PNETCDF_PATH</span></code> Makefile variable in the <code class="docutils literal notranslate"><span class="pre">Macros.make</span></code> file.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="downloading_cesm.html" class="btn btn-neutral float-right" title="Downloading CESM (CESM2.2)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="CESM Quickstart Guide (CESM2.2)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, U.S. National Science Foundation.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+     
+<script>var version_json_loc = "../../versions.json";</script>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/pop_ver.js"></script>
+    
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

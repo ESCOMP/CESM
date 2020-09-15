@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CESM Quickstart Guide (CESM2.2) &mdash; CESM CESM2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="CESM CESM2.2 documentation" href="#"/>
+        <link rel="next" title="Introduction (CESM2.2)" href="introduction.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> CESM
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                
+                  <div class="version-dropdown">
+                    <select class="version-list" id="version-list">
+                      <option value=''>CESM2.2</option>
+                      
+                        
+                      
+                        
+                          <option value="">[placeholder]</option>
+                        
+                      
+                    </select>
+                  </div>
+                
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction (CESM2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloading_cesm.html">Downloading CESM (CESM2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cesm_configurations.html">CESM Configurations (CESM2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start: CESM Model Workflow (CESM2.2)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">CESM</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>CESM Quickstart Guide (CESM2.2)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cesm-quickstart-guide-version">
+<h1>CESM Quickstart Guide (CESM2.2)<a class="headerlink" href="#cesm-quickstart-guide-version" title="Permalink to this headline">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>There are separate versions of this documentation for each maintained CESM
+release. Use the menu at the top left to select the version of CESM you are using.</strong></p>
+</div>
+<div class="section" id="table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction (CESM2.2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#how-to-use-this-document">How To Use This Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#cesm-model-version-naming-conventions">CESM Model Version Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#cesm2-software-operating-system-prerequisites">CESM2 Software/Operating System Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="downloading_cesm.html">Downloading CESM (CESM2.2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="downloading_cesm.html#downloading-the-code-and-scripts">Downloading the code and scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="downloading_cesm.html#downloading-input-data">Downloading input data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cesm_configurations.html">CESM Configurations (CESM2.2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cesm_configurations.html#cesm2-components">CESM2 Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cesm_configurations.html#cesm2-component-sets">CESM2 Component Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cesm_configurations.html#cesm2-grids">CESM2 Grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cesm_configurations.html#cesm2-machines">CESM2 Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cesm_configurations.html#cesm2-validation">CESM2 Validation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start: CESM Model Workflow (CESM2.2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#create-a-case">Create a case</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#setting-up-the-case-run-script">Setting up the case run script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#build-the-executable-using-the-case-build-command">Build the executable using the case.build command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-the-case">Run the case</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="introduction.html" class="btn btn-neutral float-right" title="Introduction (CESM2.2)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, U.S. National Science Foundation.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+     
+<script>var version_json_loc = "../../versions.json";</script>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/pop_ver.js"></script>
+    
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

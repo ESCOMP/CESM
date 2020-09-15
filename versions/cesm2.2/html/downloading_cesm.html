@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Downloading CESM (CESM2.2) &mdash; CESM CESM2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="CESM CESM2.2 documentation" href="index.html"/>
+        <link rel="next" title="CESM Configurations (CESM2.2)" href="cesm_configurations.html"/>
+        <link rel="prev" title="Introduction (CESM2.2)" href="introduction.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CESM
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                
+                  <div class="version-dropdown">
+                    <select class="version-list" id="version-list">
+                      <option value=''>CESM2.2</option>
+                      
+                        
+                      
+                        
+                          <option value="">[placeholder]</option>
+                        
+                      
+                    </select>
+                  </div>
+                
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction (CESM2.2)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Downloading CESM (CESM2.2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#downloading-the-code-and-scripts">Downloading the code and scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#downloading-input-data">Downloading input data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cesm_configurations.html">CESM Configurations (CESM2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start: CESM Model Workflow (CESM2.2)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CESM</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Downloading CESM (CESM2.2)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/downloading_cesm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="downloading-cesm-version">
+<span id="downloading"></span><h1>Downloading CESM (CESM2.2)<a class="headerlink" href="#downloading-cesm-version" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="downloading-the-code-and-scripts">
+<h2>Downloading the code and scripts<a class="headerlink" href="#downloading-the-code-and-scripts" title="Permalink to this headline">¶</a></h2>
+<p>Starting with CESM2, releases are available through a public GitHub
+repository, <a class="reference external" href="http://github.com/ESCOMP/CESM">http://github.com/ESCOMP/CESM</a>.</p>
+<p>Access to the code requires both git and Subversion client software in
+place that is compatible with GitHub and our Subversion server
+software.  You will need access to the command line clients, <code class="docutils literal notranslate"><span class="pre">git</span></code>
+(v1.8 or greater) and <code class="docutils literal notranslate"><span class="pre">svn</span></code> (v1.8 or greater but less than v1.11).
+Currently, our Subversion server
+software is at version 1.8.17. For more information or to download
+open source tools, visit <a class="reference external" href="http://subversion.apache.org/">Subversion</a>
+and <a class="reference external" href="https://git-scm.com/downloads">git downloads</a>.</p>
+<p>With valid git and svn clients installed on the machine where CESM will be
+built and run, the user may download the latest version of the release
+code:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone -b release-cesm2.2.0 https://github.com/ESCOMP/CESM.git my_cesm_sandbox</span>
+<span class="go">cd my_cesm_sandbox</span>
+</pre></div>
+</div>
+<p>To checkout a previous version of CESM, first view the available versions:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git tag --list &#39;release-cesm2*&#39;</span>
+</pre></div>
+</div>
+<p>To checkout a specific CESM release tag type, for example CESM2.0.1:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git checkout release-cesm2.0.1</span>
+</pre></div>
+</div>
+<p>Finally, to checkout all the individual model components,
+run the <strong>checkout_externals</strong> script from /path/to/my_cesm_sandbox.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals</span>
+</pre></div>
+</div>
+<p>The <strong>checkout_externals</strong> script will read the configuration file called <code class="docutils literal notranslate"><span class="pre">Externals.cfg</span></code> and
+will download all the external component models and CIME into /path/to/my_cesm_sandbox.</p>
+<p>Details regarding the CESM checkout process are available in the CESM GitHub repo
+<a class="reference external" href="http://github.com/ESCOMP/CESM/blob/master/README.rst">README</a>
+To see more details regarding the checkout_externals script from the command line, type:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals --help</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When contacting the Subversion server for the first time, you may need to
+accept an authentication certification. If you experience problems such as
+<code class="docutils literal notranslate"><span class="pre">checkout_externals</span></code> hanging: Run <code class="docutils literal notranslate"><span class="pre">svn</span> <span class="pre">ls</span>
+<span class="pre">https://svn-ccsm-models.cgd.ucar.edu/ww3/release_tags</span></code>, permanently
+accepting the certificate when prompted, then retry the CESM download
+(starting over at the top of these instructions).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If a problem was encountered during checkout_externals, which may happen with an older version of the svn client software, it may appear to have downloaded successfully, but in fact only a partial checkout has occurred.</p>
+</div>
+<p>To confirm a successful download of all components, you can run <code class="docutils literal notranslate"><span class="pre">checkout_externals</span></code>
+with the status flag to show the status of the externals:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals -S</span>
+</pre></div>
+</div>
+<p>This should show a clean status for all externals, with no characters in the first two
+columns of output, as in this example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Processing externals description file : Externals.cfg</span>
+<span class="go">Processing externals description file : Externals_CLM.cfg</span>
+<span class="go">Processing externals description file : Externals_POP.cfg</span>
+<span class="go">Processing externals description file : Externals_CISM.cfg</span>
+<span class="go">Checking status of externals: clm, fates, ptclm, mosart, ww3, cime, cice, pop, cvmix, marbl, cism, source_cism, rtm, cam,</span>
+<span class="go">    ./cime</span>
+<span class="go">    ./components/cam</span>
+<span class="go">    ./components/cice</span>
+<span class="go">    ./components/cism</span>
+<span class="go">    ./components/cism/source_cism</span>
+<span class="go">    ./components/clm</span>
+<span class="go">    ./components/clm/src/fates</span>
+<span class="go">    ./components/clm/tools/PTCLM</span>
+<span class="go">    ./components/mosart</span>
+<span class="go">    ./components/pop</span>
+<span class="go">    ./components/pop/externals/CVMix</span>
+<span class="go">    ./components/pop/externals/MARBL</span>
+<span class="go">    ./components/rtm</span>
+<span class="go">    ./components/ww3</span>
+</pre></div>
+</div>
+<p>You should now have a complete copy of the CESM2 source code in your /path/to/my_cesm_sandbox.</p>
+<p>If there were problems obtaining an external, you might instead see something like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">e-  ./components/cam</span>
+</pre></div>
+</div>
+<p>This might happen if there was an unexpected interruption while downloading.
+First try rerunning <code class="docutils literal notranslate"><span class="pre">./manage_externals/checkout_externals</span></code>.
+If there is still a problem, try running with logging turned on using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals --logging</span>
+</pre></div>
+</div>
+<p>Check the <code class="docutils literal notranslate"><span class="pre">manage_externals.log</span></code> file to see what errors are reported.</p>
+</div>
+<div class="section" id="downloading-input-data">
+<h2>Downloading input data<a class="headerlink" href="#downloading-input-data" title="Permalink to this headline">¶</a></h2>
+<p>Input datasets are needed to run the model. CESM input data are
+available through a separate Subversion input data repository.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The input data repository contains datasets for many configurations and resolutions and is well over 10 TByte in total size. DO NOT try to download the entire dataset.</p>
+</div>
+<p>Datasets can be downloaded on a case by case basis as needed and CESM
+provides tools to check and download input data automatically.</p>
+<p>A local input data directory should exist on the local disk, and it also
+needs to be set in the CESM scripts via the variable <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT.</span></code>
+For supported machines, this variable is preset. For generic machines,
+this variable is set via the <code class="docutils literal notranslate"><span class="pre">--input-dir</span></code> argument to <strong>create_newcase</strong>.
+It is recommended that all users of a given filesystem share the same <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> directory.</p>
+<p>The files in the subdirectories of <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> should be
+write-protected. This prevents these files from being accidentally
+modified or deleted. The directories in <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code> should generally
+be group writable, so the directory can be shared among multiple users.</p>
+<p>As part of the process of generating the CESM executable, the utility,
+<strong>check_input_data</strong> located in each case directory
+is called, and it attempts to locate all required input data for the
+case based upon file lists generated by components. If the required
+data is not found on local disk in <code class="docutils literal notranslate"><span class="pre">$DIN_LOC_ROOT</span></code>, then the data
+will be downloaded automatically by the scripts or it can be
+downloaded by the user by invoking <strong>check_input_data</strong> with the <code class="docutils literal notranslate"><span class="pre">--download</span></code>
+command argument. If you want to download the input data manually you
+should do it before you build CESM.</p>
+<p>It is possible for users to download the data using svn subcommands
+directly, but use of the <strong>check_input_data</strong> script is highly recommended
+to ensure that only the required datasets are downloaded.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Again, users are <strong>STRONGLY DISCOURAGED</strong> from downloading the entire input dataset from the repository.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cesm_configurations.html" class="btn btn-neutral float-right" title="CESM Configurations (CESM2.2)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral" title="Introduction (CESM2.2)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, U.S. National Science Foundation.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+     
+<script>var version_json_loc = "../../versions.json";</script>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/pop_ver.js"></script>
+    
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
