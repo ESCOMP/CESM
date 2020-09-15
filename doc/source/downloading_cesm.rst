@@ -25,7 +25,7 @@ code:
 
 .. code-block:: console
 
-    git clone https://github.com/ESCOMP/CESM.git my_cesm_sandbox
+    git clone -b release-cesm2.2.0 https://github.com/ESCOMP/CESM.git my_cesm_sandbox
     cd my_cesm_sandbox
 
 To checkout a previous version of CESM, first view the available versions:
