@@ -338,7 +338,6 @@ class SourceTree(object):
             tmp_comps = self._required_compnames
 
         load_comps = self.order_comps_by_local_path(tmp_comps)
-
         # checkout the primary externals
         for comp in load_comps:
             if verbosity < VERBOSITY_VERBOSE:
@@ -363,10 +362,8 @@ class SourceTree(object):
         local_paths = []
         for comp in comps_in:
             local_paths.append(self._all_components[comp].get_local_path())
-        local_paths = list(set(local_paths))
         for path in sorted(local_paths, key=len):
             for comp in comps_in:
                 if self._all_components[comp].get_local_path() == path:
                     comps_out.append(comp)
-        comps_out = list(set(comps_out))
         return comps_out
