@@ -337,7 +337,7 @@ class SourceTree(object):
         else:
             tmp_comps = self._required_compnames
 
-        load_comps = self.order_comps_by_local_path(self, tmp_comps)
+        load_comps = self.order_comps_by_local_path(tmp_comps)
 
         # checkout the primary externals
         for comp in load_comps:
