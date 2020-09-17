@@ -255,7 +255,7 @@ def execute_subprocess(commands, status_to_caller=False,
     hanging_timer.start()
     try:
         output = subprocess.check_output(commands, stderr=subprocess.STDOUT,
-                                         universal_newlines=True).decode('utf-8')
+                                         universal_newlines=True)
         log_process_output(output)
         status = 0
     except OSError as error:
