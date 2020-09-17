@@ -331,11 +331,13 @@ class SourceTree(object):
             printlog('Checking out externals: ', end='')
 
         if load_all:
-            load_comps = self._all_components.keys()
+            tmp_comps = self._all_components.keys()
         elif load_comp is not None:
-            load_comps = [load_comp]
+            tmp_comps = [load_comp]
         else:
-            load_comps = self._required_compnames
+            tmp_comps = self._required_compnames
+
+        load_comps = self.order_comps_by_local_path(self, tmp_comps)
 
         # checkout the primary externals
         for comp in load_comps:
@@ -351,3 +353,20 @@ class SourceTree(object):
         # now give each external an opportunitity to checkout it's externals.
         for comp in load_comps:
             self._all_components[comp].checkout_externals(verbosity, load_all)
+
+    def order_comps_by_local_path(self, comps_in):
+        """
+        put the comps into an order so that comp local_paths
+        that are nested are checked out in correct order
+        """
+        comps_out = []
+        local_paths = []
+        for comp in comps_in:
+            local_paths.append(self._all_components[comp].get_local_path())
+        local_paths = list(set(local_paths))
+        for path in sorted(local_paths, key=len):
+            for comp in comps_in:
+                if self._all_components[comp].get_local_path() == path:
+                    comps_out.append(comp)
+        comps_out = list(set(comps_out))
+        return comps_out
