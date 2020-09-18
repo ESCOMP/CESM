@@ -1681,7 +1681,6 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         """
 
         # Run the basic setup
-        #super(TestSubrepoCheckout, self).setUp()
         super().setUp()
         # create test repo
         # We need to do this here (rather than have a static repo) because
