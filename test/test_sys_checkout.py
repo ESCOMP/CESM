@@ -162,7 +162,7 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         self.write_config(dest_dir)
 
-    def container_nested_required(self, dest_dir, order=[0,1,2]):
+    def container_nested_required(self, dest_dir, order):
         """Create a container externals file with only simple externals.
 
         """
@@ -174,7 +174,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                             branch=REMOTE_BRANCH_FEATURE2, path=NESTED_NAME[order[1]])
 
         self.create_section(SIMPLE_REPO_NAME, 'simp_hash', nested=True,
-                            ref_hash='60b1cc1a38d63',path=NESTED_NAME[order[2]])
+                            ref_hash='60b1cc1a38d63', path=NESTED_NAME[order[2]])
 
         self.write_config(dest_dir)
 
@@ -794,7 +794,7 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_branch_empty(tree)
         self._check_simple_hash_empty(tree)
 
-    def _check_container_nested_required_pre_checkout(self, overall, tree, order=[0,1,2]):
+    def _check_container_nested_required_pre_checkout(self, overall, tree, order):
         self.assertEqual(overall, 0)
         self._check_nested_tag_empty(tree, name=NESTED_NAME[order[0]])
         self._check_nested_branch_empty(tree, name=NESTED_NAME[order[1]])
@@ -807,7 +807,7 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_branch_empty(tree)
         self._check_simple_hash_empty(tree)
 
-    def _check_container_nested_required_checkout(self, overall, tree, order=[0,1,2]):
+    def _check_container_nested_required_checkout(self, overall, tree, order):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
         self._check_nested_tag_empty(tree, name=NESTED_NAME[order[0]])
@@ -820,7 +820,7 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_branch_ok(tree)
         self._check_simple_hash_ok(tree)
 
-    def _check_container_nested_required_post_checkout(self, overall, tree, order=[0,1,2]):
+    def _check_container_nested_required_post_checkout(self, overall, tree, order):
         self.assertEqual(overall, 0)
         self._check_nested_tag_ok(tree, name=NESTED_NAME[order[0]])
         self._check_nested_branch_ok(tree, name=NESTED_NAME[order[1]])
@@ -1029,29 +1029,30 @@ class TestSysCheckout(BaseTestSysCheckout):
         Tests over all possible permutations
         """
 
-        orders = [[0,1,2], [1,2,0], [2,0,1], [0,2,1], [2,1,0], [1,0,2]]
+        orders = [[0, 1, 2], [1, 2, 0], [2, 0, 1],
+                  [0, 2, 1], [2, 1, 0], [1, 0, 2]]
         for n, order in enumerate(orders):
             # create repo
-            dest_dir=os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
-                                  self._test_id,"test"+str(n))
+            dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
+                                  self._test_id, "test"+str(n))
             under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME,
                                                   dest_dir_in=dest_dir)
-            self._generator.container_nested_required(under_test_dir, order=order)
+            self._generator.container_nested_required(under_test_dir, order)
 
             # status of empty repo
             overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                     self.status_args)
-            self._check_container_nested_required_pre_checkout(overall, tree, order=order)
+            self._check_container_nested_required_pre_checkout(overall, tree, order)
 
             # checkout
             overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                     self.checkout_args)
-            self._check_container_nested_required_checkout(overall, tree, order=order)
+            self._check_container_nested_required_checkout(overall, tree, order)
 
             # status clean checked out
             overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                     self.status_args)
-            self._check_container_nested_required_post_checkout(overall, tree, order=order)
+            self._check_container_nested_required_post_checkout(overall, tree, order)
 
     def test_container_simple_optional(self):
         """Verify that container with an optional simple subrepos

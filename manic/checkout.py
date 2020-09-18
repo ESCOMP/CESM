@@ -380,14 +380,14 @@ def main(args):
 
     if args.status:
         # user requested status-only
-        for comp in sorted(tree_status.keys()):
+        for comp in sorted(tree_status):
             tree_status[comp].log_status_message(args.verbose)
     else:
         # checkout / update the external repositories.
         safe_to_update = check_safe_to_update_repos(tree_status)
         if not safe_to_update:
             # print status
-            for comp in sorted(tree_status.keys()):
+            for comp in sorted(tree_status):
                 tree_status[comp].log_status_message(args.verbose)
             # exit gracefully
             msg = """The external repositories labeled with 'M' above are not in a clean state.
