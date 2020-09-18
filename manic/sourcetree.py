@@ -338,7 +338,7 @@ class SourceTree(object):
             tmp_comps = self._required_compnames
         # Sort by path so that if paths are nested the
         # parent repo is checked out first.
-        load_comps = sorted(tmp_comps,key=lambda comp: self._all_components[comp].get_local_path())
+        load_comps = sorted(tmp_comps, key=lambda comp: self._all_components[comp].get_local_path())
         # checkout the primary externals
         for comp in load_comps:
             if verbosity < VERBOSITY_VERBOSE:
