@@ -342,6 +342,40 @@ class TestCreateExternalsDescription(unittest.TestCase):
         # NOTE(goldy, 2019-03) Should test other possible keywords such as
         # fetchRecurseSubmodules, ignore, and shallow
 
+    @staticmethod
+    def setup_dict_config():
+        """Create the full container dictionary with simple and mixed use
+        externals
+
+        """
+        rdatat = {ExternalsDescription.PROTOCOL: 'git',
+                  ExternalsDescription.REPO_URL: 'simple-ext.git',
+                  ExternalsDescription.TAG: 'tag1'}
+        rdatab = {ExternalsDescription.PROTOCOL: 'git',
+                  ExternalsDescription.REPO_URL: 'simple-ext.git',
+                  ExternalsDescription.BRANCH: 'feature2'}
+        rdatam = {ExternalsDescription.PROTOCOL: 'git',
+                  ExternalsDescription.REPO_URL: 'mixed-cont-ext.git',
+                  ExternalsDescription.BRANCH: 'master'}
+        desc = {'simp_tag': {ExternalsDescription.REQUIRED: True,
+                             ExternalsDescription.PATH: 'simp_tag',
+                             ExternalsDescription.EXTERNALS: EMPTY_STR,
+                             ExternalsDescription.REPO: rdatat},
+                'simp_branch' : {ExternalsDescription.REQUIRED: True,
+                                 ExternalsDescription.PATH: 'simp_branch',
+                                 ExternalsDescription.EXTERNALS: EMPTY_STR,
+                                 ExternalsDescription.REPO: rdatab},
+                'simp_opt': {ExternalsDescription.REQUIRED: False,
+                             ExternalsDescription.PATH: 'simp_opt',
+                             ExternalsDescription.EXTERNALS: EMPTY_STR,
+                             ExternalsDescription.REPO: rdatat},
+                'mixed_req': {ExternalsDescription.REQUIRED: True,
+                              ExternalsDescription.PATH: 'mixed_req',
+                              ExternalsDescription.EXTERNALS: 'sub-ext.cfg',
+                              ExternalsDescription.REPO: rdatam}}
+
+        return desc
+
     def test_cfg_v1_ok(self):
         """Test that a correct cfg v1 object is created by create_externals_description
 
@@ -378,6 +412,49 @@ class TestCreateExternalsDescription(unittest.TestCase):
 
         ext = create_externals_description(desc, model_format='dict')
         self.assertIsInstance(ext, ExternalsDescriptionDict)
+
+    def test_cfg_component_dict(self):
+        """Verify that create_externals_description works with a dictionary
+        """
+        # create the top level externals file
+        desc = self.setup_dict_config()
+        # Check external with all repos
+        external = create_externals_description(desc, model_format='dict')
+        self.assertIsInstance(external, ExternalsDescriptionDict)
+        self.assertTrue('simp_tag' in external)
+        self.assertTrue('simp_branch' in external)
+        self.assertTrue('simp_opt' in external)
+        self.assertTrue('mixed_req' in external)
+
+    def test_cfg_exclude_component_dict(self):
+        """Verify that exclude component checkout works with a dictionary
+        """
+        # create the top level externals file
+        desc = self.setup_dict_config()
+        # Test an excluded repo
+        external = create_externals_description(desc, model_format='dict',
+                                                exclude=['simp_tag',
+                                                         'simp_opt'])
+        self.assertIsInstance(external, ExternalsDescriptionDict)
+        self.assertFalse('simp_tag' in external)
+        self.assertTrue('simp_branch' in external)
+        self.assertFalse('simp_opt' in external)
+        self.assertTrue('mixed_req' in external)
+
+    def test_cfg_opt_component_dict(self):
+        """Verify that exclude component checkout works with a dictionary
+        """
+        # create the top level externals file
+        desc = self.setup_dict_config()
+        # Test an excluded repo
+        external = create_externals_description(desc, model_format='dict',
+                                                components=['simp_tag',
+                                                            'simp_opt'])
+        self.assertIsInstance(external, ExternalsDescriptionDict)
+        self.assertTrue('simp_tag' in external)
+        self.assertFalse('simp_branch' in external)
+        self.assertTrue('simp_opt' in external)
+        self.assertFalse('mixed_req' in external)
 
     def test_cfg_unknown_version(self):
         """Test that a runtime error is raised when an unknown file version is

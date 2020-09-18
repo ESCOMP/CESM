@@ -38,6 +38,7 @@ import logging
 import os
 import os.path
 import shutil
+import sys
 import unittest
 
 from manic.externals_description import ExternalsDescription
@@ -85,6 +86,8 @@ CFG_NAME = 'externals.cfg'
 CFG_SUB_NAME = 'sub-externals.cfg'
 README_NAME = 'readme.txt'
 REMOTE_BRANCH_FEATURE2 = 'feature2'
+NESTED_NAME = ['./fred', './fred/wilma', './fred/wilma/barney']
+
 
 SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 
@@ -159,6 +162,23 @@ class GenerateExternalsDescriptionCfgV1(object):
                             ref_hash='60b1cc1a38d63')
 
         self.write_config(dest_dir)
+
+    def container_nested_required(self, dest_dir, order):
+        """Create a container externals file with only simple externals.
+
+        """
+        self.create_config()
+        self.create_section(SIMPLE_REPO_NAME, 'simp_tag', nested=True,
+                            tag='tag1', path=NESTED_NAME[order[0]])
+
+        self.create_section(SIMPLE_REPO_NAME, 'simp_branch', nested=True,
+                            branch=REMOTE_BRANCH_FEATURE2, path=NESTED_NAME[order[1]])
+
+        self.create_section(SIMPLE_REPO_NAME, 'simp_hash', nested=True,
+                            ref_hash='60b1cc1a38d63', path=NESTED_NAME[order[2]])
+
+        self.write_config(dest_dir)
+
 
     def container_simple_optional(self, dest_dir):
         """Create a container externals file with optional simple externals
@@ -261,7 +281,7 @@ class GenerateExternalsDescriptionCfgV1(object):
     def create_section(self, repo_type, name, tag='', branch='',
                        ref_hash='', required=True, path=EXTERNALS_NAME,
                        externals='', repo_path=None, from_submodule=False,
-                       sparse=''):
+                       sparse='', nested=False):
         # pylint: disable=too-many-branches
         """Create a config section with autofilling some items and handling
         optional items.
@@ -270,8 +290,11 @@ class GenerateExternalsDescriptionCfgV1(object):
         # pylint: disable=R0913
         self._config.add_section(name)
         if not from_submodule:
-            self._config.set(name, ExternalsDescription.PATH,
-                             os.path.join(path, name))
+            if nested:
+                self._config.set(name, ExternalsDescription.PATH, path)
+            else:
+                self._config.set(name, ExternalsDescription.PATH,
+                                 os.path.join(path, name))
 
         self._config.set(name, ExternalsDescription.PROTOCOL,
                          ExternalsDescription.PROTOCOL_GIT)
@@ -535,12 +558,26 @@ class BaseTestSysCheckout(unittest.TestCase):
 
         self._test_id = self.id().split('.')[-1]
 
+        # find root
+        if os.path.exists(os.path.join(os.getcwd(), 'checkout_externals')):
+            root_dir = os.path.abspath(os.getcwd())
+        else:
+            # maybe we are in a subdir, search up
+            root_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+            while os.path.basename(root_dir):
+                if os.path.exists(os.path.join(root_dir, 'checkout_externals')):
+                    break
+                root_dir = os.path.dirname(root_dir)
+
+        if not os.path.exists(os.path.join(root_dir, 'checkout_externals')):
+            raise RuntimeError('Cannot find checkout_externals')
+
         # path to the executable
-        self._checkout = os.path.join('../checkout_externals')
-        self._checkout = os.path.abspath(self._checkout)
+        self._checkout = os.path.join(root_dir, 'checkout_externals')
 
         # directory where we have test repositories
-        self._bare_root = os.path.join(os.getcwd(), BARE_REPO_ROOT_NAME)
+        test_dir = os.path.join(root_dir, 'test')
+        self._bare_root = os.path.join(test_dir, BARE_REPO_ROOT_NAME)
         self._bare_root = os.path.abspath(self._bare_root)
 
         # set into the environment so var will be expanded in externals files
@@ -671,8 +708,14 @@ class BaseTestSysCheckout(unittest.TestCase):
         name = './{0}/simp_tag'.format(directory)
         self._check_generic_empty_default_required(tree, name)
 
+    def _check_nested_tag_empty(self, tree, name=EXTERNALS_NAME):
+        self._check_generic_empty_default_required(tree, name)
+
     def _check_simple_tag_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_tag'.format(directory)
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_nested_tag_ok(self, tree, name=EXTERNALS_NAME):
         self._check_generic_ok_clean_required(tree, name)
 
     def _check_simple_tag_dirty(self, tree, directory=EXTERNALS_NAME):
@@ -687,8 +730,14 @@ class BaseTestSysCheckout(unittest.TestCase):
         name = './{0}/simp_branch'.format(directory)
         self._check_generic_empty_default_required(tree, name)
 
+    def _check_nested_branch_empty(self, tree, name=EXTERNALS_NAME):
+        self._check_generic_empty_default_required(tree, name)
+
     def _check_simple_branch_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_branch'.format(directory)
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_nested_branch_ok(self, tree, name=EXTERNALS_NAME):
         self._check_generic_ok_clean_required(tree, name)
 
     def _check_simple_branch_modified(self, tree, directory=EXTERNALS_NAME):
@@ -699,8 +748,14 @@ class BaseTestSysCheckout(unittest.TestCase):
         name = './{0}/simp_hash'.format(directory)
         self._check_generic_empty_default_required(tree, name)
 
+    def _check_nested_hash_empty(self, tree, name=EXTERNALS_NAME):
+        self._check_generic_empty_default_required(tree, name)
+
     def _check_simple_hash_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_hash'.format(directory)
+        self._check_generic_ok_clean_required(tree, name)
+
+    def _check_nested_hash_ok(self, tree, name=EXTERNALS_NAME):
         self._check_generic_ok_clean_required(tree, name)
 
     def _check_simple_hash_modified(self, tree, directory=EXTERNALS_NAME):
@@ -754,6 +809,12 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_branch_empty(tree)
         self._check_simple_hash_empty(tree)
 
+    def _check_container_nested_required_pre_checkout(self, overall, tree, order):
+        self.assertEqual(overall, 0)
+        self._check_nested_tag_empty(tree, name=NESTED_NAME[order[0]])
+        self._check_nested_branch_empty(tree, name=NESTED_NAME[order[1]])
+        self._check_nested_hash_empty(tree, name=NESTED_NAME[order[2]])
+
     def _check_container_simple_required_checkout(self, overall, tree):
         # Note, this is the internal tree status just before checkout
         self.assertEqual(overall, 0)
@@ -761,11 +822,24 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_branch_empty(tree)
         self._check_simple_hash_empty(tree)
 
+    def _check_container_nested_required_checkout(self, overall, tree, order):
+        # Note, this is the internal tree status just before checkout
+        self.assertEqual(overall, 0)
+        self._check_nested_tag_empty(tree, name=NESTED_NAME[order[0]])
+        self._check_nested_branch_empty(tree, name=NESTED_NAME[order[1]])
+        self._check_nested_hash_empty(tree, name=NESTED_NAME[order[2]])
+
     def _check_container_simple_required_post_checkout(self, overall, tree):
         self.assertEqual(overall, 0)
         self._check_simple_tag_ok(tree)
         self._check_simple_branch_ok(tree)
         self._check_simple_hash_ok(tree)
+
+    def _check_container_nested_required_post_checkout(self, overall, tree, order):
+        self.assertEqual(overall, 0)
+        self._check_nested_tag_ok(tree, name=NESTED_NAME[order[0]])
+        self._check_nested_branch_ok(tree, name=NESTED_NAME[order[1]])
+        self._check_nested_hash_ok(tree, name=NESTED_NAME[order[2]])
 
     def _check_container_simple_required_out_of_sync(self, overall, tree):
         self.assertEqual(overall, 0)
@@ -819,8 +893,13 @@ class BaseTestSysCheckout(unittest.TestCase):
 
     def _check_container_component_post_checkout2(self, overall, tree):
         self.assertEqual(overall, 0)
-        self._check_simple_opt_ok(tree)
         self._check_simple_tag_empty(tree)
+        self._check_simple_branch_ok(tree)
+
+    def _check_container_component_post_checkout3(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self.assertFalse("simp_opt" in tree)
+        self._check_simple_tag_ok(tree)
         self._check_simple_branch_ok(tree)
 
     def _check_container_full_post_checkout(self, overall, tree):
@@ -958,6 +1037,37 @@ class TestSysCheckout(BaseTestSysCheckout):
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
         self._check_container_simple_required_post_checkout(overall, tree)
+
+    def test_container_nested_required(self):
+        """Verify that a container with nested subrepos
+        generates the correct initial status.
+        Tests over all possible permutations
+        """
+
+        orders = [[0, 1, 2], [1, 2, 0], [2, 0, 1],
+                  [0, 2, 1], [2, 1, 0], [1, 0, 2]]
+        for n, order in enumerate(orders):
+            # create repo
+            dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
+                                  self._test_id, "test"+str(n))
+            under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME,
+                                                  dest_dir_in=dest_dir)
+            self._generator.container_nested_required(under_test_dir, order)
+
+            # status of empty repo
+            overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                    self.status_args)
+            self._check_container_nested_required_pre_checkout(overall, tree, order)
+
+            # checkout
+            overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                    self.checkout_args)
+            self._check_container_nested_required_checkout(overall, tree, order)
+
+            # status clean checked out
+            overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                    self.status_args)
+            self._check_container_nested_required_post_checkout(overall, tree, order)
 
     def test_container_simple_optional(self):
         """Verify that container with an optional simple subrepos
@@ -1347,6 +1457,23 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_component_post_checkout2(overall, tree)
 
+    def test_container_exclude_component(self):
+        """Verify that exclude component checkout works
+        """
+        # create the test repository
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+
+        # create the top level externals file
+        self._generator.container_full(under_test_dir)
+
+        # inital checkout, exclude simp_opt
+        checkout_args = ['--exclude', 'simp_opt']
+        checkout_args.extend(self.checkout_args)
+        overall, tree = self.execute_cmd_in_dir(under_test_dir, checkout_args)
+        checkout_args.append("--status")
+        overall, tree = self.execute_cmd_in_dir(under_test_dir, checkout_args)
+        self._check_container_component_post_checkout3(overall, tree)
+
     def test_mixed_simple(self):
         """Verify that a mixed use repo can serve as a 'full' container,
         pulling in a set of externals and a seperate set of sub-externals.
@@ -1569,7 +1696,7 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         """
 
         # Run the basic setup
-        super(TestSubrepoCheckout, self).setUp()
+        super().setUp()
         # create test repo
         # We need to do this here (rather than have a static repo) because
         # git submodules do not allow for variables in .gitmodules files
@@ -1588,8 +1715,9 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         cwd = os.getcwd()
         fork_repo_dir = os.path.join(self._bare_root, SIMPLE_FORK_NAME)
         simple_repo_dir = os.path.join(self._bare_root, SIMPLE_REPO_NAME)
-        self._simple_ext_fork_name = SIMPLE_FORK_NAME.split('.')[0]
-        self._simple_ext_name = SIMPLE_REPO_NAME.split('.')[0]
+        self._simple_ext_fork_name = os.path.splitext(SIMPLE_FORK_NAME)[0]
+        self._simple_ext_name = os.path.join('sourc',
+                                             os.path.splitext(SIMPLE_REPO_NAME)[0])
         os.chdir(self._repo_dir)
         # Add a branch with a subrepo
         cmd = ['git', 'branch', self._bare_branch_name, 'master']
@@ -1610,7 +1738,8 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         execute_subprocess(cmd)
         cmd = ['git', 'checkout', self._config_branch_name]
         execute_subprocess(cmd)
-        cmd = ['git', 'submodule', 'add', simple_repo_dir]
+        cmd = ['git', 'submodule', 'add', '--name', SIMPLE_REPO_NAME,
+               simple_repo_dir, self._simple_ext_name]
         execute_subprocess(cmd)
         # Checkout feature2
         os.chdir(self._simple_ext_name)
