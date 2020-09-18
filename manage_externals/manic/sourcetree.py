@@ -331,12 +331,14 @@ class SourceTree(object):
             printlog('Checking out externals: ', end='')
 
         if load_all:
-            load_comps = self._all_components.keys()
+            tmp_comps = self._all_components.keys()
         elif load_comp is not None:
-            load_comps = [load_comp]
+            tmp_comps = [load_comp]
         else:
-            load_comps = self._required_compnames
-
+            tmp_comps = self._required_compnames
+        # Sort by path so that if paths are nested the
+        # parent repo is checked out first.
+        load_comps = sorted(tmp_comps, key=lambda comp: self._all_components[comp].get_local_path())
         # checkout the primary externals
         for comp in load_comps:
             if verbosity < VERBOSITY_VERBOSE:
@@ -346,8 +348,6 @@ class SourceTree(object):
                 # output a newline
                 printlog(EMPTY_STR)
             self._all_components[comp].checkout(verbosity, load_all)
-        printlog('')
-
-        # now give each external an opportunitity to checkout it's externals.
-        for comp in load_comps:
+            # now give each external an opportunitity to checkout it's externals.
             self._all_components[comp].checkout_externals(verbosity, load_all)
+        printlog('')
