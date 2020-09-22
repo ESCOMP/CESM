@@ -1,3 +1,16 @@
+Tag name: ihesp_regional_master_200922
+Originator(s): Yun Liu
+Date: 2020 Sep 22
+update the name of boundary/initial data directory: now use YYYYMMDD_HH
+integrate  the non-standard cime source codes for wrf_surface_scheme in wrf
+fix a bug in wrf code for running  wrf_surface_scheme ( J. Kurian's contribution)
+
+in WRF: ihesp_regional_master_200922
+#      WRF_sfc_scheme_files/     non standard cime source code for SourceModes
+#      phys/module_physics_init.F   bug fixing file by J. kurian
+#      bld/wrf.buildnml.csh         fix the namelist and modify the input directory
+
+============================================
 Tag name: ihesp_regional_master_200911
 Originator(s): Yun Liu
 Date: 2020 Sep 11
