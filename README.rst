@@ -64,7 +64,7 @@ https://wiki.ucar.edu/display/ccsm/Fortran+Compiler+Bug+List for more
 details on older Fortran compiler versions).
 
 CESM2 is tested on several different systems with newer Fortran compilers:
-Please see `CESM2.0 Compiler/Machine Tests <https://docs.google.com/spreadsheets/d/15QUqsXD1Z0K_rYNTlykBvjTRt8s0XcQw0cfAj9DZbj0/edit#gid=0>`_
+Please see `CESM Compiler/Machine Tests <https://docs.google.com/spreadsheets/d/15QUqsXD1Z0K_rYNTlykBvjTRt8s0XcQw0cfAj9DZbj0/edit#gid=0>`_
 for a spreadsheet of the current results.
 
 More details on porting CESM
@@ -76,11 +76,11 @@ http://esmci.github.io/cime/users_guide/porting-cime.html
 Obtaining the full model code and associated scripting infrastructure
 =====================================================================
 
-CESM2.0 is now released via github. You will need some familiarity with git in order
+CESM is now released via github. You will need some familiarity with git in order
 to modify the code and commit these changes. However, to simply checkout and run the
 code, no git knowledge is required other than what is documented in the following steps.
 
-To obtain the CESM2.0 code you need to do the following:
+To obtain the CESM code you need to do the following:
 
 #. Clone the repository. ::
 
