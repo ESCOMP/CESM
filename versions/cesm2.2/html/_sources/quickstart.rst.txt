@@ -15,7 +15,7 @@ If you are new to CESM2, please consider reading the
 
 This is the procedure for quickly setting up and running a CESM2 case.
 
-Download CESM2 (see `Downloading CESM2 <downloading_cesm.rst>`_).
+Download CESM2 (see `Downloading CESM2 <downloading_cesm.html>`_).
 
 Select a component set, and a resolution for your case.  Details of available
 component sets and resolutions are available from the `query_config`_ tool located

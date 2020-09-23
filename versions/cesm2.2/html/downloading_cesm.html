@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Downloading CESM (CESM2.2) &mdash; CESM CESM2.2 documentation</title>
+  <title>Downloading CESM2 (CESM2.2) &mdash; CESM CESM2.2 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="CESM CESM2.2 documentation" href="index.html"/>
-        <link rel="next" title="CESM Configurations (CESM2.2)" href="cesm_configurations.html"/>
+        <link rel="next" title="CESM2 Configurations (CESM2.2)" href="cesm_configurations.html"/>
         <link rel="prev" title="Introduction (CESM2.2)" href="introduction.html"/> 
 
   
@@ -105,12 +105,12 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction (CESM2.2)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Downloading CESM (CESM2.2)</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Downloading CESM2 (CESM2.2)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#downloading-the-code-and-scripts">Downloading the code and scripts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#downloading-input-data">Downloading input data</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cesm_configurations.html">CESM Configurations (CESM2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cesm_configurations.html">CESM2 Configurations (CESM2.2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start: CESM Model Workflow (CESM2.2)</a></li>
 </ul>
 
@@ -156,7 +156,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Downloading CESM (CESM2.2)</li>
+      <li>Downloading CESM2 (CESM2.2)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -175,8 +175,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="downloading-cesm-version">
-<span id="downloading"></span><h1>Downloading CESM (CESM2.2)<a class="headerlink" href="#downloading-cesm-version" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="downloading-cesm2-version">
+<span id="downloading"></span><h1>Downloading CESM2 (CESM2.2)<a class="headerlink" href="#downloading-cesm2-version" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="downloading-the-code-and-scripts">
 <h2>Downloading the code and scripts<a class="headerlink" href="#downloading-the-code-and-scripts" title="Permalink to this headline">¶</a></h2>
 <p>Starting with CESM2, releases are available through a public GitHub
@@ -189,18 +189,18 @@ Currently, our Subversion server
 software is at version 1.8.17. For more information or to download
 open source tools, visit <a class="reference external" href="http://subversion.apache.org/">Subversion</a>
 and <a class="reference external" href="https://git-scm.com/downloads">git downloads</a>.</p>
-<p>With valid git and svn clients installed on the machine where CESM will be
+<p>With valid git and svn clients installed on the machine where CESM2 will be
 built and run, the user may download the latest version of the release
 code:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone -b release-cesm2.2.0 https://github.com/ESCOMP/CESM.git my_cesm_sandbox</span>
 <span class="go">cd my_cesm_sandbox</span>
 </pre></div>
 </div>
-<p>To checkout a previous version of CESM, first view the available versions:</p>
+<p>To checkout a previous version of CESM2, first view the available versions:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git tag --list &#39;release-cesm2*&#39;</span>
 </pre></div>
 </div>
-<p>To checkout a specific CESM release tag type, for example CESM2.0.1:</p>
+<p>To checkout a specific CESM2 release tag type, for example CESM2.0.1:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git checkout release-cesm2.0.1</span>
 </pre></div>
 </div>
@@ -211,7 +211,7 @@ run the <strong>checkout_externals</strong> script from /path/to/my_cesm_sandbox
 </div>
 <p>The <strong>checkout_externals</strong> script will read the configuration file called <code class="docutils literal notranslate"><span class="pre">Externals.cfg</span></code> and
 will download all the external component models and CIME into /path/to/my_cesm_sandbox.</p>
-<p>Details regarding the CESM checkout process are available in the CESM GitHub repo
+<p>Details regarding the CESM2 checkout process are available in the CESM GitHub repo
 <a class="reference external" href="http://github.com/ESCOMP/CESM/blob/master/README.rst">README</a>
 To see more details regarding the checkout_externals script from the command line, type:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./manage_externals/checkout_externals --help</span>
@@ -239,26 +239,49 @@ with the status flag to show the status of the externals:</p>
 columns of output, as in this example:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Processing externals description file : Externals.cfg</span>
 <span class="go">Processing externals description file : Externals_CLM.cfg</span>
+<span class="go">Processing externals description file : ../Externals_cime.cfg</span>
 <span class="go">Processing externals description file : Externals_POP.cfg</span>
 <span class="go">Processing externals description file : Externals_CISM.cfg</span>
-<span class="go">Checking status of externals: clm, fates, ptclm, mosart, ww3, cime, cice, pop, cvmix, marbl, cism, source_cism, rtm, cam,</span>
+<span class="go">Processing externals description file : .gitmodules</span>
+<span class="go">Processing submodules description file : .gitmodules</span>
+<span class="go">Processing externals description file : Externals_CAM.cfg</span>
+<span class="go">Checking status of externals: clm, fates, ptclm, mosart, cime, cmeps, ww3, cice, fms, pop, cvmix, marbl, cism, source_cism, rtm, cdeps, fox, mom, cam, silhs, clubb, pumas, atmos_phys, cosp2, chem_proc, atmos_cubed_sphere, carma,</span>
 <span class="go">    ./cime</span>
+<span class="go">e-o ./cime/src/drivers/nuopc/</span>
 <span class="go">    ./components/cam</span>
+<span class="go">    ./components/cam/chem_proc</span>
+<span class="go">    ./components/cam/src/atmos_phys</span>
+<span class="go">    ./components/cam/src/dynamics/fv3/atmos_cubed_sphere</span>
+<span class="go">    ./components/cam/src/physics/carma/base</span>
+<span class="go">    ./components/cam/src/physics/clubb</span>
+<span class="go">    ./components/cam/src/physics/cosp2/src</span>
+<span class="go">    ./components/cam/src/physics/pumas</span>
+<span class="go">    ./components/cam/src/physics/silhs</span>
+<span class="go">    ./components/cdeps</span>
+<span class="go">    ./components/cdeps/fox</span>
 <span class="go">    ./components/cice</span>
 <span class="go">    ./components/cism</span>
 <span class="go">    ./components/cism/source_cism</span>
 <span class="go">    ./components/clm</span>
 <span class="go">    ./components/clm/src/fates</span>
 <span class="go">    ./components/clm/tools/PTCLM</span>
+<span class="go">e-o ./components/mom</span>
 <span class="go">    ./components/mosart</span>
 <span class="go">    ./components/pop</span>
 <span class="go">    ./components/pop/externals/CVMix</span>
 <span class="go">    ./components/pop/externals/MARBL</span>
 <span class="go">    ./components/rtm</span>
 <span class="go">    ./components/ww3</span>
+<span class="go">e-o ./libraries/FMS</span>
 </pre></div>
 </div>
-<p>You should now have a complete copy of the CESM2 source code in your /path/to/my_cesm_sandbox.</p>
+<p>You should now have a default copy of the CESM2 source code in your /path/to/my_cesm_sandbox.</p>
+<p>These components are optional and are not needed to run CESM2.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">e-o ./cime/src/drivers/nuopc/</span>
+<span class="go">e-o ./components/mom</span>
+<span class="go">e-o ./libraries/FMS</span>
+</pre></div>
+</div>
 <p>If there were problems obtaining an external, you might instead see something like:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">e-  ./components/cam</span>
 </pre></div>
@@ -319,7 +342,7 @@ to ensure that only the required datasets are downloaded.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="cesm_configurations.html" class="btn btn-neutral float-right" title="CESM Configurations (CESM2.2)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="cesm_configurations.html" class="btn btn-neutral float-right" title="CESM2 Configurations (CESM2.2)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="introduction.html" class="btn btn-neutral" title="Introduction (CESM2.2)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

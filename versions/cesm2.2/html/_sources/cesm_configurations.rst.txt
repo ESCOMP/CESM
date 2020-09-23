@@ -1,11 +1,11 @@
 .. _configurations:
 
-===============================
-CESM Configurations (|version|)
-===============================
+================================
+CESM2 Configurations (|version|)
+================================
 
-The CESM system can be configured a number of different ways from both
-a science and technical perspective. CESM supports numerous
+The CESM2 system can be configured a number of different ways from both
+a science and technical perspective. CESM2 supports numerous
 `resolutions
 <http://www.cesm.ucar.edu/models/cesm2/cesm/grids.html>`_, and
 `component sets
@@ -42,13 +42,13 @@ of several modes: "active," "data," "dead," or "stub" that permits the
 whole system to activate and deactive component feedbacks by allowing
 for a variety of "plug and play" combinations.
 
-During the course of a CESM run, the model components integrate forward
+During the course of a CESM2 run, the model components integrate forward
 in time, periodically exchanging information with the coupler.
 The coupler meanwhile receives fields from the component models,
 computes, maps, and merges this information, then sends the fields back
 to the component models. The coupler brokers this sequence of
 communication interchanges and manages the overall time progression of
-the coupled system. A CESM component set is comprised of eight
+the coupled system. A CESM2 component set is comprised of eight
 components: one component from each model (atm, lnd, rof, ocn, ice, glc,
 wav, and esp) plus the coupler. Model components are written primarily in
 Fortran.
@@ -68,7 +68,7 @@ so ice, ocn, and glc stubs are used).
 
 The CESM2 components can be summarized as follows:
 
-.. csv-table:: "CESM model components"
+.. csv-table:: "CESM2 model components"
    :header: "Component Generic Type", "Component Generic Name", "Component Name", "Component Type", "Description"
    :widths: 12, 10, 10, 10, 60
 
@@ -86,6 +86,7 @@ The CESM2 components can be summarized as follows:
    "river", "rof", "xrof", "dead", "Used only for testing the driver/coupler"
    "river", "rof", "srof", "stub", "Used only to satisy the interface requirements"
    "ocean", "ocn", "pop", "active", "The ocean model is an extension of the `Parallel Ocean Program (POP) <http://www.cesm.ucar.edu/models/cesm2/ocean/>`_ Version 2 from Los Alamos National Laboratory (LANL)."
+   "ocean", "ocn", "mom6", "active", "Based on the `Modular Ocean Model version 6 <http://www.cesm.ucar.edu/models/cesm2/ocean/>`_; an early functional release is available starting in CESM2.2.   Note that MOM6 is not obtained by default; for instructions on obtaining it, see https://github.com/ESCOMP/MOM_interface/wiki/Detailed-Instructions."
    "ocean", "ocn", "docn", "data", "The `data ocean <http://esmci.github.io/cime/versions/master/html/data_models/data-ocean.html>`_ component has two distinct modes of operation. It can run as a pure data model, reading ocean SSTs (normally climatological) from input datasets, interpolating in space and time, and then passing these to the coupler. Alternatively, docn can compute updated SSTs based on a slab ocean model where bottom ocean heat flux convergence and boundary layer depths are read in and used with the atmosphere/ocean and ice/ocean fluxes obtained from the coupler."
    "ocean", "ocn", "xocn", "dead"
    "ocean", "ocn", "socn", "stub"
@@ -120,7 +121,7 @@ See `supported component sets
 <http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html>`_ for a
 complete list of supported compset options. Running **query_config**
 with the ``--compsets`` option will also provide a listing of the
-supported out-of-the-box component sets for the local version of CESM.
+supported out-of-the-box component sets for the local version of CESM2.
 
 
 CESM2 Grids
@@ -128,11 +129,11 @@ CESM2 Grids
 
 The `supported grid resolutions
 <http://www.cesm.ucar.edu/models/cesm2/cesm/grids.html>`_ are
-specified in CESM by setting an overall model resolution.  Once the
+specified in CESM2 by setting an overall model resolution.  Once the
 overall model resolution is set, components will read in appropriate
 grid files and the coupler will read in appropriate mapping weights
 files. Coupler mapping weights are always generated externally in
-CESM. The components will send the grid data to the coupler at
+CESM2. The components will send the grid data to the coupler at
 initialization, and the coupler will check that the component grids
 are consistent with each other and with the mapping weights files.
 
@@ -141,7 +142,7 @@ atmosphere, land, river runoff and land ice can each be on different grids.
 Each component determines its own unique grid decomposition based upon
 the total number of pes or processing elements assigned to that component.
 
-CESM supports several types of grids out-of-the-box including single
+CESM2 supports several types of grids out-of-the-box including single
 point, finite volume, cubed sphere, displaced pole, and
 tripole. These grids are used internally by the
 models. Input datasets are usually on the same grid but in some cases,
@@ -168,13 +169,13 @@ CESM2 Machines
 
 Scripts for `supported machines
 <http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html>`_ and
-userdefined machines are provided with the CESM release. Supported
-machines have machine specific files and settings added to the CESM
-scripts and are machines that should run CESM cases
-out-of-the-box. Machines are supported in CESM on an individual basis
+userdefined machines are provided with the CESM2 release. Supported
+machines have machine specific files and settings added to the CESM2
+scripts and are machines that should run CESM2 cases
+out-of-the-box. Machines are supported in CESM2 on an individual basis
 and are usually listed by their common site-specific name. To get a
-machine ported and functionally supported in CESM, local batch, run,
-environment, and compiler information must be configured in the CESM
+machine ported and functionally supported in CESM2, local batch, run,
+environment, and compiler information must be configured in the CESM2
 scripts. The machine name "userdefined" machines refer to any machine
 that the user defines and requires that a user edit the resulting xml
 files to fill in information required for the target platform. This
@@ -182,11 +183,11 @@ functionality is handy in accelerating the porting process and quickly
 getting a case running on a new platform. For more information on
 porting, see the `CIME porting guide
 <http://esmci.github.io/cime/versions/master/html/users_guide/porting-cime.html>`_.  The
-list of available machines are documented in `CESM supported machines
+list of available machines are documented in `CESM2 supported machines
 <http://www.cesm.ucar.edu/models/cesm2/cesm/machines.html>`_.
 Running **query_config** with the ``--machines`` option will also show
 the list of all machines for the current local version of
-CESM. Supported machines have undergone the full CESM porting
+CESM. Supported machines have undergone the full CESM2 porting
 process. The machines available in each of these categories changes as
 access to machines change over time.
 
@@ -194,7 +195,7 @@ access to machines change over time.
 CESM2 Validation
 ----------------
 
-Although CESM can be run out-of-the-box for a variety of resolutions,
+Although CESM2 can be run out-of-the-box for a variety of resolutions,
 component combinations, and machines, MOST combinations of component
 sets, resolutions, and machines have not undergone rigorous scientific
 climate validation. Control runs accompany `scientifically supported
