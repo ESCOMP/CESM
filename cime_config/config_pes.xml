@@ -210,7 +210,7 @@
 	  <ntasks_lnd>-9</ntasks_lnd>
 	  <ntasks_rof>-9</ntasks_rof>
 	  <ntasks_ice>-7</ntasks_ice>
-	  <ntasks_ocn>-1</ntasks_ocn>
+	  <ntasks_ocn>-4</ntasks_ocn>
 	  <ntasks_glc>-1</ntasks_glc>
 	  <ntasks_wav>-1</ntasks_wav>
 	  <ntasks_cpl>-16</ntasks_cpl>
@@ -1369,7 +1369,7 @@
 	  <ntasks_lnd>-9</ntasks_lnd>
 	  <ntasks_rof>-9</ntasks_rof>
 	  <ntasks_ice>-7</ntasks_ice>
-	  <ntasks_ocn>-1</ntasks_ocn>
+	  <ntasks_ocn>-4</ntasks_ocn>
 	  <ntasks_glc>-1</ntasks_glc>
 	  <ntasks_wav>-1</ntasks_wav>
 	  <ntasks_cpl>-16</ntasks_cpl>
