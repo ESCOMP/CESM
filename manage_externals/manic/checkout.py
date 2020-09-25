@@ -279,6 +279,9 @@ of the externals description file or examine the output of
                         help='The externals description filename. '
                         'Default: %(default)s.')
 
+    parser.add_argument('-x', '--exclude', nargs='*',
+                        help='Component(s) listed in the externals file which should be ignored.')
+
     parser.add_argument('-o', '--optional', action='store_true', default=False,
                         help='By default only the required externals '
                         'are checked out. This flag will also checkout the '
@@ -362,7 +365,7 @@ def main(args):
     root_dir = os.path.abspath(os.getcwd())
     external_data = read_externals_description_file(root_dir, args.externals)
     external = create_externals_description(
-        external_data, components=args.components)
+        external_data, components=args.components, exclude=args.exclude)
 
     for comp in args.components:
         if comp not in external.keys():
@@ -377,29 +380,37 @@ def main(args):
 
     if args.status:
         # user requested status-only
-        for comp in sorted(tree_status.keys()):
+        for comp in sorted(tree_status):
             tree_status[comp].log_status_message(args.verbose)
     else:
         # checkout / update the external repositories.
         safe_to_update = check_safe_to_update_repos(tree_status)
         if not safe_to_update:
             # print status
-            for comp in sorted(tree_status.keys()):
+            for comp in sorted(tree_status):
                 tree_status[comp].log_status_message(args.verbose)
             # exit gracefully
             msg = """The external repositories labeled with 'M' above are not in a clean state.
 
-The following are two options for how to proceed:
+The following are three options for how to proceed:
 
-(1) Go into each external that is not in a clean state and issue either
-    an 'svn status' or a 'git status' command. Either revert or commit
-    your changes so that all externals are in a clean state. (Note,
-    though, that it is okay to have untracked files in your working
+(1) Go into each external that is not in a clean state and issue either a 'git status' or
+    an 'svn status' command (depending on whether the external is managed by git or
+    svn). Either revert or commit your changes so that all externals are in a clean
+    state. (To revert changes in git, follow the instructions given when you run 'git
+    status'.) (Note, though, that it is okay to have untracked files in your working
     directory.) Then rerun {program_name}.
 
-(2) Alternatively, you do not have to rely on {program_name}. Instead, you
-    can manually update out-of-sync externals (labeled with 's' above)
-    as described in the configuration file {config_file}.
+(2) Alternatively, you do not have to rely on {program_name}. Instead, you can manually
+    update out-of-sync externals (labeled with 's' above) as described in the
+    configuration file {config_file}. (For example, run 'git fetch' and 'git checkout'
+    commands to checkout the appropriate tags for each external, as given in
+    {config_file}.)
+
+(3) You can also use {program_name} to manage most, but not all externals: You can specify
+    one or more externals to ignore using the '-x' or '--exclude' argument to
+    {program_name}. Excluding externals labeled with 'M' will allow {program_name} to
+    update the other, non-excluded externals.
 
 
 The external repositories labeled with '?' above are not under version
