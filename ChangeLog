@@ -25,9 +25,9 @@ cam
 
 
     Chris Fischer 2020-10-26 - cam_cesm2_1_rel_49 - components/cam (cesm2.1.4-rc.05)
-    https://github.com/ESCOMP/CAM/tags/??
+    https://github.com/ESCOMP/CAM/tags/49
 
-    Place holder for CESM2-LE smoothed BB forcing
+    CESM2-LE smoothed BB forcing
 
 
 cesm
