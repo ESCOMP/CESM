@@ -460,6 +460,7 @@
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="SSP585EXT_CAM60%WCTS_CLM50%BGC-CROP.*CICE.*POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">2101-01-01</value>
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">0134-01-01</value>
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">0501-01-01</value>
+	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="HIST_CAM60%SMBB_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">0501-01-01</value>
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="1850_CAM60%4xCO2.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD">0501-01-01</value>
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%1PCT.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD" >0501-01-01</value>
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7"      compset="_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >0014-01-01</value>
@@ -518,6 +519,7 @@
 	     It was interpoalted from the control case to the transient one.
 	 -->
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.B1850.f09_g17.CMIP6-piControl.001_v3hist</value>
+	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="HIST_CAM60%SMBB_CLM50%BGC-CROP.*_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.B1850.f09_g17.CMIP6-piControl.001_v3hist</value>
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%4xCO2.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3">b.e21.B1850.f09_g17.CMIP6-piControl.001_v2</value>
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%1PCT.*_CLM50%BGC-CROP-CMIP6DECK_CICE.*_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3" >b.e21.B1850.f09_g17.CMIP6-piControl.001_v2</value>
 	<value grid="a%0.9x1.25_l%0.9x1.25_oi%gx1v7_r%r05_g%gland4_w%ww3a_m%gx1v7" compset="1850_CAM60%WCSC_CLM50%BGC-CROP_CICE_POP2%ECO.*_MOSART_CISM2%NOEVOLVE_WW3"            >b.e21.BWsc1850.test.002_v2</value>
