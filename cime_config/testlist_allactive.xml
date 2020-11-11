@@ -350,6 +350,14 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
+  <test name="ERS_Ld7" grid="f09_g17" compset="BSSP370smbb" testmods="allactive/defaultio">
+    <machines>
+      <machine name="cheyenne" compiler="gnu" category="prealpha"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 01:00:00 </option>
+    </options>
+  </test>
   <test name="IRT_Ld7" grid="f09_g17" compset="BHIST" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>

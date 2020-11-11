@@ -279,6 +279,14 @@
   </compset>
 
   <compset>
+    <alias>BSSP370smbb</alias>
+    <lname>SSP370_CAM60%SMBB_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <science_support grid="f09_g17"/>
+  </compset>
+
+
+
+  <compset>
     <alias>BC5L45BGC</alias>
     <lname>2000_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
   </compset>
