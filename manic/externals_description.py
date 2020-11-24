@@ -193,6 +193,9 @@ def parse_submodules_desc_section(section_items, file_path):
 def read_gitmodules_file(root_dir, file_name):
     # pylint: disable=deprecated-method
     # Disabling this check because the method is only used for python2
+    # pylint: disable=too-many-locals
+    # pylint: disable=too-many-branches
+    # pylint: disable=too-many-statements
     """Read a .gitmodules file and convert it to be compatible with an
     externals description.
     """
