@@ -135,7 +135,7 @@ class GitRepository(Repository):
             # If we're on a branch, include branch name in current ref
             branch_found, branch_name = self._git_current_branch()
             if branch_found:
-                current_ref = "{} ({})".format(branch_name, current_ref)
+                current_ref = "{} (branch {})".format(current_ref, branch_name)
         else:
             # If we still can't find a ref, return empty string. This
             # can happen if we're not actually in a git repo
