@@ -38,7 +38,6 @@ import logging
 import os
 import os.path
 import shutil
-import sys
 import unittest
 
 from manic.externals_description import ExternalsDescription
