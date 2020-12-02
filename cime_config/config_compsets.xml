@@ -18,7 +18,7 @@
     ICE  = [CICE, DICE, SICE]
     OCN  = [DOCN, ,AQUAP, SOCN]
     ROF  = [RTM, MOSART, SROF]
-    GLC  = [CISM1, CISM2, SGLC]
+    GLC  = [CISM2, SGLC]
     WAV  = [WW3, DWAV, XWAV, SWAV]
     ESP  = [SESP]
     BGC  = optional BGC scenario
@@ -62,14 +62,6 @@
   <compset>
     <alias>B1850G</alias>
     <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%EVOLVE_WW3_BGC%BDRD</lname>
-  </compset>
-
-  <!-- Include one CISM1 compset, mainly for testing purposes, to make sure that
-       CISM1 can operate in a fully-coupled configuration. Main point is to
-       check the PE layout. -->
-  <compset>
-    <alias>B1850G1</alias>
-    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM1%EVOLVE_WW3_BGC%BDRD</lname>
   </compset>
 
   <!-- Prognostic wave -->

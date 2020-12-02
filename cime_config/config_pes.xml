@@ -1684,14 +1684,6 @@
 	    <nthrds_cpl>1</nthrds_cpl>
 	  </nthrds>
 	</pes>
-	<pes pesize="any" compset="CISM1">
-	  <ntasks>
-	    <ntasks_glc>1</ntasks_glc>
-	  </ntasks>
-	  <nthrds>
-	    <nthrds_glc>1</nthrds_glc>
-	  </nthrds>
-	</pes>
       </mach>
     </grid>
   </overrides>
