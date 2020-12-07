@@ -1,4 +1,160 @@
 ===============================================================
+
+Tag name: cesm2_3_alpha01a
+Originator(s): CSEG
+Date: 7 December 2020
+One-line Summary: Set PIO2 as the default.
+
+
+components/cam                     https://github.com/jedwards4b/CAM/tree/pio2_n01_cesm2_2_rel03                          **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.35                               **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_69                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/branch_tags/fixes-for-pio2.no2_release-cesm2.2.01  **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200820                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/branch_tag/pio2.n01_mosart1_0_38                 **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20201204                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/branch_tag/nuopc_cap.n01_rtm1_0_73                  **
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     --
+
+cam
+    Chris Fischer 2020-12-07 - pio2_n01_cesm2_2_rel03 - components/cam (cesm2_3_alpha01a)
+    https://github.com/jedwards4b/CAM/tags/pio2_n01_cesm2_2_rel03
+
+    cam bug fixes to get PIO2 running
+
+
+cime
+    Chris Fischer 2020-12-07 - cime5.8.35 - cime (cesm2_3_alpha01a)
+    https://github.com/ESMCI/cime/tags/cime5.8.35
+
+        - Make the default pio_version = 2.
+        - Changes for nuopc xcpl_comps needed for new ice sheets capability.
+        - Print TPUTCOMP difference to TestStatus.log.
+        - Correct typo in pgi module on cheyenne.
+        - Changes to implement ESMF aware threading in the nuopc driver.
+        - Add back pio version cpp.
+        - Fix pgi nuopc build issue.
+        - More e3sm build upgrades.
+        - Fix some build issues, for nuopc and cam_dycore.
+        - Build nuopc_cap with csm_share.
+        - Update seq_io_write_time to work for CPLHIST run.
+        - Fix python3 incompatibilities in case.py.
+
+
+    Needs branch_tag/nuopc_cap.n01_rtm1_0_73
+
+
+    Chris Fischer 2020-11-12 - cime5.8.34 - cime (cesm2_3_alpha01a)
+    https://github.com/ESMCI/cime/tags/cime5.8.34
+
+        - MPAS build fix for nag and pgi.
+        - Remove timing flags for e3sm build.
+        - New build wrapper for e3sm.
+        - More build updates for e3sm.
+        - Revert one e3sm-only line change for timing.
+        - Avoid building CDEPS with CTSM's LILAC.
+        - Add ability to add timings to all build operations for E3SM.
+        - Rename _separate_builds to _user_separate_builds.
+        - Support separate_builds for tests.
+        - Add an error check for separate builds.
+        - Merge branch 'master'.
+        - Merge branch 'master'.
+        - Fix merge issue.
+        - Remove the flags that fail the ERP test.
+        - Fix E3SM nightly TSC test failure.
+        - Revert "Use enhanced compiler flags for PUMAS/MG3 related F90 codes".
+        - Use enhanced compiler flags for PUMAS/MG3 related F90 codes.
+        - Create srt.yml.
+        - ESMF and pgi cheyenne update.
+        - Correctly attribute scorpio timers in cime_pre_init2.
+        - Fix test Y for nuopc driver.
+        - Add nuopc tests to cdash.
+        - Fix hang in TESTRUNDIFFRESUBMIT.
+        - Fix for pop ecosys rh files.
+        - Merge branch 'master'.
+        - Update ESMF on cheyenne.
+        - Change name ccsm cppdefs.
+        - Fixes Y_TestUserConcurrentMods by adding a more-robust waiting scheme.
+        - Add a no-submit option to jenkins_generic_job.
+        - In MEMLEAK checks, skip first day memory highwater while initializing.
+        - Some updates to E3SM test infrastructure.
+        - Add EAM case for 20TR CMIP6 docn component.
+        - Fix check_input_data to fail over to svn when a wget download fails.
+        - Change permissions on ref case rpointer files.
+
+
+    Chris Fischer 2020-11-02 - cime5.8.33a - cime (cesm2_3_alpha01a)
+    https://github.com/ESMCI/cime/tags/cime5.8.33
+
+        - Add support for MPAS grids.
+        - Allow for different atm names in chem_mech file generation.
+        - Change name of cam to eam in E3SM.
+        - Add mpi_init timer and ouput memory usage before CIME Run loop.
+        - Fix path to FMS in CESM.
+        - Support csh source cmd.
+        - Skip preview namelist.
+        - Downgrade Intel Compiler for UFS applications.
+        - Add JRA Repeat Year Forcing data modes.
+        - Change name of clm to elm in E3SM.
+        - Update cmeps paths.
+        - Fix mct build issue.
+        - Fix path the cmeps buildexe.
+        - Fix path to cdeps buildlib for cesm.
+        - Update impi version for ufs model.
+        - Change name of clm to elm in E3SM.
+        - Change NCPL's for G-case default and grids EC30 to 60E2r2 and WC14 to 60E2r3.
+        - Sets coupling frequencies for new MPAS-Ocean grid in E3SM.
+        - Include submodule status in provenance.
+        - Cime changes required by the topounit inplementation in E3SM.
+        - Update for UFS app.
+
+
+    Chris Fischer 2020-10-06 - cime5.8.34 - cime (cesm2_3_alpha01a)
+    https://github.com/ESMCI/cime/tags/cime5.8.33
+
+    Set PIO2 as the default
+
+
+clm
+    William Sacks 2020-11-11 - branch_tags/fixes-for-pio2.n02_release-cesm2.2.01 - components/clm (cesm2_3_alpha01a)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/fixes-for-pio2.n02_release-cesm2.2.01
+
+    Fixes to pio_get_var for single_column mode, needed for PIO2
+
+
+    William Sacks 2020-10-15 - branch_tags/fixes-for-pio2.n01_release-cesm2.2.01 - components/clm (cesm2_3_alpha01a)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/fixes-for-pio2.n01_release-cesm2.2.01
+
+    Use pnetcdf rather than netcdf when writing 1-d (vector) history files
+
+    This is needed for good performance with PIO2
+
+
+mosart
+    Erik Kluzek 2020-12-07 - branch_tag/pio2.n01_mosart1_0_38 - components/mosart (cesm2_3_alpha01a)
+    https://github.com/ESCOMP/mosart/tags/branch_tag/pio2.n01_mosart1_0_38
+
+    minor changes for pio2 compatibility
+
+
+pop
+    Michael Levy 2020-12-04 - cesm_pop_2_1_20201204 - components/pop (cesm2_3_alpha01a)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20201204
+
+    Updates from Jim to be compatible with PIO2
+
+
+rtm
+    Erik Kluzek 2020-12-07 - branch_tag/nuopc_cap.n01_rtm1_0_73 - components/rtm (cesm2_3_alpha01a)
+    https://github.com/ESCOMP/rtm/tags/branch_tag/nuopc_cap.n01_rtm1_0_73
+
+    Changes needed to work with latest cime.
+
+    cime: cime5.8.35
+
+===============================================================
 Tag name: cesm2_2_beta06
 Originator(s): CSEG
 Date: 11 September 2020
