@@ -8,9 +8,9 @@ One-line Summary: Set PIO2 as the default.
 
 components/cam                     https://github.com/jedwards4b/CAM/tree/pio2_n01_cesm2_2_rel03                          **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
-cime                               https://github.com/CESM-Development/cime/tree/cime5.8.35                               **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.36                               **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_69                                 --
-components/clm                     https://github.com/ESCOMP/ctsm/tree/branch_tags/fixes-for-pio2.no2_release-cesm2.2.01  **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/branch_tags/fixes-for-pio2.no3_release-cesm2.2.01  **
 components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               --
 components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200820                                    --
 components/mosart                  https://github.com/ESCOMP/mosart/tree/branch_tag/pio2.n01_mosart1_0_38                 **
@@ -26,6 +26,16 @@ cam
 
 
 cime
+    Chris Fischer 2020-12-11 - cime5.8.36 - cime (cesm2_3_alpha01a)
+    https://github.com/ESMCI/cime/tags/cime5.8.36
+
+        - Add a useful check to wait_for_tests.
+        - Fix issue with time variable in ha files.
+        - Revert "Merge pull request #3788 from ESMCI/azamat/driver/mem-usage-logging."
+        - Add memory usage logging for memory profiling.
+        - Update OS process id error-checking in GPTL's get_memusage.
+
+
     Chris Fischer 2020-12-07 - cime5.8.35 - cime (cesm2_3_alpha01a)
     https://github.com/ESMCI/cime/tags/cime5.8.35
 
@@ -118,6 +128,13 @@ cime
 
 
 clm
+    Chris Fischer 2020-12-11 - branch_tags/fixes-for-pio2.n03_release-cesm2.2.01 - components/clm (cesm2_3_alpha01a)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/fixes-for-pio2.n03_release-cesm2.2.01
+
+    Incorporate changes to ncdio_pio.F90.in and histFileMod.F90 from
+    ctsm1.0.dev110 (https://github.com/ESCOMP/CTSM/pull/1095).
+
+
     William Sacks 2020-11-11 - branch_tags/fixes-for-pio2.n02_release-cesm2.2.01 - components/clm (cesm2_3_alpha01a)
     https://github.com/ESCOMP/ctsm/tags/branch_tags/fixes-for-pio2.n02_release-cesm2.2.01
 
