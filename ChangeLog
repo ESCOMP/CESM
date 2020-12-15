@@ -1,4 +1,36 @@
 ===============================================================
+Tag name: cesm2_3_beta01
+Originator(s): CSEG
+Date: 12 December 2020
+One-line Summary: Set PIO2 as default
+
+Component tags used for this CESM beta tag :
+components/cam                     https://github.com/jedwards4b/CAM/tree/pio2_n01_cesm2_2_rel03                          
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.36                               
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_69                                 
+components/clm                     https://github.com/ESCOMP/ctsm/tree/branch_tags/fixes-for-pio2.n03_release-cesm2.2.01  
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200820                                    
+components/mosart                  https://github.com/ESCOMP/mosart/tree/branch_tag/pio2.n01_mosart1_0_38                 
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20201204                              
+components/rtm                     https://github.com/ESCOMP/rtm/tree/branch_tag/nuopc_cap.n01_rtm1_0_73                  
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     
+
+
+Answer Changes introduced with this tag when compared to cesm2_2_beta06:
+    - BFB, except for fill values in pop.
+
+Problems identified after tag creation:
+- Several intel tests on izumi failing with SIGSEGV.
+- There are known issues for the pgi and cray compilers.
+- SMS_D_Ln9.ne30pg3_ne30pg3_mg17.FWma2000climo.cheyenne_intel.cam-outfrq9s 
+  Known issue with PIO2
+- ERS_Lm3.T62_g16.CIAF.cheyenne_pgi.pop-default memory leak, fixed with cime PR #3800.
+- PET.T62_g16.G.cheyenne_pgi.pop-cice fails due to fill values, fixed with cime PR #3800.
+- SMS_Ln9.ne30_ne30_mg17.FW2000climo.cheyenne_intel.cam-outfrq9s_wcm_ne30 fails, possible because using cam branch tag.
+
+===============================================================
 
 Tag name: cesm2_3_alpha01a
 Originator(s): CSEG
