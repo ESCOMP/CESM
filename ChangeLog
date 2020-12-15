@@ -10,7 +10,7 @@ components/cam                     https://github.com/jedwards4b/CAM/tree/pio2_n
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
 cime                               https://github.com/CESM-Development/cime/tree/cime5.8.36                               **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_69                                 --
-components/clm                     https://github.com/ESCOMP/ctsm/tree/branch_tags/fixes-for-pio2.no3_release-cesm2.2.01  **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/branch_tags/fixes-for-pio2.n03_release-cesm2.2.01  **
 components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               --
 components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200820                                    --
 components/mosart                  https://github.com/ESCOMP/mosart/tree/branch_tag/pio2.n01_mosart1_0_38                 **
