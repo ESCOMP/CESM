@@ -1,5 +1,209 @@
 ===============================================================
 
+Tag name: cesm2_3_alpha02a
+Originator(s): CSEG
+Date: 16 December 2020
+One-line Summary: Lots of ctsm updates.
+
+
+components/cam                     https://github.com/jedwards4b/CAM/tree/pio2_n01_cesm2_2_rel03                          --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.36                               --
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_69                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev018                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200820                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/branch_tag/pio2.n01_mosart1_0_38                 --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20201204                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/branch_tag/nuopc_cap.n01_rtm1_0_73                  --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     --
+
+clm
+    Negin Sobhani 2020-10-23 - ctsm5.1.dev009 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev009
+
+    Some BFB fixes and hydraulic redistribution work 
+
+
+    William Sacks 2020-12-08 - ctsm5.1.dev018 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev018
+
+    Add ACTIVE (T/F) column to master hist fields table and alphabetize
+
+
+    William Sacks 2020-11-19 - ctsm5.1.dev017 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev017
+
+    Write history fields master list to separate optional file
+
+
+    William Sacks 2020-11-17 - ctsm5.1.dev016 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev016
+
+    Various updates needed for nuopc
+
+
+    William Sacks 2020-11-13 - ctsm5.1.dev015 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev015
+
+    A few small fixes
+
+
+    William Sacks 2020-11-07 - ctsm5.1.dev014 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev014
+
+    Grass/crop snow burial fraction fix, and some other fixes
+
+
+    William Sacks 2020-11-04 - ctsm5.1.dev013 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev013
+
+    Allow pnetcdf for vector history files
+
+
+    William Sacks 2020-11-03 - ctsm5.1.dev012 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev012
+
+    Allow nlevgrnd < nlevurb
+
+
+    William Sacks 2020-11-02 - ctsm5.1.dev011 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev011
+
+    Change CISM2%NOEVOLVE compsets to use SGLC; documentation updates
+
+    Changes answers for all I compsets due to redefined compsets
+
+
+    William Sacks 2020-11-01 - ctsm5.1.dev010 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev010
+
+    Fix reading netcdf variable into a different data type
+
+
+    Erik Kluzek 2020-10-07 - ctsm5.1.dev008 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev008
+
+    Changes answers for Clm45/50/51 with crop on (unless CO2 prognostic), 
+    and 2000Clm51 compsets (new IC file)
+
+
+    William Sacks 2020-10-06 - ctsm5.1.dev007 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev007
+
+    CNFire: btran2 fixes and general cleanup
+
+    Changes answers for all Bgc and Cn compsets
+
+
+    William Sacks 2020-10-03 - ctsm5.1.dev006 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev006
+
+    Call correct routine to calculate btran2 for CNFireLi2021
+
+    Changes answers for Clm51Bgc compsets
+
+
+    William Sacks 2020-09-25 - ctsm5.1.dev002 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev002
+
+    Reduce duplication between caps; merge different QSat routines into one
+
+
+    Erik Kluzek 2020-09-23 - ctsm5.1.dev001 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev001
+
+    Add clm5_1 physics option.
+
+
+    Negin Sobhani 2020-09-09 - ctsm1.0.dev113 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev113
+
+    Some BFB fixes including bug fixes needed for Perturbed Parameter Ensemble (PPE) simulations. 
+
+
+    William Sacks 2020-08-28 - ctsm1.0.dev112 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev112
+
+    Small changes to mksurfdata_map, singlept tool and run_sys_tests
+
+
+    Erik Kluzek 2020-09-01 - ctsm1.0.dev111 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev111
+
+    Compsets don't use 2014 for GSWP3 forcing, LUNA prevyr changed back
+
+
+    William Sacks 2020-08-28 - ctsm1.0.dev110 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev110
+
+    Changes needed for PIO2
+
+
+    Negin Sobhani 2020-09-02 - ctsm1.0.dev109 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev109
+
+    Allow for resorbtion in transition from live to dead wood N
+
+
+    William Sacks 2020-10-02 - ctsm5.1.dev005 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev005
+
+    Answer changing bug fixes for clm51: fire and organic_frac_squared
+
+    Changes answers for all CLM51 compsets
+
+
+    William Sacks 2020-09-30 - ctsm5.1.dev004 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev004
+
+    Improve robustness of onset and offset counters when changing dt
+
+    Changes answers for cases where the model run uses a different
+    time step than the initial conditions file
+
+
+    William Sacks 2020-09-29 - ctsm5.1.dev003 - components/clm (cesm2_3_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm1.0.dev003
+
+    Add capability for dynamic lake areas
+
+    Changes answers for transient cases (including Hist/SSP, Fates, CNDV and transient glacier)
+
+===============================================================
+Tag name: cesm2_3_beta01
+Originator(s): CSEG
+Date: 12 December 2020
+One-line Summary: Set PIO2 as default
+
+Component tags used for this CESM beta tag :
+components/cam                     https://github.com/jedwards4b/CAM/tree/pio2_n01_cesm2_2_rel03                          
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.36                               
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_69                                 
+components/clm                     https://github.com/ESCOMP/ctsm/tree/branch_tags/fixes-for-pio2.n03_release-cesm2.2.01  
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200820                                    
+components/mosart                  https://github.com/ESCOMP/mosart/tree/branch_tag/pio2.n01_mosart1_0_38                 
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20201204                              
+components/rtm                     https://github.com/ESCOMP/rtm/tree/branch_tag/nuopc_cap.n01_rtm1_0_73                  
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     
+
+
+Answer Changes introduced with this tag when compared to cesm2_2_beta06:
+    - BFB, except for fill values in pop.
+
+Problems identified after tag creation:
+- Several intel tests on izumi failing with SIGSEGV.
+- There are known issues for the pgi and cray compilers.
+- SMS_D_Ln9.ne30pg3_ne30pg3_mg17.FWma2000climo.cheyenne_intel.cam-outfrq9s 
+  Known issue with PIO2
+- ERS_Lm3.T62_g16.CIAF.cheyenne_pgi.pop-default memory leak, fixed with cime PR #3800.
+- PET.T62_g16.G.cheyenne_pgi.pop-cice fails due to fill values, fixed with cime PR #3800.
+- SMS_Ln9.ne30_ne30_mg17.FW2000climo.cheyenne_intel.cam-outfrq9s_wcm_ne30 fails, possible because using cam branch tag.
+
+===============================================================
+
 Tag name: cesm2_3_alpha01a
 Originator(s): CSEG
 Date: 7 December 2020
