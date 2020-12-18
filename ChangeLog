@@ -1,4 +1,77 @@
 ===============================================================
+Tag name: cesm2.1.4-rc.07
+Originator(s): CSEG
+Date: 18 December 2020 
+One-line Summary: Add BSSP245smbb compset
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_53
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.34
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism-release-cesm2.1.2_02
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.34
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.04
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n13
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.04
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cam
+    Chris Fischer 2020-12-18 - cam_cesm2_1_rel_53 - components/cam (cesm2.1.4-rc.07)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_1_rel_53
+
+    Add ssp245BB use_case.
+
+
+    Cheryl Craig 2020-11-03 - cam_cesm2_1_rel_51 - components/cam (cesm2.1.4-rc.07)
+    https://github.com/ESCOMP/CAM/tags/cam_6_1_???
+
+    For Steve Goldhaber
+
+    _Fillvalue in cam history files
+
+
+    Cheryl Craig 2020-11-03 - cam_cesm2_1_rel_52 - components/cam (cesm2.1.4-rc.07)
+    https://github.com/ESCOMP/CAM/tags/cam6_1_???
+
+    For Jesse Nusbaumer
+
+    bug in the lidar simulator (COPS1.4 and COSP2)
+
+===============================================================
+Tag name: cesm2.1.4-rc.06
+Originator(s): CSEG
+Date: 18 November 2020 
+One-line Summary: Add BSSP370smbb compset
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_50
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.34
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism-release-cesm2.1.2_02
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.34
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.04
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n13
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.04
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cam
+    Chris Fischer 2020-11-16 - cam_cesm2_1_rel_50 - components/cam (cesm2.1.4-rc.06)
+    https://github.com/ESCOMP/CAM/tags/ cam_cesm2_1_rel_50
+
+     Add a use_case for ssp370BB.
+
+
+cesm
+    Chris Fischer 2020-11-11 - cesm2.1.4-rc.06 - (cesm2.1.4-rc.06)
+    https://github.com/ESCOMP/cesm/tags/cesm2.1.4-rc.06
+
+    Add BSSP370smbb compset.
+
+===============================================================
 Tag name: cesm2.1.4-rc.05
 Originator(s): CSEG
 Date: 27 October 2020 
