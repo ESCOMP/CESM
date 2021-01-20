@@ -60,6 +60,14 @@
   </compset>
 
   <compset>
+    <alias>BRCP85C5</alias>
+    <lname>RCP8_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV</lname>
+    <science_support grid="ne120_t12"/>
+    <science_support grid="f09_g16"/>
+    <science_support grid="ne30_g16"/>
+  </compset>
+
+  <compset>
     <alias>BHISTC5</alias>
     <lname>HIST_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV</lname>
   </compset>
@@ -73,7 +81,7 @@
 <value compset="2000_"     >0001-01-01</value>
 <value compset="HIST_"     >1850-01-01</value>
 <value compset="5505_"     >1955-01-01</value>
-<value compset="RCP[2468]_">2005-01-01</value>
+<value compset="RCP[2468]_">2006-01-01</value>
 <value compset="2013_"     >2013-01-01</value>
 </values>
 </entry>
@@ -82,6 +90,7 @@
 	<values match="first">
 	  <value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%null_w%null_m%tx0.1v2"      compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">0021-01-01</value>
 	  <value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%null_w%null_m%tx0.1v2"      compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">0055-01-01</value>
+	  <value grid="a%ne120np4_l%ne120np4_oi%tx0.1v2_r%r05_g%null_w%null_m%tx0.1v2"      compset="RCP85_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">2005-01-01</value>
       </values>
     </entry>
 
@@ -90,6 +99,7 @@
       <values match="first">
         <value  compset="1950_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">hybrid</value>
         <value  compset="1950TR_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">hybrid</value>
+        <value  compset="RCP85_CAM50_CLM40%SP_CICE_POP2_RTM_SGLC_SWAV">hybrid</value>
       </values>
     </entry>
 
