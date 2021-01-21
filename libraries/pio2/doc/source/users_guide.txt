@@ -1,0 +1,21 @@
+/*! 
+
+@page users_guide PIO User's Guide
+
+This user's guide provides information about the PIO library and
+examples on how it can be used. Please watch the PIO GitHub site
+[https://github.com/NCAR/ParallelIO] for announcements and new
+releases.
+
+ - @ref intro
+ - @ref iosystem
+ - @ref decomp
+ - @ref error
+ - @ref examp
+ - @ref netcdf_integration
+ - @ref faq
+ - @ref api
+ - @ref c_api
+ - @ref contributing_code
+
+*/

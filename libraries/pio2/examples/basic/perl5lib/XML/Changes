@@ -1,0 +1,27 @@
+Revision history for Perl extension XML::Lite.
+
+0.14 31 January 2003
+	- Fixed a major bug in parsing empty elements
+	- Fixed some typos in documenation
+	- Fixed error in documentation of XML::Element::get_attributes interface
+0.13 13 November 2001
+	- Minor bug fixes?
+0.12 15 November 2001
+	- Fixed bugs in test that failed on CPAN Testers
+	- Fixed warnings in XML::Lite::Element->_find_self
+	- Fixed bug where mutiple child lists failed (problem in opt code)
+	- Added tests for above
+	- Removed from CPAN because Matt Sergeant got upset
+0.11 6 November 2001
+	- XML::Lite::Element->get_text() now removes CDATA tags (but leaves content)
+0.10 6 November 2001
+	- Fixed children() and text() methods by re-vamping the
+	  tree.
+	- Built tests for all exposed methods of all objects
+	- Built tests for all contructor calls
+0.05 4 November 2001
+	- Added get_text method
+0.01  Sat Aug 25 13:31:48 2001
+	- original version; created by h2xs 1.20 with options
+		-XA -n XML::Lite
+

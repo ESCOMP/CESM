@@ -1,0 +1,33 @@
+/*! 
+
+@mainpage Parallel I/O Libraries (PIO)
+
+@author Jim Edwards
+@author John M. Dennis
+@author Mariana Vertenstein
+@author Edward Hartnett
+
+The Parallel IO libraries (PIO) are high-level parallel I/O C and
+Fortran libraries for structured grid applications. PIO provides a
+netCDF-like API, and allows users to designate some subset of
+processors to perform IO. Computational code calls netCDF-like
+functions to read and write data, and PIO uses the IO processors to
+perform all necessary IO.
+
+PIO also supports the creation of multiple computation components,
+each containing many processors, and one shared set of IO
+processors. The computational components can perform write operation
+asynchronously, and the IO processors will take care of all storage
+interaction.
+
+This user's guide provides information about the PIO library and
+examples on how it can be used. Please watch the PIO GitHub site
+[https://github.com/NCAR/ParallelIO] for announcements and new
+releases.
+
+ - @ref install
+ - @ref users_guide
+ - @ref api
+ - @ref c_api
+ - @ref netcdf_integration
+*/

@@ -1,0 +1,38 @@
+# PIO Configuration Summary
+==============================
+
+# General
+-------
+PIO Version:		@PACKAGE_VERSION@
+Configured On:		@CONFIG_DATE@
+Host System:		@host_cpu@-@host_vendor@-@host_os@
+Build Directory: 	@abs_top_builddir@
+Install Prefix:         @prefix@
+
+# Compiling Options
+-----------------
+C Compiler:		@CC_VERSION@
+CFLAGS:			@CFLAGS@
+CPPFLAGS:		@CPPFLAGS@
+LDFLAGS:		@LDFLAGS@
+Shared Library:		@enable_shared@
+Static Library:		@enable_static@
+Extra libraries:	@LIBS@
+
+Fortran Compiler:       @FC_VERSION@
+FFLAGS:                 @FFLAGS@
+FCFLAGS:                @FCFLAGS@
+More Fortran Flags:	@FPPFLAGS@
+
+# Features
+--------
+PnetCDF Support:	@HAS_PNETCDF@
+SZIP Write Support:	@HAS_SZIP_WRITE@
+Parallel Filters:	@HAS_PAR_FILTERS@
+NetCDF/HDF5 Support:	@HAS_NETCDF4@
+NetCDF/HDF5 Par I/O:	@HAS_NETCDF4_PAR@
+NetCDF Integration:	@HAS_NETCDF_INTEGRATION@
+PIO Logging:		@HAS_LOGGING@
+MPIEXEC:		@WITH_MPIEXEC@
+Fortran:		@HAS_PIO_FORTRAN@
+

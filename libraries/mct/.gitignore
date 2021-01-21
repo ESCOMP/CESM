@@ -1,0 +1,9 @@
+Makefile.conf
+config.log
+config.status
+config.h
+autom4te.cache
+*.o
+*.mod
+lib*.a
+data

@@ -1,0 +1,5 @@
+This directory contains some specific tests used in the MCT autoconf system.
+They are placed here to make the configure.ac a little cleaner.
+
+These are only needed if you are trying to recreate the "configure" script from
+the "configure.ac" file.

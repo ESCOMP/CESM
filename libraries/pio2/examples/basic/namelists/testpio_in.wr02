@@ -1,0 +1,16 @@
+&io_nml
+  casename    = 'rd01:pnc:box:stride=1:rddof'
+ nx_global = 1013
+ ny_global = 2966
+  iofmt       = 'pnc'
+  rearr       = 'box'
+  nprocsIO    = -1
+  stride      = 1
+  base        = 0
+  maxiter     = 10
+  dir         = './none/'
+  num_aggregator = 1
+  DebugLevel  = 0
+  compdof_input = '../wr01.dof.txt'
+  compdof_output = 'none'
+/

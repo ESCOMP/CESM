@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Arguments:
+#
+#   $1  - Number of MPI Tasks
+#   $2+ - Executable and its arguments
+#
+
+NP=$1
+shift
+
+${BGQ_RUNJOB:-runjob} --np $NP --block $COBALT_PARTNAME \
+    --envs GPFSMPIO_NAGG_PSET=16 GPFSMPIO_ONESIDED_ALWAYS_RMW=1 \ 
+           GPFSMPIO_BALANCECONTIG=1 GPFSMPIO_WRITE_AGGMETHOD=2 \
+           GPFSMPIO_READ_AGGMETHOD=2 PAMID_TYPED_ONESIDED=1 \
+           PAMID_RMA_PENDING=1M GPFSMPIO_BRIDGERINGAGG=1 : $@

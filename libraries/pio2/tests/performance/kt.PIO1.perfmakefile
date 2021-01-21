@@ -1,0 +1,19 @@
+all: pioperf pioperfp1
+
+pioperf: pioperformance.o
+	mpif90 pioperformance.o  -o pioperf  ../pio_build_int/src/flib/libpiof.a ../pio_build_int/src/clib/libpioc.a ../pio_build_int/src/gptl/libgptl.a /glade/apps/opt/netcdf-mpi/4.3.3.1/intel/default/lib/libnetcdff.a /glade/apps/opt/netcdf-mpi/4.3.3.1/intel/default/lib/libnetcdf.so /glade/apps/opt/pnetcdf/1.6.1/intel/15.0.3/lib/libpnetcdf.a -lirng -ldecimal -lcilkrts -lstdc++ 
+
+pioperformance.o: pioperformance.F90
+	mpif90  -DCPRINTEL -DHAVE_MPI -DINCLUDE_CMAKE_FCI -DLINUX -DTIMING -DUSEMPIIO -DUSE_PNETCDF_VARN -DUSE_PNETCDF_VARN_ON_READ -D_NETCDF -D_NETCDF4 -D_PNETCDF -I/glade/p/work/katec/pio_work/ncar_pio2/src/flib -I/glade/p/work/katec/pio_work/pio_build_int/src/flib -I/glade/apps/opt/netcdf-mpi/4.3.2/intel/default/include -I/glade/apps/opt/pnetcdf/1.6.1/intel/15.0.3/include -I/glade/p/work/katec/pio_work/ncar_pio2/src/clib -I/glade/p/work/katec/pio_work/ncar_pio2/src/gptl -I/glade/p/work/katec/pio_work/pio_build_int/src/gptl -c pioperformance.F90 -o pioperformance.o
+
+pioperfp1: pioperformancep1.o
+	mpif90 pioperformancep1.o  -o pioperfp1  ../PIO1_bld/pio/libpio.a ../pio_build_int/src/gptl/libgptl.a /glade/apps/opt/netcdf-mpi/4.3.3.1/intel/default/lib/libnetcdff.a /glade/apps/opt/netcdf-mpi/4.3.3.1/intel/default/lib/libnetcdf.so /glade/apps/opt/pnetcdf/1.6.1/intel/15.0.3/lib/libpnetcdf.a -lirng -ldecimal -lcilkrts -lstdc++ -openmp
+
+pioperformancep1.o: pioperformance.F90
+	mpif90  -DPIO_GPFS_HINTS -DUSEMPIIO -D_NETCDF -D_NETCDF4 -D_NOUSEMCT -D_PNETCDF -D_USEBOX -D_PIO1 -no-opt-dynamic-align  -convert big_endian -assume byterecl -ftz -traceback -assume realloc_lhs -fp-model source -g -xHost -debug minimal  -openmp   -DLINUX -DMCT_INTERFACE -DHAVE_MPI -DTHREADED_OMP -DFORTRANUNDERSCORE -DNO_R16 -DINTEL_MKL -DHAVE_SSE2  -DLINUX -DCPRINTEL  -DHAVE_SLASHPROC -I. -I/glade/p/work/katec/pio_work/PIO1_bld/pio -I/glade/apps/opt/netcdf-mpi/4.3.3.1/intel/default/include -I/glade/apps/opt/pnetcdf/1.6.1/intel/15.0.3/include -I/glade/p/work/katec/pio_work/PIO1/pio -I/glade/p/work/katec/pio_work/PIO1_bld/pio/timing -I/glade/apps/opt/netcdf-mpi/4.3.3.1/intel/default/include -I/glade/apps/opt/pnetcdf/1.6.1/intel/15.0.3/include  -c pioperformance.F90 -o pioperformancep1.o
+
+cleanp1:
+	rm pioperformancep1.o pioperfp1
+
+clean:
+	rm pioperformance.o pioperf

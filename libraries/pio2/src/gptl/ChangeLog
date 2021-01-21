@@ -1,0 +1,141 @@
+timing_120921: Add code for cmake build, should not have any affect otherwise
+timing_120803: Bug fix in setting timing_detail_limit default.
+               [Patrick Worley]
+timing_120731: Correction in Makefile for serial build [Jim Edwards]
+timing_120728: Replace process subset optional parameter in t_prf with 
+	       outpe_thispe optional parameter. Change def_perf_outpe_num to 0. 
+	       [Patrick Worley]
+timing_120717: Retain timestamp on cp in Makefile   [Jim Edwards]
+timing_120710: Correct issue in Makefile [Jim Edwards]
+timing_120709: Change for BGP to measure on compute nodes rather than IO nodes only,
+               minor Change in Makefile so that gptl can build seperate from csm_share
+               in cesm [Jim Edwards]
+timing_120512: Bug fix in global statistics logic for when a thread has no events 
+	       to contribute to the merge (mods to gptl.c)
+	       [Patrick Worley]
+timing_120419: Minor changes for mpi-serial compile (jedwards)
+timing_120408: Make HAVE_COMM_F2C default to true. (jedwards)
+timing_120110: Update to GPTL 4.1 source (mods to gptl.c and GPTLprint_memusage)
+               [Jim Rosinski (GPTL 4.1), Patrick Worley]
+timing_120109: Bug fix (adding shr_kind_i8 to shr_kind_mod list)
+timing_111205: Update to gptl 4.0 (introducing CESM customizations); 
+               support for handles in t_startf/t_stopf;
+               support for restricting output to explicitly named process subsets
+               [Jim Rosinski (gptl 4.0), Patrick Worley]
+timing_111101: Workaround for mpi_rsend issue on cray/gemini
+timing_110928: Add a Makefile and build as a library usable by mct and pio
+timing_101215: No changes from previous tag other than updating Changelog
+timing_101210: Fix interface to cesm build system, add workaround for xlf bug
+timing_101202: updated get_memusage and print_memusage from GPTL version 3.7; adds
+	       improved support for MacOS and SLASHPROC
+	       [Jim Rosinski, Chuck Bardeen (integrated by P. Worley)]
+timing_091021: update to GPTL version 3.5; rewrite of GPTLpr_summary: much faster, merging 
+	       events from all processes and all threads (not just process 0/thread 0);
+	       miscellaneous fixes
+	       [Jim Rosinski (gptl 3.5), Joseph Singh, Patrick Worley]
+timing_090929: added explicit support for the GPTL-native token HAVE_MPI (indicating
+	       presence of MPI library)
+	       [Patrick Worley]
+timing_081221: restore default assumption that gettimeofday available
+timing_081028: bug fix in include order in gptl_papi.c
+timing_081026: change in output format to make postprocessing simpler
+timing_081024: support for up to one million processes and writing timing files to 
+	       subdirectories
+timing_081017: updated to gptl version 3_4_2. Changed some defaults.
+               [Jim Rosinski, Patrick Worley]
+timing_080629: added optional parameters perf_outpe_num and perf_outpe_stride to t_prf.
+	       These are used to override the user specified values for timing data
+	       written out before the end of a simulation.
+               [Patrick Worley]
+timing_071213: changed default to disable inline keyword; changed global statistics
+	       logic to avoid problems at scale; moved shr and CAM routine equivalencies
+	       to a new module (in perf_utils.F90); added t_getLogUnit/t_setLogUnit
+	       routines to control Log output in same way as shr_file_get/setLogUnit;
+               modified GPTLpr logic to support output of timing data during a run
+               [Patrick Worley]
+timing_071023: updated to gptl version 2.16, added support for output of global
+               statistics; removed dependencies on shr and CAM routines; renamed
+               gptlutil.c to GPTLutil.c
+               [Patrick Worley, Jim Rosinski]
+timing_071019: modified namelist logic to abort if try to set unknown namelist parameters; 
+	       changed default number of reporting processes to 1; 
+               reversed meaning and changed names of CPP tokens to NO_C99_INLINE and NO_VPRINTF
+               [Patrick Worley]
+timing_071010: modified gptl.c to remove the 'inline' specification unless the
+	       CPP token C99 is defined.
+               [Patrick Worley]
+timing_070810: added ChangeLog
+               updated to latest version of GPTL (from Jim Rosinski)
+               modified perf_mod.F90:
+               - added perf_outpe_num and perf_outpe_stride to perf_inparm 
+	         namelist to control which processes output timing data
+	       - added perf_papi_enable to perf_inparm namelist to enable
+	         PAPI counters 
+               - added papi_inparm namelist and papi_ctr1,2,3,4 namelist
+	         parameters to specify PAPI counters
+               [Patrick Worley, Jim Rosinski]
+timing_070525: bug fix in gptl.c 
+               - unitialized pointer, testing for null pter
+                 before traversing
+               [Patrick Worley]
+timing_070328: modified perf_mod.F90
+	       - deleted HIDE_MPI cpp token
+	       [Erik Kluzek]
+timing_070327: bug fixes in gptl.c 
+	       - testing for null pters before traversing 
+                 links; added missing type declaration to GPTLallocate for sum
+	       bug fixes in perf_mod.F90 
+	       - fixed OMP-related logic, modified settings reporting, 
+	         modified to work when namelist input is
+                 missing; moved timer depth logic back into gptl.c
+	       [Patrick Worley]
+timing_070308: added perf_mod.F90 
+	       - defines all t_xxx entry points - calling gptlxxx directly 
+	         and removing all external gptlxxx dependencies,
+                 added detail option as an alternative way to disable
+	         event timing, added runtime selection of timing_disable,
+	         perf_timer, timer_depth_limit, timing_detail_limit,
+	         timing_barrier, perf_single_file via namelist parameters
+	       modified f_wrappers.c 
+	       - replaced all t_xxx entry points with gptlxxx entry points, 
+	         added new gptlxxx entry points, deleted _fcd support
+	       modified gptl.c 
+	       - deleted DISABLE_TIMERS cpp token, modified GPTLpr call
+	         and logic to move some of support for concatenating timing
+	         output into a single file to perf_mod.F90
+	       modified gptl.h 
+	       - exposed gptlxxx entry points and to add support for choice 
+	         of GPTL timer
+	       modified gptl.inc
+	       - removed t_xxx entry points and expose gptlxxx entry points
+	       [Patrick Worley]
+timing_061207: modified gptl.c 
+	       - improved event output ordering 
+	       [Jim Edwards]
+timing_061124: modified gptl.c 
+	       - modified GPTLpr to add option to concatenate
+	         all timing data in a single output file, added GPTL_enable
+	         and GPTL_disable as runtime control of event timing, 
+	         process 0-only reporting of timing options - unless DEBUG
+	         cpp token defined
+	       modified gptl.h 
+	       - redefined GPTLpr parameters
+	       modified f_wrappers.c 
+	       - added t_enablef and t_disablef to call GPTL_enable and 
+	         GPTL_disable, added t_pr_onef, added string.h include
+	       bug fix in f_wrappers.c 
+	       - changed character string size declaration from int to size_t
+	       bug fix in gptl_papi.c 
+	       - modified error message - from Jim Edwards
+	       modified private.h
+	       - increased maximum event name length
+	       [Patrick Worley]
+timing_061028: modified f_wrappers.c 
+	       - deleted dependency on cfort.h
+	       [Patrick Worley]
+timing_060524: modified f_wrappers.c 
+	       - added support for CRAY cpp token and fixed routine 
+	         type declarations
+	       [Patrick Worley]
+timing_051212: original subversion version 
+	       - see CAM ChangeLog for earlier history

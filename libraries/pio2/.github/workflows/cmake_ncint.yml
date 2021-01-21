@@ -1,0 +1,60 @@
+  name: cmake_ncint
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      CC: mpicc
+      FC: mpifort
+      CPPFLAGS: "-I/usr/include -I/usr/local/include -I/home/runner/pnetcdf/include"
+      LDFLAGS: "-L/home/runner/pnetcdf/lib"
+      LD_LIBRARY_PATH: "/home/runner/pnetcdf/lib"
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Installs
+      run: |
+        set -x
+        sudo gem install apt-spy2
+        sudo apt-spy2 check
+        sudo apt-spy2 fix --commit
+        # after selecting a specific mirror, we need to run 'apt-get update'
+        sudo apt-get update
+        sudo apt-get install netcdf-bin libnetcdf-dev doxygen graphviz wget gfortran libjpeg-dev libz-dev openmpi-bin libopenmpi-dev 
+
+    - name: cache-pnetcdf
+      id: cache-pnetcdf
+      uses: actions/cache@v2
+      with:
+        path: ~/pnetcdf
+        key: pnetcdf-${{ runner.os }}-1.12.1
+
+    - name: build-pnetcdf
+      if: steps.cache-pnetcdf.outputs.cache-hit != 'true'
+      run: |
+        set -x
+        wget https://parallel-netcdf.github.io/Release/pnetcdf-1.12.1.tar.gz &> /dev/null
+        tar -xzvf pnetcdf-1.12.1.tar.gz
+        pushd pnetcdf-1.12.1
+        ./configure --prefix=/home/runner/pnetcdf --enable-shared --disable-cxx
+        make
+        sudo make install
+        popd
+
+    - name: cmake build
+      run: |
+        set -x
+        mkdir build
+        cd build
+        cmake -Wno-dev -DPIO_ENABLE_NETCDF_INTEGRATION=On -DNetCDF_C_LIBRARY=/usr/lib/x86_64-linux-gnu/libnetcdf.so -DNetCDF_C_INCLUDE_DIR=/usr/include -DPnetCDF_PATH='/home/runner/pnetcdf' -DPIO_HDF5_LOGGING=On -DPIO_USE_MALLOC=On -DPIO_ENABLE_LOGGING=On -DPIO_ENABLE_TIMING=Off ..
+        make VERBOSE=1
+        make tests VERBOSE=1
+        ctest -VV

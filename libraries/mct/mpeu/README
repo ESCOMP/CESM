@@ -1,0 +1,59 @@
+!-----------------------------------------------------------------------
+! CVS $Id$
+! CVS $Name$
+!-----------------------------------------------------------------------
+
+This directory contains a version of MPEU distributed as part
+of the Model Coupling Toolkit (MCT).  MPEU was written by
+Jing Guo of the NASA Data Assimilation Office.
+
+This copy of MPEU provided by Jing Guo.  Usage is covered
+by terms in the file MCT/COPYRIGHT.
+
+MCT distribution contents:
+MCT/
+MCT/COPYRIGHT
+MCT/doc/
+MCT/examples/
+MCT/mct/
+MCT/mpeu/   <- You are here
+MCT/protex/
+
+A complete distribution of MCT can be obtained from http://www.mcs.anl.gov/mct.
+
+---------------------------------------------------
+Build instructions:
+
+In top level directory, type "./configure", then "make".
+
+If "./configure" has already been run, you can also type "make"
+in this directory.
+
+---------------------------------------------------
+NASA/GSFC, Data Assimilation Office, Code 910.3, GEOS/DAS
+
+28Sep99	- Jing Guo
+	- Changed supported libraries to
+
+	mpeu:	libmpeu.a libeu.a with the _same_ interface in mpeu/
+
+	- Implemented several design changes:
+
+	  . Removed -r8/_R8_ compiler flags in Makefile.conf.IRIX64.
+	    The current design is expected to support both single and
+	    double precision REAL kinds.  The selection should be made
+	    by the compiler through Fortran 90 generic interface
+	    feature.
+
+	  . Added MP_type() function in mpif90.F90 to allow a more
+	    portable approach of using MPI_REAL.
+
+	  . Removed _SINGLE_PE_ flag to make the interface in mpeu/
+	    portable to both library versions.
+
+
+14Sep99	- Jing Guo	- Targets supported in this directory
+
+	mpeu:	make -f Makefile all		for MPI env
+	eu:	make -f Makefile.1pe all	for single PE env
+

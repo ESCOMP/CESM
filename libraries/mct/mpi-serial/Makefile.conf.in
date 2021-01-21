@@ -1,0 +1,16 @@
+CC              = @CC@
+FC              = @FC@
+FCFLAGS         = @FCFLAGS@
+INCLUDE         = -I.
+INCFLAG		= @INCLUDEFLAG@
+DEFS            = @DEFS@
+CFLAGS          = @CFLAGS@
+AR              = @AR@
+RANLIB          = @RANLIB@
+LIBS            = @LIBS@
+CRULE           = .c.o
+F90RULE         = .F90.o
+
+SHELL		= /bin/sh
+
+MODULE		= mpi-serial

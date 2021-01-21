@@ -1,0 +1,6 @@
+# Resource file for dst model
+# nx and ny::  global grid size in x and y
+
+  nx: 320
+  ny: 384
+  decomp: R

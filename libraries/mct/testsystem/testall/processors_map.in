@@ -1,0 +1,12 @@
+PROCESSORS_MAP
+BEGIN
+atmosphere   0   1
+coupler    2 3
+ocean    4 5
+END
+NPROCS_ATM 1 2
+ADD any comments in this line and below.
+1)
+ccm.3.6, ocean_POP, couple.PCM are all legitimate name, too.
+2)
+Order of names is irrelevant.

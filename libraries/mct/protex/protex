@@ -1,0 +1,879 @@
+#!/usr/bin/perl
+#BOP
+#
+# !ROUTINE: ProTeX v. 2.00 - Translates DAO Prologues to LaTeX
+#
+# !INTERFACE:
+#         protex [-hbACFS] ] [+-nlsxf] [src_file(s)]
+#
+# !DESCRIPTION:
+#         Perl filter to produce a \LaTeX compatible document
+#         from a DAO Fortran source code with standard Pro\TeX
+#         prologues. If source files are not specified it
+#         reads from stdin; output is always to stdout.
+#
+# \noindent
+# {\bf Command Line Switches:} \vspace{0.2cm}
+#
+# \begin{center}
+# \begin{tabular}{|c|l|} \hline \hline
+#   -h   & Help mode: list command line options   \\ \hline
+#   -b   & Bare mode, meaning no preamble, etc.  \\ \hline
+#   +/-n & New Page for each subsection (wastes paper) \\ \hline
+#   +/-l & Listing mode, default is prologues only \\ \hline
+#   +/-s & Shut-up mode, i.e., ignore any code from BOC to EOC \\ \hline
+#   +/-x & No LaTeX mode, i.e., put !DESCRIPTION: in verbatim mode \\ \hline
+#   +/-f & No source file info \\ \hline
+#   -A   & Ada code \\ \hline
+#   -C   & C++ code \\ \hline
+#   -F   & F90 code (default) \\ \hline
+#   -S   & Shell script \\ \hline \hline
+# \end{tabular}
+# \end{center}
+#
+# The options can appear in any order.  The options, -h and -b, affect
+# the input from all files listed on command-line input.  Each of the
+# remaining options effects only the input from the files listed after
+# the option and prior to any overriding option.  The plus sign
+# turns off the option.  For example, the command-line input,
+# \bv
+#      protex -bnS File1 -F File2.f +n File3.f
+# \ev
+# will cause the option, {\tt -n} to affect the input from the files,
+# {\tt File} and {\tt File2.f}, but not from {\tt File3.f}.  The
+# {\tt -S} option is implemented for {\tt File1} but is overridden by
+# the {\tt -F} for files {\tt File2.f} and {\tt File3.f}.
+#
+#
+# !SEE ALSO:
+#         For a more detailed description of ProTeX functionality,
+#         DAO Prologue and other conventions, consult:
+#
+#           Sawyer, W., and A. da Silva, 1997: ProTeX: A Sample
+#           Fortran 90 Source Code Documentation System.
+#           DAO Office Note 97-11
+#
+#
+# !REVISION HISTORY:
+#
+#  20Dec1995  da Silva  First experimental version
+#  10Nov1996  da Silva  First internal release (v1.01)
+#  28Jun1997  da Silva  Modified so that !DESCRIPTION can appear after
+#             !INTERFACE, and !INPUT PARAMETERS etc. changed to italics.
+#  02Jul1997  Sawyer    Added shut-up mode
+#  20Oct1997  Sawyer    Added support for shell scripts
+#  11Mar1998  Sawyer    Added: file name, date in header, C, script support
+#  05Aug1998  Sawyer    Fixed LPChang-bug-support-for-files-with-underscores
+#  10Oct1998  da Silva  Introduced -f option for removing source file info
+#                       from subsection, etc.  Added help (WS).
+#  06Dec1999  C. Redder Added LaTeX command "\label{sec:prologues}" just
+#                       after the beginning of the proglogue section.
+#  13Dec1999  C. Redder Increased flexbility in command-line
+#                       interface.  The options can appear in any
+#                       order which will allow the user to implement
+#                       options for select files.
+#  01Feb1999  C. Redder Added \usepackage commands to preamble of latex
+#                       document to include the packages amsmath, epsfig
+#                       and hangcaption.
+#  10May2000  C. Redder Revised LaTeX command "\label{sec:prologues}"
+#                       to "\label{app:ProLogues}"
+#  24May2001  da Silva  Added !PARAMETERS/!REURN VALUE: keywords for CAM.
+#
+#EOP
+#----------------------------------------------------------------------------
+
+# Keep this if you don't know what it does...
+# -------------------------------------------
+  $[ = 1;                 # set array base to 1
+  $, = ' ';               # set output field separator
+  $\ = "\n";              # set output record separator
+
+# Set valid options lists
+# -----------------------
+  $GlobOptions = 'hb';    # Global options (i.e for all files)
+  $LangOptions = 'ACFS';  # Options for setting programming languages
+  $SwOptions   = 'flnsx'; # Options that can change for each input
+                          #   file
+  $RegOptions  = "$GlobOptions$LangOptions";
+                          # Scan for global options until first first
+                          #   file is processed.
+
+# Scan for global options
+# -----------------------
+  $NFiles = 0;
+Arg:
+  foreach $arg (@ARGV) {
+     $option = &CheckOpts ( $arg, $RegOptions, $SwOptions ) + 1;
+     if ( $option ) {
+        $rc = &GetOpts    ( $arg, $GlobOptions );
+         next Arg; }
+
+     else { $NFiles++;
+}#   end if
+}# end foreach
+
+# If all inut arguments are options, then assume the
+# filename, "-", for the standard input
+# --------------------------------------------------
+  if ( $NFiles == 0 ) { push (@ARGV, "-"); }
+
+# Implement help option
+# ---------------------
+  if ( $opt_h ) {
+     &print_help();
+      exit();
+}#end if
+
+# Optional Prologue Keywords
+# --------------------------
+  @keys = ( "!INTERFACE:",
+            "!USES:",
+            "!PUBLIC TYPES:",
+            "!PUBLIC MEMBER FUNCTIONS:",
+            "!PUBLIC DATA MEMBERS:",
+            "!DEFINED PARAMETERS:",
+            "!PARAMETERS:",
+            "!INPUT PARAMETERS:",
+            "!INPUT/OUTPUT PARAMETERS:",
+            "!OUTPUT PARAMETERS:",
+            "!RETURN VALUE:",
+            "!REVISION HISTORY:",
+            "!BUGS:",
+            "!SEE ALSO:",
+            "!SYSTEM ROUTINES:",
+            "!FILES USED:",
+            "!REMARKS:",
+            "!TO DO:",
+            "!CALLING SEQUENCE:",
+            "!AUTHOR:",
+            "!CALLED FROM:",
+            "!LOCAL VARIABLES:" );
+
+# Initialize these for clarity
+# ----------------------------
+  $intro = 0;             # doing introduction?
+  $prologue = 0;          # doing prologue?
+  $first = 1;             # first prologue?
+  $source = 0;            # source code mode?
+  $verb = 0;              # verbatim mode?
+  $tpage = 0;             # title page?
+  $begdoc = 0;            # has \begin{document} been written?
+
+# Initial LaTeX stuff
+# -------------------
+  &print_notice();
+  &print_preamble();      # \documentclass, text dimensions, etc.
+  &print_macros();        # short-hand LaTeX macros
+
+# Main loop -- for each command-line argument
+# -------------------------------------------
+ARG:
+  foreach $arg (@ARGV) {
+
+#    Scan for non-global command-line options
+#    ----------------------------------------
+     $option = &CheckOpts ( $arg, $RegOptions, $SwOptions, "quiet" ) + 1;
+     if ( $option ) {
+        &GetOpts  ( $arg, $SwOptions   );
+        &SetOpt   ( $arg, $LangOptions );
+        next ARG;
+
+}#   end if
+
+#    Determine the type of code, set corresponding search strings
+#    ------------------------------------------------------------
+#    if ( $opt_F ) {            # FORTRAN
+        $comment_string = '!';  # -------
+        $boi_string = '!BOI';
+        $eoi_string = '!EOI';
+        $bop_string = '!BOP';
+        $eop_string = '!EOP';
+        $boc_string = '!BOC';
+        $eoc_string = '!EOC';
+#}#   end if
+
+     if ( $opt_A ) {            # ADA
+        $comment_string = '--'; # ---
+        $boi_string = '--BOI';
+        $eoi_string = '--EOI';
+        $bop_string = '--BOP';
+        $eop_string = '--EOP';
+        $boc_string = '--BOC';
+        $eoc_string = '--EOC';
+}#   end if
+
+     if ( $opt_C ) {
+        $comment_string = '//'; # C
+        $boi_string = '//BOI';  # -
+        $eoi_string = '//EOI';
+        $bop_string = '//BOP';
+        $eop_string = '//EOP';
+        $boc_string = '//BOC';
+        $eoc_string = '//EOC';
+}#   end if
+
+     if ( $opt_S ) {            # Script
+        $comment_string = '#';  # ------
+        $boi_string = '#BOI';
+        $eoi_string = '#EOI';
+        $bop_string = '#BOP';
+        $eop_string = '#EOP';
+        $boc_string = '#BOC';
+        $eoc_string = '#EOC';
+}#   end if
+
+#    Set file name parameters
+#    ------------------------
+     $InputFile           = $arg;
+     @all_path_components = split( /\//, $InputFile     );
+     $FileBaseName        = pop  ( @all_path_components );
+     $FileBaseName        =~ s/_/\\_/g;
+     if ( $InputFile eq "-" ) {$FileBaseName = "Standard Input";}
+
+#    Set date
+#    --------
+     $Date                = `date`;
+
+#    Open current file
+#    -----------------
+     open ( InputFile, "$InputFile" )
+          or print STDERR "Unable to open $InputFile: $!";
+
+#    Print page header
+#    -----------------
+     printf "\n\\markboth{Left}{Source File: %s,  Date: %s}\n\n",
+                               $FileBaseName,    $Date;
+
+LINE:
+#    Inner loop --- for processing each line of the input file
+#    ---------------------------------------------------------
+     while ( <InputFile> ) {
+        chop;     # strip record separator
+        @Fld = split(' ', $_, 9999);
+
+#       Straight quote
+#       --------------
+        if ($Fld[1] eq '!QUOTE:') {
+           for ($i = 2; $i <= $#Fld; $i++) {
+               printf '%s ', $Fld[$i];
+}#         end for
+           print " ";
+           next LINE;
+}#      end if
+
+#       Handle optional Title Page and Introduction
+#       -------------------------------------------
+        if ($Fld[1] eq $boi_string) {
+           print ' ';
+           $intro = 1;
+           next LINE;
+}#      end if
+
+        if ($Fld[2] eq '!TITLE:') {
+           if ( $intro ) {
+              shift @Fld;
+              shift @Fld;
+              @title = @Fld;
+              $tpage = 1;
+              next LINE;
+}#         end if
+}#      end if
+
+        if ($Fld[2] eq '!AUTHORS:') {
+           if ( $intro ) {
+              shift @Fld;
+              shift @Fld;
+              @author = @Fld;
+              $tpage = 1;
+              next LINE;
+}#         end if
+}#      end if
+
+        if ($Fld[2] eq '!AFFILIATION:') {
+           if ( $intro ) {
+              shift @Fld;
+              shift @Fld;
+              @affiliation = @Fld;
+              $tpage = 1;
+              next LINE;
+}#         end if
+}#      end if
+
+        if ($Fld[2] eq '!DATE:') {
+           if ( $intro ) {
+              shift @Fld;
+              shift @Fld;
+              @date = @Fld;
+              $tpage = 1;
+              next LINE;
+}#         end if
+}#      end if
+
+        if ($Fld[2] eq '!INTRODUCTION:') {
+           if ( $intro ) {
+              &do_beg();
+              print ' ';
+              print '%..............................................';
+              shift @Fld;
+              shift @Fld;
+              print "\\section{@Fld}";
+              next LINE;
+}#         end if
+}#      end if
+
+
+#       End of introduction
+#       -------------------
+        if ($Fld[1] eq $eoi_string) {
+           print ' ';
+           print '%/////////////////////////////////////////////////////////////';
+           print "\\newpage";
+           $intro = 0;
+           next LINE;
+}#      end if
+
+#       Beginning of prologue
+#       ---------------------
+        if ($Fld[1] eq $bop_string) {
+           if ( $source ) { &do_eoc(); }
+           print ' ';
+           print '%/////////////////////////////////////////////////////////////';
+           &do_beg();
+           if ($first == 0) {
+              ### print "\\newpage";
+              print " ";
+              print "\\mbox{}\\hrulefill\\ ";
+              print " ";}
+           else {
+              unless($opt_b){print "\\section{Routine/Function Prologues} \\label{app:ProLogues}";}
+}#         end if
+
+           $first = 0;
+           $prologue = 1;
+           $verb = 0;
+           $source = 0;
+           &set_missing();   # no required keyword yet
+           next LINE;
+}#      end if
+
+#       A new subroutine/function
+#       -------------------------
+        if ($Fld[2] eq '!ROUTINE:' ) {
+           if ($prologue) {
+              shift @Fld;
+              shift @Fld;
+              $_ = join(' ', @Fld);
+              $name_is = $_;
+              s/_/\\_/g;                         # Replace "_" with "\_"
+              if ( $opt_n && $not_first ) { printf "\\newpage\n"; }
+              unless ($opt_f) {printf "\\subsection{%s (Source File: %s)}\n\n", $_, $FileBaseName;}
+              else            {printf "\\subsection{%s }\n\n", $_;}
+              $have_name = 1;
+              $not_first = 1;
+              next LINE;
+}#         end if
+}#      end if
+
+#       A new Module
+#       ------------
+        if ($Fld[2] eq '!MODULE:' ) {
+           if ($prologue) {
+              shift @Fld;
+              shift @Fld;
+              $_ = join(' ', @Fld);
+              $name_is = $_;
+              s/_/\\_/g;                         # Replace "_" with "\_"
+              if ( $opt_n && $not_first ) { printf "\\newpage\n"; }
+              unless($opt_f) {printf "\\subsection{Module %s (Source File: %s)}\n\n", $_, $FileBaseName;}
+              else           {printf "\\subsection{Module %s }\n\n", $_;}
+              $have_name = 1;
+              $have_intf = 1;  # fake it, it does not need one.
+              $not_first = 1;
+              next LINE;
+}#         end if
+}#      end if
+
+#       A new include file
+#       ------------------
+        if ($Fld[2] eq '!INCLUDE:' ) {
+           if ($prologue) {
+              shift @Fld;
+              shift @Fld;
+              $_ = join(' ', @Fld);
+              $name_is = $_;
+              s/_/\\_/g;                         # Replace "_" with "\_"
+              if ( $opt_n && $not_first ) { printf "\\newpage\n"; }
+              unless($opt_f) {printf "\\subsection{Include File %s (Source File: %s)}\n\n", $_, $FileBaseName;}
+              else           {printf "\\subsection{Include File %s }\n\n", $_;}
+              $have_name = 1;
+              $have_intf = 1;  # fake it, it does not need one.
+              $not_first = 1;
+              next LINE;
+}#         end if
+}#      end if
+
+#       A new INTERNAL subroutine/function
+#       ----------------------------------
+        if ($Fld[2] eq '!IROUTINE:') {            # Internal routine
+           if ($prologue) {
+              shift @Fld;
+              shift @Fld;
+              $_ = join(' ', @Fld);
+              $name_is = $_;
+              s/_/\\_/g;                        # Replace "_" with "\_"
+              printf "\\subsubsection{%s}\n\n", $_;
+              $have_name = 1;
+              next LINE;
+}#         end if
+}#      end if
+
+#       Description: what follows will be regular LaTeX (no verbatim)
+#       -------------------------------------------------------------
+        if (/!DESCRIPTION:/) {
+           if ($prologue) {
+              if ($verb) {
+                 printf "\\end{verbatim}";
+                 printf "\n{\\sf DESCRIPTION:\\\\ }\n\n";
+                 $verb = 0; }
+              else {                          # probably never occurs
+}#            end if
+              if ($opt_x) {
+                 printf "\\begin{verbatim} ";
+                 $verb = 1;
+                 $first_verb = 1; }
+              else {
+                 for ($i = 3; $i <= $#Fld; $i++) {
+                    printf '%s ', $Fld[$i];
+}#               end for
+}#            end if
+              ### print " ";
+              $have_desc = 1;
+              next LINE;
+}#         end if
+}#      end if
+
+#       Handle optional keywords (these will appear as verbatim)
+#       --------------------------------------------------------
+        if ($prologue) {
+KEY:       foreach $key ( @keys ) {
+              if ( /$key/ ) {
+                 if ($verb) {
+                    printf "\\end{verbatim}";
+                    $verb = 0; }
+                 else {
+                    printf "\n\\bigskip";
+}#               end if
+                 $k = sprintf('%s', $key);
+                 $ln = length($k);
+                 ###printf "\\subsubsection*{%s}\n", substr($k, 2, $ln - 1);
+                 ###printf "{\\Large \\em %s}\n", ucfirst lc substr($k, 2, $ln - 1);
+                 $_ = $key;
+                 if( /USES/ || /INPUT/ || /OUTPUT/ || /PARAMETERS/ || /VALUE/ ) {
+                    printf "{\\em %s}\n", substr($k, 2, $ln - 1); } # italics
+                 else {
+                    printf "{\\sf %s}\n", substr($k, 2, $ln - 1); # san serif
+}#               end if
+
+                 printf "\\begin{verbatim} ";
+                 $verb = 1;
+                 $first_verb = 1;
+                 if ( $key eq "!INTERFACE:" )        { $have_intf = 1; }
+                 if ( $key eq "!CALLING SEQUENCE:" ) { $have_intf = 1; }
+                 if ( $key eq "!REVISION HISTORY:" ) { $have_hist = 1; }
+                 next LINE;
+}#            end if
+}#         end foreach
+}#      end if
+
+#       End of prologue
+#       ---------------
+        if ($Fld[1] eq $eop_string) {
+           if ($verb) {
+              print "\\end{verbatim}";
+              $verb = 0;
+}#         end if
+           $prologue = 0;
+           &check_if_all_there(); # check if all required keyword are there.
+           if ( $opt_l ) {
+              $Fld[1] = $boc_string;}
+           else { next LINE; }
+}#      end if
+
+        unless ( $opt_s ) {
+#
+#          Beginning of source code section
+#          --------------------------------
+           if ($Fld[1] eq $boc_string) {
+              print ' ';
+              print '%/////////////////////////////////////////////////////////////';
+              $first = 0;
+              $prologue = 0;
+              $source = 1;
+              ### printf "\\subsubsection*{CONTENTS:}\n\n", $Fld[3];
+              printf "{\\sf CONTENTS:}";
+              printf "\n \\begin{verbatim}\n";
+              $verb = 1;
+              next LINE;
+}#         end if
+
+#          End of source code
+#          ------------------
+           if ($Fld[1] eq $eoc_string) {
+              &do_eoc();
+              $prologue = 0;
+              next LINE;
+}#         end if
+}#      end unless
+
+#   Prologue or Introduction, print regular line (except for !)
+#   -----------------------------------------------------------
+    if ($prologue||$intro) {
+        if ( $verb && $#Fld == 1 && ( $Fld[1] eq $comment_string ) ) {
+           next LINE;                # to eliminate excessive blanks
+}#      end if
+        if ( $Fld[2] eq "\\ev" ) {   # special handling
+           $_ = $comment_string . " \\end{verbatim}";
+}#      end if
+        s/^$comment_string/ /;       # replace comment string with blank
+#       $line = sprintf('%s', $_);   # not necessary -- comment str is absent
+#       $ln = length($line);         # not necessary -- comment str is absent
+        unless ( $first_verb ) { printf "\n "; }
+        printf '%s', $_;
+#       printf '%s', substr($line, 1, $ln - 1);     # comment str is absent
+        $first_verb = 0;
+        next LINE;
+}#  end if
+
+#   Source code: print the full line
+#   --------------------------------
+    if ($source) {
+        print $_;
+        next LINE;
+}#  end if
+
+}#   end inner loop for processing each line of the input file
+ #   ---------------------------------------------------------
+
+}# end main loop for each command-line argument
+ # --------------------------------------------
+  print $_;
+  if ( $source ) { &do_eoc(); }
+  print '%...............................................................';
+
+  unless ( $opt_b ) {
+     print "\\end{document}";
+}#end unless
+
+
+#----------------------------------------------------------------------
+
+  sub CheckOpts
+#    Checks options against a given list.  Outputs error message
+#    for any invalid option.
+#
+#    Usage:
+#       $rc = &CheckOpts ( options, valid_reg_options,
+#                                   valid_sw_options,
+#                                   quiet_mode )
+#
+#       character: options - options to be checked. (e.g. -df+x)  The
+#                            list must begin with a positive or
+#                            negative sign.  If no sign appears at the
+#                            beginning or by itself, then the argument
+#                            is not recognized as a list of options.
+#       character: valid_reg_options - list of valid regular options.
+#                            (i.e. options that are associated only
+#                            eith negative sign.)
+#       character: valid_sw_options - list of valid switch options.
+#                            (i.e. options that can be associated with
+#                            either a positive or negative sign.
+#       logical:   quiet mode (optional) If true then print no error
+#                            messages.
+#       integer:   rc      - return code
+#                            = -1 if the arguement, options, is
+#                               not recognized as a list of options
+#                            =  0 if all options are valid.
+#                            >  0 for the number of invalid options.
+#
+{    local($options,
+           $valid_reg_options,
+           $valid_sw_options,
+           $quiet_mode ) = @_;
+
+     if ( $options eq "+" ||
+          $options eq "-" ) {return -1}
+
+     local(@Options) = split( / */, $options );
+     if ( $Options[ $[ ] ne "-" &&
+          $Options[ $[ ] ne "+" ) {return -1;}
+
+     local($option, $option_sign, $valid_list, $pos);
+     local($errs)    = 0;
+     foreach $option ( @Options ) {
+        if ( $option eq "-" ||
+             $option eq "+" ) {$option_sign = $option;}
+        else {
+           if ( $option_sign eq "-" )
+              { $valid_list = $valid_reg_options
+                            . $valid_sw_options; }
+           else
+              { $valid_list = $valid_sw_options; }
+           $pos = index ($valid_list,$option);
+           if ( $pos < $[ &&
+                $quiet_mode ) {
+              $errs++;
+              print STDERR "Invalid option: $option_sign$option \n";
+
+}#         end if
+}#      end if
+}#   end foreach
+     return $errs;
+
+}#end sub GetOpts
+
+  sub GetOpts
+#    Gets options.  If an option is valid,  then opt_[option] is
+#    set to 0 or 1 as a side effect if the option is preceeded by
+#    a positive or negative sign.
+#
+#    Usage:
+#       $rc = &GetOpts ( options, valid_options )
+#
+#       character: options - options to be checked. (e.g. -df+x)  The
+#                            list must begin with a positive or
+#                            negative sign.  If no sign appears at the
+#                            beginning or by itself, then the argument
+#                            is not recognized as a list of options.
+#       character: valid_options - list of valid options (e.g. dfhx)
+#       integer:   rc      - return code
+#                            = -1 if the arguement, options, is
+#                               not recognized as a list of options.
+#                            =  0 otherwise
+#
+{    local($options,$valid_options) = @_;
+
+     if ( $options eq "+" ||
+          $options eq "-" ) {return -1}
+
+     local(@Options)       = split( / */, $options );
+     if ( $Options[ $[ ] ne "-" &&
+          $Options[ $[ ] ne "+" ) {return -1;}
+
+     local($option, $option_sign);
+
+     foreach $option ( @Options ) {
+
+        if ( $option eq "-" ||
+             $option eq "+" ) {
+           $option_sign = $option; }
+
+        else {
+
+           if ( index ($valid_options,$option) >= $[ ) {
+              if ( $option_sign eq "-" ) {${"opt_$option"} = 1;}
+              if ( $option_sign eq "+" ) {${"opt_$option"} = 0;};
+
+}#         end if
+}#      end if
+}#   end foreach
+
+     return 0;
+}#end sub GetOpts
+
+  sub SetOpt
+#    Sets option flags.  For the last input option that is in a
+#    list, the flag opt_[option] is set to 1 as a side effect.
+#    For all other options in the list, opt_[option] is set to 0.
+#
+#    Usage:
+#       $rc = &SetOpt ( options, valid_options )
+#
+#       character: options - options to be checked. (e.g. -df+x)  The
+#                            list must begin with a positive or
+#                            negative sign.  If no sign appears at the
+#                            beginning or by itself, then the argument
+#                            is not recognized as a list of options.
+#       character: valid_options - list of valid options (e.g. def )
+#       integer:   rc      - return code
+#                            = -1 if the arguement, options, is
+#                               not recognized as a list of options.
+#                            =  0 otherwise
+#       Note: For the examples provided for the input arguments,
+#             $opt_d = 0, $opt_e = 0, and $opt_f = 1, since the
+#             input option, -f, was the last in the argument,
+#             option.
+#
+{    local($options,$valid_options) = @_;
+
+     if ( $options eq "+" ||
+          $options eq "-" ) {return -1}
+
+     local(@Options)       = split( / */, $options       );
+     local(@ValidOptions)  = split( / */, $valid_options );
+     if ( $Options[ $[ ] ne "-" &&
+          $Options[ $[ ] ne "+" ) {return -1;}
+
+     local($option, $option_sign);
+
+     foreach $option ( @Options ) {
+        if ( $option ne "-" &&
+             $option ne "+" ) {
+
+           if ( index ($valid_options,$option) >= $[ ) {
+              foreach $valid_option (@ValidOptions ) {
+                 ${"opt_$valid_option"} = 0;
+
+}#            end foreach
+              ${"opt_$option"} = 1;
+}#         end if
+}#      end if
+}#   end foreach
+
+  return 0;
+}#end sub SetOpt
+
+sub print_help {
+
+    print "Usage:     protex [-hbACFS] [+-nlsxf] [src_file(s)]";
+    print " ";
+    print " Options:";
+    print "     -h   Help mode: list command line options";
+    print "     -b   Bare mode, meaning no preamble, etc.";
+    print "     +-n  New Page for each subsection (wastes paper)";
+    print "     +-l  Listing mode, default is prologues only";
+    print "     +-s  Shut-up mode, i.e., ignore any code from BOC to EOC";
+    print "     +-x  No LaTeX mode, i.e., put !DESCRIPTION: in verbatim mode";
+    print "     +-f  No source file info";
+    print "     -A   Ada code";
+    print "     -C   C++ code";
+    print "     -F   F90 code";
+    print "     -S   Shell script";
+    print " ";
+    print "  The options can appear in any order.  The options, -h and -b,";
+    print "  affect the input from all files listed on command-line input.";
+    print "  Each of the remaining options effects only the input from the";
+    print "  files listed after the option and prior to any overriding";
+    print "  option.  The plus sign turns off the option.";
+}# end sub print_help
+
+sub print_notice {
+
+    print "%                **** IMPORTANT NOTICE *****" ;
+    print "% This LaTeX file has been automatically produced by ProTeX v. 1.1";
+    print "% Any changes made to this file will likely be lost next time";
+    print "% this file is regenerated from its source. Send questions ";
+    print "% to Arlindo da Silva, dasilva\@gsfc.nasa.gov";
+    print " ";
+
+}# sub print_notice
+
+sub print_preamble {
+
+  unless ( $opt_b ) {
+    print "%------------------------ PREAMBLE --------------------------";
+    print "\\documentclass[11pt]{article}";
+    print "\\usepackage{amsmath}";
+    print "\\usepackage{epsfig}";
+    print "\\usepackage{hangcaption}";
+    print "\\textheight     9in";
+    print "\\topmargin      0pt";
+    print "\\headsep        1cm";
+    print "\\headheight     0pt";
+    print "\\textwidth      6in";
+    print "\\oddsidemargin  0in";
+    print "\\evensidemargin 0in";
+    print "\\marginparpush  0pt";
+    print "\\pagestyle{myheadings}";
+    print "\\markboth{}{}";
+    print "%-------------------------------------------------------------";
+}#end unless
+
+    print "\\parskip        0pt";
+    print "\\parindent      0pt";
+    print "\\baselineskip  11pt";
+
+}# end sub print_preamble
+
+sub print_macros {
+
+    print " ";
+    print "%--------------------- SHORT-HAND MACROS ----------------------";
+    print "\\def\\bv{\\begin{verbatim}}";
+    print "\\def\\ev\{\\end\{verbatim}}";
+    print "\\def\\be{\\begin{equation}}";
+    print "\\def\\ee{\\end{equation}}";
+    print "\\def\\bea{\\begin{eqnarray}}";
+    print "\\def\\eea{\\end{eqnarray}}";
+    print "\\def\\bi{\\begin{itemize}}";
+    print "\\def\\ei{\\end{itemize}}";
+    print "\\def\\bn{\\begin{enumerate}}";
+    print "\\def\\en{\\end{enumerate}}";
+    print "\\def\\bd{\\begin{description}}";
+    print "\\def\\ed{\\end{description}}";
+    print "\\def\\({\\left (}";
+    print "\\def\\){\\right )}";
+    print "\\def\\[{\\left [}";
+    print "\\def\\]{\\right ]}";
+    print "\\def\\<{\\left  \\langle}";
+    print "\\def\\>{\\right \\rangle}";
+    print "\\def\\cI{{\\cal I}}";
+    print "\\def\\diag{\\mathop{\\rm diag}}";
+    print "\\def\\tr{\\mathop{\\rm tr}}";
+    print "%-------------------------------------------------------------";
+
+}# end sub print_macros
+
+sub do_beg {
+    unless ( $opt_b ) {
+    if ( $begdoc == 0 ) {
+	if ( $tpage ) {
+            print "\\title{@title}";
+            print "\\author{{\\sc @author}\\\\ {\\em @affiliation}}";
+            print "\\date{@date}";
+        }
+        print "\\begin{document}";
+        if ( $tpage ) {
+            print "\\maketitle";
+        }
+        print "\\tableofcontents";
+        print "\\newpage";
+        $begdoc = 1;
+     }
+  }
+}# end sub do_beg
+
+sub do_eoc {
+	print ' ';
+	if ($verb) {
+	    print "\\end{verbatim}";
+	    $verb = 0;
+	}
+	$source = 0;
+}# end sub do_eoc
+
+sub set_missing {
+
+  $have_name = 0;      # have routine name?
+  $have_desc = 0;      # have description?
+  $have_intf = 0;      # have interface?
+  $have_hist = 0;      # have revision history?
+  $name_is = "UNKNOWN";
+
+}# end sub set_missing
+
+
+sub check_if_all_there {
+
+$have_name ||
+die "ProTeX: invalid prologue, missing !ROUTINE: or !IROUTINE: in <$name_is>";
+
+$have_desc ||
+die "ProTeX: invalid prologue, missing !DESCRIPTION: in <$name_is>";
+
+$have_intf ||
+die "ProTeX: invalid prologue, missing !INTERFACE: in <$name_is>";
+
+$have_hist ||
+die "ProTeX: invalid prologue, missing !REVISION HISTORY: in <$name_is>";
+
+}# end sub check_if_all_there

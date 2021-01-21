@@ -1,0 +1,6 @@
+# Resource file for src model
+# nx and ny::  global grid size in x and y
+
+  nx: 128
+  ny: 64
+  decomp: R

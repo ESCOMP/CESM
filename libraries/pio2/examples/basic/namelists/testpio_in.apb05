@@ -1,0 +1,31 @@
+&io_nml
+  casename    = 'apb05:pnc:box:stride=4:nblksppe=4:g_xy:go_yxz:b_xy'
+ nx_global = 2778
+ ny_global = 3014
+  iofmt       = 'pnc'
+  rearr       = 'box'
+  nprocsIO    = 8
+  stride      = 1
+  base        = 0
+  maxiter     = 10
+  dir         = './none/'
+  num_aggregator = 1
+  DebugLevel  = 5
+  compdof_input = 'namelist'
+  compdof_output = 'none'
+  async = .true.
+/
+&compdof_nml
+  nblksppe = 4
+  grdorder = 'yxz'
+  grddecomp = 'xy'
+  gdx = 0
+  gdy = 0
+  gdz = 0
+  blkorder = 'xyz'
+  blkdecomp1 = 'xy'
+  blkdecomp2 = ''
+  bdx = 0
+  bdy = 0
+  bdz = 0
+/

@@ -1,0 +1,24 @@
+/** @page iosystem Initializing the IO System
+
+Using PIO begins with initializing the IO System. This sets up the MPI
+communicators with the computational and I/O processors.
+
+When the IO System is created, an IOSystem ID is returned and must be
+used in future PIO calls. The IOSystem ID is returned by C functions
+PIOc_Init_Intracomm() and PIOc_init_async(). Fortran users see @ref
+PIO_init.
+
+When the user program is complete, the IOSystem should be released by
+calling C function PIOc_finalize() or Fortran function piolib_mod::finalize()
+for each open IOSystem.
+
+@section intracomm_mode Intracomm Mode
+
+@image html PIO_Intracomm1.png "PIO Intracomm Mode"
+
+@section async_mode Async Mode
+
+@image html PIO_Async.png "PIO Async Mode"
+
+*/
+

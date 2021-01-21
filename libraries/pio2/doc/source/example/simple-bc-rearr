@@ -1,0 +1,17 @@
+
+ type (iosystem_desc_t)     :: iosystem
+ integer (i4)               :: dims(1) 
+ integer (kind=PIO_OFFSET)  :: compstart(1), compcount(1)
+ integer (kind=PIO_OFFSET)  :: iostart(1), iocount(1)
+ type (io_desc_t)           :: iodesc
+ ...
+ !---------------------------------------
+ ! Initializing the decomposition on PE 0
+ !---------------------------------------
+ dims(1) = 8
+ compstart(1) = 3
+ compcount(1) = 3
+ iostart(1) = 1
+ iocount(1) = 4
+ call PIO_initdecomp(iosystem,PIO_double,dims,compstart,compcount,iodesc,iostart=iostart,iocount=iocount)
+

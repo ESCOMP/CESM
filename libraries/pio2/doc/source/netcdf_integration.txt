@@ -1,0 +1,168 @@
+/** @page netcdf_integration NetCDF API Integration
+
+The netCDF integration feature allows existing netCDF codes, in C or
+Fortran, to be easily converted to use PIO.
+
+# Building and Using PIO with NetCDF Integration
+
+In order to use netCDF integration:
+
+* The PIO configure must use the option --enable-netcdf-integration.
+
+* Version 4.7.2 or later of the netCDF C library.
+
+Once PIO is build for netCDF integration, it provides the nc_* and
+nf_* functions required to fully integrate PIO and netCDF. Users must
+include the PIO header files in their C or Fortran programs, and link
+to the PIO and the netCDF libraries (and, optionally, the
+parallel-netcdf and HDF5 libraries).
+
+# Initializing the IO System
+
+IO system initialization is required before anyother PIO functionality
+is used in netCDF calls. The IO system defines how many processors are
+used for I/O, and how many for computation.
+
+The IO system may be initialized in one of two modes:
+
+* Intercomm Mode - All processors are involved in computation. A
+  subset does I/O (and also computation). To initialize in intercomm
+  mode, use nc_def_iosystem().
+
+* Async Mode - Some processors are dedicated to IO, and do no
+  computation. Other processors are organized into computational
+  unit. Each computational unit runs its own code. All computational
+  units which do netCDF/PIO calls will channel all IO through the
+  dedicated I/O nodes. To initialize in async mode, use
+  nc_def_async().
+
+Once defined, these functions return one or (in the case of async)
+more IO system IDs, usually abreviated in the code as 'iosysid'.
+
+For intercomm mode, there is one iosysid. For async mode, there is an
+array of iosysids, one for each computational unit.
+
+# The Default IO System
+
+The IO system ID (iosysid) must be provided for PIO calls. When using
+netCDF integration, there is no parameter in the functions available
+to pass the iosysid. Instead, there is a default iosysid. When
+creating a new IO system, the default iosysid is set, so that
+subsequent netCDF calls can know which IO system to use.
+
+In the (rare) cases where the user may wish to use multiple IO systems
+within the same section of code, the functions nc_set_iosystem() and
+nc_get_iosystem() will allow the user to set and get the defauly
+iosysid.
+
+# Opening/Creating a File
+
+To open a file, use nc_open()/nf_open(), providing the NC_PIO flag.
+
+In C:
+
+\code{.c}
+        /* Initialize the intracomm. */
+        if (nc_def_iosystemm(MPI_COMM_WORLD, 1, 1, 0, 0, &iosysid)) PERR;
+
+        /* Create a file with a 3D record var. */
+        if (nc_create(FILE_NAME, NC_PIO, &ncid)) PERR;
+        if (nc_def_dim(ncid, DIM_NAME_UNLIMITED, dimlen[0], &dimid[0])) PERR;
+        if (nc_def_dim(ncid, DIM_NAME_X, dimlen[1], &dimid[1])) PERR;
+        if (nc_def_dim(ncid, DIM_NAME_Y, dimlen[2], &dimid[2])) PERR;
+        if (nc_def_var(ncid, VAR_NAME, NC_INT, NDIM3, dimid, &varid)) PERR;
+\endcode
+
+Resources associated with the IO system must be released with
+nc_free_iosystem()/nf_free_iosystem().
+
+In Fortran:
+
+\code{.F90}
+  ! Define an IOSystem.
+  ierr = nf_def_iosystem(my_rank, MPI_COMM_WORLD, niotasks, numAggregator, &
+       stride, PIO_rearr_box, iosysid, base)
+  if (ierr .ne. nf_noerr) call handle_err(ierr)
+
+  ! Create a file.
+  ierr = nf_create(FILE_NAME, 64, ncid)
+  if (ierr .ne. nf_noerr) call handle_err(ierr)
+\endcode
+
+# Defining a Decomposition
+
+To define a decompositon for a distributed array use
+nc_def_decomp()/nf_def_decomp().
+
+In C:
+\code{.c}
+        /* Calculate a decomposition for distributed arrays. */
+        elements_per_pe = DIM_LEN_X * DIM_LEN_Y / ntasks;
+        if (!(compdof = malloc(elements_per_pe * sizeof(size_t))))
+            PERR;
+        for (i = 0; i < elements_per_pe; i++)
+            compdof[i] = my_rank * elements_per_pe + i;
+
+        /* Create the PIO decomposition for this test. */
+        if (nc_def_decomp(iosysid, PIO_INT, NDIM2, &dimlen[1], elements_per_pe,
+                          compdof, &ioid, 1, NULL, NULL)) PERR;
+        free(compdof);
+\endcode
+
+In Fortran:
+\code{.F90}
+  allocate(compdof(maplen))
+  allocate(data_buffer(maplen))
+  ! Row decomposition. Recall that my_rank is 0-based, even
+  ! in fortran. Also recall that compdof is 1-based for fortran.
+  do i = 1, maplen
+     compdof(i) = i + my_rank * maplen
+     data_buffer(i) = my_rank * 10 + i
+  end do
+  print *, 'compdof', my_rank, compdof
+  ierr = nf_def_decomp(iosysid, PIO_int, dims, compdof, decompid)
+  if (ierr .ne. nf_noerr) call handle_err(ierr)
+\endcode
+
+When a decomposition is defined, a decomposition ID is returned, and
+must be used later when accessing data using this decomposition.
+
+The resources associated with a decomposition must be freed with
+nc_free_decomp()/nf_free_decomp().
+
+# Reading and Writing Distributed Arrays
+
+Once a decomposition has been defined, it may be used to read and
+write distributed arrays. This allows the code to be written in terms
+of local storage only. That is, the array allocated and indexed in the
+code is the array of data that this processor works with. When the
+data is read/written, the library will map the local data into the
+global array space.
+
+To read distributed data, use the nc_get_vard() function, or one of the
+type-specific versions (ex. nc_get_vard_int()).
+
+To write distributed data, use the nc_put_vard() function, or one of the
+type-specific versions (ex. nc_put_vard_int()).
+
+In C:
+\code{.c}
+        /* Write some data with distributed arrays. */
+        if (nc_put_vard_int(ncid, varid, ioid, 0, my_data)) PERR;
+        if (nc_close(ncid)) PERR;
+\endcode
+
+In Fortran:
+\code{.F90}
+  ! Write 1st record with distributed arrays.
+  ierr = nf_put_vard_int(ncid, varid, decompid, 1, data_buffer)
+  if (ierr .ne. nf_noerr) call handle_err(ierr)
+\endcode
+
+# Examples in C and Fortran
+
+For examples using the netCDF integration features, look in the
+tests/ncint directory (for C) or the tests/fncint directory (for
+Fortran).
+
+*/

@@ -1,0 +1,64 @@
+This file should be deleted before copying the unittestpio directory onto the trunk.
+
+Issues to deal with:
+
+1) First example of pio_initdecomp from webpage is not supported.
+   pio_initdecomp(iosystem,PIO_int,dims,start,count,iodesc)
+
+"pio_support::pio_die:: myrank=          -1 : ERROR: piolib_mod.f90:         441 : subroutine not yet implemented"
+
+2) Can not open a binary file with PIO_write and put data in it.
+
+"write_mpiio_int: after call to file_write_all:MPI_ERR_READ_ONLY: file is read only
+pio_support::pio_die:: myrank=          -1 : ERROR: iompi_mod.F90:         230 : (no message)"
+
+3) When "creating" a binary file that already exists with PIO_CLOBBER
+   (which is ignored), file is not emptied.
+
+"warning, the mode argument is currently ignored for binary file operations"
+
+4) When creating a binary file to write data using PIO_iotype_direct_pbinary,
+   file is 32767 times larger than same file written with PIO_iotype_pbinary
+
+   Note: this is on my laptop... on Frankfurt and Yellowstone, using
+   PIO_iotype_direct_pbinary leads to MPI crashing:
+
+Frankfurt
+---------
+"write_mpiio_int after call to file_set_view:MPI_ERR_ARG: invalid argument of so
+ me other kind
+ pio_support::pio_die:: myrank=          -1 : ERROR: iompi_mod.F90:         223 
+ : (no message)"
+
+Yellowstone
+-----------
+"write_mpiio_int after call to file_set_view:Invalid argument, error stack:
+MPI_
+ FILE_SET_VIEW(57): Invalid displacement argument
+ pio_support::pio_die:: myrank=          -1 : ERROR: iompi_mod.F90:         223 
+ : (no message)"
+
+5) For tests where we expect failure (e.g. writing a file that was opened nowrite)
+   I am just checking for ret_val.ne.0 - should I compare to an exact error val?
+
+6) PIO_openfile hangs in netcdf input / output tests when stride < ntasks:
+   stride = 1 with 2 tasks on my laptop
+   stride = 2 with 4 tasks on frankfurt
+   stride = 4 with 8 tasks on caldera
+
+   (all 3 cases run fine with stride = ntasks)
+
+
+FIXED
+-----
+
+** Can not suppress MPI-IO warning message if file does not exist.
+
+"open_mpiio: after call to MPI_file_open:MPI_ERR_NO_SUCH_FILE: no such file or directory"
+
+Solution: added CheckMPI optional flag to iompio_mod.F90.in::PIO_openfile and piolib_mod.F90::PIO_openfile
+
+** Test netcdf file (3*ntasks integers) is always 4096 bytes, while pnetcdf
+   file is (80 + 12*ntasks) bytes
+
+Solution: not actually a problem

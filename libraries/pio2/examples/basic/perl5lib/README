@@ -1,0 +1,10 @@
+perl5lib/README
+
+Generic perl5 utilities and subroutines.
+
+
+Build --- Generic utilities for reading build-time configuration files
+Streams - Utility for reading/writing streams files for ccsm data models
+Decomp -- Utility to figure out decompositions for cam, cice and pop
+XML ----- Generic XML reader
+t ------- test directory (includes test scripts and sample input files)

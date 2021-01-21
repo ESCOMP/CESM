@@ -1,0 +1,23 @@
+#!/bin/sh
+#PBS -q debug
+#PBS -l walltime=5:00,size=6
+#PBS -o job.out.jaguar
+#PBS -j oe
+#PBS -m abe
+#PBS -A CLI017dev
+
+# job starts in home directory, cd to the submission directory
+
+# IMPORTANT!  after CNL upgrade, all files (input,output,pwd)
+# must be in /lustre.
+
+cd $PBS_O_WORKDIR
+
+
+echo '---------------------------------------------------------'
+
+# phoenix
+# aprun -n 6 ./utmct
+
+# jaguar
+aprun -n 6 ./utmct

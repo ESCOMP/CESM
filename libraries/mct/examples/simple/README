@@ -1,0 +1,51 @@
+
+
+The programs in this directory demonstrate how to use basic
+functions of MCT in several possible coupled configurations of
+two components.
+
+Each example is contained in one .F90 file.
+
+To compile:
+First make sure you have compiled MCT. See instructions in
+MCT/README
+
+Type "make" here or "make examples" in the top-level directory.
+
+To run:  Consult your local documentation for how to run a parallel
+program.  The examples below assume mpirun is available and you
+can run interactively.   "script.babyblue" is an example of run script
+for IBM systems which use a queue manager.
+
+----------------------------------------------------------------------
+twocomponent.concurrent.F90 - two components running concurrently on
+  separate pools of processors.
+
+  requires: at least 3 MPI processes
+  to run:  mpirun -np 3 twocon
+  note: will not work with mpi-serial
+
+------------------------------------------
+twocomponent.sequential.F90 - two components running sequentially on
+  the same processors.  Uses arguments to pass data between models.
+  Shows use of Rearranger.
+
+  requires: at least 1 MPI process
+  to run:  mpirun -np 1 twoseq
+
+------------------------------------------
+twocomponent.seqNB.F90      - two components running sequentially on
+  the same processors.  Uses non-blocking MCT calls to pass data between
+  models
+
+  requires: at least 1 MPI process
+  to run:  mpirun -np 1 twoseqNB
+
+------------------------------------------
+twocomponentUneven.sequential.F90 - two components running sequentially but
+  one model is only running on some of the shared processors.
+
+  requires: no more than 12 processors
+  to run:  mpirun -np 2 twosequn
+
+------------------------------------------

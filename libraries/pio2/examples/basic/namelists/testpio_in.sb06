@@ -1,0 +1,31 @@
+&io_nml
+  casename    = 'sb06:snc:box:stride=4:3d:nblksppe=4:g_xy:go_yxz:b_xy'
+ nx_global = 362
+ ny_global = 524
+  nz_global   = 60
+  iofmt       = 'snc'
+  rearr       = 'box'
+  nprocsIO    = -1
+  stride      = 4
+  base        = 0
+  maxiter     = 10
+  dir         = './none/'
+  num_aggregator = 1
+  DebugLevel  = 0
+  compdof_input = 'namelist'
+  compdof_output = 'none'
+/
+&compdof_nml
+  nblksppe = 4
+  grdorder = 'yxz'
+  grddecomp = 'xy'
+  gdx = 0
+  gdy = 0
+  gdz = 60
+  blkorder = 'xyz'
+  blkdecomp1 = 'xy'
+  blkdecomp2 = ''
+  bdx = 0
+  bdy = 0
+  bdz = 0
+/
