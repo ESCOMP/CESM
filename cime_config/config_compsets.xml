@@ -340,6 +340,11 @@
     <alias>B1850NEMO</alias>
     <lname>1850_CAM60_CLM45%BGC_CICE_NEMO_RTM_SGLC_SWAV</lname>
   </compset>
+  
+  <compset>
+    <alias>B2000NEMO</alias>
+    <lname>2000_CAM60_CLM45%BGC_CICE_NEMO_RTM_SGLC_SWAV</lname>
+  </compset>
 
   <compset>
     <alias>B20TRNEMO</alias>
