@@ -2,6 +2,7 @@
 cime/
 components/
 libraries/fms
+share/
 
 # generated local files
 *.log
