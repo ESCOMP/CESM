@@ -1,0 +1,44 @@
+blank_issues_enabled: true
+contact_links:
+  - name: CESM forums
+    url: https://bb.cgd.ucar.edu/cesm/
+    about: For support with model use, troubleshooting, etc., please use the CESM forums
+  - name: CIME issue
+    url: https://github.com/ESMCI/cime/issues/new/choose
+    about: Issue with CIME (scripting infrastructure, share code, etc.)
+  - name: CAM issue
+    url: https://bb.cgd.ucar.edu/cesm/forums/cam.133/
+    about: Issue with CAM (Community Atmosphere Model) - please report via forums
+  - name: CTSM / CLM issue
+    url: https://github.com/ESCOMP/CTSM/issues/new/choose
+    about: Issue with CTSM / CLM (Community Terrestrial Systems Model / Community Land Model)
+  - name: POP issue
+    url: https://github.com/ESCOMP/POP2-CESM/issues/new/choose
+    about: Issue with POP in CESM (Parallel Ocean Program)
+  - name: MOM issue
+    url: https://github.com/ESCOMP/MOM_interface/issues/new/choose
+    about: Issue with MOM in CESM (Modular Ocean Model)
+  - name: CICE5 issue
+    url: https://github.com/ESCOMP/CESM_CICE5/issues/new/choose
+    about: Issue with CICE5
+  - name: CISM issue
+    url: https://github.com/ESCOMP/cism-wrapper/issues/new/choose
+    about: Issue with CISM (Community Ice Sheet Model)
+  - name: MOSART issue
+    url: https://github.com/ESCOMP/MOSART/issues/new/choose
+    about: Issue with MOSART in CESM (Model for Scale Adaptive River Transport)
+  - name: RTM issue
+    url: https://github.com/ESCOMP/RTM/issues/new/choose
+    about: Issue with RTM (River Transport Model)
+  - name: WW3 issue
+    url: https://github.com/ESCOMP/WW3-CESM/issues/new/choose
+    about: Issue with WW3 in CESM (WaveWatch III)
+  - name: CMEPS issue
+    url: https://github.com/ESCOMP/CMEPS/issues/new/choose
+    about: Issue with CMEPS (NUOPC Community Mediator for Earth Prediction Systems )
+  - name: FMS issue
+    url: https://github.com/ESCOMP/FMS_interface/issues/new/choose
+    about: Issue with FMS in CESM
+  - name: CESM Experiments Database issue
+    url: https://github.com/NCAR/CESM_expdb2/issues/new/choose
+    about: Issue with the CESM Experiments Database

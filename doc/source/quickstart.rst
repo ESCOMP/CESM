@@ -1,13 +1,13 @@
 .. _quickstart:
 
-====================================
- Quick Start (CESM2 Model Workflow)
-====================================
+============================================
+Quick Start: CESM Model Workflow (|version|)
+============================================
 
 The following quick start guide is for versions of CESM2 that have
 already been ported to the local target machine. CESM2 is built on the
 CIME (Common Infrastructure for Modeling Earth) framework.
-Please refer to the `CIME Porting Documentation <http://esmci.github.io/cime/users_guide/porting-cime.html>`_ if CIME has not
+Please refer to the `CIME Porting Documentation <http://esmci.github.io/cime/versions/master/html/users_guide/porting-cime.html>`_ if CIME has not
 yet been ported to the target machine. 
 
 If you are new to CESM2, please consider reading the
@@ -152,7 +152,7 @@ now are:
       ./xmlquery STOP_OPTION,STOP_N
 
    These default settings can be useful in `troubleshooting
-   <http://esmci.github.io/cime/users_guide/troubleshooting.html>`_ runtime problems
+   <http://esmci.github.io/cime/versions/master/html/users_guide/troubleshooting.html>`_ runtime problems
    before submitting for a longer time, but will not allow the model to run long enough to
    produce monthly history climatology files. In order to produce history files, increase
    the run length to a month or longer:
@@ -225,8 +225,7 @@ comma separated names and no spaces):
 
 
 .. _CIME: http://esmci.github.io/cime
-.. _porting: http://esmci.github.io/cime/users_guide/porting-cime
-.. _query_config: http://esmci.github.io/cime/users_guide/introduction-and-overview.html#discovering-available-cases-with-query-config
-.. _create_newcase: http://esmci.github.io/cime/users_guide/create-a-case.html
-.. _xmlchange: http://esmci.github.io/cime/Tools_user/xmlchange.html
-.. _case.setup: http://esmci.github.io/cime/users_guide/setting-up-a-case.html
+.. _query_config: http://esmci.github.io/cime/versions/master/html/users_guide/introduction-and-overview.html#discovering-available-cases-with-query-config
+.. _create_newcase: http://esmci.github.io/cime/versions/master/html/users_guide/create-a-case.html
+.. _xmlchange: http://esmci.github.io/cime/versions/master/html/Tools_user/xmlchange.html
+.. _case.setup: http://esmci.github.io/cime/versions/master/html/users_guide/setting-up-a-case.html

@@ -1,16 +1,13 @@
-[ 50 character, one line summary ]
+### Description of changes
 
-[ Description of the changes in this commit. It should be enough
-  information for someone not following this development to understand. 
-  Lines should be wrapped at about 72 characters. ]
+### Specific notes
 
-User interface changes?: [ No/Yes ]
-[ If yes, describe what changed, and steps taken to ensure backward compatibilty ]
+Contributors other than yourself, if any:
 
 Fixes: [Github issue #s] And brief description of each issue.
 
-Testing:
-  unit tests:
-  system tests:
-  manual testing:
+User interface changes?: [ No/Yes ]
+[ If yes, describe what changed, and steps taken to ensure backward compatibility ]
+
+Testing performed (automated tests and/or manual tests):
 

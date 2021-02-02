@@ -49,59 +49,12 @@
   </compset>
   <compset>
     <alias>BWma1850</alias>
-    <lname>1850_CAM60%WCCM_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM60%WCCM_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>BHIST</alias>
     <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
-  </compset>
-
-  <compset>
-    <alias>BC5L45BGC</alias>
-    <lname>2000_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
-  </compset>
-
-  <compset>
-    <alias>B1850L45BGCR</alias>
-    <lname>1850_CAM60_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
-  </compset>
-
-  <compset>
-    <alias>B1850C5L45BGC</alias>
-    <lname>1850_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
-  </compset>
-
-  <compset>
-    <alias>BRCP85L45BGCR</alias>
-    <lname>RCP8_CAM60_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
-  </compset>
-
-  <compset>
-    <alias>BRCP85C5L45BGC</alias>
-    <lname>RCP8_CAM50_CLM45%BGC_CICE_POP2_MOSART_SGLC_SWAV</lname>
-  </compset>
-
-  <compset>
-    <alias>BC5L45BGCR</alias>
-    <lname>2000_CAM50_CLM45%BGC_CICE_POP2_RTM_SGLC_SWAV</lname>
-  </compset>
-
-  <!-- Climate Simulation Lab compsets for Keith Lindsay -->
-
-  <compset>
-    <alias>B1850C4L45BGCRBPRP</alias>
-    <lname>1850_CAM40_CLM45%BGC_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BPRP</lname>
-  </compset>
-
-  <compset>
-    <alias>B1850C4L45BGCBPRP</alias>
-    <lname>1850_CAM40_CLM45%BGC_CICE_POP2%ECO_MOSART_SGLC_SWAV_BGC%BPRP</lname>
-  </compset>
-
-  <compset>
-    <alias>B1850L45BGCRBPRP</alias>
-    <lname>1850_CAM60_CLM45%BGC_CICE_POP2%ECO_RTM_SGLC_SWAV_BGC%BPRP</lname>
   </compset>
 
   <!-- BG compsets: evolving ice sheet -->
@@ -136,8 +89,16 @@
   </compset>
 
   <compset>
-    <alias>E1850L45TEST</alias>
-    <lname>1850_CAM60_CLM45%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST</lname>
+    <alias>E1850TEST</alias>
+    <lname>1850_CAM60_CLM50%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST</lname>
+  </compset>
+
+  <!-- fully coupled MOM6 runs -->
+  <compset>
+    <!-- MOM is an optional component of CESM and is not checked out by default
+	 use checkout_externals mom to add it -->
+    <alias>B1850MOM</alias>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_MOM6_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
   </compset>
 
   <!-- All active except data atmosphere
@@ -145,18 +106,18 @@
 
   <compset>
      <alias>J1850G</alias>
-     <lname>1850_DATM%CRU_CLM50%BGC-CROP_CICE_POP2_MOSART_CISM2%EVOLVE_SWAV</lname>
+     <lname>1850_DATM%CRUv7_CLM50%BGC-CROP_CICE_POP2_MOSART_CISM2%EVOLVE_SWAV</lname>
   </compset>
 
   <entries>
     <entry id="RUN_STARTDATE">
       <values>
-        <value compset="1850_"     >0001-01-01</value>
-        <value compset="2000_"     >0001-01-01</value>
-        <value compset="HIST_"     >1850-01-01</value>
-        <value compset="5505_"     >1955-01-01</value>
-        <value compset="RCP[2468]_">2005-01-01</value>
-        <value compset="2013_"     >2013-01-01</value>
+	<value compset="1850_"     >0001-01-01</value>
+	<value compset="2000_"     >0001-01-01</value>
+	<value compset="HIST_"     >1850-01-01</value>
+	<value compset="5505_"     >1955-01-01</value>
+	<value compset="RCP[2468]_">2005-01-01</value>
+	<value compset="2013_"     >2013-01-01</value>
       </values>
     </entry>
   </entries>

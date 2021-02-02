@@ -135,69 +135,69 @@
     <mach name="cheyenne">
       <pes pesize="any" compset="CAM.+CLM.+CICE.+POP.+">
 	<comment>about 12ypd expected</comment>
-        <ntasks>
-          <ntasks_atm>288</ntasks_atm>
-          <ntasks_lnd>144</ntasks_lnd>
-          <ntasks_rof>40</ntasks_rof>
-          <ntasks_ice>108</ntasks_ice>
-          <ntasks_ocn>288</ntasks_ocn>
-          <ntasks_glc>36</ntasks_glc>
-          <ntasks_wav>36</ntasks_wav>
-          <ntasks_cpl>288</ntasks_cpl>
-        </ntasks>
-        <nthrds>
-          <nthrds_atm>1</nthrds_atm>
-          <nthrds_lnd>1</nthrds_lnd>
-          <nthrds_rof>1</nthrds_rof>
-          <nthrds_ice>1</nthrds_ice>
-          <nthrds_ocn>1</nthrds_ocn>
-          <nthrds_glc>1</nthrds_glc>
-          <nthrds_wav>1</nthrds_wav>
-          <nthrds_cpl>1</nthrds_cpl>
-        </nthrds>
-        <rootpe>
-          <rootpe_atm>0</rootpe_atm>
-          <rootpe_lnd>0</rootpe_lnd>
-          <rootpe_rof>0</rootpe_rof>
-          <rootpe_ice>144</rootpe_ice>
-          <rootpe_ocn>288</rootpe_ocn>
-          <rootpe_glc>0</rootpe_glc>
-          <rootpe_wav>252</rootpe_wav>
-          <rootpe_cpl>0</rootpe_cpl>
-        </rootpe>
+	<ntasks>
+	  <ntasks_atm>288</ntasks_atm>
+	  <ntasks_lnd>144</ntasks_lnd>
+	  <ntasks_rof>40</ntasks_rof>
+	  <ntasks_ice>108</ntasks_ice>
+	  <ntasks_ocn>288</ntasks_ocn>
+	  <ntasks_glc>36</ntasks_glc>
+	  <ntasks_wav>36</ntasks_wav>
+	  <ntasks_cpl>288</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>144</rootpe_ice>
+	  <rootpe_ocn>288</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>252</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
       </pes>
       <pes pesize="M3" compset="CAM.+CLM.+CICE.+POP.+">
 	<comment>For multi-instance tests</comment>
-        <ntasks>
-          <ntasks_atm>-36</ntasks_atm>
-          <ntasks_lnd>-12</ntasks_lnd>
-          <ntasks_rof>-3</ntasks_rof>
-          <ntasks_ice>-9</ntasks_ice>
-          <ntasks_ocn>-36</ntasks_ocn>
-          <ntasks_glc>-3</ntasks_glc>
-          <ntasks_wav>-3</ntasks_wav>
-          <ntasks_cpl>-36</ntasks_cpl>
-        </ntasks>
-        <nthrds>
-          <nthrds_atm>1</nthrds_atm>
-          <nthrds_lnd>1</nthrds_lnd>
-          <nthrds_rof>1</nthrds_rof>
-          <nthrds_ice>1</nthrds_ice>
-          <nthrds_ocn>1</nthrds_ocn>
-          <nthrds_glc>1</nthrds_glc>
-          <nthrds_wav>1</nthrds_wav>
-          <nthrds_cpl>1</nthrds_cpl>
-        </nthrds>
-        <rootpe>
-          <rootpe_atm>0</rootpe_atm>
-          <rootpe_lnd>0</rootpe_lnd>
-          <rootpe_rof>0</rootpe_rof>
-          <rootpe_ice>144</rootpe_ice>
-          <rootpe_ocn>288</rootpe_ocn>
-          <rootpe_glc>0</rootpe_glc>
-          <rootpe_wav>252</rootpe_wav>
-          <rootpe_cpl>0</rootpe_cpl>
-        </rootpe>
+	<ntasks>
+	  <ntasks_atm>-36</ntasks_atm>
+	  <ntasks_lnd>-12</ntasks_lnd>
+	  <ntasks_rof>-3</ntasks_rof>
+	  <ntasks_ice>-9</ntasks_ice>
+	  <ntasks_ocn>-36</ntasks_ocn>
+	  <ntasks_glc>-3</ntasks_glc>
+	  <ntasks_wav>-3</ntasks_wav>
+	  <ntasks_cpl>-36</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>144</rootpe_ice>
+	  <rootpe_ocn>288</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>252</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
       </pes>
     </mach>
   </grid>
@@ -1048,6 +1048,78 @@
       </pes>
     </mach>
   </grid>
+  <grid name="a%0.9x1.25_l%0.9x1.25_oi%tx0.66v1_r%r05_g%gland4_w%null_z%null_m%tx0.66v1">
+    <mach name="cheyenne">
+      <pes pesize="any" compset="any">
+	<!-- B1850MOM gets about 7.9 ypd -->
+	<comment>none</comment>
+	<ntasks>
+	  <ntasks_atm>576</ntasks_atm>
+	  <ntasks_lnd>288</ntasks_lnd>
+	  <ntasks_rof>288</ntasks_rof>
+	  <ntasks_ice>288</ntasks_ice>
+	  <ntasks_ocn>180</ntasks_ocn>
+	  <ntasks_glc>36</ntasks_glc>
+	  <ntasks_wav>36</ntasks_wav>
+	  <ntasks_cpl>576</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>288</rootpe_ice>
+	  <rootpe_ocn>576</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>0</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+      <pes pesize="L" compset="any">
+	<!-- B1850MOM gets about 18 ypd -->
+	<comment>none</comment>
+	<ntasks>
+	  <ntasks_atm>1800</ntasks_atm>
+	  <ntasks_lnd>900</ntasks_lnd>
+	  <ntasks_rof>900</ntasks_rof>
+	  <ntasks_ice>900</ntasks_ice>
+	  <ntasks_ocn>720</ntasks_ocn>
+	  <ntasks_glc>36</ntasks_glc>
+	  <ntasks_wav>36</ntasks_wav>
+	  <ntasks_cpl>1800</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>900</rootpe_ice>
+	  <rootpe_ocn>1800</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>0</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+    </mach>
+  </grid>
   <grid name="a%0.9x1.25.+l%0.9x1.25.+oi%gx1" >
     <mach name="cheyenne">
       <pes pesize="any" compset="CAM.*\d_.*CLM.+CICE.+POP.+WW3">
@@ -1600,26 +1672,26 @@
   <overrides>
     <grid name="any" >
       <mach name="any" >
-        <pes pesize="any" compset="SPCAM[SM]">
-          <nthrds>
-            <nthrds_atm>1</nthrds_atm>
-            <nthrds_lnd>1</nthrds_lnd>
-            <nthrds_rof>1</nthrds_rof>
-            <nthrds_ice>1</nthrds_ice>
-            <nthrds_ocn>1</nthrds_ocn>
-            <nthrds_glc>1</nthrds_glc>
-            <nthrds_wav>1</nthrds_wav>
-            <nthrds_cpl>1</nthrds_cpl>
-          </nthrds>
-        </pes>
-        <pes pesize="any" compset="CISM1">
-          <ntasks>
-            <ntasks_glc>1</ntasks_glc>
-          </ntasks>
-          <nthrds>
-            <nthrds_glc>1</nthrds_glc>
-          </nthrds>
-        </pes>
+	<pes pesize="any" compset="SPCAM[SM]">
+	  <nthrds>
+	    <nthrds_atm>1</nthrds_atm>
+	    <nthrds_lnd>1</nthrds_lnd>
+	    <nthrds_rof>1</nthrds_rof>
+	    <nthrds_ice>1</nthrds_ice>
+	    <nthrds_ocn>1</nthrds_ocn>
+	    <nthrds_glc>1</nthrds_glc>
+	    <nthrds_wav>1</nthrds_wav>
+	    <nthrds_cpl>1</nthrds_cpl>
+	  </nthrds>
+	</pes>
+	<pes pesize="any" compset="CISM1">
+	  <ntasks>
+	    <ntasks_glc>1</ntasks_glc>
+	  </ntasks>
+	  <nthrds>
+	    <nthrds_glc>1</nthrds_glc>
+	  </nthrds>
+	</pes>
       </mach>
     </grid>
   </overrides>
