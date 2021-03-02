@@ -1,4 +1,185 @@
 ===============================================================
+Tag name: cesm2_3_alpha02b
+Originator(s): CSEG
+Date: 3 March 2021
+One-line Summary: BFB changes.
+
+
+components/cam                     https://github.com/ESCOMP/CAM//cam6_3_009                                              **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.37                               **
+cdeps                              https://github.com/ESCOMP/CDEPS/tree/1f02a73                                           **
+cmeps                              https://github.com/ESCOMP/CMEPS/tree/c4acaa8                                           **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_75                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev019                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200908                                    **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/branch_tag/pio2.n01_mosart1_0_38                 --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20201204                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/trm1_0_74                                           **
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     --
+
+cam
+    Cheryl Craig 2021-01-13 - cam6_3_009 - components/cam (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_009
+
+    Update externals to match cesm2_3_alpha02a
+
+    Non answer changing for CESM runs
+
+
+    Steve Goldhaber 2021-01-13 - cam6_3_008 - components/cam (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_008
+
+    Fixes for PIO2 plus nudging I/O update
+
+
+    Steve Goldhaber 2021-01-13 - cam6_3_007 - components/cam (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_007
+
+    Weak scaling infrastructure and bug fixes
+
+
+    Cheryl Craig 2020-12-03 - cam6_3_006 - components/cam (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_006
+
+    Initial implementation of mass fluxes in CLUBB (CLUBB+MF) and scam bug-fix
+
+
+    Cheryl Craig 2020-12-03 - cam6_3_005 - components/cam (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_005
+
+    For Francis:
+
+    Enable CAM configure option "-chem none" with cam6 physics
+
+
+    Brian Eaton 2020-11-19 - cam6_3_004 - components/cam (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_004
+
+    Add MPAS-A dycore with functional support for simple physics.
+
+
+    Brian Eaton 2020-11-09 - cam6_3_003 - components/cam (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_003
+
+    Updates the cime external for CAM tags.
+
+
+cdeps
+    Chris Fischer 2021-02-09 - 1f02a73 - components/cdeps (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/CDEPS/tags/1f02a73
+
+    Update to latest version
+
+
+cime
+    William Sacks 2021-01-26 - cime5.8.37 - cime (cesm2_3_alpha02b)
+    https://github.com/ESMCI/cime/tags/???
+
+    Update to latest cime, as long as it's bit-for-bit
+
+    I think Mariana said it depends on the latest CMEPS and/or CDEPS
+
+    Answer changes for PGI on cheyenne, and fill patterns in cam.
+
+        - wait_for_tests: tweak cdash nml compare column.
+        - Pio bld fixes.
+        - pnetcdf detection correction.
+        - Added deleted f10_f10_musgs grid back into config_grids.xml.
+        - Changes needed to create fractions/masks at runtime with NUOPC.
+        - Better create_test/wait_for_tests integration.
+        - Add support for Chrysalis in saving provenance info.
+        - Remove unused logic.
+        - Update PIO2 to latest version and add testing support for PIO async tests.
+        - Update esmf to latest on cheyenne.
+        - Add pnetcdf module to centos7-linux build.
+        - Allow srt to skip some tests.
+        - Pass integer and not floating point for cpus-per-task.
+        - Need to get queue from case, not batch object.
+        - Update cheyenne esmf build.
+        - Seq io fix pio2.
+        - Add some SCREAM config dirs.
+        - Update to PyCECT 3.2.0.
+        - Update pgi and esmf on cheyenne.
+        - Add memory usage logging.
+        - Facilitate adding defaults for a namelist group conditionally.
+        - Add a mask.
+        - Check if TEST_ROOT exists earlier in cleanup from scripts_regression_tests.
+        - query_testlists: replace newlines in comments with spaces.
+
+
+cism
+    William Sacks 2020-12-21 - cism2_1_75 - components/cism (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_75
+
+    Convert buildlib and buildnml to python
+
+    Depends on cime: https://github.com/ESMCI/cime/pull/3804
+
+
+    William Sacks 2020-12-02 - cism2_1_74 - components/cism (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_74
+
+    Remove support for CISM1 and for Trilinos
+
+    Depends on a CESM PR where I will remove CISM1 tests:
+    https://github.com/ESCOMP/CESM/pull/179
+
+
+    William Sacks 2020-12-01 - cism2_1_73 - components/cism (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_73
+
+    Begin adding support for multiple ice sheets in NUOPC cap
+
+    Depends on the CMEPS update in https://github.com/ESCOMP/CMEPS/pull/140
+
+
+    William Sacks 2020-11-30 - cism2_1_72 - components/cism (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_72
+
+    Add nuopc cap
+
+
+    William Sacks 2020-11-26 - cism2_1_71 - components/cism (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_71
+
+    Update externals used for standalone testing
+
+
+    William Sacks 2020-11-26 - cism2_1_70 - components/cism (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_70
+
+    (From Kate) Update documentation
+
+
+cmeps
+    Chris Fischer 2021-02-09 - c4acaa8 - src/drivers/nuopc/ (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/CMEPS/tags/c4acaa8
+
+    Update to latest version
+
+
+mom
+    Alper Altuntas 2020-09-10 - mi_20200908 - components/mom (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20200908
+
+    Update mom.input_data_list.
+
+
+rtm
+    William Sacks 2020-12-22 - rtm1_0_74 - components/rtm (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_74
+
+    Minor changes to nuopc cap, etc.
+
+
+    William Sacks 2020-11-01 - rtm1_0_73 - components/rtm (cesm2_3_alpha02b)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_73
+
+    Change compset in test
+
+===============================================================
 
 Tag name: cesm2_3_alpha02a
 Originator(s): CSEG
