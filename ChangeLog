@@ -1,4 +1,150 @@
 ===============================================================
+Tag name: cesm2_3_alpha02c
+Originator(s): CSEG
+Date: 12 March 2021
+One-line Summary: Some CTSM answer changes, BFB CAM updates.
+
+
+components/cam                     https://github.com/ESCOMP/CAM//cam6_3_012                                              **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.38                               **
+cdeps                              https://github.com/ESCOMP/CDEPS/tree/1f02a73                                           --
+cmeps                              https://github.com/ESCOMP/CMEPS/tree/c4acaa8                                           --
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_76                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev026                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200908                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/branch_tag/pio2.n01_mosart1_0_38                 --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20201204                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/trm1_0_74                                           --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710                                     --
+
+
+cam
+    Cheryl Craig 2021-03-03 - cam6_3_012 - components/cam (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_012
+
+    For Chris Kruse:
+    Add Horizontal Momentum Tendency Variables
+
+    Note that runs with history_budget=true will have additional fields in the output file.
+    cprnc will return a qualified "pass"
+
+
+    Cheryl Craig 2021-02-25 - cam6_3_011 - components/cam (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_011
+
+    For John Truesdale:
+
+    Bug fix for MPAS when built in CESM checkouts
+
+
+    Francis Vitt 2021-02-24 - cam6_3_010 - components/cam (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_010
+
+    Refactor QBO namelist settings; fix "-chem none" issue; remove reprosum settings from FSD test
+
+
+
+cime
+    Chris Fischer 2021-03-02 - cime5.8.38 - cime (cesm2_3_alpha02c)
+    https://github.com/ESMCI/cime/tags/cime5.8.38
+
+        - Disable kokkos tests when building for E3SM.
+        - Remove references to CISM1-only grid for CESM.
+        - NAG port for nuopc.
+        - Generalize the file pattern match for cism.config files.
+        - Add header row and perf-archiving to memory profiling logs.
+        - Add run scripts to provenance capture.
+        - Make 64bit data default netcdf format.
+        - PIO2 update.
+        - Enable 2010 SST climatology for all variants of F-2010 compsets.
+        - Improve check_input_data tool.
+        - Fixes case where a skipped test would result in logfile_name being undefined.
+        - SCORPIO needs _PNETCDF.
+        - nuopc result is in drv.log not med.log.
+        - Adds support of DATM_MODE=CLM1PT for ELM.
+        - Introduction of MASK_GRID for CMEPS.
+        - Fixes cleaning up only on success.
+        - bless/compare_test_results should not process build-only tests.
+        - Minor changes to Makefile needed for izumi nag build to link to ESMF lib.
+        - Update driver-mct support for trigrid configuration where lnd is not on the atm grid.
+        - Make update success more robust.
+        - env_mach_specific needs to process all mpirun nodes from machobj.
+        - Add a new env_run XML value for E3SM: CASE_GROUP.
+        - Turn PIO_USE_MALLOC back on.
+        - Add machine frontera and fix run_exe setting issue.
+        - Remove collapse directives for Cray compiler.
+        - Fix some documentation of EXEROOT.
+        - Fix i4 in shr_reposum_mod and add comments.
+
+
+cism
+    William Sacks 2021-03-01 - cism2_1_76 - components/cism (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_76
+
+    Add icesheet to compset & support alternative/multiple cism.config files
+
+    Bit-for-bit, but NLCOMPs will fail
+
+    Weak dependency on cime change in https://github.com/ESMCI/cime/pull/3869
+    (cases will run without that, but cism config file won't be copied to CaseDocs,
+    which may cause problems for NLCOMP)
+
+
+clm
+    William Sacks 2021-03-10 - ctsm5.1.dev026 - components/clm (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev026
+
+    Change f10 tests to musgs
+
+    Doesn't change answers, but results in BFAILs
+
+
+    William Sacks 2021-02-23 - ctsm5.1.dev025 - components/clm (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev025
+
+    Refactor ozone code, and misc. small fixes
+
+    Field lists differ for Clm50 / Clm51 / Ctsm50 tests; otherwise bit-for-bit
+
+
+    William Sacks 2021-02-20 - ctsm5.1.dev024 - components/clm (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev024
+
+    (From Sam Levis) Grid cell-level balance check for H2O
+
+    Just roundoff-level changes in ERRH2O diagnostic field in all cases
+
+
+    Erik Kluzek 2021-02-11 - ctsm5.1.dev023 - components/clm (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev023
+
+    Some answer changes for all clm5_1 cases
+    Answer changes for clm5_0 for non Crop cases (Sp or Bgc)
+    Answer changes to two diagnostic history variables for all
+
+
+    Erik Kluzek 2021-02-05 - ctsm5.1.dev022 - components/clm (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev022
+
+    Bring the latest FATES version in. Only FATES compsets have different answers.
+
+
+    Erik Kluzek 2020-12-30 - ctsm5.1.dev021 - components/clm (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev021
+
+    Add option for taking into account bio-mass heat storage.
+    Turn it on for clm51 compsets, so they change answers.
+
+
+    Erik Kluzek 2020-12-30 - ctsm5.1.dev020 - components/clm (cesm2_3_alpha02c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev020
+
+    Potential roundoff changes for some cases due to preparation 
+    for adding bio-mass heat storage option in.
+
+===============================================================
 Tag name: cesm2_3_alpha02b
 Originator(s): CSEG
 Date: 3 March 2021
