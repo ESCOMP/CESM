@@ -1,9 +1,0 @@
- call pio_seterrorhandling(File, PIO_BCAST_ERROR)
- ierr =  pio_inq_varid(File, 'U', uid)
- call pio_seterrorhandling(File, PIO_INTERNAL_ERROR)
- if(ierr/= PIO_NOERR) then
-   write(stderr,*) 'Variable U not found on input file, setting to 0'
-   U=0
- else
-   ...
- endif

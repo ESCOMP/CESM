@@ -1,7 +1,7 @@
 # managed directories that are checked out by the externals tool
 cime/
 components/
-libraries/fms
+libraries/FMS
 share/
 
 # generated local files
