@@ -1,4 +1,331 @@
 ===============================================================
+Tag name: cesm2_3_alpha02d
+Originator(s): CSEG
+Date: 4 April 2021
+One-line Summary: Add NUOPC support.
+
+
+components/cam                     https://github.com/ESCOMP/CAM//cam6_3_016                                              **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210406                               **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.42                               **
+cdeps                              https://github.com/ESCOMP/CDEPS/tree/v0.6.0                                            **
+cmeps                              https://github.com/ESCOMP/CMEPS/tree/v0.9.0                                            **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_78                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev033                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20201112                               **
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210409                                    **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_42                                     **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210409                              **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_76                                           **
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210317                                     **
+
+
+cam
+    Francis Vitt 2021-04-01 - cam6_3_016 - components/cam (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_016
+
+    Generalize coupling of WACCMX ionosphere to CAM physics; CMEPS/NUOPC threading
+
+    WACCMX compset change answers
+
+
+    Steve Goldhaber 2021-03-25 - cam6_3_015 - components/cam (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_015
+
+    New changes for single column functionality in CMEPS/NUOPC
+
+
+    Cheryl Craig 2021-03-23 - cam6_3_014 - components/cam (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_014
+
+    Add contrail parametrization
+
+    New prealpha test added
+
+
+    Courtney Peverley 2021-03-19 - cam6_3_013 - components/cam (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_013
+
+    New CAM tag for nuopc changes - dependent on cime, cmeps, cdeps
+
+
+cdeps
+    James Edwards 2021-04-05 - v0.6.0 - components/cdeps (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CDEPS/tags/v0.6.0
+
+    https://github.com/ESCOMP/CDEPS/pull/66
+
+
+    Mariana Vertenstein 2021-03-30 - v0.4.0 - components/cdeps (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CDEPS/tags/https://github.com/ESCOMP/CDEPS/releases/tag/v0.4.0
+
+    new dlnd_glc forcings
+    this will change the baselines for TG compsets in $CESMDATAROOT/cmeps_baselines/mar29
+    all others should be bfb
+
+
+    Mariana Vertenstein 2021-03-30 - v0.3.0 - components/cdeps (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CDEPS/tags/https://github.com/ESCOMP/CDEPS/releases/tag/v0.3.0
+
+    fixes for fox nag port
+
+
+    James Edwards 2020-12-15 - c669b3920 - components/cdeps (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CDEPS/tags/c669b3920
+
+    Performance improvements for nuopc mediator
+
+
+cice
+    James Edwards 2021-04-05 - cice5_20210406 - components/cice (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_202104xx
+
+    should contain https://github.com/ESCOMP/CESM_CICE5/pull/43
+
+
+    David Bailey 2021-03-19 - cice5_20210324 - components/cice (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20210319
+
+    The only answer changes will be in the single column functionality. Plus a bug fix for when cold air
+    outbreaks are turned off.
+
+
+cime
+    Chris Fischer 2021-04-12 - cime5.8.42 - cime (cesm2_3_alpha02d)
+    https://github.com/ESMCI/cime/tags/cime5.8.42
+
+        - No need to test ESMF_AWARE_THREADING here.
+
+
+    James Edwards 2021-04-05 - cime5.8.41 - cime (cesm2_3_alpha02d)
+    https://github.com/ESMCI/cime/tags/cime5.8.41
+
+        - Save Scorpio I/O statistics.
+        - Support for threading in two different ways for esmf.
+        - Fix issue with build of nag mpiserial.
+        - Handle case when domain_root is not present.
+        - Point to new dlnd scpl forcing data.
+
+    Climate Changing just for T compsets.
+
+
+    Chris Fischer 2021-03-30 - cime5.8.40 - cime (cesm2_3_alpha02d)
+    https://github.com/ESMCI/cime/tags/cime5.8.40
+
+        - Bug fix for generating C/G nuopc compsets
+
+
+    Chris Fischer 2021-03-26 - cime5.8.39 - cime (cesm2_3_alpha02d)
+    https://github.com/ESMCI/cime/tags/cime5.8.39
+
+    Round Off for nuopc/cmeps configurations.
+
+        - Add ROF support in the primary component computation.
+        - Bug fix for single column mode for nuopc/cmeps.
+        - Fixes to nuopc single column PTS_LAT and PTS_LON.
+        - Switch e3sm config to COMP_ROOT_DIR.
+        - Fix format descriptor in mem-logging for IBM compiler.
+        - Bump pillow from 7.1.2 to 8.1.1 in /tools/statistical_ensemble_test/pyCECT/docs.
+        - Bug fix for specifying mesh for 0.25 degree runoff grid.
+        - Changes for zeus port.
+        - Avoid adding CDEPS things to inc & lib paths with LILAC.
+        - New nuopc/cmeps single/column single/point functionality.
+        - Logs tail of cprnc outputs to TestStatus.log.
+
+
+    James Edwards 2020-12-15 - cime5.8.3? - cime (cesm2_3_alpha02d)
+    https://github.com/ESMCI/cime/tags/cime5.8.36
+
+    Performance improvements for nuopc.  Depends on cdeps c669b3920
+    updates pgi compiler on cheyenne
+
+
+cism
+    James Edwards 2021-04-05 - cism2_1_78 - components/cism (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_78
+
+    Should include:
+    https://github.com/ESCOMP/CISM-wrapper/pull/57
+
+    Depends on cime, cmeps, cdeps
+
+
+    William Sacks 2021-04-01 - cism2_1_77 - components/cism (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/cism-wrapper/tags/cism2_1_77
+
+    Update externals used in standalone checkout, and change some tests
+
+    No impact in CESM, other than some BFAILs due to changing tests to use f10_f10_mg37 instead of f10_f10_musgs
+
+
+clm
+    William Sacks 2021-04-10 - ctsm5.1.dev033 - components/clm (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev033
+
+    Remove some unnecessary settings of nextsw_cday
+
+
+    William Sacks 2021-04-10 - ctsm5.1.dev032 - components/clm (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev032
+
+    Bug fixes for co2 from atmosphere
+
+    Changes answers for
+    - MCT cases with spatially-varying co2 from atmosphere
+      - No I compsets have this, but some coupled compsets may
+    - NUOPC cases with co2 from atmosphere (spatially-constant or spatially-varying)
+      - this includes all transient I compsets with NUOPC
+
+
+    James Edwards 2021-04-05 - ctsm5.1.dev031 - components/clm (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev031
+
+    Should contain PR https://github.com/ESCOMP/CTSM/pull/1319
+
+    Update externals and fixes for nuopc threading
+
+    Depends on cime, cmeps, cdeps updates
+
+
+    Erik Kluzek 2021-03-31 - ctsm5.1.dev030 - components/clm (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev030
+
+    Rework for single point sites for NUOPC.
+
+
+    William Sacks 2021-03-18 - ctsm5.1.dev029 - components/clm (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev029
+
+    Rework domain initialization for nuopc
+
+    Changes answers for nuopc and lilac cases
+
+
+    William Sacks 2021-03-18 - ctsm5.1.dev028 - components/clm (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev028
+
+    Change limitation of top layer evaporation/sublimation
+
+
+    William Sacks 2021-03-15 - ctsm5.1.dev027 - components/clm (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev027
+
+    Update externals
+
+    No impact on CESM testing
+
+
+cmeps
+    James Edwards 2021-04-05 - v0.9.0 - src/drivers/nuopc/ (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CMEPS/tags/v0.9.0
+
+    should include https://github.com/ESCOMP/CMEPS/pull/144
+
+    Some cism tests differ to round off
+
+
+    James Edwards 2020-12-15 - v0.8.0 - src/drivers/nuopc/ (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps_v0.4.3
+
+    performance improvements for nuopc depends on cdeps and cime
+
+
+fms
+    Alper Altuntas 2021-04-07 - fi_20201112 - libraries/fms (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20201112
+
+    Update FMS tag for new MOM6 tag.
+
+
+mom
+    Alper Altuntas 2021-03-17 - mi_20210329 - components/mom (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_2021????
+
+    New mom6 tag for nuopc changes
+
+
+    James Edwards 2021-04-05 - mi_20210409 - components/mom (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_202104xx
+
+    add support for threading in cmeps
+
+
+mosart
+    James Edwards 2021-04-05 - mosart1_0_42 - components/mosart (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_42
+
+    should include https://github.com/ESCOMP/MOSART/pull/41
+
+
+    William Sacks 2020-12-22 - mosart1_0_40 - components/mosart (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_40
+
+    Addition of flux area correction factors
+
+    Changes answers for nuopc, otherwise bfb
+
+    May depend on cmeps, cdeps and cime, but relatively old versions of these
+
+
+    William Sacks 2020-12-22 - mosart1_0_39 - components/mosart (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_39
+
+    Remove nuopc_cap_share from build
+
+
+    William Sacks 2020-11-01 - mosart1_0_38 - components/mosart (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_38
+
+    Change compset in test
+
+
+    William Sacks 2021-03-16 - mosart1_0_41 - components/mosart (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/mosart/tags/branch_tags/pio2.n01_mosart1_0_40
+
+    (From Jim E) Minor changes needed for PIO2
+
+
+pop
+    James Edwards 2021-04-05 - cesm_pop_2_1_20210409 - components/pop (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_202104xx
+
+    add support for threading in cmeps
+
+
+    Michael Levy 2021-03-30 - cesm_pop_2_1_20210330 - components/pop (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20210330
+
+    1. Additional momentum budget terms
+    2. Updates to NUOPC cap
+
+
+rtm
+    James Edwards 2021-04-05 - rtm1_0_76 - components/rtm (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_76
+
+    Should include
+    https://github.com/ESCOMP/RTM/pull/25
+
+
+    William Sacks 2021-03-16 - rtm1_0_75 - components/rtm (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_75
+
+    Implementation of flux area correction factors in nuopc cap
+
+    Changes answers for nuopc, otherwise bfb
+
+    May depend on cmeps, cdeps and cime, but relatively old versions of these
+
+
+ww3
+    Alper Altuntas 2021-03-17 - ww3_210317 - components/ww3 (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/WW3-CESM/tags/ww3_210317
+
+    implementation of flux correction factors in the nuopc cap
+
+
+
+===============================================================
 Tag name: cesm2_3_alpha02c
 Originator(s): CSEG
 Date: 12 March 2021
