@@ -392,7 +392,7 @@ def main(args):
             # exit gracefully
             msg = """The external repositories labeled with 'M' above are not in a clean state.
 
-The following are three options for how to proceed:
+The following are four options for how to proceed:
 
 (1) Go into each external that is not in a clean state and issue either a 'git status' or
     an 'svn status' command (depending on whether the external is managed by git or
@@ -412,12 +412,17 @@ The following are three options for how to proceed:
     {program_name}. Excluding externals labeled with 'M' will allow {program_name} to
     update the other, non-excluded externals.
 
+(4) As a last resort, if you are confident that there is no work that needs to be saved
+    from a given external, you can remove that external (via "rm -rf [directory]") and
+    then rerun the {program_name} tool. This option is mainly useful as a workaround for
+    issues with this tool (such as https://github.com/ESMCI/manage_externals/issues/157).
+
 
 The external repositories labeled with '?' above are not under version
 control using the expected protocol. If you are sure you want to switch
 protocols, and you don't have any work you need to save from this
-directory, then run "rm -rf [directory]" before re-running the
-checkout_externals tool.
+directory, then run "rm -rf [directory]" before rerunning the
+{program_name} tool.
 """.format(program_name=program_name, config_file=args.externals)
 
             printlog('-' * 70)
