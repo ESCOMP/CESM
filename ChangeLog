@@ -1,26 +1,32 @@
 ===============================================================
 Tag name: cesm2_3_alpha02d
 Originator(s): CSEG
-Date: 4 April 2021
+Date: 21 April 2021
 One-line Summary: Add NUOPC support.
 
 
-components/cam                     https://github.com/ESCOMP/CAM//cam6_3_016                                              **
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_017                                              **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210406                               **
 cime                               https://github.com/CESM-Development/cime/tree/cime5.8.42                               **
 cdeps                              https://github.com/ESCOMP/CDEPS/tree/v0.6.0                                            **
 cmeps                              https://github.com/ESCOMP/CMEPS/tree/v0.9.0                                            **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_78                                 **
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev033                                     **
-components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20201112                               **
-components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210409                                    **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210419                               **
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210415                                    **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_42                                     **
-components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210409                              **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210419                              **
 components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_76                                           **
 components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210317                                     **
 
 
 cam
+    Kate Thayer-Calder 2021-04-13 - cam6_3_017 - components/cam (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_017
+
+    Mostly answer changing updates to PUMAS/MG microphysics plus some refactoring to support GPUs.
+
+
     Francis Vitt 2021-04-01 - cam6_3_016 - components/cam (cesm2_3_alpha02d)
     https://github.com/ESCOMP/CAM/tags/cam6_3_016
 
@@ -231,6 +237,19 @@ cmeps
 
 
 fms
+    Alper Altuntas 2021-04-16 - fi_20210419 - libraries/fms (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_2021041X
+
+    Fix FMS build for Python 3.6+
+    Update constants.F90 source mod.
+
+
+    Alper Altuntas 2021-04-15 - fi_20210414 - libraries/fms (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20210413
+
+    Update FMS tag to 2020.04.03
+
+
     Alper Altuntas 2021-04-07 - fi_20201112 - libraries/fms (cesm2_3_alpha02d)
     https://github.com/ESCOMP/FMS_interface/tags/fi_20201112
 
@@ -248,6 +267,12 @@ mom
     https://github.com/ESCOMP/MOM_interface/tags/mi_202104xx
 
     add support for threading in cmeps
+
+
+    Alper Altuntas 2021-04-15 - mi_20210415 - components/mom (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20210415
+
+    Update input.nml for new FMS tag.
 
 
 mosart
@@ -292,6 +317,12 @@ pop
     add support for threading in cmeps
 
 
+    Chris Fischer 2021-04-19 - cesm_pop_2_1_20210419 - components/pop (cesm2_3_alpha02d)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20210419
+
+    Remove a redundant call to set_component_logging
+
+
     Michael Levy 2021-03-30 - cesm_pop_2_1_20210330 - components/pop (cesm2_3_alpha02d)
     https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20210330
 
@@ -322,6 +353,8 @@ ww3
     https://github.com/ESCOMP/WW3-CESM/tags/ww3_210317
 
     implementation of flux correction factors in the nuopc cap
+
+
 
 
 
