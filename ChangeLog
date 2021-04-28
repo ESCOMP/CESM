@@ -1,4 +1,49 @@
 ===============================================================
+Tag name: cesm2_3_alpha02e
+Originator(s): CSEG
+Date: 28 April 2021
+One-line Summary: Intel update
+
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_017                                               --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210406                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.43                               **
+cdeps                              https://github.com/ESCOMP/CDEPS/tree/v0.6.0                                            --
+cmeps                              https://github.com/ESCOMP/CMEPS/tree/v0.10.0                                           **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_78                                 --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev033                                     --
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210419                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210415                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_42                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210419                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_76                                           --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210317                                     --
+
+cime
+    Chris Fischer 2021-04-21 - cime5.8.43 - cime (cesm2_3_alpha02e)
+    https://github.com/ESMCI/cime/tags/cime5.8.43
+
+        - Update intel compiler and esmf on cheyenne.
+        - Fix issue to build a testcase on Casper through an interactive node.
+        - Fix py3 error in srun syntax.
+        - Remove "Code review" line from PR template.
+        - Add support for WAV as primary component.
+        - Update case status to include jobid on batch system.
+        - Allow E3SM to use its versions of coupler and data,stub,x models.
+        - Add neon server to inputdata.
+        - Fix create_test --retry when generating baselines.
+        - Generalize build directory paths, and prep for CESM share repository.
+        - Fix ChangeLog.
+        - Update configuration xml for Casper and add openacc directives to enable GPU simulation.
+        - Fix query_config for py3 output format.
+
+
+cmeps
+    Chris Fischer 2021-04-21 - v0.10.0 - src/drivers/nuopc/ (cesm2_3_alpha02e)
+    https://github.com/ESCOMP/CMEPS/tags/v0.10.0
+
+    SPCAM fix
+===============================================================
 Tag name: cesm2_3_alpha02d
 Originator(s): CSEG
 Date: 21 April 2021
