@@ -1,4 +1,59 @@
 ===============================================================
+Tag name: cesm2_3_beta02
+Originator(s): CSEG
+Date: 5 May 2021
+One-line Summary: Major nuopc update. ctsm and cam updates. 
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_017 
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210406
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.44
+cdeps                              https://github.com/ESCOMP/CDEPS/tree/v0.6.0
+cmeps                              https://github.com/ESCOMP/CMEPS/tree/v0.10.0
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_78 
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev033 
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210419 
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210415
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_42
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210419 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_76 
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210317 
+
+Answer Changes introduced with this tag when compared to cesm2_3_beta01:
+-CTSM
+   Changes answer for coupled configurations where CTSM receives NDEP from CAM.
+   Grass/crop snow burial fraction fix, and some other fixes.
+   Changes answers for all I compsets due to redefined compsets.
+   Changes answers for Clm45/50/51 with crop on (unless CO2 prognostic) and 2000Clm51 compsets (new IC file).
+   Changes answers for all Bgc and Cn compsets.
+   Changes answers for Clm51Bgc compsets.
+   Changes answers for all CLM51 compsets.
+   Changes answers for cases where the model run uses a different time step than the initial conditions file.
+   Changes answers for transient cases (including Hist/SSP, Fates, CNDV and transient glacier).
+   Some answer changes for all clm5_1 cases.
+   Answer changes for clm5_0 for non Crop cases (Sp or Bgc).
+   Only FATES compsets have different answers.
+   bio-mass heat storage.  Turn it on for clm51 compsets, so they change answers.
+   MCT cases with spatially-varying co2 from atmosphere.
+   Change limitation of top layer evaporation/sublimation.
+-CISM
+   Climate Changing just for T compsets.
+-CAM
+   Answer changes updates to PUMAS/MG microphysics.
+   Fill patterns in arrays.
+-CICE5 
+   The only answer changes will be in the single column functionality.
+-CIME
+   Answer changes for PGI on cheyenne.
+
+Problems identified after tag creation:
+- ERP_D_Ln9.C48_C48_mg17.QPC6.cheyenne_intel.cam-outfrq9s build fail.
+- ERP_D_Ln9.f09_f09_mg17.FSD.cheyenne_intel.cam-outfrq9s_contrail run fail.
+- ERP_Ln9.ne30_ne30_mg17.F2000climo.cheyenne_intel.cam-outfrq9s run fail due to init file.
+- Known issues with some nuopc configuration.
+- Several intel tests on izumi failing with SIGSEGV.
+- There are known issues for the pgi and cray compilers.
+
+===============================================================
 Tag name: cesm2_3_alpha02e
 Originator(s): CSEG
 Date: 28 April 2021
