@@ -1,4 +1,127 @@
 ===============================================================
+Tag name: cesm2_3_alpha03a
+Originator(s): CSEG
+Date: 7 MayApril 2021
+One-line Summary: Updates to CTSM, CISM, and possibly other components
+
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_017                                               --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210406                               --
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.45                               **
+cdeps                              https://github.com/ESCOMP/CDEPS/tree/cdeps0.12l.1                                      **
+cmeps                              https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.2                                       **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_82                                 **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev038                                     **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210419                               --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210415                                    --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_42                                     --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210419                              --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_76                                           --
+
+deps
+    William Sacks 2021-05-07 - cdeps0.12.1 - components/cdeps (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps???
+
+    Update to latest cdeps
+
+    Bill's note: not sure about bfb
+
+
+cime
+    William Sacks 2021-04-28 - cime5.8.45 - cime (cesm2_3_alpha03a)
+    https://github.com/ESMCI/cime/tags/???
+
+        - Update this so that paths with % in them do not break cism build.
+        - Fix res for nuopc.
+        - Add cice6 as an new CESM component.
+        - Change behavior of check on DIN_LOC_ROOT in case_setup.py.
+        - Reset a test that is rerun after a run failure.
+        - Adds git submodule info to provenance.
+        - Fixes phase 1 of multisubmit not executing during rerun.
+
+    Depends on cismwrap_2_1_80, cismwrap_2_1_82
+
+
+cism
+    William Sacks 2021-05-07 - cismwrap_2_1_82 - components/cism (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_82
+
+    Update externals for standalone checkout, change buildlib for compatibility with latest cime
+
+    Depends on latest cime
+
+
+    William Sacks 2021-05-04 - cismwrap_2_1_81 - components/cism (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_81
+
+    Updates for multiple ice sheet support
+
+    BFB but FIELDLIST diffs for cpl hist files
+
+    Depends on cmeps changes in Mariana's branch feature/multiple_icesheet_update
+    (https://github.com/ESCOMP/CMEPS/pull/185)
+
+
+    William Sacks 2021-04-30 - cismwrap_2_1_80 - components/cism (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_80
+
+    Rename gland to gris in grids
+
+    BFB but will have BFAILs for some tests with changed grid names, so marking this as "some"
+
+    Depends on cime tag that includes https://github.com/ESMCI/cime/pull/3943
+
+
+    Kate Thayer-Calder 2021-04-28 - cismwrap_2_1_79 - components/cism (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_79
+
+    This brings in a new CISM version that changes answers for any compset using active glaciers (added "Gg" or "Ga" or "Gag" compset). 
+
+
+clm
+    Erik Kluzek 2021-04-27 - ctsm5.1.dev038 - components/clm (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev038
+
+    Some changes that went into the cesm2.2.0 release on master. 
+    Fixes script to make mapping files for surface dataset creation.
+
+
+    William Sacks 2021-04-26 - ctsm5.1.dev037 - components/clm (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev037
+
+    Correct vertical interpolation in init_interp when soil thicknesses change
+
+
+    Erik Kluzek 2021-04-21 - ctsm5.1.dev036 - components/clm (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev036
+
+    FATES update
+
+
+    William Sacks 2021-04-20 - ctsm5.1.dev035 - components/clm (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev035
+
+    Misc bfb enhancements and fixes
+
+
+    Erik Kluzek 2021-04-19 - ctsm5.1.dev034 - components/clm (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev034
+
+    Bring in Arctic changes to LUNA from Leah Birch. Changes answers just for clm5_1 physics
+
+
+cmeps
+    William Sacks 2021-05-07 - cmeps0.13.2 - src/drivers/nuopc/ (cesm2_3_alpha03a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps???
+
+    Update to latest cmeps
+
+    Should include https://github.com/ESCOMP/CMEPS/pull/185
+
+    Bill's note: Not sure about bfb
+
+    Depends on cismwrap_2_1_81
+===============================================================
 Tag name: cesm2_3_beta02
 Originator(s): CSEG
 Date: 5 May 2021
