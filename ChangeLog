@@ -7,7 +7,7 @@ One-line Summary: Updates to CTSM, CISM, and possibly other components
 
 components/cam                     https://github.com/ESCOMP/CAM/cam6_3_017                           --
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210406           --
-cime                               https://github.com/CESM-Development/cime/tree/cime5.8.46           **
+cime                               https://github.com/CESM-Development/cime/tree/cime5.8.47           **
 cdeps                              https://github.com/ESCOMP/CDEPS/tree/cdeps0.12l.1                  **
 cmeps                              https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.2                   **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism2_1_82             **
@@ -28,6 +28,11 @@ deps
 
 
 cime
+    Chris Fischer 2021-05-11 - cime5.8.47 - cime (cesm2_3_alpha03a)
+    https://github.com/ESMCI/cime/tags/cime5.8.47
+
+        - Add back domain for CLM_USRDAT for mct driver.
+
     Chris Fischer 2021-05-10 - cime5.8.46 - cime (cesm2_3_alpha03a)
     https://github.com/ESMCI/cime/tags/cime5.8.46
 
