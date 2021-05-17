@@ -1048,7 +1048,7 @@
       </pes>
     </mach>
   </grid>
-  <grid name="a%0.9x1.25_l%0.9x1.25_oi%tx0.66v1_r%r05_g%gland4_w%null_z%null_m%tx0.66v1">
+  <grid name="a%0.9x1.25_l%0.9x1.25_oi%tx0.66v1_r%r05_g%gris4_w%null_z%null_m%tx0.66v1">
     <mach name="cheyenne">
       <pes pesize="any" compset="any">
 	<!-- B1850MOM gets about 7.9 ypd -->
@@ -1682,14 +1682,6 @@
 	    <nthrds_glc>1</nthrds_glc>
 	    <nthrds_wav>1</nthrds_wav>
 	    <nthrds_cpl>1</nthrds_cpl>
-	  </nthrds>
-	</pes>
-	<pes pesize="any" compset="CISM1">
-	  <ntasks>
-	    <ntasks_glc>1</ntasks_glc>
-	  </ntasks>
-	  <nthrds>
-	    <nthrds_glc>1</nthrds_glc>
 	  </nthrds>
 	</pes>
       </mach>
