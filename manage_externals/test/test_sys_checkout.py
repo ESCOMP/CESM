@@ -42,6 +42,7 @@ import unittest
 
 from manic.externals_description import ExternalsDescription
 from manic.externals_description import DESCRIPTION_SECTION, VERSION_ITEM
+from manic.externals_description import git_submodule_status
 from manic.externals_status import ExternalStatus
 from manic.repository_git import GitRepository
 from manic.utils import printlog, execute_subprocess
@@ -87,6 +88,8 @@ REMOTE_BRANCH_FEATURE2 = 'feature2'
 
 SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 
+# Disable too-many-public-methods error
+# pylint: disable=R0904
 
 def setUpModule():  # pylint: disable=C0103
     """Setup for all tests in this module. It is called once per module!
@@ -139,7 +142,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.create_section(MIXED_REPO_NAME, 'mixed_req',
                             branch='master', externals=CFG_SUB_NAME)
 
-        self._write_config(dest_dir)
+        self.write_config(dest_dir)
 
     def container_simple_required(self, dest_dir):
         """Create a container externals file with only simple externals.
@@ -155,7 +158,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
                             ref_hash='60b1cc1a38d63')
 
-        self._write_config(dest_dir)
+        self.write_config(dest_dir)
 
     def container_simple_optional(self, dest_dir):
         """Create a container externals file with optional simple externals
@@ -168,7 +171,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.create_section(SIMPLE_REPO_NAME, 'simp_opt',
                             tag='tag1', required=False)
 
-        self._write_config(dest_dir)
+        self.write_config(dest_dir)
 
     def container_simple_svn(self, dest_dir):
         """Create a container externals file with only simple externals.
@@ -180,7 +183,26 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.create_svn_external('svn_branch', branch='trunk')
         self.create_svn_external('svn_tag', tag='tags/cesm2.0.beta07')
 
-        self._write_config(dest_dir)
+        self.write_config(dest_dir)
+
+    def container_sparse(self, dest_dir):
+        """Create a container with a full external and a sparse external
+
+        """
+        # Create a file for a sparse pattern match
+        sparse_filename = 'sparse_checkout'
+        with open(os.path.join(dest_dir, sparse_filename), 'w') as sfile:
+            sfile.write('readme.txt')
+
+        self.create_config()
+        self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
+                            tag='tag2')
+
+        sparse_relpath = '../../{}'.format(sparse_filename)
+        self.create_section(SIMPLE_REPO_NAME, 'simp_sparse',
+                            tag='tag2', sparse=sparse_relpath)
+
+        self.write_config(dest_dir)
 
     def mixed_simple_base(self, dest_dir):
         """Create a mixed-use base externals file with only simple externals.
@@ -197,7 +219,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
                             ref_hash='60b1cc1a38d63')
 
-        self._write_config(dest_dir)
+        self.write_config(dest_dir)
 
     def mixed_simple_sub(self, dest_dir):
         """Create a mixed-use sub externals file with only simple externals.
@@ -211,9 +233,9 @@ class GenerateExternalsDescriptionCfgV1(object):
                             branch=REMOTE_BRANCH_FEATURE2,
                             path=SUB_EXTERNALS_PATH)
 
-        self._write_config(dest_dir, filename=CFG_SUB_NAME)
+        self.write_config(dest_dir, filename=CFG_SUB_NAME)
 
-    def _write_config(self, dest_dir, filename=CFG_NAME):
+    def write_config(self, dest_dir, filename=CFG_NAME):
         """Write the configuration file to disk
 
         """
@@ -237,22 +259,41 @@ class GenerateExternalsDescriptionCfgV1(object):
                          self._schema_version)
 
     def create_section(self, repo_type, name, tag='', branch='',
-                       ref_hash='',
-                       required=True, path=EXTERNALS_NAME, externals=''):
+                       ref_hash='', required=True, path=EXTERNALS_NAME,
+                       externals='', repo_path=None, from_submodule=False,
+                       sparse=''):
+        # pylint: disable=too-many-branches
         """Create a config section with autofilling some items and handling
         optional items.
 
         """
         # pylint: disable=R0913
         self._config.add_section(name)
-        self._config.set(name, ExternalsDescription.PATH,
-                         os.path.join(path, name))
+        if not from_submodule:
+            self._config.set(name, ExternalsDescription.PATH,
+                             os.path.join(path, name))
 
         self._config.set(name, ExternalsDescription.PROTOCOL,
                          ExternalsDescription.PROTOCOL_GIT)
 
-        repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_type)
-        self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
+        # from_submodules is incompatible with some other options, turn them off
+        if (from_submodule and
+                ((repo_path is not None) or tag or ref_hash or branch)):
+            printlog('create_section: "from_submodule" is incompatible with '
+                     '"repo_url", "tag", "hash", and "branch" options;\n'
+                     'Ignoring those options for {}'.format(name))
+            repo_url = None
+            tag = ''
+            ref_hash = ''
+            branch = ''
+
+        if repo_path is not None:
+            repo_url = repo_path
+        else:
+            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_type)
+
+        if not from_submodule:
+            self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
 
         self._config.set(name, ExternalsDescription.REQUIRED, str(required))
 
@@ -267,6 +308,12 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         if externals:
             self._config.set(name, ExternalsDescription.EXTERNALS, externals)
+
+        if sparse:
+            self._config.set(name, ExternalsDescription.SPARSE, sparse)
+
+        if from_submodule:
+            self._config.set(name, ExternalsDescription.SUBMODULE, "True")
 
     def create_section_ext_only(self, name,
                                 required=True, externals=CFG_SUB_NAME):
@@ -377,7 +424,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         except BaseException:
             pass
 
-        self._write_config(dest_dir, filename)
+        self.write_config(dest_dir, filename)
 
     def update_svn_branch(self, dest_dir, name, branch, filename=CFG_NAME):
         """Update a repository branch, and potentially the remote.
@@ -391,7 +438,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         except BaseException:
             pass
 
-        self._write_config(dest_dir, filename)
+        self.write_config(dest_dir, filename)
 
     def update_tag(self, dest_dir, name, tag, repo_type=None,
                    filename=CFG_NAME, remove_branch=True):
@@ -416,7 +463,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         except BaseException:
             pass
 
-        self._write_config(dest_dir, filename)
+        self.write_config(dest_dir, filename)
 
     def update_underspecify_branch_tag(self, dest_dir, name,
                                        filename=CFG_NAME):
@@ -435,7 +482,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         except BaseException:
             pass
 
-        self._write_config(dest_dir, filename)
+        self.write_config(dest_dir, filename)
 
     def update_underspecify_remove_url(self, dest_dir, name,
                                        filename=CFG_NAME):
@@ -448,7 +495,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         except BaseException:
             pass
 
-        self._write_config(dest_dir, filename)
+        self.write_config(dest_dir, filename)
 
     def update_protocol(self, dest_dir, name, protocol, repo_type=None,
                         filename=CFG_NAME):
@@ -461,7 +508,7 @@ class GenerateExternalsDescriptionCfgV1(object):
             repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_type)
             self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
 
-        self._write_config(dest_dir, filename)
+        self.write_config(dest_dir, filename)
 
 
 class BaseTestSysCheckout(unittest.TestCase):
@@ -513,7 +560,7 @@ class BaseTestSysCheckout(unittest.TestCase):
         # return to our common starting point
         os.chdir(self._return_dir)
 
-    def setup_test_repo(self, parent_repo_name):
+    def setup_test_repo(self, parent_repo_name, dest_dir_in=None):
         """Setup the paths and clone the base test repo
 
         """
@@ -522,8 +569,12 @@ class BaseTestSysCheckout(unittest.TestCase):
         print("Test repository name: {0}".format(test_dir_name))
 
         parent_repo_dir = os.path.join(self._bare_root, parent_repo_name)
-        dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
-                                test_dir_name)
+        if dest_dir_in is None:
+            dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
+                                    test_dir_name)
+        else:
+            dest_dir = dest_dir_in
+
         # pylint: disable=W0212
         GitRepository._git_clone(parent_repo_dir, dest_dir, VERBOSITY_DEFAULT)
         return dest_dir
@@ -683,6 +734,14 @@ class BaseTestSysCheckout(unittest.TestCase):
     def _check_mixed_ext_branch_modified(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/mixed_req'.format(directory)
         self._check_generic_modified_ok_required(tree, name)
+
+    def _check_simple_sparse_empty(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_sparse'.format(directory)
+        self._check_generic_empty_default_required(tree, name)
+
+    def _check_simple_sparse_ok(self, tree, directory=EXTERNALS_NAME):
+        name = './{0}/simp_sparse'.format(directory)
+        self._check_generic_ok_clean_required(tree, name)
 
     # ----------------------------------------------------------------
     #
@@ -844,6 +903,23 @@ class BaseTestSysCheckout(unittest.TestCase):
         self._check_simple_branch_ok(tree, directory=EXTERNALS_NAME)
         self._check_simple_branch_ok(tree, directory=SUB_EXTERNALS_PATH)
 
+    def _check_container_sparse_pre_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_empty(tree)
+        self._check_simple_sparse_empty(tree)
+
+    def _check_container_sparse_post_checkout(self, overall, tree):
+        self.assertEqual(overall, 0)
+        self._check_simple_tag_ok(tree)
+        self._check_simple_sparse_ok(tree)
+
+    def _check_file_exists(self, repo_dir, pathname):
+        "Check that <pathname> exists in <repo_dir>"
+        self.assertTrue(os.path.exists(os.path.join(repo_dir, pathname)))
+
+    def _check_file_absent(self, repo_dir, pathname):
+        "Check that <pathname> does not exist in <repo_dir>"
+        self.assertFalse(os.path.exists(os.path.join(repo_dir, pathname)))
 
 class TestSysCheckout(BaseTestSysCheckout):
     """Run systems level tests of checkout_externals
@@ -1208,6 +1284,14 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                 self.status_args)
         self._check_container_full_post_checkout(overall, tree)
 
+        # Check existance of some files
+        subrepo_path = os.path.join('externals', 'simp_tag')
+        self._check_file_exists(under_test_dir,
+                                os.path.join(subrepo_path, 'readme.txt'))
+        self._check_file_absent(under_test_dir, os.path.join(subrepo_path,
+                                                             'simple_subdir',
+                                                             'subdir_file.txt'))
+
         # update the mixed-use repo to point to different branch
         self._generator.update_branch(under_test_dir, 'mixed_req',
                                       'new-feature', MIXED_REPO_NAME)
@@ -1287,6 +1371,40 @@ class TestSysCheckout(BaseTestSysCheckout):
         overall, tree = self.execute_cmd_in_dir(under_test_dir,
                                                 self.status_args)
         self._check_mixed_cont_simple_required_post_checkout(overall, tree)
+
+    def test_container_sparse(self):
+        """Verify that 'full' container with simple subrepo
+        can run a sparse checkout and generate the correct initial status.
+
+        """
+        # create the test repository
+        under_test_dir = self.setup_test_repo(CONTAINER_REPO_NAME)
+
+        # create the top level externals file
+        self._generator.container_sparse(under_test_dir)
+
+        # inital checkout
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.checkout_args)
+        self._check_container_sparse_pre_checkout(overall, tree)
+
+        overall, tree = self.execute_cmd_in_dir(under_test_dir,
+                                                self.status_args)
+        self._check_container_sparse_post_checkout(overall, tree)
+
+        # Check existance of some files
+        subrepo_path = os.path.join('externals', 'simp_tag')
+        self._check_file_exists(under_test_dir,
+                                os.path.join(subrepo_path, 'readme.txt'))
+        self._check_file_exists(under_test_dir, os.path.join(subrepo_path,
+                                                             'simple_subdir',
+                                                             'subdir_file.txt'))
+        subrepo_path = os.path.join('externals', 'simp_sparse')
+        self._check_file_exists(under_test_dir,
+                                os.path.join(subrepo_path, 'readme.txt'))
+        self._check_file_absent(under_test_dir, os.path.join(subrepo_path,
+                                                             'simple_subdir',
+                                                             'subdir_file.txt'))
 
 
 class TestSysCheckoutSVN(BaseTestSysCheckout):
@@ -1434,6 +1552,237 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
                                                 self.verbose_args)
         self._check_container_simple_svn_post_checkout(overall, tree)
 
+class TestSubrepoCheckout(BaseTestSysCheckout):
+    # Need to store information at setUp time for checking
+    # pylint: disable=too-many-instance-attributes
+    """Run tests to ensure proper handling of repos with submodules.
+
+    By default, submodules in git repositories are checked out. A git
+    repository checked out as a submodule is treated as if it was
+    listed in an external with the same properties as in the source
+    .gitmodules file.
+    """
+
+    def setUp(self):
+        """Setup for all submodule checkout tests
+        Create a repo with two submodule repositories.
+        """
+
+        # Run the basic setup
+        super(TestSubrepoCheckout, self).setUp()
+        # create test repo
+        # We need to do this here (rather than have a static repo) because
+        # git submodules do not allow for variables in .gitmodules files
+        self._test_repo_name = 'test_repo_with_submodules'
+        self._bare_branch_name = 'subrepo_branch'
+        self._config_branch_name = 'subrepo_config_branch'
+        self._container_extern_name = 'externals_container.cfg'
+        self._my_test_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
+                                         self._test_id)
+        self._repo_dir = os.path.join(self._my_test_dir, self._test_repo_name)
+        self._checkout_dir = 'repo_with_submodules'
+        check_dir = self.setup_test_repo(CONTAINER_REPO_NAME,
+                                         dest_dir_in=self._repo_dir)
+        self.assertTrue(self._repo_dir == check_dir)
+        # Add the submodules
+        cwd = os.getcwd()
+        fork_repo_dir = os.path.join(self._bare_root, SIMPLE_FORK_NAME)
+        simple_repo_dir = os.path.join(self._bare_root, SIMPLE_REPO_NAME)
+        self._simple_ext_fork_name = SIMPLE_FORK_NAME.split('.')[0]
+        self._simple_ext_name = SIMPLE_REPO_NAME.split('.')[0]
+        os.chdir(self._repo_dir)
+        # Add a branch with a subrepo
+        cmd = ['git', 'branch', self._bare_branch_name, 'master']
+        execute_subprocess(cmd)
+        cmd = ['git', 'checkout', self._bare_branch_name]
+        execute_subprocess(cmd)
+        cmd = ['git', 'submodule', 'add', fork_repo_dir]
+        execute_subprocess(cmd)
+        cmd = ['git', 'commit', '-am', "'Added simple-ext-fork as a submodule'"]
+        execute_subprocess(cmd)
+        # Save the fork repo hash for comparison
+        os.chdir(self._simple_ext_fork_name)
+        self._fork_hash_check = self.get_git_hash()
+        os.chdir(self._repo_dir)
+        # Now, create a branch to test from_sbmodule
+        cmd = ['git', 'branch',
+               self._config_branch_name, self._bare_branch_name]
+        execute_subprocess(cmd)
+        cmd = ['git', 'checkout', self._config_branch_name]
+        execute_subprocess(cmd)
+        cmd = ['git', 'submodule', 'add', simple_repo_dir]
+        execute_subprocess(cmd)
+        # Checkout feature2
+        os.chdir(self._simple_ext_name)
+        cmd = ['git', 'branch', 'feature2', 'origin/feature2']
+        execute_subprocess(cmd)
+        cmd = ['git', 'checkout', 'feature2']
+        execute_subprocess(cmd)
+        # Save the fork repo hash for comparison
+        self._simple_hash_check = self.get_git_hash()
+        os.chdir(self._repo_dir)
+        self.create_externals_file(filename=self._container_extern_name,
+                                   dest_dir=self._repo_dir, from_submodule=True)
+        cmd = ['git', 'add', self._container_extern_name]
+        execute_subprocess(cmd)
+        cmd = ['git', 'commit', '-am', "'Added simple-ext as a submodule'"]
+        execute_subprocess(cmd)
+        # Reset to master
+        cmd = ['git', 'checkout', 'master']
+        execute_subprocess(cmd)
+        os.chdir(cwd)
+
+    @staticmethod
+    def get_git_hash(revision="HEAD"):
+        """Return the hash for <revision>"""
+        cmd = ['git', 'rev-parse', revision]
+        git_out = execute_subprocess(cmd, output_to_caller=True)
+        return git_out.strip()
+
+    def create_externals_file(self, name='', filename=CFG_NAME, dest_dir=None,
+                              branch_name=None, sub_externals=None,
+                              from_submodule=False):
+        # pylint: disable=too-many-arguments
+        """Create a container externals file with only simple externals.
+
+        """
+        self._generator.create_config()
+
+        if dest_dir is None:
+            dest_dir = self._my_test_dir
+
+        if from_submodule:
+            self._generator.create_section(SIMPLE_FORK_NAME,
+                                           self._simple_ext_fork_name,
+                                           from_submodule=True)
+            self._generator.create_section(SIMPLE_REPO_NAME,
+                                           self._simple_ext_name,
+                                           branch='feature3', path='',
+                                           from_submodule=False)
+        else:
+            if branch_name is None:
+                branch_name = 'master'
+
+            self._generator.create_section(self._test_repo_name,
+                                           self._checkout_dir,
+                                           branch=branch_name,
+                                           path=name, externals=sub_externals,
+                                           repo_path=self._repo_dir)
+
+        self._generator.write_config(dest_dir, filename=filename)
+
+    def idempotence_check(self, checkout_dir):
+        """Verify that calling checkout_externals and
+        checkout_externals --status does not cause errors"""
+        cwd = os.getcwd()
+        os.chdir(checkout_dir)
+        overall, _ = self.execute_cmd_in_dir(self._my_test_dir,
+                                             self.checkout_args)
+        self.assertTrue(overall == 0)
+        overall, _ = self.execute_cmd_in_dir(self._my_test_dir,
+                                             self.status_args)
+        self.assertTrue(overall == 0)
+        os.chdir(cwd)
+
+    def test_submodule_checkout_bare(self):
+        """Verify that a git repo with submodule is properly checked out
+        This test if for where there is no 'externals' keyword in the
+        parent repo.
+        Correct behavior is that the submodule is checked out using
+        normal git submodule behavior.
+        """
+        simple_ext_fork_tag = "(tag1)"
+        simple_ext_fork_status = " "
+        self.create_externals_file(branch_name=self._bare_branch_name)
+        overall, _ = self.execute_cmd_in_dir(self._my_test_dir,
+                                             self.checkout_args)
+        self.assertTrue(overall == 0)
+        cwd = os.getcwd()
+        checkout_dir = os.path.join(self._my_test_dir, self._checkout_dir)
+        fork_file = os.path.join(checkout_dir,
+                                 self._simple_ext_fork_name, "readme.txt")
+        self.assertTrue(os.path.exists(fork_file))
+        os.chdir(checkout_dir)
+        submods = git_submodule_status(checkout_dir)
+        self.assertEqual(len(submods.keys()), 1)
+        self.assertTrue(self._simple_ext_fork_name in submods)
+        submod = submods[self._simple_ext_fork_name]
+        self.assertTrue('hash' in submod)
+        self.assertEqual(submod['hash'], self._fork_hash_check)
+        self.assertTrue('status' in submod)
+        self.assertEqual(submod['status'], simple_ext_fork_status)
+        self.assertTrue('tag' in submod)
+        self.assertEqual(submod['tag'], simple_ext_fork_tag)
+        os.chdir(cwd)
+        self.idempotence_check(checkout_dir)
+
+    def test_submodule_checkout_none(self):
+        """Verify that a git repo with submodule is properly checked out
+        This test is for when 'externals=None' is in parent repo's
+        externals cfg file.
+        Correct behavior is the submodle is not checked out.
+        """
+        self.create_externals_file(branch_name=self._bare_branch_name,
+                                   sub_externals="none")
+        overall, _ = self.execute_cmd_in_dir(self._my_test_dir,
+                                             self.checkout_args)
+        self.assertTrue(overall == 0)
+        cwd = os.getcwd()
+        checkout_dir = os.path.join(self._my_test_dir, self._checkout_dir)
+        fork_file = os.path.join(checkout_dir,
+                                 self._simple_ext_fork_name, "readme.txt")
+        self.assertFalse(os.path.exists(fork_file))
+        os.chdir(cwd)
+        self.idempotence_check(checkout_dir)
+
+    def test_submodule_checkout_config(self): # pylint: disable=too-many-locals
+        """Verify that a git repo with submodule is properly checked out
+        This test if for when the 'from_submodule' keyword is used in the
+        parent repo.
+        Correct behavior is that the submodule is checked out using
+        normal git submodule behavior.
+        """
+        tag_check = None # Not checked out as submodule
+        status_check = "-" # Not checked out as submodule
+        self.create_externals_file(branch_name=self._config_branch_name,
+                                   sub_externals=self._container_extern_name)
+        overall, _ = self.execute_cmd_in_dir(self._my_test_dir,
+                                             self.checkout_args)
+        self.assertTrue(overall == 0)
+        cwd = os.getcwd()
+        checkout_dir = os.path.join(self._my_test_dir, self._checkout_dir)
+        fork_file = os.path.join(checkout_dir,
+                                 self._simple_ext_fork_name, "readme.txt")
+        self.assertTrue(os.path.exists(fork_file))
+        os.chdir(checkout_dir)
+        # Check submodule status
+        submods = git_submodule_status(checkout_dir)
+        self.assertEqual(len(submods.keys()), 2)
+        self.assertTrue(self._simple_ext_fork_name in submods)
+        submod = submods[self._simple_ext_fork_name]
+        self.assertTrue('hash' in submod)
+        self.assertEqual(submod['hash'], self._fork_hash_check)
+        self.assertTrue('status' in submod)
+        self.assertEqual(submod['status'], status_check)
+        self.assertTrue('tag' in submod)
+        self.assertEqual(submod['tag'], tag_check)
+        self.assertTrue(self._simple_ext_name in submods)
+        submod = submods[self._simple_ext_name]
+        self.assertTrue('hash' in submod)
+        self.assertEqual(submod['hash'], self._simple_hash_check)
+        self.assertTrue('status' in submod)
+        self.assertEqual(submod['status'], status_check)
+        self.assertTrue('tag' in submod)
+        self.assertEqual(submod['tag'], tag_check)
+        # Check fork repo status
+        os.chdir(self._simple_ext_fork_name)
+        self.assertEqual(self.get_git_hash(), self._fork_hash_check)
+        os.chdir(checkout_dir)
+        os.chdir(self._simple_ext_name)
+        hash_check = self.get_git_hash('origin/feature3')
+        self.assertEqual(self.get_git_hash(), hash_check)
+        os.chdir(cwd)
+        self.idempotence_check(checkout_dir)
 
 class TestSysCheckoutErrors(BaseTestSysCheckout):
     """Run systems level tests of error conditions in checkout_externals

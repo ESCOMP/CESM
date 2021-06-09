@@ -1,34 +1,118 @@
-Copyright (c) 2017, University Corporation for Atmospheric Research (UCAR)
-All rights reserved.
+CESM2 Copyright and Terms of Use
 
-Developed by: 
-              University Corporation for Atmospheric Research - National Center for Atmospheric Research
-              https://www2.cesm.ucar.edu/working-groups/sewg
+Copyright (c) 2018, University Corporation for Atmospheric Research
+(UCAR) All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the "Software"), 
-to deal with the Software without restriction, including without limitation 
-the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-and/or sell copies of the Software, and to permit persons to whom 
-the Software is furnished to do so, subject to the following conditions:
+The Community Earth System Model (CESM) was developed primarily in
+cooperation with the National Science Foundation, the Department of
+Energy, the National Aeronautics and Space Administration, and the
+University Corporation for Atmospheric Research National Center for
+Atmospheric Research.
 
-    - Redistributions of source code must retain the above copyright notice, 
-      this list of conditions and the following disclaimers.
-    - Redistributions in binary form must reproduce the above copyright notice, 
-      this list of conditions and the following disclaimers in the documentation 
-      and/or other materials provided with the distribution.
-    - Neither the names of [Name of Development Group, UCAR], 
-      nor the names of its contributors may be used to endorse or promote 
-      products derived from this Software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY UCAR AND ANY CONTRIBUTORS "AS IS" AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL UCAR OR ANY CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGE.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
-LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
-SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
-POSSIBILITY OF SUCH DAMAGE.		
+The following components are copyrighted and may only be used, modified,
+or redistributed under the terms indicated below.
+
+Code		 Institution		Copyright	Terms of Use/Disclaimer
+----		 -----------	 	---------	-----------------------
+AER RRTMG	Atmospheric		Copyright	AER RRTMG Copyright
+    		and			2002-2010, 
+		Environmental 		Atmospheric 
+		Research, Inc.		and 
+					Environmental 
+					Research, Inc.
+
+Common          University Corporation  Copyright 2017,   CIME License
+Infrastructure  for Atmospheric         University
+for Modeling    Research (UCAR) and DOE Corporation for
+the Earth       BER E3SM project team   Atmospheric
+(CIME)          members, including      Research (UCAR);
+                those at SNL and ANL    Copyright 2017,
+                                        Sandia
+                                        Corporation;
+                                        Copyright 2017,
+                                        UChicago Argonne,
+                                        LLC
+
+ESMF		 University of 		Copyright 	University of Illinois/NCSA Open Source License
+		 Illinois/NCSA 		2002-2009, 
+					University of 
+					Illinois/NCSA 
+					Open Source 
+					License
+
+Functionally    UCAR/NCAR, UC Berkeley  Copyright 2017,  FATES License
+Assembled       and DOE                 University
+Terrestrial                             Corporation for
+Ecosystem                               Atmospheric
+Simulator                               Research (UCAR),
+(FATES)                                 the U.S.
+                                        Department of
+                                        Energy, and the
+                                        University of
+                                        California
+
+CISM Community  NCAR/LANL/ORNL/SNL/     Copyright       GNU Lesser General Public License v. 3
+Ice Sheet       LBNL/NYU/U. Bristol/    2004-2018,      CISM is free software: you can redistribute it
+Model           U. Edinburgh/           GNU Lesser      and/or modify it under the terms of the GNU
+                U. Montana/U. Swansea   General Public  Lesser General Public License as published by the
+                                        License v. 3    Free Software Foundation, either version 3 of the
+                                                        License, or (at your option) any later version.
+		 
+Inf_NaN		Lahey			Copyright(c)	Copies of this source code, or standalone compiled 
+_Detection 	Computer		2003, Lahey	files derived from this source may not be sold 
+module		Systems, Inc.		Computer	without permission from Lahey Computers Systems. 
+					Systems, Inc.	All or part of this module may be freely incorporated 
+							into executable programs which are offered for sale. 
+							Otherwise, distribution of all or part of this file is 
+							permitted, provided this copyright notice and header 
+							are included.
+					 
+International	 N/A			Copyright 2003, ISCCP Simulator Software
+Satellite	 			2010, Steve 
+Cloud					Klein and Mark 
+Climatology				Webb
+Project
+(ISCCP)
+
+MCT		Argonne			Copyright 2011,	MCT Copyright
+		National		University of
+		Laboratory		Chicago 
+		 
+Parallel Ocean  Los Alamos National     Copyright 2015, Los Alamos National Security, LLC
+Program (POP2)  Laboratory              Los Alamos
+                                        National
+                                        Security, LLC
+
+The Los Alamos  Los Alamos National     Copyright 2017, Los Alamos National Security, LLC
+Sea Ice Model   Laboratory              Los Alamos
+(CICE)                                  National
+                                        Security, LLC
+
+Spherical       Los Alamos National     Copyright 2015, Los Alamos National Security, LLC
+Coordinate      Laboratory              Los Alamos
+Remapping and                           National
+Interpolation                           Security, LLC
+Package (SCRIP)
+
+XML/Lite	Wadsack-Allen		Copyright 2001, The documentation for the Perl XML-Lite 
+		Digital Group		2010 	  	module is no longer available on-line. 
+					Wadsack-Allen 
+					Digital Group
+		
+For more details on the copyrights of the above components, see
+http://www.cesm.ucar.edu/models/cesm2/copyright.html
+
+There may be other third party tools and libraries that are integrated
+into CESM, and they may have their own copyright notices and terms.

@@ -1,12 +1,35 @@
+
+This requires Sphinx v1.7 or greater, as well as some add-ons, which can
+be installed with:
+
+pip install sphinx
+pip install sphinxcontrib-programoutput
+pip install git+https://github.com/esmci/sphinx_rtd_theme.git@version-dropdown-with-fixes
+
+Check the sphinx version as follows:
+
+>sphinx-build --version
+
+The documentation source is stored with the CESM master code base. However, 
+the built html files are stored separately in the orphan gh-pages branch
+and can be viewed from a browser at URL:
+
+http://escomp.github.io/cesm
+
+Details for working with the documentation are contained in the following
+wiki page:
+
+https://github.com/ESMCI/cime/wiki/Working-with-Sphinx-and-reStructuredText
+
+(The procedure is the same for the CESM documentation as for the CIME
+documentation.)
+
 Use the following commands to auto-build the html documentation from the main
 cesm/doc directory:
 
->make clean
->make html
+make clean
+make html
 
-The build/html files should be copied to the appropriate release or
-development https://github.com/ESCOMP/cesm gh-pages orphan branch
-subdirectory and commited to that branch separately.
-
-Only the doc/source files are stored with the code on the master
-branch.
+To publish the docs to the orphan gh-pages branch, follow the steps in
+https://github.com/ESMCI/cime/wiki/Working-with-Sphinx-and-reStructuredText
+to ensure proper versioning of the documentation.

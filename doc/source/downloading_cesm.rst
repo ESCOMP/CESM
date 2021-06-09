@@ -1,14 +1,14 @@
 .. _downloading:
 
-===================
- Downloading CESM2
-===================
+=============================
+Downloading CESM2 (|version|)
+=============================
 
 Downloading the code and scripts
 --------------------------------
 
 Starting with CESM2, releases are available through a public GitHub
-repository, `http://github.com/ESCOMP/cesm <http://github.com/ESCOMP/cesm>`_. 
+repository, `http://github.com/ESCOMP/CESM <http://github.com/ESCOMP/CESM>`_. 
 
 Access to the code requires both git and Subversion client software in
 place that is compatible with GitHub and our Subversion server
@@ -16,25 +16,25 @@ software.  You will need access to the command line clients, ``git``
 (v1.8 or greater) and ``svn`` (v1.8 or greater but less than v1.11).  
 Currently, our Subversion server
 software is at version 1.8.17. For more information or to download
-open source tools, visit `Subversion <http://subversion.tigris.org/>`_
+open source tools, visit `Subversion <http://subversion.apache.org/>`_
 and `git downloads <https://git-scm.com/downloads>`_.
 
-With valid git and svn clients installed on the machine where CESM will be
+With valid git and svn clients installed on the machine where CESM2 will be
 built and run, the user may download the latest version of the release
 code:
 
 .. code-block:: console
 
-    git clone -b release-cesm2.1.0 https://github.com/ESCOMP/cesm.git my_cesm_sandbox
+    git clone -b release-cesm2.1.3 https://github.com/ESCOMP/CESM.git my_cesm_sandbox
     cd my_cesm_sandbox
 
-To checkout a previous version of CESM, first view the available versions:
+To checkout a previous version of CESM2, first view the available versions:
 
 .. code-block:: console
 
     git tag --list 'release-cesm2*'
 
-To checkout a specific CESM release tag type, for example CESM2.0.1:
+To checkout a specific CESM2 release tag type, for example CESM2.0.1:
 
 .. code-block:: console 
 
@@ -50,8 +50,8 @@ run the **checkout_externals** script from /path/to/my_cesm_sandbox.
 The **checkout_externals** script will read the configuration file called ``Externals.cfg`` and
 will download all the external component models and CIME into /path/to/my_cesm_sandbox. 
 
-Details regarding the CESM checkout process are available in the CESM GitHub repo
-`README <http://github.com/ESCOMP/cesm/blob/master/README.rst>`_
+Details regarding the CESM2 checkout process are available in the CESM GitHub repo
+`README <http://github.com/ESCOMP/CESM/blob/master/README.rst>`_
 To see more details regarding the checkout_externals script from the command line, type:
 
 .. code-block:: console

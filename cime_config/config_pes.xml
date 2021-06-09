@@ -1008,6 +1008,78 @@
     </mach>
   </grid>
   <grid name="a%0.9x1.25.+l%0.9x1.25.+oi%gx1" >
+    <mach name='aleph'>
+      <pes pesize="M" compset="any">
+	<comment>none</comment>
+	<ntasks>
+	  <ntasks_atm>-33</ntasks_atm>
+	  <ntasks_lnd>-29</ntasks_lnd>
+	  <ntasks_rof>-29</ntasks_rof>
+	  <ntasks_ice>-3</ntasks_ice>
+	  <ntasks_ocn>-7</ntasks_ocn>
+	  <ntasks_glc>-1</ntasks_glc>
+	  <ntasks_wav>-1</ntasks_wav>
+	  <ntasks_cpl>-33</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>-29</rootpe_ice>
+	  <rootpe_ocn>-33</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>-32</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+    </mach>
+    <mach name='aleph'>
+      <pes pesize="S" compset="any">
+	<comment>about 4ypd</comment>
+	<ntasks>
+	  <ntasks_atm>260</ntasks_atm>
+	  <ntasks_lnd>200</ntasks_lnd>
+	  <ntasks_rof>200</ntasks_rof>
+	  <ntasks_ice>40</ntasks_ice>
+	  <ntasks_ocn>60</ntasks_ocn>
+	  <ntasks_glc>160</ntasks_glc>
+	  <ntasks_wav>20</ntasks_wav>
+	  <ntasks_cpl>260</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>200</rootpe_ice>
+	  <rootpe_ocn>260</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>240</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+    </mach>
+  </grid>
+  <grid name="a%0.9x1.25.+l%0.9x1.25.+oi%gx1" >
     <mach name='cori-knl'>
       <pes pesize="any" compset="any">
 	<comment>none</comment>

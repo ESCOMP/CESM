@@ -316,11 +316,13 @@ class TestCreateExternalsDescription(unittest.TestCase):
         """Create config object used as basis for all tests
         """
         self._config = config_parser()
+        self._gmconfig = config_parser()
         self.setup_config()
 
     def setup_config(self):
         """Boiler plate construction of xml string for componet 1
         """
+        # Create a standard externals config with a single external
         name = 'test'
         self._config.add_section(name)
         self._config.set(name, ExternalsDescription.PATH, 'externals')
@@ -331,6 +333,14 @@ class TestCreateExternalsDescription(unittest.TestCase):
 
         self._config.add_section(DESCRIPTION_SECTION)
         self._config.set(DESCRIPTION_SECTION, VERSION_ITEM, '1.0.0')
+
+        # Create a .gitmodules test
+        name = 'submodule "gitmodules_test"'
+        self._gmconfig.add_section(name)
+        self._gmconfig.set(name, "path", 'externals/test')
+        self._gmconfig.set(name, "url", '/path/to/repo')
+        # NOTE(goldy, 2019-03) Should test other possible keywords such as
+        # fetchRecurseSubmodules, ignore, and shallow
 
     def test_cfg_v1_ok(self):
         """Test that a correct cfg v1 object is created by create_externals_description
@@ -356,7 +366,7 @@ class TestCreateExternalsDescription(unittest.TestCase):
         rdata = {ExternalsDescription.PROTOCOL: 'git',
                  ExternalsDescription.REPO_URL: '/path/to/repo',
                  ExternalsDescription.TAG: 'tagv1',
-                 }
+                }
 
         desc = {
             'test': {
