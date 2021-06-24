@@ -1,4 +1,128 @@
 ===============================================================
+Tag name: cesm2_3_alpha04a
+Originator(s): CSEG
+Date: 24 June 2021
+One-line Summary: Bring in CIME code seperation
+
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_017                           --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210406           --
+cime                               https://github.com/CESM-Development/cime/tree/cime6.0.0            **
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.2               ** 
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps                    **
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.12                  **
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.11                  **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_83            --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev038                 --
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210419           --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210415                --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_42                 --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210419          --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_76                       --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210317                 --
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_2021100520        **
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  **
+libraries/parallelio               https://github.com/NCAR/ParallilIO                                 **
+
+
+cdeps
+    Chris Fischer 2021-06-08 - cdeps0.12.11 - components/cdeps (cesm2_3_alpha04a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.1
+
+     
+
+
+cime
+    Chris Fischer 2021-06-01 - cime6.0.0 - cime (cesm2_3_alpha04a)
+    https://github.com/ESMCI/cime/tags/cime6.0.0
+
+        - Remove files that were moved out in #3990
+        - Remove all python2 invocations, except some stuff form tools.
+    *** - Seperation of fortran code to new repositories.
+        - Change cdash upload settings.
+        - Fix walltime check.
+        - Record preview_run provenance.
+        - Fixes error in parsing and comparing namelist values.
+        - Bump pillow from 8.1.1 to 8.2.0 in /tools/statistical_ensemble_test/pyCECT/docs
+        - Update the esmf library module all compilers, update gnu compiler to 10.1.0 on cheyenne.
+        - Fix unittest raising error on py37.
+        - Allow multiple grids for a component.
+        - Update climate reproducibility tests.
+        - Adds --chksum argument to case.submit and create_test.
+        - Fixes new_hash method.
+        - Adds CASE_HASH to env_case.
+        - Modify ERI test for EAM.
+        - Switch location of E3SM share buildlib scripts.
+        - Updates for pleiades systems.
+        - Add feature to capture CIME commands in a script.
+
+
+cmeps
+    Chris Fischer 2021-06-08 - cmeps0.13.12 - src/drivers/nuopc/ (cesm2_3_alpha04a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.5
+
+     
+
+
+cpl7
+    Chris Fischer 2021-06-23 - cpl7.0.2 - components/cpl7 (cesm2_3_alpha04a)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.2
+
+    Add license file and move to python3.
+
+
+    Chris Fischer 2021-06-23 - cpl7.0.1 - components/cpl7 (cesm2_3_alpha04a)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.1
+
+
+    Add CASE_HASH, fix white space, and add github actions.
+
+
+    Chris Fischer 2021-06-23 - cpl7.0.0 - components/cpl7 (cesm2_3_alpha04a)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.0
+
+    Initial tag for CESM_CPL7andDataComps.
+
+
+MCT
+    Chris Fischer 2021-06-23 - MCT_2.11.0 - libraries/mct (cesm2_3_alpha04a)
+    https://github.com/MCSclimate/MCT/tags/MCT_2.11.0
+
+    MCT is now treated as an external.
+
+
+ParallelIO
+    Chris Fischer 2021-06-23 - pio2_5_3 - libraries/parallelio (cesm2_3_alpha04a)
+    https://github.com/NCAR/ParallelIO/tags/pio2_5_3
+
+    PIO is now treated as an external.
+
+
+share
+    Chris Fischer 2021-06-23 - share1.0.2 - share (cesm2_3_alpha04a)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.2
+
+    Add license file and move to python3.
+
+
+    Chris Fischer 2021-06-23 - share1.0.1 - share (cesm2_3_alpha04a)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.1
+
+    Add github actions to run scripts regression tests.
+
+
+    Chris Fischer 2021-06-23 - share1.0.0 - share (cesm2_3_alpha04a)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.0
+
+    Initial tag for CESM_share.
+
+
+ww3dev
+    Chris Fischer 2021-06-08 - dev/ncar_20210520 - components/ww3dev (cesm2_3_alpha04a)
+    https://github.com/ESCOMP/WW3-CESM/tags/dev/ncar_20210520
+
+
+===============================================================
 Tag name: cesm2_3_beta03
 Originator(s): CSEG
 Date: 25 May 2021
