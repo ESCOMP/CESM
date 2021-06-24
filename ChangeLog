@@ -2,7 +2,7 @@
 Tag name: cesm2_3_alpha04a
 Originator(s): CSEG
 Date: 24 June 2021
-One-line Summary: Bring in CIME code seperation
+One-line Summary: Bring in CIME code seperation and add new externals.
 
 
 components/cam                     https://github.com/ESCOMP/CAM/cam6_3_017                           --
