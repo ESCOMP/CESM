@@ -1,4 +1,176 @@
 ===============================================================
+Tag name: cesm2_3_alpha05a
+Originator(s): CSEG
+Date: 20 June 2021
+One-line Summary: CTSM answer changes
+
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_017                           --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210406           --
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_4          **
+cime                               https://github.com/CESM-Development/cime/tree/cime6.0.1            **
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.2               -- 
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.3           **
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.13                  **
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.11                  **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_85            **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev044                 **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210419           --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210415                --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_42                 --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210615          **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_76                       --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210317                 --
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_2021100520        --
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  --
+libraries/parallelio               https://github.com/NCAR/ParallilIO                                 --
+
+cdeps
+    James Edwards 2021-06-01 - cdeps0.12.7 - components/cdeps (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.7
+
+    add aerosol fluxes to jra mode for datm
+
+
+
+    Erik Kluzek 2021-05-18 - cdeps0.12.4 - components/cdeps (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.4
+
+    Bring in some fixes for CLM_USRDAT tower sites.
+
+
+    Chris Fischer 2021-06-29 - cdeps0.12.11 - components/cdeps (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.11
+
+     
+
+
+cice6
+    David Bailey 2021-06-29 - cesm_cice6_2_0_4 - components/cice6 (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_2_0_1
+
+    First tag for CICE6.2.0. This points to the nuopc branch of ESCOMP/CICE as an external.
+    Also added the python3 environment statements. I had to add a few new things to
+    namelist_definition_cice.xml to reflect recent changes to the CICE6 namelist.
+
+
+cime
+    Chris Fischer 2021-06-29 - cime6.0.1 - cime (cesm2_3_alpha05a)
+    https://github.com/ESMCI/cime/tags/cime6.0.1
+
+        - Allow multiple copys of this variable.
+        - Updates from imp to importlib.
+        - Set default python to 'python3' for scripts tests CMake file.
+        - Add a new version of WW3 as an optional component.
+        - Multi gpus casper.
+        - cime smartsim.
+        - Refactor lilac build - only relevant to CESM.
+        - Adds default walltime for queues.
+
+
+cism
+    William Sacks 2021-05-29 - cismwrap_2_1_85 - components/cism (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_85
+
+    Scripting changes to support multiple grids for a component
+
+
+    William Sacks 2021-05-29 - cismwrap_2_1_84 - components/cism (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_84
+
+    Update externals to version in cesm2_3_beta03
+
+    No answer changes in the CESM context, since this is just an externals update for standalone checkouts
+
+
+clm
+    William Sacks 2021-06-25 - ctsm5.1.dev044 - components/clm (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev044
+
+    From Mariana: New stream functionality when using NUOPC or LILAC
+
+    Changes answers for NUOPC/LILAC configurations
+
+    Requires updates to
+    - CDEPS (cdeps0.12.11 used in this tag)
+    - CIME (https://github.com/ESMCI/cime/pull/4014; just needed for LILAC, so not critical for this CESM tag)
+
+
+    Erik Kluzek 2021-06-03 - ctsm5.1.dev043 - components/clm (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev043
+
+    Some refactoring for a later introduction of a new soil decomposition option. 
+    At this point the "CN " compsets now fail.
+
+
+    Erik Kluzek 2021-05-28 - ctsm5.1.dev042 - components/clm (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev042
+
+    Small answer changes. Change some hard-coded constants to double precision. Also add more limits
+    on max organic in soil as per Keith Oleson.
+
+
+    Erik Kluzek 2021-05-27 - ctsm5.1.dev041 - components/clm (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev041
+
+    FATES update. Bit-for-bit other than tests with FATES.
+
+
+    William Sacks 2021-05-25 - ctsm5.1.dev040 - components/clm (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev040
+
+    Replace masked with "nomask" SRC files for use with mkmapdata and mksurfdata_map
+
+
+    Erik Kluzek 2021-05-18 - ctsm5.1.dev039 - components/clm (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev039
+
+    Add NEON compsets
+
+    This is dependent on versions of externals that have already come in: 
+    But also needs: cdeps0.12.4
+
+
+cmeps
+    Chris Fischer 2021-06-29 - cmeps0.13.13 - src/drivers/nuopc/ (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.13
+
+    Add GPU per node variables from cime PR #3989
+
+
+    Mariana Vertenstein 2021-06-15 - cmeps0.13.11 - src/drivers/nuopc/ (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.11
+
+    Updates and bugfixes for Faoo_fco2_ocn (all others are bfb)
+
+
+    Mariana Vertenstein 2021-06-15 - cmeps0.13.11 - src/drivers/nuopc/ (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.11
+
+    Updates and bugfixes for Faoo_fco2_ocn (all others are bfb)
+
+
+cpl7
+    Chris Fischer 2021-06-29 - cpl7.0.3 - components/cpl7 (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.3
+
+    Add GPU per node variables from cime PR #3989.
+    Add ESP to PIO_NETCDF_FORMAT variables.
+
+
+pop
+    Alper Altuntas 2021-06-15 - cesm_pop_2_1_20210615 - components/pop (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20210615
+
+    Additional bug fixes for ndep and co2 from cam -> pop for nuopc cap
+
+
+    Alper Altuntas 2021-06-02 - cesm_pop_2_1_20210602 - components/pop (cesm2_3_alpha05a)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20210602
+
+    fixed ndep problem for pop in nuopc cap
+
+===============================================================
 Tag name: cesm2_3_beta04
 Originator(s): CSEG
 Date: 29 June 2021
