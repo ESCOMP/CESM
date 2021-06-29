@@ -1,4 +1,41 @@
 ===============================================================
+Tag name: cesm2_3_beta04
+Originator(s): CSEG
+Date: 29 June 2021
+One-line Summary: Bring in CIME code seperation and add new externals.
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_017                    
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210406   
+cime                               https://github.com/CESM-Development/cime/tree/cime6.0.0  
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.2    
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps        
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.12     
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.11    
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_83   
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev038       
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210419   
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210415         
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_42        
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210419 
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_76             
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210317      
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_2021100520 
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0      
+libraries/parallelio               https://github.com/NCAR/ParallilIO/tree/pio2_5_4                    
+
+Answer Changes introduced with this tag when compared to cesm2_3_beta03:
+None
+
+Problems identified after tag creation:
+- ERP_Ld3.f19_f19_mg17.FWsc2010climo.cheyenne_intel.cam-outfrq3d restart fail.
+- ERP_D_Ln9.C48_C48_mg17.QPC6.cheyenne_intel.cam-outfrq9s build fail.
+- ERP_D_Ln9.f09_f09_mg17.FSD.cheyenne_intel.cam-outfrq9s_contrail run fail.
+- ERP_Ln9.ne30_ne30_mg17.F2000climo.cheyenne_intel.cam-outfrq9s run fail due to init file.
+- Known issues with some nuopc configuration.
+- Several intel tests on izumi failing with SIGSEGV.
+- There are known issues for the pgi and cray compilers.
+
+===============================================================
 Tag name: cesm2_3_alpha04a
 Originator(s): CSEG
 Date: 24 June 2021
