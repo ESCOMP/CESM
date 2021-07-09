@@ -2,7 +2,7 @@
 Tag name: cesm2_3_alpha05a
 Originator(s): CSEG
 Date: 20 June 2021
-One-line Summary: CTSM answer changes
+One-line Summary: CAM answer changes
 
 
 components/cam                     https://github.com/ESCOMP/CAM/cam6_3_025                           **
