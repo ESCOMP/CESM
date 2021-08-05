@@ -1,4 +1,302 @@
 ===============================================================
+Tag name: cesm2_3_alpha05b
+Originator(s): CSEG
+Date: 8 August 2021
+One-line Summary: CTSM answer changes
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_025                           --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802           **
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_4          --
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.4                       **
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.4               -- 
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.4           **
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.20                  **
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.11                  **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_85            --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev050                 **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b          **
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210708                **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_43                 **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210803          **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_77                       **
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                 **
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803          **
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  --
+libraries/parallelio               https://github.com/NCAR/ParallilIO                                 --
+
+cice
+    David Bailey 2021-08-02 - cice5_20210802 - components/cice (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20210802
+
+    Add python3
+
+
+cime
+    Chris Fischer 2021-08-02 - cime6.0.4 - cime (cesm2_3_alpha05b)
+    https://github.com/ESMCI/cime/tags/cime6.0.4
+
+        - Fix replay archive.
+        - Prepend the casename to mpas component restart file search in st_archive.
+        - Fix e3sm archiving.
+        - Check the size of read only xml files.
+        - Ensure Cmake is available for wait_for_tests.
+        - Fix the failure of ensemble consistency tests for PGI/NVHPC compiler on Casper.
+        - Fix type in centos7-linux definition.
+        - jenkins_generic_job: no reason for this magic config setting here.
+
+
+    Chris Fischer 2021-08-02 - cime6.0.3 - cime (cesm2_3_alpha05b)
+    https://github.com/ESMCI/cime/tags/cime6.0.3
+
+        - WW3 support for E3SM
+        - Allow a test to have multiple testmods
+        - Update python version check to 3.6 and load python module on cheyenne
+        - Update ESMF libraries on cheyenne and izumi
+
+
+    Chris Fischer 2021-08-02 - cime6.0.2 - cime (cesm2_3_alpha05b)
+    https://github.com/ESMCI/cime/tags/cime6.0.2
+
+        - Update externals.
+        - Fix tests.
+        - Add esmf support for casper pgi.
+        - Fix testreporter issues with python3
+
+
+    Chris Fischer 2021-06-29 - cime6.0.1 - cime (cesm2_3_alpha05b)
+    https://github.com/ESMCI/cime/tags/cime6.0.1
+
+        - Allow multiple copys of this variable.
+        - Updates from imp to importlib.
+        - Set default python to 'python3' for scripts tests CMake file.
+        - Add a new version of WW3 as an optional component.
+        - Multi gpus casper.
+    Requires components to have updated shebang lines for python
+        - cime smartsim.
+        - Refactor lilac build - only relevant to CTSM.
+        - Adds default walltime for queues.
+
+
+clm
+    William Sacks 2021-08-02 - ctsm5.1.dev050 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev050
+
+    Improve and document method for getting diagnostics on a problem point
+
+
+    Erik Kluzek 2021-07-16 - ctsm5.1.dev049 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev049
+
+    NEON updates from Jim Edwards
+    New history option
+
+    Update externals to cesm2_3_beta04+ Also updates cime, cdeps, cmeps, rtm, mosart
+
+    Requires cime6.0.3, cmeps0.13.15, cdeps0.12.14, cpl7.0.3
+
+
+    Erik Kluzek 2021-07-10 - ctsm5.1.dev048 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev048
+
+    Change some history field names.
+
+
+    William Sacks 2021-07-08 - ctsm5.1.dev047 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev047
+
+    Start bounds at 1; remove references to MCT
+
+
+    Erik Kluzek 2021-07-02 - ctsm5.1.dev046 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev046
+
+    Update FATES
+
+    Update shebang lines needed to work with cime6.0.1
+
+
+    Erik Kluzek 2021-06-29 - ctsm5.1.dev045 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev045
+
+    Allow course woody debris in heterotrophic respiration 
+
+
+    William Sacks 2021-06-25 - ctsm5.1.dev044 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev044
+
+    From Mariana: New stream functionality when using NUOPC or LILAC
+
+    Changes answers for NUOPC/LILAC configurations
+
+    Requires updates to
+    - CDEPS (cdeps0.12.11 used in this tag)
+    - CIME (https://github.com/ESMCI/cime/pull/4014; just needed for LILAC, so not critical for this CESM tag)
+
+
+    Erik Kluzek 2021-06-03 - ctsm5.1.dev043 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev043
+
+    Some refactoring for a later introduction of a new soil decomposition option. 
+    At this point the "CN " compsets now fail.
+
+
+    Erik Kluzek 2021-05-28 - ctsm5.1.dev042 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev042
+
+    Small answer changes. Change some hard-coded constants to double precision. Also add more limits
+    on max organic in soil as per Keith Oleson.
+
+
+    Erik Kluzek 2021-05-27 - ctsm5.1.dev041 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev041
+
+    FATES update. Bit-for-bit other than tests with FATES.
+
+
+    William Sacks 2021-05-25 - ctsm5.1.dev040 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev040
+
+    Replace masked with "nomask" SRC files for use with mkmapdata and mksurfdata_map
+
+
+    Erik Kluzek 2021-05-18 - ctsm5.1.dev039 - components/clm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev039
+
+    Add NEON compsets
+
+    This is dependent on versions of externals that have already come in: 
+    But also needs: cdeps0.12.4
+
+
+cmeps
+    Chris Fischer 2021-08-04 - cmeps0.13.20 - src/drivers/nuopc/ (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.20
+
+    Fix run sequence bug for G and C compsets
+
+
+    Chris Fischer 2021-08-03 - cmeps0.13.19 - src/drivers/nuopc/ (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.19
+
+    Fix typo
+
+
+    Chris Fischer 2021-08-02 - cmeps0.13.18 - src/drivers/nuopc/ (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.18
+
+    Expand aoflux calculation to include atmosphere grid and exchange grid
+
+
+    Chris Fischer 2021-08-02 - cmeps0.13.17 - src/drivers/nuopc/ (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.17
+
+    New run sequence for B1850 nuopc validation
+
+
+    Chris Fischer 2021-08-02 - cmeps0.13.16 - src/drivers/nuopc/ (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.16
+
+    Update for HAFS coupling mode and changes that are required for WW3 coupling under UFS
+
+
+    Chris Fischer 2021-08-02 - cmeps0.13.15 - src/drivers/nuopc/ (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.15
+
+    Fix unitialized variable in timeInit, remove option ifdays0
+
+
+    Chris Fischer 2021-08-02 - cmeps0.13.14 - src/drivers/nuopc/ (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps.13.14
+
+    Change all shebangs to explicitly use python3
+
+
+cpl7
+    Chris Fischer 2021-08-02 - cpl7.0.4 - components/cpl7 (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.4
+
+    python3 shebang lines
+
+
+fms
+    James Edwards 2021-07-08 - fi_20210708b - libraries/fms (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20210708b
+
+    Fixes an issue in FMS library by adding file topography.F90 to src_overrides
+
+
+    James Edwards 2021-07-08 - fi_20210708 - libraries/fms (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20210708
+
+    Updates shebang in buildlib to python3
+
+
+mom
+    James Edwards 2021-07-08 - mi_20210708 - components/mom (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20210708
+
+    Updates MOM interface to use python3 on shebang lines.
+
+
+mosart
+    Erik Kluzek 2021-07-16 - mosart1_0_43 - components/mosart (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_43
+
+    Change shebang lines for python (needed for cime6.0.2)
+
+    Abort if direction file not set
+
+    Add a R2000MOSART compset (not tested yet)
+
+
+pop
+    Alper Altuntas 2021-08-03 - cesm_pop_2_1_20210803 - components/pop (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20210803
+
+    update shebangs to py3
+
+
+rtm
+    Erik Kluzek 2021-07-16 - rtm1_0_77 - components/rtm (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_77
+
+    Change shebang lines (required in cime6.0.2)
+
+    Abort if direction file not found
+
+
+share
+    Chris Fischer 2021-08-02 - share1.0.4 - share (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.4
+
+    Python3 shebang line
+
+
+    Chris Fischer 2021-08-02 - share1.0.3 - share (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.3
+
+    Add CIMEROOT to build script.
+
+
+ww3
+    Alper Altuntas 2021-08-03 - ww3_210803 - components/ww3 (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/WW3-CESM/tags/ww3_210803
+
+    update shebangs to py3
+
+
+ww3dev
+    Alper Altuntas 2021-08-03 - dev/ncar_20210803 - components/ww3dev (cesm2_3_alpha05b)
+    https://github.com/ESCOMP/WW3-CESM/tags/ncar_20210803
+
+    - Change shebang lines to python3.
+    - Misc fixes for WW3DEV + OCN coupling
+    - fix archiving issue
+    - fix USSX/Y and LANGMT diags
+    - add the export of partitioned Stokes drift
+
+
+===============================================================
 Tag name: cesm2_3_alpha05a
 Originator(s): CSEG
 Date: 9 July 2021
