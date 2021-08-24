@@ -1,4 +1,181 @@
 ===============================================================
+Tag name: cesm2_3_alpha05c
+Originator(s): CSEG
+Date: 24 August 2021
+One-line Summary: Various component model updates
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_026                           **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802           --
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5          **
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.6                       **
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.7               ** 
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5           **
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.25                  **
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.21                  **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_88            **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev053                 **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b          --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210709                **
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_43                 --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210803          --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_77                       --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                 --
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803          --
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  --
+libraries/parallelio               https://github.com/NCAR/ParallilIO                                 --
+
+cam
+    Francis Vitt 2021-07-20 - cam6_3_027 - components/cam (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_027
+
+    Misc bug fixes for WACCMX
+
+
+    Kate Thayer-Calder 2021-08-17 - cam6_3_026 - components/cam (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_026
+
+    CAM PPE support. Two code changes result in round-off level answer changes to compsets using CAM6 physics.
+
+
+cdeps
+    Chris Fischer 2021-08-17 - cdeps0.12.21 - components/cdeps (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.21
+
+    Fix pgi compiler error.
+
+
+    Mariana Vertenstein 2021-08-10 - cdeps0.12.20 - components/cdeps (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.20
+
+    Add restart capability at end of run
+
+
+cice6
+    David Bailey 2021-08-09 - cesm_cice6_2_0_5 - components/cice6 (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_2_0_5
+
+    Add config_archive.xml for CICE6.
+
+
+cime
+    Chris Fischer 2021-08-20 - cime6.0.6 - cime (cesm2_3_alpha05c)
+    https://github.com/ESMCI/cime/tags/cime6.0.6
+
+        - Make sure CLM_USERDAT_NAME is not UNSET if set.
+        - New mesh file and grid for running CISM over Antarctica.
+        - Handle neon data better by first checking the neon server.
+        - Fixes provenance in git worktree.
+        - Fix namelist duplications.
+        - Changed Addendum to Appendices.
+        - Allow multiple methods for running unit tests.
+
+
+    Chris Fischer 2021-08-17 - cime6.0.5 - cime (cesm2_3_alpha05c)
+    https://github.com/ESMCI/cime/tags/cime6.0.5
+
+        - Fix an issue with file locks when not run from caseroot.
+        - Strip % from job_id.
+        - Update esmf version.
+        - Support the creation of multiple user_nl files for a component.
+
+
+cism
+    William Sacks 2021-08-12 - cismwrap_2_1_88 - components/cism (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_88
+
+    Add out-of-the-box Antarctica support
+
+    Adds a new Antarctica test (compset T1850Ga), which depends on
+    https://github.com/ESMCI/cime/pull/4071 (other tests will pass without that)
+
+
+    William Sacks 2021-08-03 - cismwrap_2_1_87 - components/cism (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap2_1_87
+
+    Fix mid-year restarts with cmeps
+
+    May require a recent CMEPS version
+
+
+    William Sacks 2021-08-02 - cismwrap_2_1_86 - components/cism (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap2_1_86
+
+    Update externals
+
+    No impact in a CESM checkout
+
+
+clm
+    William Sacks 2021-08-13 - ctsm5.1.dev053 - components/clm (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev053
+
+    Add Antarctica compset and change min_snow_to_keep
+
+    Very limited answer changes, but may show up in theory
+
+
+    Erik Kluzek 2021-08-11 - ctsm5.1.dev052 - components/clm (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev052
+
+    Fix for writing restarts at end for cmeps driver.
+
+    Some NEON and tools fixes. And a new script to run many NEON sites.
+
+    Write restart at end for CMEPS mediator depends on:
+      cdeps0.12.19 and cmeps0.13.23
+
+
+    William Sacks 2021-08-06 - ctsm5.1.dev051 - components/clm (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev051
+
+    New ozone stress option
+
+    Changes answers for pgi, otherwise bfb
+
+
+cmeps
+    Mariana Vertenstein 2021-08-10 - cmeps0.13.25 - src/drivers/nuopc/ (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.25
+
+    Will have atm/ocn flux computation on ogrid, agrid, and xgrid
+    This will come in when cmeps PR#223 is accepted
+
+
+cpl7
+    Chris Fischer 2021-08-13 - cpl7.0.5 - components/cpl7 (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.5
+
+    Replace f19_g16 tests with f19_g17.
+    Fix documentation of seq_flux_mct_alb* variables.
+
+
+mom
+    Alper Altuntas 2021-07-09 - mi_20210709 - components/mom (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20210409
+
+    - clean up buildlib and buildnml
+    - Implements a module to simulate CFCs via NUOPC cap
+    - Merging the main candidate from GFDL 2021-03-26
+
+
+share
+    Chris Fischer 2021-08-20 - share1.0.7 - share (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.7
+
+    Fix for nag compiler.
+
+
+    Chris Fischer 2021-08-17 - share1.0.6 - share (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.6
+
+    Add an interface to the HPE SmartSim database.
+
+
+    William Sacks 2021-08-09 - share1.0.5 - share (cesm2_3_alpha05c)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.5
+
+    Add module to read ozone_coupling_nl
+===============================================================
 Tag name: cesm2_3_alpha05b
 Originator(s): CSEG
 Date: 8 August 2021
