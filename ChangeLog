@@ -1,4 +1,36 @@
 ===============================================================
+Tag name: cesm2_3_alpha05d
+Originator(s): CSEG
+Date: 20 September 2021
+One-line Summary: Various component model updates
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_026                           --
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802           --
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5          --
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.7                       **
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.7               -- 
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5           --
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.25                  --
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.21                  --
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_88            --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev053                 --
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b          --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210709                --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_43                 --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210803          --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_77                       --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                 --
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803          --
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  --
+libraries/parallelio               https://github.com/NCAR/ParallilIO                                 --
+
+cime
+    Chris Fischer 2021-08-25 - cime6.0.7 - cime (cesm2_3_alpha05d)
+    https://github.com/ESMCI/cime/tags/cime6.0.7
+
+    Changes to have new user_nl_stream_xxx for cdeps.
+
+===============================================================
 Tag name: cesm2_3_alpha05c
 Originator(s): CSEG
 Date: 24 August 2021
