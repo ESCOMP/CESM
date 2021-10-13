@@ -117,6 +117,54 @@ The compset name usually has a well defined first letter followed by
 some characters that are indicative of the configuration setup. Each
 compset name has a corresponding short name. 
 
+The first letter generally indicates which of the components are fully
+active (prognostic), which are data components, and which are completely
+absent (or stub). For the most part, this first letter refers only to
+the atmosphere (atm), land (lnd), sea ice (ice) and ocean (ocn)
+components. The type of component used for river (rof), land ice (glc)
+and ocean wave (wav) is either specified in some other way in the alias
+or is not specified explicitly. For example, an evolving land ice (glc)
+model is denoted by a capital G near the end of the compset alias (e.g.,
+B1850G is similar to B1850 but with an evolving Greenland ice sheet). In
+some cases, the distinction between prognostic and data components is
+not clear-cut -- for example, when using a data ocean model in slab
+ocean model (SOM) mode, or when using a prognostic sea ice model (CICE)
+in prescribed mode.
+
+.. table::
+
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | Designation | Active Components  | Data Components | Notes                                                                                                        |
+    +=============+====================+=================+==============================================================================================================+
+    | A           | --                 | VARIES          | All data components (exact set of data components differs for different compsets); used for software testing |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | B           | atm, lnd, ice, ocn | --              | Fully active components                                                                                      |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | C           | ocn                | atm, ice, rof   | \                                                                                                            |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | D           | ice                | atm, ocn, rof   | Slab ocean model (SOM)                                                                                       |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | E           | atm, lnd, ice      | ocn             | Slab ocean model (SOM)                                                                                       |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | F           | atm, lnd           | ice, ocn        | Sea ice in prescribed mode; some F compsets use fewer surface components                                     |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | G           | ice, ocn           | atm, rof        | \                                                                                                            |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | I           | lnd                | atm             | \                                                                                                            |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | J           | lnd, ice, ocn      | atm             | Can be used to spin up the surface components                                                                |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | P           | atm                | --              | CAM PORT compsets                                                                                            |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | Q           | atm                | ocn             | Aquaplanet compsets                                                                                          |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | S           | --                 | --              | Driver only; used for software testing                                                                       |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | T           | glc                | lnd             | \                                                                                                            |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+    | X           | --                 | --              | Coupler-test components; used for software testing                                                           |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------------------------------------------+
+
 See `supported component sets
 <http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html>`_ for a
 complete list of supported compset options. Running **query_config**
