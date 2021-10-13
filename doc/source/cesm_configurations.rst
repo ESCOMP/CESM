@@ -109,13 +109,62 @@ The CESM2 components can be combined in numerous ways to carry out
 various scientific or software experiments. A particular mix of
 components, *along with* component-specific configuration and/or
 namelist settings is called a `component set or compset
-<http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html>`_.  CESM
-has a shorthand naming convention for component sets that are
-supported out-of-the-box.
+<http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html>`_. CESM has a
+shorthand naming convention (known as an alias) for component sets that
+are supported out-of-the-box. The compset alias usually has a
+well-defined first letter followed by some characters that are
+indicative of the configuration setup.
 
-The compset name usually has a well defined first letter followed by
-some characters that are indicative of the configuration setup. Each
-compset name has a corresponding short name. 
+The first letter in a compset alias generally indicates which of the
+components are fully active (prognostic), which are data components, and
+which are completely absent (or stub). For the most part, this first
+letter refers only to the atmosphere (atm), land (lnd), sea ice (ice)
+and ocean (ocn) components. The type of component used for river (rof),
+land ice (glc) and ocean wave (wav) is either specified in some other
+way in the alias or is not specified explicitly. For example, an
+evolving land ice (glc) model is denoted by a capital G near the end of
+the compset alias (e.g., B1850G is similar to B1850 but with an evolving
+Greenland ice sheet). In some cases, the distinction between prognostic
+and data components is not clear-cut -- for example, when using a data
+ocean model in slab ocean model (SOM) mode, or when using a prognostic
+sea ice model (CICE) in prescribed mode.
+
+The following table summarizes these first-letter designations in
+compset aliases:
+
+.. table::
+
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | Designation | Active Components  | Data Components | Notes                                                                    |
+    +=============+====================+=================+==========================================================================+
+    | A           | --                 | various         | All data components; used for software testing                           |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | B           | atm, lnd, ice, ocn | --              | Fully active components                                                  |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | C           | ocn                | atm, ice, rof   | \                                                                        |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | D           | ice                | atm, ocn, rof   | Slab ocean model (SOM)                                                   |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | E           | atm, lnd, ice      | ocn             | Slab ocean model (SOM)                                                   |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | F           | atm, lnd           | ice, ocn        | Sea ice in prescribed mode; some F compsets use fewer surface components |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | G           | ice, ocn           | atm, rof        | \                                                                        |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | I           | lnd                | atm             | \                                                                        |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | J           | lnd, ice, ocn      | atm             | Can be used to spin up the surface components                            |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | P           | atm                | --              | CAM PORT compsets                                                        |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | Q           | atm                | ocn             | Aquaplanet compsets                                                      |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | S           | --                 | --              | No components present; used for software testing                         |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | T           | glc                | lnd             | \                                                                        |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
+    | X           | --                 | --              | Coupler-test components; used for software testing                       |
+    +-------------+--------------------+-----------------+--------------------------------------------------------------------------+
 
 See `supported component sets
 <http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html>`_ for a
