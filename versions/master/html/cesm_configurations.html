@@ -426,12 +426,113 @@ so ice, ocn, and glc stubs are used).</p>
 <p>The CESM2 components can be combined in numerous ways to carry out
 various scientific or software experiments. A particular mix of
 components, <em>along with</em> component-specific configuration and/or
-namelist settings is called a <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html">component set or compset</a>.  CESM
-has a shorthand naming convention for component sets that are
-supported out-of-the-box.</p>
-<p>The compset name usually has a well defined first letter followed by
-some characters that are indicative of the configuration setup. Each
-compset name has a corresponding short name.</p>
+namelist settings is called a <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html">component set or compset</a>. CESM has a
+shorthand naming convention (known as an alias) for component sets that
+are supported out-of-the-box. The compset alias usually has a
+well-defined first letter followed by some characters that are
+indicative of the configuration setup.</p>
+<p>The first letter in a compset alias generally indicates which of the
+components are fully active (prognostic), which are data components, and
+which are completely absent (or stub). For the most part, this first
+letter refers only to the atmosphere (atm), land (lnd), sea ice (ice)
+and ocean (ocn) components. The type of component used for river (rof),
+land ice (glc) and ocean wave (wav) is either specified in some other
+way in the alias or is not specified explicitly. For example, an
+evolving land ice (glc) model is denoted by a capital G near the end of
+the compset alias (e.g., B1850G is similar to B1850 but with an evolving
+Greenland ice sheet). In some cases, the distinction between prognostic
+and data components is not clear-cut – for example, when using a data
+ocean model in slab ocean model (SOM) mode, or when using a prognostic
+sea ice model (CICE) in prescribed mode.</p>
+<p>The following table summarizes these first-letter designations in
+compset aliases:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Designation</p></th>
+<th class="head"><p>Active Components</p></th>
+<th class="head"><p>Data Components</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A</p></td>
+<td><p>–</p></td>
+<td><p>various</p></td>
+<td><p>All data components; used for software testing</p></td>
+</tr>
+<tr class="row-odd"><td><p>B</p></td>
+<td><p>atm, lnd, ice, ocn</p></td>
+<td><p>–</p></td>
+<td><p>Fully active components</p></td>
+</tr>
+<tr class="row-even"><td><p>C</p></td>
+<td><p>ocn</p></td>
+<td><p>atm, ice, rof</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>D</p></td>
+<td><p>ice</p></td>
+<td><p>atm, ocn, rof</p></td>
+<td><p>Slab ocean model (SOM)</p></td>
+</tr>
+<tr class="row-even"><td><p>E</p></td>
+<td><p>atm, lnd, ice</p></td>
+<td><p>ocn</p></td>
+<td><p>Slab ocean model (SOM)</p></td>
+</tr>
+<tr class="row-odd"><td><p>F</p></td>
+<td><p>atm, lnd</p></td>
+<td><p>ice, ocn</p></td>
+<td><p>Sea ice in prescribed mode; some F compsets use fewer surface components</p></td>
+</tr>
+<tr class="row-even"><td><p>G</p></td>
+<td><p>ice, ocn</p></td>
+<td><p>atm, rof</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>I</p></td>
+<td><p>lnd</p></td>
+<td><p>atm</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>J</p></td>
+<td><p>lnd, ice, ocn</p></td>
+<td><p>atm</p></td>
+<td><p>Can be used to spin up the surface components</p></td>
+</tr>
+<tr class="row-odd"><td><p>P</p></td>
+<td><p>atm</p></td>
+<td><p>–</p></td>
+<td><p>CAM PORT compsets</p></td>
+</tr>
+<tr class="row-even"><td><p>Q</p></td>
+<td><p>atm</p></td>
+<td><p>ocn</p></td>
+<td><p>Aquaplanet compsets</p></td>
+</tr>
+<tr class="row-odd"><td><p>S</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>No components present; used for software testing</p></td>
+</tr>
+<tr class="row-even"><td><p>T</p></td>
+<td><p>glc</p></td>
+<td><p>lnd</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>X</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>Coupler-test components; used for software testing</p></td>
+</tr>
+</tbody>
+</table>
 <p>See <a class="reference external" href="http://www.cesm.ucar.edu/models/cesm2/cesm/compsets.html">supported component sets</a> for a
 complete list of supported compset options. Running <strong>query_config</strong>
 with the <code class="docutils literal notranslate"><span class="pre">--compsets</span></code> option will also provide a listing of the
@@ -561,7 +662,6 @@ and documentation.</p>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/pop_ver.js"></script>
     
 
