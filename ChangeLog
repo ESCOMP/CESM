@@ -1,4 +1,44 @@
 ===============================================================
+Tag name: cesm2_3_beta06
+Originator(s): CSEG
+Date: 15 October 2021
+One-line Summary: Set NUOPC as the default cime driver.
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_026                           
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802           
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5          
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.9                       
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.7                
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5           
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.30                  
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.26                  
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_88            
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev053                 
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b          
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210709                
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_43                 
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210803          
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_77                       
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                 
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803          
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  
+libraries/parallelio               https://github.com/NCAR/ParallilIO                                 
+
+Answer Changes introduced with this tag when compared to cesm2_3_beta05:
+
+Problems identified after tag creation:
+    FAIL ERP_D_Ln9.C48_C48_mg17.QPC6.cheyenne_intel.cam-outfrq9s MODEL_BUILD time=4
+    FAIL ERP_D_Ln9.f09_f09_mg17.FSD.cheyenne_intel.cam-outfrq9s_contrail RUN time=115
+    PEND ERP_D_Ld5.ne30_g17.I1850Clm50BgcCrop.izumi_nag.clm-default RUN
+    FAIL ERS_Ld5.f19_g17.ETEST.izumi_nag.cice-default SHAREDLIB_BUILD time=19
+    FAIL ERS_Ld5_Mmpi-serial.1x1_vancouverCAN.I1PtClm45SpRs.izumi_nag.clm-default SHAREDLIB_BUILD time=112
+    PEND SMS_D_Ln9.f19_f19_mg17.FW4madHIST.izumi_nag.cam-outfrq9s RUN
+- Known issues with some nuopc configuration.
+- Several intel tests on izumi failing with SIGSEGV.
+- There are known issues for the pgi and cray compilers.
+
+
+===============================================================
 Tag name: cesm2_3_alpha06a
 Originator(s): CSEG
 Date: 4 October 2021
