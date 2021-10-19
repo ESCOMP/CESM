@@ -1,4 +1,222 @@
 ===============================================================
+Tag name: cesm2_3_alpha07a
+Originator(s): CSEG
+Date: 19 October 2021
+One-line Summary: Misc update
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_031                           **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802           --
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5          --
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.9                       --
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.8               ** 
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5           --
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.35                  **
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.31                  **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_92            **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev060                 **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b          --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210709                --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_43                 --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210930          **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_77                       --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                 --
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803          --
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  --
+libraries/parallelio               https://github.com/NCAR/ParallilIO                                 --
+
+cam
+    Steve Goldhaber 2021-09-07 - cam6_3_031 - components/cam (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_031
+
+    Updated externals to match cesm2_3_alpha05c
+
+
+    Cheryl Craig 2021-09-07 - cam6_3_030 - components/cam (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_030
+
+    For Michael Duda
+
+    Update the MPAS-A dycore to MPAS-Atmosphere v7+ 
+
+
+    Mary Anderberg 2021-08-27 - cam6_3_029 - components/cam (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_029
+
+    Point CAM to the CARMA_base github repository instead of SVN repository
+
+
+cdeps
+    Chris Fischer 2021-10-19 - cdeps0.12.31 - components/cdeps (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.31
+
+    Code introduced in cdeps0.12.28 incorrectly used the stream mesh mask where the model mesh mask should have been used. This was causing a runtime failure in ctsm.
+
+
+    Chris Fischer 2021-10-19 - cdeps0.12.30 - components/cdeps (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.30
+
+    Update to build mpi-serial correctly
+
+
+    Chris Fischer 2021-10-19 - cdeps0.12.29 - components/cdeps (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.29
+
+    Adds the ESMF mesh mask to the timeinterp computation to avoid missing values.
+
+
+    Chris Fischer 2021-10-19 - cdeps0.12.28 - components/cdeps (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.28
+
+    Changes to function with cime branch replace_config_compilers_with_cmake_macros. This change should be fully backward compatible.
+
+
+    Chris Fischer 2021-10-19 - cdeps0.12.27 - components/cdeps (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.27
+
+    Changes map algorythm to bilinear which will work even if the grids match.
+
+
+cism
+    William Sacks 2021-09-29 - cismwrap_2_1_92 - components/cism (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_92
+
+    Update externals (nuopc now the default!) and test list
+
+    Also fixes build issue on izumi_nag with nuopc
+
+
+    William Sacks 2021-09-14 - cismwrap_2_1_91 - components/cism (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_91
+
+    Fixes for Antarctica
+
+    Changes answers for Antarctica cases (Ga in compset alias)
+
+
+    William Sacks 2021-09-14 - cismwrap_2_1_90 - components/cism (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_90
+
+    From Kate TC: Default for pseudo_plastic_bedmin and namelist changes
+
+
+    William Sacks 2021-08-23 - cismwrap_2_1_89 - components/cism (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap2_1_89
+
+    Support multiple user_nl_cism files
+
+
+clm
+    Erik Kluzek 2021-10-18 - ctsm5.1.dev060 - components/clm (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev060
+
+    Update FATES version (changes answers for FATES tests)
+
+    Small adjustment to FATES tests on izumi.
+
+
+    Erik Kluzek 2021-10-13 - ctsm5.1.dev059 - components/clm (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev059
+
+    Update the testlist for FATES
+
+
+    Erik Kluzek 2021-10-07 - ctsm5.1.dev058 - components/clm (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev058
+
+    Some small answer changes. clm5_1 will be different, 
+    but some clm4_5 and clm5_1 BgcCrop cases are identical.
+    FATES cases are different. Most Sp cases are different.
+
+
+    William Sacks 2021-09-20 - ctsm5.1.dev057 - components/clm (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev057
+
+    Consolidate duplicated CropPhenology code
+
+
+    Erik Kluzek 2021-09-17 - ctsm5.1.dev056 - components/clm (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev056
+
+    Add new FATES SP (Satellite Phenology) mode.
+
+    (everything identical except for one FATES biogeography mode test)
+
+
+    William Sacks 2021-09-13 - ctsm5.1.dev055 - components/clm (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev055
+
+    From Sam Levis: Updates to master_list_file.rst
+
+
+    Erik Kluzek 2021-08-31 - ctsm5.1.dev054 - components/clm (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev054
+
+    A list of bit-for-bit changes adding new fields and new options (with defaults remaining the same).
+
+    Technically changes answers for the extraoutput test-mod for some diagnostic fields
+    Some cases are labeled as different answers because of change in fieldlists
+
+
+cmeps
+    Chris Fischer 2021-10-19 - cmeps0.13.35 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.35
+
+    Mapping and Pole method changes for WW3DEV->MOM6 coupling
+
+
+    Chris Fischer 2021-10-19 - cmeps0.13.34 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.34
+
+    Bug fixes for cism and removal of null setting for local pointers
+
+
+    Chris Fischer 2021-10-19 - cmeps0.13.33 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.33
+
+    blank
+
+
+    Chris Fischer 2021-10-19 - cmeps0.13.32 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.32
+
+    Add testmod for y100k
+
+
+    Chris Fischer 2021-10-19 - cmeps0.13.31 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.31
+
+    Check_input_data needs this flag to properly download mesh files.
+
+
+pop
+    Michael Levy 2021-09-10 - cesm_pop_2_1_20210930 - components/pop (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_202109??
+
+    Update POP to latest version of MARBL
+    -- round off level changes in other_remin computation in MARBL,
+       so answers change in all BGC compsets
+    -- MARBL has a new namelist parameter, so NLCOMP fails in BGC compsets, too
+
+
+    Michael Levy 2021-09-09 - cesm_pop_2_1_20210909b - components/pop (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20210909b
+
+    Add PE layouts for Greenplanet (UCI computer)
+
+
+    Michael Levy 2021-09-09 - cesm_pop_2_1_20210909 - components/pop (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20210909
+
+    Migrate hobart tests to izumi
+
+
+share
+    Chris Fischer 2021-09-02 - share1.0.8 - share (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.8
+
+    shr_flux_mod change
+
+===============================================================
 Tag name: cesm2_3_beta06
 Originator(s): CSEG
 Date: 15 October 2021
