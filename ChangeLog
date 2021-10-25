@@ -4,25 +4,25 @@ Originator(s): CSEG
 Date: 19 October 2021
 One-line Summary: Misc update
 
-components/cam                     https://github.com/ESCOMP/CAM/cam6_3_031                           **
-components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802           --
-components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5          --
-cime                               https://github.com/ESMCI/cime/tree/cime6.0.9                       --
-share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.8               ** 
-components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5           --
-components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.35                  **
-components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.31                  **
-components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_92            **
-components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev060                 **
-components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b          --
-components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210709                --
-components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_43                 --
-components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210930          **
-components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_77                       --
-components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                 --
-components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803          --
-libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  --
-libraries/parallelio               https://github.com/NCAR/ParallilIO                                 --
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_031                                             **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802                             --
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5                            --
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.10                                        --
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.8                                 ** 
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5                             --
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.38                                    **
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.32                                    **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_93                              **
+components/clm                     https://github.com/ESCOMP/ctsm/tree/branch_tags/multiple-icesheets.n01_ctsm.1.dev60  **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b                            --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210709                                  --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_43                                   --
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210930                            **
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_77                                         --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                                   --
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803                            --
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                                    --
+libraries/parallelio               https://github.com/NCAR/ParallilIO                                                   --
 
 cam
     Steve Goldhaber 2021-09-07 - cam6_3_031 - components/cam (cesm2_3_alpha07a)
@@ -46,6 +46,12 @@ cam
 
 
 cdeps
+    Chris Fischer 2021-10-22 - cdeps0.12.32 - components/cdeps (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.32
+
+    Backs out tags cdeps0.12.29 and cdeps0.12.31 because using the mask on an unstructured grid doesn't work
+
+
     Chris Fischer 2021-10-19 - cdeps0.12.31 - components/cdeps (cesm2_3_alpha07a)
     https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.31
 
@@ -76,7 +82,46 @@ cdeps
     Changes map algorythm to bilinear which will work even if the grids match.
 
 
+cime
+    William Sacks 2021-10-22 - cime6.0.10 - cime (cesm2_3_alpha07a)
+    https://github.com/ESMCI/cime/tags/cime6.0.10
+
+    Depends on cismwrap_2_1_93
+
+        - Update to Cheyenne to use ESMF_8_2_0_beta_snapshot_23.
+        - Remove reference to Argonne from License file.
+        - Remove debug print statements.
+        - Port to nersc perlmutter and CPE on cheyenne.
+        - config_archive changes for running CISM with multiple ice sheets.
+        - wpc erio improvement.
+        - Hot fix Makefile for cesm.
+        - Fixes copying user cmake files.
+        - Remove MODEL as a setting for the build system, use COM_NAME instead.
+        - Hot fix for scripts regression tests.
+        - Merge branch 'master' of github.com:/ESMCI/cime.
+        - Update Externals
+        - Hot fix for nuopc mpi-serial tests.
+        - Remove dependency of cprnc on non-existent COMPARE_VARS target.
+        - Add cmake macros.
+        - cime_bisect: Improve robustness when using custom script.
+        - Update PGN and TSC test scripts for E3SM.
+        - Fix limited github workflow nuopc scripts regression testing.
+        - Hot fix, add another cam target that uses kokkos.
+        - Hot fix for better cmake-macro toggling.
+        - Change E3SM to use cmake macro file system.
+
+
 cism
+    William Sacks 2021-10-22 - cismwrap_2_1_93 - components/cism (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_93
+
+    Support multiple ice sheets
+
+    Some tests have changed so there will be some BFAILs due to missing baselines
+
+    Depends on cime6.0.10 and cmeps0.13.38
+
+
     William Sacks 2021-09-29 - cismwrap_2_1_92 - components/cism (cesm2_3_alpha07a)
     https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_92
 
@@ -157,7 +202,35 @@ clm
     Some cases are labeled as different answers because of change in fieldlists
 
 
+    William Sacks 2021-10-22 - branch_tags/multiple-icesheets.n01_ctsm5.1.dev060 - components/clm (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/multiple-icesheets.n01_ctsm5.1.dev060
+
+    Add compsets with multiple ice sheets (needed by cismwrap_2_1_93)
+
+
 cmeps
+    William Sacks 2021-10-22 - cmeps0.13.38 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.???
+
+    Fix issues with multiple ice sheets
+
+    Changes answers for glc -> lnd topo fields in compsets including CISM and CLM, but otherwise bit-for-bit
+
+    Depends on cismwrap_2_1_93
+
+
+    William Sacks 2021-10-22 - cmeps0.13.37 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.37
+
+    fix format issue
+
+
+    William Sacks 2021-10-22 - cmeps0.13.36 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.36
+
+    fix logical format specifier
+
+
     Chris Fischer 2021-10-19 - cmeps0.13.35 - src/drivers/nuopc/ (cesm2_3_alpha07a)
     https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.35
 
