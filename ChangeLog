@@ -7,7 +7,7 @@ One-line Summary: Misc update
 components/cam                     https://github.com/ESCOMP/CAM/cam6_3_031                                             **
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802                             --
 components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5                            --
-cime                               https://github.com/ESMCI/cime/tree/cime6.0.10                                        --
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.11                                        **
 share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.8                                 ** 
 components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5                             --
 components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.38                                    **
@@ -83,6 +83,14 @@ cdeps
 
 
 cime
+    Chris Fischer 2021-11-01 - cime6.0.11 - cime (cesm2_3_alpha07a)
+    https://github.com/ESMCI/cime/tags/cime6.0.11
+
+        - Add IRT test to exceptions for generate history.
+        - Replace use of MODEL with COMP_NAME in cmake_macros directory.
+        - Improve Macro.make generation.
+        - Update centos7-linux settings.
+
     William Sacks 2021-10-22 - cime6.0.10 - cime (cesm2_3_alpha07a)
     https://github.com/ESMCI/cime/tags/cime6.0.10
 
