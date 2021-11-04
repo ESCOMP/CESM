@@ -10,12 +10,12 @@ components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm
 cime                               https://github.com/ESMCI/cime/tree/cime6.0.11                                        **
 share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.8                                 ** 
 components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5                             --
-components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.38                                    **
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.40                                    **
 components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.32                                    **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_93                              **
 components/clm                     https://github.com/ESCOMP/ctsm/tree/branch_tags/multiple-icesheets.n01_ctsm.1.dev60  **
 components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b                            --
-components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20210709                                  --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20211103                                  **
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_43                                   --
 components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210930                            **
 components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_77                                         --
@@ -90,6 +90,7 @@ cime
         - Replace use of MODEL with COMP_NAME in cmake_macros directory.
         - Improve Macro.make generation.
         - Update centos7-linux settings.
+
 
     William Sacks 2021-10-22 - cime6.0.10 - cime (cesm2_3_alpha07a)
     https://github.com/ESMCI/cime/tags/cime6.0.10
@@ -227,6 +228,18 @@ cmeps
     Depends on cismwrap_2_1_93
 
 
+    Chris Fischer 2021-11-03 - cmeps0.13.40 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.40
+
+    Fix for ERI tests.
+
+
+    Chris Fischer 2021-11-02 - cmeps0.13.39 - src/drivers/nuopc/ (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.39
+
+    CESM budget table updates needed for MOM6
+
+
     William Sacks 2021-10-22 - cmeps0.13.37 - src/drivers/nuopc/ (cesm2_3_alpha07a)
     https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.37
 
@@ -267,6 +280,13 @@ cmeps
     https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.31
 
     Check_input_data needs this flag to properly download mesh files.
+
+
+mom
+    Chris Fischer 2021-11-03 - mi_20211103 - components/mom (cesm2_3_alpha07a)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_20211103
+
+    Change MODEL to COMP_NAME
 
 
 pop
