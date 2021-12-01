@@ -184,7 +184,7 @@
       <option name="wallclock"> 00:30 </option>
     </options>
   </test>
-  <test name="IRT_C3_PM3_Ld7" grid="f19_g17" compset="BHIST" testmods="allactive/defaultio">
+  <test name="IRT_C3_Ld7" grid="f19_g17" compset="BHIST" testmods="allactive/defaultio">
     <machines>
       <machine name="edison" compiler="intel" category="prebeta"/>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
