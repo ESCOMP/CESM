@@ -1,4 +1,95 @@
 ===============================================================
+Tag name: cesm2_3_alpha07c
+Originator(s): CSEG
+Date: 1 December 2021
+One-line Summary: CTSM and CAM updates.
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_035                     **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802     --
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5    --
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.11                --
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.8         -- 
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5     --
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.42            **
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.32            --
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_93      --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev64             **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b    --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20211103          --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_45           **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210930    --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_78                 --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803           --
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803    --
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0            --
+libraries/parallelio               https://github.com/NCAR/ParallilIO                           --
+
+cam
+    Cheryl Craig 2021-11-29 - cam6_3_035 - components/cam (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_035
+
+    Tag with a large number of small misc changes.
+
+    Answer changing for all CAM6 runs
+
+
+    Cheryl Craig 2021-11-23 - cam6_3_034 - components/cam (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_034
+
+    CAM6 Zhang-McFarlane option for parcel properties to be based on PBL Depth
+
+
+    Francis Vitt 2021-10-20 - cam6_3_033 - components/cam (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_033
+
+    Transport CL, BR; max solar zenth angle; waccmx pelayout; fix leap day issue
+
+
+clm
+    Erik Kluzek 2021-11-29 - ctsm5.1.dev064 - components/clm (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev064
+
+    Updated FATES version with updates to some history variables
+    to make them consistent, and correct.
+
+
+    Erik Kluzek 2021-11-23 - ctsm5.1.dev063 - components/clm (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev063
+
+    Update FATES version (changes answers only for FATES tests)
+    New prealpha ERP_Ld5.f19_g17.I2000Clm50SpRtmFl.cheyenne_gnu.clm-default
+
+
+    Erik Kluzek 2021-11-02 - ctsm5.1.dev062 - components/clm (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev062
+
+    Update externals so that NUOPC is the default driver.
+
+    cime6.0.8
+    mosart1_0_44
+    rtm1_0_78
+
+
+cmeps
+    Chris Fischer 2021-12-01 - cmeps0.13.42 - src/drivers/nuopc/ (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.42
+
+    Allows the inst and avg history files for the ATM to be written on the cubed sphere tiles instead of the mesh by setting the configuration variable.
+
+
+    Chris Fischer 2021-12-01 - cmeps0.13.41 - src/drivers/nuopc/ (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.41
+
+    CMEPS directory refactor
+
+
+mosart
+    Erik Kluzek 2021-11-11 - mosart1_0_45 - components/mosart (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_45
+
+    Don't set MOSART_MODE in buildnml, reduce decomp output when NOT DEBUG.
+
+===============================================================
 Tag name: cesm2_3_alpha07b
 Originator(s): CSEG
 Date: 9 November 2021
