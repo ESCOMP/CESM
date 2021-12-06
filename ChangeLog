@@ -8,7 +8,7 @@ components/cam                     https://github.com/ESCOMP/CAM/cam6_3_035     
 components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802     --
 components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5    --
 cime                               https://github.com/ESMCI/cime/tree/cime6.0.11                --
-share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.8         -- 
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.10        ** 
 components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.5     --
 components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.42            **
 components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.32            --
@@ -88,6 +88,20 @@ mosart
     https://github.com/ESCOMP/mosart/tags/mosart1_0_45
 
     Don't set MOSART_MODE in buildnml, reduce decomp output when NOT DEBUG.
+
+
+share
+    Chris Fischer 2021-12-06 - share1.0.10 - share (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.10
+
+    Added function shr_string_listCreateField_range()
+    Moved cmeps directory and shr_flux_mod
+
+
+    Chris Fischer 2021-12-06 - share1.0.9 - share (cesm2_3_alpha07c)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.09
+
+    Copyright updates.
 
 ===============================================================
 Tag name: cesm2_3_alpha07b
