@@ -1,4 +1,123 @@
 ===============================================================
+Tag name: cesm2_3_alpha07d
+Originator(s): CSEG
+Date: 21 December 2021
+One-line Summary: Bring in CDEPS Zenith angle change, which changes answers.
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_038                     **
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802     --
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5    --
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.12                **
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.10        -- 
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.7     --
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.43            **
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.33            **
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_93      --
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev69             **
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b    --
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20211103          --
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_45           **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210930    --
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_78                 --
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803           --
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803    --
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0            --
+libraries/parallelio               https://github.com/NCAR/ParallilIO                           --
+
+cam
+    Chris Fischer 2021-12-19 - cam6_3_038 - components/cam (cesm2_3_alpha07d)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_038
+
+    Change CISM%NOEVOLVE to SGLC in all F compsets.
+
+
+    Francis Vitt 2021-12-08 - cam6_3_037 - components/cam (cesm2_3_alpha07d)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_037
+
+    Add stratospheric sulfate mode (MAM5)
+
+
+    Cheryl Craig 2021-12-01 - cam6_3_036 - components/cam (cesm2_3_alpha07d)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_036
+
+    Update externals to cesm2_3_alpha07b (with CTSM being dev064)
+
+    BFB for CESM checkouts
+    answer changing for CAM checkouts
+
+
+cdeps
+    Erik Kluzek 2021-11-16 - cdeps0.12.33 - components/cdeps (cesm2_3_alpha07d)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.33
+
+    Bring in CDEPS PR #123 which changes answers for compsets with 
+    solar zenith angle forcing scaling.
+    So C,D,G and I compsets
+
+
+cime
+    Chris Fischer 2021-12-16 - cime6.0.12 - cime (cesm2_3_alpha07d)
+    https://github.com/ESMCI/cime/tags/cime6.0.12
+
+        - Rename izumi.unified to izumi.cgd
+        - Fix test ptr to run_cmd_no_fail.
+        - chdir is redundent in CMakeLists.txt
+        - Fix paths in cdash testing
+        - Hot fix cdash testing/
+        - Update unit tests and linting.
+        - Fix SSL certification for testing database.
+        - Fix probing machine.
+        - cprnc compares NaN.
+        - Update izumi ESMF lib to 8.2.0 release.
+        - Update CCE for crayenv2 on cheyenne.
+        - Cleanup Scorpio I/O performance data in the run directory.
+        - Fix the N_TestUnitTest by setting CIME_NO_CMAKE_MACRO
+        - Add python 3.7.0 module load for izumi (CESM only).
+        - Fix broken links in documentation.
+        - Update cime externals.
+        - tools/configure was using deprecated config_compilers.xml system.
+        - Remove documentation sections for pieces no longer included in CIME.
+        - More grids for mizuRoute.
+
+
+clm
+    William Sacks 2021-12-15 - ctsm5.1.dev069 - components/clm (cesm2_3_alpha07d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev069
+
+    Implement dynamic urban capability
+
+
+    William Sacks 2021-12-14 - ctsm5.1.dev068 - components/clm (cesm2_3_alpha07d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev068
+
+    Adds a tool to modify surface datasets
+
+
+    Erik Kluzek 2021-12-13 - ctsm5.1.dev067 - components/clm (cesm2_3_alpha07d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev067
+
+    Update externals to cesm2_3_alpha07c and next cmep
+
+    Changes for NEON scripts and settings.
+
+    Increase skip_steps for balance checks by 1, which is needed for new CAM changes.
+
+    BFB with the exception of NEON Sites
+
+
+    Erik Kluzek 2021-12-02 - ctsm5.1.dev065 - components/clm (cesm2_3_alpha07d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev065
+
+    Refactoring of static fire data for use by both FATES and CTSM/BGC
+
+
+cmeps
+    Erik Kluzek 2021-12-13 - cmeps0.13.43 - src/drivers/nuopc/ (cesm2_3_alpha07d)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.43
+
+    Allow passing of channel depths.
+
+===============================================================
 Tag name: cesm2_3_alpha07c
 Originator(s): CSEG
 Date: 1 December 2021
