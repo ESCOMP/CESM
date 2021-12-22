@@ -150,7 +150,7 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
-  <test name="ERS_Ld5" grid="f19_g17" compset="E1850TEST" testmods="cice/defaultio">
+  <test name="ERS_Ld5" grid="f19_g17" compset="E1850TEST" testmods="cice/default">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prebeta"/>
     </machines>
