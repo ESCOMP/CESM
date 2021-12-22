@@ -1,4 +1,84 @@
 ===============================================================
+Tag name: cesm2_3_beta07
+Originator(s): CSEG
+Date: 22 December 2021
+One-line Summary: shr_flux_mod, zenith angle, and various other updates.
+
+components/cam                     https://github.com/ESCOMP/CAM/cam6_3_038                    
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802   
+components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5  
+cime                               https://github.com/ESMCI/cime/tree/cime6.0.12              
+share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.10       
+components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.7   
+components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.43         
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.33          
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_93    
+components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev69           
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b  
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20211103        
+components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_45         
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20210930  
+components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_78               
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803         
+components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_20210803  
+libraries/mct                      https://github.com/MCSclimate/MCT/tree/MCT_2.11.0          
+libraries/parallelio               https://github.com/NCAR/ParallilIO                         
+
+Answer Changes introduced with this tag when compared to cesm2_3_beta06:
+    - All F compsets, change CISM%NOEVOLVE to SGLC.
+    - Answer changing for all CAM6 runs.
+    - C,D,G and I compsets, solar zenith angle forcing scaling.
+    - C and G, update to shr_flux_mod.
+    - CLM, update FATES version (changes answers only for FATES tests).
+    - Some small answer changes. clm5_1 will be different, 
+      but some clm4_5 and clm5_1 BgcCrop cases are identical.
+      Most Sp cases are different.
+    - All BGC compsets, update POP to latest version of MARBL.
+    - Changes answers for Antarctica cases (Ga in compset alias).
+    - Changes answers for glc -> lnd topo fields in compsets including CISM and CLM.
+
+Problems identified after tag creation:
+  Cheyenne Intel
+    PEND ERP_D_Ln9.C48_C48_mg17.QPC6.cheyenne_intel.cam-outfrq9s MODEL_BUILD RERUN
+    FAIL ERP_D_Ln9.f09_f09_mg17.FSD.cheyenne_intel.cam-outfrq9s_contrail RUN time=193
+    FAIL ERI_D.T31_g37_rx1.A.cheyenne_intel RUN time=45
+    FAIL ERP_Ld3_Vmct.f19_f19_mg17.FWsc2010climo.cheyenne_intel.cam-outfrq3d COMPARE_base_rest
+    FAIL ERP_Ln9_Vmct.C96_C96_mg17.F2000climo.cheyenne_intel.cam-outfrq9s_mg3 MODEL_BUILD time=2
+    FAIL ERP_Ln9_Vmct.ne30_ne30_mg17.F2000climo.cheyenne_intel.cam-outfrq9s RUN time=8
+    FAIL ERS_IOP.T62_s11.G.cheyenne_intel.pop-cice RUN time=13
+    FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_intel CREATE_NEWCASE
+    FAIL SMS_D.T62_s11.G.cheyenne_intel.pop-cice RUN time=34
+  Cheyenne GNU
+    FAIL ERI_D.T31_g37_rx1.A.cheyenne_gnu RUN time=27
+    FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_gnu CREATE_NEWCASE
+    FAIL SMS_D.T62_s11.G.cheyenne_gnu.pop-cice RUN time=26
+  Izumi NAG
+    FAIL DAE.ww3a.ADWAV.izumi_nag RUN time=27
+    PEND ERP_D_Ld5.ne30_g17.I1850Clm50BgcCrop.izumi_nag.clm-default RUN
+    FAIL ERS_Ld5.f19_g17.ETEST.izumi_nag.cice-default SHAREDLIB_BUILD time=13
+    FAIL ERS_Ld5_Mmpi-serial.1x1_vancouverCAN.I1PtClm45SpRs.izumi_nag.clm-CLM1PTStartDate SHAREDLIB_BUILD time=117
+    FAIL ERS_Ld5_Vnuopc.f19_g17.2000_CAM60_CLM50%SP_CICE6_DOCN%SOM_MOSART_SGLC_SWAV_TEST.izumi_nag.cice6-default SHAREDLIB_BUILD time=49
+    FAIL PRE.f19_f19.ADESP_TEST.izumi_nag CREATE_NEWCASE
+    FAIL SMS_Ld1_P136_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN time=252
+    FAIL SMS_Ld1_P144_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN time=262
+    FAIL SMS_Ld2_P72_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN time=58
+    FAIL SMS_Ld2_P80_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN time=62
+    FAIL SMS.T62_g37.C1850ECO.izumi_nag.pop-ecosys RUN time=74
+    FAIL ERS.T62_s11.G.izumi_nag.pop-cice RUN time=69
+    FAIL SMS_Ld1.f19_g17.B1850G.izumi_nag.allactive-cism-test_coupling SHAREDLIB_BUILD time=184
+  Izumi Intel
+    FAIL ERI_D.T31_g37_rx1.A.izumi_intel RUN time=48
+    PEND ERS_D.f19_g16_rx1.G1850ECO.izumi_intel.pop-cice_ecosys RUN
+    PEND ERS_D_Ld3.f19_g17.I1850Clm50BgcCrop.izumi_intel.clm-clm50dynroots RUN
+    FAIL ERS_Ld5.T62_s11.DTEST.izumi_intel.cice-default SUBMIT
+    FAIL ERS_N2_Ld3.T31_g37_rx1.A.izumi_intel CREATE_NEWCASE
+    PEND ERS.T62_g16.C1850ECO.izumi_intel.pop-ecosys RUN
+    FAIL ERS.T62_g16.G.izumi_intel.pop-cice RUN time=114
+    PEND SSP_Ld10.f19_g17.I1850Clm50Bgc.izumi_intel.clm-rtmColdSSP RUN
+
+- There are known issues for the pgi and cray compilers.
+
+===============================================================
 Tag name: cesm2_3_alpha07d
 Originator(s): CSEG
 Date: 21 December 2021
