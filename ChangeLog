@@ -1,7 +1,7 @@
 ===============================================================
 Tag name: cesm2_3_alpha08a
 Originator(s): CSEG
-Date: 11 January 2022
+Date: 13 January 2022
 One-line Summary: New ccs_config_cesm external, and misc updates
 
 components/cam                     https://github.com/ESCOMP/CAM/cam6_3_041                           **
@@ -9,16 +9,16 @@ components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cic
 components/cice6                   https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5          --
 cime                               https://github.com/ESMCI/cime/tree/cime6.0.13                      **
 share                              https://github.com/ESCOMP/CESM_share/tree/share1.0.10              -- 
-ccs_config                         https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.3 **
+ccs_config                         https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.5 **
 components/cpl7                    https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.11          **
 components/cmeps                   https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.45                  **
-components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.35                  **
+components/cdeps                   https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.37                  **
 components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95            **
 components/clm                     https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev70                   **
 components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b          --
 components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20211103                --
 components/mosart                  https://github.com/ESCOMP/mosart/tree/mosart1_0_45                 --
-components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220106          **
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220113          **
 components/rtm                     https://github.com/ESCOMP/rtm/tree/rtm1_0_78                       --
 components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                 --
 components/ww3dev                  https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_220111            **
@@ -62,6 +62,18 @@ ccs_config
     Moved cesm config files to new repository - ccs_config_cesm.
 
 
+    Chris Fischer 2022-01-13 - ccs_config_cesm0.0.5 - ccs_config (cesm2_3_alpha08a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.5
+
+    Add a pio 2.5.5 module on cheyenne, and add nvhpc compiler support
+
+
+    Chris Fischer 2022-01-13 - ccs_config_cesm0.0.4 - ccs_config (cesm2_3_alpha08a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.4
+
+    Fix nag build on izumi.
+
+
     Chris Fischer 2022-01-11 - ccs_config_cesm0.0.3 - ccs_config (cesm2_3_alpha08a)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.3
 
@@ -81,6 +93,20 @@ ccs_config
 
 
 cdeps
+    Chris Fischer 2022-01-13 - cdeps0.12.37 - components/cdeps (cesm2_3_alpha08a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.37
+
+    Fix for needed for nag.
+
+
+    Erik Kluzek 2022-01-07 - cdeps0.12.36 - components/cdeps (cesm2_3_alpha08a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.36
+
+    Brings in PR #123 which makes a change in the cosine solar zenith angle 
+    forcing which was off by a time-step. This will change answers 
+    for C, D, G, and I compsets
+
+
     Erik Kluzek 2022-01-07 - cdeps0.12.35 - components/cdeps (cesm2_3_alpha08a)
     https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.35
 
@@ -178,6 +204,13 @@ cpl7
 
 
 pop
+    Michael Levy 2022-01-13 - cesm_pop_2_1_20220113 - components/pop (cesm2_3_alpha08a)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20220113
+
+    Fix bug that was causing cprnc to fail on some cpl.hi files
+    (cases that used land-block elimination were not initializing ocnImp_So_dhdy correctly)
+
+
     Alper Altuntas 2022-01-06 - cesm_pop_2_1_20220106 - components/pop (cesm2_3_alpha08a)
     https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20220106
 
@@ -195,6 +228,8 @@ ww3dev
     https://github.com/ESCOMP/WW3-CESM/tags/dev/ncar_220106
 
     changes for unified cesm/ufs/ cap
+
+
 
 
 ===============================================================
