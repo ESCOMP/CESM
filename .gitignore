@@ -3,6 +3,7 @@ cime/
 components/
 libraries/
 share/
+ccs_config/
 
 # generated local files
 *.log
