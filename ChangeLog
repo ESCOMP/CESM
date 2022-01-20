@@ -56,12 +56,6 @@ cam
 
 
 ccs_config
-    Chris Fischer 2022-01-03 - ccs_config_cesm_v0.1.0 - ccs_config (cesm2_3_alpha08a)
-    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm_v0.1.0
-
-    Moved cesm config files to new repository - ccs_config_cesm.
-
-
     Chris Fischer 2022-01-13 - ccs_config_cesm0.0.4 - ccs_config (cesm2_3_alpha08a)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.4
 
@@ -78,6 +72,12 @@ ccs_config
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.2
 
     Merge tag 'ccs_config_cesm0.0.1' into main
+
+    Chris Fischer 2022-01-03 - ccs_config_cesm_v0.1.0 - ccs_config (cesm2_3_alpha08a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm_v0.1.0
+
+    Moved cesm config files to new repository - ccs_config_cesm.
+
 
 
     Chris Fischer 2022-01-11 - ccs_config_cesm0.0.1 - ccs_config (cesm2_3_alpha08a)
