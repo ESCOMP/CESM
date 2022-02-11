@@ -227,6 +227,12 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     Now, %(prog)s will process Externals.cfg and also process
     Externals_LIBX.cfg as if it was a sub-external.
 
+    Note that by default, checkout_externals will clone an external's
+    submodules. As a special case, the entry, "externals = None", will
+    prevent this behavior. For more control over which externals are
+    checked out, create an externals file (and see the from_submodule
+    configuration entry below).
+
   * from_submodule (True / False) : used to pull the repo_url, local_path,
     and hash properties for this external from the .gitmodules file in
     this repository. Note that the section name (the entry in square
