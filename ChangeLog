@@ -1,4 +1,93 @@
 ===============================================================
+Tag name: cesm2.1.4-rc.10
+Originator(s): CSEG
+Date: 2 February 2022 
+One-line Summary: Add SSP3-7.0 extension compset
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_55
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.39
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism-release-cesm2.1.2_02
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.35
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.04
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n14
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.04
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cam
+    Cheryl Craig 2021-04-06 - cam_cesm2_1_rel_54 - components/cam (cesm2.1.4-rc.10)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_1_rel_54
+
+    For nanr:
+
+    Add SMYLE
+
+
+    James Edwards 2022-01-25 - cam_cesm2_1_rel_55 - components/cam (cesm2.1.4-rc.10)
+    https://github.com/ESCOMP/CAM/tags/???
+
+    Add compset BWsc1850smyle for L83 smyle.  https://github.com/ESCOMP/CAM/pull/510
+
+    Add extension compset.  https://github.com/ESCOMP/CAM/pull/514
+
+
+cesm
+    Brian Dobbins 2022-02-02 - cesm2.1.4-rc.10 - (cesm2.1.4-rc.10)
+    https://github.com/ESCOMP/cesm/tags/???
+
+    Addition of default (simple) PE layouts for 1 & 2-degree coupled runs on AWS HPC6a nodes:
+
+    https://github.com/ESCOMP/CESM/pull/204
+
+
+    James Edwards 2022-01-27 - cesm2.1.4-rc.10 - (cesm2.1.4-rc.10)
+    https://github.com/ESCOMP/cesm/tags/???
+
+    Add extension compset
+    https://github.com/ESCOMP/CESM/pull/203
+
+
+    James Edwards 2022-01-25 - cesm2.1.4-rc.10 - (cesm2.1.4-rc.10)
+    https://github.com/ESCOMP/cesm/tags/???
+
+    Add compset BWsc1850smyle for L83 smyle.https://github.com/ESCOMP/CESM/pull/202
+
+
+cime
+    Chris Fischer 2022-02-08 - cime5.6.39 - cime (cesm2.1.4-rc.10)
+    https://github.com/ESMCI/cime/tags/cime5.6.39
+
+    A fix for izumi jobid matching pattern.
+
+
+    Brian Dobbins 2022-02-02 - cime5.6.38 - cime (cesm2.1.4-rc.10)
+    https://github.com/ESMCI/cime/tags/????
+
+    Add support for 96-core AMD nodes on AWS in machine entries ('aws-hpc6a'):
+    https://github.com/ESMCI/cime/pull/4171
+
+    Update for comet https://github.com/ESMCI/cime/pull/4165
+
+
+clm
+    James Edwards 2022-01-25 - release-clm5.0.35 - components/clm (cesm2.1.4-rc.10)
+    https://github.com/ESCOMP/ctsm/tags/???
+
+    Add support for new compset BWsc1850smyle.  This is an L83 compset for the Smyle hightop S2S 
+    forecast.
+
+    https://github.com/ESCOMP/CTSM/pull/1614
+
+    Also fix the SSP3-7.0 extension ndep file, and SSP5-3.4
+
+    Update cime to work on izumi
+
+    Also update ndep for SSP5-8.5 extension, SSP5-3.4 OS extension
+
+===============================================================
 Tag name: cesm2.1.4-rc.09
 Originator(s): CSEG
 Date: 12 December 2021 
