@@ -1,4 +1,30 @@
 ===============================================================
+Tag name: cesm2.1.4-rc.11
+Originator(s): CSEG
+Date: 16 February 2022 
+One-line Summary: Fix REFCASE for SSP3-7.0 extension compset
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_55
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.39
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism-release-cesm2.1.2_02
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.35
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.04
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n14
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.04
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cesm
+    Chris Fischer 2022-02-16 - cesm2.1.4-rc.11 - (cesm2.1.4-rc.11)
+    https://github.com/ESCOMP/cesm/tags/cesm2.1.4-rc.11
+
+    Fix REFCASE for BSSP370smbbext compset.
+    https://github.com/ESCOMP/CESM/pull/205
+
+===============================================================
 Tag name: cesm2.1.4-rc.10
 Originator(s): CSEG
 Date: 2 February 2022 
