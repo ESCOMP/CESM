@@ -1,4 +1,160 @@
 ===============================================================
+Tag name: cesm2_3_alpha08b
+Originator(s): CSEG
+Date: 17 February
+One-line Summary: Coordinate component changes needed for fire-emissions.
+
+components/cam           https://github.com/ESCOMP/CAM/cam6_3_048                           **
+components/cice          https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802           --
+components/cice6         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5          --
+cime                     https://github.com/ESMCI/cime/tree/cime6.0.13                      --
+share                    https://github.com/ESCOMP/CESM_share/tree/share1.0.10              -- 
+ccs_config               https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.5 **
+components/cpl7          https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.12          **
+components/cmeps         https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.47                  **
+components/cdeps         https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.37                  --
+components/cism          https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95            --
+components/clm           https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev75                   **
+components/fms           https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b          --
+components/mom           https://github.com/ESCOMP/MOM_interface/mi_20211103                --
+components/mosart        https://github.com/ESCOMP/mosart/tree/mosart1_0_45                 --
+components/pop           https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220113          --
+components/rtm           https://github.com/ESCOMP/rtm/tree/rtm1_0_78                       --
+components/ww3           https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                 --
+components/ww3dev        https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_220111            --
+libraries/mct            https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  --
+libraries/parallelio     https://github.com/NCAR/ParallilIO/tree/pio2_5_5                   **
+
+cam
+    Cheryl Craig 2022-02-03 - cam6_3_048 - components/cam (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_048
+
+    Update externals to match cesm2_3_alpha08a
+
+
+    Francis Vitt 2022-02-02 - cam6_3_047 - components/cam (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_047
+
+    Combine duplicate WACCMX specific code in dycores; Remove double call of outfld HNO3_GAS
+
+    - Answer changing just for diagnostic HNO3_GAS field
+
+
+    Kate Thayer-Calder 2022-02-01 - cam6_3_046 - components/cam (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_046
+
+    Add updated micro_pumas to F2000dev compset. All other compsets b4b
+
+
+    Francis Vitt 2022-01-19 - cam6_3_045 - components/cam (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_045
+
+    Pass surface ozone concentrations to coupler
+
+
+    Cheryl Craig 2022-01-16 - cam6_3_044 - components/cam (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_044
+
+    Match cesm2_3_beta07 externals for CAM checkouts
+    Bug fix for SE WACCM-X
+
+
+    Cheryl Craig 2022-01-16 - cam6_3_043 - components/cam (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_043
+
+    For Courtney Peverley:
+
+    Enable use of initial data file with either horizontal dimension name "ncol" or "ncol_d"
+
+
+    Francis Vitt 2022-01-10 - cam6_3_042 - components/cam (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_042
+
+    Corrections to aerosol fire emissions
+
+
+ccs_config
+    James Edwards 2022-01-13 - ccs_config_cesm0.0.5 - ccs_config (cesm2_3_alpha08b)
+    https://github.com/ESMCI/ccs_config_cesm/tags/???
+
+    Update for cheyenne configuration (https://github.com/ESMCI/ccs_config_cesm/pull/5)
+    Adds the nvhpc compiler.  Adds pio2.5.5 module (overrides local build of pio)
+    Updates mpt, netcdf, pnetcdf modules. 
+    Depends on cime master 11fb036 reorder fox libraries for nvhpc
+
+
+clm
+    Erik Kluzek 2022-02-16 - ctsm5.1.dev075 - components/clm (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev075
+
+    Fire-emission update, and urban ventilation answer changes
+    Irrigation is now default off except for SSP scenarios
+    SSP2-4.5 and SSP3-7.0 ndep update
+    Externals update to coordinate with this alpha tag
+
+    Coordinates with share, CMEPS, CAM and CESM-share tags
+
+
+    Erik Kluzek 2022-02-01 - ctsm5.1.dev074 - components/clm (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev074
+
+    This adds MIMICS model as an option for soil decomposition.
+
+    There is only one test that showed a change in answers: 
+
+    SMS_Vmct.f10_f10_mg37.I2000Clm50BgcCrop.izumi_pgi.clm-crop
+
+
+
+
+
+    William Sacks 2022-01-25 - ctsm5.1.dev073 - components/clm (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev073
+
+    Minor fixes for cases using a Gregorian calendar
+
+    Small answer changes possible in some cases using Gregorian calendar
+
+
+    Negin Sobhani 2022-01-21 - ctsm5.1.dev072 - components/clm (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev072
+
+    This tag introduces first part of the pythonized toolchain :./gen_mksurf_namelist p
+    ython script, which generates a user-modifiable control file (namelist) for use 
+    with CTSM/#1430 (mkmap_data.py).
+
+
+    Erik Kluzek 2022-01-04 - ctsm5.1.dev071 - components/clm (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev071
+
+    A FATES update. Only FATES tests will show answer changes.
+
+
+cmeps
+    Erik Kluzek 2022-01-04 - cmeps0.13.47 - src/drivers/nuopc/ (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.46
+
+    Fire emission changes
+
+    Coordinates with share, CAM, CTSM, and cpl7 tags
+
+
+cpl7
+    Erik Kluzek 2022-01-03 - cpl7.0.12 - components/cpl7 (cesm2_3_alpha08b)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.10
+
+    Fire-emission fix. PR #6
+
+    Coordinates with share, CMEPS, CAM and CTSM tags
+
+
+ParallelIO
+    James Edwards 2022-01-13 - pio2_5_5 - libraries/parallelio (cesm2_3_alpha08b)
+    https://github.com/NCAR/ParallelIO/tags/pio2_5_5
+
+    Update to latest pio release
+
+===============================================================
 Tag name: cesm2_3_alpha08a
 Originator(s): CSEG
 Date: 13 January 2022
