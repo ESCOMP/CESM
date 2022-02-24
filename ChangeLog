@@ -9,7 +9,7 @@ components/cice          https://github.com/ESCOMP/CESM_CICE5/tree/cice5_2021080
 components/cice6         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5          --
 cime                     https://github.com/ESMCI/cime/tree/cime6.0.13                      --
 share                    https://github.com/ESCOMP/CESM_share/tree/share1.0.10              -- 
-ccs_config               https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.5 **
+ccs_config               https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.4 --
 components/cpl7          https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.12          **
 components/cmeps         https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.47                  **
 components/cdeps         https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.37                  --
@@ -23,7 +23,7 @@ components/rtm           https://github.com/ESCOMP/rtm/tree/rtm1_0_78           
 components/ww3           https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                 --
 components/ww3dev        https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_220111            --
 libraries/mct            https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                  --
-libraries/parallelio     https://github.com/NCAR/ParallilIO/tree/pio2_5_5                   **
+libraries/parallelio     https://github.com/NCAR/ParallilIO/tree/pio2_5_4                   --
 
 cam
     Cheryl Craig 2022-02-03 - cam6_3_048 - components/cam (cesm2_3_alpha08b)
@@ -71,16 +71,6 @@ cam
     https://github.com/ESCOMP/CAM/tags/cam6_3_042
 
     Corrections to aerosol fire emissions
-
-
-ccs_config
-    James Edwards 2022-01-13 - ccs_config_cesm0.0.5 - ccs_config (cesm2_3_alpha08b)
-    https://github.com/ESMCI/ccs_config_cesm/tags/???
-
-    Update for cheyenne configuration (https://github.com/ESMCI/ccs_config_cesm/pull/5)
-    Adds the nvhpc compiler.  Adds pio2.5.5 module (overrides local build of pio)
-    Updates mpt, netcdf, pnetcdf modules. 
-    Depends on cime master 11fb036 reorder fox libraries for nvhpc
 
 
 clm
@@ -147,12 +137,6 @@ cpl7
 
     Coordinates with share, CMEPS, CAM and CTSM tags
 
-
-ParallelIO
-    James Edwards 2022-01-13 - pio2_5_5 - libraries/parallelio (cesm2_3_alpha08b)
-    https://github.com/NCAR/ParallelIO/tags/pio2_5_5
-
-    Update to latest pio release
 
 ===============================================================
 Tag name: cesm2_3_alpha08a
