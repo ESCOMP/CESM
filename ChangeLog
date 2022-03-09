@@ -1,4 +1,230 @@
 ===============================================================
+Tag name: cesm2_3_alpha08c
+Originator(s): CSEG
+Date: 17 February
+One-line Summary: 
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_052                            **
+components/cice         https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802            --
+components/cice6        https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5           --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.14                       **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.10               -- 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.13 **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.12           --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.47                   --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.37                   --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev82                    **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b           --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_220225                   **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_45                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220113           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                  --
+components/ww3dev       https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_220202             **
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_6                    **
+
+cam
+    Francis Vitt 2022-03-01 - cam6_3_052 - components/cam (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_052
+
+    Remove unused chemistry code; reduce memory footprint of SE dycore restarts
+
+
+    Francis Vitt 2022-03-01 - cam6_3_051 - components/cam (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_051
+
+    Inline chemical forcings due to medium energy electrons
+
+
+    Cheryl Craig 2022-02-22 - cam6_3_050 - components/cam (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_050
+
+    For manderberg:
+
+    New CAM CARMA tests
+
+
+    Francis Vitt 2022-02-07 - cam6_3_049 - components/cam (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_049
+
+    Misc updates for WACCM-X
+
+     Address github issues:
+     . D-Region ion chemistry in WACCMX not converging #465
+     . WACCM-X conductance field seems to have a "hole" over geographic pole #456
+     . WACCM-X history fields EX, EY missing Rearth+z factor #455
+     . Need to reduce number of WACCMX history fields in the master field list #457
+
+     Provide more efficient default PE layouts for WACCM-X on cheyenne
+
+
+ccs_config
+    Chris Fischer 2022-03-01 - ccs_config_cesm0.0.9 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.9
+
+    CICE fix for pio2_5_5
+
+
+    Chris Fischer 2022-03-01 - ccs_config_cesm0.0.8 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.8
+
+    Need to fill out
+
+
+    Chris Fischer 2022-03-01 - ccs_config_cesm0.0.7 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.7
+
+    need to fill out
+
+
+    Chris Fischer 2022-03-01 - ccs_config_cesm0.0.6 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.6
+
+    Need to fill out
+
+
+    Chris Fischer 2022-03-09 - ccs_config_cesm0.0.13 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.13
+
+    Reverts ccs_config_cesm0.0.9, cice fix for pio2_5_5.
+
+
+    Chris Fischer 2022-03-09 - ccs_config_cesm0.0.12 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.12
+
+    Use pio/2.5.6 on cheyenne and casper
+
+
+    Chris Fischer 2022-03-09 - ccs_config_cesm0.0.11 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.11
+
+    Merged main
+
+
+    Chris Fischer 2022-03-09 - ccs_config_cesm0.0.10 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.10
+
+    Fixed bug in specifying full path for domain files needed for single
+
+
+    James Edwards 2022-01-13 - ccs_config_cesm0.0.5 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/???
+
+    Update for cheyenne configuration (https://github.com/ESMCI/ccs_config_cesm/pull/5)
+    Adds the nvhpc compiler.  Adds pio2.5.5 module (overrides local build of pio)
+    Updates mpt, netcdf, pnetcdf modules. 
+    Depends on cime master 11fb036 reorder fox libraries for nvhpc
+
+
+cime
+    Chris Fischer 2022-03-01 - cime6.0.14 - cime (cesm2_3_alpha08c)
+    https://github.com/ESMCI/cime/tags/cime6.0.14
+
+        - Needed some non-local flags added.
+        - Allow unbounded compilers to modify max tasks per node.
+        - Fix for correct path for PTS_DOMAINFILE.
+        - Check current machine and exit if not case machine.
+        - Use of optional .exclude files for selective exclusion during build.
+        - Automate documentation.
+        - Changes for implementing nemo in cesm2.3.
+        - Need to move version check out of utils.py.
+        - Update tests to get status from new EVV output.
+        - Remove the remaining users of config_compilers.xml.
+        - Reorder fox libraries for nvhpc.
+        - Add missing doctest.
+        - Fixes for a number of fails in scripts_regression for e3sm on mappy.
+        - Update grids.rst, removing $CCSMROOT references.
+        - Remove test_release from test_categories.
+        - Bump pillow from 8.3.2 to 9.0.0 in /tools/statistical_ensemble_test/pyCECT/docs.
+        - Fix removing test directories on failure.
+        - Remove rather than overwrite baseline contents with the create_test -o flag.
+        - Remove trailing whitespace
+
+
+clm
+    Erik Kluzek 2022-02-28 - ctsm5.1.dev082 - components/clm (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev082
+
+    CTSM offline tool update. Code is the same.
+
+
+    William Sacks 2022-02-24 - ctsm5.1.dev081 - components/clm (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev081
+
+    Do not subtract irrigation from QRUNOFF diagnostic
+
+    Changes answers in just a few diagnostic fields (QRUNOFF*) for Crop cases with irrigation on
+    (generally true for transient and present-day cases)
+
+
+    William Sacks 2022-02-24 - ctsm5.1.dev080 - components/clm (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev080
+
+    Use avg days per year when converting param units
+
+    Changes answers for cases using a Gregorian calendar
+
+
+    William Sacks 2022-02-24 - ctsm5.1.dev079 - components/clm (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev079
+
+    Changes to CropPhenology timing
+
+    Changes answers for all crop cases
+
+
+    William Sacks 2022-02-24 - ctsm5.1.dev078 - components/clm (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev078
+
+    Rework single-point test list
+
+    Bit-for-bit, but some tests will BFAIL
+
+
+    Erik Kluzek 2022-02-22 - ctsm5.1.dev077 - components/clm (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev077
+
+    FATES history update, and bug fix for FATES hydro. 
+    Only changes answers for FATES compsets.
+
+
+    Negin Sobhani 2022-01-04 - ctsm5.1.dev076 - components/clm (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev070
+
+    Updates to subset_data script for subsetting data for a single point or a region. 
+
+
+mom
+    Alper Altuntas 2022-02-24 - mi_220225 - components/mom (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/MOM_interface/tags/dev/ncar_2202??
+
+    - sync with gfdl.
+    - wav coupling changes.
+
+
+ParallelIO
+    Chris Fischer 2022-03-09 - pio2_5_6 - libraries/parallelio (cesm2_3_alpha08c)
+    https://github.com/NCAR/ParallelIO/tags/pio2_5_6
+
+    Fixes for pio2_5_5
+
+
+    James Edwards 2022-01-13 - pio2_5_5 - libraries/parallelio (cesm2_3_alpha08c)
+    https://github.com/NCAR/ParallelIO/tags/pio2_5_5
+
+    Update to latest pio release
+
+
+ww3dev
+    Alper Altuntas 2022-02-02 - dev/unified_220202 - components/ww3dev (cesm2_3_alpha08c)
+    https://github.com/ESCOMP/WW3-CESM/tags/dev/unified_220202
+
+    Switch to dev/unified (ww3 v.7.* incl. unified NUOPC cap) as the new ww3dev codebase.
+
+
+===============================================================
 Tag name: cesm2_3_alpha08b
 Originator(s): CSEG
 Date: 17 February
