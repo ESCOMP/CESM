@@ -1,8 +1,8 @@
 ===============================================================
 Tag name: cesm2_3_alpha08c
 Originator(s): CSEG
-Date: 17 February
-One-line Summary: 
+Date: 3rd March 2022 
+One-line Summary: CAM and CTSM udpates 
 
 components/cam          https://github.com/ESCOMP/CAM/cam6_3_052                            **
 components/cice         https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802            --
