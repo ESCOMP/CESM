@@ -7,7 +7,7 @@ One-line Summary: CAM and CTSM udpates
 components/cam          https://github.com/ESCOMP/CAM/cam6_3_052                            **
 components/cice         https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802            --
 components/cice6        https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5           --
-cime                    https://github.com/ESMCI/cime/tree/cime6.0.14                       **
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.15                       **
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.10               -- 
 ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.14 **
 components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.12           --
@@ -124,6 +124,15 @@ ccs_config
 
 
 cime
+    Chris Fischer 2022-03-11 - cime6.0.15 - cime (cesm2_3_alpha08c)
+    https://github.com/ESMCI/cime/tags/cime6.0.15
+
+        - Fix generated baseline from disappearing when using --retry.
+        - Comparison test class with arbitrary number of instances.
+        - Fixes extraneous warnings and machine detection
+        - neon inputdata update
+
+
     Chris Fischer 2022-03-01 - cime6.0.14 - cime (cesm2_3_alpha08c)
     https://github.com/ESMCI/cime/tags/cime6.0.14
 
