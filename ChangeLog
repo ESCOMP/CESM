@@ -9,7 +9,7 @@ components/cice         https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802
 components/cice6        https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5           --
 cime                    https://github.com/ESMCI/cime/tree/cime6.0.14                       **
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.10               -- 
-ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.13 **
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.14 **
 components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.12           --
 components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.47                   --
 components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.37                   --
@@ -61,6 +61,11 @@ cam
 
 
 ccs_config
+    Chris Fischer 2022-03-11 - ccs_config_cesm0.0.14 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.14
+
+    Load module for pio and mpi-serial.
+
     Chris Fischer 2022-03-01 - ccs_config_cesm0.0.9 - ccs_config (cesm2_3_alpha08c)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.9
 
