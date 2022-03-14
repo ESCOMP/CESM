@@ -9,7 +9,7 @@ components/cice         https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802
 components/cice6        https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5           --
 cime                    https://github.com/ESMCI/cime/tree/cime6.0.15                       **
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.10               -- 
-ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.14 **
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.15 **
 components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.12           --
 components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.47                   --
 components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.37                   --
@@ -24,6 +24,7 @@ components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803      
 components/ww3dev       https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_220202             **
 libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
 libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_6                    **
+
 
 cam
     Francis Vitt 2022-03-01 - cam6_3_052 - components/cam (cesm2_3_alpha08c)
@@ -61,11 +62,6 @@ cam
 
 
 ccs_config
-    Chris Fischer 2022-03-11 - ccs_config_cesm0.0.14 - ccs_config (cesm2_3_alpha08c)
-    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.14
-
-    Load module for pio and mpi-serial.
-
     Chris Fischer 2022-03-01 - ccs_config_cesm0.0.9 - ccs_config (cesm2_3_alpha08c)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.9
 
@@ -75,19 +71,33 @@ ccs_config
     Chris Fischer 2022-03-01 - ccs_config_cesm0.0.8 - ccs_config (cesm2_3_alpha08c)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.8
 
-    Need to fill out
+    Updates needed for CESM on NAS Pleiades machines
 
 
     Chris Fischer 2022-03-01 - ccs_config_cesm0.0.7 - ccs_config (cesm2_3_alpha08c)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.7
 
-    need to fill out
+    Add grid definitions used by nemo configurations
+    Change zeus machine configuration file
 
 
     Chris Fischer 2022-03-01 - ccs_config_cesm0.0.6 - ccs_config (cesm2_3_alpha08c)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.6
 
-    Need to fill out
+    NVHPC and pumas updates.
+
+
+    Chris Fischer 2022-03-14 - ccs_config_cesm0.0.15 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.15
+
+
+    Set io to netcdf for scam compset.
+
+
+    Chris Fischer 2022-03-11 - ccs_config_cesm0.0.14 - ccs_config (cesm2_3_alpha08c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.14
+
+    Load module for pio and mpi-serial.
 
 
     Chris Fischer 2022-03-09 - ccs_config_cesm0.0.13 - ccs_config (cesm2_3_alpha08c)
@@ -236,7 +246,6 @@ ww3dev
     https://github.com/ESCOMP/WW3-CESM/tags/dev/unified_220202
 
     Switch to dev/unified (ww3 v.7.* incl. unified NUOPC cap) as the new ww3dev codebase.
-
 
 ===============================================================
 Tag name: cesm2_3_alpha08b
