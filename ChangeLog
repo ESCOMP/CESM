@@ -1,4 +1,64 @@
 ===============================================================
+Tag name: cesm2_3_alpha08d
+Originator(s): CSEG
+Date: 16 March 2022 
+One-line Summary: Revert solar zenith angle correction.
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_052                            --
+components/cice         https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802            --
+components/cice6        https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_5           --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.15                       --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.10               -- 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.16 **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.12           --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.47                   --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.41                   **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev82                    --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_20210708b           --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_220225                   --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_45                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220113           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                  --
+components/ww3dev       https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_220202             --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_6                    --
+
+
+ccs_config
+    Chris Fischer 2022-03-16 - ccs_config_cesm0.0.16 - ccs_config (cesm2_3_alpha08d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.16
+
+    Update version of nvhpc for cheyenne.
+
+
+cdeps
+    Chris Fischer 2022-03-16 - cdeps0.12.41 - components/cdeps (cesm2_3_alpha08d)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.41
+
+    Revert PR #123 (solar zenith angle correction)
+    This will change answers for C, D, G, and I compsets
+
+
+    Chris Fischer 2022-03-16 - cdeps0.12.40 - components/cdeps (cesm2_3_alpha08d)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.40
+
+    Change NONE to None in datm buildnml.
+
+
+    Chris Fischer 2022-03-16 - cdeps0.12.39 - components/cdeps (cesm2_3_alpha08d)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.39
+
+    Updates download path for NEON data.
+
+
+    Chris Fischer 2022-03-16 - cdeps0.12.38 - components/cdeps (cesm2_3_alpha08d)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.38
+
+    Changed all references from master_task to main_task and from masterproc to mainproc.
+
+===============================================================
 Tag name: cesm2_3_alpha08c
 Originator(s): CSEG
 Date: 3rd March 2022 
