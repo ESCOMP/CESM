@@ -1,8 +1,8 @@
 ===============================================================
 Tag name: cesm2_3_beta08
 Originator(s): CSEG
-Date: 31 March 2022
-One-line Summary: ccs_config restructure, fire-emissions update 
+Date: 21 March 2022
+One-line Summary: ccs_config/cime restructure, fire-emissions update 
 
 components/cam          https://github.com/ESCOMP/CAM/cam6_3_052
 components/cice         https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20210802
