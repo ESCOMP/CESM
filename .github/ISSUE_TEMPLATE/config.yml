@@ -18,9 +18,12 @@ contact_links:
   - name: MOM issue
     url: https://github.com/ESCOMP/MOM_interface/issues/new/choose
     about: Issue with MOM in CESM (Modular Ocean Model)
+  - name: CICE issue
+    url: https://github.com/ESCOMP/CESM_CICE/issues/new/choose
+    about: Issue with CICE in CESM
   - name: CICE5 issue
     url: https://github.com/ESCOMP/CESM_CICE5/issues/new/choose
-    about: Issue with CICE5
+    about: Issue with (old) CICE5
   - name: CISM issue
     url: https://github.com/ESCOMP/cism-wrapper/issues/new/choose
     about: Issue with CISM (Community Ice Sheet Model)
@@ -39,9 +42,24 @@ contact_links:
   - name: CDEPS issue
     url: https://github.com/ESCOMP/CDEPS/issues/new/choose
     about: Issue with CDEPS (Community Data Models for Earth Prediction Systems)
+  - name: CESM_share issue
+    url: https://github.com/ESCOMP/CESM_share/issues/new/choose
+    about: Issue with CESM share code
+  - name: PIO issue
+    url: https://github.com/NCAR/ParallelIO/issues/new/choose
+    about: Issue with the ParallelIO (PIO) library
+  - name: CCS_config issue
+    url: https://github.com/ESMCI/ccs_config_cesm/issues/new/choose
+    about: Issue with CESM configuration data (grids, machines, etc.)
+  - name: CPL7 issue
+    url: https://github.com/ESCOMP/CESM_CPL7andDataComps/issues/new/choose
+    about: Issue with (old) MCT-based driver/coupler (CPL7)
   - name: FMS issue
     url: https://github.com/ESCOMP/FMS_interface/issues/new/choose
     about: Issue with FMS in CESM
+  - name: MCT issue
+    url: https://github.com/MCSclimate/MCT/issues/new/choose
+    about: Issue with the Model Coupling Toolkit (MCT) library
   - name: CESM Experiments Database issue
     url: https://github.com/NCAR/CESM_expdb2/issues/new/choose
     about: Issue with the CESM Experiments Database
