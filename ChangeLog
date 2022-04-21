@@ -1,4 +1,147 @@
 ===============================================================
+Tag name: cesm2_3_alpha09a
+Originator(s): CSEG
+Date: 21 April 2022 
+One-line Summary: Set CICE6 as default.
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_055                            **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_16          **
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.16                       **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.11               ** 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.24 **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.12           --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.47                   --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.41                   --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev82                    --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_20220419            **
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_220225                   --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_45                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220113           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_210803                  --
+components/ww3dev       https://github.com/ESCOMP/WW3-CESM/tree/dev/ncar_220202             --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_6                    --
+
+cam
+    Mariana Vertenstein 2022-04-05 - cam6_3_055 - components/cam (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_055
+
+    All testing moved to nuopc by default - EXCEPT for SCT tests 
+    SCAM will need to use MCT until a fix is provided
+    The results will not change but the baselines will need to be generated 
+
+
+    Cheryl Craig 2022-03-23 - cam6_3_054 - components/cam (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_054
+
+    Update externals to match cesm2_3_beta08
+
+    Change 0000 year STARTDATE to 0001 in tests which needed it.  (No prealpha or prebeta tests used the 0000 STARTDATE)
+
+
+    Courtney Peverley 2022-03-17 - cam6_3_053 - components/cam (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_053
+
+    cam6_3_053: Transition izumi PGI tests to GNU compiler #541
+
+    answer changes: prebeta pgi test moved to gnu, causing small answer changes
+
+
+ccs_config
+    James Edwards 2022-04-19 - ccs_config_cesm0.0.24 - ccs_config (cesm2_3_alpha09a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.24
+
+    Add a grid for ne30pg3_t061
+
+
+    Chris Fischer 2022-04-08 - ccs_config_cesm0.0.21 - ccs_config (cesm2_3_alpha09a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.21
+
+    fix typo in ne5pg2 mesh
+
+
+    Chris Fischer 2022-04-08 - ccs_config_cesm0.0.20 - ccs_config (cesm2_3_alpha09a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.20
+
+    add machine regex to ubuntu-latest definition
+
+
+    Chris Fischer 2022-04-08 - ccs_config_cesm0.0.19 - ccs_config (cesm2_3_alpha09a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.19
+
+    both cice5 and cice6 define a config_archive.xml entry
+
+
+    Chris Fischer 2022-04-08 - ccs_config_cesm0.0.18 - ccs_config (cesm2_3_alpha09a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.18
+
+    Add additional NUOPC meshes
+
+
+    Chris Fischer 2022-04-08 - ccs_config_cesm0.0.17 - ccs_config (cesm2_3_alpha09a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.17
+
+    Update Cray Programming Environment CPE machine
+
+
+cesm
+    David Bailey 2022-02-22 - cesm2_3_alpha09a - (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/cesm/tags/cesm??
+
+    Requires a new Externals.cfg for CICE5 and CICE6
+
+
+cice
+    David Bailey 2022-02-22 - cice5_20220204 - components/cice (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5_20220204
+
+    CICE5 will now be checked out under components/cice5.
+
+
+cice6
+    David Bailey 2022-02-22 - cesm_cice6_2_0_15 - components/cice6 (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_????
+
+    CICE6 will now be checked out under components/cice. Update tfrz_option and update_ocn_f
+    settings to go with MOM. Also, change character length for history file names.
+
+
+    James Edwards 2022-04-19 - cesm_cice6_2_0_16 - components/cice6 (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_2_0_16
+
+    Fix for multi-instance compsets.
+
+
+cime
+    David Bailey 2022-02-22 - cime6.0.16 - cime (cesm2_3_alpha09a)
+    https://github.com/ESMCI/cime/tags/cime6.0.?
+
+    This change CICE to the default component and makes CICE5 only usable by name.
+
+    This requires new CICE6 and CICE5 tags.
+
+        - Fix run_tests.py when no machine is given.
+        - Bump pillow from 9.0.0 to 9.0.1 in pyCECT documents.
+        - Only clear baselines when run_count is 0 and -o is used.
+
+
+fms
+    James Edwards 2022-04-19 - fi_20220419 - libraries/fms (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20220419
+
+    Fixes a build issue for BMOM compsets. 
+
+
+share
+    James Edwards 2022-04-19 - share1.0.11 - share (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.11
+
+    Fix for nuopc build of shr_pio_mod
+
+===============================================================
 Tag name: cesm2_3_beta08
 Originator(s): CSEG
 Date: 21 March 2022
