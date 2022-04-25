@@ -15,7 +15,7 @@ components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.47       
 components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.41                   --
 components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
 components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev82                    --
-components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_20220419            **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_20220425            **
 components/mom          https://github.com/ESCOMP/MOM_interface/mi_220225                   --
 components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_45                  --
 components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220113           --
@@ -129,6 +129,12 @@ cime
 
 
 fms
+    Chris Fischer 2022-04-25 - fi_20220425 - libraries/fms (cesm2_3_alpha09a)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20220425
+
+    Fix for MOM builds.
+
+
     James Edwards 2022-04-19 - fi_20220419 - libraries/fms (cesm2_3_alpha09a)
     https://github.com/ESCOMP/FMS_interface/tags/fi_20220419
 
