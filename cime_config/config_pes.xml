@@ -317,14 +317,14 @@
       <pes pesize="any" compset="any">
 	<comment>none</comment>
 	<ntasks>
-	  <ntasks_atm>3600</ntasks_atm>
-	  <ntasks_lnd>1800</ntasks_lnd>
-	  <ntasks_rof>1800</ntasks_rof>
-	  <ntasks_ice>1728</ntasks_ice>
-	  <ntasks_ocn>1800</ntasks_ocn>
-	  <ntasks_glc>36</ntasks_glc>
-	  <ntasks_wav>36</ntasks_wav>
-	  <ntasks_cpl>3600</ntasks_cpl>
+	  <ntasks_atm>-100</ntasks_atm>
+	  <ntasks_lnd>-40</ntasks_lnd>
+	  <ntasks_rof>-40</ntasks_rof>
+	  <ntasks_ice>-60</ntasks_ice>
+	  <ntasks_ocn>-21</ntasks_ocn>
+	  <ntasks_glc>-1</ntasks_glc>
+	  <ntasks_wav>-1</ntasks_wav>
+	  <ntasks_cpl>-100</ntasks_cpl>
 	</ntasks>
 	<nthrds>
 	  <nthrds_atm>1</nthrds_atm>
@@ -339,11 +339,11 @@
 	<rootpe>
 	  <rootpe_atm>0</rootpe_atm>
 	  <rootpe_lnd>0</rootpe_lnd>
-	  <rootpe_ice>1800</rootpe_ice>
+	  <rootpe_ice>-40</rootpe_ice>
 	  <rootpe_rof>0</rootpe_rof>
-	  <rootpe_ocn>3600</rootpe_ocn>
-	  <rootpe_glc>3528</rootpe_glc>
-	  <rootpe_wav>3564</rootpe_wav>
+	  <rootpe_ocn>-100</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>0</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
