@@ -16,7 +16,7 @@
       <option name="wallclock"> 00:30:00 </option>
     </options>
   </test>
-  <test name="SMS_Ld2" grid="f09_g17" compset="B1850MOM" testmods="allactive/defaultio">
+  <test name="SMS_Ld2" grid="ne30pg3_t061" compset="B1850MOM" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="gnu" category="prealpha"/>
     </machines>
