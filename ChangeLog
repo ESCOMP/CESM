@@ -1,4 +1,112 @@
-2==============================================================
+==============================================================
+Tag name: cesm2_3_alpha09d
+Originator(s): CSEG
+Date: 1 August 2022 
+One-line Summary: SCAM and misc. fixes
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_058                            --
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_22          **
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.33                       --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.12               ** 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.36 **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.13           **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.68                   **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.54                   **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev82                    --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_20220425            --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_220624                   **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_45                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220322           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_220322                  --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.2         --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_6                    --
+
+ccs_config
+    Chris Fischer 2022-05-31 - ccs_config_cesm0.0.36 - ccs_config (cesm2_3_alpha09d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.36
+
+    ccs_congif_cesm0.0.36: Fix path to cime tools
+    ccs_config_cesm0.0.35: Add ESMF env for AWS to output timing file correctly.
+    ccs_config_cesm0.0.34: Add ESMF env for Casper to output timing file correctly.
+    ccs_config_cesm0.0.33: Additional AWS changes.
+    ccs_config_cesm0.0.32: Revert esmf changes from ccs_config_cesm0.0.29
+    ccs_config_cesm0.0.31: Add a single environment variable (ESMFMKFILE) to the 'aws-hpc6a' config.
+    ccs_config_cesm0.0.30: Fix for compiling/running with openmpi on cheyenne_intel
+    ccs_config_cesm0.0.29: Update esmf libraries for cheyenne.
+
+
+    Chris Fischer 2022-05-03 - ccs_config_cesm0.0.29 - ccs_config (cesm2_3_alpha09d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.29
+
+    Update ESMF library, pio, and mpt on cheyenne.
+
+
+cdeps
+    Chris Fischer 2022-08-01 - cdeps0.12.54 - components/cdeps (cesm2_3_alpha09d)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.54
+
+    cdeps0.12.54: Need to use os.getenv("PIO_LIBDIR") instead of os.environ["PIO_LIBDIR"] to avoid a hang on some systems.
+    cdeps0.12.53: Need to add a _FillValue attribute.
+    cdeps0.12.52: Add a read for ZBOT in the streams for CLMNCEP fixing
+                  Changes answers if ZBOT is on the stream file.
+    cdeps0.12.51: Use prebuilt pio library if env vars set.
+    cdeps0.12.50: Add the missing RYF DROF stream entries in xml files
+
+
+    Chris Fischer 2022-05-31 - cdeps0.12.49 - components/cdeps (cesm2_3_alpha09d)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps0.12.49
+
+    cdeps0.12.49: Corrects CIME path in buildnml scripts. 
+    cdeps0.12.48: Fix of restart problems on izumi
+
+
+cice6
+    David Bailey 2022-05-25 - cesm_cice6_2_0_22 - components/cice6 (cesm2_3_alpha09d)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_2_0_22
+
+    These fixes are mainly for single column mode.
+
+
+cmeps
+    William Sacks 2022-07-08 - cmeps0.13.68 - src/drivers/nuopc/ (cesm2_3_alpha09d)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.68
+
+    Extract non-initialization parts of shr_pio_mod to a module in share
+
+    Depends on share1.0.12
+
+
+cpl7
+    William Sacks 2022-07-08 - cpl7.0.13 - components/cpl7 (cesm2_3_alpha09d)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.13
+
+    Introduce init_pio_mod with the initialization pieces from shr_pio_mod
+
+    Depends on share1.0.12
+
+
+mom
+    Alper Altuntas 2022-07-12 - mi_220624 - components/mom (cesm2_3_alpha09d)
+    https://github.com/ESCOMP/MOM_interface/tags/mo_202207xx
+
+    Latest GFDL sync
+
+
+share
+    William Sacks 2022-07-08 - share1.0.12 - share (cesm2_3_alpha09d)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.12
+
+    Remove pio initialization routines from shr_pio_mod
+
+    Depends on:
+    - cmeps0.13.68
+    - cpl7.0.13
+
+==============================================================
 Tag name: cesm2_3_alpha09c
 Originator(s): CSEG
 Date: 5 July 2022 
