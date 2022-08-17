@@ -1,3 +1,85 @@
+===============================================================
+Tag name: cesm2_3_beta09
+Originator(s): CSEG
+Date: 17 August 2022
+One-line Summary: Default CICE6, option to provide enthalpy fluxes
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_058                            
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_22          
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.33                       
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.12                
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.36 
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.13           
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.68                   
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.54                   
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev82                   
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_20220425           
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_220624                   
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_45                  
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220322           
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_220322                  
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.2         
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_6                    
+
+Answer Changes introduced with this tag when compared to cesm2_3_beta08:
+    - Changing default CICE5 to CICE6 changes answers for compsets with CICE.
+    - Fix restarts using coszen angle time interpolation.  This will change answers for 
+      C, D, G, and I compsets.
+    - Fix vector mapping for u,v fields and missing datm streams.  Answer changes for 
+      C,G, and A compsets.
+    - PUMAS and CAM-SE change CAM answers. 
+    - MOM enthalpy and GFDL sync change answers for MOM.
+    - Add a read for ZBOT in the streams for CLMNCEP fixing.  Changes CTSM answers if 
+      ZBOT is on the stream file.
+
+Problems identified after tag creation:
+- All T31_g37_rx1.A tests fail with floating point exception.
+- All T62_s11 nuopc tests fail because of missing mesh file.
+- All ERS_N2 tests should be ERS_C2 tests.
+- Cheyenne intel:
+    FAIL ERP_Ln9_Vnuopc.ne30_ne30_mg17.QPRCEMIP.cheyenne_intel.cam-outfrq9s RUN time=21
+    FAIL ERP_D_Ln9_Vmct.C48_C48_mg17.QPC6.cheyenne_intel.cam-outfrq9s MODEL_BUILD time=2
+    FAIL ERP_D_Ln9_Vmct.f09_f09_mg17.FSD.cheyenne_intel.cam-outfrq9s_contrail RUN time=115
+    FAIL ERP_Ld3_Vmct.f19_f19_mg17.FWsc2010climo.cheyenne_intel.cam-outfrq3d COMPARE_base_rest
+    PEND ERP_Ln9_Vmct.C96_C96_mg17.F2000climo.cheyenne_intel.cam-outfrq9s_mg3 MODEL_BUILD RERUN
+    FAIL SMS_C80_P108x1_Lh1_Vnuopc.f09_f09_mg17.FHIST_DARTC6.cheyenne_intel.cam-dartcambigens RUN time=2424
+- Cheyenne gnu:
+    FAIL PET_PM.f19_g17.B1850.cheyenne_gnu.allactive-defaultiomi COMPARE_base_single_thread
+    FAIL IRT_C3_Ld7.f19_g17.BHIST.cheyenne_gnu.allactive-defaultio RUN time=1149
+- Cheyenne nvhpc:
+    FAIL ERS.T62_g16.G1850ECO.cheyenne_nvhpc.pop-cice_ecosys RUN time=70
+    FAIL ERI_D.T31_g37_rx1.A.cheyenne_nvhpc RUN time=19
+    FAIL ERS_IOP.T62_s11.G.cheyenne_nvhpc.pop-cice RUN time=9
+    FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_nvhpc CREATE_NEWCASE
+    FAIL ERS.T62_g16.C1850ECO.cheyenne_nvhpc.pop-ecosys RUN time=25
+    PEND PET.T62_g16.G.cheyenne_nvhpc.pop-cice RUN
+    PEND SMS_D.T62_s11.G.cheyenne_nvhpc.pop-cice RUN
+
+- Izumi intel:
+    PEND ERS_D.f19_g16_rx1.G1850ECO.izumi_intel.pop-cice_ecosys RUN
+    PEND ERS.T62_g16.C1850ECO.izumi_intel.pop-ecosys RUN
+    FAIL ERS.T62_g16.G.izumi_intel.pop-cice RUN time=116
+    PEND SSP_Ld10.f19_g17.I1850Clm50Bgc.izumi_intel.clm-rtmColdSSP RUN
+    FAIL ERI.f19_g17_rx1.DTEST.izumi_intel.cice-default RUN time=23
+    FAIL ERI_Vnuopc.f19_g17_rx1.2000_DATM%NYF_SLND_CICE6_DOCN%SOM_DROF%NYF_SGLC_SWAV_TEST.izumi_intel.cice6-default RUN time=28
+- Izumi nag:
+    FAIL DAE.ww3a.ADWAV.izumi_nag RUN time=28
+    PEND ERP_D_Ld5.ne30_g17.I1850Clm50BgcCrop.izumi_nag.clm-default RUN
+    FAIL ERS_Ld5.f19_g17.2000_CAM60_CLM50%SP_CICE5_DOCN%SOM_MOSART_SGLC_SWAV_TEST.izumi_nag.cice5-default SHAREDLIB_BUILD time=52
+    FAIL ERS_Ld5_Vnuopc.f19_g17.2000_CAM60_CLM50%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST.izumi_nag.cice-default SHAREDLIB_BUILD time=13
+    FAIL PRE.f19_f19.ADESP_TEST.izumi_nag CREATE_NEWCASE
+    FAIL SMS_Ld1_P136_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN time=260
+    FAIL SMS_Ld1_P144_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN time=274
+    FAIL SMS_Ld2_P72_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN time=61
+    FAIL SMS_Ld2_P80_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN time=62
+    FAIL SMS.T62_g37.C1850ECO.izumi_nag.pop-ecosys RUN time=76
+    FAIL ERS.T62_s11.G.izumi_nag.pop-cice SUBMIT
+
+
 ==============================================================
 Tag name: cesm2_3_alpha09d
 Originator(s): CSEG
