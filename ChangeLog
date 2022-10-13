@@ -1,4 +1,251 @@
 ==============================================================
+Tag name: cesm2_3_alpha010b
+Originator(s): CSEG
+Date: 13 October 2022 
+One-line Summary: CAM and misc. updates.
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_078                            **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_34          --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.64                       --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.12               -- 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.47 **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.14           **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.13.78                   **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.65                   --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev107                   **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_20220425            --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_220624                   --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_45                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220322           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_220322                  --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.4         **
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_9                    **
+
+cam
+    Cheryl Craig 2022-09-28 - cam6_3_078 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_078
+
+    Fix cam_dev restarts so they are always BFB
+
+    Answer changing for restarts when radiation is called on the restart time step
+
+
+    Cheryl Craig 2022-09-28 - cam6_3_077 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_077
+
+    For Francis Vitt
+
+    Refactor aerosol-cloud interaction code to use generalized aerosol interfaces
+
+    Roundoff differences for CCN diagnostics, otherwise BFB
+
+
+    Courtney Peverley 2022-08-29 - cam6_3_076 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_076
+
+    CAM thermo refactor
+
+
+    Kate Thayer-Calder 2022-08-26 - cam6_3_075 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_075
+
+    New PUMAS external tag
+
+
+    Francis Vitt 2022-08-22 - cam6_3_074 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_074
+
+    Upper boundary conditions specification via namelist
+
+
+    Cheryl Craig 2022-08-18 - cam6_3_073 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_073
+
+    Thermodynamics answer changing bug fixes.
+
+    Answer changing for WACCMX
+
+
+    Cheryl Craig 2022-08-11 - cam6_3_072 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_072
+
+    Bug fix for SE and SSTICE namelists
+
+    Answer changing for CAMSE runs and select compsets which forced SSTICE namelist settings
+
+
+    Francis Vitt 2022-08-03 - cam6_3_071 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_071
+
+    Move Henry's law coefficients to an input file; fix a bug in WACCMX history grids
+
+    Note: Externals updates needed:
+     cmeps0.13.70
+     cpl7.0.14
+
+
+    Cheryl Craig 2022-07-15 - cam6_3_070 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_070
+
+    Update CTSM external to ctsm5.1.dev103
+
+    Answer changing for some configurations for CAM checkouts
+
+    BFB for CESM checkouts
+
+
+    Cheryl Craig 2022-07-14 - cam6_3_069 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_069
+
+    Update to ctsm5.1.dev102
+
+    Answer changing for CAM checkouts, but CESM checkouts are BFB
+
+
+    Cheryl Craig 2022-07-14 - cam6_3_068 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_068
+
+    Update externals for CAM checkouts to match cesm2_3_alpha09c
+
+
+    Cheryl Craig 2022-07-14 - cam6_3_067 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_067
+
+    For Francis Vitt:
+
+    Move chemistry preprocessor external to github repository
+
+
+    Cheryl Craig 2022-07-07 - cam6_3_066 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_066
+
+    CAM-CLUBB interface cleanup and misc bug fixes
+
+    Answer changing for runs using CLUBB (all CAM6)
+
+
+    Cheryl Craig 2022-07-01 - cam6_3_065 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_065
+
+    Misc tag for gravity wave, contrail, cam_snapshot and SE dycore writes.
+
+    Fixes prealpha contrail test
+
+
+    Francis Vitt 2022-06-14 - cam6_3_064 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_064
+
+    Improvements to WACCMX AMIE/LTR high-latitiude potential input readers
+
+
+    Cheryl Craig 2022-06-06 - cam6_3_063 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_063
+
+    PUMAS updates and fixes
+
+    - Answer changing just for F2000dev compsets
+
+
+    Cheryl Craig 2022-06-06 - cam6_3_062 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_062
+
+    For Francis Vitt:
+
+    Fix for ERA5 driven Specified Dynamics
+
+
+    Mary Anderberg 2022-05-26 - cam6_3_061 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_061
+
+    Advance the CARMA_base tag used by CAM to CARMA4.00
+
+
+    Francis Vitt 2022-05-24 - cam6_3_060 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_060
+
+    Corrections to WACCMX conductance diagnostics; updates to fire emissions factors
+
+
+    Kate Thayer-Calder 2022-05-24 - cam6_3_059 - components/cam (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_057
+
+    Update CLUBB and SILHS externals. Will change answers for all CAM6+ compsets (all that use CLUBB)
+
+
+ccs_config
+    James Edwards 2022-10-13 - ccs_config_cesm0.0.47 - ccs_config (cesm2_3_alpha10b)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.47
+
+    updates esmf on cheyenne
+
+
+clm
+    William Sacks 2022-09-07 - ctsm5.1.dev107 - components/clm (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev107
+
+    (From Francis Vitt and Adrianna Foster) Update externals, fix drydep for compatibility with latest externals
+
+    (Changes answers in standalone CTSM due to externals update, but this shouldn't have an impact in CESM testing)
+
+    Note: Externals updates needed:
+     cmeps0.13.70
+     cpl7.0.14
+
+
+cmeps
+    James Edwards 2022-10-12 - cmeps0.13.78 - src/drivers/nuopc/ (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.77
+
+    Fixes issue in shr_drydep_mod when lnd ntasks ne atm ntasks or lndroot ne atmroot.
+
+
+    James Edwards 2022-10-11 - cmeps0.13.74 - src/drivers/nuopc/ (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.74
+
+     simplify specification of stop_option, rest_option and history_option (cesm only) (#313)
+        
+        new simplified approach for setting setting stop, restart and history mediator settings
+
+
+    Francis Vitt 2022-08-03 - cmeps0.13.70 - src/drivers/nuopc/ (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.13.70
+
+    Input deposition data (Henry's law coefs) from file 
+
+    Depends on:
+     cam6_3_071
+     ctsm5.1.dev107
+
+
+cpl7
+    Francis Vitt 2022-08-03 - cpl7.0.14 - components/cpl7 (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.14
+
+    Input deposition data (Henry's law coefs) from file 
+
+    Depends on:
+     cam6_3_071
+     ctsm5.1.dev107
+
+
+ParallelIO
+    James Edwards 2022-09-19 - pio2_5_9 - libraries/parallelio (cesm2_3_alpha10b)
+    https://github.com/NCAR/ParallelIO/tags/pio2_5_9
+
+    Contains a fix for reading regionally refined grids in cam.
+
+
+ww3dev
+    Alper Altuntas 2022-05-05 - main_0.0.4 - components/ww3dev (cesm2_3_alpha10b)
+    https://github.com/ESCOMP/WW3_interface/tags/main_0.0.3
+
+    Merge with EMC pr.
+
+==============================================================
 Tag name: cesm2_3_alpha010a
 Originator(s): CSEG
 Date: 10 October 2022 
