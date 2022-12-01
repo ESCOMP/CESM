@@ -40,28 +40,28 @@
 
   <compset>
     <alias>B1850</alias>
-    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%GRIS-NOEVOLVE_WW3_BGC%BDRD</lname>
   </compset>
 
   <compset>
     <alias>BW1850</alias>
-    <lname>1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM60%WCTS_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%GRIS-NOEVOLVE_WW3</lname>
   </compset>
   <compset>
     <alias>BWma1850</alias>
-    <lname>1850_CAM60%WCCM_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM60%WCCM_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%GRIS-NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>BHIST</alias>
-    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
+    <lname>HIST_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%GRIS-NOEVOLVE_WW3_BGC%BDRD</lname>
   </compset>
 
   <!-- BG compsets: evolving ice sheet -->
 
   <compset>
     <alias>B1850G</alias>
-    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%EVOLVE_WW3_BGC%BDRD</lname>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_POP2%ECO_MOSART_CISM2%GRIS-EVOLVE_WW3_BGC%BDRD</lname>
   </compset>
 
   <!-- Prognostic wave -->
@@ -90,7 +90,7 @@
     <!-- MOM is an optional component of CESM and is not checked out by default
 	 use checkout_externals mom to add it -->
     <alias>B1850MOM</alias>
-    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_MOM6_MOSART_CISM2%NOEVOLVE_SWAV_BGC%BDRD</lname>
+    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_MOM6_MOSART_CISM2%GRIS-NOEVOLVE_SWAV_BGC%BDRD</lname>
   </compset>
 
   <!-- All active except data atmosphere
@@ -98,7 +98,7 @@
 
   <compset>
      <alias>J1850G</alias>
-     <lname>1850_DATM%CRUv7_CLM50%BGC-CROP_CICE_POP2_MOSART_CISM2%EVOLVE_SWAV</lname>
+     <lname>1850_DATM%CRUv7_CLM50%BGC-CROP_CICE_POP2_MOSART_CISM2%GRIS-EVOLVE_SWAV</lname>
   </compset>
 
   <entries>

@@ -1,0 +1,24 @@
+! Users should add all user specific namelist changes below in the form of
+! namelist_var = new_namelist_value
+! These are specific changes to CAM for the LENS experiment
+ cldfrc_rhminl = 0.8925D0
+ empty_htapes=.true.
+ fincl1='ABSORB:A','ANRAIN:A','ANSNOW:A','AODDUST1:A','AODDUST2:A','AODDUST3:A',
+  'AODVIS:A','AQRAIN:A','AQSNOW:A','AREI:A','AREL:A','AWNC:A','AWNI:A','CDNUMC:A',
+  'CLDHGH:A','CLDICE:A','CLDLIQ:A','CLDLOW:A','CLDMED:A','CLDTOT:A','CLOUD:A',
+  'DCQ:A','DTCOND:A','DTV:A','FICE:A','FLDS:A','FLNS:A','FLNSC:A','FLNT:A',
+  'FLNTC:A','FLUT:A','FLUTC:A','FREQI:A','FREQL:A','FREQR:A','FREQS:A','FSDS:A',
+  'FSDSC:A','FSNS:A','FSNSC:A','FSNT:A','FSNTC:A','FSNTOA:A','FSNTOAC:A',
+  'ICEFRAC:A','ICIMR:A','ICWMR:A','IWC:A','LANDFRAC:A','LHFLX:A','LWCF:A',
+  'NUMICE:A','NUMLIQ:A','OCNFRAC:A','OMEGA:A','OMEGAT:A','PBLH:A','PRECC:A',
+  'PRECL:A','PRECSC:A','PRECSL:A','PS:A','PSL:A','Q:A','QFLX:A','QRL:A','QRS:A',
+  'RELHUM:A','SHFLX:A','SNOWHICE:A','SNOWHLND:A','SOLIN:A','SRFRAD:A','SWCF:A',
+  'T:A','TAUX:A','TAUY:A','TGCLDIWP:A','TGCLDLWP:A','TMQ:A','TREFHT:A','TS:A',
+  'U:A','U10:A','UU:A','V:A','VD01:A','VQ:A','VT:A','VU:A','VV:A','WSUB:A','Z3:A',
+  'CCN3:A','UQ:A','WGUSTD:X','WSPDSRFMX:A','TSMX:X','TSMN:M','TREFHTMX:X','TREFHTMN:M',
+  'bc_a1_SRF:A','dst_a1_SRF:A','dst_a3_SRF:A','pom_a1_SRF:A','so4_a1_SRF:A',
+  'so4_a2_SRF:A','so4_a3_SRF:A','soa_a1_SRF:A','soa_a2_SRF:A','BURDENSO4:A',
+  'BURDENBC:A','BURDENPOM:A','BURDENSOA:A','BURDENDUST:A','BURDENSEASALT:A',
+  'AODABS:A','EXTINCT:A','PHIS:A','TROP_P:A','TROP_T:A','TOT_CLD_VISTAU:A',
+  'ICLDIWP:A','ICLDTWP:A','CO2:A','CO2_LND:A','CO2_OCN:A','SFCO2:A','SFCO2_LND:A',
+  'SFCO2_OCN:A','TMCO2:A','TMCO2_LND:A','TMCO2_OCN:A''CO2_FFF:A', 'SFCO2_FFF:A', 'TMCO2_FFF:A'
