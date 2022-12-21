@@ -90,11 +90,11 @@ class _External(object):
 
     def status(self):
         """
-        If the repo destination directory exists, ensure it is correct (from
-        correct URL, correct branch or tag), and possibly update the external.
-        If the repo destination directory does not exist, checkout the correce
-        branch or tag.
-        If load_all is True, also load all of the the externals sub-externals.
+        Returns status of all components (if available).
+
+        Also returns, if available:
+          * Is this external optional/required
+          * Is local repository clean/dirty
         """
 
         self._stat.path = self.get_local_path()
@@ -112,6 +112,7 @@ class _External(object):
         ext_stats = {}
 
         if not os.path.exists(self._repo_dir_path):
+            # No local repository.
             self._stat.sync_state = ExternalStatus.EMPTY
             msg = ('status check: repository directory for "{0}" does not '
                    'exist.'.format(self._name))
@@ -126,9 +127,11 @@ class _External(object):
             else:
                 self._stat.expected_version = self._repo.tag() + self._repo.branch()
         else:
+            # Local repository state (e.g. clean/dirty)
             if self._repo:
                 self._repo.status(self._stat, self._repo_dir_path)
 
+            # Status of the entire source tree.
             if self._externals and self._externals_sourcetree:
                 # we expect externals and they exist
                 cwd = os.getcwd()
