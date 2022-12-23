@@ -1,4 +1,92 @@
 ==============================================================
+Tag name: cesm2_3_beta11
+Originator(s): CSEG
+Date: 23 December 2022 
+One-line Summary: NUOPC restart fix.
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_085                            
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_2_0_34          
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.82                       
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.16               
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.49 
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.14           
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.2                    
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps0.12.67                   
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev114                   
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_20220425            
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_221206                   
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_47                  
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220322           
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                  
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.5         
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_9                    
+
+Answer Changes introduced with this tag when compared to cesm2_3_beta10:
+    NONE
+
+Problems identified after tag creation:
+- Multi-instance init is being done serially.
+- All T31_g37_rx1.A tests fail with floating point exception.
+- All T62_s11 nuopc tests fail because of missing mesh file.
+- All ERS_N2 tests should be ERS_C2 tests.
+Cheyenne intel
+        FAIL ERI_D.T31_g37_rx1.A.cheyenne_intel RUN time=48
+        FAIL ERP_Ln9_Vnuopc.C96_C96_mg17.F2000climo.cheyenne_intel.cam-outfrq9s_mg3 MODEL_BUILD time=3
+        FAIL ERS_IOP.T62_s11.G.cheyenne_intel.pop-cice SUBMIT
+        FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_intel CREATE_NEWCASE
+        FAIL PET.T62_g16.G.cheyenne_intel.pop-cice COMPARE_base_single_thread
+        FAIL SMS_C80_P108x1_Lh1_Vnuopc.f09_f09_mg17.FHIST_DARTC6.cheyenne_intel.cam-dartcambigens RUN time=2427
+        PEND ERP_D_Ln9_Vnuopc.C48_C48_mg17.QPC6.cheyenne_intel.cam-outfrq9s MODEL_BUILD RERUN
+        FAIL PET_PM.f19_g17.B1850.cheyenne_intel.allactive-defaultiomi COMPARE_base_single_thread
+        FAIL SMS_D_Ld1_PS.f09_g17.I1850Clm50BgcSpinup.cheyenne_intel.clm-cplhist RUN time=49
+        PEND SMS_Ld1_P144_D.T62_g17.C.cheyenne_intel.pop-144blocks_320x384_spacecurve RUN
+        PEND SMS_Ld2_P80_D.T62_g37.C1850ECO.cheyenne_intel.pop-ecosys_81blocks_100x116_spacecurve RUN
+Cheyenne gnu
+        FAIL ERI_D.T31_g37_rx1.A.cheyenne_gnu RUN time=29
+        FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_gnu CREATE_NEWCASE
+        FAIL IRT_C3_Ld7.f19_g17.BHIST.cheyenne_gnu.allactive-defaultio RUN time=2011
+        FAIL PET.T62_g16.G.cheyenne_gnu.pop-cice COMPARE_base_single_thread
+        FAIL SMS_D.T62_s11.G.cheyenne_gnu.pop-cice SUBMIT
+        FAIL PET_PM.f19_g17.B1850.cheyenne_gnu.allactive-defaultiomi COMPARE_base_single_thread
+Cheyenne nvhpc
+        FAIL ERI_D.T31_g37_rx1.A.cheyenne_nvhpc RUN time=18
+        FAIL ERS_IOP.T62_s11.G.cheyenne_nvhpc.pop-cice SUBMIT
+        FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_nvhpc CREATE_NEWCASE
+        FAIL ERS.T62_g16.C1850ECO.cheyenne_nvhpc.pop-ecosys RUN time=172
+        FAIL PEA_P1_Ld3.f45_g37_rx1.A.cheyenne_nvhpc RUN time=93
+        FAIL PEA_P1_Ld3.T31_g37.X.cheyenne_nvhpc RUN time=411
+        FAIL PET.T62_g16.G.cheyenne_nvhpc.pop-cice RUN time=1111
+        FAIL SMS_D.T62_s11.G.cheyenne_nvhpc.pop-cice RUN time=13
+        FAIL ERS.T62_g16.G1850ECO.cheyenne_nvhpc.pop-cice_ecosys RUN time=177
+
+Izumi intel
+        FAIL ERI.f19_g17_rx1.2000_DATM%NYF_SLND_CICE5_DOCN%SOM_DROF%NYF_SGLC_SWAV_TEST.izumi_intel.cice5-default RUN time=30
+        FAIL ERI_Vnuopc.f19_g17_rx1.2000_DATM%NYF_SLND_CICE_DOCN%SOM_DROF%NYF_SGLC_SWAV_TEST.izumi_intel.cice-default RUN time=45
+        FAIL ERI_D.T31_g37_rx1.A.izumi_intel RUN time=45
+        PEND ERS_D.f19_g16_rx1.G1850ECO.izumi_intel.pop-cice_ecosys RUN
+        FAIL ERS_Ld5.T62_s11.2000_DATM%NYF_SLND_CICE5_DOCN%SOM_DROF%NYF_SGLC_SWAV_TEST.izumi_intel.cice5-default SUBMIT
+        FAIL ERS_N2_Ld3.T31_g37_rx1.A.izumi_intel CREATE_NEWCASE
+        PEND ERS.T62_g16.C1850ECO.izumi_intel.pop-ecosys RUN
+        FAIL ERS.T62_g16.G.izumi_intel.pop-cice RUN time=112
+
+Izumi nag
+        FAIL DAE.ww3a.ADWAV.izumi_nag RUN time=28
+        PEND ERP_D_Ld5.ne30_g17.I1850Clm50BgcCrop.izumi_nag.clm-default RUN
+        FAIL ERS_Ld5.f19_g17.2000_CAM60_CLM50%SP_CICE5_DOCN%SOM_MOSART_SGLC_SWAV_TEST.izumi_nag.cice5-default SHAREDLIB_BUILD time=50
+        FAIL ERS_Ld5_Vnuopc.f19_g17.2000_CAM60_CLM50%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST.izumi_nag.cice-default SHAREDLIB_BUILD time=12
+        FAIL PRE.f19_f19.ADESP_TEST.izumi_nag CREATE_NEWCASE
+        FAIL SMS_Ld1_P136_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN time=259
+        PEND SMS_Ld1_P144_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN
+        FAIL SMS_Ld2_P72_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN time=59
+        PEND SMS_Ld2_P80_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN
+        FAIL SMS.T62_g37.C1850ECO.izumi_nag.pop-ecosys RUN time=74
+        FAIL ERS.T62_s11.G.izumi_nag.pop-cice SUBMIT
+
+==============================================================
 Tag name: cesm2_3_alpha011a
 Originator(s): CSEG
 Date: 23 December 2022 
