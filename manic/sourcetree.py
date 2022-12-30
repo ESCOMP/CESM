@@ -102,8 +102,8 @@ class _External(object):
         """
         Returns status of this component and all subcomponents (if available).
 
-        Returns a dict mapping our local path to an ExternalStatus dict (plus
-        additional entries for any subcomponents)
+        Returns a dict mapping our local path to an ExternalStatus dict. Any
+        subcomponents will have their own top-level key.
 
         Populates self._stat as a side effect.
         """
@@ -303,6 +303,9 @@ class SourceTree(object):
     def status(self, relative_path_base=LOCAL_PATH_INDICATOR):
         """Return a dictionary of local path->ExternalStatus.
 
+        Note that all traversed components, whether recursive or top-level, have
+        a top-level key in the returned dictionary.
+
         FIXME(bja, 2017-10) what do we do about situations where the
         user checked out the optional components, but didn't add
         optional for running status? What do we do where the user
@@ -328,7 +331,7 @@ class SourceTree(object):
                     modified_path = os.path.join(relative_path_base,
                                                  stat[name].path)
                     stat_final[modified_path] = stat[name]
-                    stat_final[modified_path].ppath = modified_path
+                    stat_final[modified_path].path = modified_path
             summary.update(stat_final)
 
         return summary
