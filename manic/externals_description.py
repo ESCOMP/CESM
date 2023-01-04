@@ -281,6 +281,10 @@ def read_gitmodules_file(root_dir, file_name):
 def create_externals_description(
         model_data, model_format='cfg', components=None, exclude=None, parent_repo=None):
     """Create the a externals description object from the provided data
+        
+    components: list of component names to include, None to include all. If a
+                name isn't found, it is silently omitted from the return value.
+    exclude: list of component names to skip.
     """
     externals_description = None
     if model_format == 'dict':
@@ -763,6 +767,8 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
         """Convert the config data into a standardized dict that can be used to
         construct the source objects
 
+        components: list of component names to include, None to include all.
+        exclude: list of component names to skip.
         """
         ExternalsDescription.__init__(self, parent_repo=parent_repo)
         self._schema_major = 1
@@ -786,6 +792,9 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
 
     def _parse_cfg(self, cfg_data, components=None, exclude=None):
         """Parse a config_parser object into a externals description.
+
+        components: list of component names to include, None to include all.
+        exclude: list of component names to skip.
         """
         def list_to_dict(input_list, convert_to_lower_case=True):
             """Convert a list of key-value pairs into a dictionary.

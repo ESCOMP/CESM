@@ -338,7 +338,34 @@ of the externals description file or examine the output of
         options = parser.parse_args()
     return options
 
-
+def _dirty_local_repo_msg(program_name, config_file):
+    return """The external repositories labeled with 'M' above are not in a clean state.
+The following are four options for how to proceed:
+(1) Go into each external that is not in a clean state and issue either a 'git status' or
+    an 'svn status' command (depending on whether the external is managed by git or
+    svn). Either revert or commit your changes so that all externals are in a clean
+    state. (To revert changes in git, follow the instructions given when you run 'git
+    status'.) (Note, though, that it is okay to have untracked files in your working
+    directory.) Then rerun {program_name}.
+(2) Alternatively, you do not have to rely on {program_name}. Instead, you can manually
+    update out-of-sync externals (labeled with 's' above) as described in the
+    configuration file {config_file}. (For example, run 'git fetch' and 'git checkout'
+    commands to checkout the appropriate tags for each external, as given in
+    {config_file}.)
+(3) You can also use {program_name} to manage most, but not all externals: You can specify
+    one or more externals to ignore using the '-x' or '--exclude' argument to
+    {program_name}. Excluding externals labeled with 'M' will allow {program_name} to
+    update the other, non-excluded externals.
+(4) As a last resort, if you are confident that there is no work that needs to be saved
+    from a given external, you can remove that external (via "rm -rf [directory]") and
+    then rerun the {program_name} tool. This option is mainly useful as a workaround for
+    issues with this tool (such as https://github.com/ESMCI/manage_externals/issues/157).
+The external repositories labeled with '?' above are not under version
+control using the expected protocol. If you are sure you want to switch
+protocols, and you don't have any work you need to save from this
+directory, then run "rm -rf [directory]" before rerunning the
+{program_name} tool.
+""".format(program_name=program_name, config_file=config_file)
 # ---------------------------------------------------------------------
 #
 # main
@@ -380,8 +407,12 @@ def main(args):
                     comp, args.externals))
 
     source_tree = SourceTree(root_dir, external, svn_ignore_ancestry=args.svn_ignore_ancestry)
-    printlog('Checking status of externals: ', end='')
-    tree_status = source_tree.status()
+    if args.components:
+        components_str = 'specified components'
+    else:
+        components_str = 'required & optional components'
+    printlog('Checking local status of ' + components_str + ': ', end='')
+    tree_status = source_tree.status(print_progress=True)
     printlog('')
 
     if args.status:
@@ -396,43 +427,8 @@ def main(args):
             for comp in sorted(tree_status):
                 tree_status[comp].log_status_message(args.verbose)
             # exit gracefully
-            msg = """The external repositories labeled with 'M' above are not in a clean state.
-
-The following are four options for how to proceed:
-
-(1) Go into each external that is not in a clean state and issue either a 'git status' or
-    an 'svn status' command (depending on whether the external is managed by git or
-    svn). Either revert or commit your changes so that all externals are in a clean
-    state. (To revert changes in git, follow the instructions given when you run 'git
-    status'.) (Note, though, that it is okay to have untracked files in your working
-    directory.) Then rerun {program_name}.
-
-(2) Alternatively, you do not have to rely on {program_name}. Instead, you can manually
-    update out-of-sync externals (labeled with 's' above) as described in the
-    configuration file {config_file}. (For example, run 'git fetch' and 'git checkout'
-    commands to checkout the appropriate tags for each external, as given in
-    {config_file}.)
-
-(3) You can also use {program_name} to manage most, but not all externals: You can specify
-    one or more externals to ignore using the '-x' or '--exclude' argument to
-    {program_name}. Excluding externals labeled with 'M' will allow {program_name} to
-    update the other, non-excluded externals.
-
-(4) As a last resort, if you are confident that there is no work that needs to be saved
-    from a given external, you can remove that external (via "rm -rf [directory]") and
-    then rerun the {program_name} tool. This option is mainly useful as a workaround for
-    issues with this tool (such as https://github.com/ESMCI/manage_externals/issues/157).
-
-
-The external repositories labeled with '?' above are not under version
-control using the expected protocol. If you are sure you want to switch
-protocols, and you don't have any work you need to save from this
-directory, then run "rm -rf [directory]" before rerunning the
-{program_name} tool.
-""".format(program_name=program_name, config_file=args.externals)
-
             printlog('-' * 70)
-            printlog(msg)
+            printlog(_dirty_local_repo_msg(program_name, args.externals))
             printlog('-' * 70)
         else:
             if not args.components:
