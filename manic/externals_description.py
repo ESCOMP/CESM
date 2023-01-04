@@ -358,8 +358,9 @@ class ExternalsDescription(dict):
     input value.
 
     """
-    # keywords defining the interface into the externals description data
-    EXTERNALS = 'externals'
+    # keywords defining the interface into the externals description data; these
+    # are brought together by the schema below.
+    EXTERNALS = 'externals'  # path to externals file.
     BRANCH = 'branch'
     SUBMODULE = 'from_submodule'
     HASH = 'hash'
@@ -385,6 +386,8 @@ class ExternalsDescription(dict):
     _V1_BRANCH = 'BRANCH'
     _V1_REQ_SOURCE = 'REQ_SOURCE'
 
+    # Dictionary keys are component names. The corresponding values are laid out
+    # according to this schema.
     _source_schema = {REQUIRED: True,
                       PATH: 'string',
                       EXTERNALS: 'string',
