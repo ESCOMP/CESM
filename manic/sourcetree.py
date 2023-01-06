@@ -117,10 +117,10 @@ class _External(object):
             elif self._local_path == LOCAL_PATH_INDICATOR:
                 # LOCAL_PATH_INDICATOR, '.' paths, are standalone
                 # component directories that are not managed by
-                # checkout_externals.
+                # checkout_subexternals.
                 self._stat.source_type = ExternalStatus.STANDALONE
             else:
-                # managed by checkout_externals
+                # managed by checkout_subexternals
                 self._stat.source_type = ExternalStatus.MANAGED
 
         subcomponent_stats = {}
@@ -169,13 +169,13 @@ class _External(object):
 
         return all_stats
 
-    def checkout(self, verbosity, load_all):
+    def checkout(self, verbosity):
         """
         If the repo destination directory exists, ensure it is correct (from
         correct URL, correct branch or tag), and possibly update the external.
         If the repo destination directory does not exist, checkout the correct
         branch or tag.
-        load_all is currently ignored. See checkout_externals() to check out sub-externals.
+        Does not check out sub-externals, see checkout_subexternals().
         """
         # Make sure we are in correct location
         if not os.path.exists(self._repo_dir_path):
@@ -213,10 +213,10 @@ class _External(object):
             self._repo.checkout(self._base_dir_path, self._repo_dir_name,
                                 checkout_verbosity, self.clone_recursive())
 
-    def checkout_externals(self, verbosity, load_all):
-        """Checkout the sub-externals for this component, if any.
+    def checkout_subexternals(self, verbosity, load_all):
+        """Recursively checkout the sub-externals for this component, if any.
 
-        if load_all is True, also recurse into sub-sub-externals and so on.
+        See load_all documentation in SourceTree.checkout().
         """
         if self.load_externals():
             if self._externals_sourcetree:
@@ -353,13 +353,11 @@ class SourceTree(object):
 
     def checkout(self, verbosity, load_all, load_comp=None):
         """
-        Checkout or update indicated components into the the configured
-        subdirs.
+        Checkout or update indicated components into the configured subdirs.
 
-        If load_all is True, recursively checkout all externals.
-        If load_all is False, load_comp is an optional set of components to load.
-        If load_all is False and load_comp is None, only checkout the required external (plus any optionals that are already checked out)
-        For all 3 cases, sub-externals are also recursively checked out.
+        If load_all is True, checkout all externals (required + optional), recursively.
+        If load_all is False and load_comp is set, checkout load_comp (and any required subexternals, plus any optional subexternals that are already checked out, recursively)
+        If load_all is False and load_comp is None, checkout all required externals, plus any optionals that are already checked out, recursively.
         """
         if load_all:
             tmp_comps = self._all_components.keys()
@@ -380,7 +378,8 @@ class SourceTree(object):
         # Sort by path so that if paths are nested the
         # parent repo is checked out first.
         load_comps = sorted(tmp_comps, key=lambda comp: self._all_components[comp].get_local_path())
-        # checkout the primary externals
+
+        # checkout.
         for comp in load_comps:
             if verbosity < VERBOSITY_VERBOSE:
                 printlog('{0}, '.format(comp), end='')
@@ -388,7 +387,9 @@ class SourceTree(object):
                 # verbose output handled by the _External object, just
                 # output a newline
                 printlog(EMPTY_STR)
-            self._all_components[comp].checkout(verbosity, load_all)
-            # now give each external an opportunitity to checkout it's externals.
-            self._all_components[comp].checkout_externals(verbosity, load_all)
+            # Does not recurse.
+            self._all_components[comp].checkout(verbosity)
+            # Recursively check out subexternals, if any.
+            self._all_components[comp].checkout_subexternals(verbosity,
+                                                             load_all)
         printlog('')

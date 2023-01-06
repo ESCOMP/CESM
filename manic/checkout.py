@@ -396,17 +396,17 @@ def main(args):
         load_all = True
 
     root_dir = os.path.abspath(os.getcwd())
-    external_data = read_externals_description_file(root_dir, args.externals)
-    external = create_externals_description(
-        external_data, components=args.components, exclude=args.exclude)
+    model_data = read_externals_description_file(root_dir, args.externals)
+    ext_description = create_externals_description(
+        model_data, components=args.components, exclude=args.exclude)
 
     for comp in args.components:
-        if comp not in external.keys():
+        if comp not in ext_description.keys():
             fatal_error(
                 "No component {} found in {}".format(
                     comp, args.externals))
 
-    source_tree = SourceTree(root_dir, external, svn_ignore_ancestry=args.svn_ignore_ancestry)
+    source_tree = SourceTree(root_dir, ext_description, svn_ignore_ancestry=args.svn_ignore_ancestry)
     if args.components:
         components_str = 'specified components'
     else:
