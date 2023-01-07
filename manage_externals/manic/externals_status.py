@@ -29,16 +29,16 @@ class ExternalStatus(object):
     transactions (e.g. add, remove, rename, untracked files).
 
     """
-    # sync_state and clean_state can be one of the following:
-    DEFAULT = '-'  # aka not set yet.
+    DEFAULT = '-'
     UNKNOWN = '?'
     EMPTY = 'e'
-    MODEL_MODIFIED = 's'  # repo version != externals (sync_state only)
-    DIRTY = 'M'       # repo is dirty (clean_state only)
-    STATUS_OK = ' '   # repo is clean/matches externals.
+    MODEL_MODIFIED = 's'  # a.k.a. out-of-sync
+    DIRTY = 'M'
+
+    STATUS_OK = ' '
     STATUS_ERROR = '!'
 
-    # source_type can be one of the following:
+    # source types
     OPTIONAL = 'o'
     STANDALONE = 's'
     MANAGED = ' '
@@ -55,21 +55,19 @@ class ExternalStatus(object):
     def log_status_message(self, verbosity):
         """Write status message to the screen and log file
         """
-        printlog(self._default_status_message())
+        self._default_status_message()
         if verbosity >= VERBOSITY_VERBOSE:
-            printlog(self._verbose_status_message())
+            self._verbose_status_message()
         if verbosity >= VERBOSITY_DUMP:
-            printlog(self._dump_status_message())
-
-    def __repr__(self):
-        return self._default_status_message()
+            self._dump_status_message()
 
     def _default_status_message(self):
         """Return the default terse status message string
         """
-        return '{sync}{clean}{src_type} {path}'.format(
+        msg = '{sync}{clean}{src_type} {path}'.format(
             sync=self.sync_state, clean=self.clean_state,
             src_type=self.source_type, path=self.path)
+        printlog(msg)
 
     def _verbose_status_message(self):
         """Return the verbose status message string
@@ -84,12 +82,14 @@ class ExternalStatus(object):
         if self.sync_state != self.STATUS_OK:
             sync_str = '{current} --> {expected}'.format(
                 current=self.current_version, expected=self.expected_version)
-        return '        {clean}, {sync}'.format(clean=clean_str, sync=sync_str)
+        msg = '        {clean}, {sync}'.format(clean=clean_str, sync=sync_str)
+        printlog(msg)
 
     def _dump_status_message(self):
         """Return the dump status message string
         """
-        return indent_string(self.status_output, 12)
+        msg = indent_string(self.status_output, 12)
+        printlog(msg)
 
     def safe_to_update(self):
         """Report if it is safe to update a repository. Safe is defined as:
