@@ -17,6 +17,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: oleksiyrudenko/gha-git-credentials@v2-latest
         with:
+          name: 'Jim Edwards'
+          email: 'jedwards@ucar.edu'
           token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Test Manic
         run: |
