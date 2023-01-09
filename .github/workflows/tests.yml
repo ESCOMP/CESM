@@ -20,6 +20,7 @@ jobs:
           pushd test
           git config --global user.email "devnull@example.com"
           git config --global user.name "GITHUB tester"
+          git config --global protocol.file.allow always
           make utest
           make stest
           popd
