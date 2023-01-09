@@ -43,10 +43,15 @@ class SvnRepository(Repository):
         """
         Repository.__init__(self, component_name, repo)
         self._ignore_ancestry = ignore_ancestry
+        if self._url.endswith('/'):
+            # there is already a '/' separator in the URL; no need to add another
+            url_sep = ''
+        else:
+            url_sep = '/'
         if self._branch:
-            self._url = os.path.join(self._url, self._branch)
+            self._url = self._url + url_sep + self._branch
         elif self._tag:
-            self._url = os.path.join(self._url, self._tag)
+            self._url = self._url + url_sep + self._tag
         else:
             msg = "DEV_ERROR in svn repository. Shouldn't be here!"
             fatal_error(msg)

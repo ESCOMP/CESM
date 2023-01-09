@@ -109,26 +109,20 @@ class GitRepository(Repository):
     def _current_ref(self):
         """Determine the *name* associated with HEAD.
 
-        If we're on a branch, then returns the branch name; otherwise,
-        if we're on a tag, then returns the tag name; otherwise, returns
+        If we're on a tag, then returns the tag name; otherwise, returns
         the current hash. Returns an empty string if no reference can be
         determined (e.g., if we're not actually in a git repository).
+
+        If we're on a branch, then the branch name is also included in
+        the returned string (in addition to the tag / hash).
         """
         ref_found = False
 
-        # If we're on a branch, then use that as the current ref
-        branch_found, branch_name = self._git_current_branch()
-        if branch_found:
-            current_ref = branch_name
+        # If we're exactly at a tag, use that as the current ref
+        tag_found, tag_name = self._git_current_tag()
+        if tag_found:
+            current_ref = tag_name
             ref_found = True
-
-        if not ref_found:
-            # Otherwise, if we're exactly at a tag, use that as the
-            # current ref
-            tag_found, tag_name = self._git_current_tag()
-            if tag_found:
-                current_ref = tag_name
-                ref_found = True
 
         if not ref_found:
             # Otherwise, use current hash as the current ref
@@ -137,7 +131,12 @@ class GitRepository(Repository):
                 current_ref = hash_name
                 ref_found = True
 
-        if not ref_found:
+        if ref_found:
+            # If we're on a branch, include branch name in current ref
+            branch_found, branch_name = self._git_current_branch()
+            if branch_found:
+                current_ref = "{} (branch {})".format(current_ref, branch_name)
+        else:
             # If we still can't find a ref, return empty string. This
             # can happen if we're not actually in a git repo
             current_ref = ''

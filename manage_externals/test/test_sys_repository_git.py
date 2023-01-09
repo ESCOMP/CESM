@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Tests of some of the functionality in repository_git.py that actually
 interacts with git repositories.
