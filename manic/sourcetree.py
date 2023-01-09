@@ -1,5 +1,5 @@
 """
-0;10;1c
+
 FIXME(bja, 2017-11) External and SourceTree have a circular dependancy!
 """
 
