@@ -15,14 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
-        with:
-          name: 'Jim Edwards'
-          email: 'jedwards@ucar.edu'
-          token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Test Manic
         run: |
           pushd test
+          git config --global user.email "devnull@example.com"
+          git config --global user.name "GITHUB tester"
           make utest
           make stest
           popd
