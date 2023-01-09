@@ -402,6 +402,8 @@ def main(args):
 
     for comp in args.components:
         if comp not in ext_description.keys():
+            # Note we can't print out the list of found externals because
+            # they were filtered in create_externals_description above.
             fatal_error(
                 "No component {} found in {}".format(
                     comp, args.externals))

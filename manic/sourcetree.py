@@ -98,12 +98,14 @@ class _External(object):
         """
         return self._local_path
 
-    def status(self, force=False):
+    def status(self, force=False, print_progress=False):
         """
-        Returns status of this component and all subcomponents (if available).
+        Returns status of this component and all subcomponents.
 
-        Returns a dict mapping our local path to an ExternalStatus dict. Any
-        subcomponents will have their own top-level key.
+        Returns a dict mapping our local path (not component name!) to an
+        ExternalStatus dict. Any subcomponents will have their own top-level
+        path keys.  Note the return value includes entries for this and all 
+        subcomponents regardless of whether they are locally installed or not.
 
         Side-effect: If self._stat is empty or force is True, calculates _stat.
         """
@@ -151,7 +153,7 @@ class _External(object):
                 # SourceTree.status() expects to be called from the correct
                 # root directory.
                 os.chdir(self._repo_dir_path)
-                subcomponent_stats = self._externals_sourcetree.status(self._local_path, force=force)
+                subcomponent_stats = self._externals_sourcetree.status(self._local_path, force=force, print_progress=print_progress)
                 os.chdir(cwd)
 
         # Merge our status + subcomponent statuses into one return dict keyed
@@ -311,19 +313,22 @@ class SourceTree(object):
                force=False, print_progress=False):
         """Return a dictionary of local path->ExternalStatus.
 
-        Note that all traversed components, whether recursive or top-level, have
-        a top-level key in the returned dictionary.
-
-        Note that all components that are checked out locally, whether required or 
-        optional, ar included in the returned status.
-        """
+        Notes about the returned dictionary:
+          * It is keyed by local path (e.g. 'components/mom'), not by
+            component name (e.g. 'mom').
+          * It contains top-level keys for all traversed components, whether
+            discovered by recursion or top-level.
+          * It contains entries for all components regardless of whether they
+            are locally installed or not, or required or optional.
+x        """
         load_comps = self._all_components.keys()
 
         summary = {}  # Holds merged statuses from all components.
         for comp in load_comps:
             if print_progress:
                 printlog('{0}, '.format(comp), end='')
-            stat = self._all_components[comp].status(force=force)
+            stat = self._all_components[comp].status(force=force,
+                                                     print_progress=print_progress)
 
             # Returned status dictionary is keyed by local path; prepend
             # relative_path_base if not already there.
@@ -342,14 +347,16 @@ class SourceTree(object):
 
     def _find_installed_optional_components(self):
         """Returns a list of installed optional component names, if any."""
-        installed_comps = set()
+        installed_comps = []
         for comp_name, ext in self._all_components.items():
             if comp_name in self._required_compnames:
                 continue
             # Note that in practice we expect this status to be cached.
-            stat = ext.status()
-            installed_comps.update(stat.keys())
-        return list(installed_comps)
+            path_to_stat = ext.status()
+            if any(stat.sync_state != ExternalStatus.EMPTY
+                   for stat in path_to_stat.values()):
+                installed_comps.append(comp_name)
+        return installed_comps
 
     def checkout(self, verbosity, load_all, load_comp=None):
         """
