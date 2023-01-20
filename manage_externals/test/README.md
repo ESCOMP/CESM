@@ -18,27 +18,17 @@ Development environments should be setup for python2 and python3:
 
 ## Unit tests
 
-Tests should be run for both python2 and python3. It is recommended
-that you have seperate terminal windows open python2 and python3
-testing to avoid errors activating and deactivating environments.
-
 ```SH
     cd checkout_externals/test
-    . env_python2/bin/activate
     make utest
-    deactivate
-```
-
-```SH
-    cd checkout_externals/test
-    . env_python2/bin/activate
-    make utest
-    deactivate
 ```
 
 ## System tests
 
-Not yet implemented.
+```SH
+    cd checkout_externals/test
+    make stest
+```
 
 ## Static analysis
 
@@ -51,9 +41,7 @@ regularly for automatic code formatting and linting.
 
 ```SH
     cd checkout_externals/test
-    . env_python2/bin/activate
     make lint
-    deactivate
 ```
 
 The canonical formatting for the code is whatever autopep8
@@ -68,10 +56,8 @@ coverage, run the code coverage tool:
 
 ```SH
     cd checkout_externals/test
-    . env_python2/bin/activate
     make coverage
     open -a Firefox.app htmlcov/index.html
-    deactivate
 ```
 
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Unit test driver for checkout_externals
 
@@ -101,7 +101,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
             True, 'feature3')
         self._repo._git_current_tag = self._git_current_tag(True, 'foo_tag')
         self._repo._git_current_hash = self._git_current_hash(True, 'abc123')
-        expected = 'feature3'
+        expected = 'foo_tag (branch feature3)'
         result = self._repo._current_ref()
         self.assertEqual(result, expected)
 

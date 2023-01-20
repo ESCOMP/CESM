@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Model description
 
@@ -71,7 +71,8 @@ def read_externals_description_file(root_dir, file_name):
     root_dir = os.path.abspath(root_dir)
     msg = 'In directory : {0}'.format(root_dir)
     logging.info(msg)
-    printlog('Processing externals description file : {0}'.format(file_name))
+    printlog('Processing externals description file : {0} ({1})'.format(file_name,
+                                                                        root_dir))
 
     file_path = os.path.join(root_dir, file_name)
     if not os.path.exists(file_name):
@@ -193,6 +194,9 @@ def parse_submodules_desc_section(section_items, file_path):
 def read_gitmodules_file(root_dir, file_name):
     # pylint: disable=deprecated-method
     # Disabling this check because the method is only used for python2
+    # pylint: disable=too-many-locals
+    # pylint: disable=too-many-branches
+    # pylint: disable=too-many-statements
     """Read a .gitmodules file and convert it to be compatible with an
     externals description.
     """
@@ -278,6 +282,10 @@ def read_gitmodules_file(root_dir, file_name):
 def create_externals_description(
         model_data, model_format='cfg', components=None, exclude=None, parent_repo=None):
     """Create the a externals description object from the provided data
+        
+    components: list of component names to include, None to include all. If a
+                name isn't found, it is silently omitted from the return value.
+    exclude: list of component names to skip.
     """
     externals_description = None
     if model_format == 'dict':
@@ -354,8 +362,9 @@ class ExternalsDescription(dict):
     input value.
 
     """
-    # keywords defining the interface into the externals description data
-    EXTERNALS = 'externals'
+    # keywords defining the interface into the externals description data; these
+    # are brought together by the schema below.
+    EXTERNALS = 'externals'  # path to externals file.
     BRANCH = 'branch'
     SUBMODULE = 'from_submodule'
     HASH = 'hash'
@@ -381,6 +390,8 @@ class ExternalsDescription(dict):
     _V1_BRANCH = 'BRANCH'
     _V1_REQ_SOURCE = 'REQ_SOURCE'
 
+    # Dictionary keys are component names. The corresponding values are laid out
+    # according to this schema.
     _source_schema = {REQUIRED: True,
                       PATH: 'string',
                       EXTERNALS: 'string',
@@ -757,6 +768,8 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
         """Convert the config data into a standardized dict that can be used to
         construct the source objects
 
+        components: list of component names to include, None to include all.
+        exclude: list of component names to skip.
         """
         ExternalsDescription.__init__(self, parent_repo=parent_repo)
         self._schema_major = 1
@@ -780,6 +793,9 @@ class ExternalsDescriptionConfigV1(ExternalsDescription):
 
     def _parse_cfg(self, cfg_data, components=None, exclude=None):
         """Parse a config_parser object into a externals description.
+
+        components: list of component names to include, None to include all.
+        exclude: list of component names to skip.
         """
         def list_to_dict(input_list, convert_to_lower_case=True):
             """Convert a list of key-value pairs into a dictionary.
