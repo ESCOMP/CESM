@@ -33,7 +33,7 @@ class _External(object):
             root_dir : string - the (checked-out) parent repo's root dir.
             local_path : string - this external's (checked-out) subdir relative
             to root_dir, e.g. "components/mom"
-            repo: string - the repo object for this external.
+            repo: Repository - the repo object for this external. Can be None (e.g. if this external just refers to another external file).
 
             name : string - name of this external (as named by the parent 
             reference).  May or may not correspond to something in the path.
@@ -42,8 +42,8 @@ class _External(object):
 
             svn_ignore_ancestry : bool - use --ignore-externals with svn switch
 
-            subexternals_path: path to sub-externals config file, if any. Relative to local_path, or special value 'none'.
-            subexternal_sourcetree: SourceTree coresponding to subexternals_path, if subexternals_path exists (it might not, if it is not checked out yet).
+            subexternals_path: string - path to sub-externals config file, if any. Relative to local_path, or special value 'none'.
+            subexternal_sourcetree: SourceTree - corresponding to subexternals_path, if subexternals_path exists (it might not, if it is not checked out yet).
         """
         self._name = name
         self._required = required
