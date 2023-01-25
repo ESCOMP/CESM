@@ -2,6 +2,11 @@
 
 """Unit test driver for checkout_externals
 
+Terminology: 
+  * 'container': a repo that has externals
+  * 'simple': a repo that has no externals, but is referenced as an external by another repo.
+  * 'mixed': a repo that both has externals and is referenced as an external by another repo.
+
 Note: this script assume the path to the manic and
 checkout_externals module is already in the python path. This is
 usually handled by the makefile. If you call it directly, you may need
@@ -22,6 +27,11 @@ So the solution is:
 * Erase any existing repos at the begining of the module in
 setUpModule.
 
+NOTE(jpa, 2023-01): knowledge about each test's structure is currently highly distributed, e.g. the following 4 methods all assume the existence of the same 3 externals, and they are brought together for a single test case (TestSysCheckout.test_container_simple_required()):
+   GenerateExternalsDescriptionCfgV1.container_simple_requiredl()
+   BaseTestSysCheckout.self._check_container_simple_required_pre_checkout()
+   BaseTestSysCheckout.self._check_container_simple_required_checkout()
+   BaseTestSysCheckout.self._check_container_simple_required_post_checkout()
 """
 
 # NOTE(bja, 2017-11) pylint complains that the module is too big, but
@@ -72,34 +82,39 @@ except ImportError:
 MANIC_TEST_TMP_REPO_ROOT = 'MANIC_TEST_TMP_REPO_ROOT' # env var name
 TMP_REPO_DIR_NAME = 'tmp'  # subdir under $CWD
 
-# We clone these checked-in repositories on a per-test basis. The
-# 'bare repo root' is the test/repos/ subdir that holds them all.
+# 'bare repo root' is the test/repos/ subdir that holds all of our
+# checked-in repositories.
 MANIC_TEST_BARE_REPO_ROOT = 'MANIC_TEST_BARE_REPO_ROOT'  # env var name
 BARE_REPO_ROOT_NAME = 'repos' # subdir name
 
-# Subdirs under bare repo root, each holding a repository.
-CONTAINER_REPO_NAME = 'container.git'
-MIXED_REPO_NAME = 'mixed-cont-ext.git'
-SIMPLE_REPO_NAME = 'simple-ext.git'
-SIMPLE_FORK_NAME = 'simple-ext-fork.git'
+# Subdirs under bare repo root, each holding a repository. For more info
+# on the contents of these repositories, see test/repos/README.md. In these
+# tests the 'parent' repos are cloned as a starting point, whereas the 'child'
+# repos are checked out when the tests run checkout_externals.
+CONTAINER_REPO_NAME = 'container.git'     # Parent repo
+SIMPLE_REPO_NAME = 'simple-ext.git'       # Child repo
+SIMPLE_FORK_NAME = 'simple-ext-fork.git'  # Child repo
+MIXED_REPO_NAME = 'mixed-cont-ext.git'    # Both parent and child
 
-
-# In each of the test repos, all externals live under this subdir.
+# All the configs we construct check out their externals into these local paths.
 EXTERNALS_NAME = 'externals'
 SUB_EXTERNALS_PATH = 'src'  # For mixed test repos, 
 
 # For testing behavior with '.' instead of an explicit paths.
 SIMPLE_LOCAL_ONLY_NAME = '.'
 
-# Filenames
+# Externals files that we construct or reference.
 CFG_NAME = 'externals.cfg'
 CFG_SUB_NAME = 'sub-externals.cfg'
-README_NAME = 'readme.txt'  # Arbitrary file to check in.
 
-# Arbirary test branch name
+# Arbitrary text file in all the test repos.
+README_NAME = 'readme.txt'  
+
+# Branch that exists in both the simple and simple-fork repos.
 REMOTE_BRANCH_FEATURE2 = 'feature2'
 
-# Section names in container_nested_* test config.
+# Output subdirs for 3 sibling externals, to test that one external can be
+# checked out in a subdir of another.
 NESTED_NAME = ['./fred', './fred/wilma', './fred/wilma/barney']
 
 SVN_TEST_REPO = 'https://github.com/escomp/cesm'
@@ -143,28 +158,29 @@ class GenerateExternalsDescriptionCfgV1(object):
         self._config = None
 
     def container_full(self, dest_dir):
-        """Create the full container config file with simple and mixed use
-        externals
-
+        """Simple externals plus a mixed-use one. Also required/optional.
         """
         self.create_config()
+        # Required external, by tag.
         self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
                             tag='tag1')
 
+        # Required external, by branch.
         self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
                             branch=REMOTE_BRANCH_FEATURE2)
 
+        # Optional external, by tag.
         self.create_section(SIMPLE_REPO_NAME, 'simp_opt',
                             tag='tag1', required=False)
 
+        # Required external, by branch, with explicit subexternals filename.
         self.create_section(MIXED_REPO_NAME, 'mixed_req',
-                            branch='master', externals=CFG_SUB_NAME)
+                            branch='master', sub_externals=CFG_SUB_NAME)
 
         self.write_config(dest_dir)
 
     def container_simple_required(self, dest_dir):
-        """Create a container externals file with only simple externals.
-
+        """Most basic externals: by tag, by branch, by hash. All required.
         """
         self.create_config()
         self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
@@ -179,8 +195,10 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.write_config(dest_dir)
 
     def container_nested_required(self, dest_dir, order):
-        """Create a container externals file with only simple externals.
+        """One external checked out into a subdir of another. All required.
 
+        order: permutation of which type of external repo to use for 
+        each of grandparent/parent/child nesting levels.
         """
         self.create_config()
         self.create_section(SIMPLE_REPO_NAME, 'simp_tag', nested=True,
@@ -196,8 +214,7 @@ class GenerateExternalsDescriptionCfgV1(object):
 
 
     def container_simple_optional(self, dest_dir):
-        """Create a container externals file with optional simple externals
-
+        """A single simple repo, in both required and optional form.
         """
         self.create_config()
         self.create_section(SIMPLE_REPO_NAME, 'simp_req',
@@ -209,20 +226,21 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.write_config(dest_dir)
 
     def container_simple_svn(self, dest_dir):
-        """Create a container externals file with only simple externals.
+        """One git and two svn repos.
 
         """
         self.create_config()
+        # Git repo.
         self.create_section(SIMPLE_REPO_NAME, 'simp_tag', tag='tag1')
 
+        # Svn repos.
         self.create_svn_external('svn_branch', branch='trunk')
         self.create_svn_external('svn_tag', tag='tags/cesm2.0.beta07')
 
         self.write_config(dest_dir)
 
     def container_sparse(self, dest_dir):
-        """Create a container with a full external and a sparse external
-
+        """Simple repo in standard (full) form and in sparse form.
         """
         # Create a file for a sparse pattern match
         sparse_filename = 'sparse_checkout'
@@ -240,11 +258,12 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.write_config(dest_dir)
 
     def mixed_simple_base(self, dest_dir):
-        """Create a mixed-use base externals file with only simple externals.
-
+        """Simple repos + an external file that only points to another file.
         """
         self.create_config()
+        # Points to local sub-externals file (as opposed to a specific repo)
         self.create_section_ext_only('mixed_base')
+
         self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
                             tag='tag1')
 
@@ -257,7 +276,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         self.write_config(dest_dir)
 
     def mixed_simple_sub(self, dest_dir):
-        """Create a mixed-use sub externals file with only simple externals.
+        """Point to a sub_externals file within each referenced repo.
 
         """
         self.create_config()
@@ -295,7 +314,7 @@ class GenerateExternalsDescriptionCfgV1(object):
 
     def create_section(self, repo_path, name, tag='', branch='',
                        ref_hash='', required=True, path=EXTERNALS_NAME,
-                       externals='', repo_path_abs=None, from_submodule=False,
+                       sub_externals='', repo_path_abs=None, from_submodule=False,
                        sparse='', nested=False):
         # pylint: disable=too-many-branches
         """Create a config ExternalsDescription section with the given name.
@@ -303,7 +322,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         Autofills some items and handles some optional items.
 
         repo_path_abs overrides repo_path (which is relative to the bare repo)
-        path is a subdir under repo_path.
+        path is a subdir under repo_path to check out to.
         """
         # pylint: disable=R0913
         self._config.add_section(name)
@@ -347,8 +366,9 @@ class GenerateExternalsDescriptionCfgV1(object):
         if ref_hash:
             self._config.set(name, ExternalsDescription.HASH, ref_hash)
 
-        if externals:
-            self._config.set(name, ExternalsDescription.EXTERNALS, externals)
+        if sub_externals:
+            self._config.set(name, ExternalsDescription.EXTERNALS,
+                             sub_externals)
 
         if sparse:
             self._config.set(name, ExternalsDescription.SPARSE, sparse)
@@ -356,10 +376,8 @@ class GenerateExternalsDescriptionCfgV1(object):
         if from_submodule:
             self._config.set(name, ExternalsDescription.SUBMODULE, "True")
 
-    def create_section_ext_only(self, name,
-                                required=True, externals=CFG_SUB_NAME):
-        """Create a config section with autofilling some items and handling
-        optional items.
+    def create_section_ext_only(self, name):
+        """Just a reference to another externals file.
 
         """
         # pylint: disable=R0913
@@ -372,10 +390,9 @@ class GenerateExternalsDescriptionCfgV1(object):
         self._config.set(name, ExternalsDescription.REPO_URL,
                          LOCAL_PATH_INDICATOR)
 
-        self._config.set(name, ExternalsDescription.REQUIRED, str(required))
+        self._config.set(name, ExternalsDescription.REQUIRED, str(True))
 
-        if externals:
-            self._config.set(name, ExternalsDescription.EXTERNALS, externals)
+        self._config.set(name, ExternalsDescription.EXTERNALS, CFG_SUB_NAME)
 
     def create_svn_external(self, name, tag='', branch=''):
         """Create a config section for an svn repository.
@@ -667,6 +684,8 @@ class BaseTestSysCheckout(unittest.TestCase):
         routines and not using a subprocess call so that we get code
         coverage results!
 
+        Also note that the returned tree_status is the status _before_
+        the checkout happens.
         """
         cwd = os.getcwd()
         checkout_path = os.path.abspath('{0}/../../checkout_externals')
@@ -1038,9 +1057,7 @@ class TestSysCheckout(BaseTestSysCheckout):
     #
     # ----------------------------------------------------------------
     def test_container_simple_required(self):
-        """Verify that a container with simple subrepos
-        generates the correct initial status.
-
+        """Most basic test of simplest externals: by tag, by branch, by hash.
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
@@ -1821,7 +1838,7 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
             self._generator.create_section(self._test_repo_name,
                                            self._checkout_dir,
                                            branch=branch_name,
-                                           path=name, externals=sub_externals,
+                                           path=name, sub_externals=sub_externals,
                                            repo_path_abs=self._repo_dir)
 
         self._generator.write_config(dest_dir, filename=filename)
