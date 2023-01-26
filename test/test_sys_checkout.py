@@ -27,11 +27,7 @@ So the solution is:
 * Erase any existing repos at the begining of the module in
 setUpModule.
 
-NOTE(jpa, 2023-01): knowledge about each test's structure is currently highly distributed, e.g. the following 4 methods all assume the existence of the same 3 externals, and they are brought together for a single test case (TestSysCheckout.test_container_simple_required()):
-   GenerateExternalsDescriptionCfgV1.container_simple_requiredl()
-   BaseTestSysCheckout.self._check_container_simple_required_pre_checkout()
-   BaseTestSysCheckout.self._check_container_simple_required_checkout()
-   BaseTestSysCheckout.self._check_container_simple_required_post_checkout()
+NOTE(jpa, 2023-01): knowledge about each test's structure is currently split between the config-generation methods (like GenerateExternalsDescriptionCfgV1.container_simple_required()) and the test cases that call them, then call checkout and assert on the results (like TestSysCheckout.test_container_simple_required()).
 """
 
 # NOTE(bja, 2017-11) pylint complains that the module is too big, but
@@ -754,7 +750,7 @@ class BaseTestSysCheckout(unittest.TestCase):
     # Check results for groups of externals under specific conditions
     #
     # ----------------------------------------------------------------
-    def _check_container_simple_required_pre_checkout(self, tree):
+    def _check_tag_branch_hash_empty(self, tree):
         self._check_sync_clean_type(tree[self._simple_tag_name()],
                                     ExternalStatus.EMPTY,
                                     ExternalStatus.DEFAULT,
@@ -768,21 +764,7 @@ class BaseTestSysCheckout(unittest.TestCase):
                                     ExternalStatus.DEFAULT,
                                     ExternalStatus.MANAGED)
 
-    def _check_container_nested_required_pre_checkout(self, tree, order):
-        self._check_sync_clean_type(tree[NESTED_NAME[order[0]]],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[NESTED_NAME[order[1]]],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[NESTED_NAME[order[2]]],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-
-    def _check_container_simple_required_post_checkout(self, tree):
+    def _check_tag_branch_hash_clean(self, tree):
         self._check_sync_clean_type(tree[self._simple_tag_name()],
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.STATUS_OK,
@@ -796,65 +778,7 @@ class BaseTestSysCheckout(unittest.TestCase):
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.MANAGED)
 
-    def _check_container_nested_required_post_checkout(self, tree, order):
-        self._check_sync_clean_type(tree[NESTED_NAME[order[0]]],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[NESTED_NAME[order[1]]],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[NESTED_NAME[order[2]]],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-
-    def _check_container_simple_required_out_of_sync(self, tree):
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.MODEL_MODIFIED,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.MODEL_MODIFIED,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_hash_name()],
-                                    ExternalStatus.MODEL_MODIFIED,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-
-    def _check_container_simple_optional_pre_checkout(self, tree):
-        self._check_sync_clean_type(tree[self._simple_req_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_opt_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.OPTIONAL)
-
-    def _check_container_simple_optional_post_checkout(self, tree):
-        self._check_sync_clean_type(tree[self._simple_req_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_opt_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.OPTIONAL)
-
-    def _check_container_simple_optional_post_optional(self, tree):
-        self._check_sync_clean_type(tree[self._simple_req_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_opt_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.OPTIONAL)
-
-    def _check_container_simple_required_sb_modified(self, tree):
+    def _check_tag_hash_clean_and_branch_modified(self, tree):
         self._check_sync_clean_type(tree[self._simple_tag_name()],
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.STATUS_OK,
@@ -868,67 +792,7 @@ class BaseTestSysCheckout(unittest.TestCase):
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.MANAGED)
 
-    def _check_container_simple_optional_st_dirty(self, tree):
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.DIRTY,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-
-    def _check_container_full_pre_checkout(self, tree):
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_opt_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.OPTIONAL)
-        self._check_mixed_ext_branch_required_pre_checkout(tree)
-
-    def _check_container_component_post_checkout(self, tree):
-        self._check_sync_clean_type(tree[self._simple_opt_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.OPTIONAL)
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-
-    def _check_container_component_post_checkout2(self, tree):
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-
-    def _check_container_component_post_checkout3(self, tree):
-        self.assertFalse("simp_opt" in tree)
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-
-    def _check_container_full_post_checkout(self, tree):
+    def _check_tag_branch_clean_and_optional_hash_empty(self, tree):
         self._check_sync_clean_type(tree[self._simple_tag_name()],
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.STATUS_OK,
@@ -941,52 +805,7 @@ class BaseTestSysCheckout(unittest.TestCase):
                                     ExternalStatus.EMPTY,
                                     ExternalStatus.DEFAULT,
                                     ExternalStatus.OPTIONAL)
-        self._check_mixed_ext_branch_required_post_checkout(tree)
 
-    def _check_container_full_pre_checkout_ext_change(self, tree):
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_opt_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.OPTIONAL)
-        self._check_mixed_ext_branch_required_pre_checkout_ext_change(
-            tree)
-
-    def _check_container_full_post_checkout_subext_modified(
-            self, tree):
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_opt_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.OPTIONAL)
-        self._check_mixed_ext_branch_required_post_checkout_subext_modified(
-            tree)
-
-    def _check_mixed_ext_branch_required_pre_checkout(self, tree):
-        # Note, this is the internal tree status just before checkout
-        self._check_sync_clean_type(tree[self._mixed_req_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        # NOTE: externals/mixed_req/src should not exist in the tree
-        # since this is the status before checkout of mixed_req.
-
-    def _check_mixed_ext_branch_required_post_checkout(self, tree):
-        # Note, this is the internal tree status just before checkout
         self._check_sync_clean_type(tree[self._mixed_req_name()],
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.STATUS_OK,
@@ -994,108 +813,6 @@ class BaseTestSysCheckout(unittest.TestCase):
         check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
                                          SUB_EXTERNALS_PATH)
         self._check_sync_clean_type(tree[self._simple_branch_name(directory=check_dir)],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-
-    def _check_mixed_ext_branch_required_pre_checkout_ext_change(
-            self, tree):
-        # Note, this is the internal tree status just after change the
-        # externals description file, but before checkout
-        self._check_sync_clean_type(tree[self._mixed_req_name()],
-                                    ExternalStatus.MODEL_MODIFIED,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
-                                         SUB_EXTERNALS_PATH)
-        self._check_sync_clean_type(
-        tree[self._simple_branch_name(directory=check_dir)],
-            ExternalStatus.STATUS_OK,
-            ExternalStatus.STATUS_OK,
-            ExternalStatus.MANAGED)
-
-    def _check_mixed_ext_branch_required_post_checkout_subext_modified(
-            self, tree):
-        # Note, this is the internal tree status just after change the
-        # externals description file, but before checkout
-        self._check_sync_clean_type(tree[self._mixed_req_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
-                                         SUB_EXTERNALS_PATH)
-        self._check_sync_clean_type(
-            tree[self._simple_branch_name(directory=check_dir)],
-            ExternalStatus.MODEL_MODIFIED,
-            ExternalStatus.STATUS_OK,
-            ExternalStatus.MANAGED)
-        
-    def _check_mixed_cont_simple_required_pre_checkout(self, tree):
-        # Note, this is the internal tree status just before checkout
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(
-            tree[self._simple_branch_name(directory=SUB_EXTERNALS_PATH)],
-            ExternalStatus.EMPTY,
-            ExternalStatus.DEFAULT,
-            ExternalStatus.MANAGED)
-
-    def _check_mixed_cont_simple_required_checkout(self, tree):
-        # Note, this is the internal tree status just before checkout
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(
-            tree[self._simple_branch_name(SUB_EXTERNALS_PATH)],
-            ExternalStatus.EMPTY,
-            ExternalStatus.DEFAULT,
-            ExternalStatus.MANAGED)
-
-    def _check_mixed_cont_simple_required_post_checkout(self, tree):
-        # Note, this is the internal tree status just before checkout
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        
-        self._check_sync_clean_type(
-            tree[self._simple_branch_name(directory=SUB_EXTERNALS_PATH)],
-            ExternalStatus.STATUS_OK,
-            ExternalStatus.STATUS_OK,
-            ExternalStatus.MANAGED)
-        
-
-    def _check_container_sparse_pre_checkout(self, tree):
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_sparse_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
-
-    def _check_container_sparse_post_checkout(self, tree):
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.STATUS_OK,
-                                    ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_sparse_name()],
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.MANAGED)
@@ -1132,12 +849,12 @@ class TestSysCheckout(BaseTestSysCheckout):
         # status of empty repo
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_container_simple_required_pre_checkout(tree)
+        self._check_tag_branch_hash_empty(tree)
 
         # checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
     def test_container_nested_required(self):
         """Verify that a container with nested subrepos
@@ -1158,13 +875,35 @@ class TestSysCheckout(BaseTestSysCheckout):
             # status of empty repo
             tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                                 self.status_args)
-            self._check_container_nested_required_pre_checkout(tree, order)
+            self._check_sync_clean_type(tree[NESTED_NAME[order[0]]],
+                                        ExternalStatus.EMPTY,
+                                        ExternalStatus.DEFAULT,
+                                        ExternalStatus.MANAGED)
+            self._check_sync_clean_type(tree[NESTED_NAME[order[1]]],
+                                        ExternalStatus.EMPTY,
+                                        ExternalStatus.DEFAULT,
+                                        ExternalStatus.MANAGED)
+            self._check_sync_clean_type(tree[NESTED_NAME[order[2]]],
+                                        ExternalStatus.EMPTY,
+                                        ExternalStatus.DEFAULT,
+                                        ExternalStatus.MANAGED)
 
             # checkout
             tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                      self.checkout_args)
-            self._check_container_nested_required_post_checkout(tree, order)
-
+            self._check_sync_clean_type(tree[NESTED_NAME[order[0]]],
+                                        ExternalStatus.STATUS_OK,
+                                        ExternalStatus.STATUS_OK,
+                                        ExternalStatus.MANAGED)
+            self._check_sync_clean_type(tree[NESTED_NAME[order[1]]],
+                                        ExternalStatus.STATUS_OK,
+                                        ExternalStatus.STATUS_OK,
+                                        ExternalStatus.MANAGED)
+            self._check_sync_clean_type(tree[NESTED_NAME[order[2]]],
+                                        ExternalStatus.STATUS_OK,
+                                        ExternalStatus.STATUS_OK,
+                                        ExternalStatus.MANAGED)
+            
     def test_container_simple_optional(self):
         """Verify that container with an optional simple subrepos
         generates the correct initial status.
@@ -1177,17 +916,38 @@ class TestSysCheckout(BaseTestSysCheckout):
         # check status of empty repo
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_container_simple_optional_pre_checkout(tree)
+        self._check_sync_clean_type(tree[self._simple_req_name()],
+                                    ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_opt_name()],
+                                    ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.OPTIONAL)
 
         # checkout required
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_optional_post_checkout(tree)
+        self._check_sync_clean_type(tree[self._simple_req_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_opt_name()],
+                                    ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.OPTIONAL)
 
         # checkout optional
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.optional_args)
-        self._check_container_simple_optional_post_optional(tree)
+        self._check_sync_clean_type(tree[self._simple_req_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_opt_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.OPTIONAL)
 
     def test_container_simple_verbose(self):
         """Verify that container with simple subrepos runs with verbose status
@@ -1201,12 +961,12 @@ class TestSysCheckout(BaseTestSysCheckout):
         # checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
         # check verbose status
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.verbose_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
     def test_container_simple_dirty(self):
         """Verify that a container with simple subrepos
@@ -1229,7 +989,14 @@ class TestSysCheckout(BaseTestSysCheckout):
         # modify working copy.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_optional_st_dirty(tree)
+        self._check_sync_clean_type(tree[self._simple_tag_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.DIRTY,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_branch_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def test_container_simple_untracked(self):
         """Verify that a container with simple subrepos and a untracked files
@@ -1252,7 +1019,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # untracked file.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
     def test_container_simple_detached_sync(self):
         """Verify that a container with simple subrepos generates the correct
@@ -1267,7 +1034,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # status of empty repo
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_container_simple_required_pre_checkout(tree)
+        self._check_tag_branch_hash_empty(tree)
 
         # checkout
         self.execute_checkout_in_dir(cloned_repo_dir,
@@ -1281,12 +1048,23 @@ class TestSysCheckout(BaseTestSysCheckout):
         # status of repo, branch, tag and hash should all be out of sync!
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_container_simple_required_out_of_sync(tree)
+        self._check_sync_clean_type(tree[self._simple_tag_name()],
+                                    ExternalStatus.MODEL_MODIFIED,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_branch_name()],
+                                    ExternalStatus.MODEL_MODIFIED,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_hash_name()],
+                                    ExternalStatus.MODEL_MODIFIED,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
         # checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
     def test_container_remote_branch(self):
         """Verify that a container with remote branch change works
@@ -1310,12 +1088,12 @@ class TestSysCheckout(BaseTestSysCheckout):
         # status of simp_branch should be out of sync
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_container_simple_required_sb_modified(tree)
+        self._check_tag_hash_clean_and_branch_modified(tree)
 
         # checkout new externals
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
     def test_container_remote_tag_same_branch(self):
         """Verify that a container with remote tag change works. The new tag
@@ -1341,12 +1119,12 @@ class TestSysCheckout(BaseTestSysCheckout):
         # status of simp_branch should be out of sync
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_container_simple_required_sb_modified(tree)
+        self._check_tag_hash_clean_and_branch_modified(tree)
 
         # checkout new externals, then should be synced.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
     def test_container_remote_tag_fetch_all(self):
         """Verify that a container with remote tag change works. The new tag
@@ -1373,12 +1151,12 @@ class TestSysCheckout(BaseTestSysCheckout):
         # status of simp_branch should be out of sync
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_container_simple_required_sb_modified(tree)
+        self._check_tag_hash_clean_and_branch_modified(tree)
 
         # checkout new externals, should be synced.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
     def test_container_preserve_dot(self):
         """Verify that after inital checkout, modifying an external git repo
@@ -1401,7 +1179,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
         # update branch to point to a new branch that only exists in
         # the local fork
@@ -1412,7 +1190,7 @@ class TestSysCheckout(BaseTestSysCheckout):
                                              repo_path=SIMPLE_LOCAL_ONLY_NAME)
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_simple_required_post_checkout(tree)
+        self._check_tag_branch_hash_clean(tree)
 
     def test_container_full(self):
         """Verify that 'full' container with simple and mixed subrepos
@@ -1431,7 +1209,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # inital checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_full_post_checkout(tree)
+        self._check_tag_branch_clean_and_optional_hash_empty(tree)
 
         # Check existance of some files
         subrepo_path = os.path.join('externals', 'simp_tag')
@@ -1450,13 +1228,35 @@ class TestSysCheckout(BaseTestSysCheckout):
         # are still in sync
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_container_full_pre_checkout_ext_change(tree)
+        self._check_sync_clean_type(tree[self._simple_tag_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_branch_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_opt_name()],
+                                    ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.OPTIONAL)
+        self._check_sync_clean_type(tree[self._mixed_req_name()],
+                                    ExternalStatus.MODEL_MODIFIED,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
+                                         SUB_EXTERNALS_PATH)
+        self._check_sync_clean_type(
+        tree[self._simple_branch_name(directory=check_dir)],
+            ExternalStatus.STATUS_OK,
+            ExternalStatus.STATUS_OK,
+            ExternalStatus.MANAGED)
 
         # run the checkout. Now the mixed use external and it's
         # sub-exterals should be changed.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_full_post_checkout(tree)
+        self._check_tag_branch_clean_and_optional_hash_empty(tree)
 
     def test_container_component(self):
         """Verify that optional component checkout works
@@ -1479,12 +1279,30 @@ class TestSysCheckout(BaseTestSysCheckout):
 
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  checkout_args)
-        self._check_container_component_post_checkout(tree)
+        self._check_sync_clean_type(tree[self._simple_opt_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.OPTIONAL)
+        self._check_sync_clean_type(tree[self._simple_tag_name()],
+                                    ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_branch_name()],
+                                    ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
         
         checkout_args.append('simp_branch')
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  checkout_args)
-        self._check_container_component_post_checkout2(tree)
+        self._check_sync_clean_type(tree[self._simple_tag_name()],
+                                    ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_branch_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def test_container_exclude_component(self):
         """Verify that exclude component checkout works
@@ -1500,7 +1318,15 @@ class TestSysCheckout(BaseTestSysCheckout):
         checkout_args.extend(self.checkout_args)
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  checkout_args)
-        self._check_container_component_post_checkout3(tree)
+        self.assertFalse("simp_opt" in tree)
+        self._check_sync_clean_type(tree[self._simple_tag_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_branch_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def test_mixed_simple(self):
         """Verify that a mixed use repo can serve as a 'full' container,
@@ -1520,7 +1346,20 @@ class TestSysCheckout(BaseTestSysCheckout):
         # checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_mixed_cont_simple_required_post_checkout(tree)
+        self._check_sync_clean_type(tree[self._simple_tag_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_branch_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        
+        self._check_sync_clean_type(
+            tree[self._simple_branch_name(directory=SUB_EXTERNALS_PATH)],
+            ExternalStatus.STATUS_OK,
+            ExternalStatus.STATUS_OK,
+            ExternalStatus.MANAGED)
 
     def test_container_sparse(self):
         """Verify that 'full' container with simple subrepo
@@ -1536,7 +1375,14 @@ class TestSysCheckout(BaseTestSysCheckout):
         # inital checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_container_sparse_post_checkout(tree)
+        self._check_sync_clean_type(tree[self._simple_tag_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_sparse_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
         # Check existance of some files
         subrepo_path = os.path.join('externals', 'simp_tag')
