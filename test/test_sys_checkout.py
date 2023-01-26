@@ -703,43 +703,12 @@ class BaseTestSysCheckout(unittest.TestCase):
         os.chdir(cwd)
         return overall_status, tree_status
 
-    # ----------------------------------------------------------------
-    #
-    # Check results for generic perturbation of states
-    #
-    # 'tree' is a dict with ExternalStatus as values.
-    # 'name' is a key into that dict.
-    # ----------------------------------------------------------------
-    def _check_generic_empty_default_required(self, tree, name):
-        self.assertEqual(tree[name].sync_state, ExternalStatus.EMPTY)
-        self.assertEqual(tree[name].clean_state, ExternalStatus.DEFAULT)
-        self.assertEqual(tree[name].source_type, ExternalStatus.MANAGED)
-
-    def _check_generic_ok_clean_required(self, tree, name):
-        self.assertEqual(tree[name].sync_state, ExternalStatus.STATUS_OK)
-        self.assertEqual(tree[name].clean_state, ExternalStatus.STATUS_OK)
-        self.assertEqual(tree[name].source_type, ExternalStatus.MANAGED)
-
-    def _check_generic_ok_dirty_required(self, tree, name):
-        self.assertEqual(tree[name].sync_state, ExternalStatus.STATUS_OK)
-        self.assertEqual(tree[name].clean_state, ExternalStatus.DIRTY)
-        self.assertEqual(tree[name].source_type, ExternalStatus.MANAGED)
-
-    def _check_generic_modified_ok_required(self, tree, name):
-        self.assertEqual(tree[name].sync_state, ExternalStatus.MODEL_MODIFIED)
-        self.assertEqual(tree[name].clean_state, ExternalStatus.STATUS_OK)
-        self.assertEqual(tree[name].source_type, ExternalStatus.MANAGED)
-
-    def _check_generic_empty_default_optional(self, tree, name):
-        self.assertEqual(tree[name].sync_state, ExternalStatus.EMPTY)
-        self.assertEqual(tree[name].clean_state, ExternalStatus.DEFAULT)
-        self.assertEqual(tree[name].source_type, ExternalStatus.OPTIONAL)
-
-    def _check_generic_ok_clean_optional(self, tree, name):
-        self.assertEqual(tree[name].sync_state, ExternalStatus.STATUS_OK)
-        self.assertEqual(tree[name].clean_state, ExternalStatus.STATUS_OK)
-        self.assertEqual(tree[name].source_type, ExternalStatus.OPTIONAL)
-
+    def _check_sync_clean_type(self, ext_status, expected_sync_state,
+                               expected_clean_state, expected_source_type):
+        self.assertEqual(ext_status.sync_state, expected_sync_state)
+        self.assertEqual(ext_status.clean_state, expected_clean_state)
+        self.assertEqual(ext_status.source_type, expected_source_type)
+    
     # ----------------------------------------------------------------
     #
     # Check results for individual named externals
@@ -748,97 +717,147 @@ class BaseTestSysCheckout(unittest.TestCase):
     # ----------------------------------------------------------------
     def _check_simple_tag_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_tag'.format(directory)
-        self._check_generic_empty_default_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
 
     def _check_nested_tag_empty(self, tree, name=EXTERNALS_NAME):
-        self._check_generic_empty_default_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_tag_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_tag'.format(directory)
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_nested_tag_ok(self, tree, name=EXTERNALS_NAME):
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_tag_dirty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_tag'.format(directory)
-        self._check_generic_ok_dirty_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.DIRTY,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_tag_modified(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_tag'.format(directory)
-        self._check_generic_modified_ok_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.MODEL_MODIFIED,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_branch_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_branch'.format(directory)
-        self._check_generic_empty_default_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
 
     def _check_nested_branch_empty(self, tree, name=EXTERNALS_NAME):
-        self._check_generic_empty_default_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_branch_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_branch'.format(directory)
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_nested_branch_ok(self, tree, name=EXTERNALS_NAME):
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_branch_modified(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_branch'.format(directory)
-        self._check_generic_modified_ok_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.MODEL_MODIFIED,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_hash_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_hash'.format(directory)
-        self._check_generic_empty_default_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
 
     def _check_nested_hash_empty(self, tree, name=EXTERNALS_NAME):
-        self._check_generic_empty_default_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_hash_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_hash'.format(directory)
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_nested_hash_ok(self, tree, name=EXTERNALS_NAME):
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_hash_modified(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_hash'.format(directory)
-        self._check_generic_modified_ok_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.MODEL_MODIFIED,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_req_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_req'.format(directory)
-        self._check_generic_empty_default_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_req_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_req'.format(directory)
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_opt_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_opt'.format(directory)
-        self._check_generic_empty_default_optional(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.OPTIONAL)
 
     def _check_simple_opt_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_opt'.format(directory)
-        self._check_generic_ok_clean_optional(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.OPTIONAL)
 
     def _check_mixed_ext_branch_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/mixed_req'.format(directory)
-        self._check_generic_empty_default_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
 
     def _check_mixed_ext_branch_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/mixed_req'.format(directory)
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_mixed_ext_branch_modified(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/mixed_req'.format(directory)
-        self._check_generic_modified_ok_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.MODEL_MODIFIED,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_sparse_empty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_sparse'.format(directory)
-        self._check_generic_empty_default_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
 
     def _check_simple_sparse_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/simp_sparse'.format(directory)
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     # ----------------------------------------------------------------
     #
@@ -1610,19 +1629,27 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
 
     def _check_svn_branch_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/svn_branch'.format(directory)
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_svn_branch_dirty(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/svn_branch'.format(directory)
-        self._check_generic_ok_dirty_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.DIRTY,
+                                    ExternalStatus.MANAGED)
 
     def _check_svn_tag_ok(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/svn_tag'.format(directory)
-        self._check_generic_ok_clean_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_svn_tag_modified(self, tree, directory=EXTERNALS_NAME):
         name = './{0}/svn_tag'.format(directory)
-        self._check_generic_modified_ok_required(tree, name)
+        self._check_sync_clean_type(tree[name], ExternalStatus.MODEL_MODIFIED,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.MANAGED)
 
     def _check_container_simple_svn_post_checkout(self, overall, tree):
         self.assertEqual(overall, 0)
