@@ -138,152 +138,17 @@ def setUpModule():  # pylint: disable=C0103
     # files when executables are run
     os.environ[MANIC_TEST_TMP_REPO_ROOT] = repo_root
 
-
+    
 class GenerateExternalsDescriptionCfgV1(object):
     """Building blocks to create ExternalsDescriptionCfgV1 files.
 
     Basic usage: create_config() multiple create_*(), then write_config().
     Optionally after that: write_with_*().
-
-    Includes methods (like container_*()) to create predefined configs for the
-    checked-in repositories in test/repos/.
     """
 
     def __init__(self):
         self._schema_version = '1.1.0'
         self._config = None
-
-    def container_full(self, dest_dir):
-        """Simple externals plus a mixed-use one. Also required/optional.
-        """
-        self.create_config()
-        # Required external, by tag.
-        self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
-                            tag='tag1')
-
-        # Required external, by branch.
-        self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch=REMOTE_BRANCH_FEATURE2)
-
-        # Optional external, by tag.
-        self.create_section(SIMPLE_REPO_NAME, 'simp_opt',
-                            tag='tag1', required=False)
-
-        # Required external, by branch, with explicit subexternals filename.
-        self.create_section(MIXED_REPO_NAME, 'mixed_req',
-                            branch='master', sub_externals=CFG_SUB_NAME)
-
-        self.write_config(dest_dir)
-
-    def container_simple_required(self, dest_dir):
-        """Most basic externals: by tag, by branch, by hash. All required.
-        """
-        self.create_config()
-        self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
-                            tag='tag1')
-
-        self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch=REMOTE_BRANCH_FEATURE2)
-
-        self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
-                            ref_hash='60b1cc1a38d63')
-
-        self.write_config(dest_dir)
-
-    def container_nested_required(self, dest_dir, order):
-        """One external checked out into a subdir of another. All required.
-
-        order: permutation of which type of external repo to use for 
-        each of grandparent/parent/child nesting levels.
-        """
-        self.create_config()
-        self.create_section(SIMPLE_REPO_NAME, 'simp_tag', nested=True,
-                            tag='tag1', path=NESTED_NAME[order[0]])
-
-        self.create_section(SIMPLE_REPO_NAME, 'simp_branch', nested=True,
-                            branch=REMOTE_BRANCH_FEATURE2, path=NESTED_NAME[order[1]])
-
-        self.create_section(SIMPLE_REPO_NAME, 'simp_hash', nested=True,
-                            ref_hash='60b1cc1a38d63', path=NESTED_NAME[order[2]])
-
-        self.write_config(dest_dir)
-
-
-    def container_simple_optional(self, dest_dir):
-        """A single simple repo, in both required and optional form.
-        """
-        self.create_config()
-        self.create_section(SIMPLE_REPO_NAME, 'simp_req',
-                            tag='tag1')
-
-        self.create_section(SIMPLE_REPO_NAME, 'simp_opt',
-                            tag='tag1', required=False)
-
-        self.write_config(dest_dir)
-
-    def container_simple_svn(self, dest_dir):
-        """One git and two svn repos.
-
-        """
-        self.create_config()
-        # Git repo.
-        self.create_section(SIMPLE_REPO_NAME, 'simp_tag', tag='tag1')
-
-        # Svn repos.
-        self.create_svn_external('svn_branch', branch='trunk')
-        self.create_svn_external('svn_tag', tag='tags/cesm2.0.beta07')
-
-        self.write_config(dest_dir)
-
-    def container_sparse(self, dest_dir):
-        """Simple repo in standard (full) form and in sparse form.
-        """
-        # Create a file for a sparse pattern match
-        sparse_filename = 'sparse_checkout'
-        with open(os.path.join(dest_dir, sparse_filename), 'w') as sfile:
-            sfile.write('readme.txt')
-
-        self.create_config()
-        self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
-                            tag='tag2')
-
-        sparse_relpath = '../../{}'.format(sparse_filename)
-        self.create_section(SIMPLE_REPO_NAME, 'simp_sparse',
-                            tag='tag2', sparse=sparse_relpath)
-
-        self.write_config(dest_dir)
-
-    def mixed_simple_base(self, dest_dir):
-        """Simple repos + an external file that only points to another file.
-        """
-        self.create_config()
-        # Points to local sub-externals file (as opposed to a specific repo)
-        self.create_section_ext_only('mixed_base')
-
-        self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
-                            tag='tag1')
-
-        self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch=REMOTE_BRANCH_FEATURE2)
-
-        self.create_section(SIMPLE_REPO_NAME, 'simp_hash',
-                            ref_hash='60b1cc1a38d63')
-
-        self.write_config(dest_dir)
-
-    def mixed_simple_sub(self, dest_dir):
-        """Point to a sub_externals file within each referenced repo.
-
-        """
-        self.create_config()
-        self.create_section(SIMPLE_REPO_NAME, 'simp_tag',
-                            tag='tag1', path=SUB_EXTERNALS_PATH)
-
-        self.create_section(SIMPLE_REPO_NAME, 'simp_branch',
-                            branch=REMOTE_BRANCH_FEATURE2,
-                            path=SUB_EXTERNALS_PATH)
-
-        self.write_config(dest_dir, filename=CFG_SUB_NAME)
 
     def write_config(self, dest_dir, filename=CFG_NAME):
         """Write self._config to disk
@@ -825,6 +690,23 @@ class BaseTestSysCheckout(unittest.TestCase):
         "Check that <pathname> does not exist in <repo_dir>"
         self.assertFalse(os.path.exists(os.path.join(repo_dir, pathname)))
 
+
+def _write_tag_branch_hash_config(generator, dest_dir):
+    """Most basic externals: by tag, by branch, by hash. All required.
+    """
+    generator.create_config()
+    generator.create_section(SIMPLE_REPO_NAME, 'simp_tag',
+                        tag='tag1')
+    
+    generator.create_section(SIMPLE_REPO_NAME, 'simp_branch',
+                        branch=REMOTE_BRANCH_FEATURE2)
+
+    generator.create_section(SIMPLE_REPO_NAME, 'simp_hash',
+                        ref_hash='60b1cc1a38d63')
+
+    generator.write_config(dest_dir)
+
+
 class TestSysCheckout(BaseTestSysCheckout):
     """Run systems level tests of checkout_externals
 
@@ -844,7 +726,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # status of empty repo
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
@@ -870,7 +752,16 @@ class TestSysCheckout(BaseTestSysCheckout):
                                   self._test_id, "test"+str(n))
             cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME,
                                                   dest_dir_in=dest_dir)
-            self._generator.container_nested_required(cloned_repo_dir, order)
+            self._generator.create_config()
+            self._generator.create_section(SIMPLE_REPO_NAME, 'simp_tag', nested=True,
+                                           tag='tag1', path=NESTED_NAME[order[0]])
+            
+            self._generator.create_section(SIMPLE_REPO_NAME, 'simp_branch', nested=True,
+                                           branch=REMOTE_BRANCH_FEATURE2, path=NESTED_NAME[order[1]])
+            
+            self._generator.create_section(SIMPLE_REPO_NAME, 'simp_hash', nested=True,
+                                           ref_hash='60b1cc1a38d63', path=NESTED_NAME[order[2]])
+            self._generator.write_config(cloned_repo_dir)
 
             # status of empty repo
             tree = self.execute_checkout_in_dir(cloned_repo_dir,
@@ -911,7 +802,14 @@ class TestSysCheckout(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_optional(cloned_repo_dir)
+        self._generator.create_config()
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_req',
+                            tag='tag1')
+
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_opt',
+                            tag='tag1', required=False)
+
+        self._generator.write_config(cloned_repo_dir)
 
         # check status of empty repo
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
@@ -956,7 +854,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
@@ -974,7 +872,7 @@ class TestSysCheckout(BaseTestSysCheckout):
 
         """
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # checkout
         self.execute_checkout_in_dir(cloned_repo_dir,
@@ -1004,7 +902,7 @@ class TestSysCheckout(BaseTestSysCheckout):
 
         """
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # checkout
         self.execute_checkout_in_dir(cloned_repo_dir,
@@ -1029,7 +927,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # status of empty repo
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
@@ -1072,7 +970,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # checkout
         self.execute_checkout_in_dir(cloned_repo_dir,
@@ -1104,7 +1002,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # checkout
         self.execute_checkout_in_dir(cloned_repo_dir,
@@ -1136,7 +1034,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # checkout
         self.execute_checkout_in_dir(cloned_repo_dir,
@@ -1165,7 +1063,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # checkout
         self.execute_checkout_in_dir(cloned_repo_dir,
@@ -1204,7 +1102,24 @@ class TestSysCheckout(BaseTestSysCheckout):
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
 
         # create the top level externals file
-        self._generator.container_full(cloned_repo_dir)
+        self._generator.create_config()
+        # Required external, by tag.
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_tag',
+                            tag='tag1')
+
+        # Required external, by branch.
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_branch',
+                            branch=REMOTE_BRANCH_FEATURE2)
+
+        # Optional external, by tag.
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_opt',
+                            tag='tag1', required=False)
+
+        # Required external, by branch, with explicit subexternals filename.
+        self._generator.create_section(MIXED_REPO_NAME, 'mixed_req',
+                            branch='master', sub_externals=CFG_SUB_NAME)
+
+        self._generator.write_config(cloned_repo_dir)
 
         # inital checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
@@ -1265,44 +1180,65 @@ class TestSysCheckout(BaseTestSysCheckout):
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
 
         # create the top level externals file
-        self._generator.container_full(cloned_repo_dir)
+        self._generator.create_config()
+        # Optional external, by tag.
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_opt',
+                                       tag='tag1', required=False)
 
-        # inital checkout, first try a nonexistant component argument noref
+        # Required external, by branch.
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_branch',
+                                       branch=REMOTE_BRANCH_FEATURE2)
+
+        # Required external, by hash.
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_hash',
+                                       ref_hash='60b1cc1a38d63')
+        self._generator.write_config(cloned_repo_dir)
+        
+        # inital checkout, first try a nonexistent component argument noref
         checkout_args = ['simp_opt', 'noref']
         checkout_args.extend(self.checkout_args)
 
         with self.assertRaises(RuntimeError):
             self.execute_checkout_in_dir(cloned_repo_dir, checkout_args)
 
+        # Now explicitly check out one component.
         checkout_args = ['simp_opt']
         checkout_args.extend(self.checkout_args)
 
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  checkout_args)
+        # Explicitly listed component (opt) is present, the other two are not.
         self._check_sync_clean_type(tree[self._simple_opt_name()],
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.OPTIONAL)
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
         self._check_sync_clean_type(tree[self._simple_branch_name()],
                                     ExternalStatus.EMPTY,
                                     ExternalStatus.DEFAULT,
                                     ExternalStatus.MANAGED)
-        
+        self._check_sync_clean_type(tree[self._simple_hash_name()],
+                                    ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
+
+        # Check out a second component, this one required.
         checkout_args.append('simp_branch')
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  checkout_args)
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
-                                    ExternalStatus.EMPTY,
-                                    ExternalStatus.DEFAULT,
-                                    ExternalStatus.MANAGED)
+        # Explicitly listed component (branch) is present, the last one (tag) is not.
+        self._check_sync_clean_type(tree[self._simple_opt_name()],
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.STATUS_OK,
+                                    ExternalStatus.OPTIONAL)
         self._check_sync_clean_type(tree[self._simple_branch_name()],
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.MANAGED)
+        self._check_sync_clean_type(tree[self._simple_hash_name()],
+                                    ExternalStatus.EMPTY,
+                                    ExternalStatus.DEFAULT,
+                                    ExternalStatus.MANAGED)
+
 
     def test_container_exclude_component(self):
         """Verify that exclude component checkout works
@@ -1311,19 +1247,19 @@ class TestSysCheckout(BaseTestSysCheckout):
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
 
         # create the top level externals file
-        self._generator.container_full(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
-        # inital checkout, exclude simp_opt
-        checkout_args = ['--exclude', 'simp_opt']
+        # inital checkout, exclude simp_tag
+        checkout_args = ['--exclude', 'simp_tag']
         checkout_args.extend(self.checkout_args)
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  checkout_args)
-        self.assertFalse("simp_opt" in tree)
-        self._check_sync_clean_type(tree[self._simple_tag_name()],
+        self.assertFalse("simp_tag" in tree)
+        self._check_sync_clean_type(tree[self._simple_branch_name()],
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.MANAGED)
-        self._check_sync_clean_type(tree[self._simple_branch_name()],
+        self._check_sync_clean_type(tree[self._simple_hash_name()],
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.STATUS_OK,
                                     ExternalStatus.MANAGED)
@@ -1336,8 +1272,22 @@ class TestSysCheckout(BaseTestSysCheckout):
         #import pdb; pdb.set_trace()
         # create repository
         cloned_repo_dir = self.clone_test_repo(MIXED_REPO_NAME)
+
         # create top level externals file
-        self._generator.mixed_simple_base(cloned_repo_dir)
+        self._generator.create_config()
+        # Points to local sub-externals file (as opposed to a specific repo)
+        self._generator.create_section_ext_only('mixed_base')
+
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_tag',
+                                       tag='tag1')
+
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_branch',
+                                       branch=REMOTE_BRANCH_FEATURE2)
+
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_hash',
+                                       ref_hash='60b1cc1a38d63')
+
+        self._generator.write_config(cloned_repo_dir)
         # NOTE: sub-externals file is already in the repo so we can
         # switch branches during testing. Since this is a mixed-repo
         # serving as the top level container repo, we can't switch
@@ -1370,7 +1320,20 @@ class TestSysCheckout(BaseTestSysCheckout):
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
 
         # create the top level externals file
-        self._generator.container_sparse(cloned_repo_dir)
+        # Create a file for a sparse pattern match
+        sparse_filename = 'sparse_checkout'
+        with open(os.path.join(cloned_repo_dir, sparse_filename), 'w') as sfile:
+            sfile.write('readme.txt')
+
+        self._generator.create_config()
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_tag',
+                                       tag='tag2')
+
+        sparse_relpath = '../../{}'.format(sparse_filename)
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_sparse',
+                                       tag='tag2', sparse=sparse_relpath)
+
+        self._generator.write_config(cloned_repo_dir)
 
         # inital checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
@@ -1506,7 +1469,16 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
         self.skip_if_no_svn_access()
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_svn(cloned_repo_dir)
+
+        self._generator.create_config()
+        # Git repo.
+        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_tag', tag='tag1')
+
+        # Svn repos.
+        self._generator.create_svn_external('svn_branch', branch='trunk')
+        self._generator.create_svn_external('svn_tag', tag='tags/cesm2.0.beta07')
+
+        self._generator.write_config(cloned_repo_dir)
 
         # checkout
         tree = self.execute_checkout_with_status(cloned_repo_dir,
@@ -1802,7 +1774,7 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # update the config file to point to a different remote with
         # the tag instead of branch. Tag MUST NOT be in the original
@@ -1823,7 +1795,7 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # update the config file to point to a different remote with
         # the tag instead of branch. Tag MUST NOT be in the original
@@ -1839,7 +1811,7 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # update the config file to point to a different remote with
         # the tag instead of branch. Tag MUST NOT be in the original
@@ -1857,7 +1829,7 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # update the config file to point to a different remote with
         # the tag instead of branch. Tag MUST NOT be in the original
@@ -1876,7 +1848,7 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # update the config file to point to a different remote with
         # the tag instead of branch. Tag MUST NOT be in the original
@@ -1894,13 +1866,13 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
         """
         # create repo
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
-        self._generator.container_simple_required(cloned_repo_dir)
+        _write_tag_branch_hash_config(self._generator, cloned_repo_dir)
 
         # update the config file to point to a different remote with
         # the tag instead of branch. Tag MUST NOT be in the original
         # repo!
         self._generator.write_without_repo_url(cloned_repo_dir,
-                                                       'simp_branch')
+                                               'simp_branch')
 
         with self.assertRaises(RuntimeError):
             self.execute_checkout_in_dir(cloned_repo_dir, self.checkout_args)
