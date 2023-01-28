@@ -7,6 +7,8 @@ git ls-tree --full-tree -r --name-only HEAD
 git cat-file -p HEAD:<filename>
 ```
 
+File contents at a glance:
+```
 container.git/
   readme.txt
 
@@ -28,4 +30,4 @@ mixed-cont-ext.git/
 
 error/
    (no git repo here, just a readme.txt in the clear)
-
+```

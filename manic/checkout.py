@@ -378,8 +378,8 @@ def main(args):
     the --all option is passed.
 
     Returns a tuple (overall_status, tree_status). overall_status is 0
-    on success, non-zero on failure. tree_status gives the full status
-    if no checkout is happening. If checkout is happening, tree_status
+    on success, non-zero on failure. tree_status is a dict mapping local path
+    to ExternalStatus -- if no checkout is happening. If checkout is happening, tree_status
     is None.
     """
     if args.do_logging:
