@@ -39,7 +39,7 @@ class GitRepository(Repository):
 
     def __init__(self, component_name, repo):
         """
-        Parse repo (a <repo> XML element).
+        repo: ExternalsDescription.
         """
         Repository.__init__(self, component_name, repo)
         self._gitmodules = None
