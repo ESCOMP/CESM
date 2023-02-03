@@ -90,10 +90,10 @@ BARE_REPO_ROOT_NAME = 'repos' # subdir name
 # on the contents of these repositories, see test/repos/README.md. In these
 # tests the 'parent' repos are cloned as a starting point, whereas the 'child'
 # repos are checked out when the tests run checkout_externals.
-CONTAINER_REPO_NAME = 'container.git'     # Parent repo
-SIMPLE_REPO_NAME = 'simple-ext.git'       # Child repo
-SIMPLE_FORK_NAME = 'simple-ext-fork.git'  # Child repo
-MIXED_REPO_NAME = 'mixed-cont-ext.git'    # Both parent and child
+CONTAINER_REPO = 'container.git'     # Parent repo
+SIMPLE_REPO = 'simple-ext.git'       # Child repo
+SIMPLE_FORK_REPO = 'simple-ext-fork.git'  # Child repo
+MIXED_REPO = 'mixed-cont-ext.git'    # Both parent and child
 
 # Standard (arbitrary) external names for test configs
 TAG_SECTION = 'simp_tag'
@@ -146,12 +146,12 @@ def setUpModule():  # pylint: disable=C0103
 class RepoUtils(object):
     """Convenience methods for interacting with git repos."""
     @staticmethod
-    def create_branch(dest_dir, repo_name, branch, with_commit=False):
+    def create_branch(repo_base_dir, external_name, branch, with_commit=False):
         """Create branch and optionally (with_commit) add a single commit.
         """
         # pylint: disable=R0913
         cwd = os.getcwd()
-        repo_root = os.path.join(dest_dir, EXTERNALS_NAME, repo_name)
+        repo_root = os.path.join(repo_base_dir, EXTERNALS_NAME, external_name)
         os.chdir(repo_root)
         cmd = ['git', 'checkout', '-b', branch, ]
         execute_subprocess(cmd)
@@ -166,14 +166,14 @@ class RepoUtils(object):
         os.chdir(cwd)
 
     @staticmethod
-    def create_commit(dest_dir, repo_name):
-        """Make a commit on whatever is currently checked out.
-
+    def create_commit(repo_base_dir, external_name):
+        """Make a commit to the given external.
+        
         This is used to test sync state changes from local commits on
         detached heads and tracking branches.
         """
         cwd = os.getcwd()
-        repo_root = os.path.join(dest_dir, EXTERNALS_NAME, repo_name)
+        repo_root = os.path.join(repo_base_dir, EXTERNALS_NAME, external_name)
         os.chdir(repo_root)
 
         msg = 'work on great new feature!'
@@ -187,13 +187,13 @@ class RepoUtils(object):
 
     @staticmethod
     def clone_test_repo(bare_root, test_id, parent_repo_name, dest_dir_in):
-        """Clone repo under bare_root into dest_dir_in or local per-test-subdir.
+        """Clone repo at <bare_root>/<parent_repo_name> into dest_dir_in or local per-test-subdir.
 
         Returns output dir.
         """
         parent_repo_dir = os.path.join(bare_root, parent_repo_name)
         if dest_dir_in is None:
-            # unique repo for this test
+            # create unique subdir for this test
             test_dir_name = test_id
             print("Test repository name: {0}".format(test_dir_name))
             dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
@@ -364,7 +364,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         if branch:
             self._config.set(name, ExternalsDescription.BRANCH, branch)
 
-    def write_with_git_branch(self, dest_dir, name, branch, repo_path=None):
+    def write_with_git_branch(self, dest_dir, name, branch, new_remote_repo_path=None):
         """Update fields in our config and write it to disk.
 
         name is the key of the ExternalsDescription in self._config to update.
@@ -372,12 +372,12 @@ class GenerateExternalsDescriptionCfgV1(object):
         # pylint: disable=R0913
         self._config.set(name, ExternalsDescription.BRANCH, branch)
 
-        if repo_path:
-            if repo_path == SIMPLE_LOCAL_ONLY_NAME:
+        if new_remote_repo_path:
+            if new_remote_repo_path == SIMPLE_LOCAL_ONLY_NAME:
                 repo_url = SIMPLE_LOCAL_ONLY_NAME
             else:
                 repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}',
-                                        repo_path)
+                                        new_remote_repo_path)
             self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
 
         try:
@@ -402,9 +402,9 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         self.write_config(dest_dir)
 
-    def write_with_tag(self, dest_dir, name, tag, repo_path=None,
-                       remove_branch=True):
-        """Update a repository tag, and potentially the remote
+    def write_with_tag_and_remote_repo(self, dest_dir, name, tag, new_remote_repo_path,
+                                       remove_branch=True):
+        """Update a repository tag and the remote.
 
         NOTE(bja, 2017-11) remove_branch=False should result in an
         overspecified external with both a branch and tag. This is
@@ -414,8 +414,8 @@ class GenerateExternalsDescriptionCfgV1(object):
         # pylint: disable=R0913
         self._config.set(name, ExternalsDescription.TAG, tag)
 
-        if repo_path:
-            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_path)
+        if new_remote_repo_path:
+            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', new_remote_repo_path)
             self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
 
         try:
@@ -666,9 +666,9 @@ class TestSysCheckout(BaseTestSysCheckout):
     # ----------------------------------------------------------------
     def test_required_bytag(self):
         """Check out a required external pointing to a git tag."""
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION,
+        self._generator.create_section(SIMPLE_REPO, TAG_SECTION,
                                  tag='tag1')
         self._generator.write_config(cloned_repo_dir)
 
@@ -688,9 +688,9 @@ class TestSysCheckout(BaseTestSysCheckout):
         
     def test_required_bybranch(self):
         """Check out a required external pointing to a git branch."""
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                  branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
@@ -710,9 +710,9 @@ class TestSysCheckout(BaseTestSysCheckout):
         
     def test_required_byhash(self):
         """Check out a required external pointing to a git hash."""
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, HASH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, HASH_SECTION,
                                  ref_hash='60b1cc1a38d63')
         self._generator.write_config(cloned_repo_dir)
 
@@ -745,19 +745,19 @@ class TestSysCheckout(BaseTestSysCheckout):
         for n, order in enumerate(orders):
             dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
                                   self._test_id, "test"+str(n))
-            cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME,
+            cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO,
                                                    dest_dir_in=dest_dir)
             self._generator.create_config()
             # We happen to check out each section via a different reference (tag/branch/hash) but
             # those don't really matter, we just need to check out three repos into a nested set of
             # directories.
-            self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION, nested=True,
+            self._generator.create_section(SIMPLE_REPO, TAG_SECTION, nested=True,
                                            tag='tag1', path=NESTED_SUBDIR[order[0]])
             
-            self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION, nested=True,
+            self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION, nested=True,
                                            branch=REMOTE_BRANCH_FEATURE2, path=NESTED_SUBDIR[order[1]])
             
-            self._generator.create_section(SIMPLE_REPO_NAME, HASH_SECTION, nested=True,
+            self._generator.create_section(SIMPLE_REPO, HASH_SECTION, nested=True,
                                            ref_hash='60b1cc1a38d63', path=NESTED_SUBDIR[order[2]])
             self._generator.write_config(cloned_repo_dir)
 
@@ -793,12 +793,12 @@ class TestSysCheckout(BaseTestSysCheckout):
 
         """
         # create repo and externals config.
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_req',
+        self._generator.create_section(SIMPLE_REPO, 'simp_req',
                             tag='tag1')
 
-        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_opt',
+        self._generator.create_section(SIMPLE_REPO, 'simp_opt',
                             tag='tag1', required=False)
 
         self._generator.write_config(cloned_repo_dir)
@@ -851,9 +851,9 @@ class TestSysCheckout(BaseTestSysCheckout):
     def test_container_simple_verbose(self):
         """Verify that verbose status matches non-verbose.
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION,
+        self._generator.create_section(SIMPLE_REPO, TAG_SECTION,
                                  tag='tag1')
         self._generator.write_config(cloned_repo_dir)
 
@@ -874,9 +874,9 @@ class TestSysCheckout(BaseTestSysCheckout):
     def test_container_simple_dirty(self):
         """Verify that a container with a new tracked file is marked dirty.
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION,
+        self._generator.create_section(SIMPLE_REPO, TAG_SECTION,
                                  tag='tag1')
         self._generator.write_config(cloned_repo_dir)
 
@@ -906,9 +906,9 @@ class TestSysCheckout(BaseTestSysCheckout):
         is not considered 'dirty' and will attempt an update.
 
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION,
+        self._generator.create_section(SIMPLE_REPO, TAG_SECTION,
                                        tag='tag1')
         self._generator.write_config(cloned_repo_dir)
 
@@ -936,18 +936,19 @@ class TestSysCheckout(BaseTestSysCheckout):
     def test_container_simple_detached_sync(self):
         """Verify that a container with simple subrepos generates the correct
         out of sync status when making commits from a detached head
-        state.
+        state. 
 
+        For more info about 'detached head' state: https://www.cloudbees.com/blog/git-detached-head
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION,
+        self._generator.create_section(SIMPLE_REPO, TAG_SECTION,
                                  tag='tag1')
         
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                  branch=REMOTE_BRANCH_FEATURE2)
         
-        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_hash',
+        self._generator.create_section(SIMPLE_REPO, 'simp_hash',
                                  ref_hash='60b1cc1a38d63')
         
         self._generator.write_config(cloned_repo_dir)
@@ -967,13 +968,15 @@ class TestSysCheckout(BaseTestSysCheckout):
         # checkout
         self.execute_checkout_in_dir(cloned_repo_dir, self.checkout_args)
 
-        # make a commit on the detached head of the three externals
+        # Commit on top of the tag and hash (creating the detached head state in those two
+        # externals' repos)
+        # The branch commit does not create the detached head state, but here for completeness.
         RepoUtils.create_commit(cloned_repo_dir, TAG_SECTION)
         RepoUtils.create_commit(cloned_repo_dir, HASH_SECTION)
         RepoUtils.create_commit(cloned_repo_dir, BRANCH_SECTION)
 
-        # sync status of all three should be 'modified' (local git state !=
-        # state of original tag/branch/hash) but clean status is 'ok' (no uncommitted changes).
+        # sync status of all three should be 'modified' (uncommitted changes)
+        # clean status is 'ok' (matches externals version)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
         self._check_sync_clean(tree[self._simple_tag_path()],
                                ExternalStatus.MODEL_MODIFIED,
@@ -985,8 +988,8 @@ class TestSysCheckout(BaseTestSysCheckout):
                                ExternalStatus.MODEL_MODIFIED,
                                ExternalStatus.STATUS_OK)
 
-        # after checkout, all externals should be totally clean (local git state ==
-        # original tag/branch/hash, plus no uncommited changes).
+        # after checkout, all externals should be totally clean (no uncommitted changes,
+        # and matches externals version).
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
         self._check_sync_clean(tree[self._simple_tag_path()],
                                ExternalStatus.STATUS_OK,
@@ -1002,9 +1005,9 @@ class TestSysCheckout(BaseTestSysCheckout):
         """Verify that a container with remote branch change works
 
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                  branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
@@ -1016,7 +1019,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._generator.write_with_git_branch(cloned_repo_dir,
                                               name=BRANCH_SECTION,
                                               branch=REMOTE_BRANCH_FEATURE2,
-                                              repo_path=SIMPLE_FORK_NAME)
+                                              new_remote_repo_path=SIMPLE_FORK_REPO)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
         self._check_sync_clean(tree[self._simple_branch_path()],
                                ExternalStatus.MODEL_MODIFIED,
@@ -1035,20 +1038,21 @@ class TestSysCheckout(BaseTestSysCheckout):
         the branch.
 
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
-                                 branch=REMOTE_BRANCH_FEATURE2)
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
+                                       branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
         # initial checkout
         self.execute_checkout_in_dir(cloned_repo_dir, self.checkout_args)
 
         # update the config file to point to a different remote with
-        # the tag instead of branch. Tag MUST NOT be in the original
+        # the new tag replacing the old branch. Tag MUST NOT be in the original
         # repo! status of simp_branch should then be out of sync
-        self._generator.write_with_tag(cloned_repo_dir, BRANCH_SECTION,
-                                       'forked-feature-v1', SIMPLE_FORK_NAME)
+        self._generator.write_with_tag_and_remote_repo(cloned_repo_dir, BRANCH_SECTION,
+                                                       tag='forked-feature-v1',
+                                                       new_remote_repo_path=SIMPLE_FORK_REPO)
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
         self._check_sync_clean(tree[self._simple_branch_path()],
@@ -1067,12 +1071,11 @@ class TestSysCheckout(BaseTestSysCheckout):
         should not be in the original repo, only the new remote
         fork. It should also not be on a branch that will be fetched,
         and therefore not fetched by default with 'git fetch'. It will
-        only be retreived by 'git fetch --tags'
-
+        only be retrieved by 'git fetch --tags'
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                  branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
@@ -1080,10 +1083,11 @@ class TestSysCheckout(BaseTestSysCheckout):
         self.execute_checkout_in_dir(cloned_repo_dir, self.checkout_args)
 
         # update the config file to point to a different remote with
-        # the tag instead of branch. Tag MUST NOT be in the original
+        # the new tag instead of the old branch. Tag MUST NOT be in the original
         # repo! status of simp_branch should then be out of sync.
-        self._generator.write_with_tag(cloned_repo_dir, BRANCH_SECTION,
-                                       'abandoned-feature', SIMPLE_FORK_NAME)
+        self._generator.write_with_tag_and_remote_repo(cloned_repo_dir, BRANCH_SECTION,
+                                                       tag='abandoned-feature',
+                                                       new_remote_repo_path=SIMPLE_FORK_REPO)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
         self._check_sync_clean(tree[self._simple_branch_path()],
                                ExternalStatus.MODEL_MODIFIED,
@@ -1101,9 +1105,9 @@ class TestSysCheckout(BaseTestSysCheckout):
         url to '.' and the current branch will leave it unchanged.
 
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                  branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
@@ -1114,7 +1118,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # the same branch.
         self._generator.write_with_git_branch(cloned_repo_dir, name=BRANCH_SECTION,
                                               branch=REMOTE_BRANCH_FEATURE2,
-                                              repo_path=SIMPLE_FORK_NAME)
+                                              new_remote_repo_path=SIMPLE_FORK_REPO)
         # after checkout, should be clean again.
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
         self._check_sync_clean(tree[self._simple_branch_path()],
@@ -1123,11 +1127,11 @@ class TestSysCheckout(BaseTestSysCheckout):
 
         # update branch to point to a new branch that only exists in
         # the local fork
-        RepoUtils.create_branch(cloned_repo_dir, repo_name=BRANCH_SECTION,
+        RepoUtils.create_branch(cloned_repo_dir, external_name=BRANCH_SECTION,
                                 branch='private-feature', with_commit=True)
         self._generator.write_with_git_branch(cloned_repo_dir, name=BRANCH_SECTION,
                                               branch='private-feature',
-                                              repo_path=SIMPLE_LOCAL_ONLY_NAME)
+                                              new_remote_repo_path=SIMPLE_LOCAL_ONLY_NAME)
         # after checkout, should be clean again.
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
         self._check_sync_clean(tree[self._simple_branch_path()],
@@ -1142,22 +1146,22 @@ class TestSysCheckout(BaseTestSysCheckout):
         sub-externals on different branches.
 
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
 
         self._generator.create_config()
         # Required external, by tag.
-        self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION, tag='tag1')
+        self._generator.create_section(SIMPLE_REPO, TAG_SECTION, tag='tag1')
 
         # Required external, by branch.
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                        branch=REMOTE_BRANCH_FEATURE2)
 
         # Optional external, by tag.
-        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_opt',
+        self._generator.create_section(SIMPLE_REPO, 'simp_opt',
                                        tag='tag1', required=False)
 
         # Required external, by branch, with explicit subexternals filename.
-        self._generator.create_section(MIXED_REPO_NAME, 'mixed_req',
+        self._generator.create_section(MIXED_REPO, 'mixed_req',
                                        branch='master', sub_externals=CFG_SUB_NAME)
 
         self._generator.write_config(cloned_repo_dir)
@@ -1180,7 +1184,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         # are still in sync
         self._generator.write_with_git_branch(cloned_repo_dir, name='mixed_req',
                                               branch='new-feature',
-                                              repo_path=MIXED_REPO_NAME)
+                                              new_remote_repo_path=MIXED_REPO)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
         self._check_sync_clean(tree[self._simple_tag_path()],
                                ExternalStatus.STATUS_OK,
@@ -1208,20 +1212,20 @@ class TestSysCheckout(BaseTestSysCheckout):
     def test_container_component(self):
         """Verify that optional component checkout works
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
 
         # create the top level externals file
         self._generator.create_config()
         # Optional external, by tag.
-        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_opt',
+        self._generator.create_section(SIMPLE_REPO, 'simp_opt',
                                        tag='tag1', required=False)
 
         # Required external, by branch.
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                        branch=REMOTE_BRANCH_FEATURE2)
 
         # Required external, by hash.
-        self._generator.create_section(SIMPLE_REPO_NAME, HASH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, HASH_SECTION,
                                        ref_hash='60b1cc1a38d63')
         self._generator.write_config(cloned_repo_dir)
         
@@ -1267,15 +1271,15 @@ class TestSysCheckout(BaseTestSysCheckout):
     def test_container_exclude_component(self):
         """Verify that exclude component checkout works
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION,
+        self._generator.create_section(SIMPLE_REPO, TAG_SECTION,
                                  tag='tag1')
         
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                  branch=REMOTE_BRANCH_FEATURE2)
         
-        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_hash',
+        self._generator.create_section(SIMPLE_REPO, 'simp_hash',
                                  ref_hash='60b1cc1a38d63')
         
         self._generator.write_config(cloned_repo_dir)
@@ -1298,7 +1302,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         """Verify that an externals file can be brought in as a reference.
 
         """
-        cloned_repo_dir = self.clone_test_repo(MIXED_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(MIXED_REPO)
 
         self._generator.create_config()
         self._generator.create_section_reference_to_subexternal('mixed_base')
@@ -1319,7 +1323,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         can run a sparse checkout and generate the correct initial status.
 
         """
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
 
         # Create a file to list filenames to checkout.
         sparse_filename = 'sparse_checkout'
@@ -1327,12 +1331,12 @@ class TestSysCheckout(BaseTestSysCheckout):
             sfile.write(README_NAME)
 
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION,
+        self._generator.create_section(SIMPLE_REPO, TAG_SECTION,
                                        tag='tag2')
 
         # Same tag as above, but with a sparse file too.
         sparse_relpath = '../../{}'.format(sparse_filename)
-        self._generator.create_section(SIMPLE_REPO_NAME, 'simp_sparse',
+        self._generator.create_section(SIMPLE_REPO, 'simp_sparse',
                                        tag='tag2', sparse=sparse_relpath)
 
         self._generator.write_config(cloned_repo_dir)
@@ -1440,11 +1444,11 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
         """
         self._skip_if_no_svn_access()
         # create repo
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
 
         self._generator.create_config()
         # Git repo.
-        self._generator.create_section(SIMPLE_REPO_NAME, TAG_SECTION, tag='tag1')
+        self._generator.create_section(SIMPLE_REPO, TAG_SECTION, tag='tag1')
 
         # Svn repos.
         self._generator.create_svn_external('svn_branch', branch='trunk')
@@ -1517,16 +1521,16 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
                                          self._test_id)
         self._repo_dir = os.path.join(self._my_test_dir, self._test_repo_name)
         self._checkout_dir = 'repo_with_submodules'
-        check_dir = self.clone_test_repo(CONTAINER_REPO_NAME,
+        check_dir = self.clone_test_repo(CONTAINER_REPO,
                                          dest_dir_in=self._repo_dir)
         self.assertTrue(self._repo_dir == check_dir)
         # Add the submodules
         cwd = os.getcwd()
-        fork_repo_dir = os.path.join(self._bare_root, SIMPLE_FORK_NAME)
-        simple_repo_dir = os.path.join(self._bare_root, SIMPLE_REPO_NAME)
-        self._simple_ext_fork_name = os.path.splitext(SIMPLE_FORK_NAME)[0]
+        fork_repo_dir = os.path.join(self._bare_root, SIMPLE_FORK_REPO)
+        simple_repo_dir = os.path.join(self._bare_root, SIMPLE_REPO)
+        self._simple_ext_fork_name = os.path.splitext(SIMPLE_FORK_REPO)[0]
         self._simple_ext_name = os.path.join('sourc',
-                                             os.path.splitext(SIMPLE_REPO_NAME)[0])
+                                             os.path.splitext(SIMPLE_REPO)[0])
         os.chdir(self._repo_dir)
         # Add a branch with a subrepo
         cmd = ['git', 'branch', self._bare_branch_name, 'master']
@@ -1547,7 +1551,7 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         execute_subprocess(cmd)
         cmd = ['git', 'checkout', self._config_branch_name]
         execute_subprocess(cmd)
-        cmd = ['git', 'submodule', 'add', '--name', SIMPLE_REPO_NAME,
+        cmd = ['git', 'submodule', 'add', '--name', SIMPLE_REPO,
                simple_repo_dir, self._simple_ext_name]
         execute_subprocess(cmd)
         # Checkout feature2
@@ -1591,10 +1595,10 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
             dest_dir = self._my_test_dir
 
         if from_submodule:
-            self._generator.create_section(SIMPLE_FORK_NAME,
+            self._generator.create_section(SIMPLE_FORK_REPO,
                                            self._simple_ext_fork_name,
                                            from_submodule=True)
-            self._generator.create_section(SIMPLE_REPO_NAME,
+            self._generator.create_section(SIMPLE_REPO,
                                            self._simple_ext_name,
                                            branch='feature3', path='',
                                            from_submodule=False)
@@ -1744,9 +1748,9 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
 
         """
         # create repo
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                        branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
@@ -1768,9 +1772,9 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
 
         """
         # create repo
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                        branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
@@ -1787,17 +1791,18 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
 
         """
         # create repo
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                        branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
         # update the config file to point to a different remote with
         # the tag instead of branch. Tag MUST NOT be in the original
         # repo!
-        self._generator.write_with_tag(cloned_repo_dir, BRANCH_SECTION,
-                                       'this-tag-does-not-exist', SIMPLE_REPO_NAME)
+        self._generator.write_with_tag_and_remote_repo(cloned_repo_dir, BRANCH_SECTION,
+                                                       tag='this-tag-does-not-exist',
+                                                       new_remote_repo_path=SIMPLE_REPO)
 
         with self.assertRaises(RuntimeError):
             self.execute_checkout_in_dir(cloned_repo_dir, self.checkout_args)
@@ -1808,18 +1813,19 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
 
         """
         # create repo
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                        branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
         # update the config file to point to a different remote with
         # the tag instead of branch. Tag MUST NOT be in the original
         # repo!
-        self._generator.write_with_tag(cloned_repo_dir, BRANCH_SECTION,
-                                       'this-tag-does-not-exist', SIMPLE_REPO_NAME,
-                                       remove_branch=False)
+        self._generator.write_with_tag_and_remote_repo(cloned_repo_dir, BRANCH_SECTION,
+                                                       tag='this-tag-does-not-exist',
+                                                       new_remote_repo_path=SIMPLE_REPO,
+                                                       remove_branch=False)
 
         with self.assertRaises(RuntimeError):
             self.execute_checkout_in_dir(cloned_repo_dir, self.checkout_args)
@@ -1830,9 +1836,9 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
 
         """
         # create repo
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                        branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
@@ -1850,9 +1856,9 @@ class TestSysCheckoutErrors(BaseTestSysCheckout):
 
         """
         # create repo
-        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO_NAME)
+        cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
-        self._generator.create_section(SIMPLE_REPO_NAME, BRANCH_SECTION,
+        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
                                        branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
