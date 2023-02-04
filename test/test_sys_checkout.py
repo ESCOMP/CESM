@@ -29,8 +29,6 @@ So the solution is:
 
 * Erase any existing repos at the begining of the module in
 setUpModule.
-
-NOTE(jpa, 2023-01): knowledge about each test's structure is currently split between the config-generation methods (like GenerateExternalsDescriptionCfgV1.container_simple_required()) and the test cases that call them, then call checkout and assert on the results (like TestSysCheckout.test_container_simple_required()).
 """
 
 # NOTE(bja, 2017-11) pylint complains that the module is too big, but
@@ -101,7 +99,7 @@ BRANCH_SECTION = 'simp_branch'
 HASH_SECTION = 'simp_hash'
 
 # All the configs we construct check out their externals into these local paths.
-EXTERNALS_NAME = 'externals'
+EXTERNALS_PATH = 'externals'
 SUB_EXTERNALS_PATH = 'src'  # For mixed test repos, 
 
 # For testing behavior with '.' instead of an explicit paths.
@@ -151,7 +149,7 @@ class RepoUtils(object):
         """
         # pylint: disable=R0913
         cwd = os.getcwd()
-        repo_root = os.path.join(repo_base_dir, EXTERNALS_NAME, external_name)
+        repo_root = os.path.join(repo_base_dir, EXTERNALS_PATH, external_name)
         os.chdir(repo_root)
         cmd = ['git', 'checkout', '-b', branch, ]
         execute_subprocess(cmd)
@@ -173,7 +171,7 @@ class RepoUtils(object):
         detached heads and tracking branches.
         """
         cwd = os.getcwd()
-        repo_root = os.path.join(repo_base_dir, EXTERNALS_NAME, external_name)
+        repo_root = os.path.join(repo_base_dir, EXTERNALS_PATH, external_name)
         os.chdir(repo_root)
 
         msg = 'work on great new feature!'
@@ -262,7 +260,7 @@ class GenerateExternalsDescriptionCfgV1(object):
                          self._schema_version)
 
     def create_section(self, repo_path, name, tag='', branch='',
-                       ref_hash='', required=True, path=EXTERNALS_NAME,
+                       ref_hash='', required=True, path=EXTERNALS_PATH,
                        sub_externals='', repo_path_abs=None, from_submodule=False,
                        sparse='', nested=False):
         # pylint: disable=too-many-branches
@@ -349,7 +347,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         """
         self._config.add_section(name)
         self._config.set(name, ExternalsDescription.PATH,
-                         os.path.join(EXTERNALS_NAME, name))
+                         os.path.join(EXTERNALS_PATH, name))
 
         self._config.set(name, ExternalsDescription.PROTOCOL,
                          ExternalsDescription.PROTOCOL_SVN)
@@ -588,60 +586,11 @@ class BaseTestSysCheckout(unittest.TestCase):
                           expected_clean_state):
         self.assertEqual(ext_status.sync_state, expected_sync_state)
         self.assertEqual(ext_status.clean_state, expected_clean_state)
+
+    @staticmethod
+    def _external_path(section_name, base_path=EXTERNALS_PATH):
+        return './{0}/{1}'.format(base_path, section_name)
         
-    @staticmethod
-    def _simple_tag_path():
-        return './{0}/{1}'.format(EXTERNALS_NAME, TAG_SECTION)
-
-    @staticmethod
-    def _simple_branch_path(directory=EXTERNALS_NAME):
-        return './{0}/{1}'.format(directory, BRANCH_SECTION)
-
-    @staticmethod
-    def _simple_hash_path():
-        return './{0}/{1}'.format(EXTERNALS_NAME, HASH_SECTION)
-
-    @staticmethod
-    def _simple_req_path():
-        return './{0}/simp_req'.format(EXTERNALS_NAME)
-    
-    @staticmethod
-    def _simple_opt_path():
-        return './{0}/simp_opt'.format(EXTERNALS_NAME)
-    
-    @staticmethod
-    def _mixed_req_path():
-        return './{0}/mixed_req'.format(EXTERNALS_NAME)
-
-    @staticmethod
-    def _simple_sparse_path():
-        return './{0}/simp_sparse'.format(EXTERNALS_NAME)
-
-    # ----------------------------------------------------------------
-    #
-    # Check results for groups of externals under specific conditions
-    #
-    # ----------------------------------------------------------------
-    def _check_required_tag_branch_mixed_clean_and_optional_empty(self, tree):
-        self._check_sync_clean(tree[self._simple_tag_path()],
-                               ExternalStatus.STATUS_OK,
-                               ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_branch_path()],
-                               ExternalStatus.STATUS_OK,
-                               ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_opt_path()],
-                               ExternalStatus.EMPTY,
-                               ExternalStatus.DEFAULT)
-
-        self._check_sync_clean(tree[self._mixed_req_path()],
-                               ExternalStatus.STATUS_OK,
-                               ExternalStatus.STATUS_OK)
-        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
-                                         SUB_EXTERNALS_PATH)
-        self._check_sync_clean(tree[self._simple_branch_path(directory=check_dir)],
-                               ExternalStatus.STATUS_OK,
-                               ExternalStatus.STATUS_OK)
-
     def _check_file_exists(self, repo_dir, pathname):
         "Check that <pathname> exists in <repo_dir>"
         self.assertTrue(os.path.exists(os.path.join(repo_dir, pathname)))
@@ -675,16 +624,25 @@ class TestSysCheckout(BaseTestSysCheckout):
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
 
         # after checkout, the external is 'clean' aka at the correct version.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
+
+        # Check existence of some simp_tag files
+        tag_path = os.path.join('externals', TAG_SECTION)
+        self._check_file_exists(cloned_repo_dir,
+                                os.path.join(tag_path, README_NAME))
+        self._check_file_absent(cloned_repo_dir, os.path.join(tag_path,
+                                                             'simple_subdir',
+                                                             'subdir_file.txt'))
+
         
     def test_required_bybranch(self):
         """Check out a required external pointing to a git branch."""
@@ -697,14 +655,14 @@ class TestSysCheckout(BaseTestSysCheckout):
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
 
         # after checkout, the external is 'clean' aka at the correct version.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
         
@@ -719,14 +677,14 @@ class TestSysCheckout(BaseTestSysCheckout):
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_sync_clean(tree[self._simple_hash_path()],
+        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
 
         # after checkout, the externals are 'clean' aka at their correct version.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._simple_hash_path()],
+        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
         
@@ -806,13 +764,13 @@ class TestSysCheckout(BaseTestSysCheckout):
         # all externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        req_status = tree[self._simple_req_path()]
+        req_status = tree[self._external_path('simp_req')]
         self._check_sync_clean(req_status,
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
         self.assertEqual(req_status.source_type, ExternalStatus.MANAGED)
 
-        opt_status = tree[self._simple_opt_path()]
+        opt_status = tree[self._external_path('simp_opt')]
         self._check_sync_clean(opt_status,
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
@@ -821,13 +779,13 @@ class TestSysCheckout(BaseTestSysCheckout):
         # after checkout, required external is clean, optional is still empty.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        req_status = tree[self._simple_req_path()]
+        req_status = tree[self._external_path('simp_req')]
         self._check_sync_clean(req_status,
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
         self.assertEqual(req_status.source_type, ExternalStatus.MANAGED)
         
-        opt_status = tree[self._simple_opt_path()]
+        opt_status = tree[self._external_path('simp_opt')]
         self._check_sync_clean(opt_status,
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
@@ -836,13 +794,13 @@ class TestSysCheckout(BaseTestSysCheckout):
         # after checking out optionals, the optional external is also clean.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.optional_args)
-        req_status = tree[self._simple_req_path()]        
+        req_status = tree[self._external_path('simp_req')]        
         self._check_sync_clean(req_status,
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
         self.assertEqual(req_status.source_type, ExternalStatus.MANAGED)
 
-        opt_status = tree[self._simple_opt_path()]
+        opt_status = tree[self._external_path('simp_opt')]
         self._check_sync_clean(opt_status,
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
@@ -860,14 +818,14 @@ class TestSysCheckout(BaseTestSysCheckout):
         # after checkout, all externals should be 'clean'.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
         # 'Verbose' status should tell the same story.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.verbose_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -882,7 +840,7 @@ class TestSysCheckout(BaseTestSysCheckout):
 
         # checkout, should start out clean.
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -890,14 +848,14 @@ class TestSysCheckout(BaseTestSysCheckout):
         RepoUtils.add_file_to_repo(cloned_repo_dir, 'externals/{0}/tmp.txt'.format(TAG_SECTION),
                                    tracked=True)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.DIRTY)
 
         # Re-checkout; simp_tag should still be dirty.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.DIRTY)
 
@@ -914,7 +872,7 @@ class TestSysCheckout(BaseTestSysCheckout):
 
         # checkout, should start out clean.
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -922,14 +880,14 @@ class TestSysCheckout(BaseTestSysCheckout):
         RepoUtils.add_file_to_repo(cloned_repo_dir, 'externals/{0}/tmp.txt'.format(TAG_SECTION),
                                    tracked=False)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
         
         # After checkout, the external should still be 'clean'.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -955,13 +913,13 @@ class TestSysCheckout(BaseTestSysCheckout):
 
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
-        self._check_sync_clean(tree[self._simple_hash_path()],
+        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
 
@@ -978,26 +936,26 @@ class TestSysCheckout(BaseTestSysCheckout):
         # sync status of all three should be 'modified' (uncommitted changes)
         # clean status is 'ok' (matches externals version)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.MODEL_MODIFIED,
                                ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.MODEL_MODIFIED,
                                ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_hash_path()],
+        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
                                ExternalStatus.MODEL_MODIFIED,
                                ExternalStatus.STATUS_OK)
 
         # after checkout, all externals should be totally clean (no uncommitted changes,
         # and matches externals version).
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_hash_path()],
+        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -1021,13 +979,13 @@ class TestSysCheckout(BaseTestSysCheckout):
                                               branch=REMOTE_BRANCH_FEATURE2,
                                               new_remote_repo_path=SIMPLE_FORK_REPO)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.MODEL_MODIFIED,
                                ExternalStatus.STATUS_OK)
 
         # checkout new externals, now simp_branch should be clean.
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -1055,14 +1013,14 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                        new_remote_repo_path=SIMPLE_FORK_REPO)
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.MODEL_MODIFIED,
                                ExternalStatus.STATUS_OK)
 
         # checkout new externals, then should be synced.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -1089,14 +1047,14 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                        tag='abandoned-feature',
                                                        new_remote_repo_path=SIMPLE_FORK_REPO)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.MODEL_MODIFIED,
                                ExternalStatus.STATUS_OK)
 
         # checkout new externals, should be clean again.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -1121,7 +1079,7 @@ class TestSysCheckout(BaseTestSysCheckout):
                                               new_remote_repo_path=SIMPLE_FORK_REPO)
         # after checkout, should be clean again.
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -1134,13 +1092,12 @@ class TestSysCheckout(BaseTestSysCheckout):
                                               new_remote_repo_path=SIMPLE_LOCAL_ONLY_NAME)
         # after checkout, should be clean again.
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
-    def test_container_full(self):
-        """Verify that 'full' container with simple and mixed subrepos
-        generates the correct initial status.
+    def test_container_mixed_subrepo(self):
+        """Verify container with mixed subrepo.
 
         The mixed subrepo has a sub-externals file with different
         sub-externals on different branches.
@@ -1149,35 +1106,22 @@ class TestSysCheckout(BaseTestSysCheckout):
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
 
         self._generator.create_config()
-        # Required external, by tag.
-        self._generator.create_section(SIMPLE_REPO, TAG_SECTION, tag='tag1')
-
-        # Required external, by branch.
-        self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
-                                       branch=REMOTE_BRANCH_FEATURE2)
-
-        # Optional external, by tag.
-        self._generator.create_section(SIMPLE_REPO, 'simp_opt',
-                                       tag='tag1', required=False)
-
-        # Required external, by branch, with explicit subexternals filename.
         self._generator.create_section(MIXED_REPO, 'mixed_req',
                                        branch='master', sub_externals=CFG_SUB_NAME)
-
         self._generator.write_config(cloned_repo_dir)
 
         # inital checkout: all requireds are clean, and optional is empty.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_required_tag_branch_mixed_clean_and_optional_empty(tree)
-
-        # Check existence of some simp_tag files
-        subrepo_path = os.path.join('externals', TAG_SECTION)
-        self._check_file_exists(cloned_repo_dir,
-                                os.path.join(subrepo_path, README_NAME))
-        self._check_file_absent(cloned_repo_dir, os.path.join(subrepo_path,
-                                                             'simple_subdir',
-                                                             'subdir_file.txt'))
+        mixed_req_path = self._external_path('mixed_req')
+        self._check_sync_clean(tree[mixed_req_path],
+                               ExternalStatus.STATUS_OK,
+                               ExternalStatus.STATUS_OK)
+        sub_ext_base_path = "{0}/{1}/{2}".format(EXTERNALS_PATH, 'mixed_req', SUB_EXTERNALS_PATH)
+        # The already-checked-in subexternals file has a 'simp_branch' section
+        self._check_sync_clean(tree[self._external_path('simp_branch', base_path=sub_ext_base_path)],
+                               ExternalStatus.STATUS_OK,
+                               ExternalStatus.STATUS_OK)
 
         # update the mixed-use external to point to different branch
         # status should become out of sync for mixed_req, but sub-externals
@@ -1186,29 +1130,22 @@ class TestSysCheckout(BaseTestSysCheckout):
                                               branch='new-feature',
                                               new_remote_repo_path=MIXED_REPO)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
-                               ExternalStatus.STATUS_OK,
-                               ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_branch_path()],
-                               ExternalStatus.STATUS_OK,
-                               ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_opt_path()],
-                               ExternalStatus.EMPTY,
-                               ExternalStatus.DEFAULT)
-        self._check_sync_clean(tree[self._mixed_req_path()],
+        self._check_sync_clean(tree[mixed_req_path],
                                ExternalStatus.MODEL_MODIFIED,
                                ExternalStatus.STATUS_OK)
-        check_dir = "{0}/{1}/{2}".format(EXTERNALS_NAME, "mixed_req",
-                                         SUB_EXTERNALS_PATH)
-        self._check_sync_clean(
-            tree[self._simple_branch_path(directory=check_dir)],
-            ExternalStatus.STATUS_OK,
-            ExternalStatus.STATUS_OK)
+        self._check_sync_clean(tree[self._external_path('simp_branch', base_path=sub_ext_base_path)],
+                               ExternalStatus.STATUS_OK,
+                               ExternalStatus.STATUS_OK)
 
         # run the checkout. Now the mixed use external and its sub-externals should be clean.
         tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
-        self._check_required_tag_branch_mixed_clean_and_optional_empty(tree)
-
+        self._check_sync_clean(tree[mixed_req_path],
+                               ExternalStatus.STATUS_OK,
+                               ExternalStatus.STATUS_OK)
+        self._check_sync_clean(tree[self._external_path('simp_branch', base_path=sub_ext_base_path)],
+                               ExternalStatus.STATUS_OK,
+                               ExternalStatus.STATUS_OK)
+        
     def test_container_component(self):
         """Verify that optional component checkout works
         """
@@ -1242,13 +1179,13 @@ class TestSysCheckout(BaseTestSysCheckout):
         checkout_args.extend(self.checkout_args)
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  checkout_args)
-        self._check_sync_clean(tree[self._simple_opt_path()],
+        self._check_sync_clean(tree[self._external_path('simp_opt')],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
-        self._check_sync_clean(tree[self._simple_hash_path()],
+        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
 
@@ -1257,13 +1194,13 @@ class TestSysCheckout(BaseTestSysCheckout):
         checkout_args.append(BRANCH_SECTION)
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  checkout_args)
-        self._check_sync_clean(tree[self._simple_opt_path()],
+        self._check_sync_clean(tree[self._external_path('simp_opt')],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_hash_path()],
+        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
 
@@ -1288,13 +1225,13 @@ class TestSysCheckout(BaseTestSysCheckout):
         checkout_args = ['--exclude', TAG_SECTION]
         checkout_args.extend(self.checkout_args)
         tree = self.execute_checkout_with_status(cloned_repo_dir, checkout_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
-        self._check_sync_clean(tree[self._simple_branch_path()],
+        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_hash_path()],
+        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -1314,7 +1251,7 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                  self.checkout_args)
         
         self._check_sync_clean(
-            tree[self._simple_branch_path(directory=SUB_EXTERNALS_PATH)],
+            tree[self._external_path(BRANCH_SECTION, base_path=SUB_EXTERNALS_PATH)],
             ExternalStatus.STATUS_OK,
             ExternalStatus.STATUS_OK)
 
@@ -1344,10 +1281,10 @@ class TestSysCheckout(BaseTestSysCheckout):
         # inital checkout, confirm required's are clean.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        self._check_sync_clean(tree[self._simple_sparse_path()],
+        self._check_sync_clean(tree[self._external_path('simp_sparse')],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
@@ -1400,14 +1337,14 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
 
     @staticmethod
     def _svn_branch_name():
-        return './{0}/svn_branch'.format(EXTERNALS_NAME)
+        return './{0}/svn_branch'.format(EXTERNALS_PATH)
 
     @staticmethod
     def _svn_tag_name():
-        return './{0}/svn_tag'.format(EXTERNALS_NAME)
+        return './{0}/svn_tag'.format(EXTERNALS_PATH)
     
     def _check_tag_branch_svn_tag_clean(self, tree):
-        self._check_sync_clean(tree[self._simple_tag_path()],
+        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
         self._check_sync_clean(tree[self._svn_branch_name()],
