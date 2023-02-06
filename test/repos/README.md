@@ -26,7 +26,7 @@ simple-ext-fork.git/
 mixed-cont-ext.git/
   (has branch: new-feature)
   readme.txt
-  sub-externals.cfg (refers to simple-ext.git/ repo)
+  sub-externals.cfg ('simp_branch' section refers to 'feature2' branch in simple-ext.git/ repo)
 
 error/
    (no git repo here, just a readme.txt in the clear)
