@@ -624,69 +624,88 @@ class TestSysCheckout(BaseTestSysCheckout):
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
+        local_path = self._external_path(TAG_SECTION)
+        self._check_sync_clean(tree[local_path],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
+        tag_full_path = os.path.join(cloned_repo_dir, local_path)
+        self.assertFalse(os.path.exists(tag_full_path))
 
         # after checkout, the external is 'clean' aka at the correct version.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
+        self._check_sync_clean(tree[local_path],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
+
+        # Actually checked out the desired tag.
+        (tag_found, tag_name) = GitRepository._git_current_tag(tag_full_path)
+        self.assertEqual(tag_name, 'tag1')
 
         # Check existence of some simp_tag files
         tag_path = os.path.join('externals', TAG_SECTION)
         self._check_file_exists(cloned_repo_dir,
                                 os.path.join(tag_path, README_NAME))
+        # Subrepo should not exist (not referenced by configs).
         self._check_file_absent(cloned_repo_dir, os.path.join(tag_path,
                                                              'simple_subdir',
                                                              'subdir_file.txt'))
-
-        
     def test_required_bybranch(self):
         """Check out a required external pointing to a git branch."""
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
         self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION,
-                                 branch=REMOTE_BRANCH_FEATURE2)
+                                       branch=REMOTE_BRANCH_FEATURE2)
         self._generator.write_config(cloned_repo_dir)
 
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
+        local_path = self._external_path(BRANCH_SECTION)
+        self._check_sync_clean(tree[local_path],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
+        branch_path = os.path.join(cloned_repo_dir, local_path)
+        self.assertFalse(os.path.exists(branch_path))
 
         # after checkout, the external is 'clean' aka at the correct version.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._external_path(BRANCH_SECTION)],
+        self._check_sync_clean(tree[local_path],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
+        self.assertTrue(os.path.exists(branch_path))
+        (branch_found, branch_name) = GitRepository._git_current_remote_branch(
+            branch_path)
+        self.assertEquals(branch_name, 'origin/' + REMOTE_BRANCH_FEATURE2)
         
     def test_required_byhash(self):
         """Check out a required external pointing to a git hash."""
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
         self._generator.create_section(SIMPLE_REPO, HASH_SECTION,
-                                 ref_hash='60b1cc1a38d63')
+                                       ref_hash='60b1cc1a38d63')
         self._generator.write_config(cloned_repo_dir)
 
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
+        local_path = self._external_path(HASH_SECTION)
+        self._check_sync_clean(tree[local_path],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
+        hash_path = os.path.join(cloned_repo_dir, local_path)
+        self.assertFalse(os.path.exists(hash_path))
 
         # after checkout, the externals are 'clean' aka at their correct version.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[self._external_path(HASH_SECTION)],
+        self._check_sync_clean(tree[local_path],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
+        (hash_found, hash_name) = GitRepository._git_current_hash(hash_path)
+        self.assertTrue(hash_name.startswith('60b1cc1a38d63'),
+                        msg=hash_name)
         
     def test_container_nested_required(self):
         """Verify that a container with nested subrepos generates the correct initial status.
@@ -709,14 +728,15 @@ class TestSysCheckout(BaseTestSysCheckout):
             # We happen to check out each section via a different reference (tag/branch/hash) but
             # those don't really matter, we just need to check out three repos into a nested set of
             # directories.
-            self._generator.create_section(SIMPLE_REPO, TAG_SECTION, nested=True,
-                                           tag='tag1', path=NESTED_SUBDIR[order[0]])
-            
-            self._generator.create_section(SIMPLE_REPO, BRANCH_SECTION, nested=True,
-                                           branch=REMOTE_BRANCH_FEATURE2, path=NESTED_SUBDIR[order[1]])
-            
-            self._generator.create_section(SIMPLE_REPO, HASH_SECTION, nested=True,
-                                           ref_hash='60b1cc1a38d63', path=NESTED_SUBDIR[order[2]])
+            self._generator.create_section(
+                SIMPLE_REPO, TAG_SECTION, nested=True,
+                tag='tag1', path=NESTED_SUBDIR[order[0]])
+            self._generator.create_section(
+                SIMPLE_REPO, BRANCH_SECTION, nested=True,
+                branch=REMOTE_BRANCH_FEATURE2, path=NESTED_SUBDIR[order[1]])
+            self._generator.create_section(
+                SIMPLE_REPO, HASH_SECTION, nested=True,
+                ref_hash='60b1cc1a38d63', path=NESTED_SUBDIR[order[2]])
             self._generator.write_config(cloned_repo_dir)
 
             # all externals start out 'empty' aka not checked out.
@@ -746,8 +766,8 @@ class TestSysCheckout(BaseTestSysCheckout):
                                    ExternalStatus.STATUS_OK)
             
     def test_container_simple_optional(self):
-        """Verify that container with an optional simple subrepos generates the correct initial
-        status.
+        """Verify that container with an optional simple subrepos generates
+        the correct initial status.
 
         """
         # create repo and externals config.
@@ -845,7 +865,8 @@ class TestSysCheckout(BaseTestSysCheckout):
                                ExternalStatus.STATUS_OK)
 
         # add a tracked file to the simp_tag external, should be dirty.
-        RepoUtils.add_file_to_repo(cloned_repo_dir, 'externals/{0}/tmp.txt'.format(TAG_SECTION),
+        RepoUtils.add_file_to_repo(cloned_repo_dir,
+                                   'externals/{0}/tmp.txt'.format(TAG_SECTION),
                                    tracked=True)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
         self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
@@ -871,13 +892,15 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._generator.write_config(cloned_repo_dir)
 
         # checkout, should start out clean.
-        tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
+        tree = self.execute_checkout_with_status(cloned_repo_dir,
+                                                 self.checkout_args)
         self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
         # add an untracked file to the simp_tag external, should stay clean.
-        RepoUtils.add_file_to_repo(cloned_repo_dir, 'externals/{0}/tmp.txt'.format(TAG_SECTION),
+        RepoUtils.add_file_to_repo(cloned_repo_dir,
+                                   'externals/{0}/tmp.txt'.format(TAG_SECTION),
                                    tracked=False)
         tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
         self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
