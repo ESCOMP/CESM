@@ -340,7 +340,11 @@ class GitRepository(Repository):
     def _checkout_external_ref(self, verbosity, submodules):
         """Checkout the reference from a remote repository
         if <submodules> is True, recursively initialize and update
-        the repo's submodules
+        the repo's submodules. 
+        Note that this results in a 'detached HEAD' state if checking out
+        a branch, because we check out the remote branch rather than the
+        local. See https://github.com/ESMCI/manage_externals/issues/34 for 
+        more discussion.
         """
         if self._tag:
             ref = self._tag
@@ -361,6 +365,10 @@ class GitRepository(Repository):
         self._check_for_valid_ref(ref, remote_name)
 
         if self._branch:
+            # Prepend remote name to branch. This means we avoid various
+            # special cases if the local branch is not tracking the remote or
+            # cannot be trivially fast-forwarded to match; but, it also
+            # means we end up in a 'detached HEAD' state.
             ref = '{0}/{1}'.format(remote_name, ref)
         self._git_checkout_ref(ref, verbosity, submodules)
 
@@ -601,28 +609,75 @@ class GitRepository(Repository):
     #
     # ----------------------------------------------------------------
     @staticmethod
-    def _git_current_hash():
+    def _git_current_hash(dir=None):
         """Return the full hash of the currently checked-out version.
+
+        if dir is None, uses the cwd.
 
         Returns a tuple, (hash_found, hash), where hash_found is a
         logical specifying whether a hash was found for HEAD (False
         could mean we're not in a git repository at all). (If hash_found
         is False, then hash is ''.)
         """
+        if dir:
+            cwd = os.getcwd()
+            os.chdir(dir)
+        
         status, git_output = GitRepository._git_revparse_commit("HEAD")
         hash_found = not status
         if not hash_found:
             git_output = ''
+        if dir:
+            os.chdir(cwd)
         return hash_found, git_output
 
     @staticmethod
-    def _git_current_branch():
-        """Determines the name of the current branch.
+    def _git_current_remote_branch(dir=None):
+        """Determines the name of the current remote branch, if any.
+
+        if dir is None, uses the cwd.
 
         Returns a tuple, (branch_found, branch_name), where branch_found
-        is a logical specifying whether a branch name was found for
-        HEAD. (If branch_found is False, then branch_name is ''.)
+        is a bool specifying whether a branch name was found for
+        HEAD. (If branch_found is False, then branch_name is '').
+        branch_name is in the format '$remote/$branch', e.g. 'origin/foo'.
         """
+        if dir:
+            cwd = os.getcwd()
+            os.chdir(dir)
+
+        branch_found = False
+        branch_name = ''
+        
+        cmd = 'git log -n 1 --pretty=%d HEAD'.split()
+        status, git_output = execute_subprocess(cmd,
+                                                output_to_caller=True,
+                                                status_to_caller=True)
+        branch_found = 'HEAD,' in git_output
+        if branch_found:
+            # git_output is of the form " (HEAD, origin/blah)"
+            branch_name = git_output.split(',')[1].strip()[:-1]
+        if dir:
+            os.chdir(cwd)
+        return branch_found, branch_name
+    
+    @staticmethod
+    def _git_current_branch(dir=None):
+        """Determines the name of the current local branch.
+
+        if dir is None, uses the cwd.
+
+        Returns a tuple, (branch_found, branch_name), where branch_found
+        is a bool specifying whether a branch name was found for
+        HEAD. (If branch_found is False, then branch_name is ''.)
+        Note that currently we check out the remote branch rather than
+        the local, so this command does not return the just-checked-out
+        branch. See _git_current_remote_branch.
+        """
+        if dir:
+            cwd = os.getcwd()
+            os.chdir(dir)
+
         cmd = ['git', 'symbolic-ref', '--short', '-q', 'HEAD']
         status, git_output = execute_subprocess(cmd,
                                                 output_to_caller=True,
@@ -632,16 +687,23 @@ class GitRepository(Repository):
             git_output = git_output.strip()
         else:
             git_output = ''
+        if dir:
+            os.chdir(cwd)
         return branch_found, git_output
 
     @staticmethod
-    def _git_current_tag():
+    def _git_current_tag(dir=None):
         """Determines the name tag corresponding to HEAD (if any).
 
+        if dir is None, uses the cwd.
+
         Returns a tuple, (tag_found, tag_name), where tag_found is a
-        logical specifying whether we found a tag name corresponding to
+        bool specifying whether we found a tag name corresponding to
         HEAD. (If tag_found is False, then tag_name is ''.)
         """
+        if dir:
+            cwd = os.getcwd()
+            os.chdir(dir)
         # git describe --exact-match --tags HEAD
         cmd = ['git', 'describe', '--exact-match', '--tags', 'HEAD']
         status, git_output = execute_subprocess(cmd,
@@ -652,6 +714,8 @@ class GitRepository(Repository):
             git_output = git_output.strip()
         else:
             git_output = ''
+        if dir:
+            os.chdir(cwd)
         return tag_found, git_output
 
     @staticmethod
