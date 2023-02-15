@@ -433,7 +433,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self.assertEqual(stat.clean_state, ExternalStatus.DEFAULT)
 
     def test_sync_branch_diff_remote(self):
-        """Test _determine_remote_name with a different remote
+        """Test _remote_name_for_url with a different remote
 
         """
         stat = ExternalStatus()
@@ -449,7 +449,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         # expected argument
 
     def test_sync_branch_diff_remote2(self):
-        """Test _determine_remote_name with a different remote
+        """Test _remote_name_for_url with a different remote
 
         """
         stat = ExternalStatus()
