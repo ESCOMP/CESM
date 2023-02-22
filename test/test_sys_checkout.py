@@ -75,8 +75,9 @@ except ImportError:
 
 
 # Module-wide root directory for all the per-test subdirs we'll create on
-# the fly.
-MANIC_TEST_TMP_REPO_ROOT = 'MANIC_TEST_TMP_REPO_ROOT' # env var name
+# the fly (which are placed under wherever $CWD is when the test runs).
+# Set by setupModule().
+module_tmp_root_dir = None
 TMP_REPO_DIR_NAME = 'tmp'  # subdir under $CWD
 
 # 'bare repo root' is the test/repos/ subdir that holds all of our
@@ -136,9 +137,11 @@ def setUpModule():  # pylint: disable=C0103
         pass
     # create clean dir for this run
     os.mkdir(repo_root)
-    # set into the environment so var will be expanded in externals
-    # files when executables are run
-    os.environ[MANIC_TEST_TMP_REPO_ROOT] = repo_root
+
+    # Make available to all tests in this file.
+    global module_tmp_root_dir
+    assert module_tmp_root_dir == None, module_tmp_root_dir
+    module_tmp_root_dir = repo_root
 
 
 class RepoUtils(object):
@@ -194,8 +197,7 @@ class RepoUtils(object):
             # create unique subdir for this test
             test_dir_name = test_id
             print("Test repository name: {0}".format(test_dir_name))
-            dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
-                                    test_dir_name)
+            dest_dir = os.path.join(module_tmp_root_dir, test_dir_name)
         else:
             dest_dir = dest_dir_in
 
@@ -720,8 +722,8 @@ class TestSysCheckout(BaseTestSysCheckout):
         orders = [[0, 1, 2], [1, 2, 0], [2, 0, 1],
                   [0, 2, 1], [2, 1, 0], [1, 0, 2]]
         for n, order in enumerate(orders):
-            dest_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
-                                  self._test_id, "test"+str(n))
+            dest_dir = os.path.join(module_tmp_root_dir, self._test_id,
+                                    "test"+str(n))
             cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO,
                                                    dest_dir_in=dest_dir)
             self._generator.create_config()
@@ -1477,8 +1479,7 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         self._bare_branch_name = 'subrepo_branch'
         self._config_branch_name = 'subrepo_config_branch'
         self._container_extern_name = 'externals_container.cfg'
-        self._my_test_dir = os.path.join(os.environ[MANIC_TEST_TMP_REPO_ROOT],
-                                         self._test_id)
+        self._my_test_dir = os.path.join(module_tmp_root_dir, self._test_id)
         self._repo_dir = os.path.join(self._my_test_dir, self._test_repo_name)
         self._checkout_dir = 'repo_with_submodules'
         check_dir = self.clone_test_repo(CONTAINER_REPO,
