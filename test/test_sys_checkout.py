@@ -80,10 +80,14 @@ except ImportError:
 module_tmp_root_dir = None
 TMP_REPO_DIR_NAME = 'tmp'  # subdir under $CWD
 
-# 'bare repo root' is the test/repos/ subdir that holds all of our
-# checked-in repositories.
-MANIC_TEST_BARE_REPO_ROOT = 'MANIC_TEST_BARE_REPO_ROOT'  # env var name
-BARE_REPO_ROOT_NAME = 'repos' # subdir name
+# subdir under test/ that holds all of our checked-in repositories (which we
+# will clone for these tests).
+BARE_REPO_ROOT_NAME = 'repos'
+
+# Environment var referenced by checked-in externals file in mixed-cont-ext.git,
+# which should be pointed to the fully-resolved BARE_REPO_ROOT_NAME directory.
+# We explicitly clear this after every test, via tearDown().
+MIXED_CONT_EXT_ROOT_ENV_VAR = 'MANIC_TEST_BARE_REPO_ROOT'
 
 # Subdirs under bare repo root, each holding a repository. For more info
 # on the contents of these repositories, see test/repos/README.md. In these
@@ -234,9 +238,13 @@ class GenerateExternalsDescriptionCfgV1(object):
     Optionally after that: write_with_*().
     """
 
-    def __init__(self):
+    def __init__(self, bare_root):
         self._schema_version = '1.1.0'
         self._config = None
+
+        # directory where we have test repositories (which we will clone for
+        # tests)
+        self._bare_root = bare_root
 
     def write_config(self, dest_dir, filename=CFG_NAME):
         """Write self._config to disk
@@ -299,7 +307,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         if repo_path_abs is not None:
             repo_url = repo_path_abs
         else:
-            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_path)
+            repo_url = os.path.join(self._bare_root, repo_path)
 
         if not from_submodule:
             self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
@@ -376,8 +384,7 @@ class GenerateExternalsDescriptionCfgV1(object):
             if new_remote_repo_path == SIMPLE_LOCAL_ONLY_NAME:
                 repo_url = SIMPLE_LOCAL_ONLY_NAME
             else:
-                repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}',
-                                        new_remote_repo_path)
+                repo_url = os.path.join(self._bare_root, new_remote_repo_path)
             self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
 
         try:
@@ -415,7 +422,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         self._config.set(name, ExternalsDescription.TAG, tag)
 
         if new_remote_repo_path:
-            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', new_remote_repo_path)
+            repo_url = os.path.join(self._bare_root, new_remote_repo_path)
             self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
 
         try:
@@ -464,19 +471,24 @@ class GenerateExternalsDescriptionCfgV1(object):
         self._config.set(name, ExternalsDescription.PROTOCOL, protocol)
 
         if repo_path:
-            repo_url = os.path.join('${MANIC_TEST_BARE_REPO_ROOT}', repo_path)
+            repo_url = os.path.join(self._bare_root, repo_path)
             self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
 
         self.write_config(dest_dir)
 
 
-def _execute_checkout_in_dir(dirname, args):
+def _execute_checkout_in_dir(dirname, args, debug_env=''):
     """Execute the checkout command in the appropriate repo dir with the
-    specified additional args
-    
+    specified additional args. 
+
+    args should be a list of strings.
+    debug_env shuld be a string of the form 'FOO=bar' or the empty string. 
+
     Note that we are calling the command line processing and main
     routines and not using a subprocess call so that we get code
-    coverage results!
+    coverage results! Note this means that environment variables are passed
+    to checkout_externals via os.environ; debug_env is just used to aid
+    manual reproducibility of a given call.
 
     Returns (overall_status, tree_status)
     where overall_status is 0 for success, nonzero otherwise.
@@ -486,15 +498,15 @@ def _execute_checkout_in_dir(dirname, args):
     necessarily do any checking out (e.g. if --status is passed in).
     """
     cwd = os.getcwd()
+
+    # Construct a command line for reproducibility; this command is not actually
+    # executed in the test.
     checkout_path = os.path.abspath('{0}/../../checkout_externals')
     os.chdir(dirname)
     cmdline = ['--externals', CFG_NAME, ]
     cmdline += args
-    repo_root = 'MANIC_TEST_BARE_REPO_ROOT={root}'.format(
-        root=os.environ[MANIC_TEST_BARE_REPO_ROOT])
     manual_cmd = ('Test cmd:\npushd {cwd}; {env} {checkout} {args}'.format(
-        cwd=dirname, env=repo_root, checkout=checkout_path,
-        args=' '.join(cmdline)))
+        cwd=dirname, checkout=checkout_path, env=debug_env, args=' '.join(cmdline)))
     printlog(manual_cmd)
     options = checkout.commandline_arguments(cmdline)
     overall_status, tree_status = checkout.main(options)
@@ -543,44 +555,45 @@ class BaseTestSysCheckout(unittest.TestCase):
         # path to the executable
         self._checkout = os.path.join(root_dir, 'checkout_externals')
 
-        # directory where we have test repositories
+        # directory where we have test repositories (which we will clone for
+        # tests)
         self._bare_root = os.path.abspath(
             os.path.join(root_dir, 'test', BARE_REPO_ROOT_NAME))
 
-        # set into the environment so var will be expanded in externals files
-        os.environ[MANIC_TEST_BARE_REPO_ROOT] = self._bare_root
-
         # set the input file generator
-        self._generator = GenerateExternalsDescriptionCfgV1()
+        self._generator = GenerateExternalsDescriptionCfgV1(self._bare_root)
         # set the input file generator for secondary externals
-        self._sub_generator = GenerateExternalsDescriptionCfgV1()
+        self._sub_generator = GenerateExternalsDescriptionCfgV1(self._bare_root)
 
     def tearDown(self):
         """Tear down for individual tests
         """
-        # remove the env var we added in setup
-        del os.environ[MANIC_TEST_BARE_REPO_ROOT]
-
         # return to our common starting point
         os.chdir(self._return_dir)
+        
+        # (in case this was set) Don't pollute environment of other tests.
+        os.environ.pop(MIXED_CONT_EXT_ROOT_ENV_VAR,
+                       None)  # Don't care if key wasn't set.
 
     def clone_test_repo(self, parent_repo_name, dest_dir_in=None):
         """Clones repo under self._bare_root"""
         return RepoUtils.clone_test_repo(self._bare_root, self._test_id,
                                          parent_repo_name, dest_dir_in)
 
-    def execute_checkout_in_dir(self, dirname, args):
-        overall_status, tree_status = _execute_checkout_in_dir(dirname, args)
+    def execute_checkout_in_dir(self, dirname, args, debug_env=''):
+        overall_status, tree_status = _execute_checkout_in_dir(dirname, args,
+                                                               debug_env=debug_env)
         self.assertEqual(overall_status, 0)
         return tree_status
 
-    def execute_checkout_with_status(self, dirname, args):
+    def execute_checkout_with_status(self, dirname, args, debug_env=''):
         """Calls checkout a second time to get status if needed."""
         tree_status = self.execute_checkout_in_dir(
-            dirname, args)
+            dirname, args, debug_env=debug_env)
         if tree_status is None:
             tree_status = self.execute_checkout_in_dir(dirname,
-                                                       self.status_args)
+                                                       self.status_args,
+                                                       debug_env=debug_env)
             self.assertNotEqual(tree_status, None)
         return tree_status
     
@@ -620,7 +633,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
         self._generator.create_config()
         self._generator.create_section(SIMPLE_REPO, TAG_SECTION,
-                                 tag='tag1')
+                                       tag='tag1')
         self._generator.write_config(cloned_repo_dir)
 
         # externals start out 'empty' aka not checked out.
@@ -652,6 +665,7 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._check_file_absent(cloned_repo_dir, os.path.join(tag_path,
                                                              'simple_subdir',
                                                              'subdir_file.txt'))
+        
     def test_required_bybranch(self):
         """Check out a required external pointing to a git branch."""
         cloned_repo_dir = self.clone_test_repo(CONTAINER_REPO)
@@ -1135,9 +1149,15 @@ class TestSysCheckout(BaseTestSysCheckout):
                                        branch='master', sub_externals=CFG_SUB_NAME)
         self._generator.write_config(cloned_repo_dir)
 
+        # The subrepo has a repo_url that uses this environment variable.
+        # It'll be cleared in tearDown().
+        os.environ[MIXED_CONT_EXT_ROOT_ENV_VAR] = self._bare_root
+        debug_env = MIXED_CONT_EXT_ROOT_ENV_VAR + '=' + self._bare_root 
+        
         # inital checkout: all requireds are clean, and optional is empty.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
-                                                 self.checkout_args)
+                                                 self.checkout_args,
+                                                 debug_env=debug_env)
         mixed_req_path = self._external_path('mixed_req')
         self._check_sync_clean(tree[mixed_req_path],
                                ExternalStatus.STATUS_OK,
@@ -1154,7 +1174,8 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._generator.write_with_git_branch(cloned_repo_dir, name='mixed_req',
                                               branch='new-feature',
                                               new_remote_repo_path=MIXED_REPO)
-        tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args)
+        tree = self.execute_checkout_in_dir(cloned_repo_dir, self.status_args,
+                                            debug_env=debug_env)
         self._check_sync_clean(tree[mixed_req_path],
                                ExternalStatus.MODEL_MODIFIED,
                                ExternalStatus.STATUS_OK)
@@ -1163,7 +1184,8 @@ class TestSysCheckout(BaseTestSysCheckout):
                                ExternalStatus.STATUS_OK)
 
         # run the checkout. Now the mixed use external and its sub-externals should be clean.
-        tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args)
+        tree = self.execute_checkout_with_status(cloned_repo_dir, self.checkout_args,
+                                                 debug_env=debug_env)
         self._check_sync_clean(tree[mixed_req_path],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
@@ -1270,10 +1292,16 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._generator.create_section_reference_to_subexternal('mixed_base')
         self._generator.write_config(cloned_repo_dir)
 
+        # The subrepo has a repo_url that uses this environment variable.
+        # It'll be cleared in tearDown().
+        os.environ[MIXED_CONT_EXT_ROOT_ENV_VAR] = self._bare_root
+        debug_env = MIXED_CONT_EXT_ROOT_ENV_VAR + '=' + self._bare_root 
+
         # After checkout, confirm required's are clean and the referenced
         # subexternal's contents are also clean.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
-                                                 self.checkout_args)
+                                                 self.checkout_args,
+                                                 debug_env=debug_env)
         
         self._check_sync_clean(
             tree[self._external_path(BRANCH_SECTION, base_path=SUB_EXTERNALS_PATH)],
