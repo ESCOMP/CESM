@@ -82,7 +82,12 @@ TMP_REPO_DIR_NAME = 'tmp'  # subdir under $CWD
 
 # subdir under test/ that holds all of our checked-in repositories (which we
 # will clone for these tests).
-BARE_REPO_ROOT_NAME = 'repos' 
+BARE_REPO_ROOT_NAME = 'repos'
+
+# Environment var referenced by checked-in externals file in mixed-cont-ext.git,
+# which should be pointed to the fully-resolved BARE_REPO_ROOT_NAME directory.
+# We explicitly clear this after every test, via tearDown().
+MIXED_CONT_EXT_ROOT_ENV_VAR = 'MANIC_TEST_BARE_REPO_ROOT'
 
 # Subdirs under bare repo root, each holding a repository. For more info
 # on the contents of these repositories, see test/repos/README.md. In these
@@ -565,6 +570,10 @@ class BaseTestSysCheckout(unittest.TestCase):
         """
         # return to our common starting point
         os.chdir(self._return_dir)
+        
+        # (in case this was set) Don't pollute environment of other tests.
+        os.environ.pop(MIXED_CONT_EXT_ROOT_ENV_VAR,
+                       None)  # Don't care if key wasn't set.
 
     def clone_test_repo(self, parent_repo_name, dest_dir_in=None):
         """Clones repo under self._bare_root"""
@@ -1141,8 +1150,9 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._generator.write_config(cloned_repo_dir)
 
         # The subrepo has a repo_url that uses this environment variable.
-        os.environ['MANIC_TEST_BARE_REPO_ROOT'] = self._bare_root
-        debug_env = 'MANIC_TEST_BARE_REPO_ROOT=' + self._bare_root 
+        # It'll be cleared in tearDown().
+        os.environ[MIXED_CONT_EXT_ROOT_ENV_VAR] = self._bare_root
+        debug_env = MIXED_CONT_EXT_ROOT_ENV_VAR + '=' + self._bare_root 
         
         # inital checkout: all requireds are clean, and optional is empty.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
@@ -1182,8 +1192,6 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._check_sync_clean(tree[self._external_path('simp_branch', base_path=sub_ext_base_path)],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        # Don't pollute environment of other tests.
-        del os.environ['MANIC_TEST_BARE_REPO_ROOT']
         
     def test_container_component(self):
         """Verify that optional component checkout works
@@ -1285,8 +1293,9 @@ class TestSysCheckout(BaseTestSysCheckout):
         self._generator.write_config(cloned_repo_dir)
 
         # The subrepo has a repo_url that uses this environment variable.
-        os.environ['MANIC_TEST_BARE_REPO_ROOT'] = self._bare_root
-        debug_env = 'MANIC_TEST_BARE_REPO_ROOT=' + self._bare_root 
+        # It'll be cleared in tearDown().
+        os.environ[MIXED_CONT_EXT_ROOT_ENV_VAR] = self._bare_root
+        debug_env = MIXED_CONT_EXT_ROOT_ENV_VAR + '=' + self._bare_root 
 
         # After checkout, confirm required's are clean and the referenced
         # subexternal's contents are also clean.
@@ -1298,8 +1307,6 @@ class TestSysCheckout(BaseTestSysCheckout):
             tree[self._external_path(BRANCH_SECTION, base_path=SUB_EXTERNALS_PATH)],
             ExternalStatus.STATUS_OK,
             ExternalStatus.STATUS_OK)
-        # Don't pollute environment of other tests.
-        del os.environ['MANIC_TEST_BARE_REPO_ROOT']
 
     def test_container_sparse(self):
         """Verify that 'full' container with simple subrepo
