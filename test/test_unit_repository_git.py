@@ -206,10 +206,18 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         self._repo._current_ref = self._current_ref_empty
         self._create_tmp_git_dir()
 
+        # We have to override this class method rather than the self._repo
+        # instance method because it is called via
+        # GitRepository._remote_name_for_url, which is itself a @classmethod
+        # calls cls._git_remote_verbose().
+        self._orignal_git_remote_verbose = GitRepository._git_remote_verbose
+        GitRepository._git_remote_verbose = self._git_remote_origin_upstream        
     def tearDown(self):
         """Cleanup tmp stuff on the file system
         """
         self._remove_tmp_git_dir()
+
+        GitRepository._git_remote_verbose = self._orignal_git_remote_verbose
 
     def _create_tmp_git_dir(self):
         """Create a temporary fake git directory for testing purposes.
@@ -229,20 +237,18 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     @staticmethod
     def _current_ref_empty():
         """Return an empty string.
+
+        Drop-in for GitRepository._current_ref
         """
         return EMPTY_STR
 
     @staticmethod
-    def _git_remote_origin_upstream():
-        """Return an info string that is a checkout hash
+    def _git_remote_origin_upstream(dir=None):
+        """Return an info string that is a checkout hash.
+
+        Drop-in for GitRepository._git_remote_verbose.
         """
         return GIT_REMOTE_OUTPUT_ORIGIN_UPSTREAM
-
-    @staticmethod
-    def _git_remote_none():
-        """Return an info string that is a checkout hash
-        """
-        return EMPTY_STR
 
     @staticmethod
     def _git_current_hash(myhash):
@@ -291,9 +297,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         """Test that a non-existent git repo returns an unknown status
         """
         stat = ExternalStatus()
-        # Now we over-ride the _git_remote_verbose method on the repo to return
-        # a known value without requiring access to git.
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = 'tag1'
         self._repo._git_current_hash = self._git_current_hash('')
         self._repo._git_revparse_commit = self._git_revparse_commit(
@@ -313,7 +316,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         """Test that an invalid reference returns out-of-sync
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = 'tag1'
         self._repo._git_current_hash = self._git_current_hash('abc123')
         self._repo._git_revparse_commit = self._git_revparse_commit(
@@ -333,7 +335,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = 'tag1'
         self._repo._git_current_hash = self._git_current_hash('abc123')
         self._repo._git_revparse_commit = self._git_revparse_commit(
@@ -348,7 +349,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = 'tag1'
         self._repo._git_current_hash = self._git_current_hash('def456')
         self._repo._git_revparse_commit = self._git_revparse_commit(
@@ -368,7 +368,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = ''
         self._repo._hash = 'abc'
         self._repo._git_current_hash = self._git_current_hash('abc123')
@@ -384,7 +383,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._tag = ''
         self._repo._hash = 'abc'
         self._repo._git_current_hash = self._git_current_hash('def456')
@@ -405,7 +403,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._branch = 'feature-2'
         self._repo._tag = ''
         self._repo._git_current_hash = self._git_current_hash('abc123')
@@ -421,7 +418,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._branch = 'feature-2'
         self._repo._tag = ''
         self._repo._git_current_hash = self._git_current_hash('abc123')
@@ -437,7 +433,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._branch = 'feature-2'
         self._repo._tag = ''
         self._repo._url = '/path/to/other/repo'
@@ -453,7 +448,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._branch = 'feature-2'
         self._repo._tag = ''
         self._repo._url = '/path/to/local/repo2'
@@ -469,7 +463,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._branch = 'feature-2'
         self._repo._tag = ''
         self._repo._url = '/path/to/unknown/repo'
@@ -491,7 +484,6 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         """
         stat = ExternalStatus()
-        self._repo._git_remote_verbose = self._git_remote_origin_upstream
         self._repo._branch = 'feature3'
         self._repo._tag = ''
         self._repo._url = '.'
