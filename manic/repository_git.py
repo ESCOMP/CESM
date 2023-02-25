@@ -194,7 +194,7 @@ class GitRepository(Repository):
             if self._url == LOCAL_PATH_INDICATOR:
                 expected_ref = self._branch
             else:
-                remote_name = self._determine_remote_name()
+                remote_name = self._remote_name_for_url(self._url)
                 if not remote_name:
                     # git doesn't know about this remote. by definition
                     # this is a modified state.
@@ -232,16 +232,13 @@ class GitRepository(Repository):
 
         os.chdir(cwd)
 
-    def _determine_remote_name(self):
-        """Return the remote name.
-
-        Note that this is for the *future* repo url and branch, not
-        the current working copy!
+    @classmethod
+    def _remote_name_for_url(cls, remote_url, dir=None):
+        """Return the remote name matching remote_url (or None)
 
         """
-        git_output = self._git_remote_verbose()
+        git_output = cls._git_remote_verbose(dir)
         git_output = git_output.splitlines()
-        remote_name = ''
         for line in git_output:
             data = line.strip()
             if not data:
@@ -249,10 +246,9 @@ class GitRepository(Repository):
             data = data.split()
             name = data[0].strip()
             url = data[1].strip()
-            if self._url == url:
-                remote_name = name
-                break
-        return remote_name
+            if remote_url == url:
+                return name
+        return None
 
     def _create_remote_name(self):
         """The url specified in the externals description file was not known
@@ -353,7 +349,7 @@ class GitRepository(Repository):
         else:
             ref = self._hash
 
-        remote_name = self._determine_remote_name()
+        remote_name = self._remote_name_for_url(self._url)
         if not remote_name:
             remote_name = self._create_remote_name()
             self._git_remote_add(remote_name, self._url)
@@ -612,7 +608,7 @@ class GitRepository(Repository):
     def _git_current_hash(dir=None):
         """Return the full hash of the currently checked-out version.
 
-        if dir is None, uses the cwd.
+        If dir is None, uses the cwd.
 
         Returns a tuple, (hash_found, hash), where hash_found is a
         logical specifying whether a hash was found for HEAD (False
@@ -787,11 +783,21 @@ class GitRepository(Repository):
         return git_output
 
     @staticmethod
-    def _git_remote_verbose():
+    def _git_remote_verbose(dir=None):
         """Run the git remote command to obtain repository information.
+
+        If dir is None, uses the cwd.
+        Returned string is of the form:
+        myfork  git@github.com:johnpaulalex/manage_externals_jp.git (fetch)
+        myfork  git@github.com:johnpaulalex/manage_externals_jp.git (push)
         """
+        if dir:
+            cwd = os.getcwd()
+            os.chdir(dir)
         cmd = ['git', 'remote', '--verbose']
         git_output = execute_subprocess(cmd, output_to_caller=True)
+        if dir:
+            os.chdir(cwd)
         return git_output
 
     @staticmethod

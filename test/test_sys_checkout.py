@@ -269,6 +269,12 @@ class GenerateExternalsDescriptionCfgV1(object):
         self._config.set(DESCRIPTION_SECTION, VERSION_ITEM,
                          self._schema_version)
 
+    def url_for_repo_path(self, repo_path, repo_path_abs=None):
+        if repo_path_abs is not None:
+            return repo_path_abs
+        else:
+            return os.path.join(self._bare_root, repo_path)
+        
     def create_section(self, repo_path, name, tag='', branch='',
                        ref_hash='', required=True, path=EXTERNALS_PATH,
                        sub_externals='', repo_path_abs=None, from_submodule=False,
@@ -304,10 +310,7 @@ class GenerateExternalsDescriptionCfgV1(object):
             ref_hash = ''
             branch = ''
 
-        if repo_path_abs is not None:
-            repo_url = repo_path_abs
-        else:
-            repo_url = os.path.join(self._bare_root, repo_path)
+        repo_url = self.url_for_repo_path(repo_path, repo_path_abs)
 
         if not from_submodule:
             self._config.set(name, ExternalsDescription.REPO_URL, repo_url)
@@ -639,22 +642,29 @@ class TestSysCheckout(BaseTestSysCheckout):
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        local_path = self._external_path(TAG_SECTION)
-        self._check_sync_clean(tree[local_path],
+        local_path_rel = self._external_path(TAG_SECTION)
+        self._check_sync_clean(tree[local_path_rel],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
-        tag_full_path = os.path.join(cloned_repo_dir, local_path)
-        self.assertFalse(os.path.exists(tag_full_path))
+        local_path_abs = os.path.join(cloned_repo_dir, local_path_rel)
+        self.assertFalse(os.path.exists(local_path_abs))
 
         # after checkout, the external is 'clean' aka at the correct version.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[local_path],
+        self._check_sync_clean(tree[local_path_rel],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
+        # Actually checked out the desired repo.
+        self.assertEqual('origin', GitRepository._remote_name_for_url(
+            # Which url to look up
+            self._generator.url_for_repo_path(SIMPLE_REPO),
+            # Which directory has the local checked-out repo.
+            dir=local_path_abs))
+        
         # Actually checked out the desired tag.
-        (tag_found, tag_name) = GitRepository._git_current_tag(tag_full_path)
+        (tag_found, tag_name) = GitRepository._git_current_tag(local_path_abs)
         self.assertEqual(tag_name, 'tag1')
 
         # Check existence of some simp_tag files
@@ -677,22 +687,31 @@ class TestSysCheckout(BaseTestSysCheckout):
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        local_path = self._external_path(BRANCH_SECTION)
-        self._check_sync_clean(tree[local_path],
+        local_path_rel = self._external_path(BRANCH_SECTION)
+        self._check_sync_clean(tree[local_path_rel],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
-        branch_path = os.path.join(cloned_repo_dir, local_path)
-        self.assertFalse(os.path.exists(branch_path))
+        local_path_abs = os.path.join(cloned_repo_dir, local_path_rel)
+        self.assertFalse(os.path.exists(local_path_abs))
 
         # after checkout, the external is 'clean' aka at the correct version.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[local_path],
+        self._check_sync_clean(tree[local_path_rel],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        self.assertTrue(os.path.exists(branch_path))
+        self.assertTrue(os.path.exists(local_path_abs))
+
+        # Actually checked out the desired repo.
+        self.assertEqual('origin', GitRepository._remote_name_for_url(
+            # Which url to look up
+            self._generator.url_for_repo_path(SIMPLE_REPO),
+            # Which directory has the local checked-out repo.
+            dir=local_path_abs))
+
+        # Actually checked out the desired branch. 
         (branch_found, branch_name) = GitRepository._git_current_remote_branch(
-            branch_path)
+            local_path_abs)
         self.assertEquals(branch_name, 'origin/' + REMOTE_BRANCH_FEATURE2)
         
     def test_required_byhash(self):
@@ -706,20 +725,30 @@ class TestSysCheckout(BaseTestSysCheckout):
         # externals start out 'empty' aka not checked out.
         tree = self.execute_checkout_in_dir(cloned_repo_dir,
                                             self.status_args)
-        local_path = self._external_path(HASH_SECTION)
-        self._check_sync_clean(tree[local_path],
+        local_path_rel = self._external_path(HASH_SECTION)
+        self._check_sync_clean(tree[local_path_rel],
                                ExternalStatus.EMPTY,
                                ExternalStatus.DEFAULT)
-        hash_path = os.path.join(cloned_repo_dir, local_path)
-        self.assertFalse(os.path.exists(hash_path))
+        local_path_abs = os.path.join(cloned_repo_dir, local_path_rel)
+        self.assertFalse(os.path.exists(local_path_abs))
 
         # after checkout, the externals are 'clean' aka at their correct version.
         tree = self.execute_checkout_with_status(cloned_repo_dir,
                                                  self.checkout_args)
-        self._check_sync_clean(tree[local_path],
+        self._check_sync_clean(tree[local_path_rel],
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
-        (hash_found, hash_name) = GitRepository._git_current_hash(hash_path)
+
+        # Actually checked out the desired repo.
+        self.assertEqual('origin', GitRepository._remote_name_for_url(
+            # Which url to look up
+            self._generator.url_for_repo_path(SIMPLE_REPO),
+            # Which directory has the local checked-out repo.
+            dir=local_path_abs))
+
+        # Actually checked out the desired hash.
+        (hash_found, hash_name) = GitRepository._git_current_hash(
+            local_path_abs)
         self.assertTrue(hash_name.startswith('60b1cc1a38d63'),
                         msg=hash_name)
         
