@@ -502,14 +502,16 @@ def _execute_checkout_in_dir(dirname, args, debug_env=''):
     """
     cwd = os.getcwd()
 
-    # Construct a command line for reproducibility; this command is not actually
-    # executed in the test.
-    checkout_path = os.path.abspath('{0}/../../checkout_externals')
+    # Construct a command line for reproducibility; this command is not
+    # actually executed in the test.
     os.chdir(dirname)
     cmdline = ['--externals', CFG_NAME, ]
     cmdline += args
-    manual_cmd = ('Test cmd:\npushd {cwd}; {env} {checkout} {args}'.format(
-        cwd=dirname, checkout=checkout_path, env=debug_env, args=' '.join(cmdline)))
+    manual_cmd = ('Running equivalent of:\n'
+                  'pushd {dirname}; '
+                  '{debug_env} /path/to/checkout_externals {args}'.format(
+                      dirname=dirname, debug_env=debug_env,
+                      args=' '.join(cmdline)))
     printlog(manual_cmd)
     options = checkout.commandline_arguments(cmdline)
     overall_status, tree_status = checkout.main(options)
