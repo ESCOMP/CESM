@@ -151,9 +151,8 @@ def git_submodule_status(repo_dir):
     """Run the git submodule status command to obtain submodule hashes.
         """
     # This function is here instead of GitRepository to avoid a dependency loop
-    cwd = os.getcwd()
-    os.chdir(repo_dir)
-    cmd = ['git', 'submodule', 'status']
+    cmd = 'git -C {repo_dir} submodule status'.format(
+        repo_dir=repo_dir).split()
     git_output = execute_subprocess(cmd, output_to_caller=True)
     submodules = {}
     submods = git_output.split('\n')
@@ -168,7 +167,6 @@ def git_submodule_status(repo_dir):
 
             submodules[items[1]] = {'hash':items[0], 'status':status, 'tag':tag}
 
-    os.chdir(cwd)
     return submodules
 
 def parse_submodules_desc_section(section_items, file_path):

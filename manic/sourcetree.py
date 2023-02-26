@@ -247,14 +247,15 @@ class SourceTree(object):
             # will be handled correctly later.
             return None
 
-        cwd = os.getcwd()
-        os.chdir(parent_repo_dir_path)
         if externals_path.lower() == 'none':
             # With explicit 'none', do not look for git submodules file.
             return None
 
+        cwd = os.getcwd()
+        os.chdir(parent_repo_dir_path)
+        
         if not externals_path:
-            if GitRepository.has_submodules():
+            if GitRepository.has_submodules(parent_repo_dir_path):
                 externals_path = ExternalsDescription.GIT_SUBMODULES_FILENAME
             else:
                 return None

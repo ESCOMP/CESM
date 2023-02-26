@@ -67,7 +67,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
     def _git_current_branch(branch_found, branch_name):
         """Return a function that takes the place of
         repo._git_current_branch, which returns the given output."""
-        def my_git_current_branch():
+        def my_git_current_branch(dirname):
             """mock function that can take the place of repo._git_current_branch"""
             return branch_found, branch_name
         return my_git_current_branch
@@ -76,7 +76,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
     def _git_current_tag(tag_found, tag_name):
         """Return a function that takes the place of
         repo._git_current_tag, which returns the given output."""
-        def my_git_current_tag():
+        def my_git_current_tag(dirname):
             """mock function that can take the place of repo._git_current_tag"""
             return tag_found, tag_name
         return my_git_current_tag
@@ -85,7 +85,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
     def _git_current_hash(hash_found, hash_name):
         """Return a function that takes the place of
         repo._git_current_hash, which returns the given output."""
-        def my_git_current_hash():
+        def my_git_current_hash(dirname):
             """mock function that can take the place of repo._git_current_hash"""
             return hash_found, hash_name
         return my_git_current_hash
@@ -102,7 +102,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
         self._repo._git_current_tag = self._git_current_tag(True, 'foo_tag')
         self._repo._git_current_hash = self._git_current_hash(True, 'abc123')
         expected = 'foo_tag (branch feature3)'
-        result = self._repo._current_ref()
+        result = self._repo._current_ref(os.getcwd())
         self.assertEqual(result, expected)
 
     def test_ref_detached_tag(self):
@@ -112,7 +112,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
         self._repo._git_current_tag = self._git_current_tag(True, 'foo_tag')
         self._repo._git_current_hash = self._git_current_hash(True, 'abc123')
         expected = 'foo_tag'
-        result = self._repo._current_ref()
+        result = self._repo._current_ref(os.getcwd())
         self.assertEqual(result, expected)
 
     def test_ref_detached_hash(self):
@@ -123,7 +123,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
         self._repo._git_current_tag = self._git_current_tag(False, '')
         self._repo._git_current_hash = self._git_current_hash(True, 'abc123')
         expected = 'abc123'
-        result = self._repo._current_ref()
+        result = self._repo._current_ref(os.getcwd())
         self.assertEqual(result, expected)
 
     def test_ref_none(self):
@@ -132,7 +132,7 @@ class TestGitRepositoryCurrentRef(unittest.TestCase):
         self._repo._git_current_branch = self._git_current_branch(False, '')
         self._repo._git_current_tag = self._git_current_tag(False, '')
         self._repo._git_current_hash = self._git_current_hash(False, '')
-        result = self._repo._current_ref()
+        result = self._repo._current_ref(os.getcwd())
         self.assertEqual(result, EMPTY_STR)
 
 
@@ -235,7 +235,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
     # mock methods replacing git system calls
     #
     @staticmethod
-    def _current_ref_empty():
+    def _current_ref_empty(dirname):
         """Return an empty string.
 
         Drop-in for GitRepository._current_ref
@@ -243,7 +243,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         return EMPTY_STR
 
     @staticmethod
-    def _git_remote_origin_upstream(dir=None):
+    def _git_remote_origin_upstream(dirname):
         """Return an info string that is a checkout hash.
 
         Drop-in for GitRepository._git_remote_verbose.
@@ -255,7 +255,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
         """Return a function that takes the place of repo._git_current_hash,
         which returns the given hash
         """
-        def my_git_current_hash():
+        def my_git_current_hash(dirname):
             """mock function that can take the place of repo._git_current_hash"""
             return 0, myhash
         return my_git_current_hash
@@ -269,7 +269,7 @@ class TestGitRepositoryCheckSync(unittest.TestCase):
 
         status = 0 implies success, non-zero implies failure
         """
-        def my_git_revparse_commit(ref):
+        def my_git_revparse_commit(ref, dirname):
             """mock function that can take the place of repo._git_revparse_commit"""
             self.assertEqual(expected_ref, ref)
             return mystatus, myhash
@@ -603,24 +603,20 @@ class TestVerifyTag(unittest.TestCase):
         self._repo = GitRepository('test', repo)
 
     @staticmethod
-    def _shell_true(url, remote=None):
-        _ = url
-        _ = remote
+    def _shell_true(*args, **kwargs):
         return 0
 
     @staticmethod
-    def _shell_false(url, remote=None):
-        _ = url
-        _ = remote
+    def _shell_false(*args, **kwargs):
         return 1
 
     @staticmethod
-    def _mock_function_true(ref):
+    def _mock_revparse_commit(ref, dirname):
         _ = ref
         return (TestValidRef._shell_true, '97ebc0e0deadc0de')
 
     @staticmethod
-    def _mock_function_false(ref):
+    def _mock_revparse_commit_false(ref, dirname):
         _ = ref
         return (TestValidRef._shell_false, '97ebc0e0deadc0de')
 
@@ -630,10 +626,11 @@ class TestVerifyTag(unittest.TestCase):
         self._repo._git_showref_tag = self._shell_false
         self._repo._git_showref_branch = self._shell_false
         self._repo._git_lsremote_branch = self._shell_false
-        self._repo._git_revparse_commit = self._mock_function_false
+        self._repo._git_revparse_commit = self._mock_revparse_commit_false
         self._repo._tag = 'something'
         remote_name = 'origin'
-        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name,
+                                                os.getcwd())
         self.assertFalse(received)
 
     def test_tag_not_tag(self):
@@ -642,10 +639,11 @@ class TestVerifyTag(unittest.TestCase):
         self._repo._git_showref_tag = self._shell_false
         self._repo._git_showref_branch = self._shell_true
         self._repo._git_lsremote_branch = self._shell_true
-        self._repo._git_revparse_commit = self._mock_function_false
+        self._repo._git_revparse_commit = self._mock_revparse_commit_false
         self._repo._tag = 'tag1'
         remote_name = 'origin'
-        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name,
+                                                os.getcwd())
         self.assertFalse(received)
 
     def test_tag_indeterminant(self):
@@ -654,10 +652,11 @@ class TestVerifyTag(unittest.TestCase):
         self._repo._git_showref_tag = self._shell_true
         self._repo._git_showref_branch = self._shell_true
         self._repo._git_lsremote_branch = self._shell_true
-        self._repo._git_revparse_commit = self._mock_function_true
+        self._repo._git_revparse_commit = self._mock_revparse_commit
         self._repo._tag = 'something'
         remote_name = 'origin'
-        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name,
+                                                os.getcwd())
         self.assertFalse(received)
 
     def test_tag_is_unique(self):
@@ -666,10 +665,11 @@ class TestVerifyTag(unittest.TestCase):
         self._repo._git_showref_tag = self._shell_true
         self._repo._git_showref_branch = self._shell_false
         self._repo._git_lsremote_branch = self._shell_false
-        self._repo._git_revparse_commit = self._mock_function_true
+        self._repo._git_revparse_commit = self._mock_revparse_commit
         self._repo._tag = 'tag1'
         remote_name = 'origin'
-        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name,
+                                                os.getcwd())
         self.assertTrue(received)
 
     def test_tag_is_not_hash(self):
@@ -678,10 +678,11 @@ class TestVerifyTag(unittest.TestCase):
         self._repo._git_showref_tag = self._shell_false
         self._repo._git_showref_branch = self._shell_false
         self._repo._git_lsremote_branch = self._shell_false
-        self._repo._git_revparse_commit = self._mock_function_true
+        self._repo._git_revparse_commit = self._mock_revparse_commit
         self._repo._tag = '97ebc0e0'
         remote_name = 'origin'
-        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name,
+                                                os.getcwd())
         self.assertFalse(received)
 
     def test_hash_is_commit(self):
@@ -690,10 +691,11 @@ class TestVerifyTag(unittest.TestCase):
         self._repo._git_showref_tag = self._shell_false
         self._repo._git_showref_branch = self._shell_false
         self._repo._git_lsremote_branch = self._shell_false
-        self._repo._git_revparse_commit = self._mock_function_true
+        self._repo._git_revparse_commit = self._mock_revparse_commit
         self._repo._tag = '97ebc0e0'
         remote_name = 'origin'
-        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name)
+        received, _ = self._repo._is_unique_tag(self._repo._tag, remote_name,
+                                                os.getcwd())
         self.assertFalse(received)
 
 
@@ -738,13 +740,14 @@ class TestValidRef(unittest.TestCase):
         return 1
 
     @staticmethod
-    def _mock_function_false(ref):
+    def _mock_revparse_commit_false(ref, dirname):
         _ = ref
         return (TestValidRef._shell_false, '')
 
     @staticmethod
-    def _mock_function_true(ref):
+    def _mock_revparse_commit_true(ref, dirname):
         _ = ref
+        _ = dirname
         return (TestValidRef._shell_true, '')
 
     def test_valid_ref_is_invalid(self):
@@ -753,10 +756,12 @@ class TestValidRef(unittest.TestCase):
         self._repo._git_showref_tag = self._shell_false
         self._repo._git_showref_branch = self._shell_false
         self._repo._git_lsremote_branch = self._shell_false
-        self._repo._git_revparse_commit = self._mock_function_false
+        self._repo._git_revparse_commit = self._mock_revparse_commit_false
         self._repo._tag = 'invalid_ref'
         with self.assertRaises(RuntimeError):
-            self._repo._check_for_valid_ref(self._repo._tag)
+            self._repo._check_for_valid_ref(self._repo._tag,
+                                            remote_name=None,
+                                            dirname=os.getcwd())
 
     def test_valid_tag(self):
         """Verify a valid tag return true
@@ -764,9 +769,11 @@ class TestValidRef(unittest.TestCase):
         self._repo._git_showref_tag = self._shell_true
         self._repo._git_showref_branch = self._shell_false
         self._repo._git_lsremote_branch = self._shell_false
-        self._repo._git_revparse_commit = self._mock_function_true
+        self._repo._git_revparse_commit = self._mock_revparse_commit_true
         self._repo._tag = 'tag1'
-        received = self._repo._check_for_valid_ref(self._repo._tag)
+        received = self._repo._check_for_valid_ref(self._repo._tag,
+                                                   remote_name=None,
+                                                   dirname=os.getcwd())
         self.assertTrue(received)
 
     def test_valid_branch(self):
@@ -775,24 +782,28 @@ class TestValidRef(unittest.TestCase):
         self._repo._git_showref_tag = self._shell_false
         self._repo._git_showref_branch = self._shell_true
         self._repo._git_lsremote_branch = self._shell_false
-        self._repo._git_revparse_commit = self._mock_function_true
+        self._repo._git_revparse_commit = self._mock_revparse_commit_true
         self._repo._tag = 'tag1'
-        received = self._repo._check_for_valid_ref(self._repo._tag)
+        received = self._repo._check_for_valid_ref(self._repo._tag,
+                                                   remote_name=None,
+                                                   dirname=os.getcwd())
         self.assertTrue(received)
 
     def test_valid_hash(self):
         """Verify a valid hash return true
         """
-        def _mock_revparse_commit(ref):
+        def _mock_revparse_commit_true(ref, dirname):
             _ = ref
             return (0, '56cc0b539426eb26810af9e')
 
         self._repo._git_showref_tag = self._shell_false
         self._repo._git_showref_branch = self._shell_false
         self._repo._git_lsremote_branch = self._shell_false
-        self._repo._git_revparse_commit = _mock_revparse_commit
+        self._repo._git_revparse_commit = _mock_revparse_commit_true
         self._repo._hash = '56cc0b5394'
-        received = self._repo._check_for_valid_ref(self._repo._hash)
+        received = self._repo._check_for_valid_ref(self._repo._hash,
+                                                   remote_name=None,
+                                                   dirname=os.getcwd())
         self.assertTrue(received)
 
 
