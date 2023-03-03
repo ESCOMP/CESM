@@ -88,7 +88,7 @@ def read_externals_description_file(root_dir, file_name):
 
     externals_description = None
     if file_name == ExternalsDescription.GIT_SUBMODULES_FILENAME:
-        externals_description = read_gitmodules_file(root_dir, file_name)
+        externals_description = _read_gitmodules_file(root_dir, file_name)
     else:
         try:
             config = config_parser()
@@ -151,9 +151,8 @@ def git_submodule_status(repo_dir):
     """Run the git submodule status command to obtain submodule hashes.
         """
     # This function is here instead of GitRepository to avoid a dependency loop
-    cwd = os.getcwd()
-    os.chdir(repo_dir)
-    cmd = ['git', 'submodule', 'status']
+    cmd = 'git -C {repo_dir} submodule status'.format(
+        repo_dir=repo_dir).split()
     git_output = execute_subprocess(cmd, output_to_caller=True)
     submodules = {}
     submods = git_output.split('\n')
@@ -168,7 +167,6 @@ def git_submodule_status(repo_dir):
 
             submodules[items[1]] = {'hash':items[0], 'status':status, 'tag':tag}
 
-    os.chdir(cwd)
     return submodules
 
 def parse_submodules_desc_section(section_items, file_path):
@@ -191,7 +189,7 @@ def parse_submodules_desc_section(section_items, file_path):
 
     return path, url
 
-def read_gitmodules_file(root_dir, file_name):
+def _read_gitmodules_file(root_dir, file_name):
     # pylint: disable=deprecated-method
     # Disabling this check because the method is only used for python2
     # pylint: disable=too-many-locals
@@ -203,12 +201,11 @@ def read_gitmodules_file(root_dir, file_name):
     root_dir = os.path.abspath(root_dir)
     msg = 'In directory : {0}'.format(root_dir)
     logging.info(msg)
-    printlog('Processing submodules description file : {0}'.format(file_name))
 
     file_path = os.path.join(root_dir, file_name)
     if not os.path.exists(file_name):
         msg = ('ERROR: submodules description file, "{0}", does not '
-               'exist at path:\n    {1}'.format(file_name, file_path))
+               'exist in dir:\n    {1}'.format(file_name, root_dir))
         fatal_error(msg)
 
     submodules_description = None
@@ -640,8 +637,11 @@ class ExternalsDescription(dict):
                        '       Parent repo, "{1}" does not have submodules')
                 fatal_error(msg.format(field, self._parent_repo.name()))
 
-            submod_file = read_gitmodules_file(repo_path, submod_file)
-            submod_desc = create_externals_description(submod_file)
+            printlog(
+                'Processing submodules description file : {0} ({1})'.format(
+                    submod_file, repo_path))
+            submod_model_data= _read_gitmodules_file(repo_path, submod_file)
+            submod_desc = create_externals_description(submod_model_data)
 
         # Can we find our external?
         repo_url = None

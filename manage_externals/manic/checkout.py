@@ -378,9 +378,9 @@ def main(args):
     the --all option is passed.
 
     Returns a tuple (overall_status, tree_status). overall_status is 0
-    on success, non-zero on failure. tree_status gives the full status
-    *before* executing the checkout command - i.e., the status that it
-    used to determine if it's safe to proceed with the checkout.
+    on success, non-zero on failure. tree_status is a dict mapping local path
+    to ExternalStatus -- if no checkout is happening. If checkout is happening, tree_status
+    is None.
     """
     if args.do_logging:
         logging.basicConfig(filename=LOG_FILE_NAME,
@@ -438,6 +438,8 @@ def main(args):
             for comp in args.components:
                 source_tree.checkout(args.verbose, load_all, load_comp=comp)
             printlog('')
+            # New tree status is unknown, don't return anything.
+            tree_status = None
 
     logging.info('%s completed without exceptions.', program_name)
     # NOTE(bja, 2017-11) tree status is used by the systems tests
