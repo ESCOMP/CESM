@@ -663,7 +663,7 @@ class TestSysCheckout(BaseTestSysCheckout):
             # Which url to look up
             self._generator.url_for_repo_path(SIMPLE_REPO),
             # Which directory has the local checked-out repo.
-            dir=local_path_abs))
+            dirname=local_path_abs))
         
         # Actually checked out the desired tag.
         (tag_found, tag_name) = GitRepository._git_current_tag(local_path_abs)
@@ -709,7 +709,7 @@ class TestSysCheckout(BaseTestSysCheckout):
             # Which url to look up
             self._generator.url_for_repo_path(SIMPLE_REPO),
             # Which directory has the local checked-out repo.
-            dir=local_path_abs))
+            dirname=local_path_abs))
 
         # Actually checked out the desired branch. 
         (branch_found, branch_name) = GitRepository._git_current_remote_branch(
@@ -746,7 +746,7 @@ class TestSysCheckout(BaseTestSysCheckout):
             # Which url to look up
             self._generator.url_for_repo_path(SIMPLE_REPO),
             # Which directory has the local checked-out repo.
-            dir=local_path_abs))
+            dirname=local_path_abs))
 
         # Actually checked out the desired hash.
         (hash_found, hash_name) = GitRepository._git_current_hash(
@@ -1356,7 +1356,7 @@ class TestSysCheckout(BaseTestSysCheckout):
                                        tag='tag2')
 
         # Same tag as above, but with a sparse file too.
-        sparse_relpath = '../../{}'.format(sparse_filename)
+        sparse_relpath = '../../' + sparse_filename
         self._generator.create_section(SIMPLE_REPO, 'simp_sparse',
                                        tag='tag2', sparse=sparse_relpath)
 
@@ -1662,8 +1662,9 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         fork_file = os.path.join(checkout_dir,
                                  self._simple_ext_fork_name, "readme.txt")
         self.assertTrue(os.path.exists(fork_file))
-        os.chdir(checkout_dir)
+
         submods = git_submodule_status(checkout_dir)
+        print('checking status of', checkout_dir, ':', submods)
         self.assertEqual(len(submods.keys()), 1)
         self.assertTrue(self._simple_ext_fork_name in submods)
         submod = submods[self._simple_ext_fork_name]
@@ -1673,7 +1674,6 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         self.assertEqual(submod['status'], simple_ext_fork_status)
         self.assertTrue('tag' in submod)
         self.assertEqual(submod['tag'], simple_ext_fork_tag)
-        os.chdir(cwd)
         self.idempotence_check(checkout_dir)
 
     def test_submodule_checkout_none(self):
