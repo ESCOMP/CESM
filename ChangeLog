@@ -1,4 +1,117 @@
 ==============================================================
+Tag name: cesm2_3_alpha012c
+Originator(s): CSEG
+Date: 14 March 2023 
+One-line Summary: CDEPS and CMEPS updates.
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_086                            --
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_3           --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.94                       **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.16               -- 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.58 **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.14           --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.14                   **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.7                     **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev115                   --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230121              --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230121                   --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20220322           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                  --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.5         --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_10                   --
+
+ccs_config
+    Chris Fischer 2023-02-27 - ccs_config_cesm0.0.58 - ccs_config (cesm2_3_alpha12c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.58
+
+    ccs_config_cesm0.0.58: Update esmf libraries on remove pgi support on izumi.
+    ccs_config_cesm0.0.57: Add ne3pg3_ne3pg3_mg37 grid.
+    ccs_config_cesm0.0.56: Update ESMF and PIO libraries for fontera. Also add mpasa3p75_mpasa3p75_mt13 grid alias.
+
+
+    Chris Fischer 2023-01-26 - ccs_config_cesm0.0.55 - ccs_config (cesm2_3_alpha12c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.55
+
+    ccs_config_cesm0.0.55: Update cheyenne esmf library to 8.4.1b02
+
+
+cdeps
+    Chris Fischer 2023-02-27 - cdeps1.0.7 - components/cdeps (cesm2_3_alpha12c)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.7
+
+    cdeps1.0.7: get_standard_cmake_args no longer takes a shared_lib argument
+    cdeps1.0.6: update doc by adding NUOPC cap phases
+    cdeps1.0.5: allow non-existant include directories
+    cdeps1.0.4: New docn features and update to documentation
+
+
+    Chris Fischer 2023-02-01 - cdeps1.0.4 - components/cdeps (cesm2_3_alpha12c)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.4
+
+    cdeps1.0.4: New docn features and update to documentation.
+    cdeps1.0.3: The build in github was not consistant with that outside github.
+    cdeps1.0.2: Rename master to main.
+    cdeps1.0.1: Code cleanup.
+    cdeps1.0.0: Fix documentation.
+    cdeps0.12.72: Fix documentation.
+    cdeps0.12.71: Update CDEPS documentation.
+    cdeps0.12.70: Remove shr_mpi_mod.
+    cdeps0.12.69: Create reusable workflows.
+
+
+cime
+    Chris Fischer 2023-02-27 - cime6.0.94 - cime (cesm2_3_alpha12c)
+    https://github.com/ESMCI/cime/tags/cime6.0.94
+
+    cime6.0.94: bless_test_results: Fix mistake in re match counting
+    cime6.0.93: Improve cmake build system for sharedlibs
+    cime6.0.92: bless_test_results: improve error checking of bless_tests args
+    cime6.0.91: Updates testing worflow to upload logs on failure
+
+
+    Chris Fischer 2023-02-01 - cime6.0.90 - cime (cesm2_3_alpha12c)
+    https://github.com/ESMCI/cime/tags/cime6.0.90
+
+    cime6.0.90: Add instance to drv logs.
+    cime6.0.89: Switch file compare count mismatch to a warning.
+    cime6.0.88: Fix exception chain in import_and_run_sub_or_cmd.
+    cime6.0.87: Have sys tests use same config.
+    cime6.0.86: jenkins_generic_job: Add a bit more archiving output
+    cime6.0.85: Check number of hist file comparisons in system_test_common
+
+
+cmeps
+    James Edwards 2023-01-03 - cmeps0.14.7 - src/drivers/nuopc/ (cesm2_3_alpha12c)
+    https://github.com/ESCOMP/CMEPS/tags/TBD
+
+    Change default ocean atmosphere flux grid to xgrid
+
+
+    Chris Fischer 2023-02-01 - cmeps0.14.14 - src/drivers/nuopc/ (cesm2_3_alpha12c)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.15
+
+    For some reason tag 0.14.14 was created after 0.14.15
+
+    cmeps0.14.14: Changes needed for CDEPS PR #213
+    cmeps0.14.15: Fix the multi instance initialization.
+    cmeps0.14.13: Enable asyncio using pio.
+
+
+    Chris Fischer 2023-01-30 - cmeps0.14.12 - src/drivers/nuopc/ (cesm2_3_alpha12c)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.12
+
+    cmeps0.14.12: Updates to the MEGAN specifier string parser.
+    cmeps0.14.11: Update esmFldsExchange_nems for ungridded wave fields.
+    cmeps0.14.10: Redo multiinstance support.
+    cmeps0.14.09: Replace use of master with main.
+    cmeps0.14.08: Add werror to extbuild.
+
+==============================================================
 Tag name: cesm2_3_alpha012b
 Originator(s): CSEG
 Date: 25 January 2023 
