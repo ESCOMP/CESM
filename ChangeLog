@@ -1,4 +1,97 @@
 ==============================================================
+Tag name: cesm2_3_alpha012d
+Originator(s): CSEG
+Date: 30 March 2023 
+One-line Summary: CLM answer changes. 
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_086                            --
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_3           --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.94                       --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.16               -- 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.59 **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.14           --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.18                   **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.8                     **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev119                   **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230121              --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230121                   --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230209           **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                  --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.5         --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_10                   --
+
+ccs_config
+    Chris Fischer 2023-03-24 - ccs_config_cesm0.0.59 - ccs_config (cesm2_3_alpha12d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.59
+
+    make 4x5 mesh cdf5
+
+
+cdeps
+    Chris Fischer 2023-03-24 - cdeps1.0.8 - components/cdeps (cesm2_3_alpha12d)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.8
+
+    Fix iradsw logic for CPLHIST mode
+
+
+clm
+    Erik Kluzek 2023-03-16 - ctsm5.1.dev119 - components/clm (cesm2_3_alpha12d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev119
+
+    Allows for landuse.timeseries datasets with unrepresented land use change on them.
+
+
+    Erik Kluzek 2023-02-05 - ctsm5.1.dev118 - components/clm (cesm2_3_alpha12d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev118
+
+    Update for some python tools to use conda rather than ncar_pylib
+
+
+    Erik Kluzek 2023-02-02 - ctsm5.1.dev117 - components/clm (cesm2_3_alpha12d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev117
+
+    Adding capability to run FATES for NEON sites. @afoster did this tag.
+
+    The only test that changes answers is a NEON site test on izumi.
+
+
+    Erik Kluzek 2023-01-24 - ctsm5.1.dev116 - components/clm (cesm2_3_alpha12d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev116
+
+    Answer changes with some small bug fixes, and setting of zetamaxstable stability parameter
+    to 2.0 for clm5_1 physics. Single point datasets are updated, so I cases that use them
+    have different answers as well.
+
+
+cmeps
+    Chris Fischer 2023-03-23 - cmeps0.14.18 - src/drivers/nuopc/ (cesm2_3_alpha12d)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.18
+
+    cmeps0.14.18:  Remove unnecessary deallocate.
+    cneps0.14.17:  Revert cmeps0.14.16, but leave in multi-instance fix.
+
+
+    Chris Fischer 2023-02-22 - cmeps0.14.16 - src/drivers/nuopc/ (cesm2_3_alpha12d)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.16
+
+    Set xgrid as default.
+
+
+pop
+    Michael Levy 2023-02-09 - cesm_pop_2_1_20230209 - components/pop (cesm2_3_alpha12d)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20230209
+
+    NUOPC was relying on MCT to read stream files in some specific situations, but
+    now that can be handled by CDEPS instead.
+
+
+
+==============================================================
 Tag name: cesm2_3_alpha012c
 Originator(s): CSEG
 Date: 14 March 2023 
