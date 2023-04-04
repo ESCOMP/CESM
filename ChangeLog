@@ -1,4 +1,73 @@
 ===============================================================
+Tag name: cesm2.2.1-rc.01
+Originator(s): CSEG
+Date: 4th April 2023 
+One-line Summary: cesm2.2.1 release.
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_2_rel_07 
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20200430
+cime                               https://github.com/ESMCI/cime/tree/cime5.8.32.1
+components/cism                    https://github.com/ESCOMP/CISM-wrapper/tree/cism2_1_69
+components/clm                     https://github.com/ESCOMP/CTSM/tree/release-cesm2.2.01
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20200609 
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200908
+components/mosart                  https://github.com/ESCOMP/MOSART/tree/mosart1_0_37
+components/pop                     https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20200730
+components/rtm                     https://github.com/ESCOMP/RTM/tree/rtm1_0_72  
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710
+
+cam
+    Cheryl Craig 2023-03-02 - cam_cesm2_2_rel_07 - components/cam (cesm2.2.1-rc.01)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_2_rel_07
+
+    For Francis Vitt
+
+    Functional support for FHIST on refined SE grids
+
+
+    Cheryl Craig 2023-03-02 - cam_cesm2_2_rel_06 - components/cam (cesm2.2.1-rc.01)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_2_rel_06
+
+    For Francis Vitt
+
+    Transport CL and BR in WACCM-MA chemistry mechanisms
+
+    Answer changing for WACCM-MA chemistry mechanisms
+
+
+    Cheryl Craig 2023-03-02 - cam_cesm2_2_rel_05 - components/cam (cesm2.2.1-rc.01)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_2_rel_05
+
+    For Courtney Peverley
+    Secondary advection bug fix for CESM2.2 release
+
+    Answer changing for all SE dycore runs
+
+
+    Cheryl Craig 2022-08-22 - cam_cesm2_2_rel_04 - components/cam (cesm2.2.1-rc.01)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_2_rel_04
+
+    Fix three CAM-SE bugs
+
+    some answer changes for SE runs
+
+
+    Chris Fischer 2020-09-24 - cam_cesm2_2_rel_03 - components/cam (cesm2.2.1-rc.01)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_2_rel_03
+
+    Remove FCSCAM compset.
+
+
+cime
+    Chris Fischer 2023-04-04 - cime5.8.32.1 - cime (cesm2.2.1-rc.01)
+    https://github.com/ESMCI/cime/tags/cime5.8.32.1
+
+    Update izumi domain name.
+
+===============================================================
 Tag name: cesm2.2.0-rc.01
 Originator(s): CSEG
 Date: 15 September 2020 
