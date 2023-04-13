@@ -1,4 +1,95 @@
 ==============================================================
+Tag name: cesm2_3_alpha012e
+Originator(s): CSEG
+Date: 13 April 2023 
+One-line Summary: Update cice6, clm, cmeps, cdeps, ccs_config, cime.
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_086                            --
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_7           **
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.105                      **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.16               -- 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.61 **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.14           --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.21                   **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.9                     **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev121                   **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230121              --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230121                   --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230209           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                  --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.5         --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_10                   --
+
+ccs_config
+    Chris Fischer 2023-04-07 - ccs_config_cesm0.0.61 - ccs_config (cesm2_3_alpha12e)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.61
+
+    ccs_config_cesm0.0.61: Update CMake module for Cheyenne
+    ccs_config_cesm0.0.60: Include PRISM precipitation datm streams
+    ccs_config_cesm0.0.59: Make 4x5 mesh cdf5.
+
+
+cdeps
+    Chris Fischer 2023-04-07 - cdeps1.0.9 - components/cdeps (cesm2_3_alpha12e)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.9
+
+    Need if statement for advertising ndep
+
+
+cice6
+    David Bailey 2023-02-28 - cesm_cice6_4_1_7 - components/cice6 (cesm2_3_alpha12e)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_4_1_4
+
+    Update CICE6 tag with small bug fixes that are answer changing, but not climate changing.
+    All active CICE6 cases will be different. Also adds some new namelist flags, so NLFAIL is
+    also expected.
+
+
+cime
+    Chris Fischer 2023-03-24 - cime6.0.105 - cime (cesm2_3_alpha12e)
+    https://github.com/ESMCI/cime/tags/cime6.0.xxx
+
+    cime6.0.105: Improve netcdf link step on systems with seperate c and fortran install which use esmf.
+    cime6.0.104: Check_input_data: Expand SharedArea coverage to entire implementation
+    cime6.0.103: Adding support for ADIOS for E3SM.
+    cime6.0.102: Should not test timestep of stub components.
+    cime6.0.101: Minor updates to allow moab driver.
+    cime6.0.100: Revert "Avoid reading in the same config tests file multiple times".
+    cime6.0.99:  Loosen the XSD xml specification for config_machines.xsd to be consistent with env_mach_specific.xsd
+    cime6.0.98:  Avoid reading in the same config tests file multiple times.
+    cime6.0.97:  Fixes single_exe create_test option.
+    cime6.0.96:  jenkins_generic_job: Add support for queue selection
+    cime6.0.95:  Fixes restoring quotes to command arguments  
+
+
+clm
+    Erik Kluzek 2023-04-05 - ctsm5.1.dev121 - components/clm (cesm2_3_alpha12e)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev121
+
+    Update FATES and increase soil moisture for cold starts with FATES
+
+
+    William Sacks 2023-03-25 - ctsm5.1.dev120 - components/clm (cesm2_3_alpha12e)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev120
+
+    Just updates externals used in standalone checkouts and some aux_clm tests
+    - so no impact in CESM testing
+
+
+cmeps
+    Chris Fischer 2023-04-07 - cmeps0.14.21 - src/drivers/nuopc/ (cesm2_3_alpha12e)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.21
+
+    cmeps0.14.21: Add CAM linked lbs to exe build
+    cmeps0.14.20: Send nitrogen deposition from atm to ocn
+    cmeps0.14.19: Replace aux_cam with aux_cmeps in testlist
+
+==============================================================
 Tag name: cesm2_3_alpha012d
 Originator(s): CSEG
 Date: 30 March 2023 
