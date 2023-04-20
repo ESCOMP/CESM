@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Tool to assemble repositories represented in a model-description file.
@@ -227,6 +227,12 @@ The root of the source tree will be referred to as `${SRC_ROOT}` below.
     Now, %(prog)s will process Externals.cfg and also process
     Externals_LIBX.cfg as if it was a sub-external.
 
+    Note that by default, checkout_externals will clone an external's
+    submodules. As a special case, the entry, "externals = None", will
+    prevent this behavior. For more control over which externals are
+    checked out, create an externals file (and see the from_submodule
+    configuration entry below).
+
   * from_submodule (True / False) : used to pull the repo_url, local_path,
     and hash properties for this external from the .gitmodules file in
     this repository. Note that the section name (the entry in square
@@ -279,6 +285,9 @@ of the externals description file or examine the output of
                         help='The externals description filename. '
                         'Default: %(default)s.')
 
+    parser.add_argument('-x', '--exclude', nargs='*',
+                        help='Component(s) listed in the externals file which should be ignored.')
+
     parser.add_argument('-o', '--optional', action='store_true', default=False,
                         help='By default only the required externals '
                         'are checked out. This flag will also checkout the '
@@ -329,7 +338,34 @@ of the externals description file or examine the output of
         options = parser.parse_args()
     return options
 
-
+def _dirty_local_repo_msg(program_name, config_file):
+    return """The external repositories labeled with 'M' above are not in a clean state.
+The following are four options for how to proceed:
+(1) Go into each external that is not in a clean state and issue either a 'git status' or
+    an 'svn status' command (depending on whether the external is managed by git or
+    svn). Either revert or commit your changes so that all externals are in a clean
+    state. (To revert changes in git, follow the instructions given when you run 'git
+    status'.) (Note, though, that it is okay to have untracked files in your working
+    directory.) Then rerun {program_name}.
+(2) Alternatively, you do not have to rely on {program_name}. Instead, you can manually
+    update out-of-sync externals (labeled with 's' above) as described in the
+    configuration file {config_file}. (For example, run 'git fetch' and 'git checkout'
+    commands to checkout the appropriate tags for each external, as given in
+    {config_file}.)
+(3) You can also use {program_name} to manage most, but not all externals: You can specify
+    one or more externals to ignore using the '-x' or '--exclude' argument to
+    {program_name}. Excluding externals labeled with 'M' will allow {program_name} to
+    update the other, non-excluded externals.
+(4) As a last resort, if you are confident that there is no work that needs to be saved
+    from a given external, you can remove that external (via "rm -rf [directory]") and
+    then rerun the {program_name} tool. This option is mainly useful as a workaround for
+    issues with this tool (such as https://github.com/ESMCI/manage_externals/issues/157).
+The external repositories labeled with '?' above are not under version
+control using the expected protocol. If you are sure you want to switch
+protocols, and you don't have any work you need to save from this
+directory, then run "rm -rf [directory]" before rerunning the
+{program_name} tool.
+""".format(program_name=program_name, config_file=config_file)
 # ---------------------------------------------------------------------
 #
 # main
@@ -342,9 +378,9 @@ def main(args):
     the --all option is passed.
 
     Returns a tuple (overall_status, tree_status). overall_status is 0
-    on success, non-zero on failure. tree_status gives the full status
-    *before* executing the checkout command - i.e., the status that it
-    used to determine if it's safe to proceed with the checkout.
+    on success, non-zero on failure. tree_status is a dict mapping local path
+    to ExternalStatus -- if no checkout is happening. If checkout is happening, tree_status
+    is None.
     """
     if args.do_logging:
         logging.basicConfig(filename=LOG_FILE_NAME,
@@ -360,57 +396,41 @@ def main(args):
         load_all = True
 
     root_dir = os.path.abspath(os.getcwd())
-    external_data = read_externals_description_file(root_dir, args.externals)
-    external = create_externals_description(
-        external_data, components=args.components)
+    model_data = read_externals_description_file(root_dir, args.externals)
+    ext_description = create_externals_description(
+        model_data, components=args.components, exclude=args.exclude)
 
     for comp in args.components:
-        if comp not in external.keys():
+        if comp not in ext_description.keys():
+            # Note we can't print out the list of found externals because
+            # they were filtered in create_externals_description above.
             fatal_error(
                 "No component {} found in {}".format(
                     comp, args.externals))
 
-    source_tree = SourceTree(root_dir, external, svn_ignore_ancestry=args.svn_ignore_ancestry)
-    printlog('Checking status of externals: ', end='')
-    tree_status = source_tree.status()
+    source_tree = SourceTree(root_dir, ext_description, svn_ignore_ancestry=args.svn_ignore_ancestry)
+    if args.components:
+        components_str = 'specified components'
+    else:
+        components_str = 'required & optional components'
+    printlog('Checking local status of ' + components_str + ': ', end='')
+    tree_status = source_tree.status(print_progress=True)
     printlog('')
 
     if args.status:
         # user requested status-only
-        for comp in sorted(tree_status.keys()):
+        for comp in sorted(tree_status):
             tree_status[comp].log_status_message(args.verbose)
     else:
         # checkout / update the external repositories.
         safe_to_update = check_safe_to_update_repos(tree_status)
         if not safe_to_update:
             # print status
-            for comp in sorted(tree_status.keys()):
+            for comp in sorted(tree_status):
                 tree_status[comp].log_status_message(args.verbose)
             # exit gracefully
-            msg = """The external repositories labeled with 'M' above are not in a clean state.
-
-The following are two options for how to proceed:
-
-(1) Go into each external that is not in a clean state and issue either
-    an 'svn status' or a 'git status' command. Either revert or commit
-    your changes so that all externals are in a clean state. (Note,
-    though, that it is okay to have untracked files in your working
-    directory.) Then rerun {program_name}.
-
-(2) Alternatively, you do not have to rely on {program_name}. Instead, you
-    can manually update out-of-sync externals (labeled with 's' above)
-    as described in the configuration file {config_file}.
-
-
-The external repositories labeled with '?' above are not under version
-control using the expected protocol. If you are sure you want to switch
-protocols, and you don't have any work you need to save from this
-directory, then run "rm -rf [directory]" before re-running the
-checkout_externals tool.
-""".format(program_name=program_name, config_file=args.externals)
-
             printlog('-' * 70)
-            printlog(msg)
+            printlog(_dirty_local_repo_msg(program_name, args.externals))
             printlog('-' * 70)
         else:
             if not args.components:
@@ -418,6 +438,8 @@ checkout_externals tool.
             for comp in args.components:
                 source_tree.checkout(args.verbose, load_all, load_comp=comp)
             printlog('')
+            # New tree status is unknown, don't return anything.
+            tree_status = None
 
     logging.info('%s completed without exceptions.', program_name)
     # NOTE(bja, 2017-11) tree status is used by the systems tests
