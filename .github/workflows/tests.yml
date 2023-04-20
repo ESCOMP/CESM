@@ -1,0 +1,30 @@
+# This is a workflow to compile the cmeps source without cime
+name: Test Manic
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  test-manic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test Manic
+        run: |
+          pushd test
+          git config --global user.email "devnull@example.com"
+          git config --global user.name "GITHUB tester"
+          git config --global protocol.file.allow always
+          make utest
+          make stest
+          popd
+
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3

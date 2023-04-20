@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Unit test driver for checkout_externals
 
@@ -60,7 +60,7 @@ class TestSvnRepositoryCheckURL(unittest.TestCase):
         self._name = 'component'
         rdata = {ExternalsDescription.PROTOCOL: 'svn',
                  ExternalsDescription.REPO_URL:
-                     'https://svn-ccsm-models.cgd.ucar.edu/',
+                     'https://svn-ccsm-models.cgd.ucar.edu',
                  ExternalsDescription.TAG:
                      'mosart/trunk_tags/mosart1_0_26',
                  }
