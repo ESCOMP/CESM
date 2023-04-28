@@ -1,4 +1,175 @@
 ==============================================================
+Tag name: cesm2_3_alpha012f
+Originator(s): CSEG
+Date: 28 April 2023 
+One-line Summary: Answer changes for cam
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_106                            **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_7           --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.105                      --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.16               -- 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.61 --
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.15           **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.21                   --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.9                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev121                   --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230121              --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230121                   --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230209           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                  --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.5         --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_10                   --
+
+cam
+    Kate Thayer-Calder 2023-01-24 - cam6_3_091 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_91
+
+    Update CLUBB external. Changes answers for all CAM6 and dev composts
+
+
+    Brian Eaton 2023-04-06 - cam6_3_106 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_106
+
+    Initialize CO2 when it's missing from initial file.  This only impacts runs using the new ghg_mam4 chemistry.
+
+
+    Brian Eaton 2023-04-06 - cam6_3_105 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_105
+
+    Fix for COSP with cam_dev physics.
+
+
+    Francis Vitt 2023-04-05 - cam6_3_104 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_104
+
+    Misc bug fixes
+
+
+    Francis Vitt 2023-04-04 - cam6_3_102 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_102
+
+    Updates to TEM diagnostics
+
+
+    Cheryl Craig 2023-03-31 - cam6_3_101 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_101
+
+    Introduce FLTHIST_v0a compset (low top 58 level compset using cam_dev)
+
+    CLUBB bug fix and new topo file for ne30pg3.
+
+    WACCM ne30pg3 runs are broken with this tag - will be fixed in future tag
+
+
+    Francis Vitt 2023-03-20 - cam6_3_100 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_100
+
+    Introduce prognostic GHG chemistry mechanism for CAM7
+
+
+    Brian Eaton 2023-03-16 - cam6_3_099 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_099
+
+    Fix drydep emissions for cam_dev physics.
+
+    Changes answers for configurations using 'cam_dev' version of physics.  Otherwise BFB.
+
+
+    Brian Eaton 2023-03-15 - cam6_3_098 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_098
+
+    always pass NDEP from CAM and remove sst specs
+
+
+    Cheryl Craig 2023-03-15 - cam6_3_097 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_097
+
+    For Francis Vitt
+
+    Updates to heterogenous freezing code (answer changing mods)
+
+
+    Francis Vitt 2023-03-08 - cam6_3_096 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_096
+
+    Aqueous chemistry bug fix
+
+
+    Francis Vitt 2023-02-15 - cam6_3_095 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_095
+
+    Chemistry updates
+
+
+    Cheryl Craig 2023-02-09 - cam6_3_094 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_094
+
+    modify CLUBB to operate on dry density / mixing ratios
+
+    Answer changing for all CAM6 and dev runs (which use CLUBB)
+
+
+    Francis Vitt 2023-02-07 - cam6_3_093 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_093
+
+    Update SOA scheme in simplified chemistry configurations
+    DMS emissions in complex chemistry configurations are changed
+
+
+    Francis Vitt 2023-01-25 - cam6_3_092 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_092
+
+    Add capability for zonal mean nudging
+
+
+    Francis Vitt 2023-01-12 - cam6_3_090 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_090
+
+    Functional support for FHIST on SE refined grids
+
+
+    Francis Vitt 2023-01-10 - cam6_3_089 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_089
+
+    Introduce zonal mean and Transformed Eulerian Mean diagnostics capabilities on arbitrary grids
+
+
+    Cheryl Craig 2022-12-21 - cam6_3_088 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_088
+
+    Update externals to match (almost) cesm2_3_alpha11a
+
+    Add missing ./xmlchange ROF_NCPL and GLC_NCPL to various tests
+
+
+    Cheryl Craig 2022-12-21 - cam6_3_087 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_087
+
+    For Francis Vitt:
+
+    Add MAM5 chemistry and change coarse mode size parameters for MAM4 used by cam_dev physics
+
+
+    Cheryl Craig 2023-04-05 - cam6_3_103 - components/cam (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CAM/tags/ cam6_3_102
+
+    Update to cesm2_3_alpha12d externals (almost)
+
+    Answer changing for CAM checkouts, but not for CESM ones
+
+
+cpl7
+    Chris Fischer 2023-04-14 - cpl7.0.15 - components/cpl7 (cesm2_3_alpha12f)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl7.0.15
+
+    Updates to MEGAN namelist parser
+
+==============================================================
 Tag name: cesm2_3_alpha012e
 Originator(s): CSEG
 Date: 13 April 2023 
