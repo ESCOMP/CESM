@@ -131,12 +131,12 @@ class TestGitRepositoryGitCommands(GitTestCase):
         shutil.rmtree(self._tmpdir, ignore_errors=True)
 
     @staticmethod
-    def make_git_repo():
+    def make_cwd_git_repo():
         """Turn the current directory into an empty git repository"""
         execute_subprocess(['git', 'init'])
 
     @staticmethod
-    def add_git_commit():
+    def add_cwd_git_commit():
         """Add a git commit in the current directory"""
         with open('README', 'a') as myfile:
             myfile.write('more info')
@@ -144,17 +144,17 @@ class TestGitRepositoryGitCommands(GitTestCase):
         execute_subprocess(['git', 'commit', '-m', 'my commit message'])
 
     @staticmethod
-    def checkout_git_branch(branchname):
+    def checkout_cwd_git_branch(branchname):
         """Checkout a new branch in the current directory"""
         execute_subprocess(['git', 'checkout', '-b', branchname])
 
     @staticmethod
-    def make_git_tag(tagname):
+    def make_cwd_git_tag(tagname):
         """Make a lightweight tag at the current commit"""
         execute_subprocess(['git', 'tag', '-m', 'making a tag', tagname])
 
     @staticmethod
-    def checkout_ref(refname):
+    def checkout_cwd_ref(refname):
         """Checkout the given refname in the current directory"""
         execute_subprocess(['git', 'checkout', refname])
 
@@ -164,72 +164,72 @@ class TestGitRepositoryGitCommands(GitTestCase):
 
     def test_currentHash_returnsHash(self):
         """Ensure that the _git_current_hash function returns a hash"""
-        self.make_git_repo()
-        self.add_git_commit()
-        hash_found, myhash = self._repo._git_current_hash()
+        self.make_cwd_git_repo()
+        self.add_cwd_git_commit()
+        hash_found, myhash = self._repo._git_current_hash(os.getcwd())
         self.assertTrue(hash_found)
         self.assertIsHash(myhash)
 
     def test_currentHash_outsideGitRepo(self):
         """Ensure that the _git_current_hash function returns False when
         outside a git repository"""
-        hash_found, myhash = self._repo._git_current_hash()
+        hash_found, myhash = self._repo._git_current_hash(os.getcwd())
         self.assertFalse(hash_found)
         self.assertEqual('', myhash)
 
     def test_currentBranch_onBranch(self):
         """Ensure that the _git_current_branch function returns the name
         of the branch"""
-        self.make_git_repo()
-        self.add_git_commit()
-        self.checkout_git_branch('foo')
-        branch_found, mybranch = self._repo._git_current_branch()
+        self.make_cwd_git_repo()
+        self.add_cwd_git_commit()
+        self.checkout_cwd_git_branch('foo')
+        branch_found, mybranch = self._repo._git_current_branch(os.getcwd())
         self.assertTrue(branch_found)
         self.assertEqual('foo', mybranch)
 
     def test_currentBranch_notOnBranch(self):
         """Ensure that the _git_current_branch function returns False
         when not on a branch"""
-        self.make_git_repo()
-        self.add_git_commit()
-        self.make_git_tag('mytag')
-        self.checkout_ref('mytag')
-        branch_found, mybranch = self._repo._git_current_branch()
+        self.make_cwd_git_repo()
+        self.add_cwd_git_commit()
+        self.make_cwd_git_tag('mytag')
+        self.checkout_cwd_ref('mytag')
+        branch_found, mybranch = self._repo._git_current_branch(os.getcwd())
         self.assertFalse(branch_found)
         self.assertEqual('', mybranch)
 
     def test_currentBranch_outsideGitRepo(self):
         """Ensure that the _git_current_branch function returns False
         when outside a git repository"""
-        branch_found, mybranch = self._repo._git_current_branch()
+        branch_found, mybranch = self._repo._git_current_branch(os.getcwd())
         self.assertFalse(branch_found)
         self.assertEqual('', mybranch)
 
     def test_currentTag_onTag(self):
         """Ensure that the _git_current_tag function returns the name of
         the tag"""
-        self.make_git_repo()
-        self.add_git_commit()
-        self.make_git_tag('some_tag')
-        tag_found, mytag = self._repo._git_current_tag()
+        self.make_cwd_git_repo()
+        self.add_cwd_git_commit()
+        self.make_cwd_git_tag('some_tag')
+        tag_found, mytag = self._repo._git_current_tag(os.getcwd())            
         self.assertTrue(tag_found)
         self.assertEqual('some_tag', mytag)
 
     def test_currentTag_notOnTag(self):
         """Ensure tha the _git_current_tag function returns False when
         not on a tag"""
-        self.make_git_repo()
-        self.add_git_commit()
-        self.make_git_tag('some_tag')
-        self.add_git_commit()
-        tag_found, mytag = self._repo._git_current_tag()
+        self.make_cwd_git_repo()
+        self.add_cwd_git_commit()
+        self.make_cwd_git_tag('some_tag')
+        self.add_cwd_git_commit()
+        tag_found, mytag = self._repo._git_current_tag(os.getcwd())
         self.assertFalse(tag_found)
         self.assertEqual('', mytag)
 
     def test_currentTag_outsideGitRepo(self):
         """Ensure that the _git_current_tag function returns False when
         outside a git repository"""
-        tag_found, mytag = self._repo._git_current_tag()
+        tag_found, mytag = self._repo._git_current_tag(os.getcwd())
         self.assertFalse(tag_found)
         self.assertEqual('', mytag)
 

@@ -30,12 +30,12 @@ class ExternalStatus(object):
 
     """
     # sync_state and clean_state can be one of the following:
-    DEFAULT = '-'  # aka not set yet.
+    DEFAULT = '-'  # not set yet (sync_state).  clean_state can be this if sync_state is EMPTY.
     UNKNOWN = '?'
     EMPTY = 'e'
     MODEL_MODIFIED = 's'  # repo version != externals (sync_state only)
     DIRTY = 'M'       # repo is dirty (clean_state only)
-    STATUS_OK = ' '   # repo is clean/matches externals.
+    STATUS_OK = ' '   # repo is clean (clean_state) or matches externals version (sync_state)
     STATUS_ERROR = '!'
 
     # source_type can be one of the following:

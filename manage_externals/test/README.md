@@ -1,21 +1,5 @@
 # Testing for checkout_externals
 
-NOTE: Python2 is the supported runtime environment. Python3 compatibility is
-in progress, complicated by the different proposed input methods
-(yaml, xml, cfg/ini, json) and their different handling of strings
-(unicode vs byte) in python2. Full python3 compatibility will be
-possible once the number of possible input formats has been narrowed.
-
-## Setup development environment
-
-Development environments should be setup for python2 and python3:
-
-```SH
-    cd checkout_externals/test
-    make python=python2 env
-    make python=python3 env
-```
-
 ## Unit tests
 
 ```SH
@@ -28,6 +12,12 @@ Development environments should be setup for python2 and python3:
 ```SH
     cd checkout_externals/test
     make stest
+```
+
+Example to run a single test:
+```SH
+    cd checkout_externals
+    python -m unittest test.test_sys_checkout.TestSysCheckout.test_container_simple_required
 ```
 
 ## Static analysis
