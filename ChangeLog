@@ -1,4 +1,84 @@
 ==============================================================
+Tag name: cesm2_3_alpha012g
+Originator(s): CSEG
+Date: 1 May 2023 
+One-line Summary: Tag for coupled run.
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_109                            **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_7           --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.105                      --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.16               -- 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.61 --
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl7.0.15           --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.24                   **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.9                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev122                   **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230121              --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230121                   --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230209           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                  --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.5         --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_10                   --
+
+
+cam
+    Cheryl Craig 2023-04-26 - cam6_3_109 - components/cam (cesm2_3_alpha12g)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_109
+
+    For John Truesdale
+
+    Energy fixer and mass budget reporting
+
+
+    Cheryl Craig 2023-04-19 - cam6_3_108 - components/cam (cesm2_3_alpha12g)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_108
+
+    For Francis Vitt
+
+    Ocean emissions fix and lightning flash freq passed to land model
+
+    Needs  cmeps0.14.24
+
+
+    Brian Eaton 2023-04-18 - cam6_3_107 - components/cam (cesm2_3_alpha12g)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_107
+
+    Reimplement zonal_mean_mod::Invert_Matrix using LAPACK DGESV.
+
+    Answer changes for runs with nudging and Nudge_ZonalFilter set to true.
+    Other configurations are BFB, but the diagnostic zonal mean fields only agree to a couple of significant figures due to fixing a bug in a matrix inversion routine.
+
+
+cesm
+    Chris Fischer 2023-04-28 - cesm2_3_alpha12g - (cesm2_3_alpha12g)
+    https://github.com/ESCOMP/cesm/tags/cesm2_3_alpha12g
+
+    Update manage externals.
+
+
+clm
+    William Sacks 2023-04-26 - ctsm5.1.dev122 - components/clm (cesm2_3_alpha12g)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev122
+
+    Rework handling of evaporation constraint in SoilFluxes
+
+    Roundoff-level answer changes appear occasionally
+
+
+cmeps
+    Chris Fischer 2023-04-28 - cmeps0.14.24 - src/drivers/nuopc/ (cesm2_3_alpha12g)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.24
+
+    cmeps0.14.24: Cloud-to-ground lightning flash frequency coupling
+    cmeps0.14.23: Fix issue with xgrid reproducibility
+    cmeps0.14.22: A fix for #346 so that LND2ROF_FMAPNAME will be used
+
+==============================================================
 Tag name: cesm2_3_alpha012f
 Originator(s): CSEG
 Date: 28 April 2023 
