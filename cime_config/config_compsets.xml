@@ -44,12 +44,12 @@
   </compset>
 
   <compset>
-    <alias>BLT1850_v0b</alias>
+    <alias>BLT1850_v0c</alias>
     <lname>1850_CAM%DEV%LT%GHGMAM4_CLM51%BGC-CROP_CICE_MOM6_MOSART_CISM2%GRIS-NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
-    <alias>BMT1850_v0b</alias>
+    <alias>BMT1850_v0c</alias>
     <lname>1850_CAM%DEV%MT%GHGMAM4_CLM51%BGC-CROP_CICE_MOM6_MOSART_CISM2%GRIS-NOEVOLVE_WW3</lname>
   </compset>
 
