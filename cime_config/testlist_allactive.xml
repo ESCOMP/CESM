@@ -24,6 +24,14 @@
       <option name="wallclock"> 00:30:00 </option>
     </options>
   </test>
+  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="BLT1850_v0c" testmods="allactive/defaultio">
+    <machines>
+      <machine name="cheyenne" compiler="gnu" category="prealpha"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+    </options>
+  </test>
   <test name="SMS_Ld2" grid="f09_g17" compset="BHIST" testmods="allactive/defaultio">
     <machines>
       <machine name="cheyenne" compiler="gnu" category="aux_cime_baselines"/>
