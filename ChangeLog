@@ -1,4 +1,104 @@
 ==============================================================
+Tag name: cesm2_3_alpha013b
+Originator(s): CSEG
+Date: 18 May 2023 
+One-line Summary: Support for BLT1850_v0c compset
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_111                            **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204            --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_8           --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.121                      **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.17               -- 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.71 **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.5           --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.30                   **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.14                    **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_95             --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev123                   --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230121              --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230504                   --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                  --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230209           --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                        --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                  --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.6         **
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_10                   --
+
+cam
+    Cheryl Craig 2023-05-08 - cam6_3_111 - components/cam (cesm2_3_alpha13b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_???
+
+    Add 1850_cam_lt.xml and 1850_cam_mt.xml use_cases
+
+
+    Cheryl Craig 2023-05-08 - cam6_3_110 - components/cam (cesm2_3_alpha13b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_110
+
+    For Brian Eaton-
+
+    Misc changes for CAM
+
+    Includes adding GHGMAM4 to FMTHIST compset
+
+
+ccs_config
+    James Edwards 2023-05-18 - ccs_config_cesm0.0.71 - ccs_config (cesm2_3_alpha13b)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.71
+
+    Updates for gust
+
+
+cdeps
+    James Edwards 2023-05-18 - cdeps1.0.14 - components/cdeps (cesm2_3_alpha13b)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.14
+
+    Allow adding a day to streams' file name date specifier.
+    Include PRISM precipitation datm streams.
+    Modify stream_definition_datm.xml to generate a streams file (datm.streams.xml) with the new coupler history file format.
+    Black reformat python files.
+
+
+cesm
+    Chris Fischer 2023-05-19 - cesm2_3_alpha13b - (cesm2_3_alpha13b)
+    https://github.com/ESCOMP/cesm/tags/cesm2_3_alpha13b
+
+    Add BLT1850_v0c compset and test.
+
+
+cime
+    James Edwards 2023-05-18 - cime6.0.121 - cime (cesm2_3_alpha13b)
+    https://github.com/ESMCI/cime/tags/cime6.0.121
+
+    Bug fix for BATCH_COMMAND_FLAGS
+    Fix for cce/15.0.1 compiler
+    SRCROOT should match the original case if possible. This bug was causing multi-build tests, like PEM, to not respect a custom --srcroot argument t
+    o create_test.
+    Use compiler info when looking for test status files.
+    Reduce newlines in append to user_nl_* files.
+    Fix caching test files in container.
+    Rename xml-driver to driver in create_test 
+    Update docs and add error message to scripts_regression_tests.py if cprnc is missing.
+
+
+cmeps
+    James Edwards 2023-05-18 - cmeps0.14.30 - src/drivers/nuopc/ (cesm2_3_alpha13b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.30
+
+    remove unneeded xml variables 
+    add check for nans in mediator fields
+    Fix issues with aux_cpl file writes
+    Update minimum ESMF version requirement
+
+
+ww3dev
+    James Edwards 2023-05-18 - main_0.0.6 - components/ww3dev (cesm2_3_alpha13b)
+    https://github.com/ESCOMP/WW3_interface/tags/main_0.0.6
+
+    Fix build interface
+
+
+==============================================================
 Tag name: cesm2_3_alpha013a
 Originator(s): CSEG
 Date: 9 May 2023 
