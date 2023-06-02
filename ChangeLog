@@ -49,7 +49,26 @@ cime
 
     Improve modelio namelist file generation performance.
 
+===============================================================
+Tag name: cesm2.1.4-rc.12
+Originator(s): CSEG
+Date: 20 April 2023 
+One-line Summary: Machine updates.
 
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_1_rel_55
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_cesm2_1_1_20190321
+cime                               https://github.com/ESMCI/cime/tree/cime5.6.42
+components/cism                    https://github.com/ESCOMP/cism-wrapper/tree/cism-release-cesm2.1.2_02
+components/clm                     https://github.com/ESCOMP/ctsm/tree/release-clm5.0.35
+components/mosart                  https://github.com/ESCOMP/mosart/tree/release-cesm2.0.04
+components/pop                     https://github.com/ESCOMP/POP2-CESM/tree/pop2_cesm2_1_rel_n14
+components/rtm                     https://github.com/ESCOMP/rtm/tree/release-cesm2.0.04
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_cesm2_1_rel_01
+
+cime
     Chris Fischer 2023-05-08 - cime5.6.42 - cime (cesm2.1.4-rc.12)
     https://github.com/ESMCI/cime/tags/cime5.6.42
 
@@ -68,6 +87,7 @@ cime
 
         - Update cori modules.
         - Adding arc4 machine and SGE batch scheduler.
+
 
 
 ===============================================================
