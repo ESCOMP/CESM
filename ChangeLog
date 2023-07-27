@@ -1,4 +1,67 @@
 ==============================================================
+Tag name: cesm2_3_alpha016b
+Originator(s): CSEG
+Date: 27 July 2023
+One-line Summary: CAM update needed for runs
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_119                              **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_9             --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.141                        --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.17                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.73   --
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.5             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.35                     --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.14                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_96               --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev130                     --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230601                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n01_v2.1.0     **
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230601                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230511             --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  **
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.10          --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_10                     --
+
+cam
+    Cheryl Craig 2023-07-25 - cam6_3_119 - components/cam (cesm2_3_alpha16b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_119
+
+    For Francis Vitt
+
+    CAM-Chem updates
+
+    Answer changing for CAM6 and cam_dev
+
+
+    Cheryl Craig 2023-07-25 - cam6_3_118 - components/cam (cesm2_3_alpha16b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_118
+
+    For Francis Vitt
+
+    Introduce HEMCO in CESM
+
+
+mizuRoute
+    Erik Kluzek 2023-07-21 - cesm-coupling.n01_v2.1.0 - components/mizuroute (cesm2_3_alpha16b)
+    https://github.com/ESCOMP/mizuRoute/tags/cesm-coupling.n01_v2.1.0
+
+    First tag of mizuRoute in CESM
+
+
+SLIM
+    Erik Kluzek 2023-07-20 - slim0.4.002_cesm2_3_beta15 - components/slim (cesm2_3_alpha16b)
+    https://github.com/ESCOMP/SimpleLand/tags/slim0.4.002_cesm2_3_beta15
+
+    First tag of SLIM in CESM!
+    Only MCT cap is working now.
+    More work is coming.
+
+==============================================================
 Tag name: cesm2_3_alpha016a
 Originator(s): CSEG
 Date: 25 July 2023 
