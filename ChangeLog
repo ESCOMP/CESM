@@ -1,4 +1,114 @@
 ==============================================================
+Tag name: cesm2_3_alpha016c
+Originator(s): CSEG
+Date: 23 August 2023
+One-line Summary: CAM and CLM updates
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_123                              **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_10            **
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.152                        **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.17                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.76   **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.5             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.39                     **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.14                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_96               --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev133                     **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230601                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n01_v2.1.0     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230601                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230511             --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.10          --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_5_10                     --
+
+cam
+    Cheryl Craig 2023-08-16 - cam6_3_123 - components/cam (cesm2_3_alpha16c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_123
+
+    Fix derecho bugs
+
+
+    Francis Vitt 2023-08-11 - cam6_3_122 - components/cam (cesm2_3_alpha16c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_122
+
+    Aerosol optics updates
+
+
+    Francis Vitt 2023-08-08 - cam6_3_121 - components/cam (cesm2_3_alpha16c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_121
+
+    Update SOAE emissions factors
+
+
+    Francis Vitt 2023-07-28 - cam6_3_120 - components/cam (cesm2_3_alpha16c)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_120
+
+    Add O3S diagnostic tracer to WACCM-MA; move gravity wave parameter to namelist
+
+
+ccs_config
+    Chris Fischer 2023-08-16 - ccs_config_cesm0.0.76 - ccs_config (cesm2_3_alpha16c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.76
+
+    ccs_config_cesm0.0.76: Add flexible controls of GPU configuration and remove old GPU configuration
+    ccs_config_cesm0.0.75: Update BASELINE_ROOT for derecho
+    ccs_config_cesm0.0.74: Update ESMF library on cheyenne and izumi to the 8.5.0 release.
+
+
+cice6
+    David Bailey 2023-08-08 - cesm_cice6_4_1_10 - components/cice6 (cesm2_3_alpha16c)
+    https://github.com/ESCOMP/CESM_CICE/tags/cice6_4_1_10
+
+    This changes the default time axis for history files. Should only be answer changing for active CICE cases that write history files.
+
+
+cime
+    Chris Fischer 2023-08-16 - cime6.0.152 - cime (cesm2_3_alpha16c)
+    https://github.com/ESMCI/cime/tags/cime6.0.152
+
+    cime6.0.152: Removes DAE.ww3a.ADWAV from cime_developers
+    cime6.0.151: Add flexible controls of GPU configuration
+    cime6.0.150: Update create-a-case.rst with how to use SourceMods
+
+
+clm
+    Erik Kluzek 2023-08-09 - ctsm5.1.dev133 - components/clm (cesm2_3_alpha16c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev133
+
+    Update of FATES and refactoring in FATES.
+    Changes answer only for FATES.
+
+
+    Erik Kluzek 2023-08-04 - ctsm5.1.dev132 - components/clm (cesm2_3_alpha16c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev132
+
+    Add capability of using excess ice streams or restart files with excess ice.
+    Excess ice is paleo ice remains.
+
+
+    Erik Kluzek 2023-07-27 - ctsm5.1.dev131 - components/clm (cesm2_3_alpha16c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev131
+
+    Adding in prescribed crop calendars.
+
+
+cmeps
+    Chris Fischer 2023-08-16 - cmeps0.14.39 - src/drivers/nuopc/ (cesm2_3_alpha16c)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.38
+
+    cmeps0.14.39: Fix for nag compiler
+    cmeps0.14.38: Implement ocean albedos for UF
+    cmeps0.14.37: Add new XML variables for flexible controls of GPU configuration
+    cmeps0.14.36: Fix the x case.
+
+
+==============================================================
 Tag name: cesm2_3_alpha016b
 Originator(s): CSEG
 Date: 27 July 2023
