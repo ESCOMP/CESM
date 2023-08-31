@@ -107,6 +107,13 @@ clm
     Changes answers for FATES
 
 
+cpl7
+    Chris Fischer 2023-08-31 - cpl77.0.6 - components/cpl7 (cesm2_3_alpha16d)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl77.0.6
+
+    Add new XML variables for GPU options
+
+
 fms
     Alper Altuntas 2023-08-29 - fi_230818 - libraries/fms (cesm2_3_alpha16d)
     https://github.com/ESCOMP/FMS_interface/tags/fi_230818
@@ -151,7 +158,7 @@ components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_
 cime                    https://github.com/ESMCI/cime/tree/cime6.0.152                        **
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.17                 --
 ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.76   **
-components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.5             --
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.6             **
 components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.39                     **
 components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.14                      --
 components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_96               --
