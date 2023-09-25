@@ -772,7 +772,7 @@
 	  <ntasks_ice>-4</ntasks_ice>
 	  <ntasks_ocn>-1</ntasks_ocn>
 	  <ntasks_glc>-8</ntasks_glc>
-	  <ntasks_wav>-8</ntasks_wav>
+	  <ntasks_wav>-2</ntasks_wav>
 	  <ntasks_cpl>-8</ntasks_cpl>
 	</ntasks>
 	<nthrds>
