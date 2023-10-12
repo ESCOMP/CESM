@@ -81,7 +81,7 @@ def disp_usage(callType):
 def process_args_dict(caller, caller_argv):
 
     # Pull in and analyze the command line arguements
-    s = "case= mach= project= compiler= compset= res= uf nb ns ensemble= verbose silent test multi-driver pecount= nist= mpilib= pesfile= gridfile= srcroot= output-root= script-root= queue= user-modes-dir= input-dir= pertlim= walltime= h ect="
+    s = "case= mach= project= compiler= compset= res= uf nb ns ensemble= verbose silent test multi-driver pecount= nist= mpilib= pesfile= gridfile= srcroot= output-root= script-root= queue= user-modes-dir= input-dir= pertlim= walltime= h ect= ngpus-per-node= gpu-type= gpu-offload="
 
     optkeys = s.split()
 
@@ -117,6 +117,9 @@ def process_args_dict(caller, caller_argv):
     opts_dict["mach"] = "NONE"
     opts_dict["compset"] = "NONE"
     opts_dict["res"] = "NONE"
+    opts_dict["ngpus-per-node"] = 0
+    opts_dict["gpu-type"] = "NONE"
+    opts_dict["gpu-offload"] = "NONE"
 
     s_case_flags = ""
 
@@ -203,6 +206,15 @@ def process_args_dict(caller, caller_argv):
             s_case_flags += " " + opt + " " + arg
         elif opt == "--walltime":
             opts_dict["walltime"] = arg
+        elif opt == "--ngpus-per-node":
+            opts_dict["ngpus-per-node"] = arg
+            s_case_flags += " " + opt + " " + arg
+        elif opt == "--gpu-type":
+            opts_dict["gpu-type"] = arg
+            s_case_flags += " " + opt + " " + arg
+        elif opt == "--gpu-offload":
+            opts_dict["gpu-offload"] = arg
+            s_case_flags += " " + opt + " " + arg
             # add below
 
     # check required things: case, machine
@@ -312,6 +324,10 @@ def single_case(opts_dict, case_flags, stat_dir):
             ret = os.system(command)
             command = "./xmlchange --file env_run.xml --id STOP_N --val 12"
             ret = os.system(command)
+
+    print("STATUS: updating ROF_NCPL...")
+    command = "./xmlchange ROF_NCPL=48"
+    ret = os.system(command)
 
     print("STATUS: running setup for single case...")
     command = "./case.setup"
