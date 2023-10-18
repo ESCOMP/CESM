@@ -63,6 +63,9 @@ def disp_usage(callType):
             "  --ns               Disables auto submitting any members of the ensemble"
         )
         print(
+            "  --es               Start ensemble creation at this number (default is 0)"
+        )
+        print(
             "  --ensemble <size>  Build the ensemble (instead of building case(s) with random pertlim values for verification),"
         )
         print(
@@ -81,7 +84,7 @@ def disp_usage(callType):
 def process_args_dict(caller, caller_argv):
 
     # Pull in and analyze the command line arguements
-    s = "case= mach= project= compiler= compset= res= uf nb ns ensemble= verbose silent test multi-driver pecount= nist= mpilib= pesfile= gridfile= srcroot= output-root= script-root= queue= user-modes-dir= input-dir= pertlim= walltime= h ect= ngpus-per-node= gpu-type= gpu-offload="
+    s = "case= mach= project= compiler= compset= res= uf nb ns ensemble= verbose silent test multi-driver pecount= nist= mpilib= pesfile= gridfile= srcroot= output-root= script-root= queue= user-modes-dir= input-dir= pertlim= walltime= h es= ect= ngpus-per-node= gpu-type= gpu-offload="
 
     optkeys = s.split()
 
@@ -108,6 +111,7 @@ def process_args_dict(caller, caller_argv):
     opts_dict["uf"] = False
     opts_dict["ensemble"] = 0
     opts_dict["ect"] = "cam"
+    opts_dict["es"] = 0
     # for create newcase
     opts_dict["verbose"] = False
     opts_dict["silent"] = False
@@ -140,6 +144,8 @@ def process_args_dict(caller, caller_argv):
         elif opt == "--res":
             opts_dict["res"] = arg
             # required - add to flags later
+        elif opt == "--es":
+            opts_dict["es"] = int(arg)
         elif opt == "--ect":
             opts_dict["ect"] = arg
         elif opt == "--ensemble":
