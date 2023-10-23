@@ -1,4 +1,312 @@
 ==============================================================
+Tag name: cesm2_3_alpha016f
+Originator(s): CSEG
+Date: 23 October 2023
+One-line Summary: CAM answer changes. 
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_125                              --
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_10            --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.156                        --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.17                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.78   **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.5             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.39                     --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.21                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_96               --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev142                     **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n01_v2.1.0     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230829                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230511             --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.11          **
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cam
+    Cheryl Craig 2023-10-10 - cam6_3_130 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_130
+
+    For John Truesdale
+
+    WACCM-X bug fix
+    answer changing for WACCM-X
+
+
+    Cheryl Craig 2023-10-10 - cam6_3_130 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_130
+
+    For John Truesdale
+
+    WACCM-X bug fix
+    answer changing for WACCM-X
+
+
+    Cheryl Craig 2023-10-03 - cam6_3_129 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_129
+
+    Update HEMCO external to fix line too long for NVHPC compiler on derecho
+
+    Update externals to match cesm2_3_alpha16d (answer changing for CAM checkouts)
+
+    Bring in test_driver.sh which enables testing on derecho
+
+
+    Francis Vitt 2023-09-13 - cam6_3_128 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_128
+
+    Enable use of CARMA aerosol packages with unstructured grids
+
+
+    Chris Fischer 2023-09-26 - cam6_3_127 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_127
+
+    Option to turn on HB where CLUBB is not active
+
+    Expected diff for cam_dev and cam6 run using do_hb_above_clubb=.true.
+
+
+    Dylan Dickerson 2023-09-08 - cam6_3_126 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_126
+
+    Add MPAS-A 60 and 30km ncdata and related changes
+
+
+ccs_config
+    Chris Fischer 2023-10-18 - ccs_config_cesm0.0.82 - ccs_config (cesm2_3_alpha16f)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.82
+
+    ccs_config_cesm0.0.82: MOM6 t232 grid mapping updates
+    ccs_config_cesm0.0.81: update pio module on derecho
+
+
+    James Edwards 2023-10-13 - ccs_config_cesm0.0.80 - ccs_config (cesm2_3_alpha16f)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ ccs_config_cesm0.0.80
+
+    Requires cmeps and cpl7 updates as well.
+
+
+cdeps
+    Chris Fischer 2023-10-18 - cdeps1.0.24 - components/cdeps (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.23
+
+    cdeps1.0.24: Add namelist lookup to each namelist read call
+    cdeps1.0.23: Add save attribute to first_time variable 
+    cdeps1.0.22: Simple DATM forcing mode
+
+
+cime
+    Chris Fischer 2023-10-18 - cime6.0.175 - cime (cesm2_3_alpha16f)
+    https://github.com/ESMCI/cime/tags/cime6.0.175
+
+    cime6.0.175: Remove deprecated 'distutils' package from ParamGen.
+    cime6.0.174: Updates performance baselines
+    cime6.0.173: Remove always pull option from testing workflow.
+    cime6.0.172: Adds dispatching to testing workflow
+    cime6.0.171: Fixes workflow permissions
+    cime6.0.170: Add a clarification to README
+    cime6.0.169: Update instructions for building cprnc with cmake
+    cime6.0.168: Fixes conditional push and adds dispatching
+    cime6.0.167: Updates libnetcdf to 4.9.1.
+    cime6.0.166: - Adds lapack and blas packages
+                 - Adds separate workflow for containers
+                 - Changes publishing to ghcr.io from hub.docker
+    cime6.0.165: Fixes ww3 archiving
+    cime6.0.164: Fixes workflow job dependencies
+    cime6.0.163: Copy only necessary cmake macros to case
+    cime6.0.162: PFS tests should always save timing
+    cime6.0.161: Removes .* between hist_file_extension and suffix in get_all_hist_files.
+    cime6.0.160: Add new 'perf' test property
+    cime6.0.159: Moves check_input_data to SystemTestsCommon when running a test
+    cime6.0.158: env_batch: Fix flag/val separator
+    cime6.0.157: Fix typo retart/restart
+
+
+cmeps
+    James Edwards 2023-10-13 - cmeps0.14.43 - src/drivers/nuopc/ (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.43
+
+    Needed for ccs_config_cesm0.0.80
+    cmeps0.14.43: support for job_priority on derecho
+    cmeps0.14.42: fix hang on abort issue
+    cmeps0.14.41: add surface flux rollover
+    cmeps0.14.40: UFS-specific modifications
+
+
+cpl7
+    James Edwards 2023-10-13 - cpl77.0.7 - components/cpl7 (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/ cpl77.0.7
+
+    Needed for ccs_config_cesm0.0.80
+
+
+mom
+    Alper Altuntas 2023-10-18 - mi_231018 - components/mom (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_231018
+
+    add diagnostics sections for tx2_3v1
+    add derecho tests in aux_mom and pr_mom suites
+    bump up core MOM6 tag
+
+
+==============================================================
+Tag name: cesm2_3_alpha016e
+Originator(s): CSEG
+Date: 2 October 2023
+One-line Summary: CLM answer changes
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_125                              --
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_10            --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.156                        --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.17                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.78   **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.5             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.39                     --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.21                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_96               --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev142                     **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n01_v2.1.0     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_230829                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230511             --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.11          **
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cam
+    Cheryl Craig 2023-10-10 - cam6_3_130 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_130
+
+    For John Truesdale
+
+    WACCM-X bug fix
+    answer changing for WACCM-X
+
+
+    Cheryl Craig 2023-10-10 - cam6_3_130 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_130
+
+    For John Truesdale
+
+    WACCM-X bug fix
+    answer changing for WACCM-X
+
+
+    Cheryl Craig 2023-10-03 - cam6_3_129 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_129
+
+    Update HEMCO external to fix line too long for NVHPC compiler on derecho
+
+    Update externals to match cesm2_3_alpha16d (answer changing for CAM checkouts)
+
+    Bring in test_driver.sh which enables testing on derecho
+
+
+    Francis Vitt 2023-09-13 - cam6_3_128 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_128
+
+    Enable use of CARMA aerosol packages with unstructured grids
+
+
+    Chris Fischer 2023-09-26 - cam6_3_127 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_127
+
+    Option to turn on HB where CLUBB is not active
+
+    Expected diff for cam_dev and cam6 run using do_hb_above_clubb=.true.
+
+
+    Dylan Dickerson 2023-09-08 - cam6_3_126 - components/cam (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_126
+
+    Add MPAS-A 60 and 30km ncdata and related changes
+
+
+ccs_config
+    Chris Fischer 2023-10-18 - ccs_config_cesm0.0.82 - ccs_config (cesm2_3_alpha16f)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.82
+
+    ccs_config_cesm0.0.82: MOM6 t232 grid mapping updates
+    ccs_config_cesm0.0.81: update pio module on derecho
+
+
+    James Edwards 2023-10-13 - ccs_config_cesm0.0.80 - ccs_config (cesm2_3_alpha16f)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ ccs_config_cesm0.0.80
+
+    Requires cmeps and cpl7 updates as well.
+
+
+cdeps
+    Chris Fischer 2023-10-18 - cdeps1.0.24 - components/cdeps (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.23
+
+    cdeps1.0.24: Add namelist lookup to each namelist read call
+    cdeps1.0.23: Add save attribute to first_time variable 
+    cdeps1.0.22: Simple DATM forcing mode
+
+
+cime
+    Chris Fischer 2023-10-18 - cime6.0.175 - cime (cesm2_3_alpha16f)
+    https://github.com/ESMCI/cime/tags/cime6.0.175
+
+    Update to latest cime
+    cime6.0.175:
+    cime6.0.174:
+    cime6.0.173:
+    cime6.0.172:
+    cime6.0.171:
+    cime6.0.170:
+    cime6.0.169:
+    cime6.0.168:
+    cime6.0.167:
+    cime6.0.166:
+    cime6.0.165:
+    cime6.0.164:
+    cime6.0.163:
+    cime6.0.162:
+    cime6.0.161:
+    cime6.0.160:
+    cime6.0.159:
+    cime6.0.158:
+    cime6.0.157:
+
+
+cmeps
+    James Edwards 2023-10-13 - cmeps0.14.43 - src/drivers/nuopc/ (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.43
+
+    Needed for ccs_config_cesm0.0.80
+    cmeps0.14.43: support for job_priority on derecho
+    cmeps0.14.42: fix hang on abort issue
+    cmeps0.14.41: add surface flux rollover
+    cmeps0.14.40: UFS-specific modifications
+
+
+cpl7
+    James Edwards 2023-10-13 - cpl77.0.7 - components/cpl7 (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/ cpl77.0.7
+
+    Needed for ccs_config_cesm0.0.80
+
+
+mom
+    Alper Altuntas 2023-10-18 - mi_231018 - components/mom (cesm2_3_alpha16f)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_231018
+
+    add diagnostics sections for tx2_3v1
+    add derecho tests in aux_mom and pr_mom suites
+    bump up core MOM6 tag
+
+==============================================================
 Tag name: cesm2_3_alpha016e
 Originator(s): CSEG
 Date: 2 October 2023
