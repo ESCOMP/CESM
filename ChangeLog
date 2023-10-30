@@ -1,31 +1,75 @@
 ==============================================================
-Tag name: cesm2_3_alpha016f
+Tag name: cesm2_3_alpha016g
 Originator(s): CSEG
-Date: 23 October 2023
-One-line Summary: CAM answer changes. 
+Date: 30 October 2023
+One-line Summary: CAM updates for run 51.
 
-components/cam          https://github.com/ESCOMP/CAM/cam6_3_125                              --
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_132                              **
 components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
 components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_10            --
-cime                    https://github.com/ESMCI/cime/tree/cime6.0.156                        --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.175                        --
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.17                 --
-ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.78   **
-components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.5             --
-components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.39                     --
-components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.21                      --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.82   --
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.7             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.43                     --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.24                      --
 components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_96               --
-components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev142                     **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev142                     --
 components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
 components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n01_v2.1.0     --
-components/mom          https://github.com/ESCOMP/MOM_interface/mi_230829                     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_231018                     --
 components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                    --
 components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230511             --
 components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                          --
 components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
 components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
-components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.11          **
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.11          --
 libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
 libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cam
+    Chris Fischer 2023-10-30 - cam6_3_132 - components/cam (cesm2_3_alpha16g)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_132
+
+    Bring in changes to match run 51
+    Answer changes for all cam_dev and SE cam6
+
+
+    Chris Fischer 2023-10-30 - cam6_3_131 - components/cam (cesm2_3_alpha16g)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_131
+
+    Update cam externals to get job_priority setting on derecho
+
+
+==============================================================
+Tag name: cesm2_3_alpha016f
+Originator(s): CSEG
+Date: 23 October 2023
+One-line Summary: CAM answer changes. 
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_130                              **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_10            --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.175                        **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.17                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.82   **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.7             **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.43                     **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.24                      **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_96               --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm.1.dev142                     --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n01_v2.1.0     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_231018                     **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230511             --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.11          --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
 
 cam
     Cheryl Craig 2023-10-10 - cam6_3_130 - components/cam (cesm2_3_alpha16f)
