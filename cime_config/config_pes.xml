@@ -401,8 +401,8 @@
         <comment>none</comment>
         <ntasks>
           <ntasks_atm>1800</ntasks_atm>
-          <ntasks_lnd>724</ntasks_lnd>
-          <ntasks_rof>724</ntasks_rof>
+          <ntasks_lnd>720</ntasks_lnd>
+          <ntasks_rof>720</ntasks_rof>
           <ntasks_ice>1080</ntasks_ice>
           <ntasks_ocn>324</ntasks_ocn>
           <ntasks_glc>36</ntasks_glc>
@@ -423,7 +423,7 @@
           <rootpe_atm>0</rootpe_atm>
           <rootpe_lnd>0</rootpe_lnd>
           <rootpe_rof>0</rootpe_rof>
-          <rootpe_ice>724</rootpe_ice>
+          <rootpe_ice>720</rootpe_ice>
           <rootpe_ocn>1800</rootpe_ocn>
           <rootpe_glc>0</rootpe_glc>
           <rootpe_wav>1</rootpe_wav>
