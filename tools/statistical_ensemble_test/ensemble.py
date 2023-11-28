@@ -20,21 +20,44 @@ def random_pick(num_pick, end):
 
 
 # get the pertlim corressponding to the random int
+# modified 10/23 to go to 2000 (previously only 1st 900 unique)
 def get_pertlim_uf(rand_num):
     i = rand_num
     if i == 0:
         ptlim = 0
-    else:
-        j = 2 * int((i - 1) / 100) + 101
-        k = (i - 1) % 100
-        if i % 2 != 0:
+    elif i > 2000:
+        print("don't support sizes > 2000")
+    elif i <= 1800:  # [1 - 1800]
+        if i <= 900:  # [1-900]
+            j = 2 * int((i - 1) / 100) + 101
+        elif i <= 1000:  # [901 - 1000]
+            j = 2 * int((i - 1) / 100) + 100
+        elif i <= 1800:  # [1001-1800]
+            j = 2 * int((i - 1001) / 100) + 102
+        k = (i - 1) % 100  # this is just last 2 digits of i-1
+        if i % 2 != 0:  # odd
             ll = j + int(k / 2) * 18
             ippt = str(ll).zfill(3)
-            ptlim = "0." + ippt + "d-13"
-        else:
+            ptlim = '0.' + ippt + 'd-13'
+        else:  # even
             ll = j + int((k - 1) / 2) * 18
             ippt = str(ll).zfill(3)
-            ptlim = "-0." + ippt + "d-13"
+            ptlim = '-0.' + ippt + 'd-13'
+    else:  # [1801 - 2000]
+        if i <= 1900:  # [1801-1900]
+            j = 1
+        else:  # [1901-2000]
+            j = 2
+        k = (i - 1) % 100
+        if i % 2 != 0:  # odd
+            ll = j + int(k / 2) * 2
+            ippt = str(ll).zfill(3)
+            ptlim = '0.' + ippt + 'd-13'
+        else:  # even
+            ll = j + int((k - 1) / 2) * 2
+            ippt = str(ll).zfill(3)
+            ptlim = '-0.' + ippt + 'd-13'
+
     return ptlim
 
 
@@ -62,10 +85,24 @@ def main(argv):
     if ens_size > 0:
         run_type = "ensemble"
         clone_count = ens_size - 1
-        if ens_size > 999:
-            print("Error: cannot have an ensemble size greater than 999.")
+        if ens_size > 2000:
+            print("Error: cannot have an ensemble size greater than 2000.")
             sys.exit()
         print("STATUS: ensemble size = " + str(ens_size))
+
+    #where to start ensemble
+    start = opts_dict["ens_start"]
+    if start < 0:
+        start = 0
+    if run_type == "ensemble":
+        if start >= ens_size:    
+            print("Error: cannot start the ensemble at a number larger than the ensemble size.")
+            sys.exit()
+        print("STATUS: ensemble start = " + str(start))
+    else:
+        #don't allow a mid start when doing verifcation runs
+        start = 0
+
 
     # generate random pertlim(s) for verify
     if run_type == "verify":
@@ -79,8 +116,6 @@ def main(argv):
             rand_ints = random_pick(3, end_range)
 
     # now create cases
-    print("STATUS: creating first case ...")
-
     # create first case - then clone
     if run_type == "verify":
         opts_dict["pertlim"] = get_pertlim_uf(rand_ints[0])
@@ -88,7 +123,12 @@ def main(argv):
         opts_dict["pertlim"] = "0"
 
     # first case
-    single_case(opts_dict, case_flags, stat_dir)
+    if start == 0:
+        print("STATUS: creating first case ...")
+        single_case(opts_dict, case_flags, stat_dir)
+        begin_i = 1
+    else :
+        begin_i = start
 
     # clone?
     if clone_count > 0:
@@ -103,17 +143,19 @@ def main(argv):
         scripts_dir = os.getcwd()
         print("STATUS: scripts dir = " + scripts_dir)
 
-        # we know case name ends in '.000' (already checked)
+        # we know case name ends in '.0000' (already checked)
         clone_case = opts_dict["case"]
-        case_pfx = clone_case[:-4]
+        case_pfx = clone_case[:-5]
 
-        for i in range(1, clone_count + 1):  # 1: clone_count
+        for i in range(begin_i, clone_count + 1):  # 1: clone_count
             if run_type == "verify":
                 this_pertlim = get_pertlim_uf(rand_ints[i])
             else:  # full ensemble
                 this_pertlim = get_pertlim_uf(i)
 
-            iens = "{0:03d}".format(i)
+
+            #allow for 4 digit numbers
+            iens = '{0:04d}'.format(i)
             new_case = case_pfx + "." + iens
 
             os.chdir(scripts_dir)

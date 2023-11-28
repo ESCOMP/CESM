@@ -31,57 +31,60 @@ def disp_usage(callType):
         )
     else:
         print(
-            '  --case <name>    Case name passed on to create_newcase (incl. full path AND must end in ".000")'
+            '  --case <name>    Case name passed on to create_newcase (incl. full path AND must end in ".0000")'
         )
     print("  --mach <name>    Machine name passed on to create_newcase")
     print(" ")
     print('Optional flags (+ all "--" options to create_newcase): ')
-    print("  --project <num>    Project number to charge in job scripts")
+    print("  --project <num>     Project number to charge in job scripts")
     print(
-        "  --ect <cam,pop>    Specify whether ensemble is for CAM-ECT or POP-ECT (default = cam)"
+        "  --ect <cam,pop>     Specify whether ensemble is for CAM-ECT or POP-ECT (default = cam)"
     )
     if callType == "single_run.py":
-        print("  --pertlim <num>    Run (CAM or POP) with specified non-zero pertlim")
+        print("  --pertlim <num>     Run (CAM or POP) with specified non-zero pertlim")
     print(
-        "  --walltime <hr:mn> Amount of walltime requested (default = 4:30 (CAM-ECT) 2:00 (POP-ECT), or 0:10 with --uf enabled)"
+        "  --walltime <hr:mn>  Amount of walltime requested (default = 4:30 (CAM-ECT) 2:00 (POP-ECT), or 0:10 with --uf enabled)"
     )
-    print("  --compiler <name>  Compiler to use (default = same as Machine default) ")
+    print("  --compiler <name>   Compiler to use (default = same as Machine default) ")
     print(
-        "  --compset <name>   Compset to use (default = F2000climo (CAM-ECT) or G (POP-ECT))"
-    )
-    print(
-        "  --res <name>       Resolution to run (default = f19_f19 (CAM-ECT) or T62_g17 (POP-ECT))"
+        "  --compset <name>    Compset to use (default = F2000climo (CAM-ECT) or G (POP-ECT))"
     )
     print(
-        "  --uf               Enable ninth time step runs (ultra-fast mode for CAM-ECT) - otherwise the default is 12-month runs"
+        "  --res <name>        Resolution to run (default = f19_f19 (CAM-ECT) or T62_g17 (POP-ECT))"
+    )
+    print(
+        "  --uf                Enable ninth time step runs (ultra-fast mode for CAM-ECT) - otherwise the default is 12-month runs"
     )
     if callType == "ensemble.py":
         print(
-            "  --nb               Disables auto building the root case of the ensemble"
+            "  --nb                Disables auto building the root case of the ensemble"
         )
         print(
-            "  --ns               Disables auto submitting any members of the ensemble"
+            "  --ns                Disables auto submitting any members of the ensemble"
         )
         print(
-            "  --ensemble <size>  Build the ensemble (instead of building case(s) with random pertlim values for verification),"
+            "  --ens_start <start> Start ensemble creation at this number (default is 0)"
         )
         print(
-            "                     and specify the number of ensemble members to generate (e.g.: 151 for CAM-ECT annual averages "
+            "  --ensemble <size>   Build the ensemble (instead of building case(s) with random pertlim values for verification),"
         )
         print(
-            "                     or 350 for ultra-fast CAM-ECT mode or 40 for POP-ECT)"
+            "                      and specify the number of ensemble members to generate (e.g.: 151 for CAM-ECT annual averages "
+        )
+        print(
+            "                      or 350 for ultra-fast CAM-ECT mode or 40 for POP-ECT)"
         )
     else:
-        print("  --nb               Disables building (and submitting) the single case")
-        print("  --ns               Disables submitting the single case")
-    print("  --help, -h         Prints out this usage message")
+        print("  --nb                Disables building (and submitting) the single case")
+        print("  --ns                Disables submitting the single case")
+    print("  --help, -h          Prints out this usage message")
 
 
 ########
 def process_args_dict(caller, caller_argv):
 
     # Pull in and analyze the command line arguements
-    s = "case= mach= project= compiler= compset= res= uf nb ns ensemble= verbose silent test multi-driver pecount= nist= mpilib= pesfile= gridfile= srcroot= output-root= script-root= queue= user-modes-dir= input-dir= pertlim= walltime= h ect= ngpus-per-node= gpu-type= gpu-offload="
+    s = "case= mach= project= compiler= compset= res= uf nb ns ensemble= verbose silent test multi-driver pecount= nist= mpilib= pesfile= gridfile= srcroot= output-root= script-root= queue= user-modes-dir= input-dir= pertlim= walltime= h ens_start= ect= ngpus-per-node= gpu-type= gpu-offload="
 
     optkeys = s.split()
 
@@ -108,6 +111,7 @@ def process_args_dict(caller, caller_argv):
     opts_dict["uf"] = False
     opts_dict["ensemble"] = 0
     opts_dict["ect"] = "cam"
+    opts_dict["ens_start"] = 0
     # for create newcase
     opts_dict["verbose"] = False
     opts_dict["silent"] = False
@@ -140,6 +144,8 @@ def process_args_dict(caller, caller_argv):
         elif opt == "--res":
             opts_dict["res"] = arg
             # required - add to flags later
+        elif opt == "--ens_start":
+            opts_dict["ens_start"] = int(arg)
         elif opt == "--ect":
             opts_dict["ect"] = arg
         elif opt == "--ensemble":
@@ -227,9 +233,9 @@ def process_args_dict(caller, caller_argv):
     else:
         case = opts_dict["case"]
         if caller == "ensemble.py":
-            if case[-4:] != ".000":
+            if case[-5:] != ".0000":
                 print(
-                    'Error: when using ensemble.py, the case name (--case) must end in ".000".'
+                    'Error: when using ensemble.py, the case name (--case) must end in ".0000".'
                 )
                 sys.exit()
         case_dir = os.path.dirname(case)
