@@ -90,15 +90,18 @@ def main(argv):
             sys.exit()
         print("STATUS: ensemble size = " + str(ens_size))
 
-    #where to start ensemble                                                                                                                                                                                                                                                                           
-    start = opts_dict["es"]
+    #where to start ensemble
+    start = opts_dict["ens_start"]
     if start < 0:
         start = 0
-    if start >= ens_size:    
-        print("Error: cannot start the ensemble at a number larger than the ensemble size.")
-        sys.exit()
-    print("STATUS: ensemble start = " + str(start))
-
+    if run_type == "ensemble":
+        if start >= ens_size:    
+            print("Error: cannot start the ensemble at a number larger than the ensemble size.")
+            sys.exit()
+        print("STATUS: ensemble start = " + str(start))
+    else:
+        #don't allow a mid start when doing verifcation runs
+        start = 0
 
 
     # generate random pertlim(s) for verify
@@ -140,9 +143,9 @@ def main(argv):
         scripts_dir = os.getcwd()
         print("STATUS: scripts dir = " + scripts_dir)
 
-        # we know case name ends in '.000' (already checked)
+        # we know case name ends in '.0000' (already checked)
         clone_case = opts_dict["case"]
-        case_pfx = clone_case[:-4]
+        case_pfx = clone_case[:-5]
 
         for i in range(begin_i, clone_count + 1):  # 1: clone_count
             if run_type == "verify":
@@ -152,10 +155,7 @@ def main(argv):
 
 
             #allow for 4 digit numbers
-            if i > 999:
-                iens = '{0:04d}'.format(i)
-            else:
-                iens = '{0:03d}'.format(i)
+            iens = '{0:04d}'.format(i)
             new_case = case_pfx + "." + iens
 
             os.chdir(scripts_dir)
