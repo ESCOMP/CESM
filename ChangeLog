@@ -1,4 +1,57 @@
 ==============================================================
+Tag name: cesm2_3_beta16
+Originator(s): CSEG
+Date: 8 December 2023 
+One-line Summary: Misc. Updates
+ 
+
+Answer Changes introduced with this tag when compared to cesm2_3_beta15:
+
+Problems identified after tag creation:
+- All T31_g37_rx1.A tests fail with floating point exception.
+- All T62_s11 nuopc tests fail because of missing mesh file.
+- All ERS_N2 tests should be ERS_C2 tests.
+
+Cheyenne Intel
+        FAIL ERP_D_Ln9_Vnuopc.C48_C48_mg17.QPC6.cheyenne_intel.cam-outfrq9s MODEL_BUILD time=3
+        FAIL SMS_D_Ld1_PS.f09_g17.I1850Clm50BgcSpinup.cheyenne_intel.clm-cplhist RUN time=45
+        FAIL ERI_D.T31_g37_rx1.A.cheyenne_intel RUN time=45
+        FAIL ERP_Ln9_Vnuopc.C96_C96_mg17.F2000climo.cheyenne_intel.cam-outfrq9s_mg3 MODEL_BUILD time=3
+        FAIL ERS_IOP.T62_s11.G.cheyenne_intel.pop-cice SUBMIT
+        FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_intel CREATE_NEWCASE
+        FAIL SMS_D_Ln9_Vnuopc.ne30pg3_ne30pg3_mg17.FWma2000climo.cheyenne_intel.cam-outfrq9s RUN time=519
+        FAIL SMS_D.T62_s11.G.cheyenne_intel.pop-cice RUN time=4
+Cheyenne gnu
+        FAIL ERI_D.T31_g37_rx1.A.cheyenne_gnu RUN time=40
+        FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_gnu CREATE_NEWCASE
+        FAIL IRT_C3_Ld7.f19_g17.BHIST.cheyenne_gnu.allactive-defaultio RUN time=307
+        FAIL SMS_D.T62_s11.G.cheyenne_gnu.pop-cice SUBMIT
+Izumi Intel
+        FAIL ERI.f19_g17_rx1.2000_DATM%NYF_SLND_CICE5_DOCN%SOM_DROF%NYF_SGLC_SWAV_TEST.izumi_intel.cice5-default RUN time=40
+        FAIL ERI_Vnuopc.f19_g17_rx1.2000_DATM%NYF_SLND_CICE_DOCN%SOM_DROF%NYF_SGLC_SWAV_TEST.izumi_intel.cice-default RUN time=41
+        FAIL ERI_D.T31_g37_rx1.A.izumi_intel RUN time=50
+        PEND ERS_D.f19_g16_rx1.G1850ECO.izumi_intel.pop-cice_ecosys RUN
+        FAIL ERS_Ld5.T62_s11.2000_DATM%NYF_SLND_CICE5_DOCN%SOM_DROF%NYF_SGLC_SWAV_TEST.izumi_intel.cice5-default SUBMIT
+        FAIL ERS_N2_Ld3.T31_g37_rx1.A.izumi_intel CREATE_NEWCASE
+        PEND ERS.T62_g16.C1850ECO.izumi_intel.pop-ecosys RUN
+        FAIL ERS.T62_g16.G.izumi_intel.pop-cice RUN time=84
+Izumi nag
+        FAIL DAE.ww3a.ADWAV.izumi_nag RUN time=26
+        PEND ERP_D_Ld5.ne30_g17.I1850Clm50BgcCrop.izumi_nag.clm-default RUN
+        FAIL ERS_Ld5.f19_g17.2000_CAM60_CLM50%SP_CICE5_DOCN%SOM_MOSART_SGLC_SWAV_TEST.izumi_nag.cice5-default SHAREDLIB_BUILD time=73
+        FAIL ERS_Ld5_Vnuopc.f19_g17.2000_CAM60_CLM50%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST.izumi_nag.cice-default SHAREDLIB_BUILD time=13
+        FAIL PRE.f19_f19.ADESP_TEST.izumi_nag CREATE_NEWCASE
+        FAIL SMS_D_Ln9_Vnuopc.f10_f10_mg37.QPWmadC4.izumi_nag.cam-outfrq9s BASELINE cesm2_3_alpha12f: DIFF
+        FAIL SMS_Ld1_P136_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN time=245
+        PEND SMS_Ld1_P144_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN
+        FAIL SMS_Ld2_P72_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN time=62
+        PEND SMS_Ld2_P80_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN
+        FAIL SMS.T62_g37.C1850ECO.izumi_nag.pop-ecosys RUN time=76
+        FAIL ERS.T62_s11.G.izumi_nag.pop-cice SUBMIT
+
+
+
+==============================================================
 Tag name: cesm2_3_alpha016h
 Originator(s): CSEG
 Date: 1 Decemeber 2023
