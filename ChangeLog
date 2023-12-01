@@ -1,4 +1,90 @@
 ==============================================================
+Tag name: cesm2_3_alpha016h
+Originator(s): CSEG
+Date: 1 Decemeber 2023
+One-line Summary:  CTSM update 
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_132                              --
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_10            --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.175                        --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.17                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.82   --
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.7             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.43                     --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.24                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_96               --
+components/clm          https://github.com/ESCOMP/ctsm/tree/branch_tags/CESM3_dev.n04_ctsm5.1.dev145ctsm.1.dev142                     **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n01_v2.1.0     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_231018                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20230511             --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.11          --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+clm
+    Erik Kluzek 2023-10-24 - ctsm5.1.dev145 - components/clm (cesm2_3_beta16)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev145
+
+    Updates and options to the SNICAR snow optics. From work by Cenlin He.
+
+    Changes answers for ALL physics options. Also adds new capability and namelist
+    options for SNICAR.
+
+
+    Sam Rabin 2023-10-19 - ctsm5.1.dev144 - components/clm (cesm2_3_beta16)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev144
+
+    Removes a use of the deprecated shr_mpi_mod, replacing with ESMF_VMBroadcast. In addition, since the last tag, some minor documentation changes have been made.
+
+
+
+    Erik Kluzek 2023-10-13 - ctsm5.1.dev143 - components/clm (cesm2_3_beta16)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev143
+
+    Updates GRU fields to zero for FATES.
+
+    Changes answers for FATES compsets
+
+
+    Erik Kluzek 2023-11-08 - branch_tags/CESM3_dev.n04_ctsm5.1.dev145 - components/clm (cesm2_3_beta16)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/CESM3_dev.n03_ctsm5.1.dev145
+
+    Add in some missing datasets (or mistyped datasets) so that
+    the prealpha tests will work.
+
+
+    Erik Kluzek 2023-11-02 - branch_tags/CESM3_dev.n03_ctsm5.1.dev145 - components/clm (cesm2_3_beta16)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/CESM3_dev.n03_ctsm5.1.dev14
+
+    Fix so tests will work, only turn on latest
+    physics for clm5_1, and not previous versions.
+
+
+    Erik Kluzek 2023-11-02 - branch_tags/CESM3_dev.n02_ctsm5.1.dev145 - components/clm (cesm2_3_beta16)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/CESM3_dev.n02_ctsm5.1.dev14
+
+    Fix multi-processing bug.
+
+
+    Erik Kluzek 2023-10-31 - branch_tags/CESM3_dev.n01_ctsm5.1.dev145 - components/clm (cesm2_3_beta16)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/CESM3_dev.n01_ctsm5.1.dev145
+
+    CESM3 development branch tag with following updates:
+     - ctsm5.2 surface datasets
+     - Meier roughness turned on
+     - Excess ice turned on
+     - Using externals from cesm2_3_alpha16f
+
+
+
+
+==============================================================
 Tag name: cesm2_3_alpha016g
 Originator(s): CSEG
 Date: 30 October 2023
