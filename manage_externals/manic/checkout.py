@@ -304,6 +304,9 @@ of the externals description file or examine the output of
                         'used up to two times, increasing the '
                         'verbosity level each time.')
 
+    parser.add_argument('--version', action='store_true', default=False,
+                        help='Print manage_externals version and exit.')
+    
     parser.add_argument('--svn-ignore-ancestry', action='store_true', default=False,
                         help='By default, subversion will abort if a component is '
                         'already checked out and there is no common ancestry with '
