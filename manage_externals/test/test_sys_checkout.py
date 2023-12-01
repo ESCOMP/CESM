@@ -97,6 +97,7 @@ CONTAINER_REPO = 'container.git'     # Parent repo
 SIMPLE_REPO = 'simple-ext.git'       # Child repo
 SIMPLE_FORK_REPO = 'simple-ext-fork.git'  # Child repo
 MIXED_REPO = 'mixed-cont-ext.git'    # Both parent and child
+SVN_TEST_REPO = 'simple-ext.svn'     # Subversion repository
 
 # Standard (arbitrary) external names for test configs
 TAG_SECTION = 'simp_tag'
@@ -119,8 +120,6 @@ README_NAME = 'readme.txt'
 
 # Branch that exists in both the simple and simple-fork repos.
 REMOTE_BRANCH_FEATURE2 = 'feature2'
-
-SVN_TEST_REPO = 'https://github.com/escomp/cesm'
 
 # Disable too-many-public-methods error
 # pylint: disable=R0904
@@ -354,7 +353,7 @@ class GenerateExternalsDescriptionCfgV1(object):
 
         self._config.set(name, ExternalsDescription.EXTERNALS, CFG_SUB_NAME)
 
-    def create_svn_external(self, name, tag='', branch=''):
+    def create_svn_external(self, name, url, tag='', branch=''):
         """Create a config section for an svn repository.
 
         """
@@ -365,7 +364,7 @@ class GenerateExternalsDescriptionCfgV1(object):
         self._config.set(name, ExternalsDescription.PROTOCOL,
                          ExternalsDescription.PROTOCOL_SVN)
 
-        self._config.set(name, ExternalsDescription.REPO_URL, SVN_TEST_REPO)
+        self._config.set(name, ExternalsDescription.REPO_URL, url)
 
         self._config.set(name, ExternalsDescription.REQUIRED, str(True))
 
@@ -1387,36 +1386,10 @@ class TestSysCheckout(BaseTestSysCheckout):
                                                              'simple_subdir',
                                                              'subdir_file.txt'))
 
-
 class TestSysCheckoutSVN(BaseTestSysCheckout):
     """Run systems level tests of checkout_externals accessing svn repositories
 
-    SVN tests - these tests use the svn repository interface. Since
-    they require an active network connection, they are significantly
-    slower than the git tests. But svn testing is critical. So try to
-    design the tests to only test svn repository functionality
-    (checkout, switch) and leave generic testing of functionality like
-    'optional' to the fast git tests.
-
-    Example timing as of 2017-11:
-
-      * All other git and unit tests combined take between 4-5 seconds
-
-      * Just checking if svn is available for a single test takes 2 seconds.
-
-      * The single svn test typically takes between 10 and 25 seconds
-        (depending on the network)!
-
-    NOTE(bja, 2017-11) To enable CI testing we can't use a real remote
-    repository that restricts access and it seems inappropriate to hit
-    a random open source repo. For now we are just hitting one of our
-    own github repos using the github svn server interface. This
-    should be "good enough" for basic checkout and swich
-    functionality. But if additional svn functionality is required, a
-    better solution will be necessary. I think eventually we want to
-    create a small local svn repository on the fly (doesn't require an
-    svn server or network connection!) and use it for testing.
-
+    SVN tests - these tests use the svn repository interface.
     """
 
     @staticmethod
@@ -1427,6 +1400,9 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
     def _svn_tag_name():
         return './{0}/svn_tag'.format(EXTERNALS_PATH)
     
+    def _svn_test_repo_url(self):
+        return 'file://' + os.path.join(self._bare_root, SVN_TEST_REPO)
+
     def _check_tag_branch_svn_tag_clean(self, tree):
         self._check_sync_clean(tree[self._external_path(TAG_SECTION)],
                                ExternalStatus.STATUS_OK,
@@ -1438,13 +1414,12 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
                                ExternalStatus.STATUS_OK,
                                ExternalStatus.STATUS_OK)
 
-    @staticmethod
-    def _have_svn_access():
+    def _have_svn_access(self):
         """Check if we have svn access so we can enable tests that use svn.
 
         """
         have_svn = False
-        cmd = ['svn', 'ls', SVN_TEST_REPO, ]
+        cmd = ['svn', 'ls', self._svn_test_repo_url(), ]
         try:
             execute_subprocess(cmd)
             have_svn = True
@@ -1472,8 +1447,8 @@ class TestSysCheckoutSVN(BaseTestSysCheckout):
         self._generator.create_section(SIMPLE_REPO, TAG_SECTION, tag='tag1')
 
         # Svn repos.
-        self._generator.create_svn_external('svn_branch', branch='trunk')
-        self._generator.create_svn_external('svn_tag', tag='tags/cesm2.0.beta07')
+        self._generator.create_svn_external('svn_branch', self._svn_test_repo_url(), branch='trunk')
+        self._generator.create_svn_external('svn_tag', self._svn_test_repo_url(), tag='tags/cesm2.0.beta07')
 
         self._generator.write_config(cloned_repo_dir)
 
@@ -1557,7 +1532,7 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         execute_subprocess(cmd)
         cmd = ['git', 'checkout', self._bare_branch_name]
         execute_subprocess(cmd)
-        cmd = ['git', 'submodule', 'add', fork_repo_dir]
+        cmd = ['git', '-c', 'protocol.file.allow=always','submodule', 'add', fork_repo_dir]
         execute_subprocess(cmd)
         cmd = ['git', 'commit', '-am', "'Added simple-ext-fork as a submodule'"]
         execute_subprocess(cmd)
@@ -1571,7 +1546,7 @@ class TestSubrepoCheckout(BaseTestSysCheckout):
         execute_subprocess(cmd)
         cmd = ['git', 'checkout', self._config_branch_name]
         execute_subprocess(cmd)
-        cmd = ['git', 'submodule', 'add', '--name', SIMPLE_REPO,
+        cmd = ['git', '-c', 'protocol.file.allow=always', 'submodule', 'add', '--name', SIMPLE_REPO,
                simple_repo_dir, self._simple_ext_name]
         execute_subprocess(cmd)
         # Checkout feature2

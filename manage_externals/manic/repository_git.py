@@ -7,6 +7,7 @@ from __future__ import print_function
 
 import copy
 import os
+import sys
 
 from .global_constants import EMPTY_STR, LOCAL_PATH_INDICATOR
 from .global_constants import VERBOSITY_VERBOSE
@@ -380,7 +381,6 @@ class GitRepository(Repository):
         is_tag = self._ref_is_tag(ref, dirname)
         is_branch = self._ref_is_branch(ref, remote_name, dirname)
         is_hash = self._ref_is_hash(ref, dirname)
-
         is_valid = is_tag or is_branch or is_hash
         if not is_valid:
             msg = ('In repo "{0}": reference "{1}" does not appear to be a '
@@ -710,7 +710,10 @@ class GitRepository(Repository):
         cmd = ('git -C {dirname} ls-remote --exit-code --heads '
                '{remote_name} {ref}').format(
                    dirname=dirname, remote_name=remote_name, ref=ref).split()
-        status = execute_subprocess(cmd, status_to_caller=True)
+        status, output = execute_subprocess(cmd, status_to_caller=True, output_to_caller=True)
+        if not status and not f"refs/heads/{ref}" in output:
+            # In this case the ref is contained in the branch name but is not the complete branch name
+            return -1
         return status
 
     @staticmethod
@@ -837,12 +840,19 @@ class GitRepository(Repository):
         """Run git submodule update for the side effect of updating this
         repo's submodules.
         """
+        # due to https://vielmetti.typepad.com/logbook/2022/10/git-security-fixes-lead-to-fatal-transport-file-not-allowed-error-in-ci-systems-cve-2022-39253.html
+        # submodules from file doesn't work without overriding the protocol, this is done
+        # for testing submodule support but should not be done in practice
+        file_protocol = ""
+        if 'unittest' in sys.modules.keys():
+            file_protocol = "-c protocol.file.allow=always"
+
         # First, verify that we have a .gitmodules file
         if os.path.exists(
                 os.path.join(dirname,
                              ExternalsDescription.GIT_SUBMODULES_FILENAME)):
-            cmd = ('git -C {dirname} submodule update --init --recursive'
-                   .format(dirname=dirname)).split()
+            cmd = ('git {file_protocol} -C {dirname} submodule update --init --recursive'
+                   .format(file_protocol=file_protocol, dirname=dirname)).split()
             if verbosity >= VERBOSITY_VERBOSE:
                 printlog('    {0}'.format(' '.join(cmd)))
 
