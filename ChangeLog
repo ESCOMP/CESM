@@ -6,6 +6,31 @@ One-line Summary: Misc. Updates
  
 
 Answer Changes introduced with this tag when compared to cesm2_3_beta15:
+CAM
+    Answer changing for CAM6 and cam_dev  CAM-Chem updates
+    Aerosol optics updates
+    Update SOAE emissions factors
+    WACCM-X bug fix.
+    Expected diff for cam_dev and cam6 run using do_hb_above_clubb=.true.
+CTSM
+    Changes answers FATES. 
+    Adding in prescribed crop calendars.
+    Both MIMICS and BGC soil, litter and course woody debris are changed, 
+        will only affect %BGC cases 
+    Change small snocan levels to zero.  Roundoff answer changes.
+    Bring in CESM3 development branch.
+CICE6
+    changes the default time axis for history files
+MOM
+     Sync with GFDL
+WW3dev 
+    Langmuir mixing computations clean up and refactoring.
+    Change IC0 switch to IC4. 
+CDEPS
+    Update SST files for historical configurations   Changes answers for HIST compsets.
+CMEPS
+    Add surface flux rollover.
+
 
 Problems identified after tag creation:
 - All T31_g37_rx1.A tests fail with floating point exception.
