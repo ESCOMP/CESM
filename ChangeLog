@@ -21,6 +21,9 @@ Cheyenne Intel
         FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_intel CREATE_NEWCASE
         FAIL SMS_D_Ln9_Vnuopc.ne30pg3_ne30pg3_mg17.FWma2000climo.cheyenne_intel.cam-outfrq9s RUN time=519
         FAIL SMS_D.T62_s11.G.cheyenne_intel.pop-cice RUN time=4
+	PEND ERP_Lh12_Vnuopc.f09_f09_mg17.FWSD.cheyenne_intel.cam-outfrq3h RUN time=292
+	PEND SMS_D_Ln9_Vnuopc_P1280x1.ne0ARCTICGRISne30x8_ne0ARCTICGRISne30x8_mt12.FHIST.cheyenne_intel.cam-outfrq9s RUN time=7
+
 Cheyenne gnu
         FAIL ERI_D.T31_g37_rx1.A.cheyenne_gnu RUN time=40
         FAIL ERS_N2_Ld3.T31_g37_rx1.A.cheyenne_gnu CREATE_NEWCASE
