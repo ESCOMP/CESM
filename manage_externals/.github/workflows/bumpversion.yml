@@ -1,0 +1,46 @@
+name: Update file on PR merge
+on:
+  pull_request:
+    branches:
+      - main
+    types: closed
+
+jobs:
+  update_version:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          # Fetch full depth, otherwise the last step overwrites the last commit's parent, essentially removing the graph.
+          fetch-depth: 0
+
+      - name: GenerateTag
+        id: name_tag
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          create_annotated_tag: true
+          default_bump: patch
+          dry_run: true
+          tag_prefix: manic-
+      - name: Update version.txt
+        run: |
+          echo "${{ steps.name_tag.outputs.new_tag }}" > version.txt
+      - name: Amend the last commit
+        run: |
+          git config --global user.email "gitbot@openrct2.org"
+          git config --global user.name "OpenRCT2 git bot"
+          git commit -a --amend --no-edit
+          git push --force-with-lease
+          echo "Complete"name: Bump version
+      - name: Bump version and push tag
+        id: really_tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          create_annotated_tag: true
+          default_bump: patch
+          dry_run: false
+          tag_prefix: manic-
