@@ -1,6 +1,6 @@
 """
-
-FIXME(bja, 2017-11) External and SourceTree have a circular dependancy!
+Classes to represent an externals config file (SourceTree) and the components
+within it (_External).
 """
 
 import errno
@@ -19,62 +19,54 @@ from .global_constants import VERBOSITY_VERBOSE
 
 class _External(object):
     """
-    _External represents an external object inside a SourceTree
-    """
+    A single component hosted in an external repository (and any children).
 
+    The component may or may not be checked-out upon construction.
+    """
     # pylint: disable=R0902
 
-    def __init__(self, root_dir, name, ext_description, svn_ignore_ancestry):
-        """Parse an external description file into a dictionary of externals.
+    def __init__(self, root_dir, name, local_path, required, subexternals_path,
+                 repo, svn_ignore_ancestry, subexternal_sourcetree):
+        """Create a single external component (checked out or not).
 
         Input:
+            root_dir : string - the (checked-out) parent repo's root dir.
+            local_path : string - this external's (checked-out) subdir relative
+            to root_dir, e.g. "components/mom"
+            repo: Repository - the repo object for this external. Can be None (e.g. if this external just refers to another external file).
 
-            root_dir : string - the root directory path where
-            'local_path' is relative to.
-
-            name : string - name of the ext_description object. may or may not
-            correspond to something in the path.
+            name : string - name of this external (as named by the parent 
+            reference).  May or may not correspond to something in the path.
 
             ext_description : dict - source ExternalsDescription object
 
             svn_ignore_ancestry : bool - use --ignore-externals with svn switch
 
+            subexternals_path: string - path to sub-externals config file, if any. Relative to local_path, or special value 'none'.
+            subexternal_sourcetree: SourceTree - corresponding to subexternals_path, if subexternals_path exists (it might not, if it is not checked out yet).
         """
         self._name = name
-        self._repo = None
-        self._externals = EMPTY_STR
-        self._externals_sourcetree = None
-        self._stat = ExternalStatus()
-        self._sparse = None
-        # Parse the sub-elements
+        self._required = required
+        
+        self._stat = None  # Populated in status()
 
-        # _path : local path relative to the containing source tree
-        self._local_path = ext_description[ExternalsDescription.PATH]
-        # _repo_dir : full repository directory
-        repo_dir = os.path.join(root_dir, self._local_path)
+        self._local_path = local_path
+        # _repo_dir_path : full repository directory, e.g.
+        # "<root_dir>/components/mom"
+        repo_dir = os.path.join(root_dir, local_path)
         self._repo_dir_path = os.path.abspath(repo_dir)
-        # _base_dir : base directory *containing* the repository
+        # _base_dir_path : base directory *containing* the repository, e.g.
+        # "<root_dir>/components"
         self._base_dir_path = os.path.dirname(self._repo_dir_path)
-        # repo_dir_name : base_dir_path + repo_dir_name = rep_dir_path
+        # _repo_dir_name : base_dir_path + repo_dir_name = repo_dir_path
+        # e.g., "mom"
         self._repo_dir_name = os.path.basename(self._repo_dir_path)
-        assert(os.path.join(self._base_dir_path, self._repo_dir_name)
-               == self._repo_dir_path)
+        self._repo = repo
 
-        self._required = ext_description[ExternalsDescription.REQUIRED]
-        self._externals = ext_description[ExternalsDescription.EXTERNALS]
-        # Treat a .gitmodules file as a backup externals config
-        if not self._externals:
-            if GitRepository.has_submodules(self._repo_dir_path):
-                self._externals = ExternalsDescription.GIT_SUBMODULES_FILENAME
-
-        repo = create_repository(
-            name, ext_description[ExternalsDescription.REPO],
-            svn_ignore_ancestry=svn_ignore_ancestry)
-        if repo:
-            self._repo = repo
-
-        if self._externals and (self._externals.lower() != 'none'):
-            self._create_externals_sourcetree()
+        # Does this component have subcomponents aka an externals config?
+        self._subexternals_path = subexternals_path
+        self._subexternal_sourcetree = subexternal_sourcetree
+        
 
     def get_name(self):
         """
@@ -88,81 +80,97 @@ class _External(object):
         """
         return self._local_path
 
-    def status(self):
+    def get_repo_dir_path(self):
+        return self._repo_dir_path
+
+    def get_subexternals_path(self):
+        return self._subexternals_path
+
+    def get_repo(self):
+        return self._repo
+    
+    def status(self, force=False, print_progress=False):
         """
-        If the repo destination directory exists, ensure it is correct (from
-        correct URL, correct branch or tag), and possibly update the external.
-        If the repo destination directory does not exist, checkout the correce
-        branch or tag.
-        If load_all is True, also load all of the the externals sub-externals.
+        Returns status of this component and all subcomponents.
+
+        Returns a dict mapping our local path (not component name!) to an
+        ExternalStatus dict. Any subcomponents will have their own top-level
+        path keys.  Note the return value includes entries for this and all 
+        subcomponents regardless of whether they are locally installed or not.
+
+        Side-effect: If self._stat is empty or force is True, calculates _stat.
         """
+        calc_stat = force or not self._stat
 
-        self._stat.path = self.get_local_path()
-        if not self._required:
-            self._stat.source_type = ExternalStatus.OPTIONAL
-        elif self._local_path == LOCAL_PATH_INDICATOR:
-            # LOCAL_PATH_INDICATOR, '.' paths, are standalone
-            # component directories that are not managed by
-            # checkout_externals.
-            self._stat.source_type = ExternalStatus.STANDALONE
-        else:
-            # managed by checkout_externals
-            self._stat.source_type = ExternalStatus.MANAGED
-
-        ext_stats = {}
-
-        if not os.path.exists(self._repo_dir_path):
-            self._stat.sync_state = ExternalStatus.EMPTY
-            msg = ('status check: repository directory for "{0}" does not '
-                   'exist.'.format(self._name))
-            logging.info(msg)
-            self._stat.current_version = 'not checked out'
-            # NOTE(bja, 2018-01) directory doesn't exist, so we cannot
-            # use repo to determine the expected version. We just take
-            # a best-guess based on the assumption that only tag or
-            # branch should be set, but not both.
-            if not self._repo:
-                self._stat.expected_version = 'unknown'
+        if calc_stat:
+            self._stat = ExternalStatus()
+            self._stat.path = self.get_local_path()
+            if not self._required:
+                self._stat.source_type = ExternalStatus.OPTIONAL
+            elif self._local_path == LOCAL_PATH_INDICATOR:
+                # LOCAL_PATH_INDICATOR, '.' paths, are standalone
+                # component directories that are not managed by
+                # checkout_subexternals.
+                self._stat.source_type = ExternalStatus.STANDALONE
             else:
-                self._stat.expected_version = self._repo.tag() + self._repo.branch()
+                # managed by checkout_subexternals
+                self._stat.source_type = ExternalStatus.MANAGED
+
+        subcomponent_stats = {}
+        if not os.path.exists(self._repo_dir_path):
+            if calc_stat:
+                # No local repository.
+                self._stat.sync_state = ExternalStatus.EMPTY
+                msg = ('status check: repository directory for "{0}" does not '
+                       'exist.'.format(self._name))
+                logging.info(msg)
+                self._stat.current_version = 'not checked out'
+                # NOTE(bja, 2018-01) directory doesn't exist, so we cannot
+                # use repo to determine the expected version. We just take
+                # a best-guess based on the assumption that only tag or
+                # branch should be set, but not both.
+                if not self._repo:
+                    self._stat.expected_version = 'unknown'
+                else:
+                    self._stat.expected_version = self._repo.tag() + self._repo.branch()
         else:
-            if self._repo:
+            # Merge local repository state (e.g. clean/dirty) into self._stat.
+            if calc_stat and self._repo:
                 self._repo.status(self._stat, self._repo_dir_path)
 
-            if self._externals and self._externals_sourcetree:
-                # we expect externals and they exist
+            # Status of subcomponents, if any.
+            if self._subexternals_path and self._subexternal_sourcetree:
                 cwd = os.getcwd()
-                # SourceTree expects to be called from the correct
+                # SourceTree.status() expects to be called from the correct
                 # root directory.
                 os.chdir(self._repo_dir_path)
-                ext_stats = self._externals_sourcetree.status(self._local_path)
+                subcomponent_stats = self._subexternal_sourcetree.status(self._local_path, force=force, print_progress=print_progress)
                 os.chdir(cwd)
 
+        # Merge our status + subcomponent statuses into one return dict keyed
+        # by component path.
         all_stats = {}
         # don't add the root component because we don't manage it
         # and can't provide useful info about it.
         if self._local_path != LOCAL_PATH_INDICATOR:
-            # store the stats under tha local_path, not comp name so
+            # store the stats under the local_path, not comp name so
             # it will be sorted correctly
             all_stats[self._stat.path] = self._stat
 
-        if ext_stats:
-            all_stats.update(ext_stats)
+        if subcomponent_stats:
+            all_stats.update(subcomponent_stats)
 
         return all_stats
 
-    def checkout(self, verbosity, load_all):
+    def checkout(self, verbosity):
         """
         If the repo destination directory exists, ensure it is correct (from
-        correct URL, correct branch or tag), and possibly update the external.
+        correct URL, correct branch or tag), and possibly updateit.
         If the repo destination directory does not exist, checkout the correct
         branch or tag.
-        If load_all is True, also load all of the the externals sub-externals.
+        Does not check out sub-externals, see SourceTree.checkout().
         """
-        if load_all:
-            pass
         # Make sure we are in correct location
-
         if not os.path.exists(self._repo_dir_path):
             # repository directory doesn't exist. Need to check it
             # out, and for that we need the base_dir_path to exist
@@ -174,6 +182,10 @@ class _External(object):
                         self._base_dir_path)
                     fatal_error(msg)
 
+        if not self._stat:
+            self.status()
+            assert self._stat
+            
         if self._stat.source_type != ExternalStatus.STANDALONE:
             if verbosity >= VERBOSITY_VERBOSE:
                 # NOTE(bja, 2018-01) probably do not want to pass
@@ -194,120 +206,147 @@ class _External(object):
             self._repo.checkout(self._base_dir_path, self._repo_dir_name,
                                 checkout_verbosity, self.clone_recursive())
 
-    def checkout_externals(self, verbosity, load_all):
-        """Checkout the sub-externals for this object
-        """
-        if self.load_externals():
-            if self._externals_sourcetree:
-                # NOTE(bja, 2018-02): the subtree externals objects
-                # were created during initial status check. Updating
-                # the external may have changed which sub-externals
-                # are needed. We need to delete those objects and
-                # re-read the potentially modified externals
-                # description file.
-                self._externals_sourcetree = None
-            self._create_externals_sourcetree()
-            self._externals_sourcetree.checkout(verbosity, load_all)
-
-    def load_externals(self):
-        'Return True iff an externals file should be loaded'
-        load_ex = False
-        if os.path.exists(self._repo_dir_path):
-            if self._externals:
-                if self._externals.lower() != 'none':
-                    load_ex = os.path.exists(os.path.join(self._repo_dir_path,
-                                                          self._externals))
-
-        return load_ex
+    def replace_subexternal_sourcetree(self, sourcetree):
+        self._subexternal_sourcetree = sourcetree
 
     def clone_recursive(self):
         'Return True iff any .gitmodules files should be processed'
-        # Try recursive unless there is an externals entry
-        recursive = not self._externals
+        # Try recursive .gitmodules unless there is an externals entry
+        recursive = not self._subexternals_path
 
         return recursive
 
-    def _create_externals_sourcetree(self):
+
+class SourceTree(object):
+    """
+    SourceTree represents a group of managed externals.
+
+    Those externals may not be checked out locally yet, they might only
+    have Repository objects pointing to their respective repositories.
+    """
+
+    @classmethod
+    def from_externals_file(cls, parent_repo_dir_path, parent_repo,
+                            externals_path):
+        """Creates a SourceTree representing the given externals file.
+        
+        Looks up a git submodules file as an optional backup if there is no
+        externals file specified.
+
+        Returns None if there is no externals file (i.e. it's None or 'none'),
+        or if the externals file hasn't been checked out yet.
+
+        parent_repo_dir_path: parent repo root dir
+        parent_repo: parent repo.
+        externals_path: path to externals file, relative to parent_repo_dir_path.
         """
-        """
-        if not os.path.exists(self._repo_dir_path):
+        if not os.path.exists(parent_repo_dir_path):
             # NOTE(bja, 2017-10) repository has not been checked out
             # yet, can't process the externals file. Assume we are
             # checking status before code is checkoud out and this
             # will be handled correctly later.
-            return
+            return None
+
+        if externals_path.lower() == 'none':
+            # With explicit 'none', do not look for git submodules file.
+            return None
 
         cwd = os.getcwd()
-        os.chdir(self._repo_dir_path)
-        if self._externals.lower() == 'none':
-            msg = ('Internal: Attempt to create source tree for '
-                   'externals = none in {}'.format(self._repo_dir_path))
-            fatal_error(msg)
+        os.chdir(parent_repo_dir_path)
+        
+        if not externals_path:
+            if GitRepository.has_submodules(parent_repo_dir_path):
+                externals_path = ExternalsDescription.GIT_SUBMODULES_FILENAME
+            else:
+                return None
 
-        if not os.path.exists(self._externals):
-            if GitRepository.has_submodules():
-                self._externals = ExternalsDescription.GIT_SUBMODULES_FILENAME
-
-        if not os.path.exists(self._externals):
-            # NOTE(bja, 2017-10) this check is redundent with the one
+        if not os.path.exists(externals_path):
+            # NOTE(bja, 2017-10) this check is redundant with the one
             # in read_externals_description_file!
-            msg = ('External externals description file "{0}" '
+            msg = ('Externals description file "{0}" '
                    'does not exist! In directory: {1}'.format(
-                       self._externals, self._repo_dir_path))
+                       externals_path, parent_repo_dir_path))
             fatal_error(msg)
 
-        externals_root = self._repo_dir_path
+        externals_root = parent_repo_dir_path
+        # model_data is a dict-like object which mirrors the file format.
         model_data = read_externals_description_file(externals_root,
-                                                     self._externals)
-        externals = create_externals_description(model_data,
-                                                 parent_repo=self._repo)
-        self._externals_sourcetree = SourceTree(externals_root, externals)
+                                                     externals_path)
+        # ext_description is another dict-like object (see ExternalsDescription)
+        ext_description = create_externals_description(model_data,
+                                                       parent_repo=parent_repo)
+        externals_sourcetree = SourceTree(externals_root, ext_description)
         os.chdir(cwd)
-
-class SourceTree(object):
-    """
-    SourceTree represents a group of managed externals
-    """
-
-    def __init__(self, root_dir, model, svn_ignore_ancestry=False):
+        return externals_sourcetree
+    
+    def __init__(self, root_dir, ext_description, svn_ignore_ancestry=False):
         """
-        Build a SourceTree object from a model description
+        Build a SourceTree object from an ExternalDescription.
+
+        root_dir: the (checked-out) parent repo root dir.
         """
         self._root_dir = os.path.abspath(root_dir)
-        self._all_components = {}
+        self._all_components = {}  # component_name -> _External
         self._required_compnames = []
-        for comp in model:
-            src = _External(self._root_dir, comp, model[comp], svn_ignore_ancestry)
+        for comp, desc in ext_description.items():
+            local_path = desc[ExternalsDescription.PATH]
+            required = desc[ExternalsDescription.REQUIRED]
+            repo_info = desc[ExternalsDescription.REPO]
+            subexternals_path = desc[ExternalsDescription.EXTERNALS]
+
+            repo = create_repository(comp,
+                                     repo_info,
+                                     svn_ignore_ancestry=svn_ignore_ancestry)
+
+            sourcetree = None
+            # Treat a .gitmodules file as a backup externals config
+            if not subexternals_path:
+                parent_repo_dir_path = os.path.abspath(os.path.join(root_dir,
+                                                             local_path))
+                if GitRepository.has_submodules(parent_repo_dir_path):
+                    subexternals_path = ExternalsDescription.GIT_SUBMODULES_FILENAME
+            
+            # Might return None (if the subexternal isn't checked out yet, or subexternal is None or 'none')
+            subexternal_sourcetree = SourceTree.from_externals_file(
+                os.path.join(self._root_dir, local_path),
+                repo,
+                subexternals_path)
+            src = _External(self._root_dir, comp, local_path, required,
+                            subexternals_path, repo, svn_ignore_ancestry,
+                            subexternal_sourcetree)
+            
             self._all_components[comp] = src
-            if model[comp][ExternalsDescription.REQUIRED]:
+            if required:
                 self._required_compnames.append(comp)
 
-    def status(self, relative_path_base=LOCAL_PATH_INDICATOR):
-        """Report the status components
+    def status(self, relative_path_base=LOCAL_PATH_INDICATOR,
+               force=False, print_progress=False):
+        """Return a dictionary of local path->ExternalStatus.
 
-        FIXME(bja, 2017-10) what do we do about situations where the
-        user checked out the optional components, but didn't add
-        optional for running status? What do we do where the user
-        didn't add optional to the checkout but did add it to the
-        status. -- For now, we run status on all components, and try
-        to do the right thing based on the results....
-
-        """
+        Notes about the returned dictionary:
+          * It is keyed by local path (e.g. 'components/mom'), not by
+            component name (e.g. 'mom').
+          * It contains top-level keys for all traversed components, whether
+            discovered by recursion or top-level.
+          * It contains entries for all components regardless of whether they
+            are locally installed or not, or required or optional.
+x        """
         load_comps = self._all_components.keys()
 
-        summary = {}
+        summary = {}  # Holds merged statuses from all components.
         for comp in load_comps:
-            printlog('{0}, '.format(comp), end='')
-            stat = self._all_components[comp].status()
+            if print_progress:
+                printlog('{0}, '.format(comp), end='')
+            stat = self._all_components[comp].status(force=force,
+                                                     print_progress=print_progress)
+
+            # Returned status dictionary is keyed by local path; prepend
+            # relative_path_base if not already there.
             stat_final = {}
             for name in stat.keys():
-                # check if we need to append the relative_path_base to
-                # the path so it will be sorted in the correct order.
                 if stat[name].path.startswith(relative_path_base):
-                    # use as is, without any changes to path
                     stat_final[name] = stat[name]
                 else:
-                    # append relative_path_base to path and store under key = updated path
                     modified_path = os.path.join(relative_path_base,
                                                  stat[name].path)
                     stat_final[modified_path] = stat[name]
@@ -316,38 +355,71 @@ class SourceTree(object):
 
         return summary
 
+    def _find_installed_optional_components(self):
+        """Returns a list of installed optional component names, if any."""
+        installed_comps = []
+        for comp_name, ext in self._all_components.items():
+            if comp_name in self._required_compnames:
+                continue
+            # Note that in practice we expect this status to be cached.
+            path_to_stat = ext.status()
+
+            # If any part of this component exists locally, consider it
+            # installed and therefore eligible for updating.
+            if any(s.sync_state != ExternalStatus.EMPTY
+                   for s in path_to_stat.values()):
+                installed_comps.append(comp_name)
+        return installed_comps
+
     def checkout(self, verbosity, load_all, load_comp=None):
         """
-        Checkout or update indicated components into the the configured
-        subdirs.
+        Checkout or update indicated components into the configured subdirs.
 
-        If load_all is True, recursively checkout all externals.
-        If load_all is False, load_comp is an optional set of components to load.
-        If load_all is True and load_comp is None, only load the required externals.
+        If load_all is True, checkout all externals (required + optional), recursively.
+        If load_all is False and load_comp is set, checkout load_comp (and any required subexternals, plus any optional subexternals that are already checked out, recursively)
+        If load_all is False and load_comp is None, checkout all required externals, plus any optionals that are already checked out, recursively.
         """
+        if load_all:
+            tmp_comps = self._all_components.keys()
+        elif load_comp is not None:
+            tmp_comps = [load_comp]
+        else:
+            local_optional_compnames = self._find_installed_optional_components()
+            tmp_comps = self._required_compnames + local_optional_compnames
+            if local_optional_compnames:
+                printlog('Found locally installed optional components: ' +
+                         ', '.join(local_optional_compnames))
+                bad_compnames = set(local_optional_compnames) - set(self._all_components.keys())
+                if bad_compnames:
+                    printlog('Internal error: found locally installed components that are not in the global list of all components: ' + ','.join(bad_compnames))
+
         if verbosity >= VERBOSITY_VERBOSE:
             printlog('Checking out externals: ')
         else:
             printlog('Checking out externals: ', end='')
 
-        if load_all:
-            load_comps = self._all_components.keys()
-        elif load_comp is not None:
-            load_comps = [load_comp]
-        else:
-            load_comps = self._required_compnames
+        # Sort by path so that if paths are nested the
+        # parent repo is checked out first.
+        load_comps = sorted(tmp_comps, key=lambda comp: self._all_components[comp].get_local_path())
 
-        # checkout the primary externals
-        for comp in load_comps:
+        # checkout.
+        for comp_name in load_comps:
             if verbosity < VERBOSITY_VERBOSE:
-                printlog('{0}, '.format(comp), end='')
+                printlog('{0}, '.format(comp_name), end='')
             else:
                 # verbose output handled by the _External object, just
                 # output a newline
                 printlog(EMPTY_STR)
-            self._all_components[comp].checkout(verbosity, load_all)
+            c = self._all_components[comp_name]
+            # Does not recurse.
+            c.checkout(verbosity)
+            # Recursively check out subexternals, if any. Returns None
+            # if there's no subexternals path.
+            component_subexternal_sourcetree = SourceTree.from_externals_file(
+                    c.get_repo_dir_path(),
+                    c.get_repo(),
+                    c.get_subexternals_path())
+            c.replace_subexternal_sourcetree(component_subexternal_sourcetree)
+            if component_subexternal_sourcetree:
+                component_subexternal_sourcetree.checkout(verbosity, load_all)
         printlog('')
-
-        # now give each external an opportunitity to checkout it's externals.
-        for comp in load_comps:
-            self._all_components[comp].checkout_externals(verbosity, load_all)
