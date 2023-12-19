@@ -1,6 +1,6 @@
-Git repositories for testing git-related behavior.  For usage and terminology notes, see test/test_sys_checkout.py.
+Git and svn repositories for testing git and svn-related behavior.  For usage and terminology notes, see test/test_sys_checkout.py.
 
-To list files and view file contents at HEAD:
+For git repos: To list files and view file contents at HEAD:
 ```
 cd <repo_dir>
 git ls-tree --full-tree -r --name-only HEAD
