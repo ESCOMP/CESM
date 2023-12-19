@@ -42,6 +42,9 @@ class SvnRepository(Repository):
         Parse repo (a <repo> XML element).
         """
         Repository.__init__(self, component_name, repo)
+        if 'github.com' in self._url:
+            msg = "SVN access to github.com is no longer supported"
+            fatal_error(msg)
         self._ignore_ancestry = ignore_ancestry
         if self._url.endswith('/'):
             # there is already a '/' separator in the URL; no need to add another
