@@ -1,4 +1,202 @@
 ==============================================================
+Tag name: cesm2_3_alpha017a
+Originator(s): CSEG
+Date: 22 Decemeber 2023
+One-line Summary:  CAM/Derecho/manage_externals  update 
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_142                              **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_10            --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.175                        --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.18                 **
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.85   **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.7             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.45                     **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.26                      **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_96               --
+components/clm          https://github.com/ESCOMP/ctsm/tree/branch_tags/CESM3_dev.n04_ctsm5.1.dev145ctsm.1.dev142   --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.2     **
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_231107                     **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20231208             **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.13          **
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cam
+    Brian Eaton 2023-12-13 - cam6_3_142 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_142
+
+    Miscellaneous fixes.
+
+
+    Brian Eaton 2023-12-08 - cam6_3_141 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_141
+
+    Removes the nstep==0 timesample from all history files by default.
+    Use namelist variable write_nstep0=.true. to obtain old behavior, which is
+    useful for comparing with old baselines among other things.
+
+
+    Courtney Peverley 2023-12-06 - cam6_3_140 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_140
+
+    Updates CAM history files to be split into separate files for instantaneous and accumulated fields; time', 'date', 'datesec' calculated based on midpoint for accumulated files.
+
+
+    Francis Vitt 2023-12-01 - cam6_3_139 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_139
+
+    Aircraft emissions and derecho PE layouts
+
+
+    Francis Vitt 2023-12-01 - cam6_3_138 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_138
+
+    Frontogenesis gravity waves with MPAS dynamical core
+
+
+    Dylan Dickerson 2023-11-29 - cam6_3_137 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_137
+
+    Update mpas external in CAM to use v8.0.1 version
+
+
+    Cheryl Craig 2023-11-15 - cam6_3_136 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_136
+
+    Update externals for CAM checkouts
+    Fix failing derecho tests
+
+    Should be BFB for CESM checkouts
+
+
+    Cheryl Craig 2023-11-15 - cam6_3_135 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_135
+
+    For Jesse Nusbaumer
+
+    Remove svn sparse checkout
+
+
+    Jesse Nusbaumer 2023-11-01 - cam6_3_134 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_134
+
+    Update atmospheric_physics external
+
+    Answer changing for FKESSLER compset.
+
+
+    Jesse Nusbaumer 2023-11-01 - cam6_3_133 - components/cam (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_133
+
+    Hybrid PGF option in the SE dycore for WACCM-x and other misc updates
+
+    Answer changing for all WACCM-X compsets.
+
+
+ccs_config
+    Chris Fischer 2023-12-12 - ccs_config_cesm0.0.85 - ccs_config (cesm2_3_alpha17a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.87
+
+     Add pFUnit support on derecho with the intel compiler.
+
+
+    James Edwards 2023-11-20 - ccs_config_cesm0.0.84 - ccs_config (cesm2_3_alpha17a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.84
+
+    Updates the esmf build on derecho to the 8.6.0 release for intel, nvhpc and gnu compilers.   
+
+
+    James Edwards 2023-11-16 - ccs_config_cesm0.0.83 - ccs_config (cesm2_3_alpha17a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.83
+
+    Fixed NETCDF path for derecho.
+
+
+cdeps
+    Chris Fischer 2023-12-12 - cdeps1.0.25 - components/cdeps (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CDEPS/tags/cdesp1.0.25
+
+    Fix minor typo in drof modifier mode
+
+
+    James Edwards 2023-10-27 - cdeps1.0.26 - components/cdeps (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.26
+
+    depends on share1.0.18
+
+    Allow path of streamfiles to change as long as filename stays the same.
+
+
+cesm
+    Chris Fischer 2023-12-12 - cesm2_3_alpha17a - (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/cesm/tags/cesm2_3_alpha17a
+
+    Update manage_externals
+
+
+cmeps
+    Chris Fischer 2023-12-12 - cmeps0.14.45 - src/drivers/nuopc/ (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.45
+
+    cmeps0.14.45: Rename ufs related coupling modes; replace nems with ufs
+    cmeps0.14.44: Remove unused variable ESMF_LOGFILE_KIND
+
+
+mizuRoute
+    Erik Kluzek 2023-11-09 - cesm-coupling.n02_v2.1.2 - components/mizuroute (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/mizuRoute/tags/cesm-coupling.n02_v2.1.2
+
+    Some science updates: IRF, channel properties, lake module to KWT
+    Allow user to run at time-step different from coupling frequency
+    Fix funoff depth units, error in writing history_file variable
+    PIO refactoring for efficiency
+    Documentation updates: readthedoc setup
+    Update manage_externals and externals
+
+
+    Erik Kluzek 2023-10-25 - cesm-coupling.n02_v2.1.1 - components/mizuroute (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/mizuRoute/tags/cesm-coupling.n02_v2.1.1
+
+    Changes for standalone
+    mpi-serial bugfix, CESM test list updates
+
+
+mom
+    Alper Altuntas 2023-11-07 - mi_231107 - components/mom (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_231107
+
+    bug fix #261
+
+
+pop
+    Michael Levy 2023-12-08 - cesm_pop_2_1_20231208 - components/pop (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20231208
+
+    Add derecho support, remove POP support.
+    derecho_nvhpc doesn't build, derecho_gnu builds but doesn't run; I can investigate if issues are POP-specific.
+
+
+share
+    James Edwards 2023-10-27 - share1.0.18 - share (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.18
+
+    Add fortran interface to c function realpath.
+
+
+ww3dev
+    Alper Altuntas 2023-10-19 - main_0.0.13 - components/ww3dev (cesm2_3_alpha17a)
+    https://github.com/ESCOMP/WW3_interface/tags/main_0.0.12
+
+    Add pstokes tail contribution
+
+
+==============================================================
 Tag name: cesm2_3_beta16
 Originator(s): CSEG
 Date: 8 December 2023 
