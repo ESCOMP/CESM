@@ -1,4 +1,170 @@
 ===============================================================
+Tag name: cesm2.2.2-rc.01
+Originator(s): CSEG
+Date: 22 December 2023 
+One-line Summary:  Derecho support and manage externals update to address git/svn.
+
+
+Component tags used for this CESM release candidate tag :
+
+components/cam                     https://github.com/ESCOMP/CAM/tree/cam_cesm2_2_rel_09 
+components/cice                    https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20231220
+cime                               https://github.com/ESMCI/cime/tree/cime5.8.32.9
+components/cism                    https://github.com/ESCOMP/CISM-wrapper/tree/cism2_1_69_b
+components/clm                     https://github.com/ESCOMP/CTSM/tree/release-cesm2.2.04
+components/fms                     https://github.com/ESCOMP/FMS_interface/tree/fi_20231205 
+components/mom                     https://github.com/ESCOMP/MOM_interface/mi_20200908
+components/mosart                  https://github.com/ESCOMP/MOSART/tree/mosart1_0_37_1
+components/pop                     https://github.com/ESCOMP/POP2-CESM/pop_cesm2_2_rel_n01
+components/rtm                     https://github.com/ESCOMP/RTM/tree/rtm1_0_72  
+components/ww3                     https://github.com/ESCOMP/WW3-CESM/tree/ww3_190710
+
+cam
+    Cheryl Craig 2023-11-28 - cam_cesm2_2_rel_09 - components/cam (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/CAM/tags/cam_cesm2_2_rel_09
+
+    Update for derecho tests
+
+    Includes PR #915 for Correction for history output for zonal mean fields
+
+
+    James Edwards 2023-11-14 - cam_cesm2_2_rel_08 - components/cam (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/CAM/tags/?
+
+    Remove svn sparse checkout of github repos and replace with git sparse checkout
+    requires manage_externals v 1.2.1 or newer.
+
+
+cdeps
+    Erik Kluzek 2023-12-05 - d808b7c6f78a2d5dcfeb1da0d1a452a9b66e08c8 - components/cdeps (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/CDEPS/tags/d808b7c6f78a2d5dcfeb1da0d1a452a9b66e08c8
+
+    Small changes in response to a code review
+
+    CTSM needs this so that buildnml will work with python3
+
+
+cesm
+    James Edwards 2023-11-14 - cesm-2.2.2-rc.01 - (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/cesm/tags/?
+
+    Update manage_externals to manic-1.2.25 and updated support for derecho
+
+
+cice5
+    Chris Fischer 2023-12-20 - cice5-cesm2.2.2-20231220 - components/cice (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/CESM_CICE5/tags/cice5-cesm2.2.2-20231220
+
+    Add decomps for derecho.
+
+
+cime
+    James Edwards 2023-11-14 - cime5.8.32.3 - cime (cesm2.2.2-rc.01)
+    https://github.com/ESMCI/cime/tags/cime5.8.49
+
+    updates for derecho Note that this is the maint-5.8_5.8.32 branch and NOT maint-5.8.
+
+
+    Michael Levy 2023-12-05 - cime5.8.32.8 - cime (cesm2.2.2-rc.01)
+    https://github.com/ESMCI/cime/tags/cime5.8.32.?
+
+    Set PIO version to 1.
+
+
+    Chris Fischer 2023-12-18 - cime5.8.32.9 - cime (cesm2.2.2-rc.01)
+    https://github.com/ESMCI/cime/tags/cime5.8.32.9
+
+    Add development queue for derecho.
+    Change language in mapping tool directory to direct people to CESM forum / github instead of Mike's email address
+
+
+    James Edwards 2023-12-05 - cime5.8.32.7 - cime (cesm2.2.2-rc.01)
+    https://github.com/ESMCI/cime/tags/cime5.8.32.7
+
+    updates izumi hostname
+
+
+    Chris Fischer 2023-11-30 - cime5.8.32.6 - cime (cesm2.2.2-rc.01)
+    https://github.com/ESMCI/cime/tags/cime5.8.32.6
+
+    Fix derecho job priority.
+
+
+    Chris Fischer 2023-11-30 - cime5.8.32.5 - cime (cesm2.2.2-rc.01)
+    https://github.com/ESMCI/cime/tags/cime5.8.32.5
+
+    Update pio2 to 2.6.2.
+
+
+    James Edwards 2023-11-21 - cime5.8.32.4 - cime (cesm2.2.2-rc.01)
+    https://github.com/ESMCI/cime/tags/cime5.8.32.4
+
+    Update esmf library to 8.6.0 release.
+    Add march and no-fma flags for intel compiler.
+
+
+cism
+    Kate Thayer-Calder 2023-11-16 - cism2_1_69_b - components/cism (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/cism-wrapper/tags/?
+
+    Update testing, PE layouts and Externals for Cism-wrapper checkouts on Derecho. Waiting on a CLM tag for testing.
+
+
+    James Edwards 2023-11-14 - cism2_1_69_a - components/cism (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/cism-wrapper/tags/?
+
+    Minor update for port to derecho
+
+
+clm
+    Erik Kluzek 2023-11-30 - release-cesm2.2.04 - components/clm (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/ctsm/tags/release-cesm2.2.04
+
+    Move support for Cheyenne to Derecho, move testing to Derecho, 
+    add support for PE layouts to Derecho.
+
+    Requires a CDEPS update so that python3 can be used for the datm buildnml
+
+
+    Erik Kluzek 2023-11-15 - release-cesm2.2.03 - components/clm (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/ctsm/tags/release-cesm2.2.03
+
+    Quick tag to fix a problem running PTS_MODE (SCAM) on Derecho
+
+
+    Erik Kluzek 2020-09-24 - release-cesm2.2.02 - components/clm (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/ctsm/tags/release-cesm2.2.02
+
+    Bring in history file optimization.
+
+    Note, tested with mosart1_0_37 as mosart1_0_37_1 had test fails.
+
+
+fms
+    James Edwards 2023-12-04 - fi_20200609_cesm2.2_231205 - libraries/fms (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_20200609_cesm2.2branch
+
+    Updates for newer version of intel compiler on derecho and fixes for gnu opn izume
+
+
+mosart
+    Erik Kluzek 2023-11-21 - mosart1_0_37_1 - components/mosart (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_37_1
+
+    An important update from Jim Edwards regarding storing
+    restart history filenames.
+
+    Francis found this important for restart to work.
+
+
+pop
+    Michael Levy 2023-11-15 - pop2_cesm2_2_rel_n01 - components/pop (cesm2.2.2-rc.01)
+    https://github.com/ESCOMP/POP2-CESM/tags/pop2_cesm2_2_rel_n01
+
+    Add pelayouts for derecho (and maybe remove cheyenne?)
+
+
+===============================================================
 Tag name: cesm2.2.1-rc.01
 Originator(s): CSEG
 Date: 4th April 2023 
