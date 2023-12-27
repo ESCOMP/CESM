@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CESM'
-copyright = u'2020, U.S. National Science Foundation'
+copyright = u'2023, U.S. National Science Foundation'
 author = u'Staff of NSF/NCAR CESM Software Engineering Group' 
 
 # The version info for the project you're documenting, acts as replacement for
