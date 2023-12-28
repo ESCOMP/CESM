@@ -1,0 +1,69 @@
+[submodule "components/mom"]
+	path = components/mom
+	url = https://github.com/jedwards4b/MOM_interface
+[submodule "components/cam"]
+	path = components/cam
+	url = https://github.com/jedwards4b/CAM
+[submodule "components/clm"]
+	path = components/clm
+	url = https://github.com/jedwards4b/CTSM
+[submodule "components/cism"]
+	path = components/cism
+	url = https://github.com/jedwards4b/cism-wrapper.git
+[submodule "components/pop"]
+	path = components/pop
+	url = https://github.com/jedwards4b/POP2-CESM
+[submodule "components/ww3dev"]
+	path = components/ww3dev
+	url = https://github.com/jedwards4b/WW3_interface
+[submodule "ccs_config"]
+	path = ccs_config
+	url = https://github.com/ESMCI/ccs_config_cesm.git
+[submodule "components/cice"]
+	path = components/cice
+	url = https://github.com/jedwards4b/CESM_CICE
+[submodule "components/cice5"]
+	path = components/cice5
+	url = https://github.com/ESCOMP/CESM_CICE5
+[submodule "components/cmeps"]
+	path = components/cmeps
+	url = https://github.com/ESCOMP/CMEPS.git
+[submodule "components/cdeps"]
+	path = components/cdeps
+	url = https://github.com/ESCOMP/CDEPS.git
+[submodule "share"]
+	path = share
+	url = https://github.com/ESCOMP/CESM_share
+[submodule "libraries/parallelio"]
+	path = libraries/parallelio
+	url = https://github.com/NCAR/ParallelIO
+[submodule "cime"]
+	path = cime
+	url = https://github.com/ESMCI/cime
+[submodule "libraries/FMS"]
+	path = libraries/FMS
+	url = https://github.com/ESCOMP/FMS_interface
+[submodule "components/mizuroute"]
+	path = components/mizuroute
+	url = https://github.com/ESCOMP/mizuRoute
+[submodule "components/mosart"]
+	path = components/mosart
+	url = https://github.com/ESCOMP/MOSART
+[submodule "tools/statistical_ensemble_test/pyCECT"]
+	path = tools/statistical_ensemble_test/pyCECT
+	url = https://github.com/NCAR/PyCECT
+[submodule "components/rtm"]
+	path = components/rtm
+	url = https://github.com/ESCOMP/RTM
+[submodule "components/ww3"]
+	path = components/ww3
+	url = https://github.com/ESCOMP/WW3-CESM
+[submodule "libraries/mpi-serial"]
+	path = libraries/mpi-serial
+	url = https://github.com/ESMCI/mpi-serial
+[submodule "libraries/mct"]
+	path = libraries/mct
+	url = https://github.com/MCSclimate/MCT
+[submodule "components/cpl7"]
+	path = components/cpl7
+	url = https://github.com/ESCOMP/CESM_CPL7andDataComps
