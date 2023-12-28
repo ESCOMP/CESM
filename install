@@ -1,0 +1,25 @@
+#!/bin/bash
+# Script to fetch submodules for CESM
+# 
+submodules=('ccs_config' 'components/cice5' 'components/cice' 'components/cmeps' \
+           'components/cdeps' 'components/cpl7' 'share' 'libraries/mct' \
+           'libraries/parallelio' 'cime' 'libraries/FMS' 'components/mosart' \
+           'components/rtm' 'components/mizoRoute' 'components/ww3' 'components/ww3dev'\
+           'components/mom' 'components/pop' 'tools/statistical_ensemble_test/pyCECT')
+
+for mod in "${submodules[@]}"
+do
+   echo "Initializing $mod"
+   git submodule update --init --recursive $mod
+done
+
+sparse_submodules=('components/clm' 'components/cism' 'components/cam' )
+
+for mod in "${sparse_submodules[@]}"
+do
+   echo "Initializing $mod"
+   git submodule update --init $mod
+   pushd $mod
+   bash ./install -internal-only
+   popd
+done

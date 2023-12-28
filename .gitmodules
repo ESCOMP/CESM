@@ -30,7 +30,7 @@
 	url = https://github.com/ESCOMP/CMEPS.git
 [submodule "components/cdeps"]
 	path = components/cdeps
-	url = https://github.com/ESCOMP/CDEPS.git
+	url = https://github.com/jedwards4b/CDEPS.git
 [submodule "share"]
 	path = share
 	url = https://github.com/ESCOMP/CESM_share
@@ -39,10 +39,10 @@
 	url = https://github.com/NCAR/ParallelIO
 [submodule "cime"]
 	path = cime
-	url = https://github.com/ESMCI/cime
+	url = https://github.com/jedwards4b/cime
 [submodule "libraries/FMS"]
 	path = libraries/FMS
-	url = https://github.com/ESCOMP/FMS_interface
+	url = https://github.com/jedwards4b/FMS_interface
 [submodule "components/mizuroute"]
 	path = components/mizuroute
 	url = https://github.com/ESCOMP/mizuRoute
