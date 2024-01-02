@@ -1,0 +1,91 @@
+#!/bin/bash
+# Script to fetch submodules for CAM
+# if argument -internal-only is supplied then only checkout CAM internal submodules, otherwise checkout everything needed for
+# cam as a top level repository
+#
+set -e
+script="install"
+function usage {
+    echo -e "\nusage: $script [-i/--internal-only]\n"
+}
+# Set default arguments
+internal_only=0
+
+# Process arguments
+while [ "$1" != "" ];
+do
+    case $1 in
+
+        # Only checkout CISM internal submodules
+        -i | -internal-only | --internal-only)
+            internal_only=1
+            ;;
+
+        *)
+            echo "$script: illegal option $1"
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+########################
+
+# Start with sparse checkouts
+if ! test -f bash-scripts/bin/git_sparse_checkout; then
+  echo "Getting git_sparse_checkout script"
+  git clone -n https://github.com/frgomes/bash-scripts --depth 1
+  pushd bash-scripts 1>/dev/null
+  git checkout HEAD -- bin/git_sparse_checkout
+  popd 1>/dev/null
+fi
+
+
+
+
+
+
+./bash-scripts/bin/git_sparse_checkout  https://github.com/larson-group/clubb_release clubb_4ncar_20221129_59cb19f_branch src/physics/clubb -- src/CLUBB_core/ src/SILHS/
+git restore src/physics/clubb
+
+./bash-scripts/bin/git_sparse_checkout https://github.com/CFMIP/COSPv2.0 master src/physics/cosp2/src -- src/
+git restore src/physics/cosp2/src
+
+./bash-scripts/bin/git_sparse_checkout https://github.com/MPAS-Dev/MPAS-Model.git develop src/dynamics/mpas/dycore -- src/external/ src/operators/ src/tools/ \
+                      src/core_atmosphere/ src/framework/
+git restore src/dynamics/mpas/dycore
+
+submodules=('chem_proc' 'src/physics/carma/base' 'src/physics/pumas' 'src/physics/pumas-frozen' 'src/physics/ali_arms' 'src/atmos_phys' 'src/dynamics/fv3/atmos_cubed_sphere' 'src/hemco')
+for mod in "${submodules[@]}"
+do
+   echo "Initializing $mod"
+   git submodule update --init $mod
+done
+
+if [ ${internal_only} -eq 1 ]
+  then
+    exit 0
+fi
+
+
+submodules=('ccs_config' 'components/cice5' 'components/cice' 'components/cmeps' \
+           'components/cdeps' 'components/cpl7' 'share' 'libraries/mct' \
+           'libraries/parallelio' 'cime' 'libraries/FMS' 'components/mosart' \
+           'components/rtm')
+
+for mod in "${submodules[@]}"
+do
+   echo "Initializing $mod"
+   git submodule update --init --recursive $mod
+done
+
+sparse_submodules=('components/clm' 'components/cism')
+for mod in "${sparse_submodules[@]}"
+do
+   echo "Initializing $mod"
+   git submodule update --init $mod
+   pushd $mod 1>/dev/null
+   bash ./install -internal-only
+   popd 1>/dev/null
+done
