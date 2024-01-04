@@ -14,6 +14,9 @@ def parse_submodules_desc_section(section, section_items):
     for item in section_items:
         name = item[0].strip().lower()
         desc[name] = item[1].strip()
+        # e3sm needs to have ssh protocol urls, we don't
+        if name == "url" and desc[name].startswith("git@github"):
+            desc[name] = desc[name].replace("git@github.com:","https://github.com/")
     if not "esmrequired" in desc:
         desc["esmrequired"] = "I:T"
     
@@ -29,7 +32,6 @@ def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
         os.makedirs(path)
     # Check first if the module is already defined
     # and the sparse-checkout file exists
-    fullpath = os.path.join(os.getcwd(),path)
     git = GitInterface(os.getcwd())
     topdir = git.git_operation("rev-parse", "--show-toplevel").rstrip()
 
@@ -62,6 +64,17 @@ def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
     sprepo_git.git_operation( "fetch", "--depth=1", "origin", "--tags")
     sprepo_git.git_operation( "checkout", tag)
     print(f"Successfully checked out {name}")
+
+def submodule_checkout(name, url, path, tag, esmrequired):
+    git = GitInterface(os.cwd())
+    topdir = git.git_operation("rev-parse", "--show-toplevel").rstrip()
+    repodir = os.path.join(topdir, path)
+    git.git_operation("submodule","update","--init")
+    # Look for a .gitmodules file in the newly checkedout repo
+    if os.path.exists(os.path.join(repodir,".gitmodules")):
+        # recursively handle this checkout
+        read_gitmodules_file(repodir, esmrequired)
+    return
     
 def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules"):
     root_dir = os.path.abspath(root_dir)
@@ -92,7 +105,12 @@ def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules"):
                 tag = "master"
             submodule_sparse_checkout(name, submodule_desc["url"], submodule_desc["path"],
                                       submodule_desc["esmsparse"], tag)
-
+            continue
+        Iesmrequired = []
+        for setting in esmrequired:
+            if setting.startswith("I:"):
+                Iesmrequired.append(setting) 
+        submodule_checkout(name, submodule_desc["url"], submodule_desc["path"], tag, Iesmrequired)
 
 
 

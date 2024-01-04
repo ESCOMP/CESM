@@ -1,4 +1,5 @@
 import os
+import logging
 from modules import utils
 
 class GitInterface:
@@ -13,12 +14,16 @@ class GitInterface:
             except git.exc.InvalidGitRepositoryError:
                 self.git = git
                 self._init_git_repo()
+            msg = "Using GitPython interface to git"
         except ImportError:
             self._use_module = False
             if not os.path.exists(os.path.join(repo_path,".git")):
                 self._init_git_repo()
-
+            msg = "Using shell interface to git"
+        logging.info(msg)
+                
     def _git_command(self, operation, *args):
+        logging.info(operation)
         if self._use_module:
             return getattr(self.repo.git, operation)(*args)
         else:
