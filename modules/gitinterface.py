@@ -24,7 +24,7 @@ class GitInterface:
                 
     def _git_command(self, operation, *args):
         logging.info(operation)
-        if self._use_module:
+        if self._use_module and operation != "submodule":
             return getattr(self.repo.git, operation)(*args)
         else:
             return ["git", "-C",self.repo_path, operation] + list(args)
