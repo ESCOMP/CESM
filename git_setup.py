@@ -69,10 +69,11 @@ def submodule_checkout(name, url, path, tag, esmrequired):
     git = GitInterface(os.getcwd())
     topdir = git.git_operation("rev-parse", "--show-toplevel").rstrip()
     repodir = os.path.join(topdir, path)
-    git.git_operation("submodule","update","--init", name)
+    git.git_operation("submodule","update","--init", path)
     # Look for a .gitmodules file in the newly checkedout repo
     if os.path.exists(os.path.join(repodir,".gitmodules")):
         # recursively handle this checkout
+        print(
         read_gitmodules_file(repodir, esmrequired)
     print(f"Successfully checked out {name}")
     return
