@@ -73,9 +73,11 @@ def submodule_checkout(name, url, path, tag, esmrequired):
     # Look for a .gitmodules file in the newly checkedout repo
     if os.path.exists(os.path.join(repodir,".gitmodules")):
         # recursively handle this checkout
-        print(
         read_gitmodules_file(repodir, esmrequired)
-    print(f"Successfully checked out {name}")
+    if os.path.exists(os.path.join(repodir,".git")):
+        print(f"Successfully checked out {name}")
+    else:
+        utils.fatal_error(f"Failed to checkout {name}")
     return
     
 def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules"):
