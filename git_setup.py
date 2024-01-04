@@ -67,7 +67,8 @@ def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
 
 def submodule_checkout(name, url, path, tag, esmrequired):
     git = GitInterface(os.getcwd())
-    topdir = git.git_operation("rev-parse", "--show-toplevel").rstrip()
+    topdir = os.getcwd()
+#    topdir = git.git_operation("rev-parse", "--show-toplevel").rstrip()
     repodir = os.path.join(topdir, path)
     git.git_operation("submodule","update","--init", path)
     # Look for a .gitmodules file in the newly checkedout repo
