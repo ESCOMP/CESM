@@ -5,6 +5,7 @@ import logging
 from modules import utils
 from configparser import ConfigParser
 from modules.lstripreader import LstripReader
+from modules.gitinterface import GitInterface
 
 def parse_submodules_desc_section(section, section_items):
     """Create a dict for this submodule description"""
@@ -28,8 +29,10 @@ def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
         os.makedirs(path)
     # Check first if the module is already defined
     # and the sparse-checkout file exists
-    cmd = ("git", "rev-parse", "--show-toplevel")
-    topdir = utils.execute_subprocess(cmd, output_to_caller=True).rstrip()
+    fullpath = os.path.join(os.getcwd(),path)
+    git = GitInterface(os.getcwd())
+    topdir = git.git_operation("rev-parse", "--show-toplevel").rstrip()
+
     topgit = os.path.join(topdir, ".git", "modules")
     gitsparse = os.path.join(topgit, name, "info","sparse-checkout")
     if os.path.isfile(gitsparse):
@@ -37,13 +40,12 @@ def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
         return
     
     #initialize a new git repo and set the sparse checkout flag
-    cmd = ("git", "-C", path, "init")
-    status = utils.execute_subprocess(cmd, status_to_caller=True)
-    cmd = ("git", "-C", path, "config", "core.sparseCheckout","true") 
-    status = utils.execute_subprocess(cmd, status_to_caller=True)
+    sprepo_git = GitInterface(os.path.join(topdir,path))
+    sprepo_git.config_set_value("core", "sparseCheckout", "true")
+
     # set the repository remote
-    cmd = ("git", "-C", path, "remote", "add", "origin", url) 
-    status = utils.execute_subprocess(cmd, status_to_caller=True)
+    cmd = ("remote", "add", "origin", url)
+    sprepo_git.git_operation("remote", "add", "origin", url)
     
     if not os.path.isdir(topgit):
         os.makedirs(topgit)
@@ -57,10 +59,8 @@ def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
         f.write("gitdir: " + os.path.relpath(topgit, path))
 
     #Finally checkout the repo
-    cmd = ("git", "-C", path, "fetch", "--depth=1", "origin", "--tags")
-    status = utils.execute_subprocess(cmd, status_to_caller=True)
-    cmd = ("git", "-C", path, "checkout", tag)
-    status = utils.execute_subprocess(cmd, status_to_caller=True)
+    sprepo_git.git_operation( "fetch", "--depth=1", "origin", "--tags")
+    sprepo_git.git_operation( "checkout", tag)
     print(f"Successfully checked out {name}")
     
 def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules"):
