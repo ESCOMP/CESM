@@ -65,11 +65,10 @@ def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
     sprepo_git.git_operation( "checkout", tag)
     print(f"Successfully checked out {name}")
 
-def submodule_checkout(name, url, path, tag, esmrequired):
+def submodule_checkout(root, name, url, path, tag, esmrequired):
     git = GitInterface(os.getcwd())
-    topdir = os.getcwd()
 #    topdir = git.git_operation("rev-parse", "--show-toplevel").rstrip()
-    repodir = os.path.join(topdir, path)
+    repodir = os.path.join(root, path)
     git.git_operation("submodule","update","--init", path)
     # Look for a .gitmodules file in the newly checkedout repo
     if os.path.exists(os.path.join(repodir,".gitmodules")):
@@ -116,7 +115,7 @@ def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules"):
         for setting in esmrequired:
             if setting.startswith("I:"):
                 Iesmrequired.append(setting) 
-        submodule_checkout(name, submodule_desc["url"], submodule_desc["path"], tag, Iesmrequired)
+        submodule_checkout(root_dir, name, submodule_desc["url"], submodule_desc["path"], tag, Iesmrequired)
 
 
 
