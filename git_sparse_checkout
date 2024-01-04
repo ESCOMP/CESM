@@ -55,13 +55,19 @@ function git_sparse_checkout {
     local opts='--depth=1'
 
     # now perform the sparse checkout
+    
     mkdir -p "${dir}"
     git -C "${dir}" init
     git -C "${dir}" config core.sparseCheckout ${sparse}
-    for path in $* ;do
-        echo "${path}" >> ${dir}/.git/info/sparse-checkout
-    done
     git -C "${dir}" remote add origin ${url}
+    super=$(git rev-parse --show-toplevel)
+    pathtodotgit=$(realpath -m --relative-to=${dir} ${super})/.git
+    relpathfromsuper=$(realpath -m --relative-to=${super} ${dir})
+    mv ${dir}/.git  ${super}/.git/modules/${relpathfromsuper}
+    echo "gitdir: ${pathtodotgit}/modules/${relpathfromsuper}" > ${dir}/.git
+    for path in $* ;do
+        echo "${path}" >> ${super}/.git/modules/${relpathfromsuper}/info/sparse-checkout
+    done
     git -C "${dir}" fetch ${opts} origin ${tag}
     git -C "${dir}" checkout ${tag}
 }

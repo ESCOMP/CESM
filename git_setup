@@ -1,10 +1,10 @@
 #!/bin/bash
-# Script to fetch submodules for CAM
-# if argument -internal-only is supplied then only checkout CAM internal submodules, otherwise checkout everything needed for
-# cam as a top level repository
+# Script to fetch submodules for esm applications 
+# if argument -internal-only is supplied then only checkout internal submodules, otherwise checkout everything needed for
+# a top level repository
 #
 set -e
-script="install"
+script=$0
 function usage {
     echo -e "\nusage: $script [-i/--internal-only]\n"
 }
@@ -31,28 +31,31 @@ do
 done
 
 ########################
+declare -A submods
+submod_list=$(git config -f .gitmodules --list)
+
+while IFS= read -r line;
+do
+    readarray -d. -t strarr <<< "$line" 
+    if [[ "strarr[3]" == "path" ]]; then
+        echo "path is $strarr[4]"
+    fi
+done <<< "$submod_list"
+exit 0
 
 # Start with sparse checkouts
-if ! test -f bash-scripts/bin/git_sparse_checkout; then
+if ! test -f bin/git_sparse_checkout; then
   echo "Getting git_sparse_checkout script"
-  git clone -n https://github.com/frgomes/bash-scripts --depth 1
-  pushd bash-scripts 1>/dev/null
-  git checkout HEAD -- bin/git_sparse_checkout
-  popd 1>/dev/null
+  git clone https://github.com/jedwards4b/gitscripts --depth 1 bin
 fi
 
-
-
-
-
-
-./bash-scripts/bin/git_sparse_checkout  https://github.com/larson-group/clubb_release clubb_4ncar_20221129_59cb19f_branch src/physics/clubb -- src/CLUBB_core/ src/SILHS/
+./bin/git_sparse_checkout  https://github.com/larson-group/clubb_release clubb_4ncar_20221129_59cb19f_branch src/physics/clubb -- src/CLUBB_core/ src/SILHS/
 git restore src/physics/clubb
 
-./bash-scripts/bin/git_sparse_checkout https://github.com/CFMIP/COSPv2.0 master src/physics/cosp2/src -- src/
+./bin/git_sparse_checkout https://github.com/CFMIP/COSPv2.0 master src/physics/cosp2/src -- src/
 git restore src/physics/cosp2/src
 
-./bash-scripts/bin/git_sparse_checkout https://github.com/MPAS-Dev/MPAS-Model.git develop src/dynamics/mpas/dycore -- src/external/ src/operators/ src/tools/ \
+./bin/git_sparse_checkout https://github.com/MPAS-Dev/MPAS-Model.git develop src/dynamics/mpas/dycore -- src/external/ src/operators/ src/tools/ \
                       src/core_atmosphere/ src/framework/
 git restore src/dynamics/mpas/dycore
 
