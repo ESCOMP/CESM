@@ -66,14 +66,15 @@ def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
     print(f"Successfully checked out {name}")
 
 def submodule_checkout(name, url, path, tag, esmrequired):
-    git = GitInterface(os.cwd())
+    git = GitInterface(os.getcwd())
     topdir = git.git_operation("rev-parse", "--show-toplevel").rstrip()
     repodir = os.path.join(topdir, path)
-    git.git_operation("submodule","update","--init")
+    git.git_operation("submodule","update","--init", name)
     # Look for a .gitmodules file in the newly checkedout repo
     if os.path.exists(os.path.join(repodir,".gitmodules")):
         # recursively handle this checkout
         read_gitmodules_file(repodir, esmrequired)
+    print(f"Successfully checked out {name}")
     return
     
 def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules"):
@@ -98,11 +99,11 @@ def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules"):
                 # TODO change to logging
                 #                logging.info(f"Skipping optional component {section}")
             continue
+        if "esmtag" in submodule_desc:
+            tag = submodule_desc["esmtag"]
+        else:
+            tag = "master"
         if "esmsparse" in submodule_desc:
-            if "esmtag" in submodule_desc:
-                tag = submodule_desc["esmtag"]
-            else:
-                tag = "master"
             submodule_sparse_checkout(name, submodule_desc["url"], submodule_desc["path"],
                                       submodule_desc["esmsparse"], tag)
             continue

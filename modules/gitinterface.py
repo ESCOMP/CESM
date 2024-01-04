@@ -40,6 +40,7 @@ class GitInterface:
     def git_operation(self, operation, *args, **kwargs):
         command = self._git_command(operation, *args)
         if isinstance(command, list):
+            print(command)
             return utils.execute_subprocess(command, output_to_caller=True)
         else:
             return command
