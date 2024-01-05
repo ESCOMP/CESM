@@ -200,7 +200,17 @@ def submodule_update(root_dir, url, tag):
             git.git_operation("remote","add","newbranch",url)
         git.git_operation("checkout", tag)
 
-
+def submodule_status(root_dir, name, url, path, tag):
+    with pushd(path):
+        git = GitInterface(os.path.join(root_dir,path))
+        atag = git.git_operation("describe","--tags","--always").rstrip()
+        if tag and atag != tag:
+            print(f"Submodule {name} {atag} is out of sync with .gitmodules {tag}")
+        elif tag:
+            print(f"Submodule {name} at tag {tag}")
+        else:
+            print(f"Submodule {name} has no tag defined in .gitmodules")
+            
 def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules", includelist=None, excludelist=None, action='install'):
     root_dir = os.path.abspath(root_dir)
 
@@ -222,10 +232,19 @@ def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules", include
             continue
         submodule_desc = parse_submodules_desc_section(section,config.items(section))
 
+        if action == 'status':
+            if "esmtag" in submodule_desc:
+                tag = submodule_desc["esmtag"]
+            else:
+                tag = None
+            submodule_status(root_dir, name, submodule_desc["url"], submodule_desc["path"], tag)
+        
+        
         if action == 'install':
             # Recursively install submodules, honering esm tags in .gitmodules
             if submodule_desc["esmrequired"] not in esmrequired:
-                print(f"Skipping optional component {section}")
+                if 'T:F' in submodule_desc["esmrequired"]:
+                    print(f"Skipping optional component {section}")
                 # TODO change to logging
                 #                logging.info(f"Skipping optional component {section}")
                 continue
@@ -252,5 +271,6 @@ def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules", include
 
 if __name__ == '__main__':
     root_dir, file_name, esmrequired, includelist, excludelist, verbose, action = commandline_arguments()
+    print(f"action is {action}")
     read_gitmodules_file(root_dir, file_name=file_name, esmrequired=esmrequired, includelist=includelist, excludelist=excludelist, action=action)
     
