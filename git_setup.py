@@ -183,7 +183,7 @@ def submodule_checkout(root, name, url, path, tag, esmrequired):
     if os.path.exists(os.path.join(repodir,".gitmodules")):
         # recursively handle this checkout
         print(f"Recursively checking out submodules of {name} {repodir}")
-        read_gitmodules_file(repodir, esmrequired)
+        read_gitmodules_file(repodir, ("I:T"))
     if os.path.exists(os.path.join(repodir,".git")):
         print(f"Successfully checked out {name}")
     else:
@@ -195,7 +195,6 @@ def submodule_update(root_dir, url, tag):
         git = GitInterface(root_dir)
         # first make sure the url is correct
         upstream = git.git_operation("ls-remote","--get-url").rstrip()
-        print(f"Here {upstream} and {url}")
         if upstream != url:
             # TODO - this needs to be a unique name
             git.git_operation("remote","add","newbranch",url)
@@ -226,11 +225,10 @@ def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules", include
         if action == 'install':
             # Recursively install submodules, honering esm tags in .gitmodules
             if submodule_desc["esmrequired"] not in esmrequired:
-                if "T:F" in esmrequired or submodule_desc["esmrequired"].startswith("I:"):
-                    print(f"Skipping optional component {section}")
-                    # TODO change to logging
-                    #                logging.info(f"Skipping optional component {section}")
-                    continue
+                print(f"Skipping optional component {section}")
+                # TODO change to logging
+                #                logging.info(f"Skipping optional component {section}")
+                continue
             if "esmtag" in submodule_desc:
                 tag = submodule_desc["esmtag"]
             else:
@@ -239,11 +237,8 @@ def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules", include
                 submodule_sparse_checkout(name, submodule_desc["url"], submodule_desc["path"],
                                           submodule_desc["esmsparse"], tag)
                 continue
-            Iesmrequired = []
-            for setting in esmrequired:
-                if setting.startswith("I:"):
-                    Iesmrequired.append(setting) 
-                submodule_checkout(root_dir, name, submodule_desc["url"], submodule_desc["path"], tag, Iesmrequired)
+            
+            submodule_checkout(root_dir, name, submodule_desc["url"], submodule_desc["path"], tag, esmrequired)
 
         if action == 'update':
             # update the submodules to the tags defined in .gitmodules
