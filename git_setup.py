@@ -39,6 +39,11 @@ def commandline_arguments(args=None):
     parser.add_argument('-C', '--path', default=os.getcwd(),
                         help='Toplevel repository directory.  Defaults to current directory.')
 
+    parser.add_argument('-g', '--gitmodules', nargs='?',
+                        default='.gitmodules',
+                        help='The submodule description filename. '
+                        'Default: %(default)s.')
+
     parser.add_argument('-x', '--exclude', nargs='*',
                         help='Component(s) listed in the gitmodules file which should be ignored.')
 
@@ -109,9 +114,7 @@ def commandline_arguments(args=None):
         print(version_info)
         sys.exit(0)
 
-
-        
-    return options.rootdir, esmrequired, options.components, options.exclude, options.verbose, action
+    return options.path, options.gitmodules, esmrequired, options.components, options.exclude, options.verbose, action
 
         
 def parse_submodules_desc_section(section, section_items):
@@ -191,14 +194,15 @@ def submodule_update(root_dir, url, tag):
     with pushd(root_dir):
         git = GitInterface(root_dir)
         # first make sure the url is correct
-        upstream = git.git_operation("ls-remote","--git-url")
+        upstream = git.git_operation("ls-remote","--get-url").rstrip()
+        print(f"Here {upstream} and {url}")
         if upstream != url:
             # TODO - this needs to be a unique name
             git.git_operation("remote","add","newbranch",url)
         git.git_operation("checkout", tag)
 
 
-def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules", gitmodulelist=None, action='install'):
+def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules", includelist=None, excludelist=None, action='install'):
     root_dir = os.path.abspath(root_dir)
 
     msg = 'In directory : {0}'.format(root_dir)
@@ -213,6 +217,10 @@ def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules", gitmodu
     config.read_file(LstripReader(file_path), source=file_name)
     for section in config.sections():
         name = section[11:-1]
+        if includelist and name not in includelist:
+            continue
+        if excludelist and name in excludelist:
+            continue
         submodule_desc = parse_submodules_desc_section(section,config.items(section))
 
         if action == 'install':
@@ -248,8 +256,6 @@ def read_gitmodules_file(root_dir, esmrequired, file_name=".gitmodules", gitmodu
                 
 
 if __name__ == '__main__':
-    root_dir, esmrequired, includelist, excludelist, verbose, action = commandline_arguments()
-    esmrequired = ("I:T", "T:T")
-    root_dir = os.getcwd()
-    read_gitmodules_file(root_dir, esmrequired, gitmodulelist, action, verbose)
+    root_dir, file_name, esmrequired, includelist, excludelist, verbose, action = commandline_arguments()
+    read_gitmodules_file(root_dir, file_name=file_name, esmrequired=esmrequired, includelist=includelist, excludelist=excludelist, action=action)
     
