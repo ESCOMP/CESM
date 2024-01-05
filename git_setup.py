@@ -95,9 +95,9 @@ def commandline_arguments(args=None):
         options = parser.parse_args()
 
     if options.optional:
-        esmrequired = 'T:'
+        esmrequired = ('T:T','T:F','I:T')
     else:
-        esmrequired = 'T:T'
+        esmrequired = ('T:T','I:T')
         
     if options.status:
         action = 'status'
