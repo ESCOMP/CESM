@@ -9,6 +9,7 @@ import os
 import subprocess
 import sys
 from threading import Timer
+from pathlib import Path
 
 LOCAL_PATH_INDICATOR = "."
 # ---------------------------------------------------------------------
@@ -53,6 +54,18 @@ def printlog(msg, **kwargs):
     else:
         print(msg)
     sys.stdout.flush()
+
+
+def find_upwards(root_dir, filename):
+    """Find a file in root dir or any of it's parents"""
+    d = Path(root_dir)
+    root = Path(d.root)
+    while d != root:
+        attempt = d / filename
+        if attempt.exists():
+            return attempt
+        d = d.parent
+    return None
 
 
 def last_n_lines(the_string, n_lines, truncation_message=None):

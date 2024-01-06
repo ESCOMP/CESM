@@ -168,16 +168,14 @@ def commandline_arguments(args=None):
     )
 
 
-def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
+def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master"):
     # first create the module directory
     if not os.path.isdir(path):
         os.makedirs(path)
     # Check first if the module is already defined
     # and the sparse-checkout file exists
-    git = GitInterface(os.getcwd())
-    topdir = git.git_operation("rev-parse", "--show-toplevel").rstrip()
-
-    topgit = os.path.join(topdir, ".git", "modules")
+    git = GitInterface(root_dir)
+    topgit = os.path.join(root_dir, ".git", "modules")
     gitsparse = os.path.join(topgit, name, "info", "sparse-checkout")
     if os.path.isfile(gitsparse):
         logger.warning("submodule {} is already initialized".format(name))
@@ -227,7 +225,7 @@ def submodule_checkout(root, name, path):
 def submodules_status(gitmodules, root_dir):
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
-        tag = gitmodules.git(name, "esmtag")
+        tag = gitmodules.get(name, "esmtag")
         with utils.pushd(path):
             git = GitInterface(os.path.join(root_dir, path))
             atag = git.git_operation("describe", "--tags", "--always").rstrip()
@@ -236,7 +234,12 @@ def submodules_status(gitmodules, root_dir):
             elif tag:
                 print(f"Submodule {name} at tag {tag}")
             else:
-                print(f"Submodule {name} has no tag defined in .gitmodules")
+                print(
+                    f"Submodule {name} has no tag defined in .gitmodules, module at {atag}"
+                )
+            status = git.git_operation("status")
+            if "nothing to commit" not in status:
+                print(status)
 
 
 def submodules_update(gitmodules, root_dir):
@@ -245,18 +248,26 @@ def submodules_update(gitmodules, root_dir):
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
         if os.path.exists(os.path.join(path, ".git")):
-            with utils.pushd(root_dir):
-                git = GitInterface(root_dir)
+            submoddir = os.path.join(root_dir, path)
+            with utils.pushd(submoddir):
+                git = GitInterface(submoddir)
                 # first make sure the url is correct
                 upstream = git.git_operation("ls-remote", "--get-url").rstrip()
+                newremote = "origin"
                 if upstream != url:
                     # TODO - this needs to be a unique name
-                    git.git_operation("remote", "add", "newbranch", url)
-                    git.git_operation("checkout", esmtag)
+                    remotes = git.git_operation("remote", "-v")
+                    newremote = "newremote"
+                    git.git_operation("remote", "add", newremote, url)
+
+                tags = git.git_operation("tag", "-l")
+                if esmtag not in tags:
+                    git.git_operation("fetch", newremote, "--tags")
+
+                git.git_operation("checkout", esmtag)
 
 
 def submodules_install(gitmodules, root_dir, requiredlist):
-    print(gitmodules.sections())
     for name in gitmodules.sections():
         esmrequired = gitmodules.get(name, "esmrequired")
         esmsparse = gitmodules.get(name, "esmsparse")
@@ -270,9 +281,9 @@ def submodules_install(gitmodules, root_dir, requiredlist):
             continue
         if esmsparse:
             logger.debug(
-                f"Callng submodule_sparse_checkout({name} {url}, {path}, {esmsparse}, {esmtag}"
+                f"Callng submodule_sparse_checkout({root_dir}, {name}, {url}, {path}, {esmsparse}, {esmtag}"
             )
-            submodule_sparse_checkout(name, url, path, esmsparse, tag=esmtag)
+            submodule_sparse_checkout(root_dir, name, url, path, esmsparse, tag=esmtag)
         else:
             logger.debug(
                 "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
@@ -293,6 +304,15 @@ def _main_func():
     if verbose:
         print(f"action is {action}")
 
+    if not os.path.isfile(os.path.join(root_dir, file_name)):
+        file_path = utils.find_upwards(root_dir, file_name)
+
+        if file_path is None:
+            fatal_error(
+                "No {} found in {} or any of it's parents".format(file_name, root_dir)
+            )
+        root_dir = os.path.dirname(file_path)
+    print(f"root_dir is {root_dir}")
     gitmodules = GitModules(
         confpath=root_dir,
         conffile=file_name,
