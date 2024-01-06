@@ -12,6 +12,12 @@ class GitModules(ConfigParser):
         includelist=None,
         excludelist=None,
     ):
+        """
+        confpath: Path to the directory containing the .gitmodules file (defaults to the current working directory).
+        conffile: Name of the configuration file (defaults to .gitmodules).
+        includelist: Optional list of submodules to include.
+        excludelist: Optional list of submodules to exclude.
+        """
         ConfigParser.__init__(self)
         self.conf_file = os.path.join(confpath, conffile)
         self.read_file(LstripReader(self.conf_file), source=conffile)
@@ -19,6 +25,11 @@ class GitModules(ConfigParser):
         self.excludelist = excludelist
 
     def set(self, name, option, value):
+        """
+        Sets a configuration value for a specific submodule:
+        Ensures the appropriate section exists for the submodule.
+        Calls the parent class's set method to store the value.
+        """
         section = f'submodule "{name}"'
         if not self.has_section(section):
             self.add_section(section)
@@ -26,6 +37,11 @@ class GitModules(ConfigParser):
 
     # pylint: disable=redefined-builtin, arguments-differ
     def get(self, name, option, raw=False, vars=None, fallback=None):
+        """
+        Retrieves a configuration value for a specific submodule:
+        Uses the parent class's get method to access the value.
+        Handles potential errors if the section or option doesn't exist.
+        """
         section = f'submodule "{name}"'
         try:
             return ConfigParser.get(
@@ -38,6 +54,7 @@ class GitModules(ConfigParser):
         self.write(open(self.conf_file, "w"))
 
     def sections(self):
+        """Strip the submodule part out of section and just use the name"""
         names = []
         for section in ConfigParser.sections(self):
             name = section[11:-1]
