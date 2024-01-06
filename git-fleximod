@@ -23,6 +23,14 @@ def commandline_arguments(args=None):
     #
     # user options
     #
+    choices = ["update", "install", "status"]
+    parser.add_argument(
+        "action",
+        choices=choices,
+        default="install",
+        help=f"Subcommand of fleximod, choices are {choices}",
+    )
+
     parser.add_argument(
         "components",
         nargs="*",
@@ -60,24 +68,6 @@ def commandline_arguments(args=None):
         help="By default only the required submodules "
         "are checked out. This flag will also checkout the "
         "optional submodules relative to the toplevel directory.",
-    )
-
-    parser.add_argument(
-        "-S",
-        "--status",
-        action="store_true",
-        default=False,
-        help="Output the status of the repositories managed by "
-        "%(prog)s. By default only summary information "
-        "is provided. Use the verbose option to see details.",
-    )
-
-    parser.add_argument(
-        "-u",
-        "--update",
-        action="store_true",
-        default=False,
-        help="Update submodules to the tags defined in .gitmodules.",
     )
 
     parser.add_argument(
@@ -142,11 +132,8 @@ def commandline_arguments(args=None):
     else:
         esmrequired = ["T:T", "I:T"]
 
-    if options.status:
-        action = "status"
-    elif options.update:
-        action = "update"
-    else:
+    action = options.action
+    if not action:
         action = "install"
 
     if options.version:
@@ -226,8 +213,9 @@ def submodules_status(gitmodules, root_dir):
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "esmtag")
-        with utils.pushd(path):
-            git = GitInterface(os.path.join(root_dir, path))
+        newpath = os.path.join(root_dir, path)
+        with utils.pushd(newpath):
+            git = GitInterface(newpath)
             atag = git.git_operation("describe", "--tags", "--always").rstrip()
             if tag and atag != tag:
                 print(f"Submodule {name} {atag} is out of sync with .gitmodules {tag}")

@@ -37,9 +37,6 @@ class GitModules(ConfigParser):
     def save(self):
         self.write(open(self.conf_file, "w"))
 
-    def __del__(self):
-        self.save()
-
     def sections(self):
         names = []
         for section in ConfigParser.sections(self):
