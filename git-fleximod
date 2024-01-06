@@ -257,11 +257,20 @@ def submodules_update(gitmodules, root_dir):
                 if upstream != url:
                     # TODO - this needs to be a unique name
                     remotes = git.git_operation("remote", "-v")
-                    newremote = "newremote"
-                    git.git_operation("remote", "add", newremote, url)
+                    if url in remotes:
+                        for line in remotes:
+                            if url in line and "fetch" in line:
+                                newremote = line.split()[0]
+                                break
+                    else:
+                        i = 0
+                        while newremote in remotes:
+                            i = i + 1
+                            newremote = f"newremote.{i:02d}"
+                        git.git_operation("remote", "add", newremote, url)
 
                 tags = git.git_operation("tag", "-l")
-                if esmtag not in tags:
+                if esmtag and esmtag not in tags:
                     git.git_operation("fetch", newremote, "--tags")
 
                 git.git_operation("checkout", esmtag)
