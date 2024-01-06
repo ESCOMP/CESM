@@ -4,7 +4,7 @@ from configparser import ConfigParser
 from modules.lstripreader import LstripReader
 
 
-class GitModules(ConfigParser.ConfigParser):
+class GitModules(ConfigParser):
     def __init__(
         self,
         confpath=os.getcwd(),
@@ -12,9 +12,9 @@ class GitModules(ConfigParser.ConfigParser):
         includelist=None,
         excludelist=None,
     ):
-        ConfigParser.ConfigParser.__init__(self)
-        self.read_file(LstripReader(confpath), source=conffile)
+        ConfigParser.__init__(self)
         self.conf_file = os.path.join(confpath, conffile)
+        self.read_file(LstripReader(self.conf_file), source=conffile)
         self.includelist = includelist
         self.excludelist = excludelist
 
@@ -22,12 +22,15 @@ class GitModules(ConfigParser.ConfigParser):
         section = f'submodule "{name}"'
         if not self.has_section(section):
             self.add_section(section)
-        ConfigParser.ConfigParser.set(self, section, option, str(value))
+        ConfigParser.set(self, section, option, str(value))
 
-    def get(self, name, option):
+    # pylint: disable=redefined-builtin, arguments-differ
+    def get(self, name, option, raw=False, vars=None, fallback=None):
         section = f'submodule "{name}"'
         try:
-            return ConfigParser.ConfigParser.get(self, section, option)
+            return ConfigParser.get(
+                self, section, option, raw=raw, vars=vars, fallback=fallback
+            )
         except ConfigParser.NoOptionError:
             return None
 
@@ -39,7 +42,7 @@ class GitModules(ConfigParser.ConfigParser):
 
     def sections(self):
         names = []
-        for section in ConfigParser.ConfigParser.sections(self):
+        for section in ConfigParser.sections(self):
             name = section[11:-1]
             if self.includelist and name not in self.includelist:
                 continue
@@ -48,6 +51,6 @@ class GitModules(ConfigParser.ConfigParser):
             names.append(name)
         return names
 
-    def items(self, name):
+    def items(self, name, raw=False, vars=None):
         section = f'submodule "{name}"'
-        return ConfigParser.ConfigParser.items(section)
+        return ConfigParser.items(section, raw=raw, vars=vars)

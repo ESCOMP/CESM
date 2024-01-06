@@ -8,6 +8,9 @@ from modules import utils
 from modules.gitinterface import GitInterface
 from modules.gitmodules import GitModules
 
+logger = logging.getLogger(__name__)
+logger.propogate = False
+
 
 def commandline_arguments(args=None):
     description = """
@@ -135,9 +138,9 @@ def commandline_arguments(args=None):
         options = parser.parse_args()
 
     if options.optional:
-        esmrequired = ("T:T", "T:F", "I:T")
+        esmrequired = ["T:T", "T:F", "I:T"]
     else:
-        esmrequired = ("T:T", "I:T")
+        esmrequired = ["T:T", "I:T"]
 
     if options.status:
         action = "status"
@@ -177,7 +180,7 @@ def submodule_sparse_checkout(name, url, path, sparsefile, tag="master"):
     topgit = os.path.join(topdir, ".git", "modules")
     gitsparse = os.path.join(topgit, name, "info", "sparse-checkout")
     if os.path.isfile(gitsparse):
-        logging.warning("submodule {} is already initialized".format(name))
+        logger.warning("submodule {} is already initialized".format(name))
         return
 
     # initialize a new git repo and set the sparse checkout flag
@@ -213,7 +216,7 @@ def submodule_checkout(root, name, path):
         # recursively handle this checkout
         print(f"Recursively checking out submodules of {name} {repodir}")
         gitmodules = GitModules(repodir)
-        submodules_install(gitmodules, repodir, ("I:T"))
+        submodules_install(gitmodules, repodir, ["I:T"])
     if os.path.exists(os.path.join(repodir, ".git")):
         print(f"Successfully checked out {name}")
     else:
@@ -253,19 +256,27 @@ def submodules_update(gitmodules, root_dir):
 
 
 def submodules_install(gitmodules, root_dir, requiredlist):
+    print(gitmodules.sections())
     for name in gitmodules.sections():
         esmrequired = gitmodules.get(name, "esmrequired")
         esmsparse = gitmodules.get(name, "esmsparse")
         esmtag = gitmodules.get(name, "esmtag")
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
-        if esmrequired not in requiredlist:
-            if "T:F" in esmrequired:
+
+        if esmrequired and esmrequired not in requiredlist:
+            if "T:F" == esmrequired:
                 print("Skipping optional component {}".format(name))
             continue
         if esmsparse:
+            logger.debug(
+                f"Callng submodule_sparse_checkout({name} {url}, {path}, {esmsparse}, {esmtag}"
+            )
             submodule_sparse_checkout(name, url, path, esmsparse, tag=esmtag)
         else:
+            logger.debug(
+                "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
+            )
             submodule_checkout(root_dir, name, path)
 
 
@@ -281,6 +292,7 @@ def _main_func():
     ) = commandline_arguments()
     if verbose:
         print(f"action is {action}")
+
     gitmodules = GitModules(
         confpath=root_dir,
         conffile=file_name,
