@@ -169,7 +169,7 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
         return
 
     # initialize a new git repo and set the sparse checkout flag
-    sprepo_git = GitInterface(os.path.join(topdir, path))
+    sprepo_git = GitInterface(os.path.join(root_dir, path))
     sprepo_git.config_set_value("core", "sparseCheckout", "true")
 
     # set the repository remote
