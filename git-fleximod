@@ -235,7 +235,7 @@ def submodules_update(gitmodules, root_dir):
         fxtag = gitmodules.get(name, "fxtag")
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
-        print(f"name={name} path={path} url={url} fxtag={fxtag}")
+        logger.info(f"name={name} path={path} url={url} fxtag={fxtag}")
         if os.path.exists(os.path.join(path, ".git")):
             submoddir = os.path.join(root_dir, path)
             with utils.pushd(submoddir):
@@ -261,10 +261,14 @@ def submodules_update(gitmodules, root_dir):
                 tags = git.git_operation("tag", "-l")
                 if fxtag and fxtag not in tags:
                     git.git_operation("fetch", newremote, "--tags")
-                if fxtag:
+                atag = git.git_operation("describe", "--tags", "--always").rstrip()
+                if fxtag and fxtag != atag:
+                    print(f"Updating {name} to {fxtag}")
                     git.git_operation("checkout", fxtag)
-                else:
+                elif not fxtag:
                     print(f"No fxtag found for submodule {name}")
+                else:
+                    print(f"submodule {name} up to date.")
 
 
 def submodules_install(gitmodules, root_dir, requiredlist):
