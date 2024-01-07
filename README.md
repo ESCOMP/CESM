@@ -46,17 +46,17 @@ Git-fleximod is a Python-based tool that extends Git's submodule capabilities, o
 Here are some common usage examples:
 
     Installing submodules, including optional ones:
-    ```Bash
-    git fleximod install --optional
-    ```
+```bash
+  git fleximod install --optional
+```
 
     Updating a specific submodule to the fxtag indicated in .gitmodules:
 
-    ```Bash
+    ```bash
     git fleximod update submodule-name
     ```
     Example .gitmodules entry:
-    ```Ini, TOML
+    ```ini, toml
     [submodule "cosp2"]
         path = src/physics/cosp2/src
         url = https://github.com/CFMIP/COSPv2.0
@@ -74,7 +74,7 @@ Here are some common usage examples:
     path directory.
 
     Additional example:
-    ```Ini, TOML
+    ```ini, toml
     [submodule "cime"]
         path = cime
         url = https://github.com/jedwards4b/cime
