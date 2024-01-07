@@ -45,49 +45,48 @@ Git-fleximod is a Python-based tool that extends Git's submodule capabilities, o
 
 Here are some common usage examples:
 
-    Installing submodules, including optional ones:
+Installing submodules, including optional ones:
 ```bash
   git fleximod install --optional
 ```
 
-    Updating a specific submodule to the fxtag indicated in .gitmodules:
+Updating a specific submodule to the fxtag indicated in .gitmodules:
 
-    ```bash
+```bash
     git fleximod update submodule-name
-    ```
-    Example .gitmodules entry:
-    ```ini, toml
+```
+Example .gitmodules entry:
+```ini, toml
     [submodule "cosp2"]
         path = src/physics/cosp2/src
         url = https://github.com/CFMIP/COSPv2.0
         fxsparse = ../.cosp_sparse_checkout
         fxtag = v2.1.4cesm
-    ```
-    Explanation:
+```
+Explanation:
 
-    This entry indicates that the submodule named cosp2 at tag
-    v2.1.4cesm should be checked out into the directory
-    src/physics/cosp2/src relative to the .gitmodules directory.  It
-    should be checked out from the URL
-    https://github.com/CFMIP/COSPv2.0 and use sparse checkout as
-    described in the file ../.cosp_sparse_checkout relative to the
-    path directory.
+This entry indicates that the submodule named cosp2 at tag v2.1.4cesm
+should be checked out into the directory src/physics/cosp2/src
+relative to the .gitmodules directory.  It should be checked out from
+the URL https://github.com/CFMIP/COSPv2.0 and use sparse checkout as
+described in the file ../.cosp_sparse_checkout relative to the path
+directory.
 
-    Additional example:
-    ```ini, toml
+Additional example:
+```ini, toml
     [submodule "cime"]
         path = cime
         url = https://github.com/jedwards4b/cime
         fxrequired = T:T
         fxtag = cime6.0.198_rme01
-    ```
+```
 
-    Explanation:
+Explanation:
 
-    This entry indicates that the submodule cime should be checked out
-    into a directory named cime at tag cime6.0.198_rme01 from the URL
-    https://github.com/jedwards4b/cime.  This should only be done if
-    the .gitmodules file is at the top level of the repository clone.
+This entry indicates that the submodule cime should be checked out
+into a directory named cime at tag cime6.0.198_rme01 from the URL
+https://github.com/jedwards4b/cime.  This should only be done if
+the .gitmodules file is at the top level of the repository clone.
 
 ## Contributing
 
