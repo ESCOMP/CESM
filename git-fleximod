@@ -128,9 +128,9 @@ def commandline_arguments(args=None):
         options = parser.parse_args()
 
     if options.optional:
-        esmrequired = ["T:T", "T:F", "I:T"]
+        fxrequired = ["T:T", "T:F", "I:T"]
     else:
-        esmrequired = ["T:T", "I:T"]
+        fxrequired = ["T:T", "I:T"]
 
     action = options.action
     if not action:
@@ -147,7 +147,7 @@ def commandline_arguments(args=None):
     return (
         options.path,
         options.gitmodules,
-        esmrequired,
+        fxrequired,
         options.components,
         options.exclude,
         options.verbose,
@@ -212,7 +212,7 @@ def submodule_checkout(root, name, path):
 def submodules_status(gitmodules, root_dir):
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
-        tag = gitmodules.get(name, "esmtag")
+        tag = gitmodules.get(name, "fxtag")
         newpath = os.path.join(root_dir, path)
         with utils.pushd(newpath):
             git = GitInterface(newpath)
@@ -232,9 +232,10 @@ def submodules_status(gitmodules, root_dir):
 
 def submodules_update(gitmodules, root_dir):
     for name in gitmodules.sections():
-        esmtag = gitmodules.get(name, "esmtag")
+        fxtag = gitmodules.get(name, "fxtag")
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
+        print(f"name={name} path={path} url={url} fxtag={fxtag}")
         if os.path.exists(os.path.join(path, ".git")):
             submoddir = os.path.join(root_dir, path)
             with utils.pushd(submoddir):
@@ -258,29 +259,31 @@ def submodules_update(gitmodules, root_dir):
                         git.git_operation("remote", "add", newremote, url)
 
                 tags = git.git_operation("tag", "-l")
-                if esmtag and esmtag not in tags:
+                if fxtag and fxtag not in tags:
                     git.git_operation("fetch", newremote, "--tags")
-
-                git.git_operation("checkout", esmtag)
+                if fxtag:
+                    git.git_operation("checkout", fxtag)
+                else:
+                    print(f"No fxtag found for submodule {name}")
 
 
 def submodules_install(gitmodules, root_dir, requiredlist):
     for name in gitmodules.sections():
-        esmrequired = gitmodules.get(name, "esmrequired")
-        esmsparse = gitmodules.get(name, "esmsparse")
-        esmtag = gitmodules.get(name, "esmtag")
+        fxrequired = gitmodules.get(name, "fxrequired")
+        fxsparse = gitmodules.get(name, "fxsparse")
+        fxtag = gitmodules.get(name, "fxtag")
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
 
-        if esmrequired and esmrequired not in requiredlist:
-            if "T:F" == esmrequired:
+        if fxrequired and fxrequired not in requiredlist:
+            if "T:F" == fxrequired:
                 print("Skipping optional component {}".format(name))
             continue
-        if esmsparse:
+        if fxsparse:
             logger.debug(
-                f"Callng submodule_sparse_checkout({root_dir}, {name}, {url}, {path}, {esmsparse}, {esmtag}"
+                f"Callng submodule_sparse_checkout({root_dir}, {name}, {url}, {path}, {fxsparse}, {fxtag}"
             )
-            submodule_sparse_checkout(root_dir, name, url, path, esmsparse, tag=esmtag)
+            submodule_sparse_checkout(root_dir, name, url, path, fxsparse, tag=fxtag)
         else:
             logger.debug(
                 "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
@@ -292,7 +295,7 @@ def _main_func():
     (
         root_dir,
         file_name,
-        esmrequired,
+        fxrequired,
         includelist,
         excludelist,
         verbose,
@@ -320,7 +323,7 @@ def _main_func():
     if action == "update":
         submodules_update(gitmodules, root_dir)
     elif action == "install":
-        submodules_install(gitmodules, root_dir, esmrequired)
+        submodules_install(gitmodules, root_dir, fxrequired)
     elif action == "status":
         submodules_status(gitmodules, root_dir)
     else:

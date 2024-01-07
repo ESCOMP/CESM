@@ -8,8 +8,9 @@ Git-fleximod is a Python-based tool that extends Git's submodule capabilities, o
 
 ## Installation
 
-    Install using pip:
-        pip install git-fleximod
+#TODO    Install using pip:
+#        pip install git-fleximod
+  If you choose to locate git-fleximod in your path you can access it via command: git fleximod
 
 ## Usage
 
@@ -18,7 +19,7 @@ Git-fleximod is a Python-based tool that extends Git's submodule capabilities, o
     Available Commands:
         install: Install submodules according to configuration.
         status: Display the status of submodules.
-        update: Update submodules to their latest commits.
+        update: Update submodules to the tag indicated in .gitmodules variable fxtag.
     Additional Options:
         See git fleximod --help for more details.
 
@@ -38,11 +39,34 @@ Git-fleximod is a Python-based tool that extends Git's submodule capabilities, o
     in the .gitmodules file to the path of a file containing the desired
     sparse checkout paths. Git-fleximod will automatically configure
     sparse checkout based on this file when applicable commands are run.
+    See [git-sparse-checkout](https://git-scm.com/docs/git-sparse-checkout#_internalsfull_pattern_set) for details on the format of this file.
 
 ## Examples
 
-    Installing submodules with optional ones: git fleximod install --optional
-    Checking out a specific tag for a submodule: git fleximod update --fxtag=v1.2.3 submodule-name
+    Installing submodules including optional ones: git fleximod install --optional
+    Update a specific submodule to the fxtag indicated in .gitmodules: git fleximod update submodule-name
+    Example .gitmodules entry:
+      [submodule "cosp2"]
+         path = src/physics/cosp2/src
+         url = https://github.com/CFMIP/COSPv2.0
+         fxsparse = ../.cosp_sparse_checkout
+         fxtag = v2.1.4cesm
+
+   This indicates that submodule named cosp2 at tag v2.1.4cesm should
+   be checked out into directory src/physics/cosp2/src relative to the
+   .gitmodules directory from the given url and that it should use the
+   sparse checkout as described in file ../.cosp_sparse_checkout relative
+   to the path directory.
+
+   [submodule "cime"]
+       path = cime
+       url = https://github.com/jedwards4b/cime
+       fxrequired = T:T
+       fxtag = cime6.0.198_rme01
+
+   This indicates that submodule cime should be checked out into a directory cime
+   at tag cime6.0.198_rme01 from url https://github.com/jedwards4b/cime, this should
+   only be done if this .gitmodules file is at the TopLevel of the repository clone.
 
 ## Contributing
 
