@@ -1,25 +1,14 @@
 #!/bin/bash
-# Script to fetch submodules for CESM
-# 
-submodules=('ccs_config' 'components/cice5' 'components/cice' 'components/cmeps' \
-           'components/cdeps' 'components/cpl7' 'share' 'libraries/mct' \
-           'libraries/parallelio' 'cime' 'libraries/FMS' 'components/mosart' \
-           'components/rtm' 'components/mizoRoute' 'components/ww3' 'components/ww3dev'\
-           'components/mom' 'components/pop' 'tools/statistical_ensemble_test/pyCECT')
-
-for mod in "${submodules[@]}"
-do
-   echo "Initializing $mod"
-   git submodule update --init --recursive $mod
-done
-
-sparse_submodules=('components/clm' 'components/cism' 'components/cam' )
-
-for mod in "${sparse_submodules[@]}"
-do
-   echo "Initializing $mod"
-   git submodule update --init $mod
-   pushd $mod
-   bash ./install -internal-only
-   popd
-done
+#
+# Script to fetch submodules for NCAR EARTH SYSTEM MODELS
+#
+set -e
+########################
+dir=$(git rev-parse --show-toplevel)
+if ! test -f ${dir}/bin/git-fleximod; then
+  echo "Getting checkout tools"
+  git -C ${dir} clone https://github.com/jedwards4b/git-fleximod --depth 1 bin
+fi
+pushd ${dir} 1>/dev/null
+python ./bin/git-fleximod install "$@"
+popd 1>/dev/null

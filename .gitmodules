@@ -32,7 +32,7 @@
 	path = components/cpl7
 	url = https://github.com/ESCOMP/CESM_CPL7andDataComps
         fxtag = cpl77.0.7
-        fxrequired = T:F
+        fxrequired = T:T
 
 [submodule "cam"]
 	path = components/cam
@@ -50,18 +50,18 @@
 	path = components/ww3dev
        	url = https://github.com/jedwards4b/WW3_interface       
         fxtag = main_0.0.13_rme01
-        fxrequired = T:F
+        fxrequired = T:T
         
 [submodule "rtm"]
 	path = components/rtm
 	url = https://github.com/ESCOMP/RTM
-        fxrequired = T:F
+        fxrequired = T:T
         fxtag = rtm1_0_78 
 
 [submodule "pysect"]
 	path = tools/statistical_ensemble_test/pyCECT
 	url = https://github.com/NCAR/PyCECT
-        fxrequired = T:F
+        fxrequired = T:T
         fxtag = 3.2.2
 
 [submodule "mosart"]
@@ -73,7 +73,7 @@
 [submodule "mizuroute"]
 	path = components/mizuroute
 	url = https://github.com/ESCOMP/mizuRoute
-        fxrequired = T:F
+        fxrequired = T:T
         fxtag = cesm-coupling.n02_v2.1.2
 
 [submodule "fms"]
@@ -85,7 +85,7 @@
 [submodule "parallelio"]
 	path = libraries/parallelio
 	url = https://github.com/NCAR/ParallelIO
-        fxrequired = T:F
+        fxrequired = T:T
         fxtag = pio2_6_2
 
 [submodule "cdeps"]
@@ -103,7 +103,7 @@
 [submodule "cice5"]
 	path = components/cice5
 	url = https://github.com/ESCOMP/CESM_CICE5
-        fxrequired = T:F
+        fxrequired = T:T
         fxtag = cice5_20220204
 
 [submodule "cice6"]
@@ -133,5 +133,5 @@
 [submodule "pop"]
 	path = components/pop
 	url = https://github.com/jedwards4b/POP2-CESM
-        fxrequired = T:F
+        fxrequired = T:T
         fxtag = cesm_pop_2_1_20231208_rme01
