@@ -162,14 +162,13 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     # Check first if the module is already defined
     # and the sparse-checkout file exists
     git = GitInterface(root_dir)
-
+    print(f"root_dir is {root_dir}")
     # initialize a new git repo and set the sparse checkout flag
     sprepo_git = GitInterface(os.path.join(root_dir, path))
     sprepo_git.config_set_value("core", "sparseCheckout", "true")
 
     # set the repository remote
     sprepo_git.git_operation("remote", "add", "origin", url)
-
 
     if os.path.isfile(os.path.join(root_dir, ".git")):
         with open(os.path.join(root_dir, ".git")) as f:
@@ -224,20 +223,23 @@ def submodules_status(gitmodules, root_dir):
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "fxtag")
         newpath = os.path.join(root_dir, path)
-        with utils.pushd(newpath):
-            git = GitInterface(newpath)
-            atag = git.git_operation("describe", "--tags", "--always").rstrip()
-            if tag and atag != tag:
-                print(f"Submodule {name} {atag} is out of sync with .gitmodules {tag}")
-            elif tag:
-                print(f"Submodule {name} at tag {tag}")
-            else:
-                print(
-                    f"Submodule {name} has no tag defined in .gitmodules, module at {atag}"
-                )
-            status = git.git_operation("status")
-            if "nothing to commit" not in status:
-                print(status)
+        if not os.path.exists(os.path.join(newpath, ".git")):
+            print(f"Submodule {name} not checked out")
+        else:
+            with utils.pushd(newpath):
+                git = GitInterface(newpath)
+                atag = git.git_operation("describe", "--tags", "--always").rstrip()
+                if tag and atag != tag:
+                    print(f"Submodule {name} {atag} is out of sync with .gitmodules {tag}")
+                elif tag:
+                    print(f"Submodule {name} at tag {tag}")
+                else:
+                    print(
+                        f"Submodule {name} has no tag defined in .gitmodules, module at {atag}"
+                    )
+                status = git.git_operation("status")
+                if "nothing to commit" not in status:
+                    print(status)
 
 
 def submodules_update(gitmodules, root_dir):
@@ -293,6 +295,11 @@ def submodules_install(gitmodules, root_dir, requiredlist):
             if "T:F" == fxrequired:
                 print("Skipping optional component {}".format(name))
             continue
+        # ssh urls cause problems for those who dont have git accounts with ssh keys defined
+        # but cime has one since e3sm prefers ssh to https
+        if url.startswith("git@"):
+            url = url.replace("git@github.com:", "https://github.com")
+            
         if fxsparse:
             logger.debug(
                 f"Callng submodule_sparse_checkout({root_dir}, {name}, {url}, {path}, {fxsparse}, {fxtag}"
