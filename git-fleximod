@@ -201,9 +201,12 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     print(f"Successfully checked out {name}")
 
 
-def submodule_checkout(root, name, path):
+def submodule_checkout(root, name, path, url=None):
     git = GitInterface(root)
     repodir = os.path.join(root, path)
+    # if url is provided update to the new url
+    if url:
+        git.git_operation("submodule", "set-url", path, url)
     git.git_operation("submodule", "update", "--init", path)
     # Look for a .gitmodules file in the newly checkedout repo
     if os.path.exists(os.path.join(repodir, ".gitmodules")):
@@ -309,7 +312,7 @@ def submodules_install(gitmodules, root_dir, requiredlist):
             logger.debug(
                 "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
             )
-            submodule_checkout(root_dir, name, path)
+            submodule_checkout(root_dir, name, path, url=url)
 
 
 def _main_func():
