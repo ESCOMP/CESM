@@ -1,60 +1,20 @@
-[submodule "components/mom"]
-	path = components/mom
-	url = https://github.com/jedwards4b/MOM_interface
-[submodule "components/clm"]
-	path = components/clm
-	url = https://github.com/jedwards4b/CTSM
-[submodule "components/cism"]
-	path = components/cism
-	url = https://github.com/jedwards4b/cism-wrapper.git
-[submodule "components/pop"]
-	path = components/pop
-	url = https://github.com/jedwards4b/POP2-CESM
-[submodule "components/ww3dev"]
-	path = components/ww3dev
-	url = https://github.com/jedwards4b/WW3_interface
 [submodule "ccs_config"]
 	path = ccs_config
 	url = https://github.com/ESMCI/ccs_config_cesm.git
-[submodule "components/cice"]
-	path = components/cice
-	url = https://github.com/jedwards4b/CESM_CICE
-[submodule "components/cice5"]
-	path = components/cice5
-	url = https://github.com/ESCOMP/CESM_CICE5
-[submodule "components/cmeps"]
-	path = components/cmeps
-	url = https://github.com/ESCOMP/CMEPS.git
-[submodule "components/cdeps"]
-	path = components/cdeps
-	url = https://github.com/jedwards4b/CDEPS.git
+        fxtag = ccs_config_cesm0.0.88
+        fxrequired = 'T:T'
+        
 [submodule "share"]
 	path = share
 	url = https://github.com/ESCOMP/CESM_share
-[submodule "libraries/parallelio"]
-	path = libraries/parallelio
-	url = https://github.com/NCAR/ParallelIO
+        fxtag = share1.0.18
+        fxrequired = 'T:T'
+
 [submodule "cime"]
 	path = cime
 	url = https://github.com/jedwards4b/cime
-[submodule "libraries/FMS"]
-	path = libraries/FMS
-	url = https://github.com/jedwards4b/FMS_interface
-[submodule "components/mizuroute"]
-	path = components/mizuroute
-	url = https://github.com/ESCOMP/mizuRoute
-[submodule "components/mosart"]
-	path = components/mosart
-	url = https://github.com/ESCOMP/MOSART
-[submodule "tools/statistical_ensemble_test/pyCECT"]
-	path = tools/statistical_ensemble_test/pyCECT
-	url = https://github.com/NCAR/PyCECT
-[submodule "components/rtm"]
-	path = components/rtm
-	url = https://github.com/ESCOMP/RTM
-[submodule "components/ww3"]
-	path = components/ww3
-	url = https://github.com/ESCOMP/WW3-CESM
+        fxtag = cime6.0.198_rme01
+        fxrequired = 'T:T'
 
 [submodule "mct"]
         path = libraries/mct
@@ -80,3 +40,92 @@
         fxtag = cam6_3_143_rme01
         fxrequired = 'T:T'
 
+[submodule "ww3"]
+	path = components/ww3
+	url = https://github.com/ESCOMP/WW3-CESM
+        fxtag = ww3_221108
+        fxrequired = 'T:T'
+        
+[submodule "ww3dev"]
+	path = components/ww3dev
+	url = https://github.com/jedwards4b/WW3_interface
+        fxrequired = 'T:F'
+        
+[submodule "rtm"]
+	path = components/rtm
+	url = https://github.com/ESCOMP/RTM
+        fxrequired = 'T:F'
+        fxtag = rtm1_0_78 
+
+[submodule "pysect"]
+	path = tools/statistical_ensemble_test/pyCECT
+	url = https://github.com/NCAR/PyCECT
+        fxrequired = 'T:F'
+        fxtag = 3.2.2
+
+[submodule "mosart"]
+	path = components/mosart
+	url = https://github.com/ESCOMP/MOSART
+        fxrequired = 'T:F'
+        fxtag = mosart1_0_48
+
+[submodule "mizuroute"]
+	path = components/mizuroute
+	url = https://github.com/ESCOMP/mizuRoute
+        fxrequired = 'T:F'
+        fxtag = cesm-coupling.n02_v2.1.2
+
+[submodule "fms"]
+	path = libraries/FMS
+	url = https://github.com/jedwards4b/FMS_interface
+        fxrequired = 'T:T'
+        fxtag = fi_230818_rme01
+        
+[submodule "parallelio"]
+	path = libraries/parallelio
+	url = https://github.com/NCAR/ParallelIO
+        fxrequired = 'T:F'
+        fxtag = pio2_6_2
+
+[submodule "cdeps"]
+	path = components/cdeps
+	url = https://github.com/jedwards4b/CDEPS
+        fxrequired = 'T:T'
+        fxtag = cdeps1.0.24_rme1
+
+[submodule "cmeps"]
+	path = components/cmeps
+	url = https://github.com/ESCOMP/CMEPS.git
+        fxrequired = 'T:T'
+        fxtag = cmeps0.14.49
+
+[submodule "cice5"]
+	path = components/cice5
+	url = https://github.com/ESCOMP/CESM_CICE5
+        fxrequired = 'T:F'
+        fxtag = cice5_20220204
+
+[submodule "cice6"]
+	path = components/cice
+	url = https://github.com/jedwards4b/CESM_CICE
+        fxrequired = 'T:T'
+        fxtag = cesm_cice6_4_1_10_rme01
+
+[submodule "cism"]
+	path = components/cism
+	url = https://github.com/jedwards4b/cism-wrapper.git
+        fxtag = cismwrap_2_1_96_rme01
+        fxrequired = 'T:T'
+
+[submodule "clm"]
+	path = components/clm
+	url = https://github.com/jedwards4b/CTSM
+
+
+[submodule "mom"]
+	path = components/mom
+	url = https://github.com/jedwards4b/MOM_interface
+
+[submodule "pop"]
+	path = components/pop
+	url = https://github.com/jedwards4b/POP2-CESM
