@@ -205,10 +205,19 @@ def submodule_checkout(root, name, path, url=None):
     git = GitInterface(root)
     repodir = os.path.join(root, path)
     # if url is provided update to the new url
+    tmpurl = None
     if url:
+        # ssh urls cause problems for those who dont have git accounts with ssh keys defined
+        # but cime has one since e3sm prefers ssh to https
+        if url.startswith("git@"):
+            tmpurl = url
+            url = url.replace("git@github.com:", "https://github.com")            
         git.git_operation("submodule", "set-url", path, url)
     git.git_operation("submodule", "update", "--init", path)
     # Look for a .gitmodules file in the newly checkedout repo
+    if tmpurl:
+        git.git_operation("submodule", "set-url", path, tmpurl)
+        
     if os.path.exists(os.path.join(repodir, ".gitmodules")):
         # recursively handle this checkout
         print(f"Recursively checking out submodules of {name} {repodir}")
@@ -298,10 +307,6 @@ def submodules_install(gitmodules, root_dir, requiredlist):
             if "T:F" == fxrequired:
                 print("Skipping optional component {}".format(name))
             continue
-        # ssh urls cause problems for those who dont have git accounts with ssh keys defined
-        # but cime has one since e3sm prefers ssh to https
-        if url.startswith("git@"):
-            url = url.replace("git@github.com:", "https://github.com")
             
         if fxsparse:
             logger.debug(
@@ -312,6 +317,7 @@ def submodules_install(gitmodules, root_dir, requiredlist):
             logger.debug(
                 "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
             )
+            
             submodule_checkout(root_dir, name, path, url=url)
 
 
