@@ -1,9 +1,6 @@
 [submodule "components/mom"]
 	path = components/mom
 	url = https://github.com/jedwards4b/MOM_interface
-[submodule "components/cam"]
-	path = components/cam
-	url = https://github.com/jedwards4b/CAM
 [submodule "components/clm"]
 	path = components/clm
 	url = https://github.com/jedwards4b/CTSM
@@ -58,12 +55,28 @@
 [submodule "components/ww3"]
 	path = components/ww3
 	url = https://github.com/ESCOMP/WW3-CESM
-[submodule "libraries/mpi-serial"]
+
+[submodule "mct"]
+        path = libraries/mct
+	url = https://github.com/MCSclimate/MCT
+        fxrequired = 'T:T'
+        fxtag = MCT_2.11.0
+
+[submodule "mpi-serial"]
 	path = libraries/mpi-serial
 	url = https://github.com/ESMCI/mpi-serial
-[submodule "libraries/mct"]
-	path = libraries/mct
-	url = https://github.com/MCSclimate/MCT
-[submodule "components/cpl7"]
+        fxtag = MPIserial_2.5.0
+        fxrequired = 'T:T'
+
+[submodule "cpl7"]
 	path = components/cpl7
 	url = https://github.com/ESCOMP/CESM_CPL7andDataComps
+        fxtag = cpl77.0.7
+        fxrequired = 'T:T'
+
+[submodule "cam"]
+	path = components/cam
+	url = https://www.github.com/jedwards4b/CAM
+        fxtag = cam6_3_143_rme01
+        fxrequired = 'T:T'
+
