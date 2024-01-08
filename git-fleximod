@@ -162,11 +162,6 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     # Check first if the module is already defined
     # and the sparse-checkout file exists
     git = GitInterface(root_dir)
-    topgit = os.path.join(root_dir, ".git", "modules")
-    gitsparse = os.path.join(topgit, name, "info", "sparse-checkout")
-    if os.path.isfile(gitsparse):
-        logger.warning("submodule {} is already initialized".format(name))
-        return
 
     # initialize a new git repo and set the sparse checkout flag
     sprepo_git = GitInterface(os.path.join(root_dir, path))
@@ -175,16 +170,31 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     # set the repository remote
     sprepo_git.git_operation("remote", "add", "origin", url)
 
+
+    if os.path.isfile(os.path.join(root_dir, ".git")):
+        with open(os.path.join(root_dir, ".git")) as f:
+            gitpath = os.path.abspath(os.path.join(root_dir,f.read().split()[1]))
+        print(f"gitpath is {gitpath}")
+        topgit = os.path.join(gitpath, "modules")
+    else:                      
+        topgit = os.path.join(root_dir, ".git", "modules")
+    print(f"topgit is {topgit}")
     if not os.path.isdir(topgit):
         os.makedirs(topgit)
     topgit = os.path.join(topgit, name)
+    print(f"topgit is {topgit}")
+    if os.path.isdir(os.path.join(root_dir,path,".git")):
+        shutil.move(os.path.join(root_dir,path, ".git"), topgit)
+        with open(os.path.join(root_dir,path, ".git"), "w") as f:
+            f.write("gitdir: " + os.path.relpath(topgit, path))
+            
+    gitsparse = os.path.abspath(os.path.join(topgit, "info", "sparse-checkout"))
+    if os.path.isfile(gitsparse):
+        logger.warning("submodule {} is already initialized".format(name))
+        return
 
-    shutil.move(os.path.join(path, ".git"), topgit)
 
-    shutil.copy(os.path.join(path, sparsefile), gitsparse)
-
-    with open(os.path.join(path, ".git"), "w") as f:
-        f.write("gitdir: " + os.path.relpath(topgit, path))
+    shutil.copy(os.path.join(root_dir,path, sparsefile), gitsparse)
 
     # Finally checkout the repo
     sprepo_git.git_operation("fetch", "--depth=1", "origin", "--tags")
