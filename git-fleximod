@@ -162,7 +162,7 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     # Check first if the module is already defined
     # and the sparse-checkout file exists
     git = GitInterface(root_dir)
-    print(f"root_dir is {root_dir}")
+
     # initialize a new git repo and set the sparse checkout flag
     sprepo_git = GitInterface(os.path.join(root_dir, path))
     sprepo_git.config_set_value("core", "sparseCheckout", "true")
@@ -173,15 +173,14 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     if os.path.isfile(os.path.join(root_dir, ".git")):
         with open(os.path.join(root_dir, ".git")) as f:
             gitpath = os.path.abspath(os.path.join(root_dir,f.read().split()[1]))
-        print(f"gitpath is {gitpath}")
         topgit = os.path.join(gitpath, "modules")
     else:                      
         topgit = os.path.join(root_dir, ".git", "modules")
-    print(f"topgit is {topgit}")
+
     if not os.path.isdir(topgit):
         os.makedirs(topgit)
     topgit = os.path.join(topgit, name)
-    print(f"topgit is {topgit}")
+
     if os.path.isdir(os.path.join(root_dir,path,".git")):
         shutil.move(os.path.join(root_dir,path, ".git"), topgit)
         with open(os.path.join(root_dir,path, ".git"), "w") as f:
