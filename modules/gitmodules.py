@@ -51,7 +51,8 @@ class GitModules(ConfigParser):
             return None
 
     def save(self):
-        self.write(open(self.conf_file, "w"))
+        print("Called gitmodules save, not expected")
+        #        self.write(open(self.conf_file, "w"))
 
     def sections(self):
         """Strip the submodule part out of section and just use the name"""

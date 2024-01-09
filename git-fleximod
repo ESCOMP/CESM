@@ -221,7 +221,7 @@ def submodule_checkout(root, name, path, url=None):
         
     if os.path.exists(os.path.join(repodir, ".gitmodules")):
         # recursively handle this checkout
-        print(f"Recursively checking out submodules of {name} {repodir}")
+        print(f"Recursively checking out submodules of {name} ")
         gitmodules = GitModules(repodir)
         submodules_install(gitmodules, repodir, ["I:T"])
     if os.path.exists(os.path.join(repodir, ".git")):
@@ -235,6 +235,8 @@ def submodules_status(gitmodules, root_dir):
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "fxtag")
+        if not path:
+            utils.fatal_error("No path found in .gitmodules for {}".format(name))
         newpath = os.path.join(root_dir, path)
         if not os.path.exists(os.path.join(newpath, ".git")):
             print(f"Submodule {name} not checked out")
