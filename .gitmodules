@@ -122,7 +122,7 @@
 	path = components/clm
 	url = https://github.com/jedwards4b/CTSM
         fxrequired = T:T
-        fxtag = branch_tags/CESM3_dev.n04_ctsm5.1.dev145_rme01
+        fxtag = branch_tags/CESM3_dev.n04_ctsm5.1.dev145_rme02
 
 [submodule "mom"]
 	path = components/mom
