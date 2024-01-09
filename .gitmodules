@@ -13,7 +13,7 @@
 [submodule "cime"]
 	path = cime
 	url = https://github.com/jedwards4b/cime
-        fxtag = cime6.0.198_rme01
+        fxtag = cime6.0.198_rme02
         fxrequired = T:T
 
 [submodule "mct"]
@@ -92,7 +92,7 @@
 	path = components/cdeps
 	url = https://github.com/jedwards4b/CDEPS
         fxrequired = T:T
-        fxtag = cdeps1.0.24_rme1
+        fxtag = cdeps1.0.26_rme01
 
 [submodule "cmeps"]
 	path = components/cmeps
