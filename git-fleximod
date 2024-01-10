@@ -218,16 +218,10 @@ def submodule_checkout(root, name, path, url=None, tag=None):
         if url.startswith("git@"):
             tmpurl = url
             url = url.replace("git@github.com:", "https://github.com")            
-
             git.git_operation("clone", "-b", tag, url, path)
-            print(f"Using {url} for {name}")
-            #            print(git.git_operation("submodule", "set-url", name, url))
-            #        if "cprnc" in repodir:
-            #            with open(os.path.join(root,".gitmodules"),"r") as f:
-            #                print(f.read())
-        print(f"calling update for {name}")
+
     if not tmpurl:
-        logger.debug(git.git_operation("submodule", "update", "--init", "--", name))
+        logger.debug(git.git_operation("submodule", "update", "--init", "--", path))
 
     if os.path.exists(os.path.join(repodir, ".gitmodules")):
         # recursively handle this checkout
@@ -239,10 +233,9 @@ def submodule_checkout(root, name, path, url=None, tag=None):
     else:
         utils.fatal_error(f"Failed to checkout {name}")
 
-    
     if tmpurl:
         print(git.git_operation("restore", ".gitmodules"))
-        print(f"Using {tmpurl} for {name}")
+
     return
 
 
