@@ -203,6 +203,7 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
 
 
 def submodule_checkout(root, name, path, url=None):
+    shutil.copy(os.path.join(root,".gitmodules"), os.path.join(root,".save.gitmodules"))
     git = GitInterface(root)
     repodir = os.path.join(root, path)
     # if url is provided update to the new url
@@ -214,7 +215,9 @@ def submodule_checkout(root, name, path, url=None):
             tmpurl = url
             url = url.replace("git@github.com:", "https://github.com")            
         git.git_operation("submodule", "set-url", path, url)
-    git.git_operation("submodule", "update", "--init", path)
+    git.git_operation("submodule", "update", "--init", "--", path)
+    shutil.copy(os.path.join(root,".save.gitmodules"), os.path.join(root,".gitmodules"))
+
     # Look for a .gitmodules file in the newly checkedout repo
     if tmpurl:
         git.git_operation("submodule", "set-url", path, tmpurl)
