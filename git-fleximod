@@ -202,11 +202,14 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     print(f"Successfully checked out {name}")
 
 
-def submodule_checkout(root, name, path, url=None):
+def submodule_checkout(root, name, path, url=None, tag=None):
     git = GitInterface(root)
     repodir = os.path.join(root, path)
+
     # if url is provided update to the new url
     tmpurl = None
+
+    # Look for a .gitmodules file in the newly checkedout repo
     if url:
         # ssh urls cause problems for those who dont have git accounts with ssh keys defined
         # but cime has one since e3sm prefers ssh to https, because the .gitmodules file was
@@ -215,22 +218,31 @@ def submodule_checkout(root, name, path, url=None):
         if url.startswith("git@"):
             tmpurl = url
             url = url.replace("git@github.com:", "https://github.com")            
-        git.git_operation("submodule", "set-url", path, url)
-    git.git_operation("submodule", "update", "--init", "--", path)
-    
-    # Look for a .gitmodules file in the newly checkedout repo
-    if tmpurl:
-        git.git_operation("submodule", "set-url", path, tmpurl)
-        
+
+            git.git_operation("clone", "-b", tag, url, path)
+            print(f"Using {url} for {name}")
+            #            print(git.git_operation("submodule", "set-url", name, url))
+            #        if "cprnc" in repodir:
+            #            with open(os.path.join(root,".gitmodules"),"r") as f:
+            #                print(f.read())
+        print(f"calling update for {name}")
+    if not tmpurl:
+        logger.debug(git.git_operation("submodule", "update", "--init", "--", name))
+
     if os.path.exists(os.path.join(repodir, ".gitmodules")):
         # recursively handle this checkout
-        print(f"Recursively checking out submodules of {name} ")
+        print(f"Recursively checking out submodules of {name} {repodir} {url}")
         gitmodules = GitModules(repodir)
         submodules_install(gitmodules, repodir, ["I:T"])
     if os.path.exists(os.path.join(repodir, ".git")):
         print(f"Successfully checked out {name}")
     else:
         utils.fatal_error(f"Failed to checkout {name}")
+
+    
+    if tmpurl:
+        print(git.git_operation("restore", ".gitmodules"))
+        print(f"Using {tmpurl} for {name}")
     return
 
 
@@ -324,7 +336,7 @@ def submodules_install(gitmodules, root_dir, requiredlist):
                 "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
             )
             
-            submodule_checkout(root_dir, name, path, url=url)
+            submodule_checkout(root_dir, name, path, url=url, tag=fxtag)
 
 
 def _main_func():
