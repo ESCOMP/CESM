@@ -1,4 +1,5 @@
 import os
+import shutil
 from configparser import ConfigParser
 
 from modules.lstripreader import LstripReader
@@ -20,6 +21,8 @@ class GitModules(ConfigParser):
         """
         ConfigParser.__init__(self)
         self.conf_file = os.path.join(confpath, conffile)
+        # first create a backup of this file to be restored on deletion of the object
+        shutil.copy(self.conf_file, self.conf_file+".save")
         self.read_file(LstripReader(self.conf_file), source=conffile)
         self.includelist = includelist
         self.excludelist = excludelist
@@ -54,6 +57,9 @@ class GitModules(ConfigParser):
         print("Called gitmodules save, not expected")
         #        self.write(open(self.conf_file, "w"))
 
+    def __del__(self):
+        shutil.move(self.conf_file+".save", self.conf_file)
+            
     def sections(self):
         """Strip the submodule part out of section and just use the name"""
         names = []

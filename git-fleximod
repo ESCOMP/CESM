@@ -203,22 +203,21 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
 
 
 def submodule_checkout(root, name, path, url=None):
-    shutil.copy(os.path.join(root,".gitmodules"), os.path.join(root,".save.gitmodules"))
     git = GitInterface(root)
     repodir = os.path.join(root, path)
     # if url is provided update to the new url
     tmpurl = None
     if url:
         # ssh urls cause problems for those who dont have git accounts with ssh keys defined
-        # but cime has one since e3sm prefers ssh to https
+        # but cime has one since e3sm prefers ssh to https, because the .gitmodules file was
+        # opened with a GitModules object we don't need to worry about restoring the file here
+        # it will be done by the GitModules class
         if url.startswith("git@"):
             tmpurl = url
             url = url.replace("git@github.com:", "https://github.com")            
         git.git_operation("submodule", "set-url", path, url)
     git.git_operation("submodule", "update", "--init", "--", path)
     
-    shutil.move(os.path.join(root,".save.gitmodules"), os.path.join(root,".gitmodules"))
-
     # Look for a .gitmodules file in the newly checkedout repo
     if tmpurl:
         git.git_operation("submodule", "set-url", path, tmpurl)
@@ -345,7 +344,7 @@ def _main_func():
         file_path = utils.find_upwards(root_dir, file_name)
 
         if file_path is None:
-            fatal_error(
+            utils.fatal_error(
                 "No {} found in {} or any of it's parents".format(file_name, root_dir)
             )
         root_dir = os.path.dirname(file_path)
