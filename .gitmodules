@@ -115,7 +115,7 @@
 [submodule "cism"]
 	path = components/cism
 	url = https://github.com/jedwards4b/cism-wrapper.git
-        fxtag = cismwrap_2_1_96_rme01
+        fxtag = cismwrap_2_1_96_rme02
         fxrequired = T:T
 
 [submodule "clm"]
