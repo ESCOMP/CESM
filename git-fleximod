@@ -216,7 +216,8 @@ def submodule_checkout(root, name, path, url=None):
             url = url.replace("git@github.com:", "https://github.com")            
         git.git_operation("submodule", "set-url", path, url)
     git.git_operation("submodule", "update", "--init", "--", path)
-    shutil.copy(os.path.join(root,".save.gitmodules"), os.path.join(root,".gitmodules"))
+    
+    shutil.move(os.path.join(root,".save.gitmodules"), os.path.join(root,".gitmodules"))
 
     # Look for a .gitmodules file in the newly checkedout repo
     if tmpurl:
@@ -255,7 +256,7 @@ def submodules_status(gitmodules, root_dir):
                     print(
                         f"Submodule {name} has no tag defined in .gitmodules, module at {atag}"
                     )
-                status = git.git_operation("status")
+                status = git.git_operation("status","--ignore-submodules","untracked")
                 if "nothing to commit" not in status:
                     print(status)
 
