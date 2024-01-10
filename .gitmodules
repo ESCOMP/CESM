@@ -13,7 +13,7 @@
 [submodule "cime"]
 	path = cime
 	url = https://github.com/jedwards4b/cime
-        fxtag = cime6.0.198_rme02
+        fxtag = cime6.0.198_rme03
         fxrequired = T:T
 
 [submodule "mct"]
