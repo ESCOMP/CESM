@@ -147,7 +147,7 @@ def commandline_arguments(args=None):
         format="%(name)s - %(levelname)s - %(message)s",
         handlers=[logging.FileHandler("fleximod.log"), logging.StreamHandler()],
     )
-    if options.version:
+    if hasattr(options, 'version'):
         exit()
     
     return (
