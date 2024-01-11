@@ -1,11 +1,12 @@
 import os
 import logging
-from modules import utils
+from fleximod import utils
 
 class GitInterface:
-    def __init__(self, repo_path):
+    def __init__(self, repo_path, logger):
+        logger.debug("Initialize GitInterface for {}".format(repo_path))
         self.repo_path = repo_path
-
+        self.logger = logger
         try:
             import git
             self._use_module = True
@@ -20,10 +21,10 @@ class GitInterface:
             if not os.path.exists(os.path.join(repo_path,".git")):
                 self._init_git_repo()
             msg = "Using shell interface to git"
-        logging.info(msg)
+        self.logger.info(msg)
                 
     def _git_command(self, operation, *args):
-        logging.info(operation)
+        self.logger.info(operation)
         if self._use_module and operation != "submodule":
             return getattr(self.repo.git, operation)(*args)
         else:
@@ -39,6 +40,7 @@ class GitInterface:
 
     def git_operation(self, operation, *args, **kwargs):
         command = self._git_command(operation, *args)
+        self.logger.info(command)
         if isinstance(command, list):
             return utils.execute_subprocess(command, output_to_caller=True)
         else:
@@ -60,4 +62,5 @@ class GitInterface:
             writer.release()  # Ensure changes are saved
         else:
             cmd = ("git","-C",self.repo_path,"config", f"{section}.{name}", value)
+            self.logger.info(cmd)
             utils.execute_subprocess(cmd, output_to_caller=True)

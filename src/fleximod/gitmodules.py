@@ -1,13 +1,12 @@
 import os
 import shutil
 from configparser import ConfigParser
-
-from modules.lstripreader import LstripReader
-
+from fleximod.lstripreader import LstripReader
 
 class GitModules(ConfigParser):
     def __init__(
         self,
+        logger,
         confpath=os.getcwd(),
         conffile=".gitmodules",
         includelist=None,
@@ -19,6 +18,8 @@ class GitModules(ConfigParser):
         includelist: Optional list of submodules to include.
         excludelist: Optional list of submodules to exclude.
         """
+        self.logger = logger
+        self.logger.debug("Creating a GitModules object {} {} {} {}".format(confpath,conffile,includelist,excludelist))
         ConfigParser.__init__(self)
         self.conf_file = os.path.join(confpath, conffile)
         # first create a backup of this file to be restored on deletion of the object
@@ -33,6 +34,7 @@ class GitModules(ConfigParser):
         Ensures the appropriate section exists for the submodule.
         Calls the parent class's set method to store the value.
         """
+        self.logger.debug("set called {} {} {}".format(name,option,value))
         section = f'submodule "{name}"'
         if not self.has_section(section):
             self.add_section(section)
@@ -45,6 +47,7 @@ class GitModules(ConfigParser):
         Uses the parent class's get method to access the value.
         Handles potential errors if the section or option doesn't exist.
         """
+        self.logger.debug("get called {} {}".format(name,option))
         section = f'submodule "{name}"'
         try:
             return ConfigParser.get(
@@ -58,10 +61,12 @@ class GitModules(ConfigParser):
         #        self.write(open(self.conf_file, "w"))
 
     def __del__(self):
+        self.logger.debug("Destroying GitModules object")
         shutil.move(self.conf_file+".save", self.conf_file)
             
     def sections(self):
         """Strip the submodule part out of section and just use the name"""
+        self.logger.debug("calling GitModules sections iterator")
         names = []
         for section in ConfigParser.sections(self):
             name = section[11:-1]
@@ -73,5 +78,6 @@ class GitModules(ConfigParser):
         return names
 
     def items(self, name, raw=False, vars=None):
+        self.logger.debug("calling GitModules items for {}".format(name))
         section = f'submodule "{name}"'
         return ConfigParser.items(section, raw=raw, vars=vars)

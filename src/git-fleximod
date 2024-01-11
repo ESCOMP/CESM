@@ -4,13 +4,12 @@ import os
 import shutil
 import logging
 import argparse
-from modules import utils
-from modules.gitinterface import GitInterface
-from modules.gitmodules import GitModules
-
-logger = logging.getLogger(__name__)
-logger.propogate = False
-
+from fleximod import utils
+from fleximod.gitinterface import GitInterface
+from fleximod.gitmodules import GitModules
+from fleximod.version import __version__
+# logger variable is global
+logger = None
 
 def commandline_arguments(args=None):
     description = """
@@ -84,9 +83,9 @@ def commandline_arguments(args=None):
     parser.add_argument(
         "-V",
         "--version",
-        action="store_true",
-        default=False,
-        help="Print manage_externals version and exit.",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="Print version and exit.",
     )
 
     #
@@ -136,14 +135,21 @@ def commandline_arguments(args=None):
     if not action:
         action = "install"
 
+    if options.debug:
+        level = logging.DEBUG
+    elif options.verbose:
+        level = logging.INFO
+    else:
+        level = logging.WARNING
+    # Configure the root logger
+    logging.basicConfig(
+        level=level,
+        format="%(name)s - %(levelname)s - %(message)s",
+        handlers=[logging.FileHandler("fleximod.log"), logging.StreamHandler()],
+    )
     if options.version:
-        version_info = ""
-        version_file_path = os.path.join(os.path.dirname(__file__), "version.txt")
-        with open(version_file_path) as f:
-            version_info = f.readlines()[0].strip()
-        print(version_info)
-        sys.exit(0)
-
+        exit()
+    
     return (
         options.path,
         options.gitmodules,
@@ -161,10 +167,10 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
         os.makedirs(path)
     # Check first if the module is already defined
     # and the sparse-checkout file exists
-    git = GitInterface(root_dir)
+    git = GitInterface(root_dir, logger)
 
     # initialize a new git repo and set the sparse checkout flag
-    sprepo_git = GitInterface(os.path.join(root_dir, path))
+    sprepo_git = GitInterface(os.path.join(root_dir, path), logger)
     sprepo_git.config_set_value("core", "sparseCheckout", "true")
 
     # set the repository remote
@@ -203,7 +209,7 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
 
 
 def submodule_checkout(root, name, path, url=None, tag=None):
-    git = GitInterface(root)
+    git = GitInterface(root, logger)
     repodir = os.path.join(root, path)
 
     # if url is provided update to the new url
@@ -226,7 +232,7 @@ def submodule_checkout(root, name, path, url=None, tag=None):
     if os.path.exists(os.path.join(repodir, ".gitmodules")):
         # recursively handle this checkout
         print(f"Recursively checking out submodules of {name} {repodir} {url}")
-        gitmodules = GitModules(repodir)
+        gitmodules = GitModules(logger,confpath=repodir)
         submodules_install(gitmodules, repodir, ["I:T"])
     if os.path.exists(os.path.join(repodir, ".git")):
         print(f"Successfully checked out {name}")
@@ -250,7 +256,7 @@ def submodules_status(gitmodules, root_dir):
             print(f"Submodule {name} not checked out")
         else:
             with utils.pushd(newpath):
-                git = GitInterface(newpath)
+                git = GitInterface(newpath, logger)
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 if tag and atag != tag:
                     print(f"Submodule {name} {atag} is out of sync with .gitmodules {tag}")
@@ -274,7 +280,7 @@ def submodules_update(gitmodules, root_dir):
         if os.path.exists(os.path.join(path, ".git")):
             submoddir = os.path.join(root_dir, path)
             with utils.pushd(submoddir):
-                git = GitInterface(submoddir)
+                git = GitInterface(submoddir, logger)
                 # first make sure the url is correct
                 upstream = git.git_operation("ls-remote", "--get-url").rstrip()
                 newremote = "origin"
@@ -342,8 +348,11 @@ def _main_func():
         verbose,
         action,
     ) = commandline_arguments()
-    if verbose:
-        print(f"action is {action}")
+    # Get a logger for the package
+    global logger
+    logger = logging.getLogger(__name__)
+        
+    logger.info(f"action is {action}")
 
     if not os.path.isfile(os.path.join(root_dir, file_name)):
         file_path = utils.find_upwards(root_dir, file_name)
@@ -353,8 +362,9 @@ def _main_func():
                 "No {} found in {} or any of it's parents".format(file_name, root_dir)
             )
         root_dir = os.path.dirname(file_path)
-    print(f"root_dir is {root_dir}")
+    logger.info(f"root_dir is {root_dir}")
     gitmodules = GitModules(
+        logger,
         confpath=root_dir,
         conffile=file_name,
         includelist=includelist,
