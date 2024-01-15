@@ -16,6 +16,8 @@ setuptools.setup(
     scripts=["src/git-fleximod"],                     # This is the name of the package
     version=main_ns['__version__'],                        # The initial release version
     author="Jim Edwards",                     # Full name of the author
+    maintainer="jedwards4b",
+    license="MIT License",
     description="Extended support for git-submodule and git-sparse-checkout",
     long_description=long_description,      # Long description read from the the readme file
     long_description_content_type="text/markdown",
@@ -29,5 +31,5 @@ setuptools.setup(
     ],                                      # Information to filter the project on PyPi website
     python_requires='>=3.6',                # Minimum version requirement of the package
 #    py_modules=['git-fleximod'],             # Name of the python package
-    install_requires=["PyGit"]                     # Install other dependencies if any
+    install_requires=["GitPython"]                     # Install other dependencies if any
 )
