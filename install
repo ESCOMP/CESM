@@ -3,12 +3,41 @@
 # Script to fetch submodules for NCAR EARTH SYSTEM MODELS
 #
 set -e
+
+function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+
+
+# Function to install git-fleximod (uncomment only one option)
+function install_git_fleximod() {
+    # -- Option 1: Install from PyPI using pip
+    pip install fleximod
+    # -- Option 2: Install from conda-forge using conda
+    # conda install -c conda-forge git-fleximod
+    # -- Option 3: Install from GitHub (adjust URL and path if needed)
+    # git clone https://github.com/jedwards4b/git-fleximod.git
+    # cd git-fleximod
+    # pip install
+}                                                                  
+
 ########################
 dir=$(git rev-parse --show-toplevel)
-if ! test -f ${dir}/bin/git-fleximod; then
-  echo "Getting checkout tools"
-  git -C ${dir} clone https://github.com/jedwards4b/git-fleximod --depth 1 bin
+
+# Check if git-fleximod is in the path and get its version
+if command -v git-fleximod >/dev/null 2>&1; then
+    gfversion=$(git-fleximod --version)
+    echo "git-fleximod version: $version"
+    # Check if the version is acceptable (adjust the logic as needed)
+
+    if [ $(version $gfversion) -ge $(version "0.1.5") ]; then
+      echo "git-fleximod is already installed and at an acceptable version."
+    else
+      echo "Installed git-fleximod version is too old. Updating..."
+      install_git_fleximod  # Call the install function
+    fi
+else
+    echo "git-fleximod is not installed. Installing..."
+    install_git_fleximod  # Call the install function
 fi
 pushd ${dir} 1>/dev/null
-python ./bin/git-fleximod install "$@"
+git fleximod install "$@"
 popd 1>/dev/null
