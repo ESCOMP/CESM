@@ -8,6 +8,7 @@ from fleximod import utils
 from fleximod.gitinterface import GitInterface
 from fleximod.gitmodules import GitModules
 from fleximod.version import __version__
+from configparser import NoOptionError
 # logger variable is global
 logger = None
 
@@ -170,7 +171,21 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     git = GitInterface(root_dir, logger)
 
     # initialize a new git repo and set the sparse checkout flag
-    sprepo_git = GitInterface(os.path.join(root_dir, path), logger)
+    sprep_repo = os.path.join(root_dir, path)
+    sprepo_git = GitInterface(sprep_repo, logger)
+    if os.path.exists(os.path.join(sprep_repo,".git")):
+        try:
+            logger.info("Submodule {} found".format(name))
+            chk = sprepo_git.config_get_value("core", "sparseCheckout")
+            if chk == "true":
+                logger.info("Sparse submodule {} already checked out".format(name))
+                return
+        except NoOptionError:
+            logger.debug("Sparse submodule {} not present".format(name))
+        except Exception as e:
+            utils.fatal_error("Unexpected error {} occured.".format(e))
+
+
     sprepo_git.config_set_value("core", "sparseCheckout", "true")
 
     # set the repository remote
@@ -211,7 +226,9 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
 def submodule_checkout(root, name, path, url=None, tag=None):
     git = GitInterface(root, logger)
     repodir = os.path.join(root, path)
-
+    if os.path.exists(os.path.join(repodir, ".git")):
+        logger.info("Submodule {} already checked out".format(name))
+        return
     # if url is provided update to the new url
     tmpurl = None
 
@@ -225,7 +242,9 @@ def submodule_checkout(root, name, path, url=None, tag=None):
             tmpurl = url
             url = url.replace("git@github.com:", "https://github.com")            
             git.git_operation("clone", "-b", tag, url, path)
-
+            # Now need to move the .git dir to the submodule location
+            
+            
     if not tmpurl:
         logger.debug(git.git_operation("submodule", "update", "--init", "--", path))
 
