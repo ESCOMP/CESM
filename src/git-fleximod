@@ -127,7 +127,8 @@ def commandline_arguments(args=None):
     else:
         options = parser.parse_args()
 
-    if options.optional:
+# explicitly listing a component overrides the optional flag    
+    if options.optional or options.components:
         fxrequired = ["T:T", "T:F", "I:T"]
     else:
         fxrequired = ["T:T", "I:T"]
@@ -271,8 +272,23 @@ def submodules_status(gitmodules, root_dir):
         if not path:
             utils.fatal_error("No path found in .gitmodules for {}".format(name))
         newpath = os.path.join(root_dir, path)
+        logger.debug("newpath is {}".format(newpath))
         if not os.path.exists(os.path.join(newpath, ".git")):
-            print(f"Submodule {name} not checked out")
+            rootgit = GitInterface(root_dir, logger)
+            # submodule commands use path, not name
+            nhash = (rootgit.git_operation("submodule","status",path).split()[0])[1:]
+            url = gitmodules.get(name, "url")
+            tags = rootgit.git_operation("ls-remote","--tags",url)
+            atag = None
+            for htag in tags.split('\n'):
+                if tag in htag:
+                    atag = (htag.split()[1])[10:]
+                    break
+            if tag == atag:
+                print(f"Submodule {name} not checked out, aligned at tag {tag}")
+            else:
+                print(f"Submodule {name} not checked out, out of sync at tag {atag}, expected tag is {tag}")
+                
         else:
             with utils.pushd(newpath):
                 git = GitInterface(newpath, logger)
