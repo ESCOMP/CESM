@@ -1,137 +1,189 @@
+# This is a git submodule file with additional support for
+# git-fleximod (https://github.com/jedwards4b/git-fleximod)
+#
+# The additional flags supported by git-fleximod are
+# fxtag - the tag associated with the submodule, this tag can be tested for
+#         consistancy with the submodule hash using git-fleximod status
+#         the hash can be updated to the tag using git-fleximod update
+#
+# fxrequired - indicates if a given submodule should be checked out on install
+#              submoudules can be toplevel or internal and required or optional
+#              toplevel means that the submodule should only be checked out if the
+#              module is the toplevel of the git repo (is not a submodule itself)
+#              internal means that the submodule is needed by the component whether
+#              the component is toplevel or the submodule of another repo
+#              required means that the submodule should always be checked out
+#              optional means that the submodule should only be checked out if the
+#              optional flag is provided to git-fleximod or the submodule name is
+#              explicitly listed on the git-fleximod command line.
+#
+# fxsparse -   this is a path to a git sparse checkout file indicating that the
+#              submodule should be checked out in sparse mode
+#
+# fxurl    -   this field is used by git-fleximod test to insure that the url is pointing
+#              to the official url of the repo and not to an unofficial fork.
+#              It is intended for use of github workflows to test commits to protected
+#              repository branches.
+#
+
+
 [submodule "ccs_config"]
 	path = ccs_config
 	url = https://github.com/ESMCI/ccs_config_cesm.git
+	fxurl = https://github.com/ESMCI/ccs_config_cesm.git
         fxtag = ccs_config_cesm0.0.88
         fxrequired = T:T
         
 [submodule "share"]
 	path = share
 	url = https://github.com/ESCOMP/CESM_share
+	fxurl = https://github.com/ESCOMP/CESM_share
         fxtag = share1.0.18
         fxrequired = T:T
 
 [submodule "cime"]
 	path = cime
 	url = https://github.com/jedwards4b/cime
+	fxurl = https://github.com/ESMCI/cime
         fxtag = cime6.0.198_rme04
         fxrequired = T:T
 
 [submodule "mct"]
         path = libraries/mct
 	url = https://github.com/MCSclimate/MCT
+	fxurl = https://github.com/MCSclimate/MCT
         fxrequired = T:T
         fxtag = MCT_2.11.0
 
 [submodule "mpi-serial"]
 	path = libraries/mpi-serial
 	url = https://github.com/ESMCI/mpi-serial
+	fxurl = https://github.com/ESMCI/mpi-serial
         fxtag = MPIserial_2.5.0
         fxrequired = T:T
 
 [submodule "cpl7"]
 	path = components/cpl7
 	url = https://github.com/ESCOMP/CESM_CPL7andDataComps
+	fxurl = https://github.com/ESCOMP/CESM_CPL7andDataComps
         fxtag = cpl77.0.7
         fxrequired = T:T
 
 [submodule "cam"]
 	path = components/cam
 	url = https://www.github.com/jedwards4b/CAM
+	fxurl = https://www.github.com/ESCOMP/CAM
         fxtag = cam6_3_143_rme01
         fxrequired = T:T
 
 [submodule "ww3"]
 	path = components/ww3
 	url = https://github.com/ESCOMP/WW3-CESM
+	fxurl = https://github.com/ESCOMP/WW3-CESM
         fxtag = ww3_221108
         fxrequired = T:T
         
 [submodule "ww3dev"]
 	path = components/ww3dev
        	url = https://github.com/jedwards4b/WW3_interface       
+       	fxurl = https://github.com/ESCOMP/WW3_interface       
         fxtag = main_0.0.13_rme01
         fxrequired = T:T
         
 [submodule "rtm"]
 	path = components/rtm
 	url = https://github.com/ESCOMP/RTM
+	fxurl = https://github.com/ESCOMP/RTM
         fxrequired = T:T
         fxtag = rtm1_0_78 
 
 [submodule "pysect"]
 	path = tools/statistical_ensemble_test/pyCECT
 	url = https://github.com/NCAR/PyCECT
+	fxurl = https://github.com/NCAR/PyCECT
         fxrequired = T:T
         fxtag = 3.2.2
 
 [submodule "mosart"]
 	path = components/mosart
 	url = https://github.com/ESCOMP/MOSART
+	fxurl = https://github.com/ESCOMP/MOSART
         fxrequired = T:T
         fxtag = mosart1_0_48
 
 [submodule "mizuroute"]
 	path = components/mizuroute
 	url = https://github.com/ESCOMP/mizuRoute
+	fxurl = https://github.com/ESCOMP/mizuRoute
         fxrequired = T:T
         fxtag = cesm-coupling.n02_v2.1.2
 
 [submodule "fms"]
 	path = libraries/FMS
 	url = https://github.com/jedwards4b/FMS_interface
+	fxurl = https://github.com/ESCOMP/FMS_interface
         fxrequired = T:T
         fxtag = fi_230818_rme01
         
 [submodule "parallelio"]
 	path = libraries/parallelio
 	url = https://github.com/NCAR/ParallelIO
+	fxurl = https://github.com/NCAR/ParallelIO
         fxrequired = T:T
         fxtag = pio2_6_2
 
 [submodule "cdeps"]
 	path = components/cdeps
 	url = https://github.com/jedwards4b/CDEPS
+	fxurl = https://github.com/ESCOMP/CDEPS
         fxrequired = T:T
         fxtag = cdeps1.0.26_rme01
 
 [submodule "cmeps"]
 	path = components/cmeps
 	url = https://github.com/ESCOMP/CMEPS.git
+	fxurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = T:T
         fxtag = cmeps0.14.49
 
 [submodule "cice5"]
 	path = components/cice5
 	url = https://github.com/ESCOMP/CESM_CICE5
+	fxurl = https://github.com/ESCOMP/CESM_CICE5
         fxrequired = T:T
-        fxtag = cice5_20220128
+        fxtag = cice5_20220204
 
 [submodule "cice6"]
 	path = components/cice
 	url = https://github.com/jedwards4b/CESM_CICE
+	fxurl = https://github.com/ESCOMP/CESM_CICE
         fxrequired = T:T
         fxtag = cesm_cice6_4_1_10_rme01
 
 [submodule "cism"]
 	path = components/cism
 	url = https://github.com/jedwards4b/cism-wrapper.git
+	fxurl = https://github.com/ESCOMP/cism-wrapper.git
         fxtag = cismwrap_2_1_96_rme02
         fxrequired = T:T
 
 [submodule "clm"]
 	path = components/clm
 	url = https://github.com/jedwards4b/CTSM
+	fxurl = https://github.com/ESCOMP/CTSM
         fxrequired = T:T
         fxtag = branch_tags/CESM3_dev.n04_ctsm5.1.dev145_rme02
 
 [submodule "mom"]
 	path = components/mom
 	url = https://github.com/jedwards4b/MOM_interface
+	fxurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = T:T
         fxtag = mi_231107_rme01
 
 [submodule "pop"]
 	path = components/pop
 	url = https://github.com/jedwards4b/POP2-CESM
+	fxurl = https://github.com/ESCOMP/POP2-CESM
         fxrequired = T:T
         fxtag = cesm_pop_2_1_20231208_rme01

@@ -26,7 +26,7 @@ def commandline_arguments(args=None):
     #
     # user options
     #
-    choices = ["update", "install", "status"]
+    choices = ["update", "install", "status", "test"]
     parser.add_argument(
         "action",
         choices=choices,
@@ -110,21 +110,6 @@ def commandline_arguments(args=None):
         "information to the screen and log file.",
     )
 
-    logging_group = parser.add_mutually_exclusive_group()
-
-    logging_group.add_argument(
-        "--logging",
-        dest="do_logging",
-        action="store_true",
-        help="DEVELOPER: enable logging.",
-    )
-    logging_group.add_argument(
-        "--no-logging",
-        dest="do_logging",
-        action="store_false",
-        default=False,
-        help="DEVELOPER: disable logging " "(this is the default)",
-    )
     if args:
         options = parser.parse_args(args)
     else:
@@ -269,6 +254,7 @@ def submodule_checkout(root, name, path, url=None, tag=None):
 
 
 def submodules_status(gitmodules, root_dir):
+    testfails = 0
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "fxtag")
@@ -291,23 +277,27 @@ def submodules_status(gitmodules, root_dir):
                 print(f"Submodule {name} not checked out, aligned at tag {tag}")
             else:
                 print(f"Submodule {name} not checked out, out of sync at tag {atag}, expected tag is {tag}")
-                
+                testfails += 1
         else:
             with utils.pushd(newpath):
                 git = GitInterface(newpath, logger)
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 if tag and atag != tag:
                     print(f"Submodule {name} {atag} is out of sync with .gitmodules {tag}")
+                    testfails += 1
                 elif tag:
                     print(f"Submodule {name} at tag {tag}")
                 else:
                     print(
                         f"Submodule {name} has no tag defined in .gitmodules, module at {atag}"
                     )
+                    testfails += 1
+
                 status = git.git_operation("status","--ignore-submodules","untracked")
                 if "nothing to commit" not in status:
                     print(status)
-
+    
+    return testfails
 
 def submodules_update(gitmodules, root_dir):
     for name in gitmodules.sections():
@@ -375,7 +365,26 @@ def submodules_install(gitmodules, root_dir, requiredlist):
             
             submodule_checkout(root_dir, name, path, url=url, tag=fxtag)
 
+def submodules_test(gitmodules, root_dir):
+    # First check that fxtags are present and in sync with submodule hashes
+    testfails = submodules_status(gitmodules, root_dir)
+    # Then make sure that urls are consistant with fxurls (not forks and not ssh)
+    # and that sparse checkout files exist
+    for name in gitmodules.sections():
+        url = gitmodules.get(name, "url")
+        fxurl = gitmodules.get(name, "fxurl")
+        fxsparse = gitmodules.get(name, "fxsparse")
+        path = gitmodules.get(name, "path")
+        if not fxurl or url != fxurl:
+            print(f"submodule {name} url {url} not in sync with required {fxurl}")
+            testfails += 1
+        if fxsparse and not os.path.isfile(os.path.join(root_dir, path, fxsparse)):
+            print(f"sparse submodule {name} sparse checkout file {fxsparse} not found")
+            testfails += 1
+    return testfails
 
+
+            
 def _main_func():
     (
         root_dir,
@@ -408,16 +417,18 @@ def _main_func():
         includelist=includelist,
         excludelist=excludelist,
     )
-
+    retval = 0
     if action == "update":
         submodules_update(gitmodules, root_dir)
     elif action == "install":
         submodules_install(gitmodules, root_dir, fxrequired)
     elif action == "status":
         submodules_status(gitmodules, root_dir)
+    elif action == "test":
+        retval = submodules_test(gitmodules, root_dir)
     else:
         utils.fatal_error(f"unrecognized action request {action}")
-
-
+    return(retval)
+        
 if __name__ == "__main__":
-    _main_func()
+    sys.exit(_main_func())

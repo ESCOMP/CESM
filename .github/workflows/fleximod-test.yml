@@ -1,0 +1,16 @@
+on:
+  push:
+    branches:
+      - master
+      - remove_manage_externals
+  pull_request:
+    branches:
+      - master
+      - remove_manage_externals
+jobs:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - name: git-fleximod test
+      run: |
+        $GITHUB_WORKSPACE/bin/git-fleximod test
