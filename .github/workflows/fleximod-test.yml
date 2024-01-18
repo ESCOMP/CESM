@@ -9,11 +9,12 @@ on:
       - remove_manage_externals
 jobs:
   runs-on: ubuntu-latest
-  strategy:
-    matrix:
-      python-version: ["3.7", "3.11"]
-  steps:
-  - uses: actions/checkout@v4
-  - name: git-fleximod test
-    run: |
-      $GITHUB_WORKSPACE/bin/git-fleximod test
+  test:
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.11"]
+    steps:
+    - uses: actions/checkout@v4
+    - name: git-fleximod test
+      run: |
+        $GITHUB_WORKSPACE/bin/git-fleximod test
