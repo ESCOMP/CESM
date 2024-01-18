@@ -32,8 +32,6 @@ Installing, building and running CESM requires:
 
 * git client version 1.8 or newer
 
-* subversion client (we have tested with versions 1.6.11 and newer)
-
 * python3 version 3.6 or newer
 
 * perl version 5
@@ -94,20 +92,18 @@ To obtain the CESM code you need to do the following:
       cd my_cesm_sandbox
       git tag
 
-#. Do a git checkout of the tag you want. If you want to checkout release-cesm2.1.2, you would issue the following. ::
+#. Do a git checkout of the tag you want. If you want to checkout release-cesm2.1.5a, you would issue the following. ::
 
-      git checkout release-cesm2.1.2
+      git checkout release-cesm2.1.5
 
    (It is normal and expected to get a message about being in 'detached
-   HEAD' state. For now you can ignore this, but it becomes important if
-   you want to make changes to your Externals.cfg file and commit those
-   changes to a branch.)
+   HEAD' state.)
 
-#. Run the script **manage_externals/checkout_externals**. ::
+#. Run the script **bin/git-fleximod install**. ::
 
-      ./manage_externals/checkout_externals
+      ./bin/git-fleximod install
 
-   The **checkout_externals** script is a package manager that will
+   The **git-fleximod** script is a package manager that will
    populate the cesm directory with the relevant versions of each of the
    components along with the CIME infrastructure code.
 
@@ -115,22 +111,21 @@ At this point you have a working version of CESM.
 
 To see full details of how to set up a case, compile and run, see the CIME documentation at http://esmci.github.io/cime/ .
 
-More details on checkout_externals
+More details on git-fleximod
 ----------------------------------
 
-The file **Externals.cfg** in your top-level CESM directory tells
-**checkout_externals** which tag/branch of each component should be
-brought in to generate your sandbox. (This file serves the same purpose
-as SVN_EXTERNAL_DIRECTORIES when CESM was in a subversion repository.)
+The file **.gitmodules** in your top-level CESM directory tells
+**git-fleximod** which tag/branch of each component should be
+brought in to generate your sandbox. 
 
-NOTE: Just like svn externals, checkout_externals will always attempt
-to make the working copy exactly match the externals description. For
-example, if you manually modify an external without updating Externals.cfg,
-(e.g. switch to a different tag), then rerunning checkout_externals
-will automatically restore the externals described in Externals.cfg. See
+NOTE: git-fleximod will always attempt
+to make the working copy exactly match the submodule description. For
+example, if you manually modify an submodule without updating .gitmodules
+(e.g. switch to a different tag), then rerunning git-fleximod update
+will automatically restore the submodules described in .gitmodules See
 below documentation `Customizing your CESM sandbox`_ for more details.
 
-**You need to rerun checkout_externals whenever Externals.cfg has
+**You need to rerun git-fleximod update whenever .gitmodules has
 changed** (unless you have already manually updated the relevant
 external(s) to have the correct branch/tag checked out). Common times
 when this is needed are:
@@ -140,17 +135,11 @@ when this is needed are:
 * After merging some other CESM branch/tag into your currently
   checked-out branch
 
-**checkout_externals** must be run from the root of the source
-tree. For example, if you cloned CESM with::
+To see more details of **git-fleximod**, issue ::
 
-  git clone https://github.com/escomp/cesm.git my_cesm_sandbox
+  ./bin/git-fleximod -h
 
-then you must run **checkout_externals** from
-``/path/to/my_cesm_sandbox``.
-
-To see more details of **checkout_externals**, issue ::
-
-  ./manage_externals/checkout_externals --help
+or visit the github page https://github.com/jedwards4b/git-fleximod
 
 Customizing your CESM sandbox
 =============================
@@ -162,11 +151,11 @@ Switching to a different CESM tag
 
 If you have already checked out a tag and **HAVE NOT MADE ANY
 MODIFICATIONS** it is simple to change your sandbox. Say that you
-checked out release-cesm2.1.2 but really wanted to have release-cesm2.1.3;
+checked out release-cesm2.1.2 but really wanted to have release-cesm2.1.5;
 you would simply do the following::
 
-  git checkout release-cesm2.1.3
-  ./manage_externals/checkout_externals
+  git checkout release-cesm2.1.5
+  ./bin/git-fleximod update
 
 You should **not** use this method if you have made any source code
 changes, or if you have any ongoing CESM cases that were created from
@@ -176,41 +165,36 @@ clone**.
 Pointing to a different version of a component
 ----------------------------------------------
 
-Each entry in **Externals.cfg** has the following form (we use CAM as an
+Each entry in **.gitmodules** has the following form (we use CAM as an
 example below)::
 
-  [cam]
-  tag = trunk_tags/cam5_4_143/components/cam
-  protocol = svn
-  repo_url = https://svn-ccsm-models.cgd.ucar.edu/cam1
-  local_path = components/cam
-  required = True
+[submodule "cpl7"]
+	path = components/cpl7
+	url = https://github.com/ESCOMP/CESM_CPL7andDataComps
+        fxtag = cpl77.0.7
+        fxrequired = T:T
 
-Each entry specifies either a tag or a branch. To point to a new tag:
+Each entry specifies a tag. To point to a new tag:
 
-#. Modify the relevant entry/entries in **Externals.cfg** (e.g., changing
+#. Modify the relevant entry/entries in **.gitmodules** (e.g., changing
    ``cam5_4_143`` to ``cam5_4_144`` above)
 
 #. Checkout the new component(s)::
 
-     ./manage_externals/checkout_externals
+     ./bin/git-fleximod update
 
 Keep in mind that changing individual components from a tag may result
 in an invalid model (won't compile, won't run, not scientifically
 meaningful) and is unsupported.
 
-Committing your change to Externals.cfg
+Committing your change to .gitmodules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After making this change, it's a good idea to commit the change in your
 local CESM git repository. First create a CESM branch in your local
-repository, then commit it. (Unlike with subversion, branches are stored
+repository, then commit it. (In git branches are stored
 locally unless you explicitly push them up to github. Feel free to
-create whatever local branches you'd like.) For example::
-
-  git checkout -b my_cesm_branch
-  git add Externals.cfg
-  git commit -m "Update CAM to cam5_4_144"
+create whatever local branches you'd like.) 
 
 Modifying a component
 ---------------------
@@ -219,27 +203,23 @@ If you'd like to modify a component via a branch and point to that
 branch in your CESM sandbox, use the following procedure (again, using
 CAM as an example):
 
-#. Create a CAM branch. Since CAM originates from a subversion
-   repository, you will first need to create a branch in that
-   repository. Let's assume you have created this branch and called it
+#. Create a CAM fork and a branch within that fork. 
+   Let's assume you have created this branch and called it
    **my_branch**.
 
-#. Update **Externals.cfg** to point to your branch. You can replace the
-   **tag** entry with a **branch** entry, as follows::
+#. Update **.gitmodules** to point to your fork.
 
      [cam]
-     branch = branches/my_branch/components/cam
-     protocol = svn
-     repo_url = https://svn-ccsm-models.cgd.ucar.edu/cam1
-     local_path = components/cam
-     required = True
+     url = https://github.com/mygithubusername/cam
+     path = components/cam
+     fxrequired = T:T
 
 #. Checkout your branch::
 
-     ./manage_externals/checkout_externals
+     ./bin/git-fleximod update cam
 
-It's a good idea to commit your **Externals.cfg** file changes. See the above
-documentation, `Committing your change to Externals.cfg`_.
+It's a good idea to commit your **.gitmodules** file changes. See the above
+documentation, `Committing your change to .gitmodules`_.
 
 Developer setup
 ===============

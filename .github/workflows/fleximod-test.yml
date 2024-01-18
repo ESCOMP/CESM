@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - master
+      - remove_manage_externals
+  pull_request:
+    branches:
+      - master
+      - remove_manage_externals
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.11"]
+    steps:
+    - uses: actions/checkout@v4
+    - name: git-fleximod test
+      run: |
+        $GITHUB_WORKSPACE/bin/git-fleximod test
