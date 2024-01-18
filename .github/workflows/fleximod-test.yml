@@ -8,8 +8,8 @@ on:
       - master
       - remove_manage_externals
 jobs:
-  runs-on: ubuntu-latest
   test:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.7", "3.11"]
