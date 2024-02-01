@@ -5,6 +5,7 @@ import shutil
 import logging
 import argparse
 import textwrap
+from pathlib import Path
 from fleximod import utils
 from fleximod.gitinterface import GitInterface
 from fleximod.gitmodules import GitModules
@@ -12,6 +13,17 @@ from fleximod.version import __version__
 from configparser import NoOptionError
 # logger variable is global
 logger = None
+
+def find_root_dir(filename=".git"):
+    d = Path.cwd()
+    root = Path(d.root)
+    while d != root:
+        attempt = d / filename
+        if attempt.is_dir():
+            return attempt
+        d = d.parent
+    return None
+    
 
 def commandline_arguments(args=None):
     description = """
@@ -42,8 +54,8 @@ def commandline_arguments(args=None):
     parser.add_argument(
         "-C",
         "--path",
-        default=os.getcwd(),
-        help="Toplevel repository directory.  Defaults to current directory.",
+        default=find_root_dir(),
+        help="Toplevel repository directory.  Defaults to top git directory relative to current.",
     )
 
     parser.add_argument(
@@ -430,6 +442,7 @@ def submodules_test(gitmodules, root_dir):
     return testfails+localmods
 
 
+
             
 def _main_func():
     (
@@ -455,6 +468,7 @@ def _main_func():
             utils.fatal_error(
                 "No {} found in {} or any of it's parents".format(file_name, root_dir)
             )
+
         root_dir = os.path.dirname(file_path)
     logger.info(f"root_dir is {root_dir}")
     gitmodules = GitModules(
