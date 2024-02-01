@@ -236,11 +236,28 @@ def submodule_checkout(root, name, path, url=None, tag=None):
             tmpurl = url
             url = url.replace("git@github.com:", "https://github.com")            
             git.git_operation("clone", url, path)
-            smgit = GitInterface(path, logger)
+            smgit = GitInterface(repodir, logger)
             if not tag:
                 tag = smgit.git_operation("describe", "--tags", "--always").rstrip()
             smgit.git_operation("checkout",tag)
             # Now need to move the .git dir to the submodule location
+            rootdotgit = os.path.join(root,".git")
+            if os.path.isfile(rootdotgit):
+                with open(rootdotgit) as f:
+                    line = f.readline()
+                    if line.startswith("gitdir: "):
+                        rootdotgit = line[8:].rstrip()
+            
+            newpath = os.path.abspath(os.path.join(root,rootdotgit,"modules",path))
+            print(f"root is {root} rootdotgit is {rootdotgit} newpath is {newpath}")
+            if not os.path.isdir(os.path.join(newpath,os.pardir)):
+                os.makedirs(os.path.abspath(os.path.join(newpath,os.pardir)))
+
+            shutil.move(os.path.join(repodir,".git"), newpath) 
+            with open(os.path.join(repodir,".git"), "w") as f:
+                f.write("gitdir: "+newpath)
+            
+
             
             
     if not tmpurl:
