@@ -4,6 +4,7 @@ import os
 import shutil
 import logging
 import argparse
+import textwrap
 from fleximod import utils
 from fleximod.gitinterface import GitInterface
 from fleximod.gitmodules import GitModules
@@ -23,11 +24,11 @@ def commandline_arguments(args=None):
     #
     # user options
     #
-    choices = ["update", "install", "status", "test"]
+    choices = ["update", "checkout", "status", "test"]
     parser.add_argument(
         "action",
         choices=choices,
-        default="install",
+        default="checkout",
         help=f"Subcommand of fleximod, choices are {choices}",
     )
 
@@ -120,7 +121,7 @@ def commandline_arguments(args=None):
 
     action = options.action
     if not action:
-        action = "install"
+        action = "checkout"
 
     if options.debug:
         level = logging.DEBUG
@@ -238,7 +239,7 @@ def submodule_checkout(root, name, path, url=None, tag=None):
         # recursively handle this checkout
         print(f"Recursively checking out submodules of {name} {repodir} {url}")
         gitmodules = GitModules(logger,confpath=repodir)
-        submodules_install(gitmodules, repodir, ["I:T"])
+        submodules_checkout(gitmodules, repodir, ["I:T"])
     if os.path.exists(os.path.join(repodir, ".git")):
         print(f"Successfully checked out {name}")
     else:
@@ -290,9 +291,9 @@ def submodules_status(gitmodules, root_dir):
                     )
                     testfails += 1
 
-                status = git.git_operation("status","--ignore-submodules","untracked")
+                status = git.git_operation("status","--ignore-submodules")
                 if "nothing to commit" not in status:
-                    print(status)
+                    print(textwrap.indent(status,'    '))
     
     return testfails
 
@@ -337,7 +338,7 @@ def submodules_update(gitmodules, root_dir):
                     print(f"submodule {name} up to date.")
 
 
-def submodules_install(gitmodules, root_dir, requiredlist):
+def submodules_checkout(gitmodules, root_dir, requiredlist):
     for name in gitmodules.sections():
         fxrequired = gitmodules.get(name, "fxrequired")
         fxsparse = gitmodules.get(name, "fxsparse")
@@ -417,8 +418,8 @@ def _main_func():
     retval = 0
     if action == "update":
         submodules_update(gitmodules, root_dir)
-    elif action == "install":
-        submodules_install(gitmodules, root_dir, fxrequired)
+    elif action == "checkout":
+        submodules_checkout(gitmodules, root_dir, fxrequired)
     elif action == "status":
         submodules_status(gitmodules, root_dir)
     elif action == "test":

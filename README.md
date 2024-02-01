@@ -20,6 +20,9 @@ Git-fleximod is a Python-based tool that extends Git's submodule capabilities, o
         install: Install submodules according to configuration.
         status: Display the status of submodules.
         update: Update submodules to the tag indicated in .gitmodules variable fxtag.
+        test: Make sure that fxtags and submodule hashes are consistant,
+              make sure that official urls (as defined by fxurl) are set
+              make sure that fxtags are defined for all submodules
     Additional Options:
         See git fleximod --help for more details.
 
@@ -32,6 +35,7 @@ Git-fleximod is a Python-based tool that extends Git's submodule capabilities, o
       - I:T: Internal and required (always checked out).
       - I:F: Internal and optional (checked out with --optional flag).
     fxsparse: Enable sparse checkout for a submodule, pointing to a file containing sparse checkout paths.
+    fcurl
 
 ## Sparse Checkouts
 
@@ -39,7 +43,13 @@ Git-fleximod is a Python-based tool that extends Git's submodule capabilities, o
     in the .gitmodules file to the path of a file containing the desired
     sparse checkout paths. Git-fleximod will automatically configure
     sparse checkout based on this file when applicable commands are run.
-    See [git-sparse-checkout](https://git-scm.com/docs/git-sparse-checkout#_internalsfull_pattern_set) for details on the format of this file.
+    See [git-sparse-checkout](https://git-scm.com/docs/git-sparse-checkout#_internalsfull_pattern_set)
+    for details on the format of this file.
+
+## Tests
+
+   The git fleximod test action is designed to be used by, for example, github workflows
+   to assure that protected branches are consistant with respect to submodule hashes and fleximod fxtags
 
 ## Examples
 
