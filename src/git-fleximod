@@ -125,6 +125,10 @@ def commandline_arguments(args=None):
     handlers=[logging.StreamHandler()]
 
     if options.debug:
+        try:
+            open("fleximod.log","w")
+        except PermissionError:
+            sys.exit("ABORT: Could not write file fleximod.log")
         level = logging.DEBUG
         handlers.append(logging.FileHandler("fleximod.log"))
     elif options.verbose:
