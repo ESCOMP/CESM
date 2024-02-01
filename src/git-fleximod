@@ -41,7 +41,7 @@ def commandline_arguments(args=None):
         "action",
         choices=choices,
         default="checkout",
-        help=f"Subcommand of fleximod, choices are {choices}",
+        help=f"Subcommand of fleximod, choices are {choices[:-1]}",
     )
 
     parser.add_argument(
