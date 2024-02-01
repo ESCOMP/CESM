@@ -60,6 +60,13 @@ def commandline_arguments(args=None):
         nargs="*",
         help="Component(s) listed in the gitmodules file which should be ignored.",
     )
+    parser.add_argument(
+        "-f",
+        "--force",
+        action="store_true",
+        default=False,
+        help="Override cautions and update or checkout over locally modified repository."
+    )
 
     parser.add_argument(
         "-o",
@@ -152,6 +159,7 @@ def commandline_arguments(args=None):
         options.components,
         options.exclude,
         options.verbose,
+        options.force,
         action,
     )
 
@@ -281,6 +289,7 @@ def submodule_checkout(root, name, path, url=None, tag=None):
 
 def submodules_status(gitmodules, root_dir):
     testfails = 0
+    localmods = 0
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "fxtag")
@@ -321,11 +330,17 @@ def submodules_status(gitmodules, root_dir):
 
                 status = git.git_operation("status","--ignore-submodules")
                 if "nothing to commit" not in status:
+                    localmods = localmods+1
                     print('M'+textwrap.indent(status,'                      '))
     
-    return testfails
+    return testfails, localmods
 
-def submodules_update(gitmodules, root_dir):
+def submodules_update(gitmodules, root_dir, force):
+    _,localmods = submodules_status(gitmodules, root_dir)
+    print("")
+    if localmods and not force:
+        print(f"Repository has local mods, cowardly refusing to continue, fix issues or use --force to override")
+        return
     for name in gitmodules.sections():
         fxtag = gitmodules.get(name, "fxtag")
         path = gitmodules.get(name, "path")
@@ -358,15 +373,20 @@ def submodules_update(gitmodules, root_dir):
                     git.git_operation("fetch", newremote, "--tags")
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 if fxtag and fxtag != atag:
-                    print(f"Updating {name} to {fxtag}")
+                    print(f"{name:>20} updated to {fxtag}")
                     git.git_operation("checkout", fxtag)
                 elif not fxtag:
-                    print(f"No fxtag found for submodule {name}")
+                    print(f"No fxtag found for submodule {name:>20}")
                 else:
-                    print(f"submodule {name} up to date.")
+                    print(f"{name:>20} up to date.")
 
 
-def submodules_checkout(gitmodules, root_dir, requiredlist):
+def submodules_checkout(gitmodules, root_dir, requiredlist, force):
+    _,localmods = submodules_status(gitmodules, root_dir)
+    print("")
+    if localmods and not force:
+        print(f"Repository has local mods, cowardly refusing to continue, fix issues or use --force to override")
+        return
     for name in gitmodules.sections():
         fxrequired = gitmodules.get(name, "fxrequired")
         fxsparse = gitmodules.get(name, "fxsparse")
@@ -393,7 +413,7 @@ def submodules_checkout(gitmodules, root_dir, requiredlist):
 
 def submodules_test(gitmodules, root_dir):
     # First check that fxtags are present and in sync with submodule hashes
-    testfails = submodules_status(gitmodules, root_dir)
+    testfails,localmods = submodules_status(gitmodules, root_dir)
     # Then make sure that urls are consistant with fxurls (not forks and not ssh)
     # and that sparse checkout files exist
     for name in gitmodules.sections():
@@ -407,7 +427,7 @@ def submodules_test(gitmodules, root_dir):
         if fxsparse and not os.path.isfile(os.path.join(root_dir, path, fxsparse)):
             print(f"sparse submodule {name} sparse checkout file {fxsparse} not found")
             testfails += 1
-    return testfails
+    return testfails+localmods
 
 
             
@@ -419,6 +439,7 @@ def _main_func():
         includelist,
         excludelist,
         verbose,
+        force,
         action,
     ) = commandline_arguments()
     # Get a logger for the package
@@ -445,9 +466,9 @@ def _main_func():
     )
     retval = 0
     if action == "update":
-        submodules_update(gitmodules, root_dir)
+        submodules_update(gitmodules, root_dir, force)
     elif action == "checkout":
-        submodules_checkout(gitmodules, root_dir, fxrequired)
+        submodules_checkout(gitmodules, root_dir, fxrequired, force)
     elif action == "status":
         submodules_status(gitmodules, root_dir)
     elif action == "test":
