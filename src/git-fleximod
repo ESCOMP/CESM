@@ -122,9 +122,11 @@ def commandline_arguments(args=None):
     action = options.action
     if not action:
         action = "checkout"
+    handlers=[logging.StreamHandler()]
 
     if options.debug:
         level = logging.DEBUG
+        handlers.append(logging.FileHandler("fleximod.log"))
     elif options.verbose:
         level = logging.INFO
     else:
@@ -133,8 +135,9 @@ def commandline_arguments(args=None):
     logging.basicConfig(
         level=level,
         format="%(name)s - %(levelname)s - %(message)s",
-        handlers=[logging.FileHandler("fleximod.log"), logging.StreamHandler()],
+        handlers=handlers
     )
+    
     if hasattr(options, 'version'):
         exit()
     
@@ -228,7 +231,11 @@ def submodule_checkout(root, name, path, url=None, tag=None):
         if url.startswith("git@"):
             tmpurl = url
             url = url.replace("git@github.com:", "https://github.com")            
-            git.git_operation("clone", "-b", tag, url, path)
+            git.git_operation("clone", url, path)
+            smgit = GitInterface(path, logger)
+            if not tag:
+                tag = smgit.git_operation("describe", "--tags", "--always").rstrip()
+            smgit.git_operation("checkout",tag)
             # Now need to move the .git dir to the submodule location
             
             
@@ -272,28 +279,28 @@ def submodules_status(gitmodules, root_dir):
                     atag = (htag.split()[1])[10:]
                     break
             if tag == atag:
-                print(f"Submodule {name} not checked out, aligned at tag {tag}")
+                print(f"e {name:>20} not checked out, aligned at tag {tag}")
             else:
-                print(f"Submodule {name} not checked out, out of sync at tag {atag}, expected tag is {tag}")
+                print(f"e {name:>20} not checked out, out of sync at tag {atag}, expected tag is {tag}")
                 testfails += 1
         else:
             with utils.pushd(newpath):
                 git = GitInterface(newpath, logger)
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 if tag and atag != tag:
-                    print(f"Submodule {name} {atag} is out of sync with .gitmodules {tag}")
+                    print(f"s {name:>20} {atag} is out of sync with .gitmodules {tag}")
                     testfails += 1
                 elif tag:
-                    print(f"Submodule {name} at tag {tag}")
+                    print(f"  {name:>20} at tag {tag}")
                 else:
                     print(
-                        f"Submodule {name} has no tag defined in .gitmodules, module at {atag}"
+                        f"e {name:>20} has no tag defined in .gitmodules, module at {atag}"
                     )
                     testfails += 1
 
                 status = git.git_operation("status","--ignore-submodules")
                 if "nothing to commit" not in status:
-                    print(textwrap.indent(status,'    '))
+                    print('M'+textwrap.indent(status,'                      '))
     
     return testfails
 

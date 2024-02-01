@@ -2,6 +2,7 @@ import setuptools
 import os
 from setuptools import setup, find_packages
 from distutils.util import convert_path
+from build_manpages import build_manpages, get_build_py_cmd, get_install_cmd
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -31,5 +32,12 @@ setuptools.setup(
     ],                                      # Information to filter the project on PyPi website
     python_requires='>=3.6',                # Minimum version requirement of the package
 #    py_modules=['git-fleximod'],             # Name of the python package
-    install_requires=["GitPython"]                     # Install other dependencies if any
+    install_requires=["GitPython"],                     # Install other dependencies if any
+    cmdclass={
+      'build_manpages': build_manpages,
+      # Re-define build_py and install commands so the manual pages
+      # are automatically re-generated and installed
+      'build_py': get_build_py_cmd(),
+      'install': get_install_cmd(),
+  }
 )
