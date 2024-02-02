@@ -2,6 +2,8 @@ import setuptools
 import os
 from setuptools import setup, find_packages
 from distutils.util import convert_path
+from setuptools.command.build_py import build_py
+from setuptools.command.install import install
 from build_manpages import build_manpages, get_build_py_cmd, get_install_cmd
 
 with open("README.md", "r") as fh:
@@ -14,7 +16,8 @@ with open(ver_path) as ver_file:
 
     
 setuptools.setup(
-    scripts=["src/git-fleximod"],                     # This is the name of the package
+    name="git-fleximod",                      # package name
+    #scripts=["src/git-fleximod"],                     # This is the name of the package
     version=main_ns['__version__'],                        # The initial release version
     author="Jim Edwards",                     # Full name of the author
     maintainer="jedwards4b",
@@ -38,6 +41,6 @@ setuptools.setup(
       # Re-define build_py and install commands so the manual pages
       # are automatically re-generated and installed
       'build_py': get_build_py_cmd(),
-      'install': get_install_cmd(),
+      'install': get_install_cmd(install),
   }
 )
