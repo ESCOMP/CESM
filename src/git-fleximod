@@ -24,8 +24,7 @@ def find_root_dir(filename=".git"):
         d = d.parent
     return None
     
-
-def commandline_arguments(args=None):
+def get_parser():
     description = """
     %(prog)s manages checking out groups of gitsubmodules with addtional support for Earth System Models
     """
@@ -126,6 +125,11 @@ def commandline_arguments(args=None):
         help="DEVELOPER: output additional debugging "
         "information to the screen and log file.",
     )
+
+    return parser
+
+def commandline_arguments(args=None):
+    parser = get_parser()
 
     if args:
         options = parser.parse_args(args)
