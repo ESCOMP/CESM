@@ -273,7 +273,6 @@ def single_submodule_checkout(root, name, path, url=None, tag=None, force=False)
                         rootdotgit = line[8:].rstrip()
             
             newpath = os.path.abspath(os.path.join(root,rootdotgit,"modules",path))
-            print(f"root is {root} rootdotgit is {rootdotgit} newpath is {newpath}")
             if not os.path.isdir(os.path.join(newpath,os.pardir)):
                 os.makedirs(os.path.abspath(os.path.join(newpath,os.pardir)))
 
@@ -321,14 +320,17 @@ def submodules_status(gitmodules, root_dir):
             tags = rootgit.git_operation("ls-remote","--tags",url)
             atag = None
             for htag in tags.split('\n'):
-                if tag in htag:
+                if tag and tag in htag:
                     atag = (htag.split()[1])[10:]
                     break
-            if tag == atag:
+            if tag and tag == atag:
                 print(f"e {name:>20} not checked out, aligned at tag {tag}")
-            else:
+            elif tag:
                 print(f"e {name:>20} not checked out, out of sync at tag {atag}, expected tag is {tag}")
                 testfails += 1
+            else:
+                print(f"e {name:>20} has no fxtag defined in .gitmodules")
+                testfails +=1 
         else:
             with utils.pushd(newpath):
                 git = GitInterface(newpath, logger)
@@ -482,6 +484,8 @@ def _main_func():
         includelist=includelist,
         excludelist=excludelist,
     )
+    if not gitmodules.sections():
+        sys.exit("No submodule components found")
     retval = 0
     if action == "update":
         submodules_update(gitmodules, root_dir, force)

@@ -1,5 +1,8 @@
-import setuptools
+import sys
 import os
+sys.path.insert(0,os.path.join(os.getenv("CONDA_PREFIX"),"lib","python3.12","site-packages"))
+
+import setuptools
 from setuptools import setup, find_packages
 from distutils.util import convert_path
 from setuptools.command.build_py import build_py
@@ -17,7 +20,7 @@ with open(ver_path) as ver_file:
     
 setuptools.setup(
     name="git-fleximod",                      # package name
-    #scripts=["src/git-fleximod"],                     # This is the name of the package
+    scripts=["src/git-fleximod"],                     # This is the name of the package
     version=main_ns['__version__'],                        # The initial release version
     author="Jim Edwards",                     # Full name of the author
     maintainer="jedwards4b",
@@ -25,8 +28,9 @@ setuptools.setup(
     description="Extended support for git-submodule and git-sparse-checkout",
     long_description=long_description,      # Long description read from the the readme file
     long_description_content_type="text/markdown",
-    packages=['fleximod'],    # List of all python modules to be installed
-    package_dir={'fleximod': 'src/fleximod'},
+    packages=find_packages(),    # List of all python modules to be installed
+    package_dir={'git-fleximod': 'src',
+                 'fleximod': 'src/fleximod'},
     package_data={"":['version.txt']},
     classifiers=[
         "Programming Language :: Python :: 3",
