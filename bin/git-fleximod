@@ -7,6 +7,8 @@ import argparse
 
 sys.path.append(os.path.join(os.path.dirname(__file__),"..","lib","python","site-packages"))
 
+import textwrap
+from pathlib import Path
 from fleximod import utils
 from fleximod.gitinterface import GitInterface
 from fleximod.gitmodules import GitModules
@@ -15,7 +17,17 @@ from configparser import NoOptionError
 # logger variable is global
 logger = None
 
-def commandline_arguments(args=None):
+def find_root_dir(filename=".git"):
+    d = Path.cwd()
+    root = Path(d.root)
+    while d != root:
+        attempt = d / filename
+        if attempt.is_dir():
+            return attempt
+        d = d.parent
+    return None
+    
+def get_parser():
     description = """
     %(prog)s manages checking out groups of gitsubmodules with addtional support for Earth System Models
     """
@@ -26,12 +38,12 @@ def commandline_arguments(args=None):
     #
     # user options
     #
-    choices = ["update", "install", "status", "test"]
+    choices = ["update", "checkout", "status", "test"]
     parser.add_argument(
         "action",
         choices=choices,
-        default="install",
-        help=f"Subcommand of fleximod, choices are {choices}",
+        default="checkout",
+        help=f"Subcommand of fleximod, choices are {choices[:-1]}",
     )
 
     parser.add_argument(
@@ -44,8 +56,8 @@ def commandline_arguments(args=None):
     parser.add_argument(
         "-C",
         "--path",
-        default=os.getcwd(),
-        help="Toplevel repository directory.  Defaults to current directory.",
+        default=find_root_dir(),
+        help="Toplevel repository directory.  Defaults to top git directory relative to current.",
     )
 
     parser.add_argument(
@@ -61,6 +73,13 @@ def commandline_arguments(args=None):
         "--exclude",
         nargs="*",
         help="Component(s) listed in the gitmodules file which should be ignored.",
+    )
+    parser.add_argument(
+        "-f",
+        "--force",
+        action="store_true",
+        default=False,
+        help="Override cautions and update or checkout over locally modified repository."
     )
 
     parser.add_argument(
@@ -110,6 +129,11 @@ def commandline_arguments(args=None):
         "information to the screen and log file.",
     )
 
+    return parser
+
+def commandline_arguments(args=None):
+    parser = get_parser()
+
     if args:
         options = parser.parse_args(args)
     else:
@@ -123,10 +147,16 @@ def commandline_arguments(args=None):
 
     action = options.action
     if not action:
-        action = "install"
+        action = "checkout"
+    handlers=[logging.StreamHandler()]
 
     if options.debug:
+        try:
+            open("fleximod.log","w")
+        except PermissionError:
+            sys.exit("ABORT: Could not write file fleximod.log")
         level = logging.DEBUG
+        handlers.append(logging.FileHandler("fleximod.log"))
     elif options.verbose:
         level = logging.INFO
     else:
@@ -135,8 +165,9 @@ def commandline_arguments(args=None):
     logging.basicConfig(
         level=level,
         format="%(name)s - %(levelname)s - %(message)s",
-        handlers=[logging.FileHandler("fleximod.log"), logging.StreamHandler()],
+        handlers=handlers
     )
+    
     if hasattr(options, 'version'):
         exit()
     
@@ -147,6 +178,7 @@ def commandline_arguments(args=None):
         options.components,
         options.exclude,
         options.verbose,
+        options.force,
         action,
     )
 
@@ -230,8 +262,29 @@ def submodule_checkout(root, name, path, url=None, tag=None):
         if url.startswith("git@"):
             tmpurl = url
             url = url.replace("git@github.com:", "https://github.com")            
-            git.git_operation("clone", "-b", tag, url, path)
+            git.git_operation("clone", url, path)
+            smgit = GitInterface(repodir, logger)
+            if not tag:
+                tag = smgit.git_operation("describe", "--tags", "--always").rstrip()
+            smgit.git_operation("checkout",tag)
             # Now need to move the .git dir to the submodule location
+            rootdotgit = os.path.join(root,".git")
+            if os.path.isfile(rootdotgit):
+                with open(rootdotgit) as f:
+                    line = f.readline()
+                    if line.startswith("gitdir: "):
+                        rootdotgit = line[8:].rstrip()
+            
+            newpath = os.path.abspath(os.path.join(root,rootdotgit,"modules",path))
+            print(f"root is {root} rootdotgit is {rootdotgit} newpath is {newpath}")
+            if not os.path.isdir(os.path.join(newpath,os.pardir)):
+                os.makedirs(os.path.abspath(os.path.join(newpath,os.pardir)))
+
+            shutil.move(os.path.join(repodir,".git"), newpath) 
+            with open(os.path.join(repodir,".git"), "w") as f:
+                f.write("gitdir: "+newpath)
+            
+
             
             
     if not tmpurl:
@@ -241,7 +294,7 @@ def submodule_checkout(root, name, path, url=None, tag=None):
         # recursively handle this checkout
         print(f"Recursively checking out submodules of {name} {repodir} {url}")
         gitmodules = GitModules(logger,confpath=repodir)
-        submodules_install(gitmodules, repodir, ["I:T"])
+        submodules_checkout(gitmodules, repodir, ["I:T"])
     if os.path.exists(os.path.join(repodir, ".git")):
         print(f"Successfully checked out {name}")
     else:
@@ -255,6 +308,7 @@ def submodule_checkout(root, name, path, url=None, tag=None):
 
 def submodules_status(gitmodules, root_dir):
     testfails = 0
+    localmods = 0
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "fxtag")
@@ -274,32 +328,38 @@ def submodules_status(gitmodules, root_dir):
                     atag = (htag.split()[1])[10:]
                     break
             if tag == atag:
-                print(f"Submodule {name} not checked out, aligned at tag {tag}")
+                print(f"e {name:>20} not checked out, aligned at tag {tag}")
             else:
-                print(f"Submodule {name} not checked out, out of sync at tag {atag}, expected tag is {tag}")
+                print(f"e {name:>20} not checked out, out of sync at tag {atag}, expected tag is {tag}")
                 testfails += 1
         else:
             with utils.pushd(newpath):
                 git = GitInterface(newpath, logger)
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 if tag and atag != tag:
-                    print(f"Submodule {name} {atag} is out of sync with .gitmodules {tag}")
+                    print(f"s {name:>20} {atag} is out of sync with .gitmodules {tag}")
                     testfails += 1
                 elif tag:
-                    print(f"Submodule {name} at tag {tag}")
+                    print(f"  {name:>20} at tag {tag}")
                 else:
                     print(
-                        f"Submodule {name} has no tag defined in .gitmodules, module at {atag}"
+                        f"e {name:>20} has no tag defined in .gitmodules, module at {atag}"
                     )
                     testfails += 1
 
-                status = git.git_operation("status","--ignore-submodules","untracked")
+                status = git.git_operation("status","--ignore-submodules")
                 if "nothing to commit" not in status:
-                    print(status)
+                    localmods = localmods+1
+                    print('M'+textwrap.indent(status,'                      '))
     
-    return testfails
+    return testfails, localmods
 
-def submodules_update(gitmodules, root_dir):
+def submodules_update(gitmodules, root_dir, force):
+    _,localmods = submodules_status(gitmodules, root_dir)
+    print("")
+    if localmods and not force:
+        print(f"Repository has local mods, cowardly refusing to continue, fix issues or use --force to override")
+        return
     for name in gitmodules.sections():
         fxtag = gitmodules.get(name, "fxtag")
         path = gitmodules.get(name, "path")
@@ -332,15 +392,20 @@ def submodules_update(gitmodules, root_dir):
                     git.git_operation("fetch", newremote, "--tags")
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 if fxtag and fxtag != atag:
-                    print(f"Updating {name} to {fxtag}")
+                    print(f"{name:>20} updated to {fxtag}")
                     git.git_operation("checkout", fxtag)
                 elif not fxtag:
-                    print(f"No fxtag found for submodule {name}")
+                    print(f"No fxtag found for submodule {name:>20}")
                 else:
-                    print(f"submodule {name} up to date.")
+                    print(f"{name:>20} up to date.")
 
 
-def submodules_install(gitmodules, root_dir, requiredlist):
+def submodules_checkout(gitmodules, root_dir, requiredlist, force):
+    _,localmods = submodules_status(gitmodules, root_dir)
+    print("")
+    if localmods and not force:
+        print(f"Repository has local mods, cowardly refusing to continue, fix issues or use --force to override")
+        return
     for name in gitmodules.sections():
         fxrequired = gitmodules.get(name, "fxrequired")
         fxsparse = gitmodules.get(name, "fxsparse")
@@ -367,7 +432,7 @@ def submodules_install(gitmodules, root_dir, requiredlist):
 
 def submodules_test(gitmodules, root_dir):
     # First check that fxtags are present and in sync with submodule hashes
-    testfails = submodules_status(gitmodules, root_dir)
+    testfails,localmods = submodules_status(gitmodules, root_dir)
     # Then make sure that urls are consistant with fxurls (not forks and not ssh)
     # and that sparse checkout files exist
     for name in gitmodules.sections():
@@ -381,7 +446,8 @@ def submodules_test(gitmodules, root_dir):
         if fxsparse and not os.path.isfile(os.path.join(root_dir, path, fxsparse)):
             print(f"sparse submodule {name} sparse checkout file {fxsparse} not found")
             testfails += 1
-    return testfails
+    return testfails+localmods
+
 
 
             
@@ -393,6 +459,7 @@ def _main_func():
         includelist,
         excludelist,
         verbose,
+        force,
         action,
     ) = commandline_arguments()
     # Get a logger for the package
@@ -408,6 +475,7 @@ def _main_func():
             utils.fatal_error(
                 "No {} found in {} or any of it's parents".format(file_name, root_dir)
             )
+
         root_dir = os.path.dirname(file_path)
     logger.info(f"root_dir is {root_dir}")
     gitmodules = GitModules(
@@ -419,9 +487,9 @@ def _main_func():
     )
     retval = 0
     if action == "update":
-        submodules_update(gitmodules, root_dir)
-    elif action == "install":
-        submodules_install(gitmodules, root_dir, fxrequired)
+        submodules_update(gitmodules, root_dir, force)
+    elif action == "checkout":
+        submodules_checkout(gitmodules, root_dir, fxrequired, force)
     elif action == "status":
         submodules_status(gitmodules, root_dir)
     elif action == "test":

@@ -101,7 +101,7 @@ To obtain the CESM code you need to do the following:
 
 #. Run the script **bin/git-fleximod install**. ::
 
-      ./bin/git-fleximod install
+      ./bin/git-fleximod checkout
 
    The **git-fleximod** script is a package manager that will
    populate the cesm directory with the relevant versions of each of the
@@ -168,16 +168,17 @@ Pointing to a different version of a component
 Each entry in **.gitmodules** has the following form (we use CAM as an
 example below)::
 
-[submodule "cpl7"]
-	path = components/cpl7
-	url = https://github.com/ESCOMP/CESM_CPL7andDataComps
-        fxtag = cpl77.0.7
+[submodule "cam"]
+	path = components/cam
+	url = https://www.github.com/jedwards4b/CAM
+	fxurl = https://www.github.com/ESCOMP/CAM
+        fxtag = cam6_3_143_rme01
         fxrequired = T:T
-
+        
 Each entry specifies a tag. To point to a new tag:
 
 #. Modify the relevant entry/entries in **.gitmodules** (e.g., changing
-   ``cam5_4_143`` to ``cam5_4_144`` above)
+   ``cam5_4_143_rme01`` to ``cam5_4_144_rme01`` above)
 
 #. Checkout the new component(s)::
 
@@ -212,6 +213,8 @@ CAM as an example):
      [cam]
      url = https://github.com/mygithubusername/cam
      path = components/cam
+     fxrequired = T:T
+     fxtag = cam6_3_143_mytagname
      fxrequired = T:T
 
 #. Checkout your branch::
