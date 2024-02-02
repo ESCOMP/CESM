@@ -1,8 +1,8 @@
-
 class LstripReader(object):
     "LstripReader formats .gitmodules files to be acceptable for configparser"
+
     def __init__(self, filename):
-        with open(filename, 'r') as infile:
+        with open(filename, "r") as infile:
             lines = infile.readlines()
         self._lines = list()
         self._num_lines = len(lines)
@@ -19,7 +19,7 @@ class LstripReader(object):
         try:
             line = self.next()
         except StopIteration:
-            line = ''
+            line = ""
 
         if (size > 0) and (len(line) < size):
             return line[0:size]
@@ -41,4 +41,3 @@ class LstripReader(object):
 
     def __next__(self):
         return self.next()
-
