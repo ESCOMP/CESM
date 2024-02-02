@@ -244,7 +244,7 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     print(f"Successfully checked out {name}")
 
 
-def submodule_checkout(root, name, path, url=None, tag=None):
+def single_submodule_checkout(root, name, path, url=None, tag=None, force=False):
     git = GitInterface(root, logger)
     repodir = os.path.join(root, path)
     if os.path.exists(os.path.join(repodir, ".git")):
@@ -276,7 +276,6 @@ def submodule_checkout(root, name, path, url=None, tag=None):
                         rootdotgit = line[8:].rstrip()
             
             newpath = os.path.abspath(os.path.join(root,rootdotgit,"modules",path))
-            print(f"root is {root} rootdotgit is {rootdotgit} newpath is {newpath}")
             if not os.path.isdir(os.path.join(newpath,os.pardir)):
                 os.makedirs(os.path.abspath(os.path.join(newpath,os.pardir)))
 
@@ -294,7 +293,7 @@ def submodule_checkout(root, name, path, url=None, tag=None):
         # recursively handle this checkout
         print(f"Recursively checking out submodules of {name} {repodir} {url}")
         gitmodules = GitModules(logger,confpath=repodir)
-        submodules_checkout(gitmodules, repodir, ["I:T"])
+        submodules_checkout(gitmodules, repodir, ["I:T"], force=force)
     if os.path.exists(os.path.join(repodir, ".git")):
         print(f"Successfully checked out {name}")
     else:
@@ -324,14 +323,17 @@ def submodules_status(gitmodules, root_dir):
             tags = rootgit.git_operation("ls-remote","--tags",url)
             atag = None
             for htag in tags.split('\n'):
-                if tag in htag:
+                if tag and tag in htag:
                     atag = (htag.split()[1])[10:]
                     break
-            if tag == atag:
+            if tag and tag == atag:
                 print(f"e {name:>20} not checked out, aligned at tag {tag}")
-            else:
+            elif tag:
                 print(f"e {name:>20} not checked out, out of sync at tag {atag}, expected tag is {tag}")
                 testfails += 1
+            else:
+                print(f"e {name:>20} has no fxtag defined in .gitmodules")
+                testfails +=1 
         else:
             with utils.pushd(newpath):
                 git = GitInterface(newpath, logger)
@@ -400,7 +402,7 @@ def submodules_update(gitmodules, root_dir, force):
                     print(f"{name:>20} up to date.")
 
 
-def submodules_checkout(gitmodules, root_dir, requiredlist, force):
+def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
     _,localmods = submodules_status(gitmodules, root_dir)
     print("")
     if localmods and not force:
@@ -428,7 +430,7 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force):
                 "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
             )
             
-            submodule_checkout(root_dir, name, path, url=url, tag=fxtag)
+            single_submodule_checkout(root_dir, name, path, url=url, tag=fxtag, force=force)
 
 def submodules_test(gitmodules, root_dir):
     # First check that fxtags are present and in sync with submodule hashes
