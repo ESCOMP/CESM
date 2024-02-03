@@ -13,7 +13,10 @@ packages = [
   { include = "src/classes/*.py" },
   { include = "License" },
   { include = "tests" },
-
+  { include = "doc/*.rst" },
+  { include = "doc/Makefile" },
+  { include = "doc/make.bat" },
+  { include = "doc/conf.py" },
 ]
 
 [tool.poetry.dependencies]
