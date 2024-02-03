@@ -184,7 +184,9 @@ def commandline_arguments(args=None):
     )
 
 
-def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master"):
+def submodule_sparse_checkout(
+    root_dir, name, url, path, sparsefile, tag="master", fxhash=None
+):
     # first create the module directory
     if not os.path.isdir(path):
         os.makedirs(path)
@@ -242,12 +244,19 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     shutil.copy(os.path.join(root_dir, path, sparsefile), gitsparse)
 
     # Finally checkout the repo
-    sprepo_git.git_operation("fetch", "--depth=1", "origin", "--tags")
-    sprepo_git.git_operation("checkout", tag)
-    print(f"Successfully checked out {name}")
+    if fxhash:
+        sprepo_git.git_operation("fetch", "origin", "--tags")
+        sprepo_git.git_operation("checkout", fxhash)
+        print(f"Successfully checked out {name:>20} at {fxhash}")
+    else:
+        sprepo_git.git_operation("fetch", "--depth=1", "origin", "--tags")
+        sprepo_git.git_operation("checkout", tag)
+        print(f"Successfully checked out {name:>20} at {tag}")
 
 
-def single_submodule_checkout(root, name, path, url=None, tag=None, force=False):
+def single_submodule_checkout(
+    root, name, path, url=None, tag=None, force=False, fxhash=None
+):
     git = GitInterface(root, logger)
     repodir = os.path.join(root, path)
     if os.path.exists(os.path.join(repodir, ".git")):
@@ -267,9 +276,12 @@ def single_submodule_checkout(root, name, path, url=None, tag=None, force=False)
             url = url.replace("git@github.com:", "https://github.com")
             git.git_operation("clone", url, path)
             smgit = GitInterface(repodir, logger)
-            if not tag:
+            if not tag and not fxhash:
                 tag = smgit.git_operation("describe", "--tags", "--always").rstrip()
-            smgit.git_operation("checkout", tag)
+            if fxhash:
+                smgit.git_operation("checkout", fxhash)
+            else:
+                smgit.git_operation("checkout", tag)
             # Now need to move the .git dir to the submodule location
             rootdotgit = os.path.join(root, ".git")
             if os.path.isfile(rootdotgit):
@@ -311,6 +323,9 @@ def submodules_status(gitmodules, root_dir):
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "fxtag")
+        fxhash = gitmodules.get(name, "fxhash")
+        if tag and fxhash:
+            utils.fatal_error(f"{name:>20} cannot have both fxtag and fxhash")
         if not path:
             utils.fatal_error("No path found in .gitmodules for {}".format(name))
         newpath = os.path.join(root_dir, path)
@@ -332,21 +347,44 @@ def submodules_status(gitmodules, root_dir):
                     f"e {name:>20} not checked out, out of sync at tag {atag}, expected tag is {tag}"
                 )
                 testfails += 1
+            elif fxhash:
+                n = len(fxhash)
+                smhash = rootgit.git_operation(
+                    "ls-tree", "--object-only", f"--abbrev={n}", "HEAD", path
+                )
+                if smhash == fxhash:
+                    print(f"  {name:>20} not checked out, aligned at hash {fxhash}")
+                else:
+                    print(
+                        f"s {name:>20} not checked out, out of sync at hash {smhash}, expected hash is {fxhash}"
+                    )
+                    testfails += 1
             else:
-                print(f"e {name:>20} has no fxtag defined in .gitmodules")
+                print(f"e {name:>20} has no fxtag nor fxhash defined in .gitmodules")
                 testfails += 1
         else:
             with utils.pushd(newpath):
                 git = GitInterface(newpath, logger)
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
+                ahash = git.git_operation("status").partition("\n")[0].split()[-1]
                 if tag and atag != tag:
                     print(f"s {name:>20} {atag} is out of sync with .gitmodules {tag}")
                     testfails += 1
                 elif tag:
                     print(f"  {name:>20} at tag {tag}")
+                elif fxhash:
+                    rootgit = GitInterface(root_dir, logger)
+                    n = len(fxhash)
+                    if ahash.startswith(fxhash):
+                        print(f"  {name:>20} at hash {fxhash}")
+                    else:
+                        print(
+                            f"s {name:>20} {ahash} is out of sync with .gitmodules {fxhash}"
+                        )
+                        testfails += 1
                 else:
                     print(
-                        f"e {name:>20} has no tag defined in .gitmodules, module at {atag}"
+                        f"e {name:>20} has no fxtag nor fxhash defined in .gitmodules, module at {atag}"
                     )
                     testfails += 1
 
@@ -368,6 +406,7 @@ def submodules_update(gitmodules, root_dir, force):
         return
     for name in gitmodules.sections():
         fxtag = gitmodules.get(name, "fxtag")
+        fxhash = gitmodules.get(name, "fxhash")
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
         logger.info("name={} path={} url={} fxtag={}".format(name, path, url, fxtag))
@@ -397,11 +436,15 @@ def submodules_update(gitmodules, root_dir, force):
                 if fxtag and fxtag not in tags:
                     git.git_operation("fetch", newremote, "--tags")
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
+
                 if fxtag and fxtag != atag:
                     print(f"{name:>20} updated to {fxtag}")
                     git.git_operation("checkout", fxtag)
-                elif not fxtag:
-                    print(f"No fxtag found for submodule {name:>20}")
+                elif fxhash:
+                    print(f"{name:>20} updated to {fxhash}")
+                    git.git_operation("checkout", fxhash)
+                elif not (fxtag or fxhash):
+                    print(f"No fxtag nor fxhash found for submodule {name:>20}")
                 else:
                     print(f"{name:>20} up to date.")
 
@@ -418,6 +461,7 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
         fxrequired = gitmodules.get(name, "fxrequired")
         fxsparse = gitmodules.get(name, "fxsparse")
         fxtag = gitmodules.get(name, "fxtag")
+        fxhash = gitmodules.get(name, "fxhash")
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
 
@@ -432,14 +476,16 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
                     root_dir, name, url, path, fxsparse, fxtag
                 )
             )
-            submodule_sparse_checkout(root_dir, name, url, path, fxsparse, tag=fxtag)
+            submodule_sparse_checkout(
+                root_dir, name, url, path, fxsparse, tag=fxtag, fxhash=fxhash
+            )
         else:
             logger.debug(
                 "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
             )
 
             single_submodule_checkout(
-                root_dir, name, path, url=url, tag=fxtag, force=force
+                root_dir, name, path, url=url, tag=fxtag, force=force, fxhash=fxhash
             )
 
 
