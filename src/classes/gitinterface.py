@@ -1,5 +1,5 @@
 import os
-from fleximod import utils
+from classes import utils
 
 
 class GitInterface:

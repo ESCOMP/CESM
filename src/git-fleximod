@@ -6,10 +6,10 @@ import logging
 import argparse
 import textwrap
 from pathlib import Path
-from fleximod import utils
-from fleximod.gitinterface import GitInterface
-from fleximod.gitmodules import GitModules
-from fleximod.version import __version__
+from classes import utils
+from classes.gitinterface import GitInterface
+from classes.gitmodules import GitModules
+from classes.version import __version__
 from configparser import NoOptionError
 
 # logger variable is global
@@ -43,7 +43,7 @@ def get_parser():
         "action",
         choices=choices,
         default="checkout",
-        help=f"Subcommand of fleximod, choices are {choices[:-1]}",
+        help=f"Subcommand of git-fleximod, choices are {choices[:-1]}",
     )
 
     parser.add_argument(
@@ -394,6 +394,7 @@ def submodules_update(gitmodules, root_dir, force):
                 if fxtag and fxtag not in tags:
                     git.git_operation("fetch", newremote, "--tags")
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
+
                 if fxtag and fxtag != atag:
                     print(f"{name:>20} updated to {fxtag}")
                     git.git_operation("checkout", fxtag)
