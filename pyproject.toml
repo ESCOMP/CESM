@@ -8,16 +8,12 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/jedwards4b/git-fleximod"
 keywords = ["git", "submodule", "sparse-checkout"]
-packages = [
-  { include = "src/git-fleximod" },
-  { include = "src/classes/*.py" },
-  { include = "License" },
-  { include = "tests" },
-  { include = "doc/*.rst" },
-  { include = "doc/Makefile" },
-  { include = "doc/make.bat" },
-  { include = "doc/conf.py" },
-]
+
+[[tool.poetry.packages]]
+include = "git_fleximod"
+
+[tool.poetry.scripts]
+git-fleximod = "git_fleximod.git-fleximod:main"
 
 [tool.poetry.dependencies]
 python = "^3.8"
