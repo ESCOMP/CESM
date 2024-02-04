@@ -1,9 +1,8 @@
 # pylint: disable=unused-import
-from classes import utils
-from classes.gitinterface import GitInterface
-from classes.gitmodules import GitModules
-from classes.version import __version__
-
+from git_fleximod import cli
+from git_fleximod import utils
+from git_fleximod.gitinterface import GitInterface
+from git_fleximod.gitmodules import GitModules
 
 def test_import():
     print("here")
