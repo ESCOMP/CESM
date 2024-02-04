@@ -8,18 +8,23 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/jedwards4b/git-fleximod"
 keywords = ["git", "submodule", "sparse-checkout"]
-
-[[tool.poetry.packages]]
-include = "git_fleximod"
+packages = [
+{ include = "git_fleximod"},
+{ include = "doc"},
+]
 
 [tool.poetry.scripts]
 git-fleximod = "git_fleximod.git-fleximod:main"
+fsspec = "fsspec.fuse:main"
 
 [tool.poetry.dependencies]
 python = "^3.8"
 GitPython = "^3.1.0"
+sphinx = "^5.0.0"
+fsspec = "^2023.12.2"
+wheel = "^0.42.0"
 
-[tools.poetry.urls]
+[tool.poetry.urls]
 "Bug Tracker" = "https://github.com/jedwards4b/git-fleximod/issues"
 
 [build-system]
