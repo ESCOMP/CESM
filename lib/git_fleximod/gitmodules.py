@@ -1,7 +1,7 @@
 import os
 import shutil
 from configparser import ConfigParser
-from fleximod.lstripreader import LstripReader
+from .lstripreader import LstripReader
 
 
 class GitModules(ConfigParser):
