@@ -87,7 +87,7 @@
 	path = components/ww3dev
        	url = https://github.com/jedwards4b/WW3_interface       
        	fxurl = https://github.com/ESCOMP/WW3_interface       
-        fxtag = main_0.0.13_rme01
+        fxtag = main_0.0.13_rme02
         fxrequired = T:T
         
 [submodule "rtm"]
