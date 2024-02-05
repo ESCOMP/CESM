@@ -186,4 +186,4 @@
 	url = https://github.com/jedwards4b/POP2-CESM
 	fxurl = https://github.com/ESCOMP/POP2-CESM
         fxrequired = T:T
-        fxtag = cesm_pop_2_1_20231208_rme01
+        fxtag = cesm_pop_2_1_20231208_rme02
