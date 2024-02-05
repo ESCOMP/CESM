@@ -11,7 +11,7 @@ Welcome to git-fleximod's documentation!
    :caption: Contents:
 .. module:: sphinxcontrib.autoprogram
 .. sphinx_argparse_cli::
-   :module: classes.cli
+   :module: git_fleximod.cli
    :func: get_parser
    :prog: git-fleximod
 

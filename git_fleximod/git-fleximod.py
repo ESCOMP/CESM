@@ -4,10 +4,10 @@ import os
 import shutil
 import logging
 import textwrap
-from classes import utils
-from classes import cli
-from classes.gitinterface import GitInterface
-from classes.gitmodules import GitModules
+from git_fleximod import utils
+from git_fleximod import cli
+from git_fleximod.gitinterface import GitInterface
+from git_fleximod.gitmodules import GitModules
 from configparser import NoOptionError
 
 # logger variable is global
@@ -343,7 +343,7 @@ def submodules_test(gitmodules, root_dir):
     return testfails + localmods
 
 
-def _main_func():
+def main():
     (
         root_dir,
         file_name,
@@ -393,4 +393,4 @@ def _main_func():
 
 
 if __name__ == "__main__":
-    sys.exit(_main_func())
+    sys.exit(main())

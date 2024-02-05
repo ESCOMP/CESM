@@ -3,7 +3,6 @@ import argparse
 
 __version__ = "0.5.0"
 
-
 def find_root_dir(filename=".git"):
     d = Path.cwd()
     root = Path(d.root)
