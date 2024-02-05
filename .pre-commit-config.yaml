@@ -1,0 +1,18 @@
+exclude: ^utils/.*$
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+  - repo: https://github.com/PyCQA/pylint
+    rev: v2.11.1
+    hooks:
+      - id: pylint
+        args:
+          - --disable=I,C,R,logging-not-lazy,wildcard-import,unused-wildcard-import,fixme,broad-except,bare-except,eval-used,exec-used,global-statement,logging-format-interpolation,no-name-in-module,arguments-renamed,unspecified-encoding,protected-access,import-error,no-member

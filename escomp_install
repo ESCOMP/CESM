@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+# updates git-fleximod in an ESCOMP model
+# this script should be run from the model root directory, it expects
+# git-fleximod to already be installed with the script in bin
+# and the classes in lib/python/site-packages
+import sys
+import shutil
+import os
+
+from glob import iglob
+
+fleximod_root = sys.argv[1]
+fleximod_path = os.path.join(fleximod_root,"src","git-fleximod")
+if os.path.isfile(fleximod_path):
+   with open(fleximod_path,"r") as f:
+        fleximod = f.readlines()
+   with open(os.path.join(".","bin","git-fleximod"),"w") as f:
+        for line in fleximod:
+            f.write(line)
+            if "import argparse" in line:
+               f.write('\nsys.path.append(os.path.join(os.path.dirname(__file__),"..","lib","python","site-packages"))\n\n')
+
+   for file in iglob(os.path.join(fleximod_root, "src", "fleximod", "*.py")):
+       shutil.copy(file,
+        os.path.join("lib","python","site-packages","fleximod",os.path.basename(file)))
