@@ -65,8 +65,8 @@ def commandline_arguments(args=None):
 
 def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master"):
     # first create the module directory
-    if not os.path.isdir(path):
-        os.makedirs(path)
+    if not os.path.isdir(os.path.join(root_dir,path)):
+        os.makedirs(os.path.join(root_dir,path))
     # Check first if the module is already defined
     # and the sparse-checkout file exists
     git = GitInterface(root_dir, logger)
