@@ -3,137 +3,19 @@ import sys
 import os
 import shutil
 import logging
-import argparse
 import textwrap
-from pathlib import Path
-from fleximod import utils
-from fleximod.gitinterface import GitInterface
-from fleximod.gitmodules import GitModules
-from fleximod.version import __version__
+from git_fleximod import utils
+from git_fleximod import cli
+from git_fleximod.gitinterface import GitInterface
+from git_fleximod.gitmodules import GitModules
 from configparser import NoOptionError
 
 # logger variable is global
 logger = None
 
 
-def find_root_dir(filename=".git"):
-    d = Path.cwd()
-    root = Path(d.root)
-    while d != root:
-        attempt = d / filename
-        if attempt.is_dir():
-            return attempt
-        d = d.parent
-    return None
-
-
-def get_parser():
-    description = """
-    %(prog)s manages checking out groups of gitsubmodules with addtional support for Earth System Models
-    """
-    parser = argparse.ArgumentParser(
-        description=description, formatter_class=argparse.RawDescriptionHelpFormatter
-    )
-
-    #
-    # user options
-    #
-    choices = ["update", "checkout", "status", "test"]
-    parser.add_argument(
-        "action",
-        choices=choices,
-        default="checkout",
-        help=f"Subcommand of fleximod, choices are {choices[:-1]}",
-    )
-
-    parser.add_argument(
-        "components",
-        nargs="*",
-        help="Specific component(s) to checkout. By default, "
-        "all required submodules are checked out.",
-    )
-
-    parser.add_argument(
-        "-C",
-        "--path",
-        default=find_root_dir(),
-        help="Toplevel repository directory.  Defaults to top git directory relative to current.",
-    )
-
-    parser.add_argument(
-        "-g",
-        "--gitmodules",
-        nargs="?",
-        default=".gitmodules",
-        help="The submodule description filename. " "Default: %(default)s.",
-    )
-
-    parser.add_argument(
-        "-x",
-        "--exclude",
-        nargs="*",
-        help="Component(s) listed in the gitmodules file which should be ignored.",
-    )
-    parser.add_argument(
-        "-f",
-        "--force",
-        action="store_true",
-        default=False,
-        help="Override cautions and update or checkout over locally modified repository.",
-    )
-
-    parser.add_argument(
-        "-o",
-        "--optional",
-        action="store_true",
-        default=False,
-        help="By default only the required submodules "
-        "are checked out. This flag will also checkout the "
-        "optional submodules relative to the toplevel directory.",
-    )
-
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="count",
-        default=0,
-        help="Output additional information to "
-        "the screen and log file. This flag can be "
-        "used up to two times, increasing the "
-        "verbosity level each time.",
-    )
-
-    parser.add_argument(
-        "-V",
-        "--version",
-        action="version",
-        version=f"%(prog)s {__version__}",
-        help="Print version and exit.",
-    )
-
-    #
-    # developer options
-    #
-    parser.add_argument(
-        "--backtrace",
-        action="store_true",
-        help="DEVELOPER: show exception backtraces as extra " "debugging output",
-    )
-
-    parser.add_argument(
-        "-d",
-        "--debug",
-        action="store_true",
-        default=False,
-        help="DEVELOPER: output additional debugging "
-        "information to the screen and log file.",
-    )
-
-    return parser
-
-
 def commandline_arguments(args=None):
-    parser = get_parser()
+    parser = cli.get_parser()
 
     if args:
         options = parser.parse_args(args)
@@ -433,7 +315,6 @@ def submodules_update(gitmodules, root_dir, force):
                 if fxtag and fxtag not in tags:
                     git.git_operation("fetch", newremote, "--tags")
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
-                print(f"fxtag {fxtag} fxhash {fxhash}")
                 if fxtag and fxtag != atag:
                     print(f"{name:>20} updated to {fxtag}")
                     git.git_operation("checkout", fxtag)
@@ -506,7 +387,7 @@ def submodules_test(gitmodules, root_dir):
     return testfails + localmods
 
 
-def _main_func():
+def main():
     (
         root_dir,
         file_name,
@@ -556,4 +437,4 @@ def _main_func():
 
 
 if __name__ == "__main__":
-    sys.exit(_main_func())
+    sys.exit(main())

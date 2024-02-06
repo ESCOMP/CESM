@@ -1,6 +1,5 @@
 import os
-from fleximod import utils
-
+from . import utils
 
 class GitInterface:
     def __init__(self, repo_path, logger):
