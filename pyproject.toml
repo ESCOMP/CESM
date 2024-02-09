@@ -14,7 +14,7 @@ packages = [
 ]
 
 [tool.poetry.scripts]
-git-fleximod = "git_fleximod.git-fleximod:main"
+git-fleximod = "git_fleximod.git_fleximod:main"
 fsspec = "fsspec.fuse:main"
 
 [tool.poetry.dependencies]
@@ -24,6 +24,7 @@ sphinx = "^5.0.0"
 fsspec = "^2023.12.2"
 wheel = "^0.42.0"
 pytest = "^8.0.0"
+pyfakefs = "^5.3.5"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/jedwards4b/git-fleximod/issues"
