@@ -152,6 +152,7 @@
       </pes>
     </mach>
   </grid>
+
   <grid name="a%ne30np4.+l%ne30np4.+oi%gx1" >
     <mach name="any">
       <pes pesize="any" compset="any">
@@ -264,6 +265,82 @@
       </pes>
     </mach>
   </grid>
+
+  <grid name="a%0.9x1.25.+l%0.9x1.25.+oi%gx1" >
+    <mach name='derecho'>
+      <pes pesize="any" compset="CAM60%WC*">
+	<comment>none</comment>
+	<ntasks>
+	  <ntasks_atm>-16</ntasks_atm>
+	  <ntasks_lnd>-15</ntasks_lnd>
+	  <ntasks_rof>-15</ntasks_rof>
+	  <ntasks_ice>-1</ntasks_ice>
+	  <ntasks_ocn>64</ntasks_ocn>
+	  <ntasks_glc>64</ntasks_glc>
+	  <ntasks_wav>64</ntasks_wav>
+	  <ntasks_cpl>-16</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>-15</rootpe_ice>
+	  <rootpe_ocn>-16</rootpe_ocn>
+	  <rootpe_glc>2112</rootpe_glc>
+	  <rootpe_wav>2112</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+    </mach>
+  </grid>
+<!--  <grid name="a%0.9x1.25.+l%0.9x1.25.+oi%gx1" >
+    <mach name='derecho'>
+      <pes pesize="any" compset="any">
+	<comment>none</comment>
+	<ntasks>
+	  <ntasks_atm>-8</ntasks_atm>
+	  <ntasks_lnd>-4</ntasks_lnd>
+	  <ntasks_rof>-4</ntasks_rof>
+	  <ntasks_ice>-4</ntasks_ice>
+	  <ntasks_ocn>-1</ntasks_ocn>
+	  <ntasks_glc>-8</ntasks_glc>
+	  <ntasks_wav>-1</ntasks_wav>
+	  <ntasks_cpl>-1</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>0</rootpe_rof>
+	  <rootpe_ice>-4</rootpe_ice>
+	  <rootpe_ocn>-8</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>0</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+    </mach>
+  </grid>
+-->
   <grid name="a%ne120np4.+l%ne120np4.+oi%tx0.1v2">
     <mach name="stampede|titan" >
       <pes pesize="any" compset="any">
