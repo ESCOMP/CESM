@@ -1,4 +1,5 @@
 import os
+import sys
 from . import utils
 
 class GitInterface:
@@ -26,7 +27,10 @@ class GitInterface:
     def _git_command(self, operation, *args):
         self.logger.info(operation)
         if self._use_module and operation != "submodule":
-            return getattr(self.repo.git, operation)(*args)
+            try:
+                return getattr(self.repo.git, operation)(*args)
+            except Exception as e:
+                sys.exit(e)
         else:
             return ["git", "-C", self.repo_path, operation] + list(args)
 
@@ -42,7 +46,10 @@ class GitInterface:
         command = self._git_command(operation, *args)
         self.logger.info(command)
         if isinstance(command, list):
-            return utils.execute_subprocess(command, output_to_caller=True)
+            try:
+                return utils.execute_subprocess(command, output_to_caller=True)
+            except Exception as e:
+                sys.exit(e)
         else:
             return command
 
