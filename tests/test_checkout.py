@@ -1,38 +1,31 @@
 import pytest
 from pathlib import Path
-
-@pytest.fixture(params=[
-    {"subrepo_path": "modules/test", "submodule_name": "test_submodule", "gitmodules_content" : """                                                                                                                                                                                      [submodule "test_submodule"]
-        path = modules/test
-        url = https://github.com/ESMCI/mpi-serial.git
-        fxtag = MPIserial_2.4.0
-        fxurl = https://github.com/ESMCI/mpi-serial.git
-        fxrequired = ToplevelOnlyRequired
-"""},
-])
-def test_config(request):                
-    return request.param
                 
-def test_basic_checkout(git_fleximod, test_repo, test_config):
+def test_basic_checkout(git_fleximod, test_repo, shared_repos):
     # Prepare a simple .gitmodules
-    gm = test_config['gitmodules_content']
+    gm = shared_repos['gitmodules_content']
     file_path = (test_repo / ".gitmodules")
-    if not file_path.exists():
-        file_path.write_text(gm)
+    repo_name = shared_repos["submodule_name"]
+    repo_path = shared_repos["subrepo_path"]
+
+    file_path.write_text(gm)
     
-        # Run the command
-        result = git_fleximod("checkout test_submodule")
+    # Run the command
+    result = git_fleximod(f"checkout {repo_name}")
+    
+    # Assertions
+    assert result.returncode == 0
+    assert Path(test_repo / repo_path).exists()   # Did the submodule directory get created?
+    if "sparse" in repo_name:
+        assert Path(test_repo /  f"{repo_path}/m4").exists()   # Did the submodule sparse directory get created?
+        assert not Path(test_repo /  f"{repo_path}/README").exists()   # Did only the submodule sparse directory get created?
+    
+    status = git_fleximod(f"status {repo_name}")
         
-        # Assertions
-        assert result.returncode == 0
-        assert Path(test_repo / "modules/test").exists()   # Did the submodule directory get created?
+    assert shared_repos["status1"] in status.stdout
         
-        status = git_fleximod("status")
+    result = git_fleximod(f"update {repo_name}")
+    assert result.returncode == 0
         
-        assert "test_submodule d82ce7c is out of sync with .gitmodules MPIserial_2.4.0" in status.stdout
-        
-        result = git_fleximod("update")
-        assert result.returncode == 0
-        
-        status = git_fleximod("status")
-        assert "test_submodule at tag MPIserial_2.4.0" in status.stdout
+    status = git_fleximod(f"status {repo_name}")
+    assert shared_repos["status2"] in status.stdout
