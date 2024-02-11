@@ -24,9 +24,9 @@ def commandline_arguments(args=None):
 
     # explicitly listing a component overrides the optional flag
     if options.optional or options.components:
-        fxrequired = ["T:T", "T:F", "I:T"]
+        fxrequired = ["ToplevelOnlyRequired", "ToplevelOnlyOptional", "AlwaysRequired", "AlwaysOptional"]
     else:
-        fxrequired = ["T:T", "I:T"]
+        fxrequired = ["ToplevelOnlyRequired", "AlwaysRequired"]
 
     action = options.action
     if not action:
@@ -66,6 +66,7 @@ def commandline_arguments(args=None):
 def submodule_sparse_checkout(
     root_dir, name, url, path, sparsefile, tag="master", fxhash=None
 ):
+    logger.info("Called sparse_checkout for {}".format(name))
     # first create the module directory
     if not os.path.isdir(os.path.join(root_dir,path)):
         os.makedirs(os.path.join(root_dir,path))
@@ -344,7 +345,7 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
         url = gitmodules.get(name, "url")
 
         if fxrequired and fxrequired not in requiredlist:
-            if "T:F" == fxrequired:
+            if "Optional" in fxrequired:
                 print("Skipping optional component {}".format(name))
             continue
 
