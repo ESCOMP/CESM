@@ -16,8 +16,10 @@ def logger():
 @pytest.fixture(params=[
     {"subrepo_path": "modules/test",
      "submodule_name": "test_submodule",
-     "status1" : "test_submodule d82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
+     "status1" : "test_submodule MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
      "status2" : "test_submodule at tag MPIserial_2.4.0",
+     "status3" : "test_submodule MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
+     "status4" : "test_submodule at tag MPIserial_2.4.0",
      "gitmodules_content" : """
     [submodule "test_submodule"]
     path = modules/test
@@ -28,20 +30,24 @@ def logger():
 """},
     {"subrepo_path": "modules/test_optional",
      "submodule_name": "test_optional",
-     "status1" : "test_optional d82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
+     "status1" : "test_optional MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
      "status2" : "test_optional at tag MPIserial_2.4.0",
+     "status3" : "test_optional not checked out, aligned at tag MPIserial_2.4.0",
+     "status4" : "test_optional at tag MPIserial_2.4.0",
      "gitmodules_content": """
     [submodule "test_optional"]
     path = modules/test_optional
     url = https://github.com/ESMCI/mpi-serial.git
     fxtag = MPIserial_2.4.0
     fxurl = https://github.com/ESMCI/mpi-serial.git
-    fxrequired = ToplevelOnlyRequired
+    fxrequired = ToplevelOnlyOptional
 """},
     {"subrepo_path": "modules/test_alwaysoptional",
      "submodule_name": "test_alwaysoptional",
-     "status1" : "test_alwaysoptional d82ce7c is out of sync with .gitmodules MPIserial_2.3.0",
+     "status1" : "test_alwaysoptional MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.3.0",
      "status2" : "test_alwaysoptional at tag MPIserial_2.3.0",
+     "status3" : "test_alwaysoptional not checked out, aligned at tag MPIserial_2.3.0",
+     "status4" : "test_alwaysoptional at tag MPIserial_2.3.0",
      "gitmodules_content": """
     [submodule "test_alwaysoptional"]
     path = modules/test_alwaysoptional
@@ -54,6 +60,8 @@ def logger():
      "submodule_name": "test_sparse",
      "status1" : "test_sparse at tag MPIserial_2.5.0",
      "status2" : "test_sparse at tag MPIserial_2.5.0",
+     "status3" : "test_sparse at tag MPIserial_2.5.0",
+     "status4" : "test_sparse at tag MPIserial_2.5.0",
      "gitmodules_content": """
     [submodule "test_sparse"]
     path = modules/test_sparse
@@ -84,13 +92,18 @@ def test_repo(shared_repos, tmp_path, logger):
         sparse_content = """m4
 """
         (test_dir / "modules" / ".sparse_file_list").write_text(sparse_content)
+        gitp.git_operation("add","modules/.sparse_file_list")
     else:
         gitp = GitInterface(str(test_dir), logger)
         gitp.git_operation("submodule", "add", "--depth","1","--name", submodule_name, "https://github.com/ESMCI/mpi-serial.git", subrepo_path)
         assert test_dir.joinpath(".gitmodules").is_file()
+        gitp.git_operation("add",subrepo_path)
+    gitp.git_operation("commit","-a","-m","\"add submod\"")
+    test_dir2 = tmp_path / "testrepo2"
+    gitp.git_operation("clone",test_dir,test_dir2)
+    return test_dir2    
         
-        
-    return test_dir
+
     
 @pytest.fixture
 def git_fleximod(test_repo):
