@@ -13,7 +13,7 @@ def logger():
     logger = logging.getLogger(__name__)
     return logger
 
-@pytest.fixture(params=[
+all_repos=[
     {"subrepo_path": "modules/test",
      "submodule_name": "test_submodule",
      "status1" : "test_submodule MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
@@ -71,10 +71,20 @@ def logger():
     fxrequired = AlwaysRequired
     fxsparse = ../.sparse_file_list
 """},
-])
+]
+@pytest.fixture(params=all_repos)
 
 def shared_repos(request):
     return request.param
+
+@pytest.fixture
+def get_all_repos():
+    return all_repos
+
+def write_sparse_checkout_file(fp):
+    sparse_content = """m4
+"""
+    fp.write_text(sparse_content)
 
 @pytest.fixture
 def test_repo(shared_repos, tmp_path, logger):
@@ -89,9 +99,7 @@ def test_repo(shared_repos, tmp_path, logger):
     if "sparse" in submodule_name:
         (test_dir / subrepo_path).mkdir()
         # Add the sparse checkout file
-        sparse_content = """m4
-"""
-        (test_dir / "modules" / ".sparse_file_list").write_text(sparse_content)
+        write_sparse_checkout_file(test_dir / "modules" / ".sparse_file_list")
         gitp.git_operation("add","modules/.sparse_file_list")
     else:
         gitp = GitInterface(str(test_dir), logger)
