@@ -11,8 +11,8 @@ def test_basic_checkout(git_fleximod, test_repo, shared_repos):
     file_path.write_text(gm)
     
     # Run the command
-    result = git_fleximod(f"checkout {repo_name}")
-    
+    result = git_fleximod(f"update {repo_name}")
+
     # Assertions
     assert result.returncode == 0 
     assert Path(test_repo / repo_path).exists()   # Did the submodule directory get created?
@@ -22,10 +22,5 @@ def test_basic_checkout(git_fleximod, test_repo, shared_repos):
     
     status = git_fleximod(f"status {repo_name}")
         
-    assert shared_repos["status1"] in status.stdout
-        
-    result = git_fleximod(f"update {repo_name}")
-    assert result.returncode == 0
-        
-    status = git_fleximod(f"status {repo_name}")
     assert shared_repos["status2"] in status.stdout
+        
