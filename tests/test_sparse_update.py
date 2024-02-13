@@ -20,7 +20,7 @@ def test_sparse_checkout(git_fleximod, test_repo_base):
 """
     (test_repo_base / "modules" / ".sparse_file_list").write_text(sparse_content)
 
-    result = git_fleximod("checkout")
+    result = git_fleximod("update")
     
     # Assertions
     assert result.returncode == 0
@@ -31,8 +31,3 @@ def test_sparse_checkout(git_fleximod, test_repo_base):
 
     assert "test_sparse_submodule at tag MPIserial_2.5.0" in status.stdout
 
-    result = git_fleximod("update")
-    assert result.returncode == 0
-
-    status = git_fleximod("status test_sparse_submodule")
-    assert "test_sparse_submodule at tag MPIserial_2.5.0" in status.stdout

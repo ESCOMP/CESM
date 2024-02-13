@@ -275,7 +275,7 @@ def submodules_status(gitmodules, root_dir):
     return testfails, localmods
 
 
-def submodules_update(gitmodules, root_dir, force):
+def submodules_update(gitmodules, root_dir, requiredlist, force):
     _, localmods = submodules_status(gitmodules, root_dir)
     print("")
     if localmods and not force:
@@ -289,6 +289,34 @@ def submodules_update(gitmodules, root_dir, force):
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
         logger.info("name={} path={} url={} fxtag={}".format(name, path, url, fxtag))
+        if not os.path.exists(os.path.join(path, ".git")):
+            fxrequired = gitmodules.get(name, "fxrequired")
+            fxsparse = gitmodules.get(name, "fxsparse")
+
+            if fxrequired and fxrequired not in requiredlist:
+                if "T:F" == fxrequired:
+                    print("Skipping optional component {}".format(name))
+                continue
+
+            if fxsparse:
+                logger.debug(
+                    "Callng submodule_sparse_checkout({}, {}, {}, {}, {}, {}".format(
+                        root_dir, name, url, path, fxsparse, fxtag
+                    )
+                )
+                submodule_sparse_checkout(
+                    root_dir, name, url, path, fxsparse, tag=fxtag, fxhash=fxhash
+                )
+            else:
+                logger.debug(
+                    "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
+                )
+                
+                single_submodule_checkout(
+                    root_dir, name, path, url=url, tag=fxtag, force=force, fxhash=fxhash
+                )
+
+
         if os.path.exists(os.path.join(path, ".git")):
             submoddir = os.path.join(root_dir, path)
             with utils.pushd(submoddir):
@@ -326,7 +354,7 @@ def submodules_update(gitmodules, root_dir, force):
                 else:
                     print(f"{name:>20} up to date.")
 
-
+# checkout is done by update if required so this function may be depricated
 def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
     _, localmods = submodules_status(gitmodules, root_dir)
     print("")
@@ -424,7 +452,7 @@ def main():
         sys.exit("No submodule components found")
     retval = 0
     if action == "update":
-        submodules_update(gitmodules, root_dir, force)
+        submodules_update(gitmodules, root_dir, fxrequired, force)
     elif action == "checkout":
         submodules_checkout(gitmodules, root_dir, fxrequired, force)
     elif action == "status":
