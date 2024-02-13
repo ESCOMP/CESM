@@ -15,18 +15,13 @@ def test_basic_checkout(git_fleximod, test_repo):
     (test_repo / ".gitmodules").write_text(gitmodules_content)
     
     # Run the command
-    result = git_fleximod("checkout")
+    result = git_fleximod("update")
 
     # Assertions
     assert result.returncode == 0
     assert Path(test_repo / "modules/test").exists()   # Did the submodule directory get created?
 
     status = git_fleximod("status")
-
-    assert "test_submodule d82ce7c is out of sync with .gitmodules MPIserial_2.4.0" in status.stdout
-
-    result = git_fleximod("update")
-    assert result.returncode == 0
 
     status = git_fleximod("status")
     assert "test_submodule at tag MPIserial_2.4.0" in status.stdout
