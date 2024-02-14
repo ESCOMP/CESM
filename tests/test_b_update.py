@@ -11,7 +11,7 @@ def test_basic_checkout(git_fleximod, test_repo, shared_repos):
     file_path.write_text(gm)
     
     # Run the command
-    result = git_fleximod(f"update {repo_name}")
+    result = git_fleximod(test_repo, f"update {repo_name}")
 
     # Assertions
     assert result.returncode == 0 
@@ -20,7 +20,7 @@ def test_basic_checkout(git_fleximod, test_repo, shared_repos):
         assert Path(test_repo /  f"{repo_path}/m4").exists()   # Did the submodule sparse directory get created?
         assert not Path(test_repo /  f"{repo_path}/README").exists()   # Did only the submodule sparse directory get created?
     
-    status = git_fleximod(f"status {repo_name}")
+    status = git_fleximod(test_repo, f"status {repo_name}")
         
     assert shared_repos["status2"] in status.stdout
         

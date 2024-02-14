@@ -18,7 +18,7 @@ all_repos=[
      "submodule_name": "test_submodule",
      "status1" : "test_submodule MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
      "status2" : "test_submodule at tag MPIserial_2.4.0",
-     "status3" : "test_submodule MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
+     "status3" : "test_submodule at tag MPIserial_2.4.0",
      "status4" : "test_submodule at tag MPIserial_2.4.0",
      "gitmodules_content" : """
     [submodule "test_submodule"]
@@ -84,6 +84,7 @@ def get_all_repos():
 def write_sparse_checkout_file(fp):
     sparse_content = """m4
 """
+    print(f"writing sparse_file_list \n")
     fp.write_text(sparse_content)
 
 @pytest.fixture
@@ -110,14 +111,23 @@ def test_repo(shared_repos, tmp_path, logger):
     test_dir2 = tmp_path / "testrepo2"
     gitp.git_operation("clone",test_dir,test_dir2)
     return test_dir2    
-        
 
+
+@pytest.fixture
+def complex_repo(tmp_path, logger):
+    test_dir = tmp_path / "testcomplex"
+    test_dir.mkdir()
+    str_path = str(test_dir)
+    gitp = GitInterface(str_path, logger)
+    gitp.git_operation("remote", "add", "origin", "https://github.com/jedwards4b/fleximod-test")
+    gitp.git_operation("fetch", "origin", "main")
+    return test_dir
     
 @pytest.fixture
-def git_fleximod(test_repo):
-    def _run_fleximod(args, input=None):
+def git_fleximod():
+    def _run_fleximod(path, args, input=None):
         cmd = ["git", "fleximod"] + args.split()
-        result = subprocess.run(cmd, cwd=test_repo, input=input, 
+        result = subprocess.run(cmd, cwd=path, input=input, 
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                                 text=True)
         return result

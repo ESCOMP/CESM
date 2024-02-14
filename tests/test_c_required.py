@@ -16,15 +16,11 @@ def test_required(git_fleximod, test_repo, shared_repos):
                 file_path.write_text(gm)
     else:
         file_path.write_text(gm)
-    status = git_fleximod(f"status {repo_name}")
-    result = git_fleximod("checkout")
+    result = git_fleximod(test_repo, "update")
     assert result.returncode == 0
-    status = git_fleximod(f"status {repo_name}")
+    status = git_fleximod(test_repo, f"status {repo_name}")
     assert shared_repos["status3"] in status.stdout
-    if "not checked out" in status.stdout:
-        status = git_fleximod(f"checkout {repo_name}")
-        assert result.returncode == 0
-    status = git_fleximod(f"update {repo_name}")
+    status = git_fleximod(test_repo, f"update {repo_name}")
     assert result.returncode == 0
-    status = git_fleximod(f"status {repo_name}")
+    status = git_fleximod(test_repo, f"status {repo_name}")
     assert shared_repos["status4"] in status.stdout
