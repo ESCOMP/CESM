@@ -29,6 +29,12 @@ pyfakefs = "^5.3.5"
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/jedwards4b/git-fleximod/issues"
 
+[tool.pytest.ini_options]
+markers = [
+        "skip_after_first: only run on first iteration"
+]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+

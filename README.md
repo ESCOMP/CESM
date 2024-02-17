@@ -1,10 +1,10 @@
 # git-fleximod
 
-Flexible Submodule Management for Git
+Flexible, Enhanced Submodule Management for Git
 
 ## Overview
 
-Git-fleximod is a Python-based tool that extends Git's submodule capabilities, offering additional features for managing submodules in a more flexible and efficient way.
+Git-fleximod is a Python-based tool that extends Git's submodule and sparse checkout capabilities, offering additional features for managing submodules in a more flexible and efficient way.
 
 ## Installation
 
@@ -30,10 +30,10 @@ Git-fleximod is a Python-based tool that extends Git's submodule capabilities, o
 
     fxtag: Specify a specific tag or branch to checkout for a submodule.
     fxrequired: Mark a submodule's checkout behavior, with allowed values:
-      - T:T: Top-level and required (checked out only when this is the Toplevel module).
-      - T:F: Top-level and optional (checked out with --optional flag if this is the Toplevel module).
-      - I:T: Internal and required (always checked out).
-      - I:F: Internal and optional (checked out with --optional flag).
+      - ToplevelRequired: Top-level and required (checked out only when this is the Toplevel module).
+      - ToplevelOptional: Top-level and optional (checked out with --optional flag if this is the Toplevel module).
+      - AlwaysRequired:       Always required (always checked out).
+      - AlwaysOptional:       Always optional (checked out with --optional flag).
     fxsparse: Enable sparse checkout for a submodule, pointing to a file containing sparse checkout paths.
     fxurl: This is the url used in the test subcommand to assure that protected branches do not point to forks
 
@@ -71,6 +71,7 @@ Example .gitmodules entry:
         path = src/physics/cosp2/src
         url = https://github.com/CFMIP/COSPv2.0
         fxsparse = ../.cosp_sparse_checkout
+        fxrequired = AlwaysRequired
         fxtag = v2.1.4cesm
 ```
 Explanation:
@@ -80,14 +81,15 @@ should be checked out into the directory src/physics/cosp2/src
 relative to the .gitmodules directory.  It should be checked out from
 the URL https://github.com/CFMIP/COSPv2.0 and use sparse checkout as
 described in the file ../.cosp_sparse_checkout relative to the path
-directory.
+directory.  It should be checked out anytime this .gitmodules entry is
+read.
 
 Additional example:
 ```ini, toml
     [submodule "cime"]
         path = cime
         url = https://github.com/jedwards4b/cime
-        fxrequired = T:T
+        fxrequired = ToplevelRequired
         fxtag = cime6.0.198_rme01
 ```
 
