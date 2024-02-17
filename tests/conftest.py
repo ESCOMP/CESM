@@ -26,7 +26,7 @@ all_repos=[
     url = https://github.com/ESMCI/mpi-serial.git
     fxtag = MPIserial_2.4.0
     fxurl = https://github.com/ESMCI/mpi-serial.git
-    fxrequired = ToplevelOnlyRequired
+    fxrequired = ToplevelRequired
 """},
     {"subrepo_path": "modules/test_optional",
      "submodule_name": "test_optional",
@@ -35,12 +35,12 @@ all_repos=[
      "status3" : "test_optional not checked out, aligned at tag MPIserial_2.4.0",
      "status4" : "test_optional at tag MPIserial_2.4.0",
      "gitmodules_content": """
-    [submodule "test_optional"]
+     [submodule "test_optional"]
     path = modules/test_optional
     url = https://github.com/ESMCI/mpi-serial.git
     fxtag = MPIserial_2.4.0
     fxurl = https://github.com/ESMCI/mpi-serial.git
-    fxrequired = ToplevelOnlyOptional
+    fxrequired = ToplevelOptional
 """},
     {"subrepo_path": "modules/test_alwaysoptional",
      "submodule_name": "test_alwaysoptional",
@@ -84,7 +84,6 @@ def get_all_repos():
 def write_sparse_checkout_file(fp):
     sparse_content = """m4
 """
-    print(f"writing sparse_file_list \n")
     fp.write_text(sparse_content)
 
 @pytest.fixture
@@ -119,8 +118,9 @@ def complex_repo(tmp_path, logger):
     test_dir.mkdir()
     str_path = str(test_dir)
     gitp = GitInterface(str_path, logger)
-    gitp.git_operation("remote", "add", "origin", "https://github.com/jedwards4b/fleximod-test")
+    gitp.git_operation("remote", "add", "origin", "https://github.com/jedwards4b/fleximod-test2")
     gitp.git_operation("fetch", "origin", "main")
+    gitp.git_operation("checkout", "main")
     return test_dir
     
 @pytest.fixture
@@ -130,6 +130,9 @@ def git_fleximod():
         result = subprocess.run(cmd, cwd=path, input=input, 
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                                 text=True)
+        if result.returncode:
+            print(result.stdout)
+            print(result.stderr)
         return result
     return _run_fleximod
 

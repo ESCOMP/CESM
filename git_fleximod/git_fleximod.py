@@ -12,7 +12,8 @@ from configparser import NoOptionError
 
 # logger variable is global
 logger = None
-
+def fxrequired_allowed_values():
+    return ['ToplevelRequired', 'ToplevelOptional', 'AlwaysRequired', 'AlwaysOptional']
 
 def commandline_arguments(args=None):
     parser = cli.get_parser()
@@ -24,9 +25,9 @@ def commandline_arguments(args=None):
 
     # explicitly listing a component overrides the optional flag
     if options.optional or options.components:
-        fxrequired = ["ToplevelOnlyRequired", "ToplevelOnlyOptional", "AlwaysRequired", "AlwaysOptional"]
+        fxrequired = ["ToplevelRequired", "ToplevelOptional", "AlwaysRequired", "AlwaysOptional"]
     else:
-        fxrequired = ["ToplevelOnlyRequired", "AlwaysRequired"]
+        fxrequired = ["ToplevelRequired", "AlwaysRequired"]
 
     action = options.action
     if not action:
@@ -67,12 +68,16 @@ def submodule_sparse_checkout(
     root_dir, name, url, path, sparsefile, tag="master", fxhash=None
 ):
     logger.info("Called sparse_checkout for {}".format(name))
+    rgit = GitInterface(root_dir, logger)
+    superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
+    if superroot:
+        gitroot = superroot
+    else:
+        gitroot = root_dir
+    assert(os.path.isdir(os.path.join(gitroot,".git")))
     # first create the module directory
     if not os.path.isdir(os.path.join(root_dir,path)):
         os.makedirs(os.path.join(root_dir,path))
-    # Check first if the module is already defined
-    # and the sparse-checkout file exists
-    git = GitInterface(root_dir, logger)
 
     # initialize a new git repo and set the sparse checkout flag
     sprep_repo = os.path.join(root_dir, path)
@@ -92,36 +97,39 @@ def submodule_sparse_checkout(
     sprepo_git.config_set_value("core", "sparseCheckout", "true")
 
     # set the repository remote
-    sprepo_git.git_operation("remote", "add", "origin", url)
 
-    superroot = git.git_operation("rev-parse", "--show-superproject-working-tree")
-    if os.path.isfile(os.path.join(root_dir, ".git")):
+    logger.info("Setting remote origin in {}/{}".format(root_dir,path))
+    status = sprepo_git.git_operation("remote", "-v")
+    if url not in status:
+        sprepo_git.git_operation("remote", "add", "origin", url)
+    
+    topgit = os.path.join(gitroot,".git")
+    
+    if gitroot != root_dir and os.path.isfile(os.path.join(root_dir, ".git")):
         with open(os.path.join(root_dir, ".git")) as f:
-            gitpath = os.path.abspath(os.path.join(root_dir, f.read().split()[1]))
-        topgit = os.path.abspath(os.path.join(gitpath, "modules"))
+            gitpath = os.path.relpath(os.path.join(root_dir, f.read().split()[1]), start=os.path.join(root_dir,path))
+        topgit = os.path.join(gitpath, "modules")
     else:
-        topgit = os.path.abspath(os.path.join(root_dir, ".git", "modules"))
-
-    if not os.path.isdir(topgit):
-        os.makedirs(topgit)
-    topgit = os.path.join(topgit, name)
-    logger.debug(
-        "root_dir is {} topgit is {} superroot is {}".format(
-            root_dir, topgit, superroot
-        )
-    )
-
+        topgit = os.path.relpath(os.path.join(root_dir, ".git", "modules"), start=os.path.join(root_dir,path))
+    
+    with utils.pushd(sprep_repo):
+        if not os.path.isdir(topgit):
+            os.makedirs(topgit)
+    topgit += os.sep + name
+    
     if os.path.isdir(os.path.join(root_dir, path, ".git")):
-        shutil.move(os.path.join(root_dir, path, ".git"), topgit)
-        with open(os.path.join(root_dir, path, ".git"), "w") as f:
-            f.write("gitdir: " + os.path.relpath(topgit, os.path.join(root_dir, path)))
+        with utils.pushd(sprep_repo):
+            shutil.move(".git", topgit)
+            with open(".git", "w") as f:
+                f.write("gitdir: " + os.path.relpath(topgit))
+            #    assert(os.path.isdir(os.path.relpath(topgit, start=sprep_repo)))
+            gitsparse = os.path.abspath(os.path.join(topgit, "info", "sparse-checkout"))
+        if os.path.isfile(gitsparse):
+            logger.warning("submodule {} is already initialized {}".format(name, topgit))
+            return
 
-    gitsparse = os.path.abspath(os.path.join(topgit, "info", "sparse-checkout"))
-    if os.path.isfile(gitsparse):
-        logger.warning("submodule {} is already initialized".format(name))
-        return
-
-    shutil.copy(os.path.join(root_dir, path, sparsefile), gitsparse)
+        with utils.pushd(sprep_repo):
+            shutil.copy(sparsefile, gitsparse)
 
     # Finally checkout the repo
     if fxhash:
@@ -132,28 +140,31 @@ def submodule_sparse_checkout(
         sprepo_git.git_operation("fetch", "--depth=1", "origin", "--tags")
         sprepo_git.git_operation("checkout", tag)
         print(f"Successfully checked out {name:>20} at {tag}")
-
+    rgit.config_set_value(f'submodule "{name}"',"active","true")
+    rgit.config_set_value(f'submodule "{name}"',"url",url)
 
 def single_submodule_checkout(
-    root, name, path, url=None, tag=None, force=False, fxhash=None
+        root, name, path, url=None, tag=None, force=False, fxhash=None, optional=False
 ):
     git = GitInterface(root, logger)
     repodir = os.path.join(root, path)
-    if os.path.exists(os.path.join(repodir, ".git")):
-        logger.info("Submodule {} already checked out".format(name))
-        return
+    logger.info("Checkout {} into {}/{}".format(name,root,path))
     # if url is provided update to the new url
     tmpurl = None
+    repo_exists = False
+    if os.path.exists(os.path.join(repodir, ".git")):
+        logger.info("Submodule {} already checked out".format(name))
+        repo_exists = True
 
     # Look for a .gitmodules file in the newly checkedout repo
-    if url:
+    if not repo_exists and url:
         # ssh urls cause problems for those who dont have git accounts with ssh keys defined
         # but cime has one since e3sm prefers ssh to https, because the .gitmodules file was
         # opened with a GitModules object we don't need to worry about restoring the file here
         # it will be done by the GitModules class
         if url.startswith("git@"):
             tmpurl = url
-            url = url.replace("git@github.com:", "https://github.com")
+            url = url.replace("git@github.com:", "https://github.com/")
             git.git_operation("clone", url, path)
             smgit = GitInterface(repodir, logger)
             if not tag and not fxhash:
@@ -170,26 +181,26 @@ def single_submodule_checkout(
                     if line.startswith("gitdir: "):
                         rootdotgit = line[8:].rstrip()
 
-            newpath = os.path.abspath(os.path.join(root, rootdotgit, "modules", path))
-            if not os.path.isdir(os.path.join(newpath, os.pardir)):
-                os.makedirs(os.path.abspath(os.path.join(newpath, os.pardir)))
-
+            newpath = os.path.abspath(os.path.join(root, rootdotgit, "modules", name))
             shutil.move(os.path.join(repodir, ".git"), newpath)
             with open(os.path.join(repodir, ".git"), "w") as f:
-                f.write("gitdir: " + newpath)
+                f.write("gitdir: " + os.path.relpath(newpath, start=repodir))
 
-    if not tmpurl:
+    if not repo_exists or not tmpurl:
         logger.debug(git.git_operation("submodule", "update", "--init", "--", path))
 
     if os.path.exists(os.path.join(repodir, ".gitmodules")):
         # recursively handle this checkout
         print(f"Recursively checking out submodules of {name} {repodir} {url}")
         gitmodules = GitModules(logger, confpath=repodir)
-        submodules_checkout(gitmodules, repodir, ["I:T"], force=force)
+        requiredlist = ["AlwaysRequired"]
+        if optional:
+            requiredlist.append("AlwaysOptional")
+        submodules_checkout(gitmodules, repodir, requiredlist, force=force)
     if os.path.exists(os.path.join(repodir, ".git")):
-        print(f"Successfully checked out {name}")
+        print(f"Successfully checked out {name} {repodir}")
     else:
-        utils.fatal_error(f"Failed to checkout {name}")
+        utils.fatal_error(f"Failed to checkout {name} {repo_exists} {tmpurl} {repodir} {path}")
 
     if tmpurl:
         print(git.git_operation("restore", ".gitmodules"))
@@ -289,33 +300,37 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
         fxhash = gitmodules.get(name, "fxhash")
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
-        logger.info("name={} path={} url={} fxtag={}".format(name, path, url, fxtag))
-        if not os.path.exists(os.path.join(path, ".git")):
-            fxrequired = gitmodules.get(name, "fxrequired")
-            fxsparse = gitmodules.get(name, "fxsparse")
-
-            if fxrequired and fxrequired not in requiredlist:
-                if "T:F" == fxrequired:
-                    print("Skipping optional component {}".format(name))
-                continue
-
-            if fxsparse:
-                logger.debug(
-                    "Callng submodule_sparse_checkout({}, {}, {}, {}, {}, {}".format(
-                        root_dir, name, url, path, fxsparse, fxtag
-                    )
+        logger.info("name={} path={} url={} fxtag={} requiredlist={}".format(name,os.path.join(root_dir, path), url, fxtag, requiredlist))
+#        if not os.path.exists(os.path.join(root_dir,path, ".git")):
+        fxrequired = gitmodules.get(name, "fxrequired")
+        assert(fxrequired in fxrequired_allowed_values())
+        rgit = GitInterface(root_dir, logger)
+        superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
+            
+        fxsparse = gitmodules.get(name, "fxsparse")
+            
+        if fxrequired and (superroot and "Toplevel" in fxrequired) or fxrequired not in requiredlist:
+            if "ToplevelOptional" == fxrequired:
+                print("Skipping optional component {}".format(name))
+            continue
+        if fxsparse:
+            logger.debug(
+                "Callng submodule_sparse_checkout({}, {}, {}, {}, {}, {}".format(
+                    root_dir, name, url, path, fxsparse, fxtag
                 )
-                submodule_sparse_checkout(
-                    root_dir, name, url, path, fxsparse, tag=fxtag, fxhash=fxhash
-                )
-            else:
-                logger.debug(
-                    "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
-                )
+            )
+            submodule_sparse_checkout(
+                root_dir, name, url, path, fxsparse, tag=fxtag, fxhash=fxhash
+            )
+        else:
+            logger.info(
+                "Calling submodule_checkout({},{},{},{})".format(root_dir, name, path,url)
+            )
                 
-                single_submodule_checkout(
-                    root_dir, name, path, url=url, tag=fxtag, force=force, fxhash=fxhash
-                )
+            single_submodule_checkout(
+                root_dir, name, path, url=url, tag=fxtag, force=force,
+                fxhash=fxhash, optional=("AlwaysOptional" in requiredlist)
+            )
 
 
         if os.path.exists(os.path.join(path, ".git")):
@@ -371,7 +386,6 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
         fxhash = gitmodules.get(name, "fxhash")
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
-
         if fxrequired and fxrequired not in requiredlist:
             if "Optional" in fxrequired:
                 print("Skipping optional component {}".format(name))
@@ -392,7 +406,8 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
             )
 
             single_submodule_checkout(
-                root_dir, name, path, url=url, tag=fxtag, force=force, fxhash=fxhash
+                root_dir, name, path, url=url, tag=fxtag, force=force, fxhash=fxhash,
+                optional = "AlwaysOptional" in requiredlist
             )
 
 
@@ -441,7 +456,7 @@ def main():
             )
 
         root_dir = os.path.dirname(file_path)
-    logger.info("root_dir is {}".format(root_dir))
+    logger.info("root_dir is {} includelist={} excludelist={}".format(root_dir, includelist, excludelist))
     gitmodules = GitModules(
         logger,
         confpath=root_dir,

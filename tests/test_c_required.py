@@ -20,6 +20,10 @@ def test_required(git_fleximod, test_repo, shared_repos):
     assert result.returncode == 0
     status = git_fleximod(test_repo, f"status {repo_name}")
     assert shared_repos["status3"] in status.stdout
+    status = git_fleximod(test_repo, f"update --optional")
+    assert result.returncode == 0
+    status = git_fleximod(test_repo, f"status {repo_name}")
+    assert shared_repos["status4"] in status.stdout
     status = git_fleximod(test_repo, f"update {repo_name}")
     assert result.returncode == 0
     status = git_fleximod(test_repo, f"status {repo_name}")

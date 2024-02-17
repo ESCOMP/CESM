@@ -30,8 +30,8 @@ Git-fleximod is a Python-based tool that extends Git's submodule and sparse chec
 
     fxtag: Specify a specific tag or branch to checkout for a submodule.
     fxrequired: Mark a submodule's checkout behavior, with allowed values:
-      - ToplevelOnlyRequired: Top-level and required (checked out only when this is the Toplevel module).
-      - ToplevelOnlyOptional: Top-level and optional (checked out with --optional flag if this is the Toplevel module).
+      - ToplevelRequired: Top-level and required (checked out only when this is the Toplevel module).
+      - ToplevelOptional: Top-level and optional (checked out with --optional flag if this is the Toplevel module).
       - AlwaysRequired:       Always required (always checked out).
       - AlwaysOptional:       Always optional (checked out with --optional flag).
     fxsparse: Enable sparse checkout for a submodule, pointing to a file containing sparse checkout paths.
@@ -89,7 +89,7 @@ Additional example:
     [submodule "cime"]
         path = cime
         url = https://github.com/jedwards4b/cime
-        fxrequired = ToplevelOnlyRequired
+        fxrequired = ToplevelRequired
         fxtag = cime6.0.198_rme01
 ```
 
