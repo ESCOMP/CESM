@@ -25,11 +25,11 @@ def get_parser():
     #
     # user options
     #
-    choices = ["update", "checkout", "status", "test"]
+    choices = ["update", "status", "test"]
     parser.add_argument(
         "action",
         choices=choices,
-        default="checkout",
+        default="update",
         help=f"Subcommand of git-fleximod, choices are {choices[:-1]}",
     )
 
