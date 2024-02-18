@@ -44,15 +44,15 @@ all_repos=[
 """},
     {"subrepo_path": "modules/test_alwaysoptional",
      "submodule_name": "test_alwaysoptional",
-     "status1" : "test_alwaysoptional MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.3.0",
-     "status2" : "test_alwaysoptional at tag MPIserial_2.3.0",
-     "status3" : "test_alwaysoptional not checked out, aligned at tag MPIserial_2.3.0",
-     "status4" : "test_alwaysoptional at tag MPIserial_2.3.0",
+     "status1" : "test_alwaysoptional MPIserial_2.3.0 is out of sync with .gitmodules e5cf35c",
+     "status2" : "test_alwaysoptional at hash e5cf35c",
+     "status3" : "test_alwaysoptional not checked out, out of sync at tag MPIserial_2.3.0",
+     "status4" : "test_alwaysoptional at hash e5cf35c",
      "gitmodules_content": """
     [submodule "test_alwaysoptional"]
     path = modules/test_alwaysoptional
     url = https://github.com/ESMCI/mpi-serial.git
-    fxtag = MPIserial_2.3.0
+    fxtag = e5cf35c
     fxurl = https://github.com/ESMCI/mpi-serial.git
     fxrequired = AlwaysOptional
 """},    
