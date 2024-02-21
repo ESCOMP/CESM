@@ -113,9 +113,9 @@
 	<ntasks>
 	  <ntasks_atm>1920</ntasks_atm>
 	  <ntasks_lnd>640</ntasks_lnd>
-	  <ntasks_rof>64</ntasks_rof>
-	  <ntasks_ice>1216</ntasks_ice>
-	  <ntasks_ocn>256</ntasks_ocn>
+	  <ntasks_rof>512</ntasks_rof>
+	  <ntasks_ice>1152</ntasks_ice>
+	  <ntasks_ocn>384</ntasks_ocn>
 	  <ntasks_glc>64</ntasks_glc>
 	  <ntasks_wav>64</ntasks_wav>
 	  <ntasks_cpl>1920</ntasks_cpl>
@@ -133,11 +133,11 @@
 	<rootpe>
 	  <rootpe_atm>0</rootpe_atm>
 	  <rootpe_lnd>0</rootpe_lnd>
-	  <rootpe_rof>640</rootpe_rof>
+	  <rootpe_rof>0</rootpe_rof>
 	  <rootpe_ice>704</rootpe_ice>
 	  <rootpe_ocn>1920</rootpe_ocn>
-	  <rootpe_glc>640</rootpe_glc>
-	  <rootpe_wav>640</rootpe_wav>
+	  <rootpe_glc>1856</rootpe_glc>
+	  <rootpe_wav>1792</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
@@ -215,51 +215,18 @@
     </mach>
   </grid>
   <grid name="a%1.9x2.5.+l%1.9x2.5.+oi%gx1" >
-    <mach name="cheyenne">
+    <mach name="derecho">
       <pes pesize="any" compset="CAM.+CLM.+CICE.+POP.+">
-	<comment>about 12ypd expected</comment>
+	<comment></comment>
 	<ntasks>
-	  <ntasks_atm>288</ntasks_atm>
-	  <ntasks_lnd>144</ntasks_lnd>
-	  <ntasks_rof>40</ntasks_rof>
-	  <ntasks_ice>108</ntasks_ice>
-	  <ntasks_ocn>288</ntasks_ocn>
-	  <ntasks_glc>36</ntasks_glc>
-	  <ntasks_wav>36</ntasks_wav>
-	  <ntasks_cpl>288</ntasks_cpl>
-	</ntasks>
-	<nthrds>
-	  <nthrds_atm>1</nthrds_atm>
-	  <nthrds_lnd>1</nthrds_lnd>
-	  <nthrds_rof>1</nthrds_rof>
-	  <nthrds_ice>1</nthrds_ice>
-	  <nthrds_ocn>1</nthrds_ocn>
-	  <nthrds_glc>1</nthrds_glc>
-	  <nthrds_wav>1</nthrds_wav>
-	  <nthrds_cpl>1</nthrds_cpl>
-	</nthrds>
-	<rootpe>
-	  <rootpe_atm>0</rootpe_atm>
-	  <rootpe_lnd>0</rootpe_lnd>
-	  <rootpe_rof>0</rootpe_rof>
-	  <rootpe_ice>144</rootpe_ice>
-	  <rootpe_ocn>288</rootpe_ocn>
-	  <rootpe_glc>0</rootpe_glc>
-	  <rootpe_wav>252</rootpe_wav>
-	  <rootpe_cpl>0</rootpe_cpl>
-	</rootpe>
-      </pes>
-      <pes pesize="M3" compset="CAM.+CLM.+CICE.+POP.+">
-	<comment>For multi-instance tests</comment>
-	<ntasks>
-	  <ntasks_atm>-36</ntasks_atm>
-	  <ntasks_lnd>-12</ntasks_lnd>
+	  <ntasks_atm>-8</ntasks_atm>
+	  <ntasks_lnd>-3</ntasks_lnd>
 	  <ntasks_rof>-3</ntasks_rof>
-	  <ntasks_ice>-9</ntasks_ice>
-	  <ntasks_ocn>-36</ntasks_ocn>
-	  <ntasks_glc>-3</ntasks_glc>
-	  <ntasks_wav>-3</ntasks_wav>
-	  <ntasks_cpl>-36</ntasks_cpl>
+	  <ntasks_ice>-5</ntasks_ice>
+	  <ntasks_ocn>-8</ntasks_ocn>
+	  <ntasks_glc>64</ntasks_glc>
+	  <ntasks_wav>64</ntasks_wav>
+	  <ntasks_cpl>-8</ntasks_cpl>
 	</ntasks>
 	<nthrds>
 	  <nthrds_atm>1</nthrds_atm>
@@ -275,10 +242,10 @@
 	  <rootpe_atm>0</rootpe_atm>
 	  <rootpe_lnd>0</rootpe_lnd>
 	  <rootpe_rof>0</rootpe_rof>
-	  <rootpe_ice>144</rootpe_ice>
-	  <rootpe_ocn>288</rootpe_ocn>
+	  <rootpe_ice>-3</rootpe_ice>
+	  <rootpe_ocn>-8</rootpe_ocn>
 	  <rootpe_glc>0</rootpe_glc>
-	  <rootpe_wav>252</rootpe_wav>
+	  <rootpe_wav>64</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
