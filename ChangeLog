@@ -1,4 +1,330 @@
 ==============================================================
+Tag name: cesm2_3_alpha017b
+Originator(s): CSEG
+Date: 26 February 2024
+One-line Summary:  CTSM answer changes, and CIME update.
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_144                              **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_4_1_10            --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.217_httpsbranch02          **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.18                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.92   **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.7             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.50                     **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.28                      **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_97               **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev166                    **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.2     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_231107                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_48                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20231208             --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_78                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.13          --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cam
+    Kate Thayer-Calder 2024-01-02 - cam6_3_144 - components/cam (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_144
+
+    New PUMAS external with some machine learning support (only when activated by namelist).
+
+
+    Francis Vitt 2023-12-20 - cam6_3_143 - components/cam (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_143
+
+    Reduce memory footprint of IC file output in SE CSLAM
+
+
+ccs_config
+    Chris Fischer 2024-01-12 - ccs_config_cesm0.0.92 - ccs_config (cesm2_3_alpha17b)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.89
+
+    ccs_config_cesm0.0.92: Fix derecho debug/intel esmf and parallelio module logic.
+    ccs_config_cesm0.0.91: Update the gpu wrapper script on Derecho.
+    ccs_config_cesm0.0.90: Workaround mpi-serial debug issue on derecho.
+    ccs_config_cesm0.0.89: Use the system-wide MPI wrapper script on Derecho
+    ccs_config_cesm0.0.88: Add develop queue
+    ccs_config_cesm0.0.87: Replaces ncar_updates_231206
+    ccs_config_cesm0.0.86: Config reformat
+
+
+cdeps
+    Chris Fischer 2024-01-29 - cdeps1.0.28 - components/cdeps (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.28
+
+    cdeps1.0.28: Update default SSTICE_DATA_FILENAME to match that previously used in cam
+    cdeps1.0.27: Bring support for configurable source and destination mask.
+
+
+cime
+    Chris Fischer 2024-02-16 - cime6.0.217_httpsbranch02 - cime (cesm2_3_alpha17b)
+    https://github.com/ESMCI/cime/tags/cime6.0.217_httpsbranch01
+
+    cime6.0.217_httpsbranch02: Fix ERI
+    cime6.0.217_httpsbranch01: Standalone component
+    cime6.0.216: Test using dynamic container
+    cime6.0.215: Fix spelling error in err message
+    cime6.0.214: Update cprnc subm again
+    cime6.0.213: Fix a string that should be raw
+    cime6.0.212: Revert "Fixes broken test with shallow git clone"
+    cime6.0.211: Fixes broken test with shallow git clone.
+    cime6.0.210: Fix no-batch mode.
+    cime6.0.209: Add back changes from PR4497 for cam
+
+
+    Chris Fischer 2024-02-01 - cime6.0.208_httpsbranch01 - cime (cesm2_3_alpha17b)
+    https://github.com/ESMCI/cime/tags/cime6.0.208_httpsbranch01
+
+    cime6.0.208_httpsbranch01: Convert cprnc access
+    cime6.0.208: Fix issue getting correct parameters for job subgroups
+
+
+    Chris Fischer 2024-01-12 - cime6.0.207 - cime (cesm2_3_alpha17b)
+    https://github.com/ESMCI/cime/tags/cime6.0.201
+
+    cime6.0.207: Fix creation of cpl-mem.log and cpl-tput.log baseline files.
+    cime6.0.206: Update CIME Externals.cfg.
+    cime6.0.205: Add read of .cime/machine/config_machines.xml file if it exists.
+    cime6.0.204: cprnc needs to have a tag for cesm
+    cime6.0.203: jenkins_generic_job: Should probe branch of main src repo, not cime repo
+    cime6.0.202: If chksum is off, don't try to download_checksum_file
+    cime6.0.201: Update cprnc submodule
+    cime6.0.200: Fix .env_mach_specific.sh when unsetting env
+    cime6.0.199: Automatically call case_setup for case2 in compareTwo
+    cime6.0.198: Remove SMP_PRESENT and replace with BUILD_THREADED
+    cime6.0.197: Update externals
+    cime6.0.196: Reformat config machines
+    cime6.0.195: Update cprnc submodule
+
+
+    Chris Fischer 2023-12-12 - cime6.0.194 - cime (cesm2_3_alpha17b)
+    https://github.com/ESMCI/cime/tags/cime6.0.194
+
+    cime6.0.194: Update to latest cprnc
+    cime6.0.193: Allow an external install of the mpi-serial library
+    cime6.0.192: Fix so that all available Macros are read.
+    cime6.0.191: Fix submodule reference for cprnc.
+    cime6.0.190: Remove cpl7 unit tests.
+    cime6.0.189: Revert PR #4497.
+    cime6.0.188: Update performance baseline checks
+    cime6.0.187: Move cprnc to new repo.
+    cime6.0.186: Fixes separating std and performance blessing.
+    cime6.0.185: Add call in case_setup to run CAM python script, revert in cime6.0.189
+    cime6.0.184: Add --ignore-namelists to Jenkins scripts.
+    cime6.0.183: Update performance baselines.
+    cime6.0.182: Add GPU flags to MPAS dycore through the CIME infrastructure.
+    cime6.0.181: Another bless test result update.
+    cime6.0.180: More bless_test_results fixes.
+    cime6.0.179: Fix bless test results
+    cime6.0.178: Fixes failing tests failing due to E3SM cmake update.
+    cime6.0.177: Reduce the number of times env_batch is rewritten.
+    cime6.0.176: Jenkins_generic_job: Add --save-timing
+
+
+cism
+    Kate Thayer-Calder 2023-12-11 - cismwrap_2_1_97 - components/cism (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_97
+
+    Updates for Derecho, fixes to SLAP and to improve the build speed of CISM with the intel compiler.
+    Requires CTSM tag ctsm5.1.dev158
+
+
+clm
+    Erik Kluzek 2024-01-24 - ctsm5.1.dev166 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev166
+
+    Some miscellaneous bit-for-bit updates having to do with python tools.
+
+    refactoring run_neon, assign high priority items to project board
+    Add izumi unit testing to aux_clm
+    Check that the python environment is turned on for tests
+
+
+    Erik Kluzek 2024-01-20 - ctsm5.1.dev165 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev165
+
+    Turn on Meier roughness, tillage, and crop residue removal for clm5_1 physics option.
+    Also bring in an answer changing bug fix for urban view angle.
+
+    Changes answers for all clm5_1 physics
+
+
+    Erik Kluzek 2024-01-17 - ctsm5.1.dev164 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev164
+
+    Add in FATES capability for two-stream radiation as an option in addition to Norman.
+
+    There's only one FATES test that changes answers because of an issue.
+
+
+    Sam Rabin 2024-01-10 - ctsm5.1.dev163 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev163
+
+    Adds capability for cropland soil tillage and post-harvest residue removal.
+
+    Tillage: This PR brings in the tillage code written by Sam Levis and Michael Graham and used in Graham et al. (2021, ERL, doi:10.1088/1748-9326/abe6c6). Low- and high-intensity tillage here work by increasing the decomposition rate of different soil carbon pools. These "decomposition multipliers" vary based on soil pool and how long it's been since the crop was planted; they are set with new paramfile variables till_decompk_multipliers and mimics_till_decompk_multipliers. Note that tillage is off by default.
+
+    Residue removal: Adds a parameter hat represents what fraction of post-harvest crop residues (stems and leaves) should be removed to the crop product pool rather than being transferred to litter.
+
+
+    Sam Rabin 2024-01-05 - ctsm5.1.dev162 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev162
+
+    Improvements to processing of crop calendar files (v2)
+
+    In python/ctsm/crop_calendars/, process_ggcmi_shdates.py and regrid_ggcmi_shdates.py are used to convert the raw GGCMI crop calendar files into CTSM-compatible versions. This update fixes some bugs, removes dependencies on the nco utilities, enables the use of surface datasets as template files (in addition to the existing ability to use CTSM output files), and standardizes things for consistency with other CTSM Python tools.
+
+
+    Sam Rabin 2024-01-04 - ctsm5.1.dev161 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev161
+
+    Refactor 20-year running means of crop GDD accumulation
+
+    Three variables track the 20-year running mean of GDD accumulation (base temperatures 0, 8, and 10°C) during the "growing season" (April through September in the Northern Hemisphere, October through March in the Southern Hemisphere). This update refactors those to use accumulMod, resolving overly-strong weighting of the first few years after a crop becomes active.
+
+    This update causes differences in crop-enabled configurations. GDD020, GDD820, and GDD1020 will differ, most strongly in the first few years after a crop becomes active. This will have downstream effects on lots of variables, since those are used in determining sowing date and maturity requirements.
+
+
+    Erik Kluzek 2023-12-19 - ctsm5.1.dev160 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev160
+
+    FATES update for first version of LUH landuse change
+    for FATES.
+
+
+    Erik Kluzek 2023-12-19 - ctsm5.1.dev159 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev159
+
+    A merge tag of several bit-for-bit changes
+    and updates in a few PR's.
+
+
+    Erik Kluzek 2023-12-07 - ctsm5.1.dev158 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev158
+
+    Port testlist and PE layouts to Derecho
+
+    Bring changes from the CESM3_dev branch to main-dev.
+
+    Remove /glade/p references. Run all test lists on Derecho.
+
+    Needs cdeps1.0.24
+
+
+    Sam Rabin 2023-11-30 - ctsm5.1.dev156 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev156
+
+    Do not use Meier roughness by default, even with 5.1
+
+    ctsm5.1.dev155 had turned on Meier2022 surface roughness calculation by default for 5.1 compsets. Several bugs have recently emerged that were not caught by pre-merge testing, so this tag reverts that change. Thus, the ZengWang2007 method is default for all compsets again.
+
+
+    Sam Rabin 2023-11-30 - ctsm5.1.dev155 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev155
+
+    Use baset_latvary parameters
+
+    Namelist parameters baset_latvary_slope and baset_latvary_intercept were never actually used, with values of 0.4 and 12 being hard-coded in the relevant subroutine instead. This PR fixes that, and also adds unit testing of a refactored function that uses them.
+
+
+    Erik Kluzek 2023-11-22 - ctsm5.1.dev154 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev154
+
+     New params files:
+    - Changes for Meier roughness
+    - MIMICS
+    - SNICAR
+    - changes to leafcn and k*_nonmyc
+
+
+    Adrianna Foster 2023-11-17 - ctsm5.1.dev153 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev153
+
+    Calls new FATES-side FatesReadParameters to make FATES API easier to use and more modular
+
+
+    Erik Kluzek 2023-11-15 - ctsm5.1.dev152 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev152
+
+    Several updates.
+    Mv tools to /python and add tests; add snow_thermal_cond_method; a few fixes / refactors
+
+
+    Erik Kluzek 2023-11-09 - ctsm5.1.dev151 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev151
+
+    Fix for FATES long exact restarting
+
+
+    Erik Kluzek 2023-11-07 - ctsm5.1.dev150 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev150
+
+    FATES-API update
+
+
+    Sam Rabin 2023-11-03 - ctsm5.1.dev149 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev149
+
+    Rearrange leaf/stem "harvest" and fix soil gas diffusivity
+
+    1. Rearranges the calculation of how much leaf and livestem C and N goes to biofuels vs. litter, in anticipation of adding crop residue removal. Also makes the affected subroutine easier to read.
+    2. Resolves two bugs in the calculation of diffusion in SoilBiogeochemNitrifDenitrif(). Also does some rearranging and renaming to improve clarity.
+    3. Includes unrelated documentation updates from Documentation Week Oct. 2023.
+
+
+    Sam Rabin 2023-11-03 - ctsm5.1.dev148 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev148
+
+    Add GRAINN outputs
+
+    In response to a user request for GRAINN_TO_FOOD outputs, this adds *_N_TO_FOOD(_ANN) and *_N_TO_SEED(_ANN) outputs for reproductive N pools. These are off by default, unlike their C counterparts. Note that the results are not scientifically supported, and tests have revealed unrealistic values. (Also adds GRAINC_TO_SEED_ANN output.)
+
+
+    Sam Rabin 2023-10-31 - ctsm5.1.dev147 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev147
+
+    Add sowing window input files.
+
+
+    Erik Kluzek 2023-10-24 - ctsm5.1.dev146 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev146
+
+    Add a new optional seed dispersal mechanism for FATES.
+
+    Only changes answers for FATES compsets
+
+
+    Sam Rabin 2023-12-05 - ctsm5.1.dev157 - components/clm (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/ctsm/tags/ ctsm5.1.dev157
+
+    Update Externals.cfg to work on Derecho
+
+    * cime: cime6.0.125 -> cime6.0.175
+    * cmeps: cmeps0.14.21 -> cmeps0.14.43
+    * cdeps: cdeps1.0.13 -> cdeps1.0.23
+    * cpl7: cpl77.0.5 -> cpl77.0.7
+    * parallelio: pio2_5_10 -> pio2_6_2
+
+    Causes all Izumi nag tests to fail in run phase.
+
+
+cmeps
+    Chris Fischer 2024-01-12 - cmeps0.14.50 - src/drivers/nuopc/ (cesm2_3_alpha17b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.49
+
+    cmeps0.14.50: For T compsets, only run GLC if med_to_glc is true.
+    cmeps0.14.49: Turn add_gusts on by default for camdev
+    cmeps0.14.48: Add convective gust contribution to U10
+    cmeps0.14.47: Remove the SMP_PRESENT variable and replace with BUILD_THREADED
+    cmeps0.14.46: More changes for derecho
+
+
+==============================================================
 Tag name: cesm2_3_alpha017a
 Originator(s): CSEG
 Date: 22 Decemeber 2023
