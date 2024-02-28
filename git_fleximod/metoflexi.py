@@ -168,9 +168,9 @@ class ExternalRepoTranslator:
                     ngit = GitInterface(newpath, logger)
                     ngit.git_operation("checkout", tag)
 
-        if (newpath / ".gitignore").exists():
-            logger.info("Moving .gitignore file in {}".format(newpath))
-            (newpath / ".gitignore").rename((newpath / "save.gitignore"))
+#        if (newpath / ".gitignore").exists():
+#            logger.info("Moving .gitignore file in {}".format(newpath))
+#            (newpath / ".gitignore").rename((newpath / "save.gitignore"))
             
         if hash_:
             self.git.git_operation("clone", url, path)

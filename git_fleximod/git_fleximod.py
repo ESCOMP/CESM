@@ -132,8 +132,9 @@ def submodule_sparse_checkout(
             shutil.copy(sparsefile, gitsparse)
 
     # Finally checkout the repo
-    sprepo_git.git_operation("fetch", "--depth=1", "origin", "--tags")
+    sprepo_git.git_operation("fetch", "origin", "--tags")
     sprepo_git.git_operation("checkout", tag)
+        
     print(f"Successfully checked out {name:>20} at {tag}")
     rgit.config_set_value(f'submodule "{name}"',"active","true")
     rgit.config_set_value(f'submodule "{name}"',"url",url)
@@ -242,7 +243,7 @@ def submodules_status(gitmodules, root_dir):
                 ahash = git.git_operation("status").partition("\n")[0].split()[-1]
                 if tag and atag == tag:
                     print(f"  {name:>20} at tag {tag}")
-                elif tag and ahash == tag:
+                elif tag and ahash[:len(tag)] == tag:
                     print(f"  {name:>20} at hash {ahash}")
                 elif tag:
                     print(f"s {name:>20} {atag} {ahash} is out of sync with .gitmodules {tag}")
