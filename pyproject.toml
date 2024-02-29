@@ -15,6 +15,7 @@ packages = [
 
 [tool.poetry.scripts]
 git-fleximod = "git_fleximod.git_fleximod:main"
+me2flexi = "git_fleximod.metoflexi:_main"
 fsspec = "fsspec.fuse:main"
 
 [tool.poetry.dependencies]
