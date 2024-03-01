@@ -184,14 +184,14 @@ def single_submodule_checkout(
 
     if os.path.exists(os.path.join(repodir, ".gitmodules")):
         # recursively handle this checkout
-        print(f"Recursively checking out submodules of {name} {repodir} {url}")
+        print(f"Recursively checking out submodules of {name}")
         gitmodules = GitModules(logger, confpath=repodir)
         requiredlist = ["AlwaysRequired"]
         if optional:
             requiredlist.append("AlwaysOptional")
         submodules_checkout(gitmodules, repodir, requiredlist, force=force)
     if os.path.exists(os.path.join(repodir, ".git")):
-        print(f"Successfully checked out {name} {repodir}")
+        print(f"Successfully checked out {name:>20}")
     else:
         utils.fatal_error(f"Failed to checkout {name} {repo_exists} {tmpurl} {repodir} {path}")
 
@@ -207,6 +207,8 @@ def submodules_status(gitmodules, root_dir):
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "fxtag")
+        required = gitmodules.get(name, "fxrequired")
+        level = required and "Toplevel" in required 
         if not path:
             utils.fatal_error("No path found in .gitmodules for {}".format(name))
         newpath = os.path.join(root_dir, path)
@@ -217,6 +219,8 @@ def submodules_status(gitmodules, root_dir):
             url = gitmodules.get(name, "url")
             tags = rootgit.git_operation("ls-remote", "--tags", url)
             atag = None
+            if level:
+                continue
             for htag in tags.split("\n"):
                 if tag and tag in htag:
                     atag = (htag.split()[1])[10:]
