@@ -98,8 +98,8 @@ fxrequired = ToplevelRequired
 
 [submodule "fms"]
 path = libraries/FMS
-url = https://github.com/ESCOMP/FMS_interface
-fxtag = fi_230818
+url = https://github.com/jedwards4b/FMS_interface
+fxtag = rme/fi_230818
 fxurl = https://github.com/ESCOMP/FMS_interface
 fxrequired = ToplevelRequired
 
