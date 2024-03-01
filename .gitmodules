@@ -84,8 +84,8 @@ fxrequired = ToplevelRequired
 
 [submodule "cism"]
 path = components/cism
-url = https://github.com/ESCOMP/CISM-wrapper
-fxtag = cismwrap_2_1_97
+url = https://github.com/jedwards4b/CISM-wrapper
+fxtag = rme/cismwrap_2_1_98
 fxurl = https://github.com/ESCOMP/CISM-wrapper
 fxrequired = ToplevelRequired
 
