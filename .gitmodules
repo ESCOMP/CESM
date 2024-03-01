@@ -78,7 +78,7 @@ fxrequired = ToplevelRequired
 [submodule "cime"]
 path = cime
 url = https://github.com/jedwards4b/cime
-fxtag = rme/cime6.0.221.01
+fxtag = rme/cime6.0.221.02
 fxurl = https://github.com/ESMCI/cime
 fxrequired = ToplevelRequired
 
