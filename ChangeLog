@@ -1,4 +1,109 @@
 ==============================================================
+Tag name: cesm2_3_alpha017c
+Originator(s): CSEG
+Date: 12 March 2024
+One-line Summary:  CICE6 answer changes and misc. updates
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_144                              --
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_7             **
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.217_httpsbranch02          --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.18                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.92   --
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.7             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.50                     --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.28                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_98               **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev167                    **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.2     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240214                     **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_49                    **
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20240202             **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_79                          **
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.13          --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cice6
+    David Bailey 2024-02-23 - cesm_cice6_5_0_7 - components/cice6 (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_5_0_7
+
+    Some bfb updates to CICE. Also change the testlist (aux_cice) in the cime wrapper
+    layer along with some decompositions.
+
+
+    David Bailey 2023-11-20 - cesm_cice6_5_0_3 - components/cice6 (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_5_0_1
+
+    This updates to CICE version 6.5.0. This includes fixes to the incremental remapping with C grid
+    as well as some bug fixes from MPAS-SeaIce. This will change answers for all active CICE cases,
+    but not climate changing.
+
+
+cism
+    Kate Thayer-Calder 2024-02-27 - cismwrap_2_1_98 - components/cism (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_98
+
+    Fix external to point to cism main tag.
+
+
+    Kate Thayer-Calder 2024-01-22 - cismwrap_2_1_97 - components/cism (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_97
+
+    Updates for Derecho. Could cause answer changes in compsets with active ice sheets, but likely small.
+
+
+clm
+    Sam Rabin 2024-02-08 - ctsm5.1.dev167 - components/clm (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev167
+
+    Delete history and spurious _FillValue from parameter files
+
+
+mom
+    Alper Altuntas 2024-02-14 - mi_240214 - components/mom (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_240214
+
+    mom-ocean:main sync.
+    misc MOM_interface changes and fixes #154 #155 including enabling of the LBE.
+
+
+mosart
+    Erik Kluzek 2024-02-02 - mosart1_0_49 - components/mosart (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/mosart/tags/mosart1_0_49
+
+    Removal of the MCT cap and MCT testing.
+    Update testlist to Derecho
+    Some cleanup and refactoring of high level calling structure.
+
+    The one test that is NOT bit-for-bit and that's the decompOpts testmod
+
+
+pop
+    Michael Levy 2024-02-02 - cesm_pop_2_1_20240202 - components/pop (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_20240202
+
+    Fix bug in shebang line introduced in cesm_pop_2_1_20231229
+
+
+    Michael Levy 2023-11-22 - cesm_pop_2_1_20231229 - components/pop (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/POP2-CESM/tags/cesm_pop_2_1_2023????
+
+    Change /bin/csh -> /usr/bin/env csh in all scripts
+    Needs POP issue resolved.
+    https://github.com/ESCOMP/POP2-CESM/pull/81
+
+
+rtm
+    Erik Kluzek 2024-01-31 - rtm1_0_79 - components/rtm (cesm2_3_alpha17c)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_79
+
+    Removal of MCT caps for RTM.
+
+==============================================================
 Tag name: cesm2_3_alpha017b
 Originator(s): CSEG
 Date: 26 February 2024
