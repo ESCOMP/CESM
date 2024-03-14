@@ -8,7 +8,7 @@ fxrequired = ToplevelRequired
 [submodule "cam"]
 path = components/cam
 url = https://github.com/jedwards4b/CAM
-fxtag =  zz_rme/cam6_3_150.01
+fxtag =  zz_rme/cam6_3_150.02
 fxurl = https://github.com/ESCOMP/CAM
 fxrequired = ToplevelRequired
 
