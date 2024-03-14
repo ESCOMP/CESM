@@ -150,53 +150,47 @@ class ExternalRepoTranslator:
             if sparse:
                 self.gitmodules.set(section, "fxsparse", sparse)
             self.gitmodules.set(section, "fxrequired", "ToplevelRequired")
-
-            return
-        
-        newpath = (self.rootpath / Path(path))
-        if newpath.exists():
-            shutil.rmtree(newpath)
-        logger.info("Creating directory {}".format(newpath))
-        newpath.mkdir(parents=True)
-        if tag:
-            logger.info("cloning {}".format(section))
-            try:
-                self.git.git_operation("clone", "-b", tag, "--depth", "1", url, path)
-            except:
+        else:
+            newpath = (self.rootpath / Path(path))
+            if newpath.exists():
+                shutil.rmtree(newpath)
+                logger.info("Creating directory {}".format(newpath))
+            newpath.mkdir(parents=True)
+            if tag:
+                logger.info("cloning {}".format(section))
+                try:
+                    self.git.git_operation("clone", "-b", tag, "--depth", "1", url, path)
+                except:
+                    self.git.git_operation("clone", url, path)
+                    with utils.pushd(newpath):
+                        ngit = GitInterface(newpath, logger)
+                        ngit.git_operation("checkout", tag)
+            if hash_:
                 self.git.git_operation("clone", url, path)
-                with utils.pushd(newpath):
-                    ngit = GitInterface(newpath, logger)
-                    ngit.git_operation("checkout", tag)
-
-#        if (newpath / ".gitignore").exists():
-#            logger.info("Moving .gitignore file in {}".format(newpath))
-#            (newpath / ".gitignore").rename((newpath / "save.gitignore"))
+                git = GitInterface(newpath, logger)
+                git.git_operation("fetch", "origin")
+                git.git_operation("checkout", hash_)
+            if sparse:
+                print("setting as sparse submodule {}".format(section))
+                sparsefile = (newpath / Path(sparse))
+                newfile = (newpath / ".git" / "info" / "sparse-checkout")
+                print(f"sparsefile {sparsefile} newfile {newfile}")
+                shutil.copy(sparsefile, newfile)
+        
+            logger.info("adding submodule {}".format(section))        
+            self.gitmodules.save()
+            self.git.git_operation("submodule", "add", "-f", "--name", section, url, path)
+            self.git.git_operation("submodule","absorbgitdirs")
+            self.gitmodules.reload()
+            if tag:
+                self.gitmodules.set(section, "fxtag", tag)
+            if hash_:
+                self.gitmodules.set(section, "fxtag", hash_)
             
-        if hash_:
-            self.git.git_operation("clone", url, path)
-            git = GitInterface(newpath, logger)
-            git.git_operation("fetch", "origin")
-            git.git_operation("checkout", hash_)
-        if sparse:
-            print("setting as sparse submodule {}".format(section))
-            sparsefile = (newpath / Path(sparse))
-            newfile = (newpath / ".git" / "info" / "sparse-checkout")
-            print(f"sparsefile {sparsefile} newfile {newfile}")
-            shutil.copy(sparsefile, newfile)
-        logger.info("adding submodule {}".format(section))
-        self.gitmodules.save()
-        self.git.git_operation("submodule", "add", "-f", "--name", section, url, path)
-        self.git.git_operation("submodule","absorbgitdirs")
-        self.gitmodules.reload()
-        if tag:
-            self.gitmodules.set(section, "fxtag", tag)
-        if hash_:
-           self.gitmodules.set(section, "fxtag", hash_)
-            
-        self.gitmodules.set(section, "fxurl", url)
-        if sparse:
-            self.gitmodules.set(section, "fxsparse", sparse)
-        self.gitmodules.set(section, "fxrequired", "ToplevelRequired")
+            self.gitmodules.set(section, "fxurl", url)
+            if sparse:
+                self.gitmodules.set(section, "fxsparse", sparse)
+            self.gitmodules.set(section, "fxrequired", "ToplevelRequired")
     
         
     def translate_repo(self):

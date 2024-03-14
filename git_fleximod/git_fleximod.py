@@ -201,7 +201,7 @@ def single_submodule_checkout(
     return
 
 
-def submodules_status(gitmodules, root_dir):
+def submodules_status(gitmodules, root_dir, toplevel=False):
     testfails = 0
     localmods = 0
     for name in gitmodules.sections():
@@ -219,7 +219,7 @@ def submodules_status(gitmodules, root_dir):
             url = gitmodules.get(name, "url")
             tags = rootgit.git_operation("ls-remote", "--tags", url)
             atag = None
-            if level:
+            if not toplevel and level:
                 continue
             for htag in tags.split("\n"):
                 if tag and tag in htag:
@@ -268,18 +268,20 @@ def submodules_status(gitmodules, root_dir):
 
 def submodules_update(gitmodules, root_dir, requiredlist, force):
     _, localmods = submodules_status(gitmodules, root_dir)
-    print("")
+
     if localmods and not force:
         print(
             "Repository has local mods, cowardly refusing to continue, fix issues or use --force to override"
         )
+        return
+    elif not localmods:
         return
     for name in gitmodules.sections():
         fxtag = gitmodules.get(name, "fxtag")
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
         logger.info("name={} path={} url={} fxtag={} requiredlist={}".format(name,os.path.join(root_dir, path), url, fxtag, requiredlist))
-#        if not os.path.exists(os.path.join(root_dir,path, ".git")):
+        #        if not os.path.exists(os.path.join(root_dir,path, ".git")):
         fxrequired = gitmodules.get(name, "fxrequired")
         assert(fxrequired in fxrequired_allowed_values())
         rgit = GitInterface(root_dir, logger)
@@ -444,7 +446,7 @@ def main():
     if action == "update":
         submodules_update(gitmodules, root_dir, fxrequired, force)
     elif action == "status":
-        submodules_status(gitmodules, root_dir)
+        submodules_status(gitmodules, root_dir, toplevel=True)
     elif action == "test":
         retval = submodules_test(gitmodules, root_dir)
     else:
