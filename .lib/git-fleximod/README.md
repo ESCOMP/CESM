@@ -17,7 +17,6 @@ Git-fleximod is a Python-based tool that extends Git's submodule and sparse chec
     Basic Usage:
         git fleximod <command> [options]
     Available Commands:
-        checkout: Checkout submodules according to git submodule hash configuration.
         status: Display the status of submodules.
         update: Update submodules to the tag indicated in .gitmodules variable fxtag.
         test: Make sure that fxtags and submodule hashes are consistant,
@@ -36,6 +35,8 @@ Git-fleximod is a Python-based tool that extends Git's submodule and sparse chec
       - AlwaysOptional:       Always optional (checked out with --optional flag).
     fxsparse: Enable sparse checkout for a submodule, pointing to a file containing sparse checkout paths.
     fxurl: This is the url used in the test subcommand to assure that protected branches do not point to forks
+           **NOTE** the fxurl variable is only used to identify the official project repository and should not be
+           changed by users.  Use the url variable to change to a fork if desired.
 
 ## Sparse Checkouts
 
@@ -55,9 +56,9 @@ Git-fleximod is a Python-based tool that extends Git's submodule and sparse chec
 
 Here are some common usage examples:
 
-Checkout submodules, including optional ones:
+Update all submodules, including optional ones:
 ```bash
-  git fleximod checkout --optional
+  git fleximod update --optional
 ```
 
 Updating a specific submodule to the fxtag indicated in .gitmodules:
