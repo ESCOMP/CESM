@@ -67,6 +67,24 @@ def commandline_arguments(args=None):
 def submodule_sparse_checkout(
     root_dir, name, url, path, sparsefile, tag="master"
 ):
+    """
+    This function performs a sparse checkout of a git submodule.  It does so by first creating the .git/info/sparse-checkout fileq
+    in the submodule and then checking out the desired tag.  If the submodule is already checked out, it will not be checked out again.
+    Creating the sparse-checkout file first prevents the entire submodule from being checked out and then removed.  This is important
+    because the submodule may have a large number of files and checking out the entire submodule and then removing it would be time 
+    and disk space consuming.
+    
+    Parameters:
+    root_dir (str): The root directory for the git operation.
+    name (str): The name of the submodule.
+    url (str): The URL of the submodule.
+    path (str): The path to the submodule.
+    sparsefile (str): The sparse file for the submodule.
+    tag (str, optional): The tag to checkout. Defaults to "master".
+
+    Returns:
+    None
+    """
     logger.info("Called sparse_checkout for {}".format(name))
     rgit = GitInterface(root_dir, logger)
     superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
@@ -140,8 +158,24 @@ def submodule_sparse_checkout(
     rgit.config_set_value(f'submodule "{name}"',"url",url)
 
 def single_submodule_checkout(
-        root, name, path, url=None, tag=None, force=False, optional=False
+    root, name, path, url=None, tag=None, force=False, optional=False
 ):
+    """
+    This function checks out a single git submodule.
+
+    Parameters:
+    root (str): The root directory for the git operation.
+    name (str): The name of the submodule.
+    path (str): The path to the submodule.
+    url (str, optional): The URL of the submodule. Defaults to None.
+    tag (str, optional): The tag to checkout. Defaults to None.
+    force (bool, optional): If set to True, forces the checkout operation. Defaults to False.
+    optional (bool, optional): If set to True, the submodule is considered optional. Defaults to False.
+
+    Returns:
+    None
+    """
+    # function implementation...
     git = GitInterface(root, logger)
     repodir = os.path.join(root, path)
     logger.info("Checkout {} into {}/{}".format(name,root,path))
@@ -204,6 +238,7 @@ def single_submodule_checkout(
 def submodules_status(gitmodules, root_dir, toplevel=False):
     testfails = 0
     localmods = 0
+    needsupdate = 0
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "fxtag")
@@ -219,6 +254,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
             url = gitmodules.get(name, "url")
             tags = rootgit.git_operation("ls-remote", "--tags", url)
             atag = None
+            needsupdate += 1
             if not toplevel and level:
                 continue
             for htag in tags.split("\n"):
@@ -252,6 +288,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
                 elif tag:
                     print(f"s {name:>20} {atag} {ahash} is out of sync with .gitmodules {tag}")
                     testfails += 1
+                    needsupdate += 1
                 else:
                     print(
                         f"e {name:>20} has no fxtag defined in .gitmodules, module at {atag}"
@@ -263,19 +300,20 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
                     localmods = localmods + 1
                     print("M" + textwrap.indent(status, "                      "))
 
-    return testfails, localmods
+    return testfails, localmods, needsupdate
 
 
 def submodules_update(gitmodules, root_dir, requiredlist, force):
-    _, localmods = submodules_status(gitmodules, root_dir)
+    _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
 
     if localmods and not force:
         print(
             "Repository has local mods, cowardly refusing to continue, fix issues or use --force to override"
         )
         return
-    elif not localmods:
+    if needsupdate == 0:
         return
+    
     for name in gitmodules.sections():
         fxtag = gitmodules.get(name, "fxtag")
         path = gitmodules.get(name, "path")
@@ -349,12 +387,14 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
 
 # checkout is done by update if required so this function may be depricated
 def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
-    _, localmods = submodules_status(gitmodules, root_dir)
+    _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
     print("")
     if localmods and not force:
         print(
             "Repository has local mods, cowardly refusing to continue, fix issues or use --force to override"
         )
+        return
+    if not needsupdate:
         return
     for name in gitmodules.sections():
         fxrequired = gitmodules.get(name, "fxrequired")
@@ -389,7 +429,7 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
 
 def submodules_test(gitmodules, root_dir):
     # First check that fxtags are present and in sync with submodule hashes
-    testfails, localmods = submodules_status(gitmodules, root_dir)
+    testfails, localmods, _ = submodules_status(gitmodules, root_dir)
     print("")
     # Then make sure that urls are consistant with fxurls (not forks and not ssh)
     # and that sparse checkout files exist
