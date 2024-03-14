@@ -35,6 +35,8 @@ Git-fleximod is a Python-based tool that extends Git's submodule and sparse chec
       - AlwaysOptional:       Always optional (checked out with --optional flag).
     fxsparse: Enable sparse checkout for a submodule, pointing to a file containing sparse checkout paths.
     fxurl: This is the url used in the test subcommand to assure that protected branches do not point to forks
+           **NOTE** the fxurl variable is only used to identify the official project repository and should not be
+           changed by users.  Use the url variable to change to a fork if desired.
 
 ## Sparse Checkouts
 
