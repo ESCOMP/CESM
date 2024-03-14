@@ -387,8 +387,21 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
 
 # checkout is done by update if required so this function may be depricated
 def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
-    _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
+    """
+    This function checks out all git submodules based on the provided parameters.
+
+    Parameters:
+    gitmodules (ConfigParser): The gitmodules configuration.
+    root_dir (str): The root directory for the git operation.
+    requiredlist (list): The list of required modules.
+    force (bool, optional): If set to True, forces the checkout operation. Defaults to False.
+
+    Returns:
+    None
+    """
+    # function implementation...
     print("")
+    _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
     if localmods and not force:
         print(
             "Repository has local mods, cowardly refusing to continue, fix issues or use --force to override"
@@ -426,10 +439,23 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
                 optional = "AlwaysOptional" in requiredlist
             )
 
-
 def submodules_test(gitmodules, root_dir):
+    """
+    This function tests the git submodules based on the provided parameters.
+
+    It first checks that fxtags are present and in sync with submodule hashes.
+    Then it ensures that urls are consistent with fxurls (not forks and not ssh)
+    and that sparse checkout files exist.
+
+    Parameters:
+    gitmodules (ConfigParser): The gitmodules configuration.
+    root_dir (str): The root directory for the git operation.
+
+    Returns:
+    int: The number of test failures.
+    """
     # First check that fxtags are present and in sync with submodule hashes
-    testfails, localmods, _ = submodules_status(gitmodules, root_dir)
+    testfails, localmods, needsupdate = submodules_status(gitmodules, root_dir)
     print("")
     # Then make sure that urls are consistant with fxurls (not forks and not ssh)
     # and that sparse checkout files exist
@@ -444,7 +470,7 @@ def submodules_test(gitmodules, root_dir):
         if fxsparse and not os.path.isfile(os.path.join(root_dir, path, fxsparse)):
             print(f"{name:>20} sparse checkout file {fxsparse} not found")
             testfails += 1
-    return testfails + localmods
+    return testfails + localmods + needsupdate
 
 
 def main():
