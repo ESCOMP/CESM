@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 import sys
+MIN_PYTHON = (3, 7)
+if sys.version_info < MIN_PYTHON:
+    sys.exit("Python %s.%s or later is required."%MIN_PYTHON)
+
 import os
 import shutil
 import logging
