@@ -227,9 +227,7 @@ def single_submodule_checkout(
         if optional:
             requiredlist.append("AlwaysOptional")
         submodules_checkout(gitmodules, repodir, requiredlist, force=force)
-    if os.path.exists(os.path.join(repodir, ".git")):
-        print(f"Successfully checked out {name:>20}")
-    else:
+    if not os.path.exists(os.path.join(repodir, ".git")):
         utils.fatal_error(f"Failed to checkout {name} {repo_exists} {tmpurl} {repodir} {path}")
 
     if tmpurl:
@@ -380,8 +378,11 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
                     git.git_operation("fetch", newremote, "--tags")
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 if fxtag and fxtag != atag:
-                    print(f"{name:>20} updated to {fxtag}")
-                    git.git_operation("checkout", fxtag)
+                    try:
+                        git.git_operation("checkout", fxtag)
+                        print(f"{name:>20} updated to {fxtag}")
+                    except Exception as error:
+                        print(error)
                 elif not fxtag:
                     print(f"No fxtag found for submodule {name:>20}")
                 else:
