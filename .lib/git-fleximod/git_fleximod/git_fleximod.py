@@ -185,7 +185,6 @@ def single_submodule_checkout(
     if os.path.exists(os.path.join(repodir, ".git")):
         logger.info("Submodule {} already checked out".format(name))
         repo_exists = True
-
     # Look for a .gitmodules file in the newly checkedout repo
     if not repo_exists and url:
         # ssh urls cause problems for those who dont have git accounts with ssh keys defined
@@ -209,7 +208,11 @@ def single_submodule_checkout(
                         rootdotgit = line[8:].rstrip()
 
             newpath = os.path.abspath(os.path.join(root, rootdotgit, "modules", name))
-            shutil.move(os.path.join(repodir, ".git"), newpath)
+            if os.path.exists(newpath):
+                shutil.rmtree(os.path.join(repodir,".git"))
+            else:
+                shutil.move(os.path.join(repodir, ".git"), newpath)
+
             with open(os.path.join(repodir, ".git"), "w") as f:
                 f.write("gitdir: " + os.path.relpath(newpath, start=repodir))
 
@@ -224,9 +227,7 @@ def single_submodule_checkout(
         if optional:
             requiredlist.append("AlwaysOptional")
         submodules_checkout(gitmodules, repodir, requiredlist, force=force)
-    if os.path.exists(os.path.join(repodir, ".git")):
-        print(f"Successfully checked out {name:>20}")
-    else:
+    if not os.path.exists(os.path.join(repodir, ".git")):
         utils.fatal_error(f"Failed to checkout {name} {repo_exists} {tmpurl} {repodir} {path}")
 
     if tmpurl:
@@ -252,6 +253,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
             rootgit = GitInterface(root_dir, logger)
             # submodule commands use path, not name
             url = gitmodules.get(name, "url")
+            url = url.replace("git@github.com:", "https://github.com/")
             tags = rootgit.git_operation("ls-remote", "--tags", url)
             atag = None
             needsupdate += 1
@@ -307,9 +309,7 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
     _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
 
     if localmods and not force:
-        print(
-            "Repository has local mods, cowardly refusing to continue, fix issues or use --force to override"
-        )
+        local_mods_output()
         return
     if needsupdate == 0:
         return
@@ -378,13 +378,32 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
                     git.git_operation("fetch", newremote, "--tags")
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 if fxtag and fxtag != atag:
-                    print(f"{name:>20} updated to {fxtag}")
-                    git.git_operation("checkout", fxtag)
+                    try:
+                        git.git_operation("checkout", fxtag)
+                        print(f"{name:>20} updated to {fxtag}")
+                    except Exception as error:
+                        print(error)
                 elif not fxtag:
                     print(f"No fxtag found for submodule {name:>20}")
                 else:
                     print(f"{name:>20} up to date.")
 
+def local_mods_output():
+    text = '''\
+    The submodules labeled with 'M' above are not in a clean state.
+    The following are options for how to proceed:
+    (1) Go into each submodule which is not in a clean state and issue a 'git status'
+        Either revert or commit your changes so that the submodule is in a clean state.
+    (2) use the --force option to git-fleximod
+    (3) you can name the particular submodules to update using the git-fleximod command line
+    (4) As a last resort you can remove the submodule (via 'rm -fr [directory]')
+        then rerun git-fleximod update.
+'''
+    print(text)
+    
+    
+
+                    
 # checkout is done by update if required so this function may be depricated
 def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
     """
@@ -403,9 +422,7 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
     print("")
     _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
     if localmods and not force:
-        print(
-            "Repository has local mods, cowardly refusing to continue, fix issues or use --force to override"
-        )
+        local_mods_output()
         return
     if not needsupdate:
         return
@@ -433,7 +450,6 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
             logger.debug(
                 "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
             )
-
             single_submodule_checkout(
                 root_dir, name, path, url=url, tag=fxtag, force=force,
                 optional = "AlwaysOptional" in requiredlist
@@ -512,7 +528,11 @@ def main():
     if action == "update":
         submodules_update(gitmodules, root_dir, fxrequired, force)
     elif action == "status":
-        submodules_status(gitmodules, root_dir, toplevel=True)
+        tfails, lmods, updates = submodules_status(gitmodules, root_dir, toplevel=True)
+        if tfails + lmods + updates > 0:
+            print(f"    testfails = {tfails}, local mods = {lmods}, needs updates {updates}\n")
+            if lmods > 0:
+                local_mods_output()                
     elif action == "test":
         retval = submodules_test(gitmodules, root_dir)
     else:
