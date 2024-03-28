@@ -185,7 +185,6 @@ def single_submodule_checkout(
     if os.path.exists(os.path.join(repodir, ".git")):
         logger.info("Submodule {} already checked out".format(name))
         repo_exists = True
-
     # Look for a .gitmodules file in the newly checkedout repo
     if not repo_exists and url:
         # ssh urls cause problems for those who dont have git accounts with ssh keys defined
@@ -209,7 +208,11 @@ def single_submodule_checkout(
                         rootdotgit = line[8:].rstrip()
 
             newpath = os.path.abspath(os.path.join(root, rootdotgit, "modules", name))
-            shutil.move(os.path.join(repodir, ".git"), newpath)
+            if os.path.exists(newpath):
+                shutil.rmtree(os.path.join(repodir,".git"))
+            else:
+                shutil.move(os.path.join(repodir, ".git"), newpath)
+
             with open(os.path.join(repodir, ".git"), "w") as f:
                 f.write("gitdir: " + os.path.relpath(newpath, start=repodir))
 
@@ -252,6 +255,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
             rootgit = GitInterface(root_dir, logger)
             # submodule commands use path, not name
             url = gitmodules.get(name, "url")
+            url = url.replace("git@github.com:", "https://github.com/")
             tags = rootgit.git_operation("ls-remote", "--tags", url)
             atag = None
             needsupdate += 1
@@ -445,7 +449,6 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
             logger.debug(
                 "Calling submodule_checkout({},{},{})".format(root_dir, name, path)
             )
-
             single_submodule_checkout(
                 root_dir, name, path, url=url, tag=fxtag, force=force,
                 optional = "AlwaysOptional" in requiredlist
