@@ -25,7 +25,7 @@ class GitInterface:
             msg = "Using GitPython interface to git"
         except ImportError:
             self._use_module = False
-            if not (repo_path / ".git").exists():
+            if not (self.repo_path / ".git").exists():
                 self._init_git_repo()
             msg = "Using shell interface to git"
         self.logger.info(msg)
