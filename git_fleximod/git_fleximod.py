@@ -307,9 +307,7 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
     _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
 
     if localmods and not force:
-        print(
-            "Repository has local mods, cowardly refusing to continue, fix issues or use --force to override"
-        )
+        local_mods_output()
         return
     if needsupdate == 0:
         return
@@ -385,6 +383,22 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
                 else:
                     print(f"{name:>20} up to date.")
 
+def local_mods_output():
+    text = '''\
+    The submodules labeled with 'M' above are not in a clean state.
+    The following are options for how to proceed:
+    (1) Go into each submodule which is not in a clean state and issue a 'git status'
+        Either revert or commit your changes so that the submodule is in a clean state.
+    (2) use the --force option to git-fleximod
+    (3) you can name the particular submodules to update using the git-fleximod command line
+    (4) As a last resort you can remove the submodule (via 'rm -fr [directory]')
+        then rerun git-fleximod update.
+'''
+    print(text)
+    
+    
+
+                    
 # checkout is done by update if required so this function may be depricated
 def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
     """
@@ -403,9 +417,7 @@ def submodules_checkout(gitmodules, root_dir, requiredlist, force=False):
     print("")
     _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
     if localmods and not force:
-        print(
-            "Repository has local mods, cowardly refusing to continue, fix issues or use --force to override"
-        )
+        local_mods_output()
         return
     if not needsupdate:
         return
@@ -512,7 +524,11 @@ def main():
     if action == "update":
         submodules_update(gitmodules, root_dir, fxrequired, force)
     elif action == "status":
-        submodules_status(gitmodules, root_dir, toplevel=True)
+        tfails, lmods, updates = submodules_status(gitmodules, root_dir, toplevel=True)
+        if tfails + lmods + updates > 0:
+            print(f"    testfails = {tfails}, local mods = {lmods}, needs updates {updates}\n")
+            if lmods > 0:
+                local_mods_output()                
     elif action == "test":
         retval = submodules_test(gitmodules, root_dir)
     else:
