@@ -17,7 +17,7 @@ def find_root_dir(filename=".git"):
     while d != root:
         attempt = d / filename
         if attempt.is_dir():
-            return attempt
+            return d
         d = d.parent
     return None
 
@@ -146,7 +146,7 @@ class ExternalRepoTranslator:
             if hash_:
                 self.gitmodules.set(section, "fxtag", hash_)
             
-            self.gitmodules.set(section, "fxurl", url)
+            self.gitmodules.set(section, "fxDONOTUSEurl", url)
             if sparse:
                 self.gitmodules.set(section, "fxsparse", sparse)
             self.gitmodules.set(section, "fxrequired", "ToplevelRequired")
@@ -187,7 +187,7 @@ class ExternalRepoTranslator:
             if hash_:
                 self.gitmodules.set(section, "fxtag", hash_)
             
-            self.gitmodules.set(section, "fxurl", url)
+            self.gitmodules.set(section, "fxDONOTUSEurl", url)
             if sparse:
                 self.gitmodules.set(section, "fxsparse", sparse)
             self.gitmodules.set(section, "fxrequired", "ToplevelRequired")
