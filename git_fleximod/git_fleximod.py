@@ -100,9 +100,9 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     rgit = GitInterface(root_dir, logger)
     superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
     if superroot:
-        gitroot = superroot
+        gitroot = superroot.strip()
     else:
-        gitroot = root_dir
+        gitroot = root_dir.strip()
     assert os.path.isdir(os.path.join(gitroot, ".git"))
     # first create the module directory
     if not os.path.isdir(os.path.join(root_dir, path)):

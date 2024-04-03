@@ -25,7 +25,7 @@ all_repos=[
     path = modules/test
     url = https://github.com/ESMCI/mpi-serial.git
     fxtag = MPIserial_2.4.0
-    fxurl = https://github.com/ESMCI/mpi-serial.git
+    fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial.git
     fxrequired = ToplevelRequired
 """},
     {"subrepo_path": "modules/test_optional",
@@ -39,7 +39,7 @@ all_repos=[
     path = modules/test_optional
     url = https://github.com/ESMCI/mpi-serial.git
     fxtag = MPIserial_2.4.0
-    fxurl = https://github.com/ESMCI/mpi-serial.git
+    fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial.git
     fxrequired = ToplevelOptional
 """},
     {"subrepo_path": "modules/test_alwaysoptional",
@@ -53,7 +53,7 @@ all_repos=[
     path = modules/test_alwaysoptional
     url = https://github.com/ESMCI/mpi-serial.git
     fxtag = e5cf35c
-    fxurl = https://github.com/ESMCI/mpi-serial.git
+    fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial.git
     fxrequired = AlwaysOptional
 """},    
     {"subrepo_path": "modules/test_sparse",
@@ -67,7 +67,7 @@ all_repos=[
     path = modules/test_sparse
     url = https://github.com/ESMCI/mpi-serial.git
     fxtag = MPIserial_2.5.0
-    fxurl = https://github.com/ESMCI/mpi-serial.git
+    fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial.git
     fxrequired = AlwaysRequired
     fxsparse = ../.sparse_file_list
 """},

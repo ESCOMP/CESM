@@ -272,7 +272,7 @@ def execute_subprocess(commands, status_to_caller=False, output_to_caller=False)
     cwd = os.getcwd()
     msg = "In directory: {0}\nexecute_subprocess running command:".format(cwd)
     logging.info(msg)
-    commands_str = " ".join(commands)
+    commands_str = " ".join(str(element) for element in commands)
     logging.info(commands_str)
     return_to_caller = status_to_caller or output_to_caller
     status = -1
