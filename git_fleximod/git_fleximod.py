@@ -235,10 +235,16 @@ def single_submodule_checkout(
 
             with open(os.path.join(repodir, ".git"), "w") as f:
                 f.write("gitdir: " + os.path.relpath(newpath, start=repodir))
+                
+    if not os.path.exists(repodir):
+        parent = os.path.dirname(repodir)
+        if not os.path.isdir(parent):
+            os.makedirs(parent)
+        git.git_operation("submodule", "add", "--name", name, "--", url, path) 
 
     if not repo_exists or not tmpurl:
-        logger.debug(git.git_operation("submodule", "update", "--init", "--", path))
-
+        git.git_operation("submodule", "update", "--init", "--", path)
+            
     if os.path.exists(os.path.join(repodir, ".gitmodules")):
         # recursively handle this checkout
         print(f"Recursively checking out submodules of {name}")
@@ -310,6 +316,8 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
                 if tag and atag == tag:
                     print(f"  {name:>20} at tag {tag}")
                 elif tag and ahash[: len(tag)] == tag:
+                    print(f"  {name:>20} at hash {ahash}")
+                elif atag == ahash:
                     print(f"  {name:>20} at hash {ahash}")
                 elif tag:
                     print(
