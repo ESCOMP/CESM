@@ -237,6 +237,9 @@ def single_submodule_checkout(
                 f.write("gitdir: " + os.path.relpath(newpath, start=repodir))
                 
     if not os.path.exists(repodir):
+        parent = os.path.dirname(repodir)
+        if not os.path.isdir(parent):
+            os.makedirs(parent)
         git.git_operation("submodule", "add", "--name", name, "--", url, path) 
 
     if not repo_exists or not tmpurl:
