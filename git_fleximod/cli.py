@@ -1,7 +1,7 @@
 from pathlib import Path
 import argparse
 
-__version__ = "0.7.3"
+__version__ = "0.7.4"
 
 def find_root_dir(filename=".git"):
     d = Path.cwd()
