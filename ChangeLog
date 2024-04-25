@@ -1,4 +1,246 @@
 ==============================================================
+Tag name: cesm2_3_alpha017d
+Originator(s): CSEG
+Date: 25 April 2024
+One-line Summary:  CTSM answer changes
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_144                              --
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_7             --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.217_httpsbranch02          --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.18                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.92   --
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.7             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.50                     --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.28                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_98               --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev167                    --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.2     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240214                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_49                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20240202             --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_79                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.13          --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+ccs_config
+    Chris Fischer 2024-04-22 - ccs_config_cesm0.0.104 - ccs_config (cesm2_3_alpha17d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.104
+
+     to modelgrid_aliases_nuopc.xml
+
+
+    Chris Fischer 2024-04-22 - ccs_config_cesm0.0.103 - ccs_config (cesm2_3_alpha17d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.103
+
+    ccs_config_cesm0.0.103: Redo polarcap/mpas grid fix PR.
+    ccs_config_cesm0.0.102: Revert "add polarcap grid, fix mpasa15-3 naming issues"
+    ccs_config_cesm0.0.101: Adding glc supporting grid aliases for CESM3
+    ccs_config_cesm0.0.100: Add polarcap grid, fix mpasa15-3 naming issues
+    ccs_config_cesm0.0.99: Update the GPU settings on Derecho
+    ccs_config_cesm0.0.98: Update modules and batch for tacc frontera
+    ccs_config_cesm0.0.97: Changes needed for adding dglc component
+    ccs_config_cesm0.0.96: New ne3np4 grids for SCAM spectral elements
+    ccs_config_cesm0.0.95: Pbs v removed
+    ccs_config_cesm0.0.94: Change the queue used for st_archive on derecho
+    ccs_config_cesm0.0.93: Update the filenames for RRTMGP v1.7
+
+
+cdeps
+    Chris Fischer 2024-04-22 - cdeps1.0.32 - components/cdeps (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.32
+
+    cdeps1.0.32: Make the amount of data required to download minimal for testing
+    cdeps1.0.31: Add a dglc component with noevolve mode
+    cdeps1.0.30: Increase stream filename length to CX (512) from CL (256), and update testnames
+    cdeps1.0.29: Update the testlist to work on derecho.
+
+
+cime
+    Erik Kluzek 2024-03-13 - cime6.0.236_httpsbranch01 - cime (cesm2_3_alpha17d)
+    https://github.com/ESMCI/cime/tags/cime6.0.217_httpsbranch03
+
+    cime6.0.236_httpsbranch01: Fix cprnc external
+    cime6.0.236: Need to make sure ref2 run dir exists
+    cime6.0.235: Disable prune workflow
+    cime6.0.234: Fix bug in path to CAM script cam.case_setup.py
+    cime6.0.233: Fix an issue with single component runs which do use mediator
+    cime6.0.232: Changes needed to add dglc component for cdeps
+    cime6.0.231: Fixes ghcr-prune script to prune version only when all tags are invalid
+    cime6.0.230: Update server name for the test database.
+    cime6.0.229: Fixes workflow dispatch
+    cime6.0.228: Fixes permissions
+    cime6.0.227: Fix testing/prune workflow
+    cime6.0.226: Update cprnc to 1.0.7
+    cime6.0.225: Points the TSC and PGN tests to updated input data for E3SMv3
+    cime6.0.224: Initialize machine to None
+    cime6.0.223: Add option to ignore diffs across the system
+    cime6.0.222: Removes workflow trigger
+    cime6.0.221: Fixes testing workflow for prs from forked repos.
+    cime6.0.220: case.submit: Always try to download input data
+    cime6.0.219: This PR fixes finding termination text in logs.
+    cime6.0.218: E3SMv3 atmosphere model default configuration is changed to use 80 vertical levels.
+
+
+cism
+    William Sacks 2024-04-03 - cismwrap_2_1_99 - components/cism (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_99
+
+    Change CISM_USE_ICESHEET to GLC_USE_ICESHEET
+
+
+    William Sacks 2024-03-22 - cismwrap_2_1_100 - components/cism (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_99
+
+    Update externals, and a small change needed for NOEVOLVE cases to pass with https://github.com/ESCOMP/CMEPS/pull/442.
+
+    Depends on https://github.com/ESCOMP/CMEPS/pull/442.
+
+    Together with the dependent CMEPS tag (https://github.com/ESCOMP/CMEPS/pull/442), changes answers just for compsets with NOEVOLVE CISM (which includes B1850 and a handful of others) in the cpl hist file: this leads to one field changing on the cpl hist file (Med_frac_glc1_lfrac) plus four new fields appearing on the cpl hist file that were previously absent.
+
+
+clm
+    Erik Kluzek 2024-04-09 - ctsm5.2.0 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.2.0
+
+    Note
+    Update all surface datasets to the new mksurfdata_esmf version.
+    This also brings in new interpolated Initial Condition datasets
+    to go with the new surface datasets.
+
+    This was a multi-year effort of many people. This also means
+    that the CESM3_dev branch can be deprecated.
+
+    This also brings in the new mksurfdata_esmf tool developed
+    by Mariana Vertenstein which uses the CESM build system
+    (from Jim Edwards) to make a distributed parallel MPI tool
+    using ESMF that can be used to create surface datasets
+    for very high resolutions.
+
+    Includes contributions by: @mvertens @ekluzek @jedwards4b @billsacks @wwieder @lawrencepj1 @negin513 @dlawrenncar @olyson
+
+
+    Adrianna Foster 2024-04-04 - ctsm5.1.dev176 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev176
+
+    Bit-for-bit merge tag.
+
+    Includes moving dust emissions source function from CAM to CTSM and change needed for addition of dglc component in cdeps
+
+    depends: cismwrap_2_1_99
+
+
+    Erik Kluzek 2024-03-21 - ctsm5.1.dev175 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev175
+
+    Bit-for-bit merge tag.
+
+    Including removal of MCT for LILAC, and cray compiler format issue.
+
+
+
+    Erik Kluzek 2024-03-14 - ctsm5.1.dev174 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev174
+
+    Mitigations to improve health of arctic vegetation.
+
+
+    Erik Kluzek 2024-03-13 - ctsm5.1.dev173 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev173
+
+    Add new namelist control for FATES: fates_hist_dense_level
+
+    Changes answers for FATES compsets by roundoff
+
+
+    Erik Kluzek 2024-03-13 - ctsm5.1.dev172 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev172
+
+    Update externals and some documentation updates
+
+    Requires: cime6.0.217_httpsbranch03
+
+
+    Erik Kluzek 2024-03-01 - ctsm5.1.dev171 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev171
+
+    Changes soil temperature on cold starts slightly to fix some rare problems.
+
+
+    Sam Rabin 2024-02-28 - ctsm5.1.dev170 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev170
+
+    Changes include multiple soil columns per vegetated landunit, additional meteorological downscaling, new subsurface lateral flow equations, and a hillslope routing parameterization.
+
+    Answer differences are for FSDS only, roundoff-level, and only in the output field itself (not what the model sees internally).
+
+
+    Sam Rabin 2024-02-22 - ctsm5.1.dev169 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev169
+
+    Bit-for-bit testing and offline Python tool changes.
+
+
+    Erik Kluzek 2024-02-20 - ctsm5.1.dev168 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.1.dev168
+
+    Answer changes to fix a rare problem with snow interception
+    that changed answers for water isotope testing. This causes
+    a change in answers for some cases to roundoff level in H2OCAN
+    and SNOCAN.
+
+
+    Erik Kluzek 2024-01-24 - branch_tags/CESM3_dev.n04_ctsm5.1.dev166 - components/clm (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/CESM3_dev.n04_ctsm5.1.dev166
+
+    Update CESM3_dev branch to ctsm5.1.dev166,
+    so it can be used in CESM3 simulations
+
+
+cmeps
+    William Sacks 2024-03-22 - cmeps0.14.60 - src/drivers/nuopc/ (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.??
+
+    cmeps0.14.60: Changes to get extra diagnostics on the GLC grid for cases with CISM running in NOEVOLVE mode (wanted by the land ice group for upcoming coupled test runs). This includes the changes in:
+    - https://github.com/ESCOMP/CMEPS/pull/441
+    - https://github.com/ESCOMP/CMEPS/pull/442
+
+    https://github.com/ESCOMP/CMEPS/pull/442 depends on (what is tentatively planned to be) cismwrap_2_1_99 for CISM NOEVOLVE cases to work.
+
+    Together with the dependent CISM-wrapper tag (tentatively cismwrap_2_1_99), changes answers just for compsets with NOEVOLVE CISM (which includes B1850 and a handful of others) in the cpl hist file: this leads to one field changing on the cpl hist file (Med_frac_glc1_lfrac) plus four new fields appearing on the cpl hist file that were previously absent.
+
+    cmeps0.14.59: Remove  ESMF_GridCompGetInternalState from use statement
+    cmeps0.14.58: Fix/add gusts
+    cmeps0.14.57: Output downscaled glacier data in cpl glc hist file
+    cmeps0.14.56: Fixes an issue with symbols in compset names on derecho
+    cmeps0.14.55: Fix leap day issue
+    cmeps0.14.54: Update U10 to be resolved wind; add variable for U10+gusts
+    cmeps0.14.53: Add index to cpl_scalars to allow CSG or regional (single tile) mediator history
+                  files for ATM component in UFS
+    cmeps0.14.52: Add unstructured grid support for use with new Spectral Elements SCAM
+    cmeps0.14.51: CMEPS PR for CDEPS Inline implementation
+
+
+cpl7
+    Chris Fischer 2024-04-22 - cpl77.0.8 - components/cpl7 (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/cpl77.0.8
+
+    Replace smp_present with build_threaded
+
+
+mom
+    Alper Altuntas 2024-03-11 - mi_240311 - components/mom (cesm2_3_alpha17d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_240311
+
+    - Unresolved diag table generation and handling
+    - Turn on AUTO_MASKTABLE, and other misc fixes/improvements
+    - Merge latest main (Feb 28, 2024)
+
+==============================================================
 Tag name: cesm2_3_alpha017c
 Originator(s): CSEG
 Date: 12 March 2024
