@@ -1,4 +1,179 @@
 ==============================================================
+Tag name: cesm2_3_alpha017e
+Originator(s): CSEG
+Date: 25 April 2024
+One-line Summary:  CAM answer changes
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_160                              **
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_7             --
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.238_httpsbranch01          **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.18                 --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.106  **
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.8             --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.60                     --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.33                      **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_100              --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.2.0                         --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.2     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240311                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_49                    --
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20240202             --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_79                          --
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    --
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.13          --
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cam
+    Cheryl Craig 2024-03-26 - cam6_3_155 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_xxx
+
+    For Kate Thayer-Calder
+
+    Update CLUBB and SILHS externals which brings in TAU
+
+    Answer changing for CLUBB runs
+
+
+    Cheryl Craig 2024-03-26 - cam6_3_154 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_xxx
+
+    Bug fix for U10 gustiness variables
+
+    Depends on CMEPS PR #440
+
+
+    Cheryl Craig 2024-04-29 - cam6_3_160 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_160
+
+    workaround so that SCT works on derecho
+
+    Depends on ccs_config_cesm0.0.99
+
+
+    Kate Thayer-Calder 2024-04-26 - cam6_3_159 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_159
+
+    Updated PUMAS external that fixes the GPU calls. And rainbows.
+
+
+    Cheryl Craig 2024-04-22 - cam6_3_158 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_158
+
+    ZM clean up round 2 for CAM and cime update for GEOS-Chem
+
+
+    Cheryl Craig 2024-04-22 - cam6_3_157 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_157
+
+    For John Truesdale
+
+    Update FV3 FMS externals for CAM checkouts, added FV3_CAM interface external, now importing core FV3 from GFDL
+
+
+    Francis Vitt 2024-04-16 - cam6_3_156 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_156
+
+    Misc code clean up for WACCM
+
+
+    Cheryl Craig 2024-03-04 - cam6_3_153 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_152
+
+    Update CAM namelist settings to match Cecile's current runs
+
+    Answer changing for cam_dev
+
+
+    Brian Eaton 2024-03-21 - cam6_3_151 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_151
+
+    Fix for more than one monthly frequency output stream.  This capability was broken with commit of cam6_3_140.
+
+
+    Cheryl Craig 2024-03-04 - cam6_3_152 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_151
+
+    For Jesse Nusbaumer
+
+    SE-CSLAM optimization
+
+    Answer changing for SE-CSLAM configurations
+
+
+    Courtney Peverley 2024-02-23 - cam6_3_150 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_150
+
+    Add convective gustiness - requires cmeps0.14.49
+
+
+    Cheryl Craig 2024-02-22 - cam6_3_149 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_149
+
+    Update CAM externals to match cesm2_3_alpha17a (except more recent cime tag)
+
+    Answer changing for CAM, but not for CESM
+
+
+    Brian Eaton 2024-02-21 - cam6_3_148 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_148
+
+    Provide RRTMGP as a radiation parameterization
+
+
+    Francis Vitt 2024-02-02 - cam6_3_147 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_147
+
+    Add GEOS-Chem chemistry as new chemistry option in CAM
+
+    ** Expect the following to fail without an update to cime to handle GEOS-Chem configuration files
+
+    prealpha          : ERP_Ln9_Vnuopc.f09_f09_mg17.FCnudged_GC.derecho_intel.cam-outfrq9s
+
+
+
+
+    Cheryl Craig 2024-01-23 - cam6_3_146 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_146
+
+    ZM clean up in preparation for using via CCPP and remove zmconv_microp feature
+
+
+    Kate Thayer-Calder 2024-01-05 - cam6_3_145 - components/cam (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_145
+
+    New pumas external and change Cheyenne to Derecho in test scripts. The new external changes answers for all cam_dev compsets.
+
+
+ccs_config
+    Chris Fischer 2024-04-29 - ccs_config_cesm0.0.106 - ccs_config (cesm2_3_alpha17e)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.106
+
+    ccs_config_cesm0.0.106: Fix build using nvhpc on derecho
+    ccs_config_cesm0.0.105: Update python version on izumi
+
+
+cdeps
+    Chris Fischer 2024-04-29 - cdeps1.0.33 - components/cdeps (cesm2_3_alpha17e)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.33
+
+    Revert "make the amount of data required to download minimal for testing"
+
+
+cime
+    Chris Fischer 2024-04-29 - cime6.0.238_httpsbranch01 - cime (cesm2_3_alpha17e)
+    https://github.com/ESMCI/cime/tags/cime6.0.238_httpsbranch01
+
+    cime6.0.238_httpsbranch01: cprnc external fix
+    cime6.0.238: Updates documentation versioning
+    cime6.0.237: Allows the complete long grid name as an argument to create_newcase
+
+
+
+==============================================================
 Tag name: cesm2_3_alpha017d
 Originator(s): CSEG
 Date: 25 April 2024
@@ -10,14 +185,14 @@ components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_
 cime                    https://github.com/ESMCI/cime/tree/cime6.0.217_httpsbranch02          --
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.18                 --
 ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.92   --
-components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.7             --
-components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.50                     --
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.8             **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.60                     **
 components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.28                      --
-components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_98               --
-components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.1.dev167                    --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_100              **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.2.0                         **
 components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                --
 components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.2     --
-components/mom          https://github.com/ESCOMP/MOM_interface/mi_240214                     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240311                     **
 components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_49                    --
 components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20240202             --
 components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_79                          --
