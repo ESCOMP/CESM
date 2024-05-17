@@ -1,4 +1,83 @@
 ==============================================================
+Tag name: cesm2_3_beta17
+Originator(s): CSEG
+Date: 17 May 2024 
+One-line Summary: Science Updates
+ 
+
+Answer Changes introduced with this tag when compared to cesm2_3_beta16:
+CAM
+	Aircraft emissions
+	FKESSLER
+	WACCM-X
+	CLUBB configurations
+	Bug fix for U10 gustiness variables
+	Update CAM namelist settings
+	SE-CSLAM configurations
+	Add convective gustines
+	New pumas external
+CICE6
+	All active CICE cases.
+CISM
+	Compsets with NOEVOLVE CISM
+CTSM
+	clm5_1 physics
+	FATES
+	Crop-enabled configurations
+	Changes for Meier roughness
+	MIMICS
+	SNICAR
+	Changes to leafcn and k*_nonmyc
+	Update all surface datasets
+	Mitigations to improve health of arctic vegetation
+	Changes soil temperature on cold starts slightly
+	Fix a rare problem with snow interception
+	clm5_1 cases because of the new finidat file
+	Fixes to the clm6_0 physics defaults
+MOM
+	Bug fix #261
+	Enable LBE
+	Update tunings
+WW3DEV
+	Add pstokes tail contribution
+mizuRoute
+	Science updates
+
+
+Problems identified after tag creation:
+- All T31_g37_rx1.A tests fail with floating point exception.
+- All T62_s11 nuopc tests fail because of missing mesh file.
+- All ERS_N2 tests should be ERS_C2 tests.
+
+SMS_D_Ln9_P1280x1.ne0ARCTICGRISne30x8_ne0ARCTICGRISne30x8_mt12.FHIST.derecho_intel.cam-outfrq9s SHAREDLIB_BUILD time=2
+SMS_Ld1.ne30_ne30_mg17.FCHIST.derecho_intel.cam-outfrq1d SHAREDLIB_BUILD time=2
+SMS_D_Ln9_P1280x1.ne0CONUSne30x8_ne0CONUSne30x8_mt12.FCnudged.derecho_intel.cam-outfrq9s
+        Failing in clm initialization.
+
+Fully couple restart test fail when rpointer files are eing updated at end of runs.
+
+Several MEMCOMP test fail when cpl-mem.log files aren't generated. 
+
+PET tests are failing on derecho
+
+Other failing tests.
+ERP_D_Ln9_Vnuopc.C48_C48_mg17.QPC6.derecho_intel.cam-outfrq9s SHAREDLIB_BUILD
+ERP_P72x2_D_Ld5.f19_g17_gris4.I1850Clm50BgcCropG.derecho_intel.clm-glcMEC_increase 
+ERS_Ln9_Vnuopc.f19_f19_mg17.FHIST.derecho_intel.drv-asyncio1pernode--cam-outfrq9s 
+SMS_D_Ld1_Mmpi-serial.f45_f45_mg37.I2000Clm50SpRs.derecho_intel.clm-ptsRLA
+DAE.ww3a.ADWAV.izumi_nag RUN time=27
+ERP_D_Ld5.ne30_g17.I1850Clm50BgcCrop.izumi_nag.clm-default RUN
+ERS_Ld5.f19_g17.2000_CAM60_CLM50%SP_CICE5_DOCN%SOM_MOSART_SGLC_SWAV_TEST.izumi_nag.cice5-default SHAREDLIB_BUILD time=50
+ERS_Ld5_Vnuopc.f19_g17.2000_CAM60_CLM50%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST.izumi_nag.cice-default SHAREDLIB_BUILD time=13
+PRE.f19_f19.ADESP_TEST.izumi_nag 
+SMS_Ld1_P136_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN time=252
+SMS_Ld1_P144_D.T62_g17.C.izumi_nag.pop-144blocks_320x384_spacecurve RUN time=262
+SMS_Ld2_P72_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN time=58
+SMS_Ld2_P80_D.T62_g37.C1850ECO.izumi_nag.pop-ecosys_81blocks_100x116_spacecurve RUN time=62
+SMS.T62_g37.C1850ECO.izumi_nag.pop-ecosys RUN time=74
+ERP_D_P48x1.f10_f10_mg37.IHistClm60Bgc.izumi_nag.clm-decStar
+
+==============================================================
 Tag name: cesm2_3_alpha017f
 Originator(s): CSEG
 Date: 15 May 2024
