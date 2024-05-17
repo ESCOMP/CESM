@@ -3,6 +3,30 @@ Tag name: cesm2_3_beta17
 Originator(s): CSEG
 Date: 17 May 2024 
 One-line Summary: Science Updates
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_160                              
+components/cice5        https://github.com/ESCOMP/CESM_CICE5/tree/cice5_20220204              
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_7             
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.238_httpsbranch01          
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.18                 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.106  
+components/cpl7         https://github.com/ESCOMP/CESM_CPL7andDataComps/cpl77.0.8             
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.60                     
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.33                      
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cism_2_1_100              
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.2.005                       
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_230818                
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.2     
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240510                     
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_49                    
+components/pop          https://github.com/ESCOMP/POP2-CESM/cesm_pop_2_1_20240202             
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_79                          
+components/slim         https://github.com/ESCOMP/SimpleLand/tree/slim0.4.002_cesm2_3_beta15  
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3_221108                    
+components/ww3dev       https://github.com/ESCOMP/WW3_interface/tree/dev/main_0.0.13          
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      
+
  
 
 Answer Changes introduced with this tag when compared to cesm2_3_beta16:
