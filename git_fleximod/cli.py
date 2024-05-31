@@ -2,7 +2,7 @@ from pathlib import Path
 import argparse
 from git_fleximod import utils
 
-__version__ = "0.7.4"
+__version__ = "0.7.5"
 
 def find_root_dir(filename=".gitmodules"):
     """ finds the highest directory in tree
