@@ -312,7 +312,11 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
             with utils.pushd(newpath):
                 git = GitInterface(newpath, logger)
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
-                ahash = git.git_operation("status").partition("\n")[0].split()[-1]
+                part =  git.git_operation("status").partition("\n")[0]
+                # fake hash to initialize
+                ahash = "xxxx"
+                if part:
+                    ahash = part.split()[-1]
                 if tag and atag == tag:
                     print(f"  {name:>20} at tag {tag}")
                 elif tag and ahash[: len(tag)] == tag:
@@ -554,8 +558,8 @@ def main():
     global logger
     logger = logging.getLogger(__name__)
 
-    logger.info("action is {}".format(action))
-
+    logger.info("action is {} root_dir={} file_name={}".format(action, root_dir, file_name))
+    
     if not os.path.isfile(os.path.join(root_dir, file_name)):
         file_path = utils.find_upwards(root_dir, file_name)
 

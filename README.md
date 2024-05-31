@@ -8,8 +8,6 @@ Git-fleximod is a Python-based tool that extends Git's submodule and sparse chec
 
 ## Installation
 
-#TODO    Install using pip:
-#        pip install git-fleximod
   If you choose to locate git-fleximod in your path you can access it via command: git fleximod
 
 ## Usage

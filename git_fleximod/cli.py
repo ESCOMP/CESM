@@ -1,17 +1,27 @@
 from pathlib import Path
 import argparse
+from git_fleximod import utils
 
 __version__ = "0.7.4"
 
-def find_root_dir(filename=".git"):
+def find_root_dir(filename=".gitmodules"):
+    """ finds the highest directory in tree
+    which contains a file called filename """
     d = Path.cwd()
     root = Path(d.root)
-    while d != root:
-        attempt = d / filename
-        if attempt.is_dir():
-            return attempt
-        d = d.parent
-    return None
+    dirlist = []
+    dl = d
+    while dl != root:
+        dirlist.append(dl)
+        dl = dl.parent
+    dirlist.append(root)
+    dirlist.reverse()
+
+    for dl in dirlist:
+        attempt = dl / filename
+        if attempt.is_file():
+            return str(dl)
+    utils.fatal_error("No .gitmodules found in directory tree")
 
 
 def get_parser():
