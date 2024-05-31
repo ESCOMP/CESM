@@ -20,7 +20,7 @@ def find_root_dir(filename=".gitmodules"):
     for dl in dirlist:
         attempt = dl / filename
         if attempt.is_file():
-            return dl
+            return str(dl)
     utils.fatal_error("No .gitmodules found in directory tree")
 
 
