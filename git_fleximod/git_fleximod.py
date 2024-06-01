@@ -263,6 +263,21 @@ def single_submodule_checkout(
 
     return
 
+def add_remote(git, url):
+    remotes = git.git_operation("remote", "-v")
+    newremote = "newremote.00"
+    if url in remotes:
+        for line in remotes:
+            if url in line and "fetch" in line:
+                newremote = line.split()[0]
+                break
+    else:
+        i = 0
+        while "newremote" in remotes:
+            i = i + 1
+            newremote = f"newremote.{i:02d}"
+        git.git_operation("remote", "add", newremote, url)
+    return newremote
 
 def submodules_status(gitmodules, root_dir, toplevel=False):
     testfails = 0
@@ -271,6 +286,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
     for name in gitmodules.sections():
         path = gitmodules.get(name, "path")
         tag = gitmodules.get(name, "fxtag")
+        url = gitmodules.get(name, "url")
         required = gitmodules.get(name, "fxrequired")
         level = required and "Toplevel" in required
         if not path:
@@ -280,7 +296,6 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
         if not os.path.exists(os.path.join(newpath, ".git")):
             rootgit = GitInterface(root_dir, logger)
             # submodule commands use path, not name
-            url = gitmodules.get(name, "url")
             url = url.replace("git@github.com:", "https://github.com/")
             tags = rootgit.git_operation("ls-remote", "--tags", url)
             atag = None
@@ -312,11 +327,11 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
             with utils.pushd(newpath):
                 git = GitInterface(newpath, logger)
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
-                part =  git.git_operation("status").partition("\n")[0]
-                # fake hash to initialize
-                ahash = "xxxx"
-                if part:
-                    ahash = part.split()[-1]
+                ahash =  git.git_operation("rev-list", "HEAD").partition("\n")[0]
+                rurl = git.git_operation("ls-remote","--get-url").rstrip()
+                if rurl != url:
+                    remote = add_remote(git, url)
+                    git.git_operation("fetch", remote)
                 if tag and atag == tag:
                     print(f"  {name:>20} at tag {tag}")
                 elif tag and ahash[: len(tag)] == tag:
@@ -335,7 +350,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
                     )
                     testfails += 1
 
-                status = git.git_operation("status", "--ignore-submodules")
+                status = git.git_operation("status", "--ignore-submodules", "-uno")
                 if "nothing to commit" not in status:
                     localmods = localmods + 1
                     print("M" + textwrap.indent(status, "                      "))
@@ -357,11 +372,11 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
         path = gitmodules.get(name, "path")
         url = gitmodules.get(name, "url")
         logger.info(
-            "name={} path={} url={} fxtag={} requiredlist={}".format(
+            "name={} path={} url={} fxtag={} requiredlist={} ".format(
                 name, os.path.join(root_dir, path), url, fxtag, requiredlist
             )
         )
-        #        if not os.path.exists(os.path.join(root_dir,path, ".git")):
+
         fxrequired = gitmodules.get(name, "fxrequired")
         assert fxrequired in fxrequired_allowed_values()
         rgit = GitInterface(root_dir, logger)
@@ -409,19 +424,7 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
                 upstream = git.git_operation("ls-remote", "--get-url").rstrip()
                 newremote = "origin"
                 if upstream != url:
-                    # TODO - this needs to be a unique name
-                    remotes = git.git_operation("remote", "-v")
-                    if url in remotes:
-                        for line in remotes:
-                            if url in line and "fetch" in line:
-                                newremote = line.split()[0]
-                                break
-                    else:
-                        i = 0
-                        while newremote in remotes:
-                            i = i + 1
-                            newremote = f"newremote.{i:02d}"
-                        git.git_operation("remote", "add", newremote, url)
+                    add_remote(git, url)
 
                 tags = git.git_operation("tag", "-l")
                 if fxtag and fxtag not in tags:
@@ -437,6 +440,8 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
                     print(f"No fxtag found for submodule {name:>20}")
                 else:
                     print(f"{name:>20} up to date.")
+
+
 
 
 def local_mods_output():
