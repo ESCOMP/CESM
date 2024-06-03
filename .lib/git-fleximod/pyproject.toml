@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "git-fleximod"
+version = "0.7.6"
+description = "Extended support for git-submodule and git-sparse-checkout"
+authors = ["Jim Edwards <jedwards@ucar.edu>"]
+maintainers = ["Jim Edwards <jedwards@ucar.edu>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/jedwards4b/git-fleximod"
+keywords = ["git", "submodule", "sparse-checkout"]
+packages = [
+{ include = "git_fleximod"},
+{ include = "doc"},
+]
+
+[tool.poetry.scripts]
+git-fleximod = "git_fleximod.git_fleximod:main"
+me2flexi = "git_fleximod.metoflexi:_main"
+fsspec = "fsspec.fuse:main"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+GitPython = "^3.1.0"
+sphinx = "^5.0.0"
+fsspec = "^2023.12.2"
+wheel = "^0.42.0"
+pytest = "^8.0.0"
+pyfakefs = "^5.3.5"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/jedwards4b/git-fleximod/issues"
+
+[tool.pytest.ini_options]
+markers = [
+        "skip_after_first: only run on first iteration"
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
