@@ -1,0 +1,175 @@
+# This is a git submodule file with additional support for
+# git-fleximod (https://github.com/jedwards4b/git-fleximod)
+#
+# The additional flags supported by git-fleximod are
+# fxtag - the tag associated with the submodule, this tag can be tested for
+#         consistancy with the submodule hash using git-fleximod status
+#         the hash can be updated to the tag using git-fleximod update
+#
+# fxrequired - indicates if a given submodule should be checked out on install
+#              submoudules can be toplevel or internal and required or optional
+#              toplevel means that the submodule should only be checked out if the
+#              module is the toplevel of the git repo (is not a submodule itself)
+#              internal means that the submodule is needed by the component whether
+#              the component is toplevel or the submodule of another repo
+#              required means that the submodule should always be checked out
+#              optional means that the submodule should only be checked out if the
+#              optional flag is provided to git-fleximod or the submodule name is
+#              explicitly listed on the git-fleximod command line.
+#
+# fxsparse -   this is a path to a git sparse checkout file indicating that the
+#              submodule should be checked out in sparse mode
+#
+# fxDONOTUSEurl    -   this field is used by git-fleximod test to insure that the url is pointing
+#              to the official url of the repo and not to an unofficial fork.
+#              It is intended for use of github workflows to test commits to protected
+#              repository branches.
+#
+
+
+[submodule "ccs_config"]
+	path = ccs_config
+	url = https://github.com/ESMCI/ccs_config_cesm.git
+	fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
+        fxtag = ccs_config_cesm0.0.106
+        fxrequired = ToplevelRequired
+        
+[submodule "share"]
+	path = share
+	url = https://github.com/ESCOMP/CESM_share
+	fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
+        fxtag = share1.0.19
+        fxrequired = ToplevelRequired
+
+[submodule "cime"]
+	path = cime
+	url = https://github.com/jedwards4b/cime
+	fxDONOTUSEurl = https://github.com/ESMCI/cime
+        fxtag = cime6.0.246
+        fxrequired = ToplevelRequired
+
+[submodule "mct"]
+	path = libraries/mct
+	url = https://github.com/MCSclimate/MCT
+	fxDONOTUSEurl = https://github.com/MCSclimate/MCT
+        fxrequired = ToplevelRequired
+        fxtag = MCT_2.11.0
+
+[submodule "mpi-serial"]
+	path = libraries/mpi-serial
+	url = https://github.com/ESMCI/mpi-serial
+	fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial
+        fxtag = MPIserial_2.5.0
+        fxrequired = ToplevelRequired
+
+[submodule "cam"]
+	path = components/cam
+	url = https://www.github.com/jedwards4b/CAM
+	fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
+        fxtag = rme/cam6_3_161
+        fxrequired = ToplevelRequired
+
+[submodule "ww3"]
+	path = components/ww3
+	url = https://github.com/ESCOMP/WW3_interface
+	fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
+        fxtag = ww3i_0.0.1
+        fxrequired = ToplevelRequired
+        
+[submodule "ww3dev"]
+	path = components/ww3dev
+	url = https://github.com/jedwards4b/WW3_interface
+       	fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface       
+        fxtag = main_0.0.13_rme02
+        fxrequired = ToplevelRequired
+        
+[submodule "rtm"]
+	path = components/rtm
+	url = https://github.com/ESCOMP/RTM
+	fxDONOTUSEurl = https://github.com/ESCOMP/RTM
+        fxrequired = ToplevelRequired
+        fxtag = rtm1_0_78 
+
+[submodule "pysect"]
+	path = tools/statistical_ensemble_test/pyCECT
+	url = https://github.com/NCAR/PyCECT
+	fxDONOTUSEurl = https://github.com/NCAR/PyCECT
+        fxrequired = ToplevelRequired
+        fxtag = 3.2.2
+
+[submodule "mosart"]
+	path = components/mosart
+	url = https://github.com/ESCOMP/MOSART
+	fxDONOTUSEurl = https://github.com/ESCOMP/MOSART
+        fxrequired = ToplevelRequired
+        fxtag = mosart1_0_48
+
+[submodule "mizuroute"]
+	path = components/mizuroute
+	url = https://github.com/jedwards4b/mizuRoute
+	fxDONOTUSEurl = https://github.com/ESCOMP/mizuRoute
+        fxrequired = ToplevelRequired
+        fxtag = cesm-coupling.n02_v2.1.2_rme02
+
+[submodule "fms"]
+	path = libraries/FMS
+	url = https://github.com/jedwards4b/FMS_interface
+	fxDONOTUSEurl = https://github.com/ESCOMP/FMS_interface
+        fxrequired = ToplevelRequired
+        fxtag = fi_230818_rme01
+        
+[submodule "parallelio"]
+	path = libraries/parallelio
+	url = https://github.com/NCAR/ParallelIO
+	fxDONOTUSEurl = https://github.com/NCAR/ParallelIO
+        fxrequired = ToplevelRequired
+        fxtag = pio2_6_2
+
+[submodule "cdeps"]
+	path = components/cdeps
+	url = https://github.com/jedwards4b/CDEPS
+	fxDONOTUSEurl = https://github.com/ESCOMP/CDEPS
+        fxrequired = ToplevelRequired
+        fxtag = cdeps1.0.26_rme01
+
+[submodule "cmeps"]
+	path = components/cmeps
+	url = https://github.com/ESCOMP/CMEPS.git
+	fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
+        fxrequired = ToplevelRequired
+        fxtag = cmeps0.14.49
+
+[submodule "cice5"]
+	path = components/cice5
+	url = https://github.com/ESCOMP/CESM_CICE5
+	fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE5
+        fxrequired = ToplevelRequired
+        fxtag = cice5_20220204
+
+[submodule "cice6"]
+	path = components/cice
+	url = https://github.com/jedwards4b/CESM_CICE
+	fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
+        fxrequired = ToplevelRequired
+        fxtag = cesm_cice6_4_1_10_rme01
+
+[submodule "cism"]
+	path = components/cism
+	url = https://github.com/jedwards4b/cism-wrapper.git
+	fxDONOTUSEurl = https://github.com/ESCOMP/cism-wrapper.git
+        fxtag = cismwrap_2_1_96_rme02
+        fxrequired = ToplevelRequired
+
+[submodule "clm"]
+	path = components/clm
+	url = https://github.com/ESCOMP/CTSM
+	fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
+        fxrequired = ToplevelRequired
+        fxtag = ctsm5.2.007
+
+[submodule "mom"]
+	path = components/mom
+	url = https://github.com/ESCOMP/MOM_interface
+	fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
+        fxrequired = ToplevelRequired
+        fxtag = mi_240522
