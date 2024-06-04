@@ -43,7 +43,7 @@
 
 [submodule "cime"]
 	path = cime
-	url = https://github.com/jedwards4b/cime
+	url = https://github.com/ESMCI/cime
 	fxDONOTUSEurl = https://github.com/ESMCI/cime
         fxtag = cime6.0.246
         fxrequired = ToplevelRequired
@@ -66,7 +66,7 @@
 	path = components/cam
 	url = https://www.github.com/jedwards4b/CAM
 	fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = rme/cam6_3_161
+        fxtag = zz_rme/cam6_3_161.0
         fxrequired = ToplevelRequired
 
 [submodule "ww3"]
