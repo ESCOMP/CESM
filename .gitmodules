@@ -75,14 +75,7 @@
 	fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
         fxtag = ww3i_0.0.1
         fxrequired = ToplevelRequired
-        
-[submodule "ww3dev"]
-	path = components/ww3dev
-	url = https://github.com/jedwards4b/WW3_interface
-       	fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface       
-        fxtag = main_0.0.13_rme02
-        fxrequired = ToplevelRequired
-        
+                
 [submodule "rtm"]
 	path = components/rtm
 	url = https://github.com/ESCOMP/RTM
@@ -139,14 +132,7 @@
         fxrequired = ToplevelRequired
         fxtag = cmeps0.14.49
 
-[submodule "cice5"]
-	path = components/cice5
-	url = https://github.com/ESCOMP/CESM_CICE5
-	fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE5
-        fxrequired = ToplevelRequired
-        fxtag = cice5_20220204
-
-[submodule "cice6"]
+[submodule "cice"]
 	path = components/cice
 	url = https://github.com/jedwards4b/CESM_CICE
 	fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
