@@ -21,7 +21,7 @@ def find_root_dir(filename=".gitmodules"):
         attempt = dl / filename
         if attempt.is_file():
             return str(dl)
-    utils.fatal_error("No .gitmodules found in directory tree")
+    return None
 
 
 def get_parser():

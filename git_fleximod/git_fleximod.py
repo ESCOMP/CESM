@@ -565,10 +565,12 @@ def main():
 
     logger.info("action is {} root_dir={} file_name={}".format(action, root_dir, file_name))
     
-    if not os.path.isfile(os.path.join(root_dir, file_name)):
-        file_path = utils.find_upwards(root_dir, file_name)
+    if not root_dir or not os.path.isfile(os.path.join(root_dir, file_name)):
+        if root_dir:
+            file_path = utils.find_upwards(root_dir, file_name)
 
-        if file_path is None:
+        if root_dir is None or file_path is None:
+            root_dir = "."
             utils.fatal_error(
                 "No {} found in {} or any of it's parents".format(file_name, root_dir)
             )
