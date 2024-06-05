@@ -309,7 +309,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
                     htag = htag[:-3]
                 if not atag and ahash in htag:
                     atag = (htag.split()[1])[10:]
-                if not hhash and htag.endswith(tag):
+                if tag and not hhash and htag.endswith(tag):
                     hhash = htag.split()[0]
                 if hhash and atag:
                     break
