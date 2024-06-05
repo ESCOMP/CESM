@@ -298,15 +298,22 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
             # submodule commands use path, not name
             url = url.replace("git@github.com:", "https://github.com/")
             tags = rootgit.git_operation("ls-remote", "--tags", url)
+            ahash = rootgit.git_operation("submodule","status",newpath).split()[0][1:]
+            hhash = None
             atag = None
             needsupdate += 1
             if not toplevel and level:
                 continue
             for htag in tags.split("\n"):
-                if tag and tag in htag:
+                if htag.endswith('^{}'):
+                    htag = htag[:-3]
+                if not atag and ahash in htag:
                     atag = (htag.split()[1])[10:]
+                if not hhash and htag.endswith(tag):
+                    hhash = htag.split()[0]
+                if hhash and atag:
                     break
-            if tag and tag == atag:
+            if tag and (ahash == hhash or atag == tag):
                 print(f"e {name:>20} not checked out, aligned at tag {tag}")
             elif tag:
                 ahash = rootgit.git_operation(
