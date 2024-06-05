@@ -298,7 +298,10 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
             # submodule commands use path, not name
             url = url.replace("git@github.com:", "https://github.com/")
             tags = rootgit.git_operation("ls-remote", "--tags", url)
-            ahash = rootgit.git_operation("submodule","status",newpath).split()[0][1:]
+            result = rootgit.git_operation("submodule","status",newpath).split()
+            ahash = None
+            if result:
+                ahash = result[0][1:]
             hhash = None
             atag = None
             needsupdate += 1
@@ -307,7 +310,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
             for htag in tags.split("\n"):
                 if htag.endswith('^{}'):
                     htag = htag[:-3]
-                if not atag and ahash in htag:
+                if ahash and not atag and ahash in htag:
                     atag = (htag.split()[1])[10:]
                 if tag and not hhash and htag.endswith(tag):
                     hhash = htag.split()[0]
