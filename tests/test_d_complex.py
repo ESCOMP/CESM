@@ -7,8 +7,8 @@ def test_complex_checkout(git_fleximod, complex_repo, logger):
     assert("ToplevelOptional not checked out, aligned at tag v5.3.2" in status.stdout)
     assert("ToplevelRequired not checked out, aligned at tag MPIserial_2.5.0" in status.stdout)
     assert("AlwaysRequired not checked out, aligned at tag MPIserial_2.4.0" in status.stdout)
-    assert("Complex not checked out, aligned at tag testtag01" in status.stdout)
-    assert("AlwaysOptional not checked out, aligned at tag MPIserial_2.3.0" in status.stdout)
+    assert("Complex not checked out, aligned at tag testtag02" in status.stdout)
+    assert("AlwaysOptional not checked out, out of sync at tag None, expected tag is MPIserial_2.3.0" in status.stdout)
     
     # This should checkout and update test_submodule and complex_sub
     result = git_fleximod(complex_repo, "update")    
@@ -18,7 +18,7 @@ def test_complex_checkout(git_fleximod, complex_repo, logger):
     assert("ToplevelOptional not checked out, aligned at tag v5.3.2" in status.stdout)
     assert("ToplevelRequired at tag MPIserial_2.5.0" in status.stdout)
     assert("AlwaysRequired at tag MPIserial_2.4.0" in status.stdout)
-    assert("Complex at tag testtag01" in status.stdout)
+    assert("Complex at tag testtag02" in status.stdout)
 
     # now check the complex_sub
     root = (complex_repo / "modules" / "complex")
@@ -39,9 +39,8 @@ def test_complex_checkout(git_fleximod, complex_repo, logger):
     assert("ToplevelOptional at tag v5.3.2" in status.stdout)
     assert("ToplevelRequired at tag MPIserial_2.5.0" in status.stdout)
     assert("AlwaysRequired at tag MPIserial_2.4.0" in status.stdout)
-    assert("Complex at tag testtag01" in status.stdout)
-    assert("AlwaysOptional not checked out, aligned at tag MPIserial_2.3.0" in status.stdout)
-
+    assert("Complex at tag testtag02" in status.stdout)
+    assert("AlwaysOptional not checked out, out of sync at tag None, expected tag is MPIserial_2.3.0" in status.stdout)
 
     # Finally update optional
     result = git_fleximod(complex_repo, "update --optional")
@@ -51,7 +50,7 @@ def test_complex_checkout(git_fleximod, complex_repo, logger):
     assert("ToplevelOptional at tag v5.3.2" in status.stdout)
     assert("ToplevelRequired at tag MPIserial_2.5.0" in status.stdout)
     assert("AlwaysRequired at tag MPIserial_2.4.0" in status.stdout)
-    assert("Complex at tag testtag01" in status.stdout)
+    assert("Complex at tag testtag02" in status.stdout)
     assert("AlwaysOptional at tag MPIserial_2.3.0" in status.stdout)
     
     # now check the complex_sub

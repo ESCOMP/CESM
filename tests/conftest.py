@@ -32,7 +32,7 @@ all_repos=[
      "submodule_name": "test_optional",
      "status1" : "test_optional MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
      "status2" : "test_optional at tag MPIserial_2.4.0",
-     "status3" : "test_optional not checked out, aligned at tag MPIserial_2.4.0",
+     "status3" : "test_optional not checked out, out of sync at tag None, expected tag is MPIserial_2.4.0",
      "status4" : "test_optional at tag MPIserial_2.4.0",
      "gitmodules_content": """
      [submodule "test_optional"]
@@ -46,7 +46,7 @@ all_repos=[
      "submodule_name": "test_alwaysoptional",
      "status1" : "test_alwaysoptional MPIserial_2.3.0 is out of sync with .gitmodules e5cf35c",
      "status2" : "test_alwaysoptional at hash e5cf35c",
-     "status3" : "test_alwaysoptional not checked out, out of sync at tag MPIserial_2.3.0",
+     "status3" : "out of sync at tag None, expected tag is e5cf35c",
      "status4" : "test_alwaysoptional at hash e5cf35c",
      "gitmodules_content": """
     [submodule "test_alwaysoptional"]
