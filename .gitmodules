@@ -73,7 +73,7 @@
 	path = components/ww3
 	url = https://github.com/ESCOMP/WW3_interface
 	fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
-        fxtag = ww3i_0.0.1
+        fxtag = ww3i_0.0.2
         fxrequired = ToplevelRequired
                 
 [submodule "rtm"]
