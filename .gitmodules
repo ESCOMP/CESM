@@ -66,7 +66,7 @@
 	path = components/cam
 	url = https://www.github.com/jedwards4b/CAM
 	fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = zz_rme/cam6_3_161.0
+        fxtag = zz_rme/cam6_3_161.1
         fxrequired = ToplevelRequired
 
 [submodule "ww3"]
@@ -106,10 +106,10 @@
 
 [submodule "fms"]
 	path = libraries/FMS
-	url = https://github.com/jedwards4b/FMS_interface
+	url = https://github.com/ESCOMP/FMS_interface
 	fxDONOTUSEurl = https://github.com/ESCOMP/FMS_interface
         fxrequired = ToplevelRequired
-        fxtag = fi_230818_rme01
+        fxtag = fi_240516
         
 [submodule "parallelio"]
 	path = libraries/parallelio
@@ -141,9 +141,9 @@
 
 [submodule "cism"]
 	path = components/cism
-	url = https://github.com/jedwards4b/cism-wrapper.git
+	url = https://github.com/ESCOMP/cism-wrapper.git
 	fxDONOTUSEurl = https://github.com/ESCOMP/cism-wrapper.git
-        fxtag = cismwrap_2_1_96_rme02
+        fxtag = cismwrap_2_2_001
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
