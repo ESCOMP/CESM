@@ -66,7 +66,7 @@
 	path = components/cam
 	url = https://www.github.com/jedwards4b/CAM
 	fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = zz_rme/cam6_3_161.1
+        fxtag = zz_rme/cam6_3_161.2
         fxrequired = ToplevelRequired
 
 [submodule "ww3"]
