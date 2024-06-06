@@ -298,15 +298,25 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
             # submodule commands use path, not name
             url = url.replace("git@github.com:", "https://github.com/")
             tags = rootgit.git_operation("ls-remote", "--tags", url)
+            result = rootgit.git_operation("submodule","status",newpath).split()
+            ahash = None
+            if result:
+                ahash = result[0][1:]
+            hhash = None
             atag = None
             needsupdate += 1
             if not toplevel and level:
                 continue
             for htag in tags.split("\n"):
-                if tag and tag in htag:
+                if htag.endswith('^{}'):
+                    htag = htag[:-3]
+                if ahash and not atag and ahash in htag:
                     atag = (htag.split()[1])[10:]
+                if tag and not hhash and htag.endswith(tag):
+                    hhash = htag.split()[0]
+                if hhash and atag:
                     break
-            if tag and tag == atag:
+            if tag and (ahash == hhash or atag == tag):
                 print(f"e {name:>20} not checked out, aligned at tag {tag}")
             elif tag:
                 ahash = rootgit.git_operation(
@@ -565,10 +575,12 @@ def main():
 
     logger.info("action is {} root_dir={} file_name={}".format(action, root_dir, file_name))
     
-    if not os.path.isfile(os.path.join(root_dir, file_name)):
-        file_path = utils.find_upwards(root_dir, file_name)
+    if not root_dir or not os.path.isfile(os.path.join(root_dir, file_name)):
+        if root_dir:
+            file_path = utils.find_upwards(root_dir, file_name)
 
-        if file_path is None:
+        if root_dir is None or file_path is None:
+            root_dir = "."
             utils.fatal_error(
                 "No {} found in {} or any of it's parents".format(file_name, root_dir)
             )

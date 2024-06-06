@@ -2,7 +2,7 @@ from pathlib import Path
 import argparse
 from git_fleximod import utils
 
-__version__ = "0.7.6"
+__version__ = "0.7.7"
 
 def find_root_dir(filename=".gitmodules"):
     """ finds the highest directory in tree
@@ -21,7 +21,7 @@ def find_root_dir(filename=".gitmodules"):
         attempt = dl / filename
         if attempt.is_file():
             return str(dl)
-    utils.fatal_error("No .gitmodules found in directory tree")
+    return None
 
 
 def get_parser():
