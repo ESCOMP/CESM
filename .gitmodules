@@ -31,7 +31,7 @@
 	path = ccs_config
 	url = https://github.com/ESMCI/ccs_config_cesm.git
 	fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm0.0.106
+        fxtag = ccs_config_cesm0.0.109
         fxrequired = ToplevelRequired
         
 [submodule "share"]
@@ -95,7 +95,7 @@
 	url = https://github.com/ESCOMP/MOSART
 	fxDONOTUSEurl = https://github.com/ESCOMP/MOSART
         fxrequired = ToplevelRequired
-        fxtag = mosart1_0_48
+        fxtag = mosart1.1.01
 
 [submodule "mizuroute"]
 	path = components/mizuroute
