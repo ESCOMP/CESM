@@ -120,17 +120,17 @@
 
 [submodule "cdeps"]
 	path = components/cdeps
-	url = https://github.com/jedwards4b/CDEPS
+	url = https://github.com/ESCOMP/CDEPS
 	fxDONOTUSEurl = https://github.com/ESCOMP/CDEPS
         fxrequired = ToplevelRequired
-        fxtag = cdeps1.0.26_rme01
+        fxtag = cdeps1.0.34
 
 [submodule "cmeps"]
 	path = components/cmeps
 	url = https://github.com/ESCOMP/CMEPS.git
 	fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-        fxtag = cmeps0.14.49
+        fxtag = cmeps0.14.63
 
 [submodule "cice"]
 	path = components/cice
