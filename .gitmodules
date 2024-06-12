@@ -123,7 +123,7 @@
 	url = https://github.com/ESCOMP/CDEPS
 	fxDONOTUSEurl = https://github.com/ESCOMP/CDEPS
         fxrequired = ToplevelRequired
-        fxtag = cdeps1.0.34
+        fxtag = cdeps1.0.36
 
 [submodule "cmeps"]
 	path = components/cmeps
