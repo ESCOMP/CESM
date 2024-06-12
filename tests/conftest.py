@@ -32,7 +32,7 @@ all_repos=[
      "submodule_name": "test_optional",
      "status1" : "test_optional MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
      "status2" : "test_optional at tag MPIserial_2.4.0",
-     "status3" : "test_optional not checked out, out of sync at tag None, expected tag is MPIserial_2.4.0",
+     "status3" : "test_optional not checked out, out of sync at tag None, expected tag is MPIserial_2.4.0 (optional)",
      "status4" : "test_optional at tag MPIserial_2.4.0",
      "gitmodules_content": """
      [submodule "test_optional"]

@@ -304,6 +304,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
                 ahash = result[0][1:]
             hhash = None
             atag = None
+            
             needsupdate += 1
             if not toplevel and level:
                 continue
@@ -316,22 +317,23 @@ def submodules_status(gitmodules, root_dir, toplevel=False):
                     hhash = htag.split()[0]
                 if hhash and atag:
                     break
+            optional = " (optional)" if required and "Optional" in required else ""
             if tag and (ahash == hhash or atag == tag):
-                print(f"e {name:>20} not checked out, aligned at tag {tag}")
+                print(f"e {name:>20} not checked out, aligned at tag {tag}{optional}")
             elif tag:
                 ahash = rootgit.git_operation(
                     "submodule", "status", "{}".format(path)
                 ).rstrip()
                 ahash = ahash[1 : len(tag) + 1]
                 if tag == ahash:
-                    print(f"e {name:>20} not checked out, aligned at hash {ahash}")
+                    print(f"e {name:>20} not checked out, aligned at hash {ahash}{optional}")
                 else:
                     print(
-                        f"e {name:>20} not checked out, out of sync at tag {atag}, expected tag is {tag}"
+                        f"e {name:>20} not checked out, out of sync at tag {atag}, expected tag is {tag}{optional}"
                     )
                     testfails += 1
             else:
-                print(f"e {name:>20} has no fxtag defined in .gitmodules")
+                print(f"e {name:>20} has no fxtag defined in .gitmodules{optional}")
                 testfails += 1
         else:
             with utils.pushd(newpath):
