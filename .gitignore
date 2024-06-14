@@ -1,11 +1,3 @@
-# managed directories that are checked out by the externals tool
-cime/
-components/
-libraries/
-share/
-ccs_config/
-tools/statistical_ensemble_test/
-
 # generated local files
 *.log
 
@@ -15,6 +7,7 @@ tools/statistical_ensemble_test/
 
 # generated python files
 *.pyc
+__pycache__
 
 # ignore for the merge to master and orphaning of the gh-pages branch
 doc/build
