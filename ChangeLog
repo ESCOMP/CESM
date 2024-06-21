@@ -1,4 +1,183 @@
 ==============================================================
+Tag name: cesm3_0_alpha01a
+Originator(s): CSEG
+Date: 21 June 2024
+One-line Summary: git-fleximod and remove externals for CESM3 
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_162                              **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_9             **
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.246                        **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.19                 **
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.109  **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.63                     **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.37                      **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_001          **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.2.007                       **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240516                **
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.2     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240522                     **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_49                    --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_79                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3i_0.0.2                    **
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cam
+    James Edwards 2024-06-03 - cam6_3_162 - components/cam (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_162
+
+    replace manage_externals with git-fleximod
+
+
+    Cheryl Craig 2024-05-07 - cam6_3_161 - components/cam (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CAM/tags/cam6_3_161
+
+    Update the CAM externals to match cesm2_3_beta17
+
+    Answer changing for CAM runs, but it will not change answers at all for CESM runs as this External file is not used during CESM checkouts
+
+
+ccs_config
+    James Edwards 2024-06-07 - ccs_config_cesm0.0.109 - ccs_config (cesm3_0_alpha01a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm0.0.109
+
+    updates nvhpc on derecho
+    updates python on izumi
+    fix typo in  modelgrid_aliases_nuopc.xml
+
+
+cdeps
+    Chris Fischer 2024-06-14 - cdeps1.0.37 - components/cdeps (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.37
+
+    Fix for NAG compiler
+
+
+    James Edwards 2024-05-13 - cdeps1.0.34 - components/cdeps (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.34
+
+    Updates from manage externals to git-fleximod, updates github workflow.
+
+
+cice5
+    James Edwards 2024-05-13 - NONE - components/cice (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CESM_CICE5/tags/NONE
+
+    REMOVE THIS COMPONENT
+
+
+cice6
+    James Edwards 2024-05-13 - cesm_cice6_5_0_9 - components/cice6 (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_5_0_9
+
+    Remove manage_externals.
+
+
+cime
+    James Edwards 2024-06-07 - cime6.0.246 - cime (cesm3_0_alpha01a)
+    https://github.com/ESMCI/cime/tags/cime6.0.246
+
+    remove reference to cice5 and ww3dev, no longer required
+
+
+    James Edwards 2024-05-16 - cime6.0.245 - cime (cesm3_0_alpha01a)
+    https://github.com/ESMCI/cime/tags/ cime6.0.245
+
+    Fixes issue of automatically identifying model as cesm.
+
+
+cism
+    James Edwards 2024-05-13 - cismwrap_2_2_001 - components/cism (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_1_101
+
+    replace manage_externals with git-fleximod
+
+
+clm
+    Erik Kluzek 2024-05-28 - ctsm5.2.007 - components/clm (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.2.007
+
+    Remove manage_externals
+
+
+    Erik Kluzek 2024-05-13 - ctsm5.2.006 - components/clm (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.2.006
+
+    Update externals to that in cesm2_3_beta17
+
+
+cmeps
+    Chris Fischer 2024-06-14 - cmeps0.14.63 - src/drivers/nuopc/ (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.63
+
+    Avoid integer overflow by skipping mediator in restart loop
+
+
+    Erik Kluzek 2024-05-20 - cmeps0.14.62 - src/drivers/nuopc/ (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.62
+
+    CMEPS PR #460 needed for CAM and CTSM tests to pass
+
+    ctsm5.2.006
+    cam6_3_131
+
+
+    Erik Kluzek 2024-05-20 - cmeps0.14.61 - src/drivers/nuopc/ (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps0.14.61
+
+    Add ability to obtain multi level input from ocn and map and pass it back to cism
+
+
+cpl7
+    James Edwards 2024-05-13 - NONE - components/cpl7 (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CESM_CPL7andDataComps/tags/NONE
+
+    REMOVE THIS COMPONENT
+
+
+fms
+    James Edwards 2024-05-16 - fi_240516 - libraries/fms (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_240516
+
+    Remove manage externals, add git fleximod
+
+
+mom
+    James Edwards 2024-05-16 - mi_240522 - components/mom (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_240516
+
+    Removes manage externals, adds git-fleximod
+
+
+pop
+    James Edwards 2024-05-13 - NONE - components/pop (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/POP2-CESM/tags/NONE
+
+    REMOVE THIS COMPONENT
+
+
+share
+    James Edwards 2024-05-28 - share1.0.19 - share (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/CESM_share/tags/share1.0.19
+
+    Removes cpl7 dependency
+
+
+SLIM
+    James Edwards 2024-05-13 - NONE - components/slim (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/SimpleLand/tags/NONE
+
+    Remove this component
+
+
+ww3
+    James Edwards 2024-05-16 - ww3i_0.0.1 - components/ww3 (cesm3_0_alpha01a)
+    https://github.com/ESCOMP/WW3_interface/tags/ww3i_0.0.1
+
+    Rename this component - it will now be ww3.
+
+
+==============================================================
 Tag name: cesm2_3_beta17
 Originator(s): CSEG
 Date: 17 May 2024 
