@@ -81,7 +81,7 @@
 	url = https://github.com/ESCOMP/RTM
 	fxDONOTUSEurl = https://github.com/ESCOMP/RTM
         fxrequired = ToplevelRequired
-        fxtag = rtm1_0_78 
+        fxtag = rtm1_0_79 
 
 [submodule "pysect"]
 	path = tools/statistical_ensemble_test/pyCECT
