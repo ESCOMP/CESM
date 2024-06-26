@@ -48,13 +48,6 @@
         fxtag = cime6.0.246
         fxrequired = ToplevelRequired
 
-[submodule "mct"]
-	path = libraries/mct
-	url = https://github.com/MCSclimate/MCT
-	fxDONOTUSEurl = https://github.com/MCSclimate/MCT
-        fxrequired = ToplevelRequired
-        fxtag = MCT_2.11.0
-
 [submodule "mpi-serial"]
 	path = libraries/mpi-serial
 	url = https://github.com/ESMCI/mpi-serial

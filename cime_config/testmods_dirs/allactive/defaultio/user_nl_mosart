@@ -6,8 +6,8 @@
 ! NOTE: if the xml variable RTM_MODE in env_run.xml is set to 'NULL', then
 !        then rtm will set rtm_present to .false. - and will ignore everything else
 !----------------------------------------------------------------------------------
-rtmhist_ndens     = 1
-rtmhist_nhtfrq    =-24
-rtmhist_mfilt     = 1
+ndens     = 1
+nhtfrq    =-24
+mfilt     = 1
 
 
