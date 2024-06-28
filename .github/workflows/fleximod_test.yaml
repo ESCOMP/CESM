@@ -1,0 +1,14 @@
+on:
+  push:
+    branches: [ master ]
+  pull-request:
+    branches: [ master ]
+jobs:
+  fleximod-test:
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout-CESM
+        uses: actions/checkout@v4
+      - id: run-fleximod
+        run: |
+          ./bin/git-fleximod test
