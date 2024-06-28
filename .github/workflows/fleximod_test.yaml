@@ -17,8 +17,8 @@ jobs:
         run: |
           $GITHUB_WORKSPACE/bin/git-fleximod update
           $GITHUB_WORKSPACE/bin/git-fleximod test
-      - name: Setup tmate session
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v3
+#      - name: Setup tmate session
+#        if: ${{ failure() }}
+#        uses: mxschmitt/action-tmate@v3
         
           
