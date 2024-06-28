@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v4
       - id: run-fleximod
         run: |
-          $GITHUB_WORKSPACE/bin/git-fleximod test
+          $GITHUB_WORKSPACE/bin/git-fleximod test share
+          $GITHUB_WORKSPACE/bin/git-fleximod test ccs_config
         
           
