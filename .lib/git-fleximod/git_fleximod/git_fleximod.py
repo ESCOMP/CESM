@@ -547,7 +547,7 @@ def submodules_test(gitmodules, root_dir):
     # and that sparse checkout files exist
     for name in gitmodules.sections():
         url = gitmodules.get(name, "url")
-        fxurl = gitmodules.get(name, "fxDONOTMODIFYurl")
+        fxurl = gitmodules.get(name, "fxDONOTUSEurl")
         fxsparse = gitmodules.get(name, "fxsparse")
         path = gitmodules.get(name, "path")
         fxurl = fxurl[:-4] if fxurl.endswith(".git") else fxurl

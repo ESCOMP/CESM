@@ -39,13 +39,23 @@
   <!-- 1850 compsets Default, Mosart, Wave for CESM3 -->
 
   <compset>
-    <alias>BLT1850_v0c</alias>
-    <lname>1850_CAM%DEV%LT%GHGMAM4_CLM51%BGC-CROP_CICE_MOM6_MOSART_CISM2%GRIS-NOEVOLVE_SWAV</lname>
+    <alias>BLT1850</alias>
+    <lname>1850_CAM70%LT_CLM51%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <compset>
-    <alias>BLTHIST_v0c</alias>
-    <lname>HIST_CAM%DEV%LT%GHGMAM4_CLM51%BGC-CROP_CICE_MOM6_MOSART_CISM2%GRIS-NOEVOLVE_SWAV</lname>
+    <alias>BLTHIST</alias>
+    <lname>HIST_CAM70%LT_CLM51%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BMT1850</alias>
+    <lname>1850_CAM70%MT_CLM51%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BMTHIST</alias>
+    <lname>HIST_CAM70%MT_CLM51%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
 

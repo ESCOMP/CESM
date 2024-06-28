@@ -1,0 +1,24 @@
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  fleximod-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # oldest supported and latest supported
+        python-version: ["3.7", "3.x"]
+    steps:
+      - id: checkout-CESM
+        uses: actions/checkout@v4
+      - id: run-fleximod
+        run: |
+          $GITHUB_WORKSPACE/bin/git-fleximod update
+          $GITHUB_WORKSPACE/bin/git-fleximod test
+#      - name: Setup tmate session
+#        if: ${{ failure() }}
+#        uses: mxschmitt/action-tmate@v3
+        
+          
