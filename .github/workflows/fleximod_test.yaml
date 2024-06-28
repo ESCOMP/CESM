@@ -13,4 +13,5 @@ jobs:
         run: |
           pwd
           ls -l bin
-          ./bin/git-fleximod test
+          ./bin/git-fleximod test 2>&1 | tee fleximod.out
+          
