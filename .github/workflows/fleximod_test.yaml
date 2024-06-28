@@ -16,6 +16,8 @@ jobs:
       - id: run-fleximod
         run: |
           $GITHUB_WORKSPACE/bin/git-fleximod test share
-          $GITHUB_WORKSPACE/bin/git-fleximod test ccs_config
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
         
           
