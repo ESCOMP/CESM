@@ -11,4 +11,5 @@ jobs:
         uses: actions/checkout@v4
       - id: run-fleximod
         run: |
+          cd CESM
           ./bin/git-fleximod test
