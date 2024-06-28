@@ -38,7 +38,7 @@
 	path = share
 	url = https://github.com/ESCOMP/CESM_share
 	fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
-        fxtag = share1.0.19
+        fxtag = share1.1.1
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -59,7 +59,7 @@
 	path = components/cam
 	url = https://www.github.com/ESCOMP/CAM
 	fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_3_162
+        fxtag = cam6_4_001
         fxrequired = ToplevelRequired
 
 [submodule "ww3"]
