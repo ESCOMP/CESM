@@ -10,8 +10,6 @@ jobs:
       - id: checkout-CESM
         uses: actions/checkout@v4
       - id: run-fleximod
-        run: |
-          pwd
-          ls -l bin
-          ./bin/git-fleximod test 2>&1 | tee fleximod.out
+        run: ./bin/git-fleximod test
+        
           
