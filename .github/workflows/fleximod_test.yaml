@@ -12,5 +12,5 @@ jobs:
       - id: run-fleximod
         run: |
           pwd
-          cd ${GITHUB_WORKDIR}/CESM
+          ls -l bin
           ./bin/git-fleximod test
