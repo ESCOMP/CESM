@@ -119,8 +119,20 @@ def complex_repo(tmp_path, logger):
     str_path = str(test_dir)
     gitp = GitInterface(str_path, logger)
     gitp.git_operation("remote", "add", "origin", "https://github.com/jedwards4b/fleximod-test2")
-    gitp.git_operation("fetch", "origin", "main")
-    gitp.git_operation("checkout", "main")
+    gitp.git_operation("fetch", "origin")
+    gitp.git_operation("checkout", "v0.0.1")
+    return test_dir
+
+@pytest.fixture
+def complex_update(tmp_path, logger):
+    test_dir = tmp_path / "testcomplex"
+    test_dir.mkdir()
+    str_path = str(test_dir)
+    gitp = GitInterface(str_path, logger)
+    gitp.git_operation("remote", "add", "origin", "https://github.com/jedwards4b/fleximod-test2")
+    gitp.git_operation("fetch", "origin")
+    gitp.git_operation("checkout", "v0.0.2")
+    
     return test_dir
     
 @pytest.fixture
