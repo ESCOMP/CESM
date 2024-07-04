@@ -62,7 +62,11 @@ class GitInterface:
     def config_get_value(self, section, name):
         if self._use_module:
             config = self.repo.config_reader()
-            return config.get_value(section, name)
+            try:
+                val = config.get_value(section, name)
+            except:
+                val = None
+            return val
         else:
             cmd = ("git", "-C", str(self.repo_path), "config", "--get", f"{section}.{name}")
             output = utils.execute_subprocess(cmd, output_to_caller=True)

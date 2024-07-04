@@ -13,7 +13,7 @@ from git_fleximod import utils
 from git_fleximod import cli
 from git_fleximod.gitinterface import GitInterface
 from git_fleximod.gitmodules import GitModules
-from configparser import NoOptionError
+from git_fleximod.submodule import Submodule
 
 # logger variable is global
 logger = None
@@ -265,131 +265,41 @@ def single_submodule_checkout(
 
     return
 
-def add_remote(git, url):
-    remotes = git.git_operation("remote", "-v")
-    newremote = "newremote.00"
-    if url in remotes:
-        for line in remotes:
-            if url in line and "fetch" in line:
-                newremote = line.split()[0]
-                break
-    else:
-        i = 0
-        while "newremote" in remotes:
-            i = i + 1
-            newremote = f"newremote.{i:02d}"
-        git.git_operation("remote", "add", newremote, url)
-    return newremote
 
-def submodules_status(gitmodules, root_dir, toplevel=False):
+def init_submodule_from_gitmodules(gitmodules, name, root_dir, logger):
+    path = gitmodules.get(name, "path")
+    url = gitmodules.get(name, "url")
+    tag = gitmodules.get(name, "fxtag")
+    fxurl = gitmodules.get(name, "fxDONOTUSEurl")
+    fxsparse = gitmodules.get(name, "fxsparse")
+    fxrequired = gitmodules.get(name, "fxrequired")
+    return Submodule(root_dir, name, path, url, fxtag=tag, fxurl=fxurl, fxsparse=fxsparse, fxrequired=fxrequired, logger=logger)
+
+def submodules_status(gitmodules, root_dir, toplevel=False, depth=0):
     testfails = 0
     localmods = 0
     needsupdate = 0
+    submodules = {}
+    wrapper = textwrap.TextWrapper(initial_indent=' '*depth, width=120,subsequent_indent=' '*(depth+20))
     for name in gitmodules.sections():
-        path = gitmodules.get(name, "path")
-        tag = gitmodules.get(name, "fxtag")
-        url = gitmodules.get(name, "url")
-        required = gitmodules.get(name, "fxrequired")
-        level = required and required.startswith("Top")
-        if not path:
-            utils.fatal_error("No path found in .gitmodules for {}".format(name))
-        newpath = os.path.join(root_dir, path)
-        logger.debug("newpath is {}".format(newpath))
-        if not os.path.exists(os.path.join(newpath, ".git")):
-            rootgit = GitInterface(root_dir, logger)
-            # submodule commands use path, not name
-            url = url.replace("git@github.com:", "https://github.com/")
-            tags = rootgit.git_operation("ls-remote", "--tags", url)
-            result = rootgit.git_operation("submodule","status",newpath).split()
-#            print(f"newpath {newpath} result {result}")
-            ahash = None
-            if result:
-                ahash = result[0][1:]
-            hhash = None
-            atag = None
+        if not submodules or name not in submodules:
+            submodules[name] = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
             
-            needsupdate += 1
-            if not toplevel and level:
-                continue
-            for htag in tags.split("\n"):
-                if htag.endswith('^{}'):
-                    htag = htag[:-3]
-                if ahash and not atag and ahash in htag:
-                    atag = (htag.split()[1])[10:]
-                if tag and not hhash and htag.endswith(tag):
-                    hhash = htag.split()[0]
-                if hhash and atag:
-                    break
-            optional = " (optional)" if required and "Optional" in required else ""
-#            print(f"tag is {tag} ahash is {ahash} {hhash} {atag} {newpath} {required} {level}")
-            if required and not required.startswith("Always") and not level:
-                continue
-
-            if tag and (ahash == hhash or atag == tag):
-                print(f"e {name:>20} not checked out, aligned at tag {tag}{optional} {level} {required}")
-            elif tag:
-                ahash = rootgit.git_operation(
-                    "submodule", "status", "{}".format(path)
-                ).rstrip()
-                ahash = ahash[1 : len(tag) + 1]
-                if tag == ahash:
-                    print(f"e {name:>20} not checked out, aligned at hash {ahash}{optional}")
-                else:
-                    print(
-                        f"e {name:>20} not checked out, out of sync at tag {atag}, expected tag is {tag}{optional}"
-                    )
-                    testfails += 1
-            else:
-                print(f"e {name:>20} has no fxtag defined in .gitmodules{optional}")
-                testfails += 1
-        else:
-            with utils.pushd(newpath):
-                git = GitInterface(newpath, logger)
-                atag = git.git_operation("describe", "--tags", "--always").rstrip()
-                ahash =  git.git_operation("rev-list", "HEAD").partition("\n")[0]
-                rurl = git.git_operation("ls-remote","--get-url").rstrip()
-                recurse = False
-                if rurl != url:
-                    remote = add_remote(git, url)
-                    git.git_operation("fetch", remote)
-                if tag and atag == tag:
-                    print(f"  {name:>20} at tag {tag}")
-                    recurse = True
-                elif tag and ahash[: len(tag)] == tag:
-                    print(f"  {name:>20} at hash {ahash}")
-                    recurse = True
-                elif atag == ahash:
-                    print(f"  {name:>20} at hash {ahash}")
-                    recurse = True
-                elif tag:
-                    print(
-                        f"s {name:>20} {atag} {ahash} is out of sync with .gitmodules {tag}"
-                    )
-                    testfails += 1
-                    needsupdate += 1
-                else:
-                    print(
-                        f"e {name:>20} has no fxtag defined in .gitmodules, module at {atag}"
-                    )
-                    testfails += 1
-                    
-                status = git.git_operation("status", "--ignore-submodules", "-uno")
-                if "nothing to commit" not in status:
-                    localmods = localmods + 1
-                    print("M" + textwrap.indent(status, "                      "))
-                if recurse and os.path.exists(os.path.join(newpath, ".gitmodules")):
-                    submodules = GitModules(
-                        logger,
-                        confpath=newpath,
-                    )
-                    nf, lm, nu = submodules_status(submodules, newpath)
-                    testfails += nf
-                    localmods += lm
-                    needsupdate += nu
-                
-                    
+        result,n,l,t = submodules[name].status()
+        testfails += t
+        localmods += l
+        needsupdate += n
+        if toplevel or not submodules[name].toplevel():
+            print(wrapper.fill(result))
+        subdir = os.path.join(root_dir, submodules[name].path)
+        if os.path.exists(os.path.join(subdir, ".gitmodules")):
+            submod = GitModules(logger, confpath=subdir)
+            t,l,n = submodules_status(submod, subdir, depth=depth+1)
+            testfails += t
+            localmods += l
+            needsupdate += n
+            
     return testfails, localmods, needsupdate
-
 
 def git_toplevelroot(root_dir, logger):
     rgit = GitInterface(root_dir, logger)
@@ -398,25 +308,24 @@ def git_toplevelroot(root_dir, logger):
 
 
 def submodules_update(gitmodules, root_dir, requiredlist, force):
-    _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
-    if localmods and not force:
-        local_mods_output()
-        return
-    if needsupdate == 0:
-        return
-
+#    _, localmods, needsupdate = submodules_status(gitmodules, root_dir)
+#    if localmods and not force:
+#        local_mods_output()
+#        return
+#    if needsupdate == 0:
+#        return
+    submodules = {}
     for name in gitmodules.sections():
-        fxtag = gitmodules.get(name, "fxtag")
-        path = gitmodules.get(name, "path")
-        url = gitmodules.get(name, "url")
+        if not submodules or name not in submodules:
+            submodules[name] = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
+        _, needsupdate, localmods, testfails = submodules[name].status()
+        fxrequired = submodules[name].fxrequired
+        if not fxrequired:
+            fxrequired = "AlwaysRequired"
 
-        fxrequired = gitmodules.get(name, "fxrequired")
-        if fxrequired:
-            allowedvalues = fxrequired_allowed_values()
-            assert fxrequired in allowedvalues
+        allowedvalues = fxrequired_allowed_values()
+        assert fxrequired in allowedvalues
 
-
-        fxsparse = gitmodules.get(name, "fxsparse")
         superroot = git_toplevelroot(root_dir, logger)
                                      
         if (
@@ -429,56 +338,27 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
                     print(f"Skipping optional component {name:>20}")
                 continue
         
-        if fxsparse:
-            logger.debug(
-                "Callng submodule_sparse_checkout({}, {}, {}, {}, {}, {}".format(
-                    root_dir, name, url, path, fxsparse, fxtag
-                )
-            )
-            submodule_sparse_checkout(root_dir, name, url, path, fxsparse, tag=fxtag)
-        else:
-            logger.info(
-                "Calling submodule_checkout({},{},{},{})".format(
-                    root_dir, name, path, url
-                )
-            )
-            print(f"fxrequired {fxrequired} requiredlist {requiredlist}")
-            single_submodule_checkout(
-                root_dir,
-                name,
-                path,
-                url=url,
-                tag=fxtag,
-                force=force,
-                optional="AlwaysOptional" in requiredlist 
-            )
+#        if fxsparse:
+#            logger.debug(
+#                "Callng submodule_sparse_checkout({}, {}, {}, {}, {}, {}".format(
+#                    root_dir, name, url, path, fxsparse, fxtag
+#                )
+#            )
+#            submodule_sparse_checkout(root_dir, name, url, path, fxsparse, tag=fxtag)
+#        else:
+        print(f"fxrequired {fxrequired} requiredlist {requiredlist}")
+        submodules[name].update(optional="AlwaysOptional")
 
-        if os.path.exists(os.path.join(path, ".git")):
-            submoddir = os.path.join(root_dir, path)
-            with utils.pushd(submoddir):
-                git = GitInterface(submoddir, logger)
-                # first make sure the url is correct
-                upstream = git.git_operation("ls-remote", "--get-url").rstrip()
-                newremote = "origin"
-                if upstream != url:
-                    add_remote(git, url)
+#            single_submodule_checkout(
+#                root_dir,
+#                name,
+#                path,
+#                url=url,
+#                tag=fxtag,
+#                force=force,
+#                optional="AlwaysOptional" in requiredlist 
+#            )
 
-                tags = git.git_operation("tag", "-l")
-                if fxtag and fxtag not in tags:
-                    git.git_operation("fetch", newremote, "--tags")
-                atag = git.git_operation("describe", "--tags", "--always").rstrip()
-                if fxtag and fxtag != atag:
-                    try:
-                        git.git_operation("checkout", fxtag)
-                        print(f"{name:>20} updated to {fxtag}")
-                    except Exception as error:
-                        print(error)
-                    
-
-                elif not fxtag:
-                    print(f"No fxtag found for submodule {name:>20}")
-                else:
-                    print(f"{name:>20} up to date.")
 
 
 
