@@ -215,9 +215,8 @@ def git_toplevelroot(root_dir, logger):
     superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
     return superroot
 
-def submodules_update(gitmodules, root_dir, requiredlist, force, submodules=None):
-    if not submodules:
-        submodules = {}
+def submodules_update(gitmodules, root_dir, requiredlist, force):
+    submodules = {}
     for name in gitmodules.sections():
         if not submodules or name not in submodules:
             submodules[name] = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
@@ -249,12 +248,11 @@ def submodules_update(gitmodules, root_dir, requiredlist, force, submodules=None
                 # recursively handle this checkout
                 print(f"Recursively checking out submodules of {name}")
                 gitsubmodules = GitModules(submodules[name].logger, confpath=repodir)
-                requiredlist = ["AlwaysRequired"]
+                newrequiredlist = ["AlwaysRequired"]
                 if optional:
-                    requiredlist.append("AlwaysOptional")
+                    newrequiredlist.append("AlwaysOptional")
 
-                submodules_update(gitsubmodules, repodir, requiredlist, force=force, submodules=submodules)
-
+                submodules_update(gitsubmodules, repodir, newrequiredlist, force=force)
 
 def local_mods_output():
     text = """\
