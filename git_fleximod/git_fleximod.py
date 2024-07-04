@@ -215,11 +215,13 @@ def git_toplevelroot(root_dir, logger):
     superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
     return superroot
 
-def submodules_update(gitmodules, root_dir, requiredlist, force):
-    submodules = {}
+def submodules_update(gitmodules, root_dir, requiredlist, force, submodules=None):
+    if not submodules:
+        submodules = {}
     for name in gitmodules.sections():
         if not submodules or name not in submodules:
             submodules[name] = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
+    
         _, needsupdate, localmods, testfails = submodules[name].status()
         if not submodules[name].fxrequired:
             submodules[name].fxrequired = "AlwaysRequired"
@@ -235,24 +237,23 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
             or fxrequired not in requiredlist)
         ):
             if "Optional" in fxrequired and "Optional" not in requiredlist:
-                print(f"Skipping optional component {name:>20}")
                 if fxrequired.startswith("Always"):
                     print(f"Skipping optional component {name:>20}")
                 continue
         optional = "AlwaysOptional" in requiredlist
-        print(f"1 Required list is {requiredlist} optional is {optional}")
+
         if fxrequired in requiredlist:
             submodules[name].update()
             repodir = os.path.join(root_dir, submodules[name].path)
             if os.path.exists(os.path.join(repodir, ".gitmodules")):
                 # recursively handle this checkout
                 print(f"Recursively checking out submodules of {name}")
-                gitmodules = GitModules(submodules[name].logger, confpath=repodir)
+                gitsubmodules = GitModules(submodules[name].logger, confpath=repodir)
                 requiredlist = ["AlwaysRequired"]
                 if optional:
                     requiredlist.append("AlwaysOptional")
-                print(f"2 Required list is {requiredlist}")
-                submodules_update(gitmodules, repodir, requiredlist, force=force)
+
+                submodules_update(gitsubmodules, repodir, requiredlist, force=force, submodules=submodules)
 
 
 def local_mods_output():

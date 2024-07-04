@@ -102,8 +102,17 @@ class Submodule():
                     needsupdate = True
                     return result, needsupdate, localmods, testfails                    
                 rurl = git.git_operation("ls-remote","--get-url").rstrip()
-                atag = git.git_operation("describe", "--tags", "--always").rstrip()
-                ahash =  git.git_operation("rev-list", "HEAD").partition("\n")[0]
+                line = git.git_operation("log", "--pretty=format:\"%h %d").partition('\n')[0]
+                parts = line.split()
+                ahash = parts[0][1:]
+                if len(parts) > 3:
+                    atag = parts[3][:-1]
+                else:
+                    atag = None
+                
+                #print(f"line is {line} ahash is {ahash} atag is {atag}")
+                #                atag = git.git_operation("describe", "--tags", "--always").rstrip()
+                # ahash =  git.git_operation("rev-list", "HEAD").partition("\n")[0]
                     
                 recurse = False
                 if rurl != self.url:
