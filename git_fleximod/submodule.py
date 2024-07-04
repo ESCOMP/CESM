@@ -168,6 +168,12 @@ class Submodule():
         git.git_operation("remote", "add", newremote, self.url)
         return newremote
 
+    def toplevel(self):
+        """
+        Returns True if the submodule is Toplevel (either Required or Optional)
+        """
+        return True if "Top" in self.fxrequired else False
+
     def sparse_checkout(self):
         """
         Performs a sparse checkout of the submodule.
