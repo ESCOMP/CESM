@@ -188,19 +188,17 @@ def submodules_status(gitmodules, root_dir, toplevel=False, depth=0):
     testfails = 0
     localmods = 0
     needsupdate = 0
-    submodules = {}
     wrapper = textwrap.TextWrapper(initial_indent=' '*(depth*10), width=120,subsequent_indent=' '*(depth*20))
     for name in gitmodules.sections():
-        if not submodules or name not in submodules:
-            submodules[name] = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
+        submod = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
             
-        result,n,l,t = submodules[name].status()
+        result,n,l,t = submod.status()
         testfails += t
         localmods += l
         needsupdate += n
-        if toplevel or not submodules[name].toplevel():
+        if toplevel or not submod.toplevel():
             print(wrapper.fill(result))
-        subdir = os.path.join(root_dir, submodules[name].path)
+        subdir = os.path.join(root_dir, submod.path)
         if os.path.exists(os.path.join(subdir, ".gitmodules")):
             submod = GitModules(logger, confpath=subdir)
             t,l,n = submodules_status(submod, subdir, depth=depth+1)
@@ -216,15 +214,13 @@ def git_toplevelroot(root_dir, logger):
     return superroot
 
 def submodules_update(gitmodules, root_dir, requiredlist, force):
-    submodules = {}
     for name in gitmodules.sections():
-        if not submodules or name not in submodules:
-            submodules[name] = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
+        submod = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
     
-        _, needsupdate, localmods, testfails = submodules[name].status()
-        if not submodules[name].fxrequired:
-            submodules[name].fxrequired = "AlwaysRequired"
-        fxrequired = submodules[name].fxrequired    
+        _, needsupdate, localmods, testfails = submod.status()
+        if not submod.fxrequired:
+            submod.fxrequired = "AlwaysRequired"
+        fxrequired = submod.fxrequired    
         allowedvalues = fxrequired_allowed_values()
         assert fxrequired in allowedvalues
 
@@ -242,12 +238,12 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
         optional = "AlwaysOptional" in requiredlist
 
         if fxrequired in requiredlist:
-            submodules[name].update()
-            repodir = os.path.join(root_dir, submodules[name].path)
+            submod.update()
+            repodir = os.path.join(root_dir, submod.path)
             if os.path.exists(os.path.join(repodir, ".gitmodules")):
                 # recursively handle this checkout
                 print(f"Recursively checking out submodules of {name}")
-                gitsubmodules = GitModules(submodules[name].logger, confpath=repodir)
+                gitsubmodules = GitModules(submod.logger, confpath=repodir)
                 newrequiredlist = ["AlwaysRequired"]
                 if optional:
                     newrequiredlist.append("AlwaysOptional")
