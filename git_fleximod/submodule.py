@@ -32,23 +32,28 @@ class Submodule():
         self.fxurl = fxurl
         self.fxtag = fxtag
         self.fxsparse = fxsparse
-        self.fxrequired = fxrequired
+        if fxrequired:
+            self.fxrequired = fxrequired
+        else:
+            self.fxrequired = "AlwaysRequired"
         self.logger = logger
        
     def status(self):
         """
         Checks the status of the submodule and returns 4 parameters:
         - result (str): The status of the submodule.
-        - needsupdate (int): An indicator if the submodule needs to be updated.
-        - localmods (int): An indicator if the submodule has local modifications.
-        - testfails (int): An indicator if the submodule has failed a test, this is used for testing purposes.        
+        - needsupdate (bool): An indicator if the submodule needs to be updated.
+        - localmods (bool): An indicator if the submodule has local modifications.
+        - testfails (bool): An indicator if the submodule has failed a test, this is used for testing purposes.        
         """
         smpath = os.path.join(self.root_dir, self.path)
-        testfails = 0
-        localmods = 0
-        needsupdate = 0
+        testfails = False
+        localmods = False
+        needsupdate = False
         ahash = None
-        optional = " (optional)" if "Optional" in self.fxrequired else None
+        optional = ""
+        if "Optional" in self.fxrequired:
+            optional = " (optional)" 
         required = None
         level = None
         if not os.path.exists(os.path.join(smpath, ".git")):
@@ -71,7 +76,8 @@ class Submodule():
                 if hhash and atag:
                     break
             if self.fxtag and (ahash == hhash or atag == self.fxtag):
-                result = f"e {self.name:>20} not checked out, aligned at tag {self.fxtag}{optional} {level} {required}"
+                result = f"e {self.name:>20} not checked out, aligned at tag {self.fxtag}{optional}"
+                needsupdate = True
             elif self.fxtag:
                 ahash = rootgit.git_operation(
                     "submodule", "status", "{}".format(self.path)
@@ -81,18 +87,19 @@ class Submodule():
                     result = f"e {self.name:>20} not checked out, aligned at hash {ahash}{optional}"
                 else:
                     result = f"e {self.name:>20} not checked out, out of sync at tag {atag}, expected tag is {self.fxtag}{optional}"
-                    testfails += 1
+                    testfails = True
+                needsupdate = True
             else:
                 result = f"e {self.name:>20} has no fxtag defined in .gitmodules{optional}"
-                testfails += 1
+                testfails = True
         else:
             with utils.pushd(smpath):
                 git = GitInterface(smpath, self.logger)
                 remote = git.git_operation("remote").rstrip()
                 if remote == '':
                     result = f"e {self.name:>20} has no associated remote"
-                    testfails += 1
-                    needsupdate += 1
+                    testfails = True
+                    needsupdate = True
                     return result, needsupdate, localmods, testfails                    
                 rurl = git.git_operation("ls-remote","--get-url").rstrip()
                 atag = git.git_operation("describe", "--tags", "--always").rstrip()
@@ -113,15 +120,15 @@ class Submodule():
                     recurse = True
                 elif self.fxtag:
                     result = f"s {self.name:>20} {atag} {ahash} is out of sync with .gitmodules {self.fxtag}"
-                    testfails += 1
-                    needsupdate += 1
+                    testfails = True
+                    needsupdate = True
                 else:
                     result = f"e {self.name:>20} has no fxtag defined in .gitmodules, module at {atag}"
-                    testfails += 1
+                    testfails = True
                     
                 status = git.git_operation("status", "--ignore-submodules", "-uno")
                 if "nothing to commit" not in status:
-                    localmods = localmods + 1
+                    localmods = True
                     result = "M" + textwrap.indent(status, "                      ")
         
         return result, needsupdate, localmods, testfails
@@ -160,13 +167,6 @@ class Submodule():
             newremote = "origin"
         git.git_operation("remote", "add", newremote, self.url)
         return newremote
-
-    def toplevel(self):
-        """
-          Checks if the submodule is a top-level submodule (ie not a submodule of a submodule).
-        """
-        if self.fxrequired:
-            return True if self.fxrequired.startswith("Top") else False
 
     def sparse_checkout(self):
         """
@@ -267,7 +267,7 @@ class Submodule():
         rgit.config_set_value(f'submodule "{self.name}"', "active", "true")
         rgit.config_set_value(f'submodule "{self.name}"', "url", self.url)
 
-    def update(self, optional=None):
+    def update(self):
         """
         Updates the submodule to the latest or specified version.
 
@@ -282,10 +282,8 @@ class Submodule():
         4. If the root `.git` is a file (indicating a submodule or a worktree), additional steps are taken to integrate the submodule properly.
 
         Args:
-            optional (bool): Indicates if the submodule is optional. This parameter is currently unused in the function but can be implemented for conditional updates based on the submodule's importance.
-
+           None
         Note:
-            - The method currently does not use the `optional` parameter, but it is designed for future use where updates can be conditional based on the submodule's importance.
             - SSH URLs are automatically converted to HTTPS to accommodate users without SSH keys.
 
         Returns:
@@ -339,23 +337,15 @@ class Submodule():
                 parent = os.path.dirname(repodir)
                 if not os.path.isdir(parent):
                     os.makedirs(parent)
-                git.git_operation("submodule", "add", "--name", self.name, "--", url, self.path) 
+                git.git_operation("submodule", "add", "--name", self.name, "--", self.url, self.path) 
 
             if not repo_exists or not tmpurl:
                 git.git_operation("submodule", "update", "--init", "--", self.path)
 
-            if self.fxtag and not optional:        
+            if self.fxtag:        
                 smgit = GitInterface(repodir, self.logger)
                 smgit.git_operation("checkout", self.fxtag)
 
-            if os.path.exists(os.path.join(repodir, ".gitmodules")):
-                # recursively handle this checkout
-                print(f"Recursively checking out submodules of {self.name} {optional}")
-                gitmodules = GitModules(self.logger, confpath=repodir)
-                requiredlist = ["AlwaysRequired"]
-                if optional:
-                    requiredlist.append("AlwaysOptional")
-                submodules_checkout(gitmodules, repodir, requiredlist, force=force)
             if not os.path.exists(os.path.join(repodir, ".git")):
                 utils.fatal_error(
                     f"Failed to checkout {self.name} {repo_exists} {tmpurl} {repodir} {self.path}"
@@ -368,10 +358,7 @@ class Submodule():
             with utils.pushd(submoddir):
                 git = GitInterface(submoddir, self.logger)
                 # first make sure the url is correct
-                print("3calling ls-remote")
-
                 newremote = self._add_remote(git)
-
                 tags = git.git_operation("tag", "-l")
                 fxtag = self.fxtag
                 if fxtag and fxtag not in tags:
