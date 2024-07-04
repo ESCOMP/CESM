@@ -6,7 +6,24 @@ from git_fleximod import utils
 from git_fleximod.gitinterface import GitInterface
 
 class Submodule():
+    """
+    Represents a Git submodule with enhanced features for flexible management.
+
+    Attributes:
+        name (str): The name of the submodule.
+        root_dir (str): The root directory of the main project.
+        path (str): The relative path from the root directory to the submodule.
+        url (str): The URL of the submodule repository.
+        fxurl (str): The URL for flexible submodule management (optional).
+        fxtag (str): The tag for flexible submodule management (optional).
+        fxsparse (str): Path to the sparse checkout file relative to the submodule path, see git-sparse-checkout for details (optional).
+        fxrequired (str): Indicates if the submodule is optional or required (optional).
+        logger (logging.Logger): Logger instance for logging (optional).
+    """
     def __init__(self, root_dir, name, path, url, fxtag=None, fxurl=None, fxsparse=None, fxrequired=None, logger=None):
+        """
+        Initializes a new Submodule instance with the provided attributes.
+        """
         self.name = name
         self.root_dir = root_dir
         self.path = path
@@ -19,6 +36,13 @@ class Submodule():
         self.logger = logger
        
     def status(self):
+        """
+        Checks the status of the submodule and returns 4 parameters:
+        - result (str): The status of the submodule.
+        - needsupdate (int): An indicator if the submodule needs to be updated.
+        - localmods (int): An indicator if the submodule has local modifications.
+        - testfails (int): An indicator if the submodule has failed a test, this is used for testing purposes.        
+        """
         smpath = os.path.join(self.root_dir, self.path)
         testfails = 0
         localmods = 0
@@ -104,6 +128,19 @@ class Submodule():
 
     
     def _add_remote(self, git):
+        """
+        Adds a new remote to the submodule if it does not already exist.
+
+        This method checks the existing remotes of the submodule. If the submodule's URL is not already listed as a remote,
+        it attempts to add a new remote. The name for the new remote is generated dynamically to avoid conflicts. If no
+        remotes exist, it defaults to naming the new remote 'origin'.
+
+        Args:
+            git (GitInterface): An instance of GitInterface to perform git operations.
+
+        Returns:
+            str: The name of the new remote if added, or the name of the existing remote that matches the submodule's URL.
+        """ 
         remotes = git.git_operation("remote", "-v").splitlines()
         upstream = None
         if remotes:
@@ -125,20 +162,27 @@ class Submodule():
         return newremote
 
     def toplevel(self):
+        """
+          Checks if the submodule is a top-level submodule (ie not a submodule of a submodule).
+        """
         if self.fxrequired:
             return True if self.fxrequired.startswith("Top") else False
 
     def sparse_checkout(self):
         """
-            This function performs a sparse checkout of a git submodule.  It does so by first creating the .git/info/sparse-checkout fileq
-            in the submodule and then checking out the desired tag.  If the submodule is already checked out, it will not be checked out again.
-            Creating the sparse-checkout file first prevents the entire submodule from being checked out and then removed.  This is important
-            because the submodule may have a large number of files and checking out the entire submodule and then removing it would be time
-            and disk space consuming.
+        Performs a sparse checkout of the submodule.
 
-            Returns:
+        This method optimizes the checkout process by only checking out files specified in the submodule's sparse-checkout configuration,
+        rather than the entire submodule content. It achieves this by first ensuring the `.git/info/sparse-checkout` file is created and
+        configured in the submodule's directory. Then, it proceeds to checkout the desired tag. If the submodule has already been checked out,
+        this method will not perform the checkout again.
+
+        This approach is particularly beneficial for submodules with a large number of files, as it significantly reduces the time and disk space
+        required for the checkout process by avoiding the unnecessary checkout and subsequent removal of unneeded files.
+
+        Returns:
             None
-        """
+        """ 
         self.logger.info("Called sparse_checkout for {}".format(self.name))
         rgit = GitInterface(self.root_dir, self.logger)
         superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
@@ -224,7 +268,29 @@ class Submodule():
         rgit.config_set_value(f'submodule "{self.name}"', "url", self.url)
 
     def update(self, optional=None):
-            # function implementation...
+        """
+        Updates the submodule to the latest or specified version.
+
+        This method handles the update process of the submodule, including checking out the submodule into the specified path,
+        handling sparse checkouts if configured, and updating the submodule's URL if necessary. It supports both SSH and HTTPS URLs,
+        automatically converting SSH URLs to HTTPS to avoid issues for users without SSH keys.
+
+        The update process involves the following steps:
+        1. If the submodule is configured for sparse checkout, it performs a sparse checkout.
+        2. If the submodule is not already checked out, it clones the submodule using the provided URL.
+        3. If a specific tag or hash is provided, it checks out that tag; otherwise, it checks out the latest version.
+        4. If the root `.git` is a file (indicating a submodule or a worktree), additional steps are taken to integrate the submodule properly.
+
+        Args:
+            optional (bool): Indicates if the submodule is optional. This parameter is currently unused in the function but can be implemented for conditional updates based on the submodule's importance.
+
+        Note:
+            - The method currently does not use the `optional` parameter, but it is designed for future use where updates can be conditional based on the submodule's importance.
+            - SSH URLs are automatically converted to HTTPS to accommodate users without SSH keys.
+
+        Returns:
+            None
+        """
         git = GitInterface(self.root_dir, self.logger)
         repodir = os.path.join(self.root_dir, self.path)
         self.logger.info("Checkout {} into {}/{}".format(self.name, self.root_dir, self.path))
