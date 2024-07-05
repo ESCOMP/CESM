@@ -26,33 +26,32 @@
 #              repository branches.
 #
 
-
 [submodule "ccs_config"]
 	path = ccs_config
 	url = https://github.com/ESMCI/ccs_config_cesm.git
 	fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm0.0.109
+        fxtag = ccs_config_cesm1.0.0
         fxrequired = ToplevelRequired
         
+[submodule "cime"]
+	path = cime
+	url = https://github.com/ESMCI/cime
+	fxDONOTUSEurl = https://github.com/ESMCI/cime
+        fxtag = cime6.1.0
+        fxrequired = ToplevelRequired
+
+[submodule "fms"]
+	path = libraries/FMS
+	url = https://github.com/ESCOMP/FMS_interface
+	fxDONOTUSEurl = https://github.com/ESCOMP/FMS_interface
+        fxrequired = ToplevelRequired
+        fxtag = fi_240516
+
 [submodule "share"]
 	path = share
 	url = https://github.com/ESCOMP/CESM_share
 	fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
         fxtag = share1.1.2
-        fxrequired = ToplevelRequired
-
-[submodule "cime"]
-	path = cime
-	url = https://github.com/ESMCI/cime
-	fxDONOTUSEurl = https://github.com/ESMCI/cime
-        fxtag = cime6.0.246
-        fxrequired = ToplevelRequired
-
-[submodule "mpi-serial"]
-	path = libraries/mpi-serial
-	url = https://github.com/ESMCI/mpi-serial
-	fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial
-        fxtag = MPIserial_2.5.0
         fxrequired = ToplevelRequired
 
 [submodule "cam"]
@@ -62,54 +61,33 @@
         fxtag = cam6_4_001
         fxrequired = ToplevelRequired
 
-[submodule "ww3"]
-	path = components/ww3
-	url = https://github.com/ESCOMP/WW3_interface
-	fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
-        fxtag = ww3i_0.0.2
+[submodule "clm"]
+	path = components/clm
+	url = https://github.com/ESCOMP/CTSM
+	fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
-                
-[submodule "rtm"]
-	path = components/rtm
-	url = https://github.com/ESCOMP/RTM
-	fxDONOTUSEurl = https://github.com/ESCOMP/RTM
-        fxrequired = ToplevelRequired
-        fxtag = rtm1_0_80
+        fxtag = ctsm5.2.007
 
-[submodule "pysect"]
-	path = tools/statistical_ensemble_test/pyCECT
-	url = https://github.com/NCAR/PyCECT
-	fxDONOTUSEurl = https://github.com/NCAR/PyCECT
+[submodule "cice"]
+	path = components/cice
+	url = https://github.com/ESCOMP/CESM_CICE
+	fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
         fxrequired = ToplevelRequired
-        fxtag = 3.2.2
+        fxtag = cesm_cice6_5_0_9
 
-[submodule "mosart"]
-	path = components/mosart
-	url = https://github.com/ESCOMP/MOSART
-	fxDONOTUSEurl = https://github.com/ESCOMP/MOSART
+[submodule "mom"]
+	path = components/mom
+	url = https://github.com/ESCOMP/MOM_interface
+	fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mosart1.1.02
+        fxtag = mi_240522
 
-[submodule "mizuroute"]
-	path = components/mizuroute
-	url = https://github.com/ESCOMP/mizuRoute
-	fxDONOTUSEurl = https://github.com/ESCOMP/mizuRoute
+[submodule "cism"]
+	path = components/cism
+	url = https://github.com/ESCOMP/cism-wrapper.git
+	fxDONOTUSEurl = https://github.com/ESCOMP/cism-wrapper.git
+        fxtag = cismwrap_2_2_002
         fxrequired = ToplevelRequired
-        fxtag = cesm-coupling.n02_v2.1.3
-
-[submodule "fms"]
-	path = libraries/FMS
-	url = https://github.com/ESCOMP/FMS_interface
-	fxDONOTUSEurl = https://github.com/ESCOMP/FMS_interface
-        fxrequired = ToplevelRequired
-        fxtag = fi_240516
-        
-[submodule "parallelio"]
-	path = libraries/parallelio
-	url = https://github.com/NCAR/ParallelIO
-	fxDONOTUSEurl = https://github.com/NCAR/ParallelIO
-        fxrequired = ToplevelRequired
-        fxtag = pio2_6_2
 
 [submodule "cdeps"]
 	path = components/cdeps
@@ -125,30 +103,56 @@
         fxrequired = ToplevelRequired
         fxtag = cmeps1.0.0
 
-[submodule "cice"]
-	path = components/cice
-	url = https://github.com/ESCOMP/CESM_CICE
-	fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
+[submodule "rtm"]
+	path = components/rtm
+	url = https://github.com/ESCOMP/RTM
+	fxDONOTUSEurl = https://github.com/ESCOMP/RTM
         fxrequired = ToplevelRequired
-        fxtag = cesm_cice6_5_0_9
+        fxtag = rtm1_0_80
 
-[submodule "cism"]
-	path = components/cism
-	url = https://github.com/ESCOMP/cism-wrapper.git
-	fxDONOTUSEurl = https://github.com/ESCOMP/cism-wrapper.git
-        fxtag = cismwrap_2_2_002
+[submodule "ww3"]
+	path = components/ww3
+	url = https://github.com/ESCOMP/WW3_interface
+	fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
+        fxtag = ww3i_0.0.2
+        fxrequired = ToplevelRequired
+                
+[submodule "mizuroute"]
+	path = components/mizuroute
+	url = https://github.com/ESCOMP/mizuRoute
+	fxDONOTUSEurl = https://github.com/ESCOMP/mizuRoute
+        fxrequired = ToplevelRequired
+        fxtag = cesm-coupling.n02_v2.1.3
+
+[submodule "mosart"]
+	path = components/mosart
+	url = https://github.com/ESCOMP/MOSART
+	fxDONOTUSEurl = https://github.com/ESCOMP/MOSART
+        fxrequired = ToplevelRequired
+        fxtag = mosart1.1.02
+
+[submodule "parallelio"]
+	path = libraries/parallelio
+	url = https://github.com/NCAR/ParallelIO
+	fxDONOTUSEurl = https://github.com/NCAR/ParallelIO
+        fxrequired = ToplevelRequired
+        fxtag = pio2_6_2
+
+[submodule "mpi-serial"]
+	path = libraries/mpi-serial
+	url = https://github.com/ESMCI/mpi-serial
+	fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial
+        fxtag = MPIserial_2.5.0
         fxrequired = ToplevelRequired
 
-[submodule "clm"]
-	path = components/clm
-	url = https://github.com/ESCOMP/CTSM
-	fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
+[submodule "pysect"]
+	path = tools/statistical_ensemble_test/pyCECT
+	url = https://github.com/NCAR/PyCECT
+	fxDONOTUSEurl = https://github.com/NCAR/PyCECT
         fxrequired = ToplevelRequired
-        fxtag = ctsm5.2.008
+        fxtag = 3.2.2
 
-[submodule "mom"]
-	path = components/mom
-	url = https://github.com/ESCOMP/MOM_interface
-	fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
-        fxrequired = ToplevelRequired
-        fxtag = mi_240522
+
+        
+
+
