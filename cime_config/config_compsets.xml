@@ -58,6 +58,27 @@
     <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
+  <!-- the following are provided to allow a bit of continuity and should be removed in a later tag -->
+  <compset>
+    <alias>BLT1850</alias>
+    <lname>1850_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BLTHIST</alias>
+    <lname>HIST_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BMT1850</alias>
+    <lname>1850_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BMTHIST</alias>
+    <lname>HIST_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+  </compset>
+
 
   <!-- Prognostic wave -->
 
@@ -78,22 +99,15 @@
     <lname>1850_CAM60_CLM50%SP_CICE_DOCN%SOM_MOSART_SGLC_SWAV_TEST</lname>
   </compset>
 
-  <!-- fully coupled MOM6 runs -->
-  <compset>
-    <alias>B1850</alias>
-    <lname>1850_CAM60_CLM50%BGC-CROP_CICE_MOM6_MOSART_CISM2%GRIS-NOEVOLVE_SWAV_BGC%BDRD</lname>
-  </compset>
-
-
   <entries>
     <entry id="RUN_STARTDATE">
       <values>
-	<value compset="1850_"     >0001-01-01</value>
-	<value compset="2000_"     >0001-01-01</value>
-	<value compset="HIST_"     >1850-01-01</value>
-	<value compset="5505_"     >1955-01-01</value>
-	<value compset="RCP[2468]_">2005-01-01</value>
-	<value compset="2013_"     >2013-01-01</value>
+	<value compset="1850[CE]?_"     >0001-01-01</value>
+	<value compset="2000[CE]?_"     >0001-01-01</value>
+	<value compset="HIST[CE]?_"     >1850-01-01</value>
+	<value compset="5505[CE]?_"     >1955-01-01</value>
+	<value compset="RCP[2468][CE]?_">2005-01-01</value>
+	<value compset="2013[CE]?_"     >2013-01-01</value>
       </values>
     </entry>
   </entries>
