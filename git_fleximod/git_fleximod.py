@@ -93,7 +93,8 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     """
     logger.info("Called sparse_checkout for {}".format(name))
     rgit = GitInterface(root_dir, logger)
-    superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
+    superroot = git_toplevelroot(root_dir, logger)
+
     if superroot:
         gitroot = superroot.strip()
     else:
@@ -178,6 +179,7 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
 def init_submodule_from_gitmodules(gitmodules, name, root_dir, logger):
     path = gitmodules.get(name, "path")
     url = gitmodules.get(name, "url")
+    assert path and url, f"Malformed .gitmodules file {path} {url}"
     tag = gitmodules.get(name, "fxtag")
     fxurl = gitmodules.get(name, "fxDONOTUSEurl")
     fxsparse = gitmodules.get(name, "fxsparse")
