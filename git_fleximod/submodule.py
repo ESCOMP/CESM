@@ -26,8 +26,7 @@ class Submodule():
         """
         self.name = name
         self.root_dir = root_dir
-        self.path = path
-        url = url.replace("git@github.com:", "https://github.com/")
+        self.path = path 
         self.url = url
         self.fxurl = fxurl
         self.fxtag = fxtag
@@ -46,6 +45,7 @@ class Submodule():
         - localmods (bool): An indicator if the submodule has local modifications.
         - testfails (bool): An indicator if the submodule has failed a test, this is used for testing purposes.        
         """
+
         smpath = os.path.join(self.root_dir, self.path)
         testfails = False
         localmods = False
@@ -162,8 +162,7 @@ class Submodule():
         if remotes:
             upstream = git.git_operation("ls-remote", "--get-url").rstrip()
             newremote = "newremote.00"
-
-            line = next((s for s in remotes if self.url in s), None)
+            line = next((s for s in remotes if self.url or tmpurl in s), None)
             if line:
                 newremote = line.split()[0]
                 return newremote
@@ -281,6 +280,7 @@ class Submodule():
         print(f"Successfully checked out {self.name:>20} at {self.fxtag}")
         rgit.config_set_value(f'submodule "{self.name}"', "active", "true")
         rgit.config_set_value(f'submodule "{self.name}"', "url", self.url)
+        rgit.config_set_value(f'submodule "{self.name}"', "path", self.path)
 
     def update(self):
         """
@@ -308,11 +308,11 @@ class Submodule():
         repodir = os.path.join(self.root_dir, self.path)
         self.logger.info("Checkout {} into {}/{}".format(self.name, self.root_dir, self.path))
         # if url is provided update to the new url
-        tmpurl = None
+        tag = None
         repo_exists = False
-        #    if os.path.exists(os.path.join(repodir, ".git")):
-        #        self.logger.info("Submodule {} already checked out".format(self.name))
-        #        repo_exists = True
+        if os.path.exists(os.path.join(repodir, ".git")):
+            self.logger.info("Submodule {} already checked out".format(self.name))
+            repo_exists = True
         # Look for a .gitmodules file in the newly checkedout repo
         if self.fxsparse:
             print(f"Sparse checkout {self.name} fxsparse {self.fxsparse}")
@@ -324,9 +324,7 @@ class Submodule():
                 # opened with a GitModules object we don't need to worry about restoring the file here
                 # it will be done by the GitModules class
                 if self.url.startswith("git@"):
-                    tmpurl = self.url
-                    url = self.url.replace("git@github.com:", "https://github.com/")
-                    git.git_operation("clone", url, self.path)
+                    git.git_operation("clone", self.url, self.path)
                     smgit = GitInterface(repodir, self.logger)
                     if not tag:
                         tag = smgit.git_operation("describe", "--tags", "--always").rstrip()
@@ -347,14 +345,14 @@ class Submodule():
                     
                     with open(os.path.join(repodir, ".git"), "w") as f:
                         f.write("gitdir: " + os.path.relpath(newpath, start=repodir))
-                
+
             if not os.path.exists(repodir):
                 parent = os.path.dirname(repodir)
                 if not os.path.isdir(parent):
                     os.makedirs(parent)
                 git.git_operation("submodule", "add", "--name", self.name, "--", self.url, self.path) 
 
-            if not repo_exists or not tmpurl:
+            if not repo_exists:
                 git.git_operation("submodule", "update", "--init", "--", self.path)
 
             if self.fxtag:        
@@ -363,11 +361,10 @@ class Submodule():
 
             if not os.path.exists(os.path.join(repodir, ".git")):
                 utils.fatal_error(
-                    f"Failed to checkout {self.name} {repo_exists} {tmpurl} {repodir} {self.path}"
+                    f"Failed to checkout {self.name} {repo_exists} {repodir} {self.path}"
                 )
                 
-            if tmpurl:
-                print(git.git_operation("restore", ".gitmodules"))
+
         if os.path.exists(os.path.join(self.path, ".git")):
             submoddir = os.path.join(self.root_dir, self.path)
             with utils.pushd(submoddir):
