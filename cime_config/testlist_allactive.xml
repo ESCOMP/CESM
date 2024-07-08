@@ -11,13 +11,6 @@
   <test name="SMS_Ld2" grid="ne30pg3_t232" compset="B1850C_LSC" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="intel" category="aux_cime_baselines"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 00:30:00 </option>
-    </options>
-  </test>
-  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="B1850C_LSC" testmods="allactive/defaultio">
-    <machines>
       <machine name="derecho" compiler="gnu" category="prealpha"/>
     </machines>
     <options>
@@ -32,7 +25,16 @@
       <option name="wallclock"> 00:30:00 </option>
     </options>
   </test>
-  <test name="MCC" grid="ne30pg3_t232" compset="B1850C_LSC" testmods="allactive/defaultio">
+  <test name="SMS_D_Ld2" grid="ne30pg3_t232" compset="B1850C_MSC" testmods="allactive/defaultio">
+    <machines>
+      <machine name="derecho" compiler="intel" category="prealpha"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+    </options>
+  </test>
+  <!-- MCC tests do not work because FMS fails at initialization of MOM -->
+  <test name="MCC" grid="ne30pg3_t232" compset="B1850C_MSC" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
     </machines>
@@ -82,6 +84,7 @@
       <option name="wallclock"> 00:30:00 </option>
     </options>
   </test>
+  <!-- PET tests do not work because of issues with openmp in the se dycore -->
   <test name="PET_PM" grid="ne30pg3_t232" compset="B1850C_LSC" testmods="allactive/defaultiomi">
     <machines>
       <machine name="derecho" compiler="gnu" category="prealpha"/>
@@ -94,13 +97,14 @@
   <test name="PFS" grid="ne30pg3_t232" compset="B1850C_MSC" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
+      <machine name="derecho" compiler="gnu"   category="prealpha"/>
       <machine name="derecho" compiler="intel" category="prebeta"/>
     </machines>
     <options>
       <option name="wallclock"> 00:40:00 </option>
     </options>
   </test>
-  <test name="PFS" grid="f09_t232" compset="B1850C_LSC" testmods="allactive/maxthroughputb">
+  <test name="PFS" grid="ne30pg3_t232" compset="B1850C_LSC" testmods="allactive/maxthroughputb">
     <machines>
       <machine name="derecho" compiler="intel" category="aux_perf"/>
     </machines>

@@ -45,17 +45,17 @@
 
   <compset>
     <alias>BHISTC_LSC</alias>
-    <lname>HIST_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>HISTC_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <compset>
     <alias>B1850C_MSC</alias>
-    <lname>1850_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <compset>
     <alias>BHISTC_MSC</alias>
-    <lname>HIST_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
 
