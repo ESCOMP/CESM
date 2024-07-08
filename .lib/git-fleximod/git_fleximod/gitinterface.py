@@ -49,8 +49,14 @@ class GitInterface:
 
     # pylint: disable=unused-argument
     def git_operation(self, operation, *args, **kwargs):
-        command = self._git_command(operation, *args)
-        self.logger.info(command)
+        newargs = []
+        for a in args:
+            # Do not use ssh interface
+            if isinstance(a, str):
+                a = a.replace("git@github.com:", "https://github.com/")
+            newargs.append(a)
+
+        command = self._git_command(operation, *newargs)
         if isinstance(command, list):
             try:
                 return utils.execute_subprocess(command, output_to_caller=True)
