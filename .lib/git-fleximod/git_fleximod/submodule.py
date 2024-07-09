@@ -1,6 +1,7 @@
 import os
 import textwrap
 import shutil
+import string
 from configparser import NoOptionError
 from git_fleximod import utils
 from git_fleximod.gitinterface import GitInterface
@@ -162,7 +163,8 @@ class Submodule():
         if remotes:
             upstream = git.git_operation("ls-remote", "--get-url").rstrip()
             newremote = "newremote.00"
-            line = next((s for s in remotes if self.url or tmpurl in s), None)
+            tmpurl = self.url.replace("git@github.com:", "https://github.com/")
+            line = next((s for s in remotes if self.url in s or tmpurl in s), None)
             if line:
                 newremote = line.split()[0]
                 return newremote
@@ -357,6 +359,13 @@ class Submodule():
 
             if self.fxtag:        
                 smgit = GitInterface(repodir, self.logger)
+                newremote = self._add_remote(smgit)
+                # Trying to distingush a tag from a hash
+                allowed = set(string.digits + 'abcdef') 
+                if not set(self.fxtag) <= allowed:
+                    # This is a tag
+                    tag = f"refs/tags/{self.fxtag}:refs/tags/{self.fxtag}"
+                    smgit.git_operation("fetch", newremote, tag)
                 smgit.git_operation("checkout", self.fxtag)
 
             if not os.path.exists(os.path.join(repodir, ".git")):
