@@ -31,7 +31,7 @@
 	path = ccs_config
 	url = https://github.com/ESMCI/ccs_config_cesm.git
 	fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.1.0
+        fxtag = ccs_config_cesm1.0.0
         fxrequired = ToplevelRequired
         
 [submodule "share"]
