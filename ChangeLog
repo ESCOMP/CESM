@@ -36,14 +36,24 @@ ccs_config
     James Edwards 2024-06-28 - ccs_config_cesm1.0.0 - ccs_config (cesm3_0_alpha02a)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config1.1.0
 
-    fix cmake for github workflow, remove mapping files that are no longer used.
+    ccs_config_cesm1.0.0:   Fix cmake for github workflow, remove mapping files that are no longer used.
+    ccs_config_cesm0.0.113: Fix cmake for github workflow 
+    ccs_config_cesm0.0.112: Add Cidadinho test site
+    ccs_config_cesm0.0.111: Removal of mapping files that are no longer needed for cism->mosart
+    ccs_config_cesm0.0.110: Add a PFUNIT for github workflow of cesm_share
+    ccs_config_cesm0.0.109: Making additions to Depends.nvhpc to enable GPU compilation of clubb code.
 
 
 cdeps
     James Edwards 2024-06-28 - cdeps1.0.43 - components/cdeps (cesm3_0_alpha02a)
     https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.43
 
-    Add dglc
+    cdeps1.0.43: Add dglc
+    cdeps1.0.42: Fix initialization of dglc import/export pointers
+    cdeps1.0.41: Add changes to exchange between SOM and WW3DEV.
+    cdeps1.0.40: Updates the fox build since the directory now always exists
+    cdeps1.0.39: Allow input of stream on unstructured mesh (e.g. mpas)
+    cdeps1.0.38: Update stream_definition_datm.xml to include longer time period in files
 
 
 cesm
@@ -57,7 +67,13 @@ cime
     James Edwards 2024-06-26 - cime6.1.0 - cime (cesm3_0_alpha02a)
     https://github.com/ESMCI/cime/tags/cime5.7.0
 
-    Update Makefile, remove mct from build.
+    cime6.1.0: Update Makefile, remove mct from build.
+    cime6.0.251: Remove mct for cesm
+    cime6.0.250: Remove esmf wrf timemanager
+    cime6.0.249: Remove broken unsupported tool
+    cime6.0.248: The xmlchange tool should not raise an exception when a diff is detected.
+    cime6.0.247: More robust approach to waiting for many threads
+    cime6.0.246: Remove reference to cice5 and ww3dev, no longer required
 
 
 cism
@@ -109,7 +125,21 @@ cmeps
     James Edwards 2024-06-26 - cmeps1.0.0 - src/drivers/nuopc/ (cesm3_0_alpha02a)
     https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.0
 
-    Add support for glc->rtm runoff depends on mosart and cism tags.
+    cmeps1.0.0:   Add support for glc->rtm runoff depends on mosart and cism tags.
+    cmeps0.14.77: Bug fix primarily for usf testing
+    cmeps0.14.76: New fix for add_gusts
+    cmeps0.14.75: Bug fix for wav2ocn_map 
+    cmeps0.14.74: Add trigrid capability - ability to run atm and lnd on separate grids
+    cmeps0.14.73: Add shr_dust_emis_mod to handle options for dust emissions between CTSM and CAM
+    cmeps0.14.72: Add bilinr_nostd for wav2ice coupling
+    cmeps0.14.71: Remove negative runoff
+    cmeps0.14.70: mct_init call is no longer needed
+    cmeps0.14.69: Fix aoflux for UFS
+    cmeps0.14.68: Implementation of glc->ocn coupling via going through mosart
+    cmeps0.14.67: Change CAM%DEV to CAM70 in buildnml
+    cmeps0.14.66: Replace manage-externals with git-fleximod
+    cmeps0.14.65: Revert "test github testing in cime PR #4631"
+    cmeps0.14.64: Test github testing in cime PR #4631
 
 
 MCT
@@ -163,7 +193,10 @@ share
     James Edwards 2024-06-26 - share1.1.2 - share (cesm3_0_alpha02a)
     https://github.com/ESCOMP/CESM_share/tags/share1.1.1
 
-    Remove mct and other unused code, add nuopc_shr_methods add github action for unit testing
+    share1.1.2: Remove mct and other unused code, add nuopc_shr_methods add github action for unit testing
+    share1.1.1: Add m_MergeSorts from mpeu for sort routines used in cam
+    share1.1.0: Add GitHub pfunit tests
+     
 
 ==============================================================
 Tag name: cesm3_0_beta01
