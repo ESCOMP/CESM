@@ -66,7 +66,7 @@
 	url = https://github.com/ESCOMP/CTSM
 	fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
-        fxtag = ctsm5.2.007
+        fxtag = ctsm5.2.009
 
 [submodule "cice"]
 	path = components/cice
@@ -101,7 +101,7 @@
 	url = https://github.com/ESCOMP/CMEPS.git
 	fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-        fxtag = cmeps1.0.1
+        fxtag = cmeps1.0.2
 
 [submodule "rtm"]
 	path = components/rtm
@@ -151,8 +151,4 @@
 	fxDONOTUSEurl = https://github.com/NCAR/PyCECT
         fxrequired = ToplevelRequired
         fxtag = 3.2.2
-
-
-        
-
 
