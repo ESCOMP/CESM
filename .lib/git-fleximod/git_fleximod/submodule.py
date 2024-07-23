@@ -92,7 +92,7 @@ class Submodule():
                 needsupdate = True
             else:
                 result = f"e {self.name:>20} has no fxtag defined in .gitmodules{optional}"
-                testfails = True
+                testfails = False
         else:
             with utils.pushd(smpath):
                 git = GitInterface(smpath, self.logger)
@@ -122,9 +122,11 @@ class Submodule():
                 if self.fxtag and atag == self.fxtag:
                     result = f"  {self.name:>20} at tag {self.fxtag}"
                     recurse = True
+                    testfails = False
                 elif self.fxtag and ahash[: len(self.fxtag)] == self.fxtag:
                     result = f"  {self.name:>20} at hash {ahash}"
                     recurse = True
+                    testfails = False
                 elif atag == ahash:
                     result = f"  {self.name:>20} at hash {ahash}"
                     recurse = True
@@ -133,14 +135,17 @@ class Submodule():
                     testfails = True
                     needsupdate = True
                 else:
-                    result = f"e {self.name:>20} has no fxtag defined in .gitmodules, module at {atag}"
-                    testfails = True
+                    if atag:
+                        result = f"e {self.name:>20} has no fxtag defined in .gitmodules, module at {atag}"
+                    else:
+                        result = f"e {self.name:>20} has no fxtag defined in .gitmodules, module at {ahash}"
+                    testfails = False
                     
                 status = git.git_operation("status", "--ignore-submodules", "-uno")
                 if "nothing to commit" not in status:
                     localmods = True
                     result = "M" + textwrap.indent(status, "                      ")
-        
+#        print(f"result {result} needsupdate {needsupdate} localmods {localmods} testfails {testfails}")
         return result, needsupdate, localmods, testfails
 
     
