@@ -30,7 +30,7 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.0
+        fxtag = ccs_config_cesm1.0.1
         fxrequired = ToplevelRequired
         
 [submodule "cime"]
@@ -58,7 +58,7 @@
         path = components/cam
         url = https://www.github.com/ESCOMP/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_4_014
+        fxtag = cam6_4_015
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
@@ -101,7 +101,7 @@
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-        fxtag = cmeps1.0.2
+        fxtag = cmeps1.0.5
 
 [submodule "rtm"]
         path = components/rtm
