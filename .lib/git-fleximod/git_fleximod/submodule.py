@@ -103,7 +103,7 @@ class Submodule():
                     needsupdate = True
                     return result, needsupdate, localmods, testfails                    
                 rurl = git.git_operation("ls-remote","--get-url").rstrip()
-                line = git.git_operation("log", "--pretty=format:\"%h %d").partition('\n')[0]
+                line = git.git_operation("log", "--pretty=format:\"%h %d\"").partition('\n')[0]
                 parts = line.split()
                 ahash = parts[0][1:]
                 atag = None
@@ -112,12 +112,14 @@ class Submodule():
                     while idx < len(parts)-1:
                         idx = idx+1
                         if parts[idx] == 'tag:':
-                            atag = parts[idx+1][:-1]
+                            atag = parts[idx+1]
+                            while atag.endswith(')') or atag.endswith(',') or atag.endswith("\""):
+                                atag = atag[:-1]
                             if atag == self.fxtag:
                                 break
 
                 
-                #print(f"line is {line} ahash is {ahash} atag is {atag}")
+                #print(f"line is {line} ahash is {ahash} atag is {atag} {parts}")
                 #                atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 # ahash =  git.git_operation("rev-list", "HEAD").partition("\n")[0]
                     
@@ -129,7 +131,7 @@ class Submodule():
                     result = f"  {self.name:>20} at tag {self.fxtag}"
                     recurse = True
                     testfails = False
-                elif self.fxtag and ahash[: len(self.fxtag)] == self.fxtag:
+                elif self.fxtag and (ahash[: len(self.fxtag)] == self.fxtag or (self.fxtag.find(ahash)==0)):
                     result = f"  {self.name:>20} at hash {ahash}"
                     recurse = True
                     testfails = False
