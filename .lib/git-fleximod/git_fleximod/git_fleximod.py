@@ -200,15 +200,15 @@ def submodules_status(gitmodules, root_dir, toplevel=False, depth=0):
             testfails += t
             localmods += l
             needsupdate += n
-
         subdir = os.path.join(root_dir, submod.path)
         if os.path.exists(os.path.join(subdir, ".gitmodules")):
             gsubmod = GitModules(logger, confpath=subdir)
             t,l,n = submodules_status(gsubmod, subdir, depth=depth+1)
-            testfails += t
-            localmods += l
-            needsupdate += n
-
+            if toplevel or not submod.toplevel():
+                testfails += t
+                localmods += l
+                needsupdate += n
+            
     return testfails, localmods, needsupdate
 
 def git_toplevelroot(root_dir, logger):

@@ -106,10 +106,16 @@ class Submodule():
                 line = git.git_operation("log", "--pretty=format:\"%h %d").partition('\n')[0]
                 parts = line.split()
                 ahash = parts[0][1:]
+                atag = None
                 if len(parts) > 3:
-                    atag = parts[3][:-1]
-                else:
-                    atag = None
+                    idx = 0
+                    while idx < len(parts)-1:
+                        idx = idx+1
+                        if parts[idx] == 'tag:':
+                            atag = parts[idx+1][:-1]
+                            if atag == self.fxtag:
+                                break
+
                 
                 #print(f"line is {line} ahash is {ahash} atag is {atag}")
                 #                atag = git.git_operation("describe", "--tags", "--always").rstrip()
