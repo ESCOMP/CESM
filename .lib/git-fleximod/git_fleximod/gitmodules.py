@@ -1,4 +1,4 @@
-import shutil
+import shutil, os
 from pathlib import Path
 from configparser import RawConfigParser, ConfigParser
 from .lstripreader import LstripReader

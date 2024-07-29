@@ -49,8 +49,14 @@ class GitInterface:
 
     # pylint: disable=unused-argument
     def git_operation(self, operation, *args, **kwargs):
-        command = self._git_command(operation, *args)
-        self.logger.info(command)
+        newargs = []
+        for a in args:
+            # Do not use ssh interface
+            if isinstance(a, str):
+                a = a.replace("git@github.com:", "https://github.com/")
+            newargs.append(a)
+
+        command = self._git_command(operation, *newargs)
         if isinstance(command, list):
             try:
                 return utils.execute_subprocess(command, output_to_caller=True)
@@ -62,7 +68,11 @@ class GitInterface:
     def config_get_value(self, section, name):
         if self._use_module:
             config = self.repo.config_reader()
-            return config.get_value(section, name)
+            try:
+                val = config.get_value(section, name)
+            except:
+                val = None
+            return val
         else:
             cmd = ("git", "-C", str(self.repo_path), "config", "--get", f"{section}.{name}")
             output = utils.execute_subprocess(cmd, output_to_caller=True)

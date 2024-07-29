@@ -70,7 +70,7 @@ The CESM2 components can be summarized as follows:
 
 .. csv-table:: "CESM2 model components"
    :header: "Component Generic Type", "Component Generic Name", "Component Name", "Component Type", "Description"
-   :widths: 12, 10, 10, 10, 60
+   :widths: 12, 10, 10, 8, 60
 
    "atmosphere","atm","cam", "active","The `Community Atmosphere Model (CAM) <http://www.cesm.ucar.edu/models/cesm2/atmosphere/>`_ is a global atmospheric general circulation model developed from the NCAR CCM3."                                                                                                                                      
    "atmosphere","atm","datm", "data", "The `data atmosphere <http://esmci.github.io/cime/versions/master/html/data_models/data-atm.html>`_ component is a pure data component that reads in atmospheric forcing data"

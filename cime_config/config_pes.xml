@@ -42,16 +42,49 @@
 
   <grid name="a%ne30np4.pg3_l%ne30np4.pg3_oi%tx2_3v2">
     <mach name="derecho">
+      <pes pesize="M" compset="CAM.*%MT.*MOM6">
+	<comment></comment>
+	<ntasks>
+	  <ntasks_atm>5400</ntasks_atm>
+	  <ntasks_lnd>1816</ntasks_lnd>
+	  <ntasks_rof>1816</ntasks_rof>
+	  <ntasks_ice>3584</ntasks_ice>
+	  <ntasks_ocn>408</ntasks_ocn>
+	  <ntasks_glc>4</ntasks_glc>
+	  <ntasks_wav>1</ntasks_wav>
+	  <ntasks_cpl>5400</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>3584</rootpe_lnd>
+	  <rootpe_rof>3584</rootpe_rof>
+	  <rootpe_ice>0</rootpe_ice>
+	  <rootpe_ocn>5400</rootpe_ocn>
+	  <rootpe_glc>0</rootpe_glc>
+	  <rootpe_wav>0</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
       <pes pesize="XL" compset="CAM.*%LT.*MOM6">
 	<comment>20 ypd/ 7100 pe-hrs/simyr expected</comment>
 	<ntasks>
 	  <ntasks_atm>5400</ntasks_atm>
-	  <ntasks_lnd>939</ntasks_lnd>
-	  <ntasks_rof>64</ntasks_rof>
-	  <ntasks_ice>4397</ntasks_ice>
-	  <ntasks_ocn>488</ntasks_ocn>
-	  <ntasks_glc>64</ntasks_glc>
-	  <ntasks_wav>64</ntasks_wav>
+	  <ntasks_lnd>1792</ntasks_lnd>
+	  <ntasks_rof>1792</ntasks_rof>
+	  <ntasks_ice>3608</ntasks_ice>
+	  <ntasks_ocn>612</ntasks_ocn>
+	  <ntasks_glc>4</ntasks_glc>
+	  <ntasks_wav>1</ntasks_wav>
 	  <ntasks_cpl>5400</ntasks_cpl>
 	</ntasks>
 	<nthrds>
@@ -68,10 +101,10 @@
 	  <rootpe_atm>0</rootpe_atm>
 	  <rootpe_lnd>0</rootpe_lnd>
 	  <rootpe_rof>0</rootpe_rof>
-	  <rootpe_ice>1003</rootpe_ice>
-	  <rootpe_ocn>5400</rootpe_ocn>
-	  <rootpe_glc>0</rootpe_glc>
-	  <rootpe_wav>0</rootpe_wav>
+	  <rootpe_ice>1792</rootpe_ice>
+	  <rootpe_ocn>5404</rootpe_ocn>
+	  <rootpe_glc>5400</rootpe_glc>
+	  <rootpe_wav>5400</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
