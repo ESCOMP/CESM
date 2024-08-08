@@ -40,43 +40,48 @@
 
   <compset>
     <alias>B1850C_LSC</alias>
-    <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <compset>
     <alias>BHISTC_LSC</alias>
-    <lname>HISTC_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>HISTC_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <compset>
     <alias>B1850C_MSC</alias>
-    <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <compset>
     <alias>BHISTC_MSC</alias>
-    <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <!-- the following are provided to allow a bit of continuity and should be removed in a later tag -->
   <compset>
     <alias>BLT1850</alias>
+    <lname>1850_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+  </compset>
+
+  <compset>
+    <alias>BLT1850_MARBL</alias>
     <lname>1850_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <compset>
     <alias>BLTHIST</alias>
-    <lname>HIST_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>HIST_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <compset>
     <alias>BMT1850</alias>
-    <lname>1850_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>1850_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <compset>
     <alias>BMTHIST</alias>
-    <lname>HIST_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>HIST_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
 
