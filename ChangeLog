@@ -1,4 +1,454 @@
 ==============================================================
+Tag name: cesm3_0_beta02
+Originator(s): CSEG
+Date: 29 July 2024
+One-line Summary: CAM answer changes and other updates in preparation for science freeze.
+
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_016                              
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_12            
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.0                          
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.2                  
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.1    
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.6                       
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.43                      
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_002          
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.2.009                       
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240516                
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.3     
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240705                     
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_02                    
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_80                          
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3i_0.0.2                    
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      
+
+
+Answer Changes introduced with this tag when compared to cesm0_0_beta01:
+CLM
+    clm45cam4LndTuningModeZDustSoilErod, clm50cam5LndTuningModeZDustSoilErod test mods
+    Hillslope hydrology changes: Changes answer ONLY for hillslope tests
+GLC 
+    mosart runoff
+CMEPS 
+    Revert some of the answer changes that came in with cmeps0.14.71
+    Remove negative runoff
+RTM
+    Correct fluxes by area
+CAM
+    Modify RRTMGP interface for MT configurations.  Answers also change
+    for LT and cam6 tests using RRTMGP.
+    Aerosol wet removal bug fixes
+    GW moving mountains
+    Changes older log-gamma function for an F2008 intrinsic, only in
+    some WACCMX configurations.
+    HB mods + dycore mods, answer changes for all SE and CLUBB runs.
+
+
+
+Problems identified after tag creation:
+  -Several MEMCOMP test failed because cpl-mem.log files weren't generate.  
+   This is an issue with cime not creating the log file when the runs are too short.
+  -Some compset need to be updated or removed from testing.
+  -Some CICE tests need to have the test mods updated.
+  -PET_PM tests fail with MOM.
+  -Some CAM tests are missing land surface data.
+  -Some compsets were removed, but the tests were not removed.
+
+
+==============================================================
+Tag name: cesm3_0_alpha02b
+Originator(s): CSEG
+Date: 29 July 2024
+One-line Summary: CAM answer changing tag
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_016                              **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_12            **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.0                          --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.2                  --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.1    **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.6                       **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.43                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_002          --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.2.009                       --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240516                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.3     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240705                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_02                    --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_80                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3i_0.0.2                    --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cam
+    Cheryl Craig 2024-07-23 - cam6_4_016 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_xxx
+
+    Modify RRTMGP interface for MT configurations.  Answers also change
+    for LT and cam6 tests using RRTMGP.
+
+
+    Cheryl Craig 2024-07-23 - cam6_4_015 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_015
+
+    For Brian Eaton
+
+    Misc bug fixes, buildcpp reports errors in CAM configure, SILHS outputting subcolumns with zeroes fix, remove solar_htng_spctrl_scl from aquaplanet case
+
+
+    Francis Vitt 2024-07-22 - cam6_4_014 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_014
+
+    Clean up WACCMX use of ESMF gridded component
+
+
+    Francis Vitt 2024-07-21 - cam6_4_013 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_013
+
+    Aerosol wet removal bug fixes
+
+
+    Francis Vitt 2024-07-19 - cam6_4_012 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_012
+
+    Add climate-chemistry compset
+
+
+    Cheryl Craig 2024-07-19 - cam6_4_011 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_011
+
+    For Brian Eaton and Cheryl Craig
+
+    Update submodules, git-fleximod; fix fv3 build; remove mct reference
+
+
+    Cheryl Craig 2024-07-16 - cam6_4_010 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_010
+
+    GW moving mountains
+
+    Answer changing for CAM7
+
+
+    Brian Dobbins 2024-07-11 - cam6_4_009 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_009
+
+    Changes older log-gamma function for an F2008 intrinsic.  This is answer-changing, but only in certain WACCMX configurations.
+
+
+    Cheryl Craig 2024-07-10 - cam6_4_008 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_008
+
+    HB mods + dycore mods
+
+    Answer changing for all SE dycore and CLUBB runs
+
+
+    Michael Waxmonsky 2024-07-10 - cam6_4_007 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_007
+
+    CCPP-ized TJ2016 #1070
+
+
+    Brian Eaton 2024-07-03 - cam6_4_006 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_006
+
+    Fix CLUBB interface bug.
+
+
+    Brian Eaton 2024-07-01 - cam6_4_005 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_005
+
+    Limit vertical domain used by COSP
+
+
+    Francis Vitt 2024-06-29 - cam6_4_004 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_004
+
+    Misc corrections for WACCMX
+
+
+    Brian Eaton 2024-06-26 - cam6_4_002 - components/cam (cesm3_0_beta02)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_002
+
+    Activate additional clubb diffusion in cam6.
+
+
+ccs_config
+    James Edwards 2024-07-25 - ccs_config_cesm1.0.1 - ccs_config (cesm3_0_beta02)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.1
+
+    Removes some obsolete grid definitions
+
+
+cesm
+    James Edwards 2024-07-25 - cesm3_0_alpha02b - (cesm3_0_beta02)
+    https://github.com/ESCOMP/cesm/tags/cesm3.0.beta02 - not sure what this should be?
+
+    Add pelayout for B1850MT.   Update git-fleximod to v0.8.4
+
+
+cice
+    David Bailey 2024-07-02 - cesm_cice6_5_0_12 - components/cice (cesm3_0_beta02)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm_cice6_5_0_11
+
+    This fixes some of the git-fleximod stuff and updates the CICE version
+    from cice6_5_0_20231221 to cice6_5_0_20240702.
+
+    Also removes the annual restarts from CICE.
+
+
+cmeps
+    James Edwards 2024-07-25 - cmeps1.0.6 - src/drivers/nuopc/ (cesm3_0_beta02)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.6
+
+    Fix merge error in med_phases_aoflux_mod.F90
+
+
+    James Edwards 2024-07-25 - cmeps1.0.5 - src/drivers/nuopc/ (cesm3_0_beta02)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.5
+
+    Declare cnt variable needed with ESMF_AWARE_THREADING
+
+
+==============================================================
+Tag name: cesm3_0_alpha02a
+Originator(s): CSEG
+Date: 16 July 2024
+One-line Summary: First set of changes from components in preparation for the science capability freeze. 
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_001                              **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_9             --
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.0                          **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.2                  **
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.0    **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.2                       **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.43                      **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_002          **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.2.009                       **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240516                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.3     **
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240705                     **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_02                    **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_80                          **
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3i_0.0.2                    --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                      --
+
+cam
+    Cheryl Craig 2024-06-24 - cam6_4_001 - components/cam (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_001
+
+    For Brian Eaton-
+
+    Change cam_dev to CAM7
+
+    Requires cmeps0.14.67
+
+
+ccs_config
+    James Edwards 2024-06-28 - ccs_config_cesm1.0.0 - ccs_config (cesm3_0_alpha02a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config1.1.0
+
+    ccs_config_cesm1.0.0:   Fix cmake for github workflow, remove mapping files that are no longer used.
+    ccs_config_cesm0.0.113: Fix cmake for github workflow 
+    ccs_config_cesm0.0.112: Add Cidadinho test site
+    ccs_config_cesm0.0.111: Removal of mapping files that are no longer needed for cism->mosart
+    ccs_config_cesm0.0.110: Add a PFUNIT for github workflow of cesm_share
+    ccs_config_cesm0.0.109: Making additions to Depends.nvhpc to enable GPU compilation of clubb code.
+
+
+cdeps
+    James Edwards 2024-06-28 - cdeps1.0.43 - components/cdeps (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.43
+
+    cdeps1.0.43: Add dglc
+    cdeps1.0.42: Fix initialization of dglc import/export pointers
+    cdeps1.0.41: Add changes to exchange between SOM and WW3DEV.
+    cdeps1.0.40: Updates the fox build since the directory now always exists
+    cdeps1.0.39: Allow input of stream on unstructured mesh (e.g. mpas)
+    cdeps1.0.38: Update stream_definition_datm.xml to include longer time period in files
+
+
+cesm
+    James Edwards 2024-06-26 - cesm3.0-alphabranch - (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/cesm/tags/cesm3.0-alphabranch
+
+    updates git-fleximod subtree, updates testmods for mosart
+
+
+cime
+    James Edwards 2024-06-26 - cime6.1.0 - cime (cesm3_0_alpha02a)
+    https://github.com/ESMCI/cime/tags/cime5.7.0
+
+    cime6.1.0: Update Makefile, remove mct from build.
+    cime6.0.251: Remove mct for cesm
+    cime6.0.250: Remove esmf wrf timemanager
+    cime6.0.249: Remove broken unsupported tool
+    cime6.0.248: The xmlchange tool should not raise an exception when a diff is detected.
+    cime6.0.247: More robust approach to waiting for many threads
+    cime6.0.246: Remove reference to cice5 and ww3dev, no longer required
+
+
+cism
+    James Edwards 2024-06-26 - cismwrap_2_2_002 - components/cism (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_2_002
+
+    GLC->mosart runoff
+
+
+clm
+    Erik Kluzek 2024-06-28 - ctsm5.2.009 - components/clm (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.2.009
+
+    Add support for CAM7 in CTSM. Also allow for "C" and "E" after period in long compset names.
+    Fix a couple bugs related to these changes.
+
+    Changes answers for the: clm45cam4LndTuningModeZDustSoilErod, clm50cam5LndTuningModeZDustSoilErod
+    test mods
+
+    This is required for: cam6_4_001
+
+
+    Erik Kluzek 2024-06-06 - ctsm5.2.008 - components/clm (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.2.008
+
+    Updates along our temporary branch
+
+    b4b-dev changes: fix prescribed crop calendar test add more checking for it, dust emission to OO
+    Update git-fleximod
+
+    Hillslope hydrology changes: Changes answer ONLY for hillslope tests
+
+
+cmeps
+    William Sacks 2024-07-09 - cmeps1.0.2 - src/drivers/nuopc/ (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.??
+
+    https://github.com/ESCOMP/CMEPS/pull/481
+
+    This reverts some of the answer changes that came in with cmeps0.14.71, so ideally this PR will be included in the same CESM alpha tag as cmeps0.14.71, but that isn't critical.
+
+
+    James Edwards 2024-07-09 - cmeps1.0.1 - src/drivers/nuopc/ (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.1
+
+    Fix for issue with gnu compiler
+
+
+    James Edwards 2024-06-26 - cmeps1.0.0 - src/drivers/nuopc/ (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.0
+
+    cmeps1.0.0:   Add support for glc->rtm runoff depends on mosart and cism tags.
+    cmeps0.14.77: Bug fix primarily for usf testing
+    cmeps0.14.76: New fix for add_gusts
+    cmeps0.14.75: Bug fix for wav2ocn_map 
+    cmeps0.14.74: Add trigrid capability - ability to run atm and lnd on separate grids
+    cmeps0.14.73: Add shr_dust_emis_mod to handle options for dust emissions between CTSM and CAM
+    cmeps0.14.72: Add bilinr_nostd for wav2ice coupling
+    cmeps0.14.71: Remove negative runoff
+    cmeps0.14.70: mct_init call is no longer needed
+    cmeps0.14.69: Fix aoflux for UFS
+    cmeps0.14.68: Implementation of glc->ocn coupling via going through mosart
+    cmeps0.14.67: Change CAM%DEV to CAM70 in buildnml
+    cmeps0.14.66: Replace manage-externals with git-fleximod
+    cmeps0.14.65: Revert "test github testing in cime PR #4631"
+    cmeps0.14.64: Test github testing in cime PR #4631
+
+
+MCT
+    James Edwards 2024-06-26 - NONE - libraries/mct (cesm3_0_alpha02a)
+    https://github.com/MCSclimate/MCT/tags/NONE
+
+    Remove from DB
+
+
+mizuRoute
+    Erik Kluzek 2024-06-20 - cesm-coupling.n02_v2.1.3 - components/mizuroute (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/mizuRoute/tags/cesm-coupling.n02_v2.1.3
+
+    Makefile cleanup, get working on intel-oneapi
+    Add some new capability for floodplain and other routing methods
+
+
+mom
+    James Edwards 2024-07-05 - mi_240705 - components/mom (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_240705
+
+    fms library path change
+
+
+mosart
+    Erik Kluzek 2024-06-20 - mosart1.1.02 - components/mosart (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/mosart/tags/mosart1.1.02
+
+    Starts adding capability to receive runoff from CISM directly.
+
+    For the new capability depends on:
+    CMEPS
+    CISM
+
+
+    James Edwards 2024-06-07 - mosart1.1.01 - components/mosart (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/mosart/tags/mosart1.1.01
+
+    Brings in changes from nor-esm
+    Refactoring and halo update capability
+
+
+rtm
+    Erik Kluzek 2024-06-21 - rtm1_0_80 - components/rtm (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_80
+
+    Correct fluxes by area
+
+
+share
+    James Edwards 2024-06-26 - share1.1.2 - share (cesm3_0_alpha02a)
+    https://github.com/ESCOMP/CESM_share/tags/share1.1.1
+
+    share1.1.2: Remove mct and other unused code, add nuopc_shr_methods add github action for unit testing
+    share1.1.1: Add m_MergeSorts from mpeu for sort routines used in cam
+    share1.1.0: Add GitHub pfunit tests
+     
+
+==============================================================
+Tag name: cesm3_0_beta01
+Originator(s): CSEG
+Date: 25 June 2024
+One-line Summary: git-fleximod and remove externals for CESM3
+
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_3_162                              
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_9             
+cime                    https://github.com/ESMCI/cime/tree/cime6.0.246                        
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.0.19                 
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm0.0.109  
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps0.14.63                     
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.37                      
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_001          
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.2.007                       
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240516                
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.2     
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240522                     
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_0_49                    
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_79                         
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3i_0.0.2                    
+libraries/mct           https://github.com/MCSclimate/MCT/tree/MCT_2.11.0                     
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_2                     
+
+Answer Changes introduced with this tag when compared to cesm2_3_beta17:
+    WW3DEV moved to WW3
+    All B compsets switched from POP to MOM.
+
+Problems identified after tag creation:
+  -Several MEMCOMP test failed because cpl-mem.log files weren't generate.  
+   This is an issue with cime not creating the log file when the runs are too short.
+  -Fully active restart tests are failing because the rpointer files are being
+   over written at the end of the first run.
+  -Some compset need to be updated or removed from testing.
+  -Some CICE tests need to have the test mods updated.
+  -PET_PM tests fail with MOM.
+  -Some CAM tests are missing land surface data.
+
+==============================================================
 Tag name: cesm3_0_alpha01a
 Originator(s): CSEG
 Date: 21 June 2024
