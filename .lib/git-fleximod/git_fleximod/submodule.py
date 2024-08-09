@@ -92,7 +92,7 @@ class Submodule():
                 needsupdate = True
             else:
                 result = f"e {self.name:>20} has no fxtag defined in .gitmodules{optional}"
-                testfails = True
+                testfails = False
         else:
             with utils.pushd(smpath):
                 git = GitInterface(smpath, self.logger)
@@ -103,15 +103,23 @@ class Submodule():
                     needsupdate = True
                     return result, needsupdate, localmods, testfails                    
                 rurl = git.git_operation("ls-remote","--get-url").rstrip()
-                line = git.git_operation("log", "--pretty=format:\"%h %d").partition('\n')[0]
+                line = git.git_operation("log", "--pretty=format:\"%h %d\"").partition('\n')[0]
                 parts = line.split()
                 ahash = parts[0][1:]
+                atag = None
                 if len(parts) > 3:
-                    atag = parts[3][:-1]
-                else:
-                    atag = None
+                    idx = 0
+                    while idx < len(parts)-1:
+                        idx = idx+1
+                        if parts[idx] == 'tag:':
+                            atag = parts[idx+1]
+                            while atag.endswith(')') or atag.endswith(',') or atag.endswith("\""):
+                                atag = atag[:-1]
+                            if atag == self.fxtag:
+                                break
+
                 
-                #print(f"line is {line} ahash is {ahash} atag is {atag}")
+                #print(f"line is {line} ahash is {ahash} atag is {atag} {parts}")
                 #                atag = git.git_operation("describe", "--tags", "--always").rstrip()
                 # ahash =  git.git_operation("rev-list", "HEAD").partition("\n")[0]
                     
@@ -122,9 +130,11 @@ class Submodule():
                 if self.fxtag and atag == self.fxtag:
                     result = f"  {self.name:>20} at tag {self.fxtag}"
                     recurse = True
-                elif self.fxtag and ahash[: len(self.fxtag)] == self.fxtag:
+                    testfails = False
+                elif self.fxtag and (ahash[: len(self.fxtag)] == self.fxtag or (self.fxtag.find(ahash)==0)):
                     result = f"  {self.name:>20} at hash {ahash}"
                     recurse = True
+                    testfails = False
                 elif atag == ahash:
                     result = f"  {self.name:>20} at hash {ahash}"
                     recurse = True
@@ -133,14 +143,17 @@ class Submodule():
                     testfails = True
                     needsupdate = True
                 else:
-                    result = f"e {self.name:>20} has no fxtag defined in .gitmodules, module at {atag}"
-                    testfails = True
+                    if atag:
+                        result = f"e {self.name:>20} has no fxtag defined in .gitmodules, module at {atag}"
+                    else:
+                        result = f"e {self.name:>20} has no fxtag defined in .gitmodules, module at {ahash}"
+                    testfails = False
                     
                 status = git.git_operation("status", "--ignore-submodules", "-uno")
                 if "nothing to commit" not in status:
                     localmods = True
                     result = "M" + textwrap.indent(status, "                      ")
-        
+#        print(f"result {result} needsupdate {needsupdate} localmods {localmods} testfails {testfails}")
         return result, needsupdate, localmods, testfails
 
     

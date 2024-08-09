@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "git-fleximod"
-version = "0.8.2"
+version = "0.8.4"
 description = "Extended support for git-submodule and git-sparse-checkout"
 authors = ["Jim Edwards <jedwards@ucar.edu>"]
 maintainers = ["Jim Edwards <jedwards@ucar.edu>"]
