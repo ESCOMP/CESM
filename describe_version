@@ -59,13 +59,11 @@ def main():
                                          universal_newlines=True)
     print(separator + 'git status:\n' + git_status + separator)
 
-    manic = os.path.join('manage_externals', 'checkout_externals')
-    # Give '--verbose' twice to give very verbose output, showing all modified files in
-    # each external.
-    manage_externals_status = subprocess.check_output([manic, '--status', '--verbose', '--verbose'],
-                                                      cwd=cesmroot,
-                                                      universal_newlines=True)
-    print(separator + 'manage_externals status:\n' + manage_externals_status + separator)
+    fleximod = os.path.join('bin', 'git-fleximod')
+    fleximod_status = subprocess.check_output([fleximod, 'status'],
+                                              cwd=cesmroot,
+                                              universal_newlines=True)
+    print(separator + 'git-fleximod status:\n' + fleximod_status + separator)
 
 if __name__ == "__main__":
     main()
