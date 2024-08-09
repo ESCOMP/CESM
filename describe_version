@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """Describes the CESM version and any local modifications"""
 
-from __future__ import print_function
-
 import os
 import argparse
 import subprocess
