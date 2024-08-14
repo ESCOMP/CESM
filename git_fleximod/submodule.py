@@ -226,7 +226,7 @@ class Submodule():
                 line = f.readline()
                 if line.startswith("gitdir: "):
                     rootdotgit = os.path.abspath(os.path.join(self.root_dir,line[8:].rstrip()))
-        print(f"rootdotgit is {rootdotgit}")
+
         assert os.path.isdir(rootdotgit)
         # first create the module directory
         if not os.path.isdir(os.path.join(self.root_dir, self.path)):
