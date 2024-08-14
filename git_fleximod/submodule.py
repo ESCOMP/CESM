@@ -219,7 +219,15 @@ class Submodule():
             gitroot = superroot.strip()
         else:
             gitroot = self.root_dir.strip()
-        assert os.path.isdir(os.path.join(gitroot, ".git"))
+        # Now need to move the .git dir to the submodule location
+        rootdotgit = os.path.join(self.root_dir, ".git")
+        while os.path.isfile(rootdotgit):
+            with open(rootdotgit) as f:
+                line = f.readline()
+                if line.startswith("gitdir: "):
+                    rootdotgit = os.path.abspath(os.path.join(self.root_dir,line[8:].rstrip()))
+
+        assert os.path.isdir(rootdotgit)
         # first create the module directory
         if not os.path.isdir(os.path.join(self.root_dir, self.path)):
             os.makedirs(os.path.join(self.root_dir, self.path))
@@ -256,35 +264,33 @@ class Submodule():
                     os.path.join(self.root_dir, f.read().split()[1]),
                     start=os.path.join(self.root_dir, self.path),
                 )
-                topgit = os.path.join(gitpath, "modules")
+                rootdotgit = os.path.join(gitpath, "modules", self.name)
         else:
-            topgit = os.path.relpath(
-                os.path.join(self.root_dir, ".git", "modules"),
+            rootdotgit = os.path.relpath(
+                os.path.join(self.root_dir, ".git", "modules", self.name),
                 start=os.path.join(self.root_dir, self.path),
             )
 
-        with utils.pushd(sprep_repo):
-            if not os.path.isdir(topgit):
-                os.makedirs(topgit)
-        topgit += os.sep + self.name
-
         if os.path.isdir(os.path.join(self.root_dir, self.path, ".git")):
             with utils.pushd(sprep_repo):
-                if os.path.isdir(os.path.join(topgit,".git")):
-                    shutil.rmtree(os.path.join(topgit,".git"))
-                shutil.move(".git", topgit)
+                if os.path.isdir(os.path.join(rootdotgit,".git")):
+                    shutil.rmtree(os.path.join(rootdotgit,".git"))
+                shutil.move(".git", rootdotgit)
                 with open(".git", "w") as f:
-                    f.write("gitdir: " + os.path.relpath(topgit))
-                #    assert(os.path.isdir(os.path.relpath(topgit, start=sprep_repo)))
-                gitsparse = os.path.abspath(os.path.join(topgit, "info", "sparse-checkout"))
+                    f.write("gitdir: " + os.path.relpath(rootdotgit))
+                infodir = os.path.join(rootdotgit, "info")
+                if not os.path.isdir(infodir):
+                    os.makedirs(infodir)
+                gitsparse = os.path.abspath(os.path.join(infodir, "sparse-checkout"))
             if os.path.isfile(gitsparse):
                 self.logger.warning(
-                    "submodule {} is already initialized {}".format(self.name, topgit)
+                    "submodule {} is already initialized {}".format(self.name, rootdotgit)
                 )
                 return
 
             with utils.pushd(sprep_repo):
                 if os.path.isfile(self.fxsparse):
+                    
                     shutil.copy(self.fxsparse, gitsparse)
                 
 
