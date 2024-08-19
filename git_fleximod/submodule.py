@@ -61,7 +61,8 @@ class Submodule():
             rootgit = GitInterface(self.root_dir, self.logger)
             # submodule commands use path, not name
             status, tags = rootgit.git_operation("ls-remote", "--tags", self.url)
-            status, result = rootgit.git_operation("submodule","status",smpath).split()
+            status, result = rootgit.git_operation("submodule","status",smpath)
+            result = result.split()
             
             if result:
                 ahash = result[0][1:]
@@ -153,7 +154,7 @@ class Submodule():
                 status, output = git.git_operation("status", "--ignore-submodules", "-uno")
                 if "nothing to commit" not in output:
                     localmods = True
-                    result = "M" + textwrap.indent(status, "                      ")
+                    result = "M" + textwrap.indent(output, "                      ")
 #        print(f"result {result} needsupdate {needsupdate} localmods {localmods} testfails {testfails}")
         return result, needsupdate, localmods, testfails
 
@@ -225,10 +226,9 @@ class Submodule():
         rootdotgit = os.path.join(self.root_dir, ".git")
         while os.path.isfile(rootdotgit):
             with open(rootdotgit) as f:
-                line = f.readline()
+                line = f.readline().rstrip()
                 if line.startswith("gitdir: "):
                     rootdotgit = os.path.abspath(os.path.join(self.root_dir,line[8:]))
-
         assert os.path.isdir(rootdotgit)
         # first create the module directory
         if not os.path.isdir(os.path.join(self.root_dir, self.path)):
