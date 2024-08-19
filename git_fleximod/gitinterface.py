@@ -59,11 +59,12 @@ class GitInterface:
         command = self._git_command(operation, *newargs)
         if isinstance(command, list):
             try:
-                return utils.execute_subprocess(command, output_to_caller=True)
+                status, output = utils.execute_subprocess(command, status_to_caller=True, output_to_caller=True)
+                return status, output.rstrip()
             except Exception as e:
                 sys.exit(e)
         else:
-            return command
+            return 0, command
 
     def config_get_value(self, section, name):
         if self._use_module:
