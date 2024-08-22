@@ -60,8 +60,9 @@ class Submodule():
         if not os.path.exists(os.path.join(smpath, ".git")):
             rootgit = GitInterface(self.root_dir, self.logger)
             # submodule commands use path, not name
-            tags = rootgit.git_operation("ls-remote", "--tags", self.url)
-            result = rootgit.git_operation("submodule","status",smpath).split()
+            status, tags = rootgit.git_operation("ls-remote", "--tags", self.url)
+            status, result = rootgit.git_operation("submodule","status",smpath)
+            result = result.split()
             
             if result:
                 ahash = result[0][1:]
@@ -80,9 +81,9 @@ class Submodule():
                 result = f"e {self.name:>20} not checked out, aligned at tag {self.fxtag}{optional}"
                 needsupdate = True
             elif self.fxtag:
-                ahash = rootgit.git_operation(
+                status, ahash = rootgit.git_operation(
                     "submodule", "status", "{}".format(self.path)
-                ).rstrip()
+                )
                 ahash = ahash[1 : len(self.fxtag) + 1]
                 if self.fxtag == ahash:
                     result = f"e {self.name:>20} not checked out, aligned at hash {ahash}{optional}"
@@ -96,14 +97,15 @@ class Submodule():
         else:
             with utils.pushd(smpath):
                 git = GitInterface(smpath, self.logger)
-                remote = git.git_operation("remote").rstrip()
+                status, remote = git.git_operation("remote")
                 if remote == '':
                     result = f"e {self.name:>20} has no associated remote"
                     testfails = True
                     needsupdate = True
                     return result, needsupdate, localmods, testfails                    
-                rurl = git.git_operation("ls-remote","--get-url").rstrip()
-                line = git.git_operation("log", "--pretty=format:\"%h %d\"").partition('\n')[0]
+                status, rurl = git.git_operation("ls-remote","--get-url")
+                status, lines = git.git_operation("log", "--pretty=format:\"%h %d\"")
+                line = lines.partition('\n')[0]
                 parts = line.split()
                 ahash = parts[0][1:]
                 atag = None
@@ -120,7 +122,7 @@ class Submodule():
 
                 
                 #print(f"line is {line} ahash is {ahash} atag is {atag} {parts}")
-                #                atag = git.git_operation("describe", "--tags", "--always").rstrip()
+                #                atag = git.git_operation("describe", "--tags", "--always")
                 # ahash =  git.git_operation("rev-list", "HEAD").partition("\n")[0]
                     
                 recurse = False
@@ -149,10 +151,10 @@ class Submodule():
                         result = f"e {self.name:>20} has no fxtag defined in .gitmodules, module at {ahash}"
                     testfails = False
                     
-                status = git.git_operation("status", "--ignore-submodules", "-uno")
-                if "nothing to commit" not in status:
+                status, output = git.git_operation("status", "--ignore-submodules", "-uno")
+                if "nothing to commit" not in output:
                     localmods = True
-                    result = "M" + textwrap.indent(status, "                      ")
+                    result = "M" + textwrap.indent(output, "                      ")
 #        print(f"result {result} needsupdate {needsupdate} localmods {localmods} testfails {testfails}")
         return result, needsupdate, localmods, testfails
 
@@ -171,10 +173,11 @@ class Submodule():
         Returns:
             str: The name of the new remote if added, or the name of the existing remote that matches the submodule's URL.
         """ 
-        remotes = git.git_operation("remote", "-v").splitlines()
+        status, remotes = git.git_operation("remote", "-v")
+        remotes = remotes.splitlines()
         upstream = None
         if remotes:
-            upstream = git.git_operation("ls-remote", "--get-url").rstrip()
+            status, upstream = git.git_operation("ls-remote", "--get-url")
             newremote = "newremote.00"
             tmpurl = self.url.replace("git@github.com:", "https://github.com/")
             line = next((s for s in remotes if self.url in s or tmpurl in s), None)
@@ -214,12 +217,19 @@ class Submodule():
         """ 
         self.logger.info("Called sparse_checkout for {}".format(self.name))
         rgit = GitInterface(self.root_dir, self.logger)
-        superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
+        status, superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
         if superroot:
             gitroot = superroot.strip()
         else:
             gitroot = self.root_dir.strip()
-        assert os.path.isdir(os.path.join(gitroot, ".git"))
+        # Now need to move the .git dir to the submodule location
+        rootdotgit = os.path.join(self.root_dir, ".git")
+        while os.path.isfile(rootdotgit):
+            with open(rootdotgit) as f:
+                line = f.readline().rstrip()
+                if line.startswith("gitdir: "):
+                    rootdotgit = os.path.abspath(os.path.join(self.root_dir,line[8:]))
+        assert os.path.isdir(rootdotgit)
         # first create the module directory
         if not os.path.isdir(os.path.join(self.root_dir, self.path)):
             os.makedirs(os.path.join(self.root_dir, self.path))
@@ -244,8 +254,8 @@ class Submodule():
         # set the repository remote
         
         self.logger.info("Setting remote origin in {}/{}".format(self.root_dir, self.path))
-        status = sprepo_git.git_operation("remote", "-v")
-        if self.url not in status:
+        status, remotes = sprepo_git.git_operation("remote", "-v")
+        if self.url not in remotes:
             sprepo_git.git_operation("remote", "add", "origin", self.url)
 
         topgit = os.path.join(gitroot, ".git")
@@ -256,43 +266,43 @@ class Submodule():
                     os.path.join(self.root_dir, f.read().split()[1]),
                     start=os.path.join(self.root_dir, self.path),
                 )
-                topgit = os.path.join(gitpath, "modules")
+                rootdotgit = os.path.join(gitpath, "modules", self.name)
         else:
-            topgit = os.path.relpath(
-                os.path.join(self.root_dir, ".git", "modules"),
+            rootdotgit = os.path.relpath(
+                os.path.join(self.root_dir, ".git", "modules", self.name),
                 start=os.path.join(self.root_dir, self.path),
             )
 
-        with utils.pushd(sprep_repo):
-            if not os.path.isdir(topgit):
-                os.makedirs(topgit)
-        topgit += os.sep + self.name
-
         if os.path.isdir(os.path.join(self.root_dir, self.path, ".git")):
             with utils.pushd(sprep_repo):
-                if os.path.isdir(os.path.join(topgit,".git")):
-                    shutil.rmtree(os.path.join(topgit,".git"))
-                shutil.move(".git", topgit)
+                if os.path.isdir(os.path.join(rootdotgit,".git")):
+                    shutil.rmtree(os.path.join(rootdotgit,".git"))
+                shutil.move(".git", rootdotgit)
                 with open(".git", "w") as f:
-                    f.write("gitdir: " + os.path.relpath(topgit))
-                #    assert(os.path.isdir(os.path.relpath(topgit, start=sprep_repo)))
-                gitsparse = os.path.abspath(os.path.join(topgit, "info", "sparse-checkout"))
+                    f.write("gitdir: " + os.path.relpath(rootdotgit))
+                infodir = os.path.join(rootdotgit, "info")
+                if not os.path.isdir(infodir):
+                    os.makedirs(infodir)
+                gitsparse = os.path.abspath(os.path.join(infodir, "sparse-checkout"))
             if os.path.isfile(gitsparse):
                 self.logger.warning(
-                    "submodule {} is already initialized {}".format(self.name, topgit)
+                    "submodule {} is already initialized {}".format(self.name, rootdotgit)
                 )
                 return
 
             with utils.pushd(sprep_repo):
                 if os.path.isfile(self.fxsparse):
+                    
                     shutil.copy(self.fxsparse, gitsparse)
                 
 
         # Finally checkout the repo
         sprepo_git.git_operation("fetch", "origin", "--tags")
-        sprepo_git.git_operation("checkout", self.fxtag)
-
-        print(f"Successfully checked out {self.name:>20} at {self.fxtag}")
+        status,_ = sprepo_git.git_operation("checkout", self.fxtag)
+        if status:
+            print(f"Error checking out {self.name:>20} at {self.fxtag}")
+        else:
+            print(f"Successfully checked out {self.name:>20} at {self.fxtag}")
         rgit.config_set_value(f'submodule "{self.name}"', "active", "true")
         rgit.config_set_value(f'submodule "{self.name}"', "url", self.url)
         rgit.config_set_value(f'submodule "{self.name}"', "path", self.path)
@@ -342,7 +352,7 @@ class Submodule():
                     git.git_operation("clone", self.url, self.path)
                     smgit = GitInterface(repodir, self.logger)
                     if not tag:
-                        tag = smgit.git_operation("describe", "--tags", "--always").rstrip()
+                        status, tag = smgit.git_operation("describe", "--tags", "--always")
                     smgit.git_operation("checkout", tag)
                     # Now need to move the .git dir to the submodule location
                     rootdotgit = os.path.join(self.root_dir, ".git")
@@ -350,7 +360,7 @@ class Submodule():
                         with open(rootdotgit) as f:
                             line = f.readline()
                             if line.startswith("gitdir: "):
-                                rootdotgit = line[8:].rstrip()
+                                rootdotgit = line[8:]
 
                     newpath = os.path.abspath(os.path.join(self.root_dir, rootdotgit, "modules", self.name))
                     if os.path.exists(newpath):
@@ -393,15 +403,16 @@ class Submodule():
                 git = GitInterface(submoddir, self.logger)
                 # first make sure the url is correct
                 newremote = self._add_remote(git)
-                tags = git.git_operation("tag", "-l")
+                status, tags = git.git_operation("tag", "-l")
                 fxtag = self.fxtag
                 if fxtag and fxtag not in tags:
                     git.git_operation("fetch", newremote, "--tags")
-                atag = git.git_operation("describe", "--tags", "--always").rstrip()
+                status, atag = git.git_operation("describe", "--tags", "--always")
                 if fxtag and fxtag != atag:
                     try:
-                        git.git_operation("checkout", fxtag)
-                        print(f"{self.name:>20} updated to {fxtag}")
+                        status, _ = git.git_operation("checkout", fxtag)
+                        if not status:
+                            print(f"{self.name:>20} updated to {fxtag}")
                     except Exception as error:
                         print(error)
                     
