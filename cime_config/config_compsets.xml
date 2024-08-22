@@ -59,6 +59,11 @@
   </compset>
 
   <compset>
+    <alias>BMT1850_MARBL</alias>
+    <lname>1850_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+  </compset>
+
+  <compset>
     <alias>BMTHIST</alias>
     <lname>HIST_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
