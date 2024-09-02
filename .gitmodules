@@ -30,14 +30,14 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.4
+        fxtag = ccs_config_cesm1.0.6
         fxrequired = ToplevelRequired
         
 [submodule "cime"]
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-        fxtag = cime6.1.8
+        fxtag = cime6.1.22
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -45,7 +45,7 @@
         url = https://github.com/ESCOMP/FMS_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/FMS_interface
         fxrequired = ToplevelRequired
-        fxtag = fi_240807
+        fxtag = fi_240828
 
 [submodule "share"]
         path = share
@@ -66,7 +66,7 @@
         url = https://github.com/ESCOMP/CTSM
         fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
-        fxtag = ctsm5.2.019
+        fxtag = ctsm5.2.027
 
 [submodule "cice"]
         path = components/cice
@@ -80,7 +80,7 @@
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_240805
+        fxtag = mi_240822
 
 [submodule "cism"]
         path = components/cism
@@ -94,14 +94,14 @@
         url = https://github.com/ESCOMP/CDEPS
         fxDONOTUSEurl = https://github.com/ESCOMP/CDEPS
         fxrequired = ToplevelRequired
-        fxtag = cdeps1.0.45
+        fxtag = cdeps1.0.49
 
 [submodule "cmeps"]
         path = components/cmeps
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-        fxtag = cmeps1.0.13
+        fxtag = cmeps1.0.16
 
 [submodule "rtm"]
         path = components/rtm
@@ -114,7 +114,7 @@
         path = components/ww3
         url = https://github.com/ESCOMP/WW3_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
-        fxtag = ww3i_0.0.2
+        fxtag = ww3i_0.0.3
         fxrequired = ToplevelRequired
                 
 [submodule "mizuroute"]
@@ -136,7 +136,7 @@
         url = https://github.com/NCAR/ParallelIO
         fxDONOTUSEurl = https://github.com/NCAR/ParallelIO
         fxrequired = ToplevelRequired
-        fxtag = pio2_6_2
+        fxtag = pio2_6_3
 
 [submodule "mpi-serial"]
         path = libraries/mpi-serial
