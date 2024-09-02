@@ -124,8 +124,8 @@ def submodule_sparse_checkout(root_dir, name, url, path, sparsefile, tag="master
     # set the repository remote
 
     logger.info("Setting remote origin in {}/{}".format(root_dir, path))
-    status = sprepo_git.git_operation("remote", "-v")
-    if url not in status:
+    _, remotelist = sprepo_git.git_operation("remote", "-v")
+    if url not in remotelist:
         sprepo_git.git_operation("remote", "add", "origin", url)
 
     topgit = os.path.join(gitroot, ".git")
@@ -213,7 +213,7 @@ def submodules_status(gitmodules, root_dir, toplevel=False, depth=0):
 
 def git_toplevelroot(root_dir, logger):
     rgit = GitInterface(root_dir, logger)
-    superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
+    _, superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
     return superroot
 
 def submodules_update(gitmodules, root_dir, requiredlist, force):
