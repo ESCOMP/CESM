@@ -1,0 +1,2 @@
+./xmlchange RUN_STARTDATE=2001-12-30
+./xmlchange CLM_BLDNML_OPTS=-ignore_warnings --append
