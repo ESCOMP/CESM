@@ -92,9 +92,9 @@ To obtain the CESM code you need to do the following:
       cd my_cesm_sandbox
       git tag
 
-#. Do a git checkout of the tag you want. If you want to checkout release-cesm2.1.2, you would issue the following. ::
+#. Do a git checkout of the tag you want. If you want to checkout cesm3_0_beta02, you would issue the following. ::
 
-      git checkout release-cesm2.1.2
+      git checkout cesm3_0_beta02
 
    (It is normal and expected to get a message about being in 'detached
    HEAD' state. For now you can ignore this, but it becomes important if
@@ -151,10 +151,10 @@ Switching to a different CESM tag
 
 If you have already checked out a tag and **HAVE NOT MADE ANY
 MODIFICATIONS** it is simple to change your sandbox. Say that you
-checked out release-cesm2.1.2 but really wanted to have release-cesm2.1.3;
+checked out cesm3_0_beta01 but really wanted to have cesm3_0_beta02
 you would simply do the following::
 
-  git checkout release-cesm2.1.3
+  git checkout cesm3_0_beta02
   ./bin/git-fleximod update
 
 You should **not** use this method if you have any ongoing CESM cases that were created from
