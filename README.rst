@@ -168,11 +168,11 @@ Each entry in **.gitmodules** has the following form (we use CAM as an
 example below)::
 
   [submodule "cam"]
-  path = components/cam
-  url = https://www.github.com/ESCOMP/CAM
-  fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-  fxtag = cam6_4_016
-  fxrequired = ToplevelRequired
+    path = components/cam
+    url = https://www.github.com/ESCOMP/CAM
+    fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
+    fxtag = cam6_4_016
+    fxrequired = ToplevelRequired
 
 Each entry specifies either a tag or a hash. To point to a new tag:
 
@@ -213,11 +213,11 @@ CAM as an example):
    point to a personal fork::
 
   [submodule "cam"]
-  path = components/cam
-  url = https://www.github.com/mycamfork/CAM
-  fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-  fxtag = 94eaf83
-  fxrequired = ToplevelRequired
+    path = components/cam
+    url = https://www.github.com/mycamfork/CAM
+    fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
+    fxtag = 94eaf83
+    fxrequired = ToplevelRequired
 
 
 #. Checkout your branch::
