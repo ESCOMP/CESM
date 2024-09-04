@@ -212,12 +212,12 @@ CAM as an example):
    **tag** entry with a **hash** entry, as follows, note that we have also changed the url to
    point to a personal fork::
 
-  [submodule "cam"]
-    path = components/cam
-    url = https://www.github.com/mycamfork/CAM
-    fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-    fxtag = 94eaf83
-    fxrequired = ToplevelRequired
+    [submodule "cam"]
+      path = components/cam
+      url = https://www.github.com/mycamfork/CAM
+      fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
+      fxtag = 94eaf83
+      fxrequired = ToplevelRequired
 
 
 #. Checkout your branch::
