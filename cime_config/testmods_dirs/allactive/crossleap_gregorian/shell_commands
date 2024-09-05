@@ -1,3 +1,1 @@
-./xmlchange RUN_STARTDATE=2004-02-28
 ./xmlchange CALENDAR=GREGORIAN
-./xmlchange CLM_BLDNML_OPTS=-ignore_warnings --append
