@@ -32,7 +32,7 @@
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
         fxtag = ccs_config_cesm1.0.6
         fxrequired = ToplevelRequired
-        
+
 [submodule "cime"]
         path = cime
         url = https://github.com/ESMCI/cime
@@ -116,7 +116,7 @@
         fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
         fxtag = ww3i_0.0.3
         fxrequired = ToplevelRequired
-                
+
 [submodule "mizuroute"]
         path = components/mizuroute
         url = https://github.com/ESCOMP/mizuRoute
@@ -151,3 +151,10 @@
         fxDONOTUSEurl = https://github.com/NCAR/PyCECT
         fxrequired = ToplevelRequired
         fxtag = 3.2.2
+
+[submodule "tools/CUPiD"]
+        path = tools/CUPiD
+        url = https://github.com/NCAR/CUPiD.git
+        fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
+        fxrequired = ToplevelRequired
+        fxtag = v0.1.0
