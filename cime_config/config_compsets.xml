@@ -104,6 +104,11 @@
 	<value compset="2013[CE]?_"     >2013-01-01</value>
       </values>
     </entry>
+    <entry id="LND_SETS_DUST_EMIS_DRV_FLDS">
+      <values match="first">
+      <value compset="_CAM7.*_CLM6">FALSE</value>
+      </values>
+    </entry>
   </entries>
 
 </compsets>
