@@ -186,7 +186,7 @@ class Submodule():
                 return newremote
             else:
                 i = 0
-                while "newremote" in remotes:
+                while newremote in remotes:
                     i = i + 1
                     newremote = f"newremote.{i:02d}"
         else:
@@ -303,9 +303,9 @@ class Submodule():
             print(f"Error checking out {self.name:>20} at {self.fxtag}")
         else:
             print(f"Successfully checked out {self.name:>20} at {self.fxtag}")
-        rgit.config_set_value(f'submodule "{self.name}"', "active", "true")
-        rgit.config_set_value(f'submodule "{self.name}"', "url", self.url)
-        rgit.config_set_value(f'submodule "{self.name}"', "path", self.path)
+        rgit.config_set_value('submodule.' + self.name, "active", "true")
+        rgit.config_set_value('submodule.' + self.name, "url", self.url)
+        rgit.config_set_value('submodule.' + self.name, "path", self.path)
 
     def update(self):
         """
