@@ -312,10 +312,7 @@ def execute_subprocess(commands, status_to_caller=False, output_to_caller=False)
             "returned status {0}".format(error.returncode)
         )
         msg = failed_command_msg(msg_context, commands, output=error.output)
-        if return_to_caller:
-            logging.warning(error)
-            logging.warning(msg)
-        else:
+        if not return_to_caller:
             logging.error(error)
             logging.error(msg)
             log_process_output(error.output)
