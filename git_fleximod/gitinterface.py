@@ -82,6 +82,8 @@ class GitInterface:
     def config_set_value(self, section, name, value):
         if self._use_module:
             with self.repo.config_writer() as writer:
+                if "." in section:  
+                    section = section.replace("."," \"")+'"'           
                 writer.set_value(section, name, value)
             writer.release()  # Ensure changes are saved
         else:
