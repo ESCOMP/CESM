@@ -1,8 +1,8 @@
 on:
   push:
-    branches: [ master ]
+    branches: [ master, cesm3.0-alphabranch ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, cesm3.0-alphabranch ]
 jobs:
   fleximod-test:
     runs-on: ubuntu-latest
