@@ -16,7 +16,8 @@ jobs:
       - id: run-fleximod
         run: |
           $GITHUB_WORKSPACE/bin/git-fleximod update
-          $GITHUB_WORKSPACE/bin/git-fleximod status | grep -c 'testfails = 0'
+          $GITHUB_WORKSPACE/bin/git-fleximod status | tee status.out
+          grep -c 'testfails = 0' status.out
           
 #      - name: Setup tmate session
 #        if: ${{ failure() }}
