@@ -80,7 +80,7 @@
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_240823
+        fxtag = mi_240923
 
 [submodule "cism"]
         path = components/cism
@@ -114,7 +114,7 @@
         path = components/ww3
         url = https://github.com/ESCOMP/WW3_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
-        fxtag = ww3i_0.0.14
+        fxtag = main_0.0.14
         fxrequired = ToplevelRequired
 
 [submodule "mizuroute"]
