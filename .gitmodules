@@ -66,7 +66,7 @@
         url = https://github.com/ESCOMP/CTSM
         fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
-        fxtag = ctsm5.3.0
+        fxtag = ctsm5.3.002
 
 [submodule "cice"]
         path = components/cice
