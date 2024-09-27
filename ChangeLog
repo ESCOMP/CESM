@@ -18,7 +18,7 @@ components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n
 components/mom          https://github.com/ESCOMP/MOM_interface/mi_240923                     **
 components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_02                    --
 components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_80                          --
-components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/ww3i_0.0.14                   **
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.14                   **
 libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_3                      --
 tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.1                             **
 
