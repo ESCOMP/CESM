@@ -20,8 +20,10 @@ jobs:
           echo "Update complete, checking status"
           echo
           $GITHUB_WORKSPACE/bin/git-fleximod status | tee status.out
-          grep 'testfails = 0' status.out
-          
+          grep testfails status.out
+          if [[ $? -eq 0 ]]; then
+            exit 1
+          fi
 #      - name: Setup tmate session
 #        if: ${{ failure() }}
 #        uses: mxschmitt/action-tmate@v3
