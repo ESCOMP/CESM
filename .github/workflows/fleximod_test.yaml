@@ -1,8 +1,8 @@
 on:
   push:
-    branches: [ master ]
+    branches: [ master, cesm3.0-alphabranch ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, cesm3.0-alphabranch ]
 jobs:
   fleximod-test:
     runs-on: ubuntu-latest
@@ -16,7 +16,12 @@ jobs:
       - id: run-fleximod
         run: |
           $GITHUB_WORKSPACE/bin/git-fleximod update
-          $GITHUB_WORKSPACE/bin/git-fleximod test
+          echo
+          echo "Update complete, checking status"
+          echo
+          $GITHUB_WORKSPACE/bin/git-fleximod status | tee status.out
+          grep testfails status.out || exit 0
+          exit 1
 #      - name: Setup tmate session
 #        if: ${{ failure() }}
 #        uses: mxschmitt/action-tmate@v3

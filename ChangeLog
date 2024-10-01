@@ -1,4 +1,113 @@
 ==============================================================
+Tag name: cesm3_0_alpha03d
+Originator(s): CSEG
+Date: 25th September 2024
+One-line Summary: CLM answer changing tag
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_032                              --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_12             **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.29                         **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.2                  --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.7    --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.16                      --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.53                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_002          --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.002                       **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.3     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_240923                     **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_02                    --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_80                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.14                   **
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_3                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.1                             **
+
+cime
+    Chris Fischer 2024-09-25 - cime6.1.29 - cime (cesm3_0_alpha03d)
+    https://github.com/ESMCI/cime/tags/cime6.1.29
+
+    cime6.1.29: Improve functionality of hidden workflow flag.
+    cime6.1.28: Avoid breaking Python environment by prepending CIME paths to PYTHONPATH.
+    cime6.1.27: Mark SETUP as FAIL if case.cmpgen_namelists fails.
+    cime6.1.26: Make the hidden status of batch jobs xml dependent.
+
+
+clm
+Erik Kluzek 2024-09-27 - ctsm5.3.002 - components/clm (cesm3_0_alpha03d)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.002
+
+Duplicate tag of ctsm5.3.001
+
+
+Erik Kluzek 2024-09-27 - ctsm5.3.001 - components/clm (cesm3_0_alpha03d)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.001
+
+Merge of b4b-dev to master. Some documentation updates.
+Some new namelist warnings for hillslope options.
+
+
+    Erik Kluzek 2024-09-24 - ctsm5.3.0 - components/clm (cesm3_0_alpha03d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.0
+
+    Minor version update for CTSM:
+    - New surface datasets NOT backward compatible with ctsm5.2 ones
+    - New f09 1850 IC file
+    - New "hand tuned" parameter file
+    - New Li2024 fire turned on for clm6_0
+    - fire emissions factor file update
+
+
+    Erik Kluzek 2024-09-05 - ctsm5.2.028 - components/clm (cesm3_0_alpha03d)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.2.028
+
+    FATES update for history flushing
+
+
+CUPiD
+    Michael Levy 2024-09-16 - v0.1.1 - tools/CUPiD (cesm3_0_alpha03d)
+    https://github.com/NCAR/CUPiD/tags/v0.1.1
+
+    Remove manage_externals in favor of git submodules.
+    Also update the key_metrics example (and clean up documentation)
+
+
+mom
+    Alper Altuntas 2024-09-23 - mi_240923 - components/mom (cesm3_0_alpha03d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_2409??
+
+    Fix memory leak introduced with MARBL changes.
+
+
+    Michael Levy 2024-09-18 - mi_240920 - components/mom (cesm3_0_alpha03d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_2409??
+
+    Update externals:
+    1. Latest version of MARBL improves diag_table for fully coupled runs
+    2. Created an ESCOMP fork of stochastic_physics
+
+
+    Alper Altuntas 2024-09-09 - mi_240909b - components/mom (cesm3_0_alpha03d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_240909b
+
+    - MARBL: add STF_SALT_{tracer} diagnostics to diag_table.
+    - Check if fluxes%salt_flux is associated.
+
+
+    Alper Altuntas 2024-08-30 - mi_240909 - components/mom (cesm3_0_alpha03d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_2408??c
+
+    - Updates in FPMix and Stokes Most
+    - Modify NUOPC cap to accept separate glc runoff fluxes
+    - Re-tuning to bring MOM in line with CESM3 development runs:
+
+
+ww3
+    Alper Altuntas 2024-09-09 - main_0.0.14 - components/ww3 (cesm3_0_alpha03d)
+    https://github.com/ESCOMP/WW3_interface/tags/main_0.0.14
+
+    Merge latest dev/ufs-weather-model
+
+==============================================================
 Tag name: cesm3_0_alpha03c
 Originator(s): CSEG
 Date: 16th September 2024

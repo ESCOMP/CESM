@@ -37,7 +37,7 @@
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-        fxtag = cime6.1.25
+        fxtag = cime6.1.29
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -66,7 +66,7 @@
         url = https://github.com/ESCOMP/CTSM
         fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
-        fxtag = ctsm5.2.027
+        fxtag = ctsm5.3.002
 
 [submodule "cice"]
         path = components/cice
@@ -80,7 +80,7 @@
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_240822
+        fxtag = mi_240923
 
 [submodule "cism"]
         path = components/cism
@@ -114,7 +114,7 @@
         path = components/ww3
         url = https://github.com/ESCOMP/WW3_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
-        fxtag = ww3i_0.0.3
+        fxtag = main_0.0.14
         fxrequired = ToplevelRequired
 
 [submodule "mizuroute"]
@@ -157,4 +157,4 @@
         url = https://github.com/NCAR/CUPiD.git
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
-        fxtag = v0.1.0
+        fxtag = v0.1.1
