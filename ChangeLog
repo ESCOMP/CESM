@@ -1,7 +1,7 @@
 ==============================================================
 Tag name: cesm3_0_alpha04a
 Originator(s): CSEG
-Date: 21st November 2024
+Date: 21st October 2024
 One-line Summary: Dust tunings and sea ice updates
 
 components/cam          https://github.com/ESCOMP/CAM/cam6_4_032                              --
