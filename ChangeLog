@@ -5,7 +5,7 @@ Date: 21st October 2024
 One-line Summary: Dust tunings and sea ice updates
 
 components/cam          https://github.com/ESCOMP/CAM/cam6_4_032                              --
-components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_5_0_7            **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm_cice6_5_0_12            --
 cime                    https://github.com/ESMCI/cime/tree/cime6.1.29                         --
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.2                  --
 ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.7    --
@@ -21,21 +21,6 @@ components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_80            
 components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.14                   --
 libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_3                      --
 tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.1                             --
-
-cice
-    David Bailey 2024-09-19 - cesm3_cice6_5_0_7 - components/cice (cesm3_0_alpha04a)
-    https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_5_0_3
-
-    This tag adds all of the new science capabilities for CICE. Several of these physics options
-    have been turned on by default along with a number of additional history variables. This is the
-    configuration of:
-
-    https://github.com/NCAR/cesm_dev/issues/14
-
-
-    I have mostly fixed the aux_cice testlist, but there is more to come here. I have also
-    updated the path for the MOM grid files.
-
 
 clm
     Erik Kluzek 2024-10-08 - ctsm5.3.005 - components/clm (cesm3_0_alpha04a)
