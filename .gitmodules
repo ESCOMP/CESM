@@ -30,7 +30,7 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.7
+        fxtag = ccs_config_cesm1.0.8
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -51,7 +51,7 @@
         path = share
         url = https://github.com/ESCOMP/CESM_share
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
-        fxtag = share1.1.4
+        fxtag = share1.1.5
         fxrequired = ToplevelRequired
 
 [submodule "cam"]
@@ -80,7 +80,7 @@
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_241101
+        fxtag = mi_241104
 
 [submodule "cism"]
         path = components/cism
@@ -142,7 +142,7 @@
         path = libraries/mpi-serial
         url = https://github.com/ESMCI/mpi-serial
         fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial
-        fxtag = MPIserial_2.5.0
+        fxtag = MPIserial_2.5.1
         fxrequired = ToplevelRequired
 
 [submodule "pysect"]
