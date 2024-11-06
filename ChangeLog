@@ -10,7 +10,7 @@ cime                    https://github.com/ESMCI/cime/tree/cime6.1.29           
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.5                  **
 ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.8    **
 components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.16                      --
-components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.55                      **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.57                      **
 components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_002          --
 components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.007                       --
 components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822                --
@@ -31,6 +31,13 @@ ccs_config
 
 
 cdeps
+    Chris Fischer 2024-11-06 - cdeps1.0.57 - components/cdeps (cesm3_0_alpha04b)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.57
+
+    cdeps1.0.57: Backout the timestamp on rpointer files until alpha05c.
+    cdeps1.0.56: Change nextsw_cday calculation for cam_dev (CAM7) in cplhist mode
+             Greater than roundoff-level changes in cases using datm in CPLHIST mode.
+
     Alper Altuntas 2024-10-30 - cdeps1.0.55 - components/cdeps (cesm3_0_alpha04b)
     https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.55
 
