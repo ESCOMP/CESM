@@ -1,4 +1,182 @@
 ==============================================================
+Tag name: cesm3_0_alpha05a
+Originator(s): CSEG
+Date: 11th November 2024
+One-line Summary: CAM answer changes
+
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_046                              **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_5_0_14           --
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.34                         **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.5                  --
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.10   **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.22                      **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.57                      --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_002          --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.007                       --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822                --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n02_v2.1.3     --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_241104                     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_02                    --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_80                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.14                   --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_3                      --
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.1                             --
+
+cam
+    Jesse Nusbaumer 2024-11-08 - cam6_4_046 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_046
+
+    For Jian Sun
+
+    Update GPU tests with new XML options
+
+    Bit-for-bit except for changes in the namelists and field lists.
+
+
+    Michael Waxmonsky 2024-11-07 - cam6_4_045 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_045
+
+    Vertical diffusion refactor
+
+
+    Courtney Peverley 2024-11-04 - cam6_4_044 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_044
+
+    For Brian Eaton
+
+    limit t_sfc to valid temperature range
+
+
+    Courtney Peverley 2024-10-29 - cam6_4_043 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_043
+
+    Update cam7 LT and MT configurations to use rrtmgp.
+    BFB except cam7 configurations
+
+
+    Courtney Peverley 2024-10-29 - cam6_4_042 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_042
+
+    For Jesse Nusbaumer
+
+    Fix reference pressures for MPAS - changes answers for MPAS
+
+
+    Courtney Peverley 2024-10-29 - cam6_4_041 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_041
+
+    For Francis Vitt
+
+    CAM-Chem compset names
+
+
+
+    Francis Vitt 2024-10-16 - cam6_4_041 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_041
+
+    Adjustments to chemistry compset names
+
+
+    Cheryl Craig 2024-10-21 - cam6_4_040 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_040
+
+    For Jesse Nusbaumer
+
+    Bring in re-organized atmopsheric_physics repo
+
+
+    Cheryl Craig 2024-10-21 - cam6_4_039 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_039
+
+    For Brian Eaton
+
+    Update externals to cesm3_0_alpha03d
+
+    Answer changing for CAM checkout, but not for CESM checkouts
+
+
+    Cheryl Craig 2024-10-21 - cam6_4_038 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_038
+
+    For Francis Vitt
+
+    GEOS-Chem 14.4 and dependencies
+
+
+    Cheryl Craig 2024-10-21 - cam6_4_037 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_037
+
+    For Haipeng Lin
+
+    Implementation of CCPP-ized tropopause_find with compatibility with current CAM
+
+
+    Cheryl Craig 2024-10-21 - cam6_4_036 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_036
+
+    For Dylan Dickerson
+
+    Update MPAS-A external to use v8.2.1
+
+    Answer changing for MPAS
+
+
+    Francis Vitt 2024-09-23 - cam6_4_035 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_035
+
+    Generalize aerosol wet removal
+
+
+    Haipeng Lin 2024-09-19 - cam6_4_034 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_034
+
+    BFB update to snapshots for total energy fields
+
+
+    Cheryl Craig 2024-09-19 - cam6_4_033 - components/cam (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_033
+
+    For Dylan Dickerson
+
+    Add updated ncdata and bnd_topo files for MPASv8
+
+    Answer changing for MPAS runs
+
+
+ccs_config
+    James Edwards 2024-11-08 - ccs_config_cesm1.0.10 - ccs_config (cesm3_0_alpha05a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.10
+
+    Update inputdata servers removing ftp and replacing with wget https.
+    Fix issue with nag compiler on izumi
+
+
+cime
+    Chris Fischer 2024-10-10 - cime6.1.34 - cime (cesm3_0_alpha05a)
+    https://github.com/ESMCI/cime/tags/cime6.1.34
+
+    cime6.1.34: Do not report memcomp if no baseline exists
+    cime6.1.33: Remove GPU options from the Python workflow and move them to XML files for CESM
+        Depends on cmeps1.0.22 and ccs_config_cesm1.0.8
+    cime6.1.32: Fixes test status reporting errors during successful baseline comparison
+    cime6.1.31: Remove distutils
+    cime6.1.30: Refine the git interface to handle no git and old git
+
+
+cmeps
+    Chris Fischer 2024-11-11 - cmeps1.0.22 - src/drivers/nuopc/ (cesm3_0_alpha05a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.22
+
+    cmeps1.0.22: Update XML variables for GPU configurations
+    cmeps1.0.21: buildnml was setting variable samegrid_wav_ocn but namelist_definintion_drv.xml was looking for samegrid_ocn_wav
+    cmeps1.0.20: Update dms exchange
+    cmeps1.0.19: wav2ocn and ocn2wav maps are still needed in some cases
+    cmeps1.0.18: Fix xgrid reproducibility
+    cmeps1.0.17: Fix for exchange grid with add_gusts false
+
+
+==============================================================
 Tag name: cesm3_0_beta04
 Originator(s): CSEG
 Date: 8th November 2024
