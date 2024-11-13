@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     if: ${{ github.event.label.name == 'run-pr-tests' }}
-    runs-on: derecho
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v2
