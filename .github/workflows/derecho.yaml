@@ -1,0 +1,16 @@
+name: cesm-derecho-hosted
+on:
+  pull_request:
+    branches: [ testbranch ]
+    types: [ labeled ]
+    
+jobs:
+  build:
+    if: ${{ github.event.label.name == 'run-pr-tests' }}
+    runs-on: derecho
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run a one-line script
+      run: echo Hello, world!
+    
