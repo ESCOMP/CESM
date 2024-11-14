@@ -1,4 +1,6 @@
 name: cesm-derecho-hosted
+run-name: ${{ github.actor }} is testing the project
+
 on:
   pull_request:
     branches: [ testbranch ]
@@ -7,10 +9,10 @@ on:
 jobs:
   build:
     if: ${{ github.event.label.name == 'run-pr-tests' }}
-    runs-on: self-hosted
+    runs-on: derecho
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Run a one-line script
       run: echo Hello one, world!
     
