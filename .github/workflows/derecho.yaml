@@ -10,9 +10,27 @@ jobs:
   build:
     if: ${{ github.event.label.name == 'run-pr-tests' }}
     runs-on: hpc-runner
-
+    env:
+      CC: mpicc
+      FC: mpifort
+      CXX: mpicxx
+      CIME_MODEL: cesm
+      CIME_DRIVER: nuopc
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
     steps:
-    - uses: actions/checkout@v3
-    - name: Run a one-line script
-      run: echo Hello one, world!
-    
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:   
+        path: $WORK/ghworkflow/CESM
+    - name: Run git-fleximod
+      run: |
+        cd $WORK/ghworkflow/CESM
+	./bin/git-fleximod update
+    - name: Run scripts_regression_tests
+      run: |
+      	cd cime/CIME/tests
+        module load cmake
+        ./scripts_regression_tests.py
+
+          
