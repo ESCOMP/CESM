@@ -26,6 +26,9 @@ jobs:
         pwd
         module list
         ./bin/git-fleximod update
+    - name: Submit test script
+      run: |
+        pwd
         cd cime/CIME/tests
         module load cmake
-        qcmd -A P93300606 -l walltime=02:00:00 -- ./scripts_regression_tests.py
+        qcmd -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./scripts_regression_tests.py
