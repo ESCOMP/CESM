@@ -23,7 +23,8 @@ jobs:
       uses: actions/checkout@v4
     - name: Run git-fleximod
       run: |
-        cd CESM
+        pwd
+	module list
         ./bin/git-fleximod update
         cd cime/CIME/tests
         module load cmake
