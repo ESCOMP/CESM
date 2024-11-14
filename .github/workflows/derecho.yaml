@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     if: ${{ github.event.label.name == 'run-pr-tests' }}
-    runs-on: derecho
+    runs-on: hpc-runner
 
     steps:
     - uses: actions/checkout@v3
