@@ -21,11 +21,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:   
-        path: $WORK/ghworkflow/CESM
     - name: Run git-fleximod
       run: |
-        cd $WORK/ghworkflow/CESM
+        cd CESM
         ./bin/git-fleximod update
         cd cime/CIME/tests
         module load cmake
