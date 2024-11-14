@@ -27,10 +27,8 @@ jobs:
       run: |
         cd $WORK/ghworkflow/CESM
         ./bin/git-fleximod update
-    - name: Run scripts_regression_tests
-      run: |
       	cd cime/CIME/tests
         module load cmake
-        ./scripts_regression_tests.py
+        qcmd -l walltime=02:00:00 -- ./scripts_regression_tests.py
 
           
