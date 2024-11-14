@@ -26,7 +26,7 @@ jobs:
     - name: Run git-fleximod
       run: |
         cd $WORK/ghworkflow/CESM
-	./bin/git-fleximod update
+        ./bin/git-fleximod update
     - name: Run scripts_regression_tests
       run: |
       	cd cime/CIME/tests
