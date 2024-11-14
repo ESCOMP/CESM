@@ -24,7 +24,7 @@ jobs:
     - name: Run git-fleximod
       run: |
         pwd
-	module list
+        module list
         ./bin/git-fleximod update
         cd cime/CIME/tests
         module load cmake
