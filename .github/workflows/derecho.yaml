@@ -29,6 +29,6 @@ jobs:
     - name: Submit test script
       run: |
         pwd
-        cd cime/CIME/tests
+        cd cime/scripts
         module load cmake
-        qcmd -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./scripts_regression_tests.py
+        qcmd -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./create_test --xml-machine derecho --xml-category prealpha --xml-compiler intel --compiler intel-oneapi --no-run
