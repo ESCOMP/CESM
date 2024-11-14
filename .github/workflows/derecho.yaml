@@ -28,4 +28,4 @@ jobs:
         ./bin/git-fleximod update
         cd cime/CIME/tests
         module load cmake
-        qcmd -l walltime=02:00:00 -- ./scripts_regression_tests.py
+        qcmd -A P93300606 -l walltime=02:00:00 -- ./scripts_regression_tests.py
