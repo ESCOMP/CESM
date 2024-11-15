@@ -34,6 +34,4 @@ jobs:
     steps:
       - uses: ./.github/workflows/reusable.yaml
         with:
-      	  compiler: ${{ matrix.compiler }}
-
-
+          compiler: ${{ matrix.compiler }}
