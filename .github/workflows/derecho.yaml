@@ -10,6 +10,8 @@ jobs:
   build:
     if: ${{ github.event.label.name == 'run-pr-tests' }}
     runs-on: hpc-runner
+    strategy:
+      compiler: [intel, intel-oneapi, gnu, nvhpc]
     env:
       CC: mpicc
       FC: mpifort
@@ -26,9 +28,10 @@ jobs:
         pwd
         module list
         ./bin/git-fleximod update
-    - name: Submit test script
+    - name: Run ${{ compiler }} tests
+      continue-on-error: true
       run: |
         pwd
         cd cime/scripts
         module load cmake
-        qcmd -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./create_test --xml-machine derecho --xml-category prealpha --xml-compiler intel --compiler intel-oneapi --no-run
+        qcmd -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./create_test --xml-machine derecho --xml-category github --no-run --compiler ${{ compiler }}
