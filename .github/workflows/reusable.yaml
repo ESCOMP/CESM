@@ -1,0 +1,21 @@
+on:
+  workflow_call:
+    inputs:
+      compiler:
+        required: true
+	type: string
+jobs:
+  test:
+    runs-on: hpc-runner
+    steps:
+      - name: Run ${{ inputs.compiler }} tests
+        continue-on-error: true
+        run: |
+          pwd
+          cd cime/scripts
+          module load cmake
+          qcmd -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./create_test --xml-machine derecho --xml-category github --no-run --compiler ${{ matrix.compiler }} --test-id ghtest.${{ inputs.compiler }}
+      - name: check status
+        run: |
+	  cd $SCRATCH
+	  ./cs.status.ghtest.${{ inputs.compiler }} --expected-fails-file ghtest.expected_fails.${{ inputs.compiler }} 

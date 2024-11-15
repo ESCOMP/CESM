@@ -7,20 +7,10 @@ on:
     types: [ labeled ]
     
 jobs:
-  build:
+  setup:
     if: ${{ github.event.label.name == 'run-pr-tests' }}
     runs-on: hpc-runner
-    strategy:
-      matrix:
-        compiler: [intel, intel-oneapi, gnu, nvhpc]
-    env:
-      CC: mpicc
-      FC: mpifort
-      CXX: mpicxx
-      CIME_MODEL: cesm
-      CIME_DRIVER: nuopc
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -29,10 +19,23 @@ jobs:
         pwd
         module list
         ./bin/git-fleximod update
-    - name: Run ${{ matrix.compiler }} tests
-      continue-on-error: true
-      run: |
-        pwd
-        cd cime/scripts
-        module load cmake
-        qcmd -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./create_test --xml-machine derecho --xml-category github --no-run --compiler ${{ matrix.compiler }}
+
+  reusable:
+    needs: [setup]
+    strategy:
+      matrix:
+#        compiler: [intel, intel-oneapi, gnu, nvhpc]
+        compiler: [intel, intel-oneapi]
+    env:
+      CC: mpicc
+      FC: mpifort
+      CXX: mpicxx
+      CIME_MODEL: cesm
+      CIME_DRIVER: nuopc
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+   uses ESCOMP/CESM/.github/workflows/reusable.yaml@mail
+   with:
+     stage: ${{ matrix.compiler }}
+
+
