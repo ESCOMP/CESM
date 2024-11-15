@@ -2,8 +2,9 @@ on:
   workflow_call:
     inputs:
       compiler:
+        type: string
         required: true
-	type: string
+
 jobs:
   test:
     runs-on: hpc-runner
