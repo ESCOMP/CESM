@@ -34,7 +34,7 @@ jobs:
       CIME_DRIVER: nuopc
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-    uses: ESCOMP/CESM/.github/workflows/reusable.yaml@mail
+    uses: ESCOMP/CESM/.github/workflows/reusable.yaml.${{ github.ref_name }}
     with:
       stage: ${{ matrix.compiler }}
 
