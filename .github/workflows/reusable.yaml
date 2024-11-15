@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Run ${{ inputs.compiler }} tests
         continue-on-error: true
-	run: |
+        run: |
           pwd
           cd cime/scripts
           module load cmake
