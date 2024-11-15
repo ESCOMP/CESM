@@ -21,6 +21,7 @@ jobs:
         ./bin/git-fleximod update
 
   reusable:
+    runs-on: hpc-runner
     strategy:
       matrix:
         compiler: [intel, intel-oneapi]
