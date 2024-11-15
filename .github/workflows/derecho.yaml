@@ -21,6 +21,9 @@ jobs:
         ./bin/git-fleximod update
 
   reusable:
+    strategy:
+      matrix:
+        compiler: [intel, intel-oneapi]
     env:
       CC: mpicc
       FC: mpifort
@@ -28,11 +31,9 @@ jobs:
       CIME_MODEL: cesm
       CIME_DRIVER: nuopc
     needs: [setup]
-    uses: ./.github/workflows/reusable.yaml
-    strategy:
-      matrix:
-        compiler: [intel, intel-oneapi]
-    with:
-      compiler: ${{ matrix.compiler }}
+    steps:
+      - uses: ./.github/workflows/reusable.yaml
+        with:
+      	  compiler: ${{ matrix.compiler }}
 
 
