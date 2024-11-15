@@ -53,6 +53,10 @@
     <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
   <compset>
+    <alias>BMT1850</alias>
+    <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_WW3</lname>
+  </compset>
+  <compset>
     <alias>BHISTC_MTso</alias>
     <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
@@ -69,6 +73,10 @@
 
   <compset>
     <alias>B1850C_LTso</alias>
+    <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_WW3</lname>
+  </compset>
+  <compset>
+    <alias>BLT1850</alias>
     <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6%MARBL-BIO_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
   <compset>
