@@ -33,7 +33,7 @@ jobs:
       CIME_MODEL: cesm
       CIME_DRIVER: nuopc
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    uses: ESCOMP/CESM/.github/workflows/reusable.yaml@${{ github.head_ref || github.ref_name }}   
+    uses: ./.github/workflows/reusable.yaml   
     with:
       stage: ${{ matrix.compiler }}
 
