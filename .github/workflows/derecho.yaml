@@ -22,6 +22,7 @@ jobs:
 
   reusable:
     needs: [setup]
+    uses: ./.github/workflows/reusable.yaml
     strategy:
       matrix:
       #        compiler: [intel, intel-oneapi, gnu, nvhpc]
@@ -32,9 +33,8 @@ jobs:
       CXX: mpicxx
       CIME_MODEL: cesm
       CIME_DRIVER: nuopc
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    uses: ./.github/workflows/reusable.yaml
+
     with:
-      stage: ${{ matrix.compiler }}
+      compiler: ${{ matrix.compiler }}
 
 
