@@ -24,17 +24,11 @@ jobs:
         ./bin/git-fleximod update
 
   reusable:
-    runs-on: hpc-runner
     strategy:
       matrix:
         compiler: [intel, intel-oneapi]
-    env:
-      CC: mpicc
-      FC: mpifort
-      CXX: mpicxx
-      CIME_MODEL: cesm
-      CIME_DRIVER: nuopc
-    needs: [setup]
     uses: ./.github/workflows/reusable.yaml
     with:
       compiler: ${{ matrix.compiler }}
+    runs-on: hpc-runner
+

@@ -7,6 +7,13 @@ on:
 
 jobs:
   test:
+    env:
+      CC: mpicc
+      FC: mpifort
+      CXX: mpicxx
+      CIME_MODEL: cesm
+      CIME_DRIVER: nuopc
+    needs: setup
     runs-on: hpc-runner
     working-directory: $GITHUB_WORKSPACE/CESM
     steps:
