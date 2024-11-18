@@ -28,4 +28,4 @@ jobs:
       - name: check status
         run: |
           cd $SCRATCH
-          ./cs.status.${GITHUB_RUN_ID} --expected-fails-file $GITHUB_WORKSPACE/CESM/cime_config/testfiles/ExpectedTestFails.xml 
+          ./cs.status.${GITHUB_RUN_ID} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml 
