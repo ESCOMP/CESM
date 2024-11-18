@@ -29,7 +29,7 @@
 
 
 <!--
-  <test name="SMS_Ld12_Mmpi-serial.1x1_urbanc_alpha.I1PtClm60SpRs.derecho_intel.clm-output_sp_highfreq--clm-nofireemis">
+  <test name="SMS.res.compset.machine_compiler.clm-nofireemis">
     <phase name="RUN">
       <status>FAIL</status>
       <issue>CDEPS/#243</issue>
