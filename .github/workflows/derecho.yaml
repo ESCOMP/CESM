@@ -35,7 +35,6 @@ jobs:
       CIME_MODEL: cesm
       CIME_DRIVER: nuopc
     needs: [setup]
-    steps:
-      - uses: ./.github/workflows/reusable.yaml
-        with:
-          compiler: ${{ matrix.compiler }}
+    uses: ./.github/workflows/reusable.yaml
+    with:
+      compiler: ${{ matrix.compiler }}
