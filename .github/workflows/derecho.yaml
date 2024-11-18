@@ -7,6 +7,22 @@ on:
     types: [ labeled ]
     
 jobs:
+  setup:
+    if: ${{ github.event.label.name == 'run-pr-tests' }}
+    runs-on: hpc-runner
+   
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        repository: ESCOMP/CESM
+	path: CESM
+    - name: Run git-fleximod
+      run: |
+        pwd
+        module list
+        ./bin/git-fleximod update
+
   reusable:
     runs-on: hpc-runner
     strategy:
