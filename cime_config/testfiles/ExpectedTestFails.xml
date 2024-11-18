@@ -35,14 +35,14 @@
       <issue>CDEPS/#243</issue>
     </phase>
   </test>
-
+-->
   <test name="SMS_D.1x1_brazil.I1850Clm60BgcCrop.derecho_gnu.clm-mimics_matrixcn">
     <phase name="RUN">
       <status>FAIL</status>
       <issue>#2780</issue>
-      <comment>Crashes in the matrix solver.</comment>
+      <comment>This file requires at least one entry</comment>
     </phase>
   </test>
--->
+
 
 </expectedFails>
