@@ -1,0 +1,48 @@
+<?xml version= "1.0"?>
+
+<expectedFails version="1.1">
+
+  <!-- Notes about the format of this file:
+
+       The required elements for a given failure are just:
+
+         <test name="...">
+           <phase name="...">
+             <status>...</status>
+           </phase>
+         </test>
+
+       There can be multiple phase blocks in a given test block.
+
+       In addition, a number of optional elements are allowed, which
+       currently are just for human consumption (not parsed by any
+       scripts):
+
+       - A phase block can contain an "issue" element, which gives the
+       issue number associated with this failure. (#123 refers to issue
+       #123 in the ESCOMP/ctsm repository. Issues in other repositories
+       should be specified as ORG/repo#123 - e.g., ESMCI/cime#123.)
+
+       - A phase block can contain a "comment" element, which gives any
+       sort of comment you desire.
+  -->
+
+
+<!--
+  <test name="SMS_Ld12_Mmpi-serial.1x1_urbanc_alpha.I1PtClm60SpRs.derecho_intel.clm-output_sp_highfreq--clm-nofireemis">
+    <phase name="RUN">
+      <status>FAIL</status>
+      <issue>CDEPS/#243</issue>
+    </phase>
+  </test>
+
+  <test name="SMS_D.1x1_brazil.I1850Clm60BgcCrop.derecho_gnu.clm-mimics_matrixcn">
+    <phase name="RUN">
+      <status>FAIL</status>
+      <issue>#2780</issue>
+      <comment>Crashes in the matrix solver.</comment>
+    </phase>
+  </test>
+-->
+
+</expectedFails>
