@@ -6,8 +6,8 @@ on:
         required: true
 
 jobs:
-  if '!cancelled()':
   test:
+    if '!cancelled()':
     env:
       CC: mpicc
       FC: mpifort
