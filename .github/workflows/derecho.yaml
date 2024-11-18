@@ -30,5 +30,3 @@ jobs:
     uses: ./.github/workflows/reusable.yaml
     with:
       compiler: ${{ matrix.compiler }}
-    runs-on: hpc-runner
-
