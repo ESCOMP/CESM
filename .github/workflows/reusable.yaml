@@ -15,7 +15,6 @@ jobs:
       CIME_DRIVER: nuopc
     needs: setup
     runs-on: hpc-runner
-    working-directory: $GITHUB_WORKSPACE/CESM
     steps:
       - name: Run ${{ inputs.compiler }} tests
         continue-on-error: true
