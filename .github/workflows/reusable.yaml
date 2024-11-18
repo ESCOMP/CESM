@@ -13,7 +13,7 @@ jobs:
       CXX: mpicxx
       CIME_MODEL: cesm
       CIME_DRIVER: nuopc
-    needs: setup
+    # needs: setup
     runs-on: hpc-runner
     steps:
       - name: Run ${{ inputs.compiler }} tests
