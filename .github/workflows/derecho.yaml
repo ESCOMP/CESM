@@ -15,9 +15,7 @@ jobs:
     steps:
     - name: Prepare system
       run: |
-        rm $SCRATCH/cs.s*
-        rm -fr $SCRATCH/SMS_Ld2*
-        rm -fr $GITHUB_WORKSPACE
+        rm -fr $SCRATCH/cs.s* $SCRATCH/SMS_Ld2* $GITHUB_WORKSPACE
         mkdir  $GITHUB_WORKSPACE
     - name: Checkout code
       uses: actions/checkout@v4
