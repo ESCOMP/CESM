@@ -17,7 +17,7 @@ jobs:
       run: |
         rm $SCRATCH/cs.s*
         rm -fr $SCRATCH/SMS_Ld2*
-        rm -fr $GITHUB_WORKSPACE/*
+        rm -fr $GITHUB_WORKSPACE
     - name: Checkout code
       uses: actions/checkout@v4
     - name: Run git-fleximod

@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    if: success() || failure()
+    if: always()
     env:
       CC: mpicc
       FC: mpifort
