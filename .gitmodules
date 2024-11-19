@@ -30,7 +30,7 @@
         path = ccs_config
         url = https://github.com/jedwards4b/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.10_update_default_ww3grid02
+        fxtag = ccs_config_cesm1.0.10_update_default_ww3grid03
         fxrequired = ToplevelRequired
 
 [submodule "cime"]

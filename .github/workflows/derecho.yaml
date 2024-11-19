@@ -23,7 +23,7 @@ jobs:
   reusable:
     strategy:
       matrix:
-        compiler: [intel, intel-oneapi]
+        compiler: [intel, intel-oneapi, nvhpc, gnu ]
     uses: ./.github/workflows/reusable.yaml
     with:
       compiler: ${{ matrix.compiler }}
