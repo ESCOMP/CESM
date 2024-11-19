@@ -36,11 +36,11 @@
     </phase>
   </test>
 -->
-  <test name="SMS_D.1x1_brazil.I1850Clm60BgcCrop.derecho_gnu.clm-mimics_matrixcn">
-    <phase name="RUN">
+  <test name="SMS_Ld2.ne30pg3_t232.BMT1850.derecho_nvhpc.allactive-defaultio">
+    <phase name="MODEL_BUILD">
       <status>FAIL</status>
-      <issue>#2780</issue>
-      <comment>This file requires at least one entry</comment>
+      <issue></issue>
+      <comment></comment>
     </phase>
   </test>
 

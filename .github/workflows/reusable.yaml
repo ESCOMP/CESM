@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    if: always()
+    if: success() || failure()
     env:
       CC: mpicc
       FC: mpifort
@@ -28,4 +28,7 @@ jobs:
       - name: check status
         run: |
           cd $SCRATCH
-          ./cs.status.${GITHUB_RUN_ID} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml 
+          ./cs.status.${GITHUB_RUN_ID} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml --summary | grep FAIL
+	  if [ $? == 0 ]; then
+	    return -1
+	  fi
