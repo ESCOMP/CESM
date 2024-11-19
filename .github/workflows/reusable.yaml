@@ -29,6 +29,6 @@ jobs:
         run: |
           cd $SCRATCH
           ./cs.status.${GITHUB_RUN_ID} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml --summary | grep FAIL
-	  if [ $? == 0 ]; then
-	    return -1
-	  fi
+          if [ $? == 0 ]; then
+            return -1
+          fi
