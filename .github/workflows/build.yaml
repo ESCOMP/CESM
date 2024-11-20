@@ -32,6 +32,6 @@ jobs:
       - name: check status
         run: |
           cd $SCRATCH
-	  # if no fails and no passes in expected fails then exit 0 otherwise exit 1
+          # if no fails and no passes in expected fails then exit 0 otherwise exit 1
           ./cs.status.${GITHUB_RUN_ID}${{ inputs.compiler }} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml | grep FAIL | grep -v FAILURE || exit 0
           exit 1
