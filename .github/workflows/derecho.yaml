@@ -28,7 +28,7 @@ jobs:
   build:
     strategy:
       matrix:
-        compiler: [gnu ]
+        compiler: [gnu, intel, intel-oneapi, nvhpc]
     uses: ./.github/workflows/build.yaml
     with:
       compiler: ${{ matrix.compiler }}

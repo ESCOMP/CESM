@@ -17,9 +17,6 @@ jobs:
       CIME_DRIVER: nuopc
     # needs: setup
     runs-on: hpc-runner
-    defaults:
-      run:
-        shell: /usr/bin/bash -ex {0}
     steps:
       - name: Run ${{ inputs.compiler }} tests
         continue-on-error: true
@@ -28,7 +25,7 @@ jobs:
           cd cime/scripts
           module load cmake
           qcmd -q main -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./create_test --xml-machine derecho\
-              --xml-category github2 --no-run --compiler ${{ inputs.compiler }} --test-id ${GITHUB_RUN_ID}${{ inputs.compiler }}
+              --xml-category github --no-run --compiler ${{ inputs.compiler }} --test-id ${GITHUB_RUN_ID}${{ inputs.compiler }}
       - name: check status
         run: |
           cd $SCRATCH
