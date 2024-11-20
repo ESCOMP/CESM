@@ -24,11 +24,11 @@ jobs:
           cd cime/scripts
           module load cmake
           qcmd -q main -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./create_test --xml-machine derecho\
-              --xml-category github --no-run --compiler ${{ inputs.compiler }} --test-id $GITHUB_RUN_ID
+              --xml-category github --no-run --compiler ${{ inputs.compiler }} --test-id $GITHUB_RUN_ID.${{ inputs.compiler }}
       - name: check status
         run: |
           cd $SCRATCH
-          ./cs.status.${GITHUB_RUN_ID} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml --summary | grep FAIL
+          ./cs.status.${GITHUB_RUN_ID}.${{ inputs.compiler }} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml --fails-only | grep FAIL
           if [ $? == 0 ]; then
             return -1
           fi
