@@ -1,0 +1,51 @@
+on:
+  push:
+    branches: [ master, cesm3.0-alphabranch ]
+  pull_request:
+    branches: [ master, cesm3.0-alphabranch ]
+
+jobs:
+  preview_namelists:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Lots of python versions, pare down if we don't support a version
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        config:
+          - {"compset": "BLT1850", "res": "ne30pg3_t232"} # fully coupled
+          - {"compset": "C_JRA", "res": "TL319_t232"}     # ocean only
+          - {"compset": "C1850MARBL_JRA", "res": "TL319_t232"}     # ocean only, with BGC
+          - {"compset": "DTEST", "res": "TL319_t232"}     # ice only
+          - {"compset": "I1850Clm60SpCru", "res": "f10_f10_mg37"} # land only
+          - {"compset": "QPC6HIST", "res": "f09_f09_mg17"} # atm only
+          - {"compset": "T1850Gg", "res": "f09_g17_gris4"} # glc only
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up non-python environment (need xmllint and a fake ESMF make file)
+        run: |
+          git config --global user.email "testing@github.actions"
+          git config --global user.name "Github Actions Testing"
+          echo "ESMFMKFILE=$HOME/esmf.mk" >> ${GITHUB_ENV}
+          echo "ESMF_VERSION_MAJOR=8" > ${HOME}/esmf.mk
+          echo "ESMF_VERSION_MINOR=8" >> ${HOME}/esmf.mk
+          sudo apt-get install libxml2-utils
+
+
+      - name: Checkout CESM
+        run: |
+          $GITHUB_WORKSPACE/bin/git-fleximod update
+
+      - name: Create new cases, run case.setup, and then preview namelists
+        run: |
+          cd $GITHUB_WORKSPACE/cime/scripts
+          ./create_newcase --run-unsupported --mach ubuntu-latest --compset ${{ matrix.config.compset }} --res ${{ matrix.config.res }} --case $GITHUB_WORKSPACE/cases/${{ matrix.config.compset }}_${{ matrix.python-version }}
+          cd $GITHUB_WORKSPACE/cases/${{ matrix.config.compset }}_${{ matrix.python-version }}
+          ./case.setup
+          ./preview_namelists
