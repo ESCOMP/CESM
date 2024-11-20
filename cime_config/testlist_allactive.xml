@@ -53,7 +53,7 @@
     <machines>
       <machine name="derecho" compiler="intel" category="aux_cime_baselines"/>
       <machine name="derecho" compiler="gnu" category="prealpha"/>
-      <machine name="derecho" compiler="intel" category="github"/>
+      <machine name="derecho" compiler="intel" category="github2"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30:00 </option>

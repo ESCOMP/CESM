@@ -25,10 +25,10 @@ jobs:
         module list
         ./bin/git-fleximod update
 
-  reusable:
+  build:
     strategy:
       matrix:
-        compiler: [intel, intel-oneapi, nvhpc, gnu ]
-    uses: ./.github/workflows/reusable.yaml
+        compiler: [gnu ]
+    uses: ./.github/workflows/build.yaml
     with:
       compiler: ${{ matrix.compiler }}
