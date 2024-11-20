@@ -40,9 +40,9 @@ jobs:
           # if no fails and no passes in expected fails then cleanup and exit 0 otherwise exit 1
           ./cs.status.${GITHUB_RUN_ID}${{ inputs.compiler }} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml | grep FAIL | grep -v FAILURE
           retcode = $?
-	  if [ $retcode -eq 0 ]; then
+          if [ $retcode -eq 0 ]; then
             exit 1
-	  fi
-	  # tests pass, clean up
-	  rm -fr *.${GITHUB_RUN_ID}${{ inputs.compiler }}
-	  exit 0
+          fi
+          # tests pass, clean up
+          rm -fr *.${GITHUB_RUN_ID}${{ inputs.compiler }}
+          exit 0
