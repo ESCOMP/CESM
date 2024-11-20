@@ -29,8 +29,8 @@ jobs:
         run: |
           cd $SCRATCH
           ./cs.status.${GITHUB_RUN_ID}${{ inputs.compiler }} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml --fails-only | grep FAIL | grep -v FAILURE
-	  retval=$?
-	  if [ $retval -eq 0 ]; then
-	    echo "Error"
+          retval=$?
+          if [ $retval -eq 0 ]; then
+            echo "Error"
           fi
-	  exit 0
+          exit 0
