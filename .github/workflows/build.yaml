@@ -16,7 +16,9 @@ jobs:
       CIME_DRIVER: nuopc
     # needs: setup
     runs-on: hpc-runner
-    shell: /usr/bin/bash -ex {0}
+    defaults:
+      run:
+        shell: bash -x
     steps:
       - name: Run ${{ inputs.compiler }} tests
         continue-on-error: true
