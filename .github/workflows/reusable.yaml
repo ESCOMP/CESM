@@ -28,7 +28,8 @@ jobs:
       - name: check status
         run: |
           cd $SCRATCH
-          ./cs.status.${GITHUB_RUN_ID}${{ inputs.compiler }} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml --fails-only | grep FAIL
+          ./cs.status.${GITHUB_RUN_ID}${{ inputs.compiler }} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml --fails-only | grep FAIL | grep -v FAILURE
           if [ $? == 0 ]; then
             return -1
           fi
+	  return 0
