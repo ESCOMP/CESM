@@ -28,9 +28,9 @@
 
 [submodule "ccs_config"]
         path = ccs_config
-        url = https://github.com/ESMCI/ccs_config_cesm.git
+        url = https://github.com/jedwards4b/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.8
+        fxtag = ccs_config_cesm1.0.10_update_default_ww3grid03
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -56,9 +56,9 @@
 
 [submodule "cam"]
         path = components/cam
-        url = https://www.github.com/ESCOMP/CAM
+        url = https://www.github.com/jedwards4b/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_4_046
+        fxtag = remove_mct_submodule_update_config_component01
         fxrequired = ToplevelRequired
 
 [submodule "clm"]

@@ -342,7 +342,7 @@ def main():
         excludelist=excludelist,
     )
     if not gitmodules.sections():
-        sys.exit("No submodule components found")
+        sys.exit(f"No submodule components found, root_dir={root_dir}")
     retval = 0
     if action == "update":
         submodules_update(gitmodules, root_dir, fxrequired, force)
