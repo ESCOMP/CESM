@@ -38,7 +38,7 @@ jobs:
         run: |
           cd $SCRATCH
           # if no fails and no passes in expected fails then cleanup and exit 0 otherwise exit 1
-          ./cs.status.${GITHUB_RUN_ID}${{ inputs.compiler }} --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml | grep FAIL | grep -v FAILURE
+          ./cs.status.${GITHUB_RUN_ID}${{ inputs.compiler }} --fails-only --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml | grep FAIL | grep -v FAILURE
           retcode=$?
           if [ $retcode -eq 0 ]; then
             exit 1

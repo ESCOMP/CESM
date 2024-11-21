@@ -39,28 +39,28 @@
   <test name="SMS_Ld2.ne30pg3_t232.BMT1850.derecho_nvhpc.allactive-defaultio">
     <phase name="MODEL_BUILD">
       <status>FAIL</status>
-      <issue></issue>
-      <comment></comment>
+      <issue>https://github.com/NCAR/MOM6/issues/324</issue>
+      <comment>atan function</comment>
     </phase>
   </test>
   <test name="SMS_Ld2.ne30pg3_t232.BLT1850.derecho_nvhpc.allactive-defaultio">
     <phase name="MODEL_BUILD">
       <status>FAIL</status>
-      <issue></issue>
+      <issue>https://github.com/NCAR/MOM6/issues/324</issue>
       <comment></comment>
     </phase>
   </test>
   <test name="SMS_Ld2.ne30pg3_t232.BHISTC_MTso.derecho_nvhpc.allactive-defaultio">
     <phase name="MODEL_BUILD">
       <status>FAIL</status>
-      <issue></issue>
+      <issue>https://github.com/NCAR/MOM6/issues/324</issue>
       <comment></comment>
     </phase>
   </test>
   <test name="SMS_Ld2.ne30pg3_t232.BHISTC_LTso.derecho_nvhpc.allactive-defaultio">
     <phase name="MODEL_BUILD">
       <status>FAIL</status>
-      <issue></issue>
+      <issue>https://github.com/NCAR/MOM6/issues/324</issue>
       <comment></comment>
     </phase>
   </test>
@@ -69,7 +69,7 @@
     <phase name="SHAREDLIB_BUILD">
       <status>FAIL</status>
       <issue></issue>
-      <comment></comment>
+      <comment>FMS file mpp.F90 fails to compile in debug mode</comment>
     </phase>
   </test>
 

@@ -30,7 +30,7 @@
         path = ccs_config
         url = https://github.com/jedwards4b/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.10_update_default_ww3grid03
+        fxtag = ccs_config_cesm1.0.10_update_default_ww3grid04
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -77,10 +77,10 @@
 
 [submodule "mom"]
         path = components/mom
-        url = https://github.com/ESCOMP/MOM_interface
+        url = https://github.com/jedwards4b/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_241104
+        fxtag = mi_241104_ncar_241101_use_atan2_for_nvhpc01
 
 [submodule "cism"]
         path = components/cism
