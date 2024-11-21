@@ -27,15 +27,15 @@
        sort of comment you desire.
   -->
 
+<!-- this file requires at least one entree -->
 
-<!--
   <test name="SMS.res.compset.machine_compiler.clm-nofireemis">
     <phase name="RUN">
       <status>FAIL</status>
       <issue>CDEPS/#243</issue>
     </phase>
   </test>
--->
+<!-- These tests were fixed with updates to ccs_config and to the mom model.
   <test name="SMS_Ld2.ne30pg3_t232.BMT1850.derecho_nvhpc.allactive-defaultio">
     <phase name="MODEL_BUILD">
       <status>FAIL</status>
@@ -95,6 +95,6 @@
     </phase>
   </test>
 
-
+-->
 
 </expectedFails>
