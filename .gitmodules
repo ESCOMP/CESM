@@ -28,9 +28,9 @@
 
 [submodule "ccs_config"]
         path = ccs_config
-        url = https://github.com/jedwards4b/ccs_config_cesm.git
+        url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.10_update_default_ww3grid07
+        fxtag = ccs_config_cesm1.0.12
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -101,7 +101,7 @@
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-        fxtag = cmeps1.0.16
+        fxtag = cmeps1.0.25
 
 [submodule "rtm"]
         path = components/rtm
