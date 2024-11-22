@@ -56,9 +56,9 @@
 
 [submodule "cam"]
         path = components/cam
-        url = https://www.github.com/jedwards4b/CAM
+        url = https://www.github.com/ESCOMP/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = remove_mct_submodule_update_config_component01
+        fxtag = cam6_4_047
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
