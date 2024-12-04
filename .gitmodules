@@ -108,7 +108,7 @@
         url = https://github.com/ESCOMP/RTM
         fxDONOTUSEurl = https://github.com/ESCOMP/RTM
         fxrequired = ToplevelRequired
-        fxtag = rtm1_0_82
+        fxtag = rtm1_0_83
 
 [submodule "ww3"]
         path = components/ww3
