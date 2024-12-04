@@ -53,6 +53,7 @@
     <machines>
       <machine name="derecho" compiler="intel" category="aux_cime_baselines"/>
       <machine name="derecho" compiler="gnu" category="prealpha"/>
+      <machine name="derecho" compiler="intel" category="github"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30:00 </option>
@@ -61,19 +62,86 @@
   <test name="SMS_Ld2" grid="ne30pg3_t232" compset="BMT1850" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="gnu" category="prealpha"/>
+      <machine name="derecho" compiler="intel" category="github"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30:00 </option>
     </options>
   </test>
-  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/defaultio">
+
+  <test name="SMS_Ld2_D" grid="ne30pg3_t232" compset="B1850C_MTt4s" testmods="allactive/defaultio">
     <machines>
-      <machine name="derecho" compiler="intel" category="prealpha"/>
+      <machine name="derecho" compiler="intel" category="github"/>
     </machines>
     <options>
       <option name="wallclock"> 00:30:00 </option>
     </options>
   </test>
+
+  <test name="SMS_Ld2_D" grid="ne30pg3_t232" compset="BHISTC_MTt4s" testmods="allactive/defaultio">
+    <machines>
+      <machine name="derecho" compiler="intel" category="github"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+    </options>
+  </test>
+
+  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="B1850C_MTso" testmods="allactive/defaultio">
+    <machines>
+      <machine name="derecho" compiler="intel" category="github"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+    </options>
+  </test>
+
+  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="BHISTC_MTso" testmods="allactive/defaultio">
+    <machines>
+      <machine name="derecho" compiler="intel" category="github"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+    </options>
+  </test>
+<!-- These are not defined in config_compsets.xml
+  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="B1850C_HTs1" testmods="allactive/defaultio">
+    <machines>
+      <machine name="derecho" compiler="intel" category="github"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+    </options>
+  </test>
+  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="BHISTC_HTs1" testmods="allactive/defaultio">
+    <machines>
+      <machine name="derecho" compiler="intel" category="github"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+    </options>
+  </test>
+-->
+  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/defaultio">
+    <machines>
+      <machine name="derecho" compiler="intel" category="github"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+    </options>
+  </test>
+
+  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="BHISTC_LTso" testmods="allactive/defaultio">
+    <machines>
+      <machine name="derecho" compiler="intel" category="github"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+    </options>
+  </test>
+
+
+  
   <!-- MCC tests do not work because FMS fails at initialization of MOM -->
   <test name="MCC" grid="ne30pg3_t232" compset="BMT1850" testmods="allactive/defaultio">
     <machines>

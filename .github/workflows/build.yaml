@@ -1,0 +1,48 @@
+on:
+  workflow_call:
+    inputs:
+      compiler:
+        type: string
+        required: true
+
+jobs:
+  test:
+    # This statement avoids failures in another instance (another compiler) to cancel this run
+    # it also prevents canceling the run using the cancel button on the github website
+    # another form (if: success() || failure()) should allow the cancel button to work but tests with that form didnt act as expected    
+    if: always()
+    env:
+      CC: mpicc
+      FC: mpifort
+      CXX: mpicxx
+      CIME_MODEL: cesm
+      CIME_DRIVER: nuopc
+    # Since self runners can only run one step at a time this needs statement is not required
+    # needs: setup
+    runs-on: hpc-runner
+    defaults:
+      run:
+        shell: bash {0}
+    steps:
+      - name: Run ${{ inputs.compiler }} tests
+        # Allows the next step to run even if this one fails 
+        continue-on-error: true
+        run: |
+          pwd
+          cd cime/scripts
+          module load cmake
+          # Need to use main queue to avoid memory overflow errors 
+          qcmd -q main -v PROJECT=P93300606 -A P93300606 -l walltime=02:00:00 -- ./create_test --xml-machine derecho\
+              --xml-category github --no-run --compiler ${{ inputs.compiler }} --test-id ${GITHUB_RUN_ID}${{ inputs.compiler }}
+      - name: check status
+        run: |
+          cd $SCRATCH
+          # if no fails and no passes in expected fails then cleanup and exit 0 otherwise exit 1
+          ./cs.status.${GITHUB_RUN_ID}${{ inputs.compiler }} --fails-only --expected-fails-file $GITHUB_WORKSPACE/cime_config/testfiles/ExpectedTestFails.xml | grep FAIL | grep -v FAILURE
+          retcode=$?
+          if [ $retcode -eq 0 ]; then
+            exit 1
+          fi
+          # tests pass, clean up
+          rm -fr *.${GITHUB_RUN_ID}${{ inputs.compiler }}
+          exit 0
