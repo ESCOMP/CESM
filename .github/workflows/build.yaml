@@ -10,7 +10,7 @@ jobs:
     # This statement avoids failures in another instance (another compiler) to cancel this run
     # it also prevents canceling the run using the cancel button on the github website
     # another form (if: success() || failure()) should allow the cancel button to work but tests with that form didnt act as expected    
-    if: always()
+    if: ${{ ! cancelled() }}
     env:
       CC: mpicc
       FC: mpifort
