@@ -221,7 +221,7 @@ class Submodule():
         if superroot:
             gitroot = superroot.strip()
         else:
-            gitroot = self.root_dir.strip()
+            gitroot = self.root_dir
         # Now need to move the .git dir to the submodule location
         rootdotgit = os.path.join(self.root_dir, ".git")
         while os.path.isfile(rootdotgit):
