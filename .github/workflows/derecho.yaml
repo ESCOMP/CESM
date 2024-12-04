@@ -1,0 +1,32 @@
+name: cesm-derecho-hosted
+run-name: ${{ github.actor }} is testing the project
+
+on:
+  pull_request:
+    branches: [ cesm3.0-alphabranch ]
+    types: [ labeled ]
+    
+jobs:
+
+  setup:
+    # only run this workflow if the label run-pr-tests is applied
+    if: ${{ github.event.label.name == 'run-pr-tests' }}
+    # currently hpc-runner is derecho.hpc.ucar.edu
+    runs-on: hpc-runner
+   
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Run git-fleximod
+      run: |
+        pwd
+        module list
+        ./bin/git-fleximod update
+
+  build:
+    strategy:
+      matrix:
+        compiler: [gnu, intel, intel-oneapi, nvhpc]
+    uses: ./.github/workflows/build.yaml
+    with:
+      compiler: ${{ matrix.compiler }}

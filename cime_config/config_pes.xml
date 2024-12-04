@@ -75,7 +75,7 @@
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
-      <pes pesize="M" compset="CAM.*%MT.*MOM6%[^_]*MARBL-BIO">
+<!--      <pes pesize="M" compset="CAM.*%MT.*MOM6%[^_]*MARBL-BIO">
 	<comment></comment>
 	<ntasks>
 	  <ntasks_atm>5400</ntasks_atm>
@@ -107,10 +107,10 @@
 	  <rootpe_wav>0</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
-      </pes>
+      </pes> -->
       <pes pesize="XL" compset="CAM.*%LT.*MOM6(?!.*%MARBL-BIO)">
 	<comment>20 ypd/ 7100 pe-hrs/simyr expected</comment>
-	<ntasks>
+  	<ntasks>
 	  <ntasks_atm>5400</ntasks_atm>
 	  <ntasks_lnd>1792</ntasks_lnd>
 	  <ntasks_rof>1792</ntasks_rof>
@@ -154,7 +154,7 @@
 	  <ntasks_ice>3608</ntasks_ice>
 	  <ntasks_ocn>3300</ntasks_ocn>
 	  <ntasks_glc>4</ntasks_glc>
-	  <ntasks_wav>1</ntasks_wav>
+	  <ntasks_wav>64</ntasks_wav>
 	  <ntasks_cpl>5400</ntasks_cpl>
 	</ntasks>
 	<nthrds>
