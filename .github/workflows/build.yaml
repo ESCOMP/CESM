@@ -17,8 +17,6 @@ jobs:
       CXX: mpicxx
       CIME_MODEL: cesm
       CIME_DRIVER: nuopc
-    # Since self runners can only run one step at a time this needs statement is not required
-    needs: setup
     runs-on: hpc-runner
     defaults:
       run:
