@@ -23,8 +23,6 @@ jobs:
         shell: bash {0}
     steps:
       - name: Run ${{ inputs.compiler }} tests
-        # Allows the next step to run even if this one fails 
-        continue-on-error: true
         run: |
           pwd
           cd cime/scripts
