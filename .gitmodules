@@ -28,9 +28,9 @@
 
 [submodule "ccs_config"]
         path = ccs_config
-        url = https://github.com/ESMCI/ccs_config_cesm.git
+        url = https://github.com/jedwards4b/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.12
+        fxtag = 5f62c8d3
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
