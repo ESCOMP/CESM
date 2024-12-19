@@ -1,0 +1,100 @@
+<?xml version= "1.0"?>
+
+<expectedFails version="1.1">
+
+  <!-- Notes about the format of this file:
+
+       The required elements for a given failure are just:
+
+         <test name="...">
+           <phase name="...">
+             <status>...</status>
+           </phase>
+         </test>
+
+       There can be multiple phase blocks in a given test block.
+
+       In addition, a number of optional elements are allowed, which
+       currently are just for human consumption (not parsed by any
+       scripts):
+
+       - A phase block can contain an "issue" element, which gives the
+       issue number associated with this failure. (#123 refers to issue
+       #123 in the ESCOMP/ctsm repository. Issues in other repositories
+       should be specified as ORG/repo#123 - e.g., ESMCI/cime#123.)
+
+       - A phase block can contain a "comment" element, which gives any
+       sort of comment you desire.
+  -->
+
+<!-- this file requires at least one entree -->
+
+  <test name="SMS.res.compset.machine_compiler.clm-nofireemis">
+    <phase name="RUN">
+      <status>FAIL</status>
+      <issue>CDEPS/#243</issue>
+    </phase>
+  </test>
+<!-- These tests were fixed with updates to ccs_config and to the mom model.
+  <test name="SMS_Ld2.ne30pg3_t232.BMT1850.derecho_nvhpc.allactive-defaultio">
+    <phase name="MODEL_BUILD">
+      <status>FAIL</status>
+      <issue>https://github.com/NCAR/MOM6/issues/324</issue>
+      <comment>atan function</comment>
+    </phase>
+  </test>
+  <test name="SMS_Ld2.ne30pg3_t232.BLT1850.derecho_nvhpc.allactive-defaultio">
+    <phase name="MODEL_BUILD">
+      <status>FAIL</status>
+      <issue>https://github.com/NCAR/MOM6/issues/324</issue>
+      <comment></comment>
+    </phase>
+  </test>
+  <test name="SMS_Ld2.ne30pg3_t232.BHISTC_MTso.derecho_nvhpc.allactive-defaultio">
+    <phase name="MODEL_BUILD">
+      <status>FAIL</status>
+      <issue>https://github.com/NCAR/MOM6/issues/324</issue>
+      <comment></comment>
+    </phase>
+  </test>
+  <test name="SMS_Ld2.ne30pg3_t232.BHISTC_LTso.derecho_nvhpc.allactive-defaultio">
+    <phase name="MODEL_BUILD">
+      <status>FAIL</status>
+      <issue>https://github.com/NCAR/MOM6/issues/324</issue>
+      <comment></comment>
+    </phase>
+  </test>
+
+  <test name="SMS_Ld2_D.ne30pg3_t232.B1850C_MTt4s.derecho_nvhpc.allactive-defaultio">
+    <phase name="SHAREDLIB_BUILD">
+      <status>FAIL</status>
+      <issue></issue>
+      <comment>FMS file mpp.F90 fails to compile in debug mode</comment>
+    </phase>
+  </test>
+
+  <test name="SMS_Ld2_D.ne30pg3_t232.BHISTC_MTt4s.derecho_nvhpc.allactive-defaultio">
+    <phase name="SHAREDLIB_BUILD">
+      <status>FAIL</status>
+      <issue></issue>
+      <comment></comment>
+    </phase>
+  </test>
+  <test name="SMS_Ld2.ne30pg3_t232.B1850C_LTso.derecho_nvhpc.allactive-defaultio">
+    <phase name="MODEL_BUILD">
+      <status>FAIL</status>
+      <issue></issue>
+      <comment></comment>
+    </phase>
+  </test>
+  <test name="SMS_Ld2.ne30pg3_t232.B1850C_MTso.derecho_nvhpc.allactive-defaultio">
+    <phase name="MODEL_BUILD">
+      <status>FAIL</status>
+      <issue></issue>
+      <comment></comment>
+    </phase>
+  </test>
+
+-->
+
+</expectedFails>
