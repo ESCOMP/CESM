@@ -36,12 +36,16 @@ jobs:
           echo "ESMF_VERSION_MAJOR=8" > ${HOME}/esmf.mk
           echo "ESMF_VERSION_MINOR=8" >> ${HOME}/esmf.mk
           sudo apt-get install libxml2-utils
-
+          sudo apt-get install subversion
 
       - name: Checkout CESM
         run: |
           $GITHUB_WORKSPACE/bin/git-fleximod update
 
+      - name: Get WW3 grid data
+        run: |
+          svn co https://svn-ccsm-inputdata.cgd.ucar.edu/trunk/inputdata/wav/ww3/grid_inp.wgx3v7 /home/runner/cesm/inputdata/wav/ww3/grid_inp.wgx3v7          
+          
       - name: Create new cases, run case.setup, and then preview namelists
         run: |
           cd $GITHUB_WORKSPACE/cime/scripts
