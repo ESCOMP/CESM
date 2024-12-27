@@ -10,22 +10,20 @@ jobs:
     # This statement avoids failures in another instance (another compiler) to cancel this run
     # it also prevents canceling the run using the cancel button on the github website
     # another form (if: success() || failure()) should allow the cancel button to work but tests with that form didnt act as expected    
-    if: always()
+    if: ${{ ! cancelled() }}
     env:
       CC: mpicc
       FC: mpifort
       CXX: mpicxx
       CIME_MODEL: cesm
       CIME_DRIVER: nuopc
-    # Since self runners can only run one step at a time this needs statement is not required
-    # needs: setup
     runs-on: hpc-runner
     defaults:
       run:
         shell: bash {0}
     steps:
       - name: Run ${{ inputs.compiler }} tests
-        # Allows the next step to run even if this one fails 
+        # Allows the check status step to run even if this one fails 
         continue-on-error: true
         run: |
           pwd
