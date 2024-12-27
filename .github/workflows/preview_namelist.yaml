@@ -43,8 +43,9 @@ jobs:
           $GITHUB_WORKSPACE/bin/git-fleximod update
 
       - name: Get WW3 grid data
+        # WW3 data needs to be prestaged for buildnml to work correctly
         run: |
-          svn co https://svn-ccsm-inputdata.cgd.ucar.edu/trunk/inputdata/wav/ww3/grid_inp.wgx3v7 /home/runner/cesm/inputdata/wav/ww3/grid_inp.wgx3v7          
+          svn co https://svn-ccsm-inputdata.cgd.ucar.edu/trunk/inputdata/wav/ww3 /home/runner/cesm/inputdata/wav/ww3          
           
       - name: Create new cases, run case.setup, and then preview namelists
         run: |
