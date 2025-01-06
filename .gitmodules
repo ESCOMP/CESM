@@ -30,7 +30,7 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.15
+        fxtag = ccs_config_cesm1.0.16
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -108,7 +108,7 @@
         url = https://github.com/ESCOMP/RTM
         fxDONOTUSEurl = https://github.com/ESCOMP/RTM
         fxrequired = ToplevelRequired
-        fxtag = rtm1_0_83
+        fxtag = rtm1_0_84
 
 [submodule "ww3"]
         path = components/ww3
