@@ -181,6 +181,8 @@ def init_submodule_from_gitmodules(gitmodules, name, root_dir, logger):
     url = gitmodules.get(name, "url")
     assert path and url, f"Malformed .gitmodules file {path} {url}"
     tag = gitmodules.get(name, "fxtag")
+    if not tag:
+        tag = gitmodules.get(name, "hash")
     fxurl = gitmodules.get(name, "fxDONOTUSEurl")
     fxsparse = gitmodules.get(name, "fxsparse")
     fxrequired = gitmodules.get(name, "fxrequired")
@@ -250,7 +252,6 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
                 newrequiredlist = ["AlwaysRequired"]
                 if optional:
                     newrequiredlist.append("AlwaysOptional")
-
                 submodules_update(gitsubmodules, repodir, newrequiredlist, force=force)
 
 def local_mods_output():

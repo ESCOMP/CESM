@@ -25,6 +25,8 @@ jobs:
 
   build:
     strategy:
+      # run all matrix members even if one fails
+      fail-fast: false
       matrix:
         compiler: [gnu, intel, intel-oneapi, nvhpc]
     uses: ./.github/workflows/build.yaml

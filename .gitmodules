@@ -30,14 +30,14 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.12
+        fxtag = ccs_config_cesm1.0.16
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-        fxtag = cime6.1.46
+        fxtag = cime6.1.56
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -51,14 +51,14 @@
         path = share
         url = https://github.com/ESCOMP/CESM_share
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
-        fxtag = share1.1.5
+        fxtag = share1.1.7
         fxrequired = ToplevelRequired
 
 [submodule "cam"]
         path = components/cam
         url = https://www.github.com/ESCOMP/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_4_047
+        fxtag = cam6_4_048
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
@@ -66,14 +66,14 @@
         url = https://github.com/ESCOMP/CTSM
         fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
-        fxtag = ctsm5.3.014
+        fxtag = ctsm5.3.016
 
 [submodule "cice"]
         path = components/cice
         url = https://github.com/ESCOMP/CESM_CICE
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
         fxrequired = ToplevelRequired
-        fxtag = cesm3_cice6_5_0_14
+        fxtag = cesm3_cice6_6_0_5
 
 [submodule "mom"]
         path = components/mom
@@ -86,7 +86,7 @@
         path = components/cism
         url = https://github.com/ESCOMP/cism-wrapper.git
         fxDONOTUSEurl = https://github.com/ESCOMP/cism-wrapper.git
-        fxtag = cismwrap_2_2_002
+        fxtag = cismwrap_2_2_005
         fxrequired = ToplevelRequired
 
 [submodule "cdeps"]
@@ -94,21 +94,21 @@
         url = https://github.com/ESCOMP/CDEPS
         fxDONOTUSEurl = https://github.com/ESCOMP/CDEPS
         fxrequired = ToplevelRequired
-        fxtag = cdeps1.0.57
+        fxtag = cdeps1.0.61
 
 [submodule "cmeps"]
         path = components/cmeps
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-        fxtag = cmeps1.0.25
+        fxtag = cmeps1.0.33
 
 [submodule "rtm"]
         path = components/rtm
         url = https://github.com/ESCOMP/RTM
         fxDONOTUSEurl = https://github.com/ESCOMP/RTM
         fxrequired = ToplevelRequired
-        fxtag = rtm1_0_83
+        fxtag = rtm1_0_84
 
 [submodule "ww3"]
         path = components/ww3
@@ -122,14 +122,14 @@
         url = https://github.com/ESCOMP/mizuRoute
         fxDONOTUSEurl = https://github.com/ESCOMP/mizuRoute
         fxrequired = ToplevelRequired
-        fxtag = cesm-coupling.n02_v2.1.3
+        fxtag = cesm-coupling.n03_v2.2.0
 
 [submodule "mosart"]
         path = components/mosart
         url = https://github.com/ESCOMP/MOSART
         fxDONOTUSEurl = https://github.com/ESCOMP/MOSART
         fxrequired = ToplevelRequired
-        fxtag = mosart1.1.05
+        fxtag = mosart1.1.06
 
 [submodule "parallelio"]
         path = libraries/parallelio
@@ -157,4 +157,4 @@
         url = https://github.com/NCAR/CUPiD.git
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
-        fxtag = v0.1.1
+        fxtag = v0.1.2

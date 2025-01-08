@@ -1,4 +1,250 @@
 ==============================================================
+Tag name: cesm3_0_alpha05c
+Originator(s): CSEG
+Date: 8th January 2024
+One-line Summary: RPOINTER update
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.16   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.56                         **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.7                  **
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_048                              **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.016                       **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_1            **
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_241122                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_005          **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.61                      **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.33                      **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_84                          **
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n03_v2.3.0     **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_06                    **
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_3                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.2                             **
+
+
+cam
+    James Edwards 2024-10-03 - cam6_4_048 - components/cam (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_xxx
+
+    Adds timestamp to rpointer files.
+
+    Depends on:
+    - cmeps1.0.32
+    - cime6.1.49
+    - share1.0.6
+    - cdeps1.0.61
+    - ctsm5.3.016
+
+
+ccs_config
+    Alper Altuntas 2025-01-06 - ccs_config_cesm1.0.16 - ccs_config (cesm3_0_alpha05c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.xx
+
+    fix default ww3 grid
+
+
+    James Edwards 2024-12-27 - ccs_config_cesm1.0.15 - ccs_config (cesm3_0_alpha05c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.15
+
+    ccs_config_cesm1.0.15: Backout derecho module update
+    ccs_config_cesm1.0.14: Add a cam and a clm file to debug exceptions for nvhpc
+    ccs_config_cesm1.0.13: Update nvhpc and gnu on derecho.
+
+
+cdeps
+    James Edwards 2024-12-18 - cdeps1.0.61 - components/cdeps (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.61
+
+    cdeps1.0.61: update nuopc_shr_methods to match share code and work with ufs
+    cdeps1.0.60: Readd rpointer timestamps.
+    cdeps1.0.59: Add back rpointer timestamps.
+    cdeps1.0.58: Change hard-coded default for nextsw_cday_calc - important for UFS.
+
+
+cice
+    Chris Fischer 2024-12-23 - cesm3_cice6_6_0_5 - components/cice (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_6_0_5
+
+    cesm3_cice6_6_0_5: Update git modules
+    cesm3_cice6_6_0_4: Fix msec initialization
+    cesm3_cice6_6_0_3: Fix msec initialization
+    cesm3_cice6_6_0_2: Remove glob rootdir
+
+
+    Chris Fischer 2024-11-19 - cesm3_cice6_6_0_1 - components/cice (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_6_0_1
+
+    Fix for testing.
+    Clean up redundant dsnown line in icepack_therm_vertical
+    Make dsnow and dsnown optional
+    Update new wave fracturing arguments
+
+
+    James Edwards 2024-10-03 - cesm3_cice6_6_0_2 - components/cice (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_5_0_xx
+
+    Adds timestamp to rpointer files.  Depends on cmeps1.0.22 and cime6.1.xxx
+
+
+    Chris Fischer 2024-11-19 - cesm3_cice6_5_0_15 - components/cice (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_5_0_15
+
+    FSD fixes for conservation
+    Update ESCOMP version of Icepack
+
+
+cime
+    James Edwards 2024-10-03 - cime6.1.47 - cime (cesm3_0_alpha05c)
+    https://github.com/ESMCI/cime/tags/cime6.1.xxx
+
+    Updates tests to add DRV_RESTART_RPOINTER variable
+
+
+    James Edwards 2024-12-30 - cime6.1.56 - cime (cesm3_0_alpha05c)
+    https://github.com/ESMCI/cime/tags/cime6.1.56
+
+    corrects logic of leap year correction in python.
+
+
+    James Edwards 2024-12-26 - cime6.1.55 - cime (cesm3_0_alpha05c)
+    https://github.com/ESMCI/cime/tags/cime6.1.55
+
+    Fixes an issue with RESUBMIT>0 which was missed in testing cam.
+
+
+    James Edwards 2024-12-20 - cime6.1.54 - cime (cesm3_0_alpha05c)
+    https://github.com/ESMCI/cime/tags/cime6.1.54
+
+    Improve leap year correction code and add doctests
+
+
+    James Edwards 2024-12-18 - cime6.1.53 - cime (cesm3_0_alpha05c)
+    https://github.com/ESMCI/cime/tags/cime6.1.53
+
+    cime6.1.53: Several updates for python 3.12 compatibility
+    cime6.1.52: Docker is not a machine, ubuntu_latest is.
+    cime6.1.51: Skip tests using evv4esm if not available.
+    cime6.1.50: Remove another reference to distutils.
+    cime6.1.49: Short term archive fix.
+    cime6.1.48: Make sure file exists before assigning.
+
+
+cism
+    James Edwards 2024-10-28 - cismwrap_2_2_005 - components/cism (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_2_005
+
+    write restart at end of run.
+
+
+    James Edwards 2024-10-03 - cismwrap_2_2_004 - components/cism (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_2_003
+
+    cismwrap_2_2_004: Adds timestamp to rpointer files.  Depends on cmeps1.0.22 and cime6.1.47
+    cismwrap_2_2_003: Update changelog for cismwrap_2_2_003.
+
+
+clm
+    James Edwards 2024-10-03 - ctsm5.3.015 - components/clm (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.xxx
+
+    Updates CDEPS and share to bring in an answer change (from CTSM's perspective)
+    regarding nextsw_cday. This change already was in place for CESM. For CTSM it
+    changes answers for cplhist cases, but also CTSM cam7 tests because of a change
+    in settings.
+
+    Changes answers for clm50cam7LndTuningMode and clm60cam7LndTuningMode tests.
+    No prealpha or prebeta tests are expected to change.
+
+    Depends on:
+    - share1.0.6
+
+
+    Erik Kluzek 2024-12-18 - ctsm5.3.016 - components/clm (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.016
+
+    Adds timestamp to rpointer files.
+
+    Includes several submodule updates that are required to go along with this. Without ALL the submodule updates there are many important tests that don't run or don't pass.
+
+    Depends on:
+    - cmeps1.0.32
+    - cdeps1.0.61
+    - cime6.1.49
+
+
+cmeps
+    James Edwards 2024-12-18 - cmeps1.0.33 - src/drivers/nuopc/ (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.33
+
+    cmeps1.0.33: remove unused variable isPresent and other github workflow related changes.
+    cmeps1.0.32: Replace testcase None in config with unset.
+    cmeps1.0.31: Restart at end of run needs to be false for these tests.
+    cmeps1.0.30: Update ice2wav maps.
+    cmeps1.0.29: Update retrieval and writing of dststatus fields.
+    cmeps1.0.28: Fix/ocnalb orbprint
+    cmeps1.0.27: Do not write restart at end of erc test.
+    cmeps1.0.26: Add timestamp rpointer.
+
+
+CUPiD
+    Michael Levy 2024-12-05 - v0.1.2 - tools/CUPiD (cesm3_0_alpha05c)
+    https://github.com/NCAR/CUPiD/tags/v0.1.2
+
+    - Start prepping CUPiD to be part of CESM workflow (can generate CUPiD and ADF config files using info from CESM cases)
+    - Better documentation
+    - Additional diagnostics in key_metrics example (requires additional packages in cupid-analysis)
+    - Update ADF external
+    - More intuitive names for both scripts and conda environments
+
+
+mizuRoute
+    Erik Kluzek 2024-10-07 - cesm-coupling.n03_v2.2.0 - components/mizuroute (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/mizuRoute/tags/cesm-coupling.n03_v2.2.0
+
+    Adds floodplain
+
+    Updates rpointer files as needed by CESM
+    Moves stand-alone version to use git-fleximod and removes manage_externals
+
+
+mosart
+    James Edwards 2024-10-03 - mosart1.1.06 - components/mosart (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/mosart/tags/mosart1.1.03
+
+    Adds timestamp to rpointer files
+
+    Depends on:
+    - cmeps1.0.32
+    - cdeps1.0.61
+    - share1.0.6
+    - cime6.1.49
+
+
+rtm
+    James Edwards 2024-10-03 - rtm1_0_84 - components/rtm (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_81
+
+    Adds timestamp to rpointer files.
+
+    Depends on:
+    - cmeps1.0.32
+    - cdeps1.0.61
+    - share1.0.6
+    - cime6.1.49
+
+
+share
+    James Edwards 2024-12-18 - share1.1.7 - share (cesm3_0_alpha05c)
+    https://github.com/ESCOMP/CESM_share/tags/share1.1.7
+
+    share1.1.7: update nuopc_shr_methods to match cdeps/share code
+    share1.1.6: The adjustl needs to be prior to inquire statement.
+
+
+
+==============================================================
 Tag name: cesm3_0_alpha05b
 Originator(s): CSEG
 Date: 17th December 2024
