@@ -46,12 +46,12 @@
 	<comment></comment>
 	<ntasks>
 	  <ntasks_atm>5400</ntasks_atm>
-	  <ntasks_lnd>1816</ntasks_lnd>
-	  <ntasks_rof>1816</ntasks_rof>
-	  <ntasks_ice>3584</ntasks_ice>
-	  <ntasks_ocn>488</ntasks_ocn>
+	  <ntasks_lnd>2456</ntasks_lnd>
+	  <ntasks_rof>2456</ntasks_rof>
+	  <ntasks_ice>2944</ntasks_ice>
+	  <ntasks_ocn>680</ntasks_ocn>
 	  <ntasks_glc>4</ntasks_glc>
-	  <ntasks_wav>1</ntasks_wav>
+	  <ntasks_wav>64</ntasks_wav>
 	  <ntasks_cpl>5400</ntasks_cpl>
 	</ntasks>
 	<nthrds>
@@ -66,12 +66,12 @@
 	</nthrds>
 	<rootpe>
 	  <rootpe_atm>0</rootpe_atm>
-	  <rootpe_lnd>3584</rootpe_lnd>
-	  <rootpe_rof>3584</rootpe_rof>
+	  <rootpe_lnd>2944</rootpe_lnd>
+	  <rootpe_rof>2944</rootpe_rof>
 	  <rootpe_ice>0</rootpe_ice>
 	  <rootpe_ocn>5400</rootpe_ocn>
 	  <rootpe_glc>0</rootpe_glc>
-	  <rootpe_wav>0</rootpe_wav>
+	  <rootpe_wav>6080</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
@@ -281,10 +281,10 @@
 	<comment>10 ypd/ 5500 pe-hrs/simyr expected</comment>
 	<ntasks>
 	  <ntasks_atm>1920</ntasks_atm>
-	  <ntasks_lnd>640</ntasks_lnd>
+	  <ntasks_lnd>1152</ntasks_lnd>
 	  <ntasks_rof>512</ntasks_rof>
-	  <ntasks_ice>1152</ntasks_ice>
-	  <ntasks_ocn>384</ntasks_ocn>
+	  <ntasks_ice>768</ntasks_ice>
+	  <ntasks_ocn>512</ntasks_ocn>
 	  <ntasks_glc>64</ntasks_glc>
 	  <ntasks_wav>64</ntasks_wav>
 	  <ntasks_cpl>1920</ntasks_cpl>
@@ -303,10 +303,10 @@
 	  <rootpe_atm>0</rootpe_atm>
 	  <rootpe_lnd>0</rootpe_lnd>
 	  <rootpe_rof>0</rootpe_rof>
-	  <rootpe_ice>704</rootpe_ice>
+	  <rootpe_ice>1152</rootpe_ice>
 	  <rootpe_ocn>1920</rootpe_ocn>
-	  <rootpe_glc>1856</rootpe_glc>
-	  <rootpe_wav>1792</rootpe_wav>
+	  <rootpe_glc>2496</rootpe_glc>
+	  <rootpe_wav>2432</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
