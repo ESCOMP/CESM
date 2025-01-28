@@ -1,4 +1,107 @@
 ==============================================================
+Tag name: cesm3_0_alpha05d
+Originator(s): CSEG
+Date: 28th January 2024
+One-line Summary: MOM and CTSM updates
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.19   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.56                         --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.7                  --
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_048                              --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.017                       **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_1            --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_250128                     **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_005          --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.61                      --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.33                      --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_84                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n03_v2.3.0     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_07                    **
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_3                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.4                             **
+
+
+ccs_config
+    Alper Altuntas 2025-01-08 - ccs_config_cesm1.0.19 - ccs_config (cesm3_0_alpha05d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.18
+
+    ccs_config_cesm1.0.19: Fix typo, sm ~> nnsm
+    ccs_config_cesm1.0.18: Update JRA to tx2_3v2 Mapping File
+
+
+    James Edwards 2025-01-07 - ccs_config_cesm1.0.17 - ccs_config (cesm3_0_alpha05d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.17
+
+    Adds cupid workflow
+
+
+clm
+    Erik Kluzek 2025-01-08 - ctsm5.3.017 - components/clm (cesm3_0_alpha05d)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/tmp-241219.n04.ctsm5.3.016
+
+    Identical to tmp-241219.n03.ctsm5.3.016
+    but on CTSM master
+
+
+    Erik Kluzek 2025-01-08 - branch_tags/tmp-241219.n03.ctsm5.3.016 - components/clm (cesm3_0_alpha05d)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/tmp-241219.n03.ctsm5.3.016
+
+    Fixes an important problem to the new nfix_method
+    found by the nag compiler
+
+
+    Erik Kluzek 2025-01-08 - branch_tags/tmp-241219.n02.ctsm5.3.016 - components/clm (cesm3_0_alpha05d)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/tmp-241219.n02.ctsm5.3.016
+
+    Small FATES update, only changes answers for FatesHydro tests
+
+
+    Erik Kluzek 2025-01-08 - branch_tags/tmp-241219.n01.ctsm5.3.016 - components/clm (cesm3_0_alpha05d)
+    https://github.com/ESCOMP/ctsm/tags/branch_tags/tmp-241219.n01.ctsm5.3.016
+
+    Merge of b4b-dev to master
+
+    Adds a new namelist option for an alternative curve
+    for the FUN module. This should be turned on
+    for coupled testing.
+
+    Set nfix_method='Bytnerowicz' for coupled simulations.
+
+
+CUPiD
+    Michael Levy 2025-01-15 - v0.1.4 - tools/CUPiD (cesm3_0_alpha05d)
+    https://github.com/NCAR/CUPiD/tags/v0.1.4
+
+    - Fix bug in time series import
+    - Update seaice notebook in key metrics
+    - Move obs data to common directory
+
+
+    Michael Levy 2025-01-07 - v0.1.3 - tools/CUPiD (cesm3_0_alpha05d)
+    https://github.com/NCAR/CUPiD/tags/v0.1.3
+
+    Updates to scripts that generate config files for CESM workflow
+
+
+mom
+    Alper Altuntas 2025-01-08 - mi_250128 - components/mom (cesm3_0_alpha05d)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_2501xx
+
+    bug fixes and parameter changes
+
+
+mosart
+    Erik Kluzek 2025-01-07 - mosart1.1.07 - components/mosart (cesm3_0_alpha05d)
+    https://github.com/ESCOMP/mosart/tags/mosart1.1.07
+
+    Simple fix for NAG compiler on Izumi
+
+
+
+==============================================================
 Tag name: cesm3_0_alpha05c
 Originator(s): CSEG
 Date: 8th January 2024
