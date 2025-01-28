@@ -109,15 +109,15 @@
 	</rootpe>
       </pes> -->
       <pes pesize="XL" compset="CAM.*%LT.*MOM6(?!.*%MARBL-BIO)">
-	<comment>20 ypd/ 7100 pe-hrs/simyr expected</comment>
+	<comment>18 ypd/ 8530 pe-hrs/simyr expected</comment>
   	<ntasks>
 	  <ntasks_atm>5400</ntasks_atm>
-	  <ntasks_lnd>1792</ntasks_lnd>
-	  <ntasks_rof>1792</ntasks_rof>
-	  <ntasks_ice>3608</ntasks_ice>
-	  <ntasks_ocn>612</ntasks_ocn>
-	  <ntasks_glc>4</ntasks_glc>
-	  <ntasks_wav>1</ntasks_wav>
+	  <ntasks_lnd>2624</ntasks_lnd>
+	  <ntasks_rof>2624</ntasks_rof>
+	  <ntasks_ice>2776</ntasks_ice>
+	  <ntasks_ocn>896</ntasks_ocn>
+	  <ntasks_glc>104</ntasks_glc>
+	  <ntasks_wav>104</ntasks_wav>
 	  <ntasks_cpl>5400</ntasks_cpl>
 	</ntasks>
 	<nthrds>
@@ -134,8 +134,8 @@
 	  <rootpe_atm>0</rootpe_atm>
 	  <rootpe_lnd>0</rootpe_lnd>
 	  <rootpe_rof>0</rootpe_rof>
-	  <rootpe_ice>1792</rootpe_ice>
-	  <rootpe_ocn>5404</rootpe_ocn>
+	  <rootpe_ice>2624</rootpe_ice>
+	  <rootpe_ocn>5504</rootpe_ocn>
 	  <rootpe_glc>5400</rootpe_glc>
 	  <rootpe_wav>5400</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
@@ -215,12 +215,12 @@
 	<comment>13.9 ypd/ 5300 pe-hrs/simyr expected</comment>
 	<ntasks>
 	  <ntasks_atm>2700</ntasks_atm>
-	  <ntasks_lnd>896</ntasks_lnd>
-	  <ntasks_rof>32</ntasks_rof>
+	  <ntasks_lnd>1280</ntasks_lnd>
+	  <ntasks_rof>1280</ntasks_rof>
 	  <ntasks_ice>1772</ntasks_ice>
-	  <ntasks_ocn>372</ntasks_ocn>
-	  <ntasks_glc>32</ntasks_glc>
-	  <ntasks_wav>32</ntasks_wav>
+	  <ntasks_ocn>640</ntasks_ocn>
+	  <ntasks_glc>116</ntasks_glc>
+	  <ntasks_wav>116</ntasks_wav>
 	  <ntasks_cpl>2700</ntasks_cpl>
 	</ntasks>
 	<nthrds>
@@ -237,10 +237,10 @@
 	  <rootpe_atm>0</rootpe_atm>
 	  <rootpe_lnd>0</rootpe_lnd>
 	  <rootpe_rof>896</rootpe_rof>
-	  <rootpe_ice>928</rootpe_ice>
-	  <rootpe_ocn>2700</rootpe_ocn>
-	  <rootpe_glc>896</rootpe_glc>
-	  <rootpe_wav>896</rootpe_wav>
+	  <rootpe_ice>1280</rootpe_ice>
+	  <rootpe_ocn>2816</rootpe_ocn>
+	  <rootpe_glc>2700</rootpe_glc>
+	  <rootpe_wav>2700</rootpe_wav>
 	  <rootpe_cpl>0</rootpe_cpl>
 	</rootpe>
       </pes>
