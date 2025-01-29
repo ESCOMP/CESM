@@ -30,7 +30,7 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.16
+        fxtag = ccs_config_cesm1.0.19
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -66,7 +66,7 @@
         url = https://github.com/ESCOMP/CTSM
         fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
-        fxtag = ctsm5.3.016
+        fxtag = ctsm5.3.017
 
 [submodule "cice"]
         path = components/cice
@@ -80,7 +80,7 @@
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_241122
+        fxtag = mi_250128
 
 [submodule "cism"]
         path = components/cism
@@ -129,7 +129,7 @@
         url = https://github.com/ESCOMP/MOSART
         fxDONOTUSEurl = https://github.com/ESCOMP/MOSART
         fxrequired = ToplevelRequired
-        fxtag = mosart1.1.06
+        fxtag = mosart1.1.07
 
 [submodule "parallelio"]
         path = libraries/parallelio
@@ -157,4 +157,4 @@
         url = https://github.com/NCAR/CUPiD.git
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
-        fxtag = v0.1.2
+        fxtag = v0.1.4
