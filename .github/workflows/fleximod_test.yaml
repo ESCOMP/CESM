@@ -20,8 +20,12 @@ jobs:
           echo "Update complete, checking status"
           echo
           $GITHUB_WORKSPACE/bin/git-fleximod test
+      - id: check-cleanliness
+        run: |
+          echo
+          echo "Checking if git fleximod matches expected externals"
+          echo
+          git diff --exit-code
 #      - name: Setup tmate session
 #        if: ${{ failure() }}
 #        uses: mxschmitt/action-tmate@v3
-        
-          
