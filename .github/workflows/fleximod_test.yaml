@@ -15,6 +15,9 @@ jobs:
         uses: actions/checkout@v4
       - id: run-fleximod
         run: |
+          # First check that submodule pointers are aligned with .gitmodules
+          $GITHUB_WORKSPACE/bin/git-fleximod test
+          # Now make sure .gitmodules are correct
           $GITHUB_WORKSPACE/bin/git-fleximod update
           echo
           echo "Update complete, checking status"
