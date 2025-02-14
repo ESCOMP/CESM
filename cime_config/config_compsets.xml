@@ -40,22 +40,22 @@
 
   <compset>
     <alias>B1850C_MTt4s</alias>
-    <lname>1850C_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850C_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
   <compset>
     <alias>B1850CM</alias>
-    <lname>1850C_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850C_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
 
   <compset>
     <alias>B1850C_MTso</alias>
-    <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>BMT1850</alias>
-    <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
@@ -65,26 +65,26 @@
 
   <compset>
     <alias>BHISTC_MTso</alias>
-    <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>BHISTC_MTt4s</alias>
-    <lname>HISTC_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HISTC_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
   <compset>
     <alias>BHISTCM</alias>
-    <lname>HISTC_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HISTC_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
 
   <compset>
     <alias>B1850C_LTso</alias>
-    <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
   <compset>
     <alias>BLT1850</alias>
-    <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
@@ -94,18 +94,18 @@
 
   <compset>
     <alias>BHISTC_LTso</alias>
-    <lname>HISTC_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HISTC_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <!-- Emissions driven compsets for CESM3 -->
 
   <compset>
     <alias>B1850E_MTt4s</alias>
-    <lname>1850E_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850E_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
   <compset>
     <alias>B1850EM</alias>
-    <lname>1850E_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850E_CAM70%MT%CT4S_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <!-- SOM compsets -->

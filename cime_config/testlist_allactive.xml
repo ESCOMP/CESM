@@ -151,14 +151,6 @@
       <option name="wallclock"> 02:00:00 </option>
     </options>
   </test>
-  <test name="ERS_D" grid="f09_t232" compset="BLT1850" testmods="allactive/defaultio">
-    <machines>
-      <machine name="derecho" compiler="intel" category="prealpha"/>
-    </machines>
-    <options>
-      <option name="wallclock"> 06:00:00 </option>
-    </options>
-  </test>
   <test name="ERS_Ld5" grid="f09_t232" compset="E1850TEST" testmods="cice/default">
     <machines>
       <machine name="derecho" compiler="intel" category="prebeta"/>
@@ -207,14 +199,6 @@
     <machines>
       <machine name="derecho" compiler="intel" category="aux_perf"/>
     </machines>
-  </test>
-  <test name="SMS_Ld7" grid="f09_t232" compset="BLT1850" testmods="allactive/defaultio">
-    <machines>
-      <machine name="derecho" compiler="intel" category="prealpha"/>
-    </machines>
-    <options>
-      <option name="wallclock">  00:30:00 </option>
-    </options>
   </test>
   <test name="ERI" grid="ne30pg3_t232" compset="BLT1850_MARBL" testmods="allactive/defaultio">
     <machines>

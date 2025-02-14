@@ -1,4 +1,196 @@
 ==============================================================
+Tag name: cesm3_0_alpha06a
+Originator(s): CSEG
+Date: 13th February 2024
+One-line Summary: CTSM updates, MOM6 .gitmodules hash fix, add
+                  mosart to fully coupled compsets
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.21   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.67                         **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  **
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_048                              --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.023                       **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_1            --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_250210                     **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_006          **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.64                      **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.35                      **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_86                          **
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n03_v2.3.0     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_08                    **
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_4                      **
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.4                             --
+
+
+ccs_config
+    James Edwards 2025-01-29 - ccs_config_cesm1.0.21 - ccs_config (cesm3_0_alpha06a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.21
+
+    clubb for gpu, Enable t232 mask on default land grid, Fix typo, sm ~> nnsm, Update JRA to tx2_3v2 Mapping File
+
+
+cdeps
+    Chris Fischer 2025-02-13 - cdeps1.0.64 - components/cdeps (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.64
+
+    cdeps1.0.64: shr_log_error and return up stack
+    cdeps1.0.63: Add restart_fh
+
+
+    James Edwards 2025-01-29 - cdeps1.0.62 - components/cdeps (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.62
+
+    use shr_sys_abort for all bailouts.
+
+
+cesm
+    Chris Fischer 2025-02-13 - cesm3_0_alpha06a - (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/cesm/tags/cesm3_0_alpha06a
+
+    Remove f09_t232 fully active compset tests.
+    Add mosart to fully active compsets.
+
+
+cime
+    Chris Fischer 2025-02-13 - cime6.1.67 - cime (cesm3_0_alpha06a)
+    https://github.com/ESMCI/cime/tags/cime6.1.67
+
+    cime6.1.67:
+    cime6.1.67: Details of test-mod searching should not be printed to info
+    cime6.1.66: Fix blesses for non-bfb testing suite
+    cime6.1.65: Fix for env_batch.zip
+    cime6.1.64: ERS fix for buildnml/skip_pnl
+    cime6.1.63: Last couple fixes for e3sm
+
+
+    James Edwards 2025-01-29 - cime6.1.62 - cime (cesm3_0_alpha06a)
+    https://github.com/ESMCI/cime/tags/cime6.1.62
+
+    Allow skipping tests that have a baseline already
+    bug fix: ERS: ninst might be None
+    jenkins: Canceling batch jobs needs to happen immediately when a signal occurs.
+    bless_test_results: Add option to lock baselines (remove group write)
+    correct the SRCROOT path when using create_clone
+    add try except clauses to reduce errors in testing
+    fix an eronious message from cprnc
+
+
+cism
+    Kate Thayer-Calder 2025-01-31 - cismwrap_2_2_006 - components/cism (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_2_006
+
+    Remove COC
+
+
+clm
+    Erik Kluzek 2025-02-06 - ctsm5.3.024 - components/clm (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.XXX
+
+    Update pressure for Urban model. Changes answers.
+
+
+    Adrianna Foster 2025-02-08 - ctsm5.3.023 - components/clm (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.023
+
+    Merge b4b-dev into master
+
+    Fixes SSP tests and adds PLUMBER tower run capabilities
+
+
+    Erik Kluzek 2025-01-29 - ctsm5.3.022 - components/clm (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.022
+
+    Don't allow FATES to run with Meier roughness
+
+    Changes answers for FATES Clm60 compsets
+
+
+    Erik Kluzek 2025-01-14 - ctsm5.3.021 - components/clm (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.021
+
+    Standardize time meta-data.
+
+    This is the ctsm5.3 development release tag for CTSM
+
+
+    Erik Kluzek 2025-01-14 - ctsm5.3.020 - components/clm (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.020
+
+    Merge changes along b4b-dev branch to master
+
+
+    Erik Kluzek 2025-01-14 - ctsm5.3.019 - components/clm (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.019
+
+    Stop running 0-th time-step for CTSM
+
+
+    Erik Kluzek 2024-11-15 - ctsm5.3.018 - components/clm (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.014
+
+    Time is reported as the midpoint in history files.
+
+
+cmeps
+    Chris Fischer 2025-02-13 - cmeps1.0.35 - src/drivers/nuopc/ (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.35
+
+    Shr log error update
+
+
+    James Edwards 2025-01-29 - cmeps1.0.34 - src/drivers/nuopc/ (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.34
+
+    Use shr_sys_abort for all bailouts.
+
+
+mom
+    Alper Altuntas 2025-02-08 - mi_250210 - components/mom (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_250208
+
+    Correct MOM6 commit hash in .gitmodules
+
+
+mosart
+    Erik Kluzek 2025-01-14 - mosart1.1.08 - components/mosart (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/mosart/tags/mosart1.1.08
+
+    Standardize time metadata
+
+
+ParallelIO
+    James Edwards 2025-01-29 - pio2_6_4 - libraries/parallelio (cesm3_0_alpha06a)
+    https://github.com/NCAR/ParallelIO/tags/pio2_6_4
+
+    hires bug fixes
+
+
+rtm
+    Erik Kluzek 2025-01-16 - rtm1_0_86 - components/rtm (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_86
+
+    Fix so will compile and run with izumi_nag
+    Add a izumi_nag test to the standard testlist
+
+
+    Erik Kluzek 2025-01-14 - rtm1_0_85 - components/rtm (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/rtm/tags/rtm1_0_85
+
+    Standardize time-metadata
+
+
+share
+    Chris Fischer 2025-02-13 - share1.1.9 - share (cesm3_0_alpha06a)
+    https://github.com/ESCOMP/CESM_share/tags/share1.1.9
+
+    share1.1.9: Add hugevalue and tinyvalue, correct buildlib path, fix rc intent in
+    share1.1.8: Create a shr_log_error method
+
+
+==============================================================
 Tag name: cesm3_0_beta05
 Originator(s): CSEG
 Date: 30th January 2025
