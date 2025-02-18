@@ -71,7 +71,7 @@
     <alias>BHISTC_MTso</alias>
     <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
-
+<!--  Not yet available in cam component
   <compset>
     <alias>B1850C_WAt4ma</alias>
     <lname>1850C_CAM70%HT%CT4MA_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
@@ -81,7 +81,7 @@
     <alias>BHISTC_WAt4ma</alias>
     <lname>1850_CAM70%HT%CT4MA_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
-
+-->
   <compset>
     <alias>B1850C_LTso</alias>
     <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
