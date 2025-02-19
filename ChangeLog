@@ -1,4 +1,162 @@
 ==============================================================
+Tag name: cesm3_0_alpha06b
+Originator(s): CSEG
+Date: 18th February 2024
+One-line Summary: CAM
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.21   --
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.67                         --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_067                              **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.023                       --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_1            --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_250210                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_006          --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.64                      --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.35                      --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_86                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n03_v2.3.0     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_08                    --
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_4                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.4                             --
+
+cam
+    Cheryl Craig 2025-02-13 - cam6_4_067 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_067
+
+    For Brian Eaton
+    Remove SPCAM
+
+
+    Cheryl Craig 2025-02-11 - cam6_4_066 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_066
+
+    For Francis Vitt
+    Negative wet dep messages
+
+
+    Cheryl Craig 2025-02-11 - cam6_4_065 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_065
+
+    ZM CCPP'ization round 4 (completes CCPP conversion of ZM)
+
+
+    Cheryl Craig 2025-02-07 - cam6_4_063 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_065
+
+    Change default namelist settings
+
+
+    Cheryl Craig 2025-02-07 - cam6_4_064 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_063
+
+    For Jesse Nusbaumer
+
+    fix brokent GPU tests for CLUBB code
+
+
+    Cheryl Craig 2025-01-28 - cam6_4_062 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_062
+
+    Phase 2 for GW development
+
+
+    Cheryl Craig 2025-01-28 - cam6_4_061 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_061
+
+    Fix heating depth for gravity wave scheme
+
+
+    Cheryl Craig 2025-01-28 - cam6_4_059 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_059
+
+    issue 1212 bug fix (cloud frac ice + liquid)
+
+
+    Cheryl Craig 2025-01-28 - cam6_4_058 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_058
+
+    For Jesse Nusbaumer
+
+    Fix Exner bug in CLUBB interface and change CLUBB namelist
+    Answer changing for CLUBB
+
+
+    Cheryl Craig 2025-01-28 - cam6_4_057 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_057
+
+    For Jesse Nusbaumer
+
+    Restore spectral scaling to RRTMGP
+
+
+    Cheryl Craig 2025-01-28 - cam6_4_056 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_056
+
+    For Francis Vitt
+
+    Nitrogen deposition fixes
+
+
+    Brian Eaton 2025-01-13 - cam6_4_055 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_055
+
+    Add cam7 aquaplanet compsets for LT and MT configurations (QPLT and QPMT).
+    This is a BFB commit, but note that tests using the outfrq3s_cosp test mods change
+    answers due to no longer ignoring the use case specifications.
+
+
+    Courtney Peverley 2025-01-13 - cam6_4_054 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_054
+
+    (for jesse nusbaumer)
+    Revert t_sfc limiter in RRTMGP
+
+    answer-changing for all F-compsets
+
+    dependent on cesm3_cice6_6_0_6
+
+
+    Francis Vitt 2025-01-07 - cam6_4_053 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_053
+
+    Update CARMA base external tag
+
+
+    Courtney Peverley 2025-01-13 - cam6_4_052 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_052
+
+    (for jesse nusbaumer)
+    clubb_intr GPUization- answer-changing for GPUs
+
+
+    Courtney Peverley 2025-01-05 - cam6_4_051 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_051
+
+    (francis vitt)
+
+    Updates to age of air tracers history output
+
+
+    Courtney Peverley 2025-01-05 - cam6_4_050 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_050
+
+    for Haipeng Lin
+
+    ccppized check_energy
+
+
+    Courtney Peverley 2025-01-05 - cam6_4_049 - components/cam (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_049
+
+    history bugfixes
+
+    changes fieldlists
+
+==============================================================
 Tag name: cesm3_0_alpha06a
 Originator(s): CSEG
 Date: 13th February 2024
