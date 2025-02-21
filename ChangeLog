@@ -1,7 +1,7 @@
 ==============================================================
 Tag name: cesm3_0_alpha06b
 Originator(s): CSEG
-Date: 18th February 2024
+Date: 21th February 2025
 One-line Summary: CAM
 
 ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.21   --
@@ -10,7 +10,7 @@ components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822  
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
 components/cam          https://github.com/ESCOMP/CAM/cam6_4_067                              **
 components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.023                       --
-components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_1            --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_6            **
 components/mom          https://github.com/ESCOMP/MOM_interface/mi_250210                     --
 components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_006          --
 components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.64                      --
@@ -155,6 +155,15 @@ cam
     history bugfixes
 
     changes fieldlists
+
+
+cice
+    Chris Fischer 2025-02-21 - cesm3_cice6_6_0_6 - components/cice (cesm3_0_alpha06b)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_6_0_6
+
+    Update with flwout fix
+
+    Needed for cam6_4_054
 
 ==============================================================
 Tag name: cesm3_0_alpha06a
