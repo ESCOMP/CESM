@@ -1,4 +1,106 @@
 ==============================================================
+Tag name: cesm3_0_alpha06c
+Originator(s): CSEG
+Date: 5th March 2025
+One-line Summary: CTSM updates
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.23   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.72                         **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_067                              --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.029                       **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_6            --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_250210                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_006          --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.65                      **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.39                      **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_86                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n03_v2.3.0     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_08                    --
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_4                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.4                             --
+
+
+ccs_config
+    Chris Fischer 2025-03-05 - ccs_config_cesm1.0.23 - ccs_config (cesm3_0_alpha06c)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.23
+
+    ccs_config_cesm1.0.23: Updates in template.cupid and config_workflow.xml for cupid workflow
+    ccs_config_cesm1.0.22: Add ne30pg3_ne30pg3_t232
+
+
+cdeps
+    Chris Fischer 2025-03-05 - cdeps1.0.65 - components/cdeps (cesm3_0_alpha06c)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.65
+
+    Refactor alarm code for endofrun restart writes
+
+
+cime
+    Chris Fischer 2025-03-05 - cime6.1.72 - cime (cesm3_0_alpha06c)
+    https://github.com/ESMCI/cime/tags/cime6.1.72
+
+    cime6.1.72: Create env_postprocessing.xml in case root
+    cime6.1.71: Update cprnc submodule to v1.1.1
+    cime6.1.70: Add a command line option to case.setup --disable-git
+    cime6.1.69: Fix for frontier test
+    cime6.1.68: Mac update
+
+
+clm
+    Erik Kluzek 2025-03-03 - ctsm5.3.029 - components/clm (cesm3_0_alpha06c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.029
+
+    Update defaults for clm6_0 compsets:
+    - Change nfix method
+    - new parameter file
+    - New IC file for f09 1850
+
+    Changes answers for all clm6_0 physics cases and tests
+
+
+    Sam Rabin 2025-03-03 - ctsm5.3.028 - components/clm (cesm3_0_alpha06c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.028
+
+    Move izumi intel and gnu tests to Derecho.
+
+
+    Adrianna Foster 2025-03-03 - ctsm5.3.027 - components/clm (cesm3_0_alpha06c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.027
+
+    Migrate FATES parameter switches to the namelist
+
+
+    Erik Kluzek 2025-02-26 - ctsm5.3.026 - components/clm (cesm3_0_alpha06c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.026
+
+    Merge b4b-dev to main-dev:
+
+    Reduce log file noise
+    Some changes for run_tower
+
+
+    Erik Kluzek 2025-02-20 - ctsm5.3.025 - components/clm (cesm3_0_alpha06c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.025
+
+    FATES parameter file update
+
+    FATES tests change answers
+
+
+cmeps
+    Chris Fischer 2025-03-05 - cmeps1.0.39 - src/drivers/nuopc/ (cesm3_0_alpha06c)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.39
+
+    cmeps1.0.39: Always set atmocn grid to ogrid with datm.  Answer changing
+    cmeps1.0.38: Bugfix: field bundle initialisation can miss ungridded dimensions
+    cmeps1.0.37: Remove seq_drydep_mod.F90
+    cmeps1.0.36: Add RUN_POSTPROCESSING variable to env_run.xml
+
+==============================================================
 Tag name: cesm3_0_alpha06b
 Originator(s): CSEG
 Date: 21th February 2025
