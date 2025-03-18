@@ -30,7 +30,7 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.23
+        fxtag = ccs_config_cesm1.0.30
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -73,7 +73,7 @@
         url = https://github.com/ESCOMP/CESM_CICE
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
         fxrequired = ToplevelRequired
-        fxtag = cesm3_cice6_6_0_6
+        fxtag = cesm3_cice6_6_0_7
 
 [submodule "mom"]
         path = components/mom
@@ -157,4 +157,4 @@
         url = https://github.com/NCAR/CUPiD.git
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
-        fxtag = v0.1.4
+        fxtag = v0.2.1
