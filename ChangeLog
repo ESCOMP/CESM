@@ -4,7 +4,7 @@ Originator(s): CSEG
 Date: 16th March 2025
 One-line Summary: CICE and NCAR system
 
-ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.30   **
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.31   **
 cime                    https://github.com/ESMCI/cime/tree/cime6.1.72                         --
 components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_240822                --
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
@@ -36,6 +36,10 @@ Chris Fischer 2025-03-16 - ccs_config_cesm1.0.30 - ccs_config (cesm3_0_alpha06d)
 https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.30
 ccs_config_cesm1.0.30: Update machine configuration for Casper
 ccs_config_cesm1.0.29: Back off intel compiler to 2024.2.1
+
+Chris Fischer 2025-03-22 - ccs_config_cesm1.0.31 - ccs_config (cesm3_0_alpha06d)
+https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.31
+Backout gcc update on derecho.
 
 cice
 David Bailey 2025-02-20 - cesm3_cice6_6_0_9 - components/cice (cesm3_0_alpha06d)
