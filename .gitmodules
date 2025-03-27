@@ -58,7 +58,7 @@
         path = components/cam
         url = https://www.github.com/ESCOMP/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_4_067
+        fxtag = cam6_4_081
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
@@ -101,7 +101,7 @@
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-        fxtag = cmeps1.0.39
+        fxtag = cmeps1.0.42
 
 [submodule "rtm"]
         path = components/rtm
