@@ -37,7 +37,7 @@
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-	fxtag = cime6.1.72
+	fxtag = cime6.1.87
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -142,7 +142,7 @@
         path = libraries/mpi-serial
         url = https://github.com/ESMCI/mpi-serial
         fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial
-        fxtag = MPIserial_2.5.1
+        fxtag = MPIserial_2.5.4
         fxrequired = ToplevelRequired
 
 [submodule "pysect"]
