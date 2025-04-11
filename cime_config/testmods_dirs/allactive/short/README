@@ -1,4 +1,0 @@
-This testmod is for short tests that run for less than a day.
-
-Note that this doesn't turn on component model output, so the only output it tests is cpl
-hist output.

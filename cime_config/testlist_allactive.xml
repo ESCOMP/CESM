@@ -209,31 +209,31 @@
     </options>
   </test>
 
-  <test name="ERS_D_Lh7" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/short">
+  <test name="ERS_D_Ld3" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/defaultio">
    <machines>
      <machine name="derecho" compiler="intel" category="prealpha"/>
    </machines>
    <options>
-     <option name="wallclock"> 00:30:00 </option>
-     <option name="comment">Include a short debug B compset test. Note that this does not have component history files.</option>
+     <option name="wallclock"> 02:00:00 </option>
+     <option name="comment">Include a debug B compset exact restart test.</option>
    </options>
  </test>
- <test name="ERS_D_Lh7" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/short--allactive/aoflux_ogrid">
+ <test name="SMS_D_Ld1" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/aoflux_ogrid">
    <machines>
      <machine name="derecho" compiler="intel" category="prebeta"/>
    </machines>
    <options>
      <option name="wallclock"> 00:30:00 </option>
-     <option name="comment">Include a short debug test using the ocn grid for aoflux calculations rather than the default xgrid. Note that this does not have component history files.</option>
+     <option name="comment">Include a short debug test using the ocn grid for aoflux calculations rather than the default xgrid.</option>
    </options>
  </test>
- <test name="ERS_D_Lh7" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/short--allactive/aoflux_agrid">
+ <test name="SMS_D_Ld1" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/aoflux_agrid">
    <machines>
      <machine name="derecho" compiler="intel" category="prebeta"/>
    </machines>
    <options>
      <option name="wallclock"> 00:30:00 </option>
-     <option name="comment">Include a short debug test using the atm grid for aoflux calculations rather than the default xgrid. Note that this does not have component history files.</option>
+     <option name="comment">Include a short debug test using the atm grid for aoflux calculations rather than the default xgrid.</option>
    </options>
  </test>
 </testlist>

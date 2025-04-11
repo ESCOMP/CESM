@@ -1,2 +1,0 @@
-./xmlchange ROF_NCPL=\$OCN_NCPL
-./xmlchange GLC_NCPL=\$OCN_NCPL
