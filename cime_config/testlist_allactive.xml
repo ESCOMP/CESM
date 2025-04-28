@@ -24,6 +24,14 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
+  <test name="ERR_Ld5" grid="ne30pg3_t232" compset="BLTHIST" testmods="allactive/defaultio">
+    <machines>
+      <machine name="derecho" compiler="gnu" category="prealpha"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 01:00:00 </option>
+    </options>
+  </test>
   <test name="ERS_Ld5" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/decstart">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
