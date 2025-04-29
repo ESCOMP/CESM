@@ -1,4 +1,151 @@
 ==============================================================
+Tag name: cesm3_0_alpha06f
+Originator(s): CSEG
+Date: 28th April 2025
+One-line Summary: MOM update
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.40   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.93                         **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                **
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_081                              --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.029                       --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_10           --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_250428                     **
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_006          --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.73                      **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.47                      **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_86                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n03_v2.3.0     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_08                    --
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_4                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.4                             --
+
+ccs_config
+    Chris Fischer 2025-04-25 - ccs_config_cesm1.0.40 - ccs_config (cesm3_0_alpha06f)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.40
+
+    Enable the CUDA target of Kokkos library
+
+
+    Chris Fischer 2025-04-22 - ccs_config_cesm1.0.39 - ccs_config (cesm3_0_alpha06f)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.39
+
+    ccs_config_cesm1.0.39: Fix aliases for C48_C48_mg17, C96_C96_mg17, C192_C192_mg17
+    ccs_config_cesm1.0.38: Clean up Kokkos setups
+    ccs_config_cesm1.0.37: Update Casper machine and batch configurations
+    ccs_config_cesm1.0.36: Update wg37 mesh to cdf5
+
+
+    Chris Fischer 2025-04-02 - ccs_config_cesm1.0.35 - ccs_config (cesm3_0_alpha06f)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.35
+
+    ccs_config_cesm1.0.35: Build kokkos in the CAM workflow and clean up the NCAR machine configuration files
+    ccs_config_cesm1.0.34: Add F compset grids w/ mt232 mask
+    ccs_config_cesm1.0.33: Specify not_compset attribute for non-MOM6 resolutions
+
+
+cdeps
+    Chris Fischer 2025-04-02 - cdeps1.0.73 - components/cdeps (cesm3_0_alpha06f)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.73
+
+    cdeps1.0.73: Fix 3 paths in stream_definition_datm.xml
+    cdeps1.0.72: Needed to be added to CMakeLists.txt
+    cdeps1.0.71: Fix and improve anomaly forcings for ISSP cases. Answer changing for SSP RCP45
+    cdeps1.0.70: Additional minor revisions to the default datm input from GSWP3v1 to CRUJRA2024 for Clm6.
+    cdeps1.0.69: Update 1850 and HIST compset names
+    cdeps1.0.68: Add CRUJRA2024 as an option to DATM_MODE
+    cdeps1.0.67: Unify cfsr and gefs datm datamodes  bfb
+    cdeps1.0.66: Create cplhist mode for dice
+
+
+cime
+    Chris Fischer 2025-04-28 - cime6.1.93 - cime (cesm3_0_alpha06f)
+    https://github.com/ESMCI/cime/tags/cime6.1.93
+
+    Fix math in calculation of startdate
+
+
+    Chris Fischer 2025-04-25 - cime6.1.92 - cime (cesm3_0_alpha06f)
+    https://github.com/ESMCI/cime/tags/cime6.1.92
+
+    bless_test_results: fix stale file use case
+
+
+    Chris Fischer 2025-04-22 - cime6.1.91 - cime (cesm3_0_alpha06f)
+    https://github.com/ESMCI/cime/tags/cime6.1.91
+
+    cime6.1.91: Fix merge error, removed duplicate line
+    cime6.1.90: Revert mct guard for kokkos
+    cime6.1.89: Clean up some CAM-specific Kokkos changes in CIME
+    cime6.1.88: Fix mem per node on derecho
+    cime6.1.87: mpi-serial build updates needed for cesm, does not affect e3sm
+    cime6.1.86: Change from only noting the last jobid, to all of them
+
+
+    Chris Fischer 2025-04-02 - cime6.1.85 - cime (cesm3_0_alpha06f)
+    https://github.com/ESMCI/cime/tags/cime6.1.85
+
+    cime6.1.85: Fix debug flags for intel compiler
+    cime6.1.84: Ensure two related messages are printed together.
+    cime6.1.83: Fix bless when cprnc file is not created
+    cime6.1.82: Rudementary support for years > 9999
+    cime6.1.81: Build Kokkos in the CAM workflow
+    cime6.1.80: Remove y100k testmod from ERS test in cime_developer.
+    cime6.1.79: Redo REST_N calculation for IRT test
+    cime6.1.78: Allow blessing if test only failed GENERATE
+    cime6.1.77: Adds --compiler argument to query_config.
+    cime6.1.76: Fix ERR test for E3SM
+    cime6.1.75: Update python minimum to 3.8 and update cprnc module.
+    cime6.1.74: safe_copy: Use /bin/cp as last resort
+    cime6.1.73: Make compset names case insensitive but retain user prefered case
+
+
+cmeps
+    Chris Fischer 2025-04-25 - cmeps1.0.47 - src/drivers/nuopc/ (cesm3_0_alpha06f)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.47
+
+    cmeps1.0.47: Fix st_archive issues with timestamped rpointer files
+    cmeps1.0.46: Improve description of histaux_l2x1yrg
+
+
+    Alper Altuntas 2025-03-20 - cmeps1.0.45 - src/drivers/nuopc/ (cesm3_0_alpha06f)
+    https://github.com/ESCOMP/CMEPS/tags/cdeps1.0.xx
+
+    cmeps1.0.45: Keep glc-derived runoff as separate fields to ocn if possible
+    cmeps1.0.44: Allow yr beyond 9999
+    cmeps1.0.43: Add explicit RH creation for uv3d mapping
+
+
+fms
+    Michael Levy 2025-04-21 - fi_250428 - libraries/fms (cesm3_0_alpha06f)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_2504??
+
+    Fix issue with auto-merging when history files are overwritten
+
+
+    Alper Altuntas 2025-04-11 - fi_250411 - libraries/fms (cesm3_0_alpha06f)
+    https://github.com/ESCOMP/FMS_interface/tags/fi_250411
+
+    Auto merge partitioned netcdf files
+
+
+mom
+    Alper Altuntas 2025-03-20 - mi_250428 - components/mom (cesm3_0_alpha06f)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_24504xx
+
+    - Synch with latest main
+    - Fix ERS and DIMCS failures for when USE_CR_GRID is on
+    - add u and v coordinates to the ocean_geometry file
+    - Add option to wave enhance ustar in Bodner23
+    - make sure that ocn bgc baselines are captured
+    - Add new parameter defaults for beta06 and fixes typo in diag_table
+    - Update stochastic_physics external
+    - Parallel IO changes.
+
+==============================================================
 Tag name: cesm3_0_alpha06e
 Originator(s): CSEG
 Date: 26th March 2025
