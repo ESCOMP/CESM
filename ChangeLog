@@ -1,4 +1,99 @@
 ==============================================================
+Tag name: cesm3_0_alpha06g
+Originator(s): CSEG
+Date: 29th April 2025
+One-line Summary: CAM/CICE updates
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.40   --
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.93                         --
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_089                              **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.3.029                       --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_13           **
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_250428                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_006          --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.73                      --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.0.47                      --
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_86                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n03_v2.3.0     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_08                    --
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_4                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.1.4                             --
+
+cam
+    Cheryl Craig 2025-04-25 - cam6_4_089 - components/cam (cesm3_0_alpha06g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_089
+
+    Update externals to match alpha06f and bring in timestamped rpointer files
+
+
+    Cheryl Craig 2025-04-25 - cam6_4_088 - components/cam (cesm3_0_alpha06g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_088
+
+    For Haipeng Lin
+
+    Replace magic numbers 287.15 with rair in physconst
+
+
+    Brian Eaton 2025-04-21 - cam6_4_087 - components/cam (cesm3_0_alpha06g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_087
+
+    Change simple models to use CAM7 LT vertical grid.  All new tests use the mt232 mask.  Update the ccs_config submodule.
+
+
+    Cheryl Craig 2025-04-25 - cam6_4_086 - components/cam (cesm3_0_alpha06g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_086
+
+    For Kate Thayer-Calder
+
+    CCPP-ize Rayleigh Friction
+
+
+    Cheryl Craig 2025-04-25 - cam6_4_085 - components/cam (cesm3_0_alpha06g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_085
+
+    For Haipeng Lin
+
+    Phase 1 or rk_stratiform CCPPization; CCPPize cldfrc
+
+    round off differences for all CAM4
+
+
+    Francis Vitt 2025-04-08 - cam6_4_084 - components/cam (cesm3_0_alpha06g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_084
+
+    Updates to nitrogen chemistry relevant to the thermosphere
+
+    Answer changing for WACCM and WACCM-X
+
+
+    Cheryl Craig 2025-04-25 - cam6_4_083 - components/cam (cesm3_0_alpha06g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_083
+
+    CCPP-ize dme_adjust
+
+
+    Cheryl Craig 2025-04-02 - cam6_4_082 - components/cam (cesm3_0_alpha06g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_082
+
+    For Lizzie Lundgren
+
+    Fix some of HEMCO restart tests
+
+
+cice
+    Chris Fischer 2025-04-29 - cesm3_cice6_6_0_13 - components/cice (cesm3_0_alpha06g)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_6_0_13
+
+    cesm3_cice6_6_0_13: Add c10 declaration
+    cesm3_cice6_6_0_12: Update to new CICE tag for nvhpc fix
+    cesm3_cice6_6_0_11: Fix archiving of timestamped rpointer files
+
+
+==============================================================
 Tag name: cesm3_0_alpha06f
 Originator(s): CSEG
 Date: 28th April 2025

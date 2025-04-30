@@ -58,7 +58,7 @@
         path = components/cam
         url = https://www.github.com/ESCOMP/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_4_081
+        fxtag = cam6_4_089
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
@@ -73,7 +73,7 @@
         url = https://github.com/ESCOMP/CESM_CICE
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
         fxrequired = ToplevelRequired
-        fxtag = cesm3_cice6_6_0_10
+        fxtag = cesm3_cice6_6_0_13
 
 [submodule "mom"]
         path = components/mom
