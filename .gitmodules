@@ -162,6 +162,6 @@
 [submodule "FTorch"]
 	path = libraries/FTorch
 	url = https://github.com/ESCOMP/FTorch_interface
-  fxtag = v0.0.4
+  fxtag = v0.0.5
   fxrequired = ToplevelOptional
   fxDONOTUSEurl = https://github.com/ESCOMP/FTorch_interface
