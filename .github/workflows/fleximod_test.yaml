@@ -26,7 +26,7 @@ jobs:
           echo
           echo "Checking if git fleximod matches expected externals"
           echo
-          git diff --exit-code
+          git add . && git diff --quiet && git diff --cached --quiet
 #      - name: Setup tmate session
 #        if: ${{ failure() }}
 #        uses: mxschmitt/action-tmate@v3
