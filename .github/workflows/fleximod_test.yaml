@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
       - id: run-fleximod
         run: |
-          $GITHUB_WORKSPACE/bin/git-fleximod update
+          $GITHUB_WORKSPACE/bin/git-fleximod update -o
           echo
           echo "Update complete, checking status"
           echo
