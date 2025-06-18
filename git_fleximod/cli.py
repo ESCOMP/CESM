@@ -1,34 +1,56 @@
 from pathlib import Path
-import argparse
+import argparse, os, sys
+from importlib.resources import files
 from git_fleximod import utils
 
-__version__ = "0.7.6"
+__version__ = "1.0.1"
+
+class CustomArgumentParser(argparse.ArgumentParser):
+    def print_help(self, file=None):
+        # First print the default help message
+        super().print_help(file)
+
+        # Then append the contents of README.md
+        candidate_paths = [
+            os.path.join(sys.prefix, "share", "your-package", "README.md"),
+            os.path.join(os.path.dirname(__file__), "..", "README.md")  # fallback for dev
+        ]
+        for path in candidate_paths:
+            if os.path.exists(path):
+                with open(path) as f:
+                    print( f.read(), file=file)
+                    return
+        print( "README.md not found.", file=file)
 
 def find_root_dir(filename=".gitmodules"):
     """ finds the highest directory in tree
     which contains a file called filename """
-    d = Path.cwd()
-    root = Path(d.root)
-    dirlist = []
-    dl = d
-    while dl != root:
-        dirlist.append(dl)
-        dl = dl.parent
-    dirlist.append(root)
-    dirlist.reverse()
+    try:
+        root = utils.execute_subprocess(["git","rev-parse", "--show-toplevel"],
+                                        output_to_caller=True ).rstrip()
+    except:
+        d = Path.cwd()
+        root = Path(d.root)
+        dirlist = []
+        dl = d
+        while dl != root:
+            dirlist.append(dl)
+            dl = dl.parent
+        dirlist.append(root)
+        dirlist.reverse()
 
-    for dl in dirlist:
-        attempt = dl / filename
-        if attempt.is_file():
-            return str(dl)
-    utils.fatal_error("No .gitmodules found in directory tree")
-
+        for dl in dirlist:
+            attempt = dl / filename
+            if attempt.is_file():
+                return str(dl)
+        return None
+    return Path(root)
 
 def get_parser():
     description = """
-    %(prog)s manages checking out groups of gitsubmodules with addtional support for Earth System Models
+    %(prog)s manages checking out groups of gitsubmodules with additional support for Earth System Models
     """
-    parser = argparse.ArgumentParser(
+    parser = CustomArgumentParser(
         description=description, formatter_class=argparse.RawDescriptionHelpFormatter
     )
 

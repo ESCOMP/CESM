@@ -32,7 +32,7 @@ all_repos=[
      "submodule_name": "test_optional",
      "status1" : "test_optional MPIserial_2.5.0-3-gd82ce7c is out of sync with .gitmodules MPIserial_2.4.0",
      "status2" : "test_optional at tag MPIserial_2.4.0",
-     "status3" : "test_optional not checked out, aligned at tag MPIserial_2.4.0",
+     "status3" : "test_optional not checked out, out of sync at tag MPIserial_2.5.4, expected tag is MPIserial_2.4.0 (optional)",
      "status4" : "test_optional at tag MPIserial_2.4.0",
      "gitmodules_content": """
      [submodule "test_optional"]
@@ -46,7 +46,7 @@ all_repos=[
      "submodule_name": "test_alwaysoptional",
      "status1" : "test_alwaysoptional MPIserial_2.3.0 is out of sync with .gitmodules e5cf35c",
      "status2" : "test_alwaysoptional at hash e5cf35c",
-     "status3" : "test_alwaysoptional not checked out, out of sync at tag MPIserial_2.3.0",
+     "status3" : "out of sync at tag MPIserial_2.5.4, expected tag is e5cf35c",
      "status4" : "test_alwaysoptional at hash e5cf35c",
      "gitmodules_content": """
     [submodule "test_alwaysoptional"]
@@ -119,8 +119,20 @@ def complex_repo(tmp_path, logger):
     str_path = str(test_dir)
     gitp = GitInterface(str_path, logger)
     gitp.git_operation("remote", "add", "origin", "https://github.com/jedwards4b/fleximod-test2")
-    gitp.git_operation("fetch", "origin", "main")
-    gitp.git_operation("checkout", "main")
+    gitp.git_operation("fetch", "origin")
+    gitp.git_operation("checkout", "v0.0.1")
+    return test_dir
+
+@pytest.fixture
+def complex_update(tmp_path, logger):
+    test_dir = tmp_path / "testcomplex"
+    test_dir.mkdir()
+    str_path = str(test_dir)
+    gitp = GitInterface(str_path, logger)
+    gitp.git_operation("remote", "add", "origin", "https://github.com/jedwards4b/fleximod-test2")
+    gitp.git_operation("fetch", "origin")
+    gitp.git_operation("checkout", "v0.0.2")
+    
     return test_dir
     
 @pytest.fixture

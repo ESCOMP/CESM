@@ -2,6 +2,7 @@ import os
 import sys
 from . import utils
 from pathlib import Path
+import asyncio
 
 class GitInterface:
     def __init__(self, repo_path, logger):
@@ -47,22 +48,55 @@ class GitInterface:
             command = ("git", "-C", str(self.repo_path), "init")
             utils.execute_subprocess(command)
 
+    def _git_operation_command(self, operation, args):
+        newargs = []
+        for a in args:
+            # Do not use ssh interface
+            if isinstance(a, str):
+                a = a.replace("git@github.com:", "https://github.com/")
+            newargs.append(a)
+
+        return self._git_command(operation, *newargs)
+
     # pylint: disable=unused-argument
     def git_operation(self, operation, *args, **kwargs):
-        command = self._git_command(operation, *args)
-        self.logger.info(command)
+        command = self._git_operation_command(operation, args)
         if isinstance(command, list):
             try:
-                return utils.execute_subprocess(command, output_to_caller=True)
+                status, output = utils.execute_subprocess(command, status_to_caller=True, output_to_caller=True)
+                return status, output.rstrip()
             except Exception as e:
                 sys.exit(e)
         else:
-            return command
+            return 0, command
+
+    # pylint: disable=unused-argument
+    async def git_operation_async(self, operation, *args, **kwargs):
+        command = self._git_operation_command(operation, args)
+        if isinstance(command, list):
+            try:
+                process = await asyncio.create_subprocess_exec(
+                    *command,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE
+                )
+                stdout, stderr = await process.communicate()
+                status = process.returncode
+                output = stdout.decode().strip() if stdout else stderr.decode().strip()
+                return status, output
+            except Exception as e:
+                sys.exit(e)
+        else:
+            return 0, command
 
     def config_get_value(self, section, name):
         if self._use_module:
             config = self.repo.config_reader()
-            return config.get_value(section, name)
+            try:
+                val = config.get_value(section, name)
+            except:
+                val = None
+            return val
         else:
             cmd = ("git", "-C", str(self.repo_path), "config", "--get", f"{section}.{name}")
             output = utils.execute_subprocess(cmd, output_to_caller=True)
@@ -71,6 +105,8 @@ class GitInterface:
     def config_set_value(self, section, name, value):
         if self._use_module:
             with self.repo.config_writer() as writer:
+                if "." in section:  
+                    section = section.replace("."," \"")+'"'           
                 writer.set_value(section, name, value)
             writer.release()  # Ensure changes are saved
         else:
