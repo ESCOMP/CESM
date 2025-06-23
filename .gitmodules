@@ -30,14 +30,14 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.40
+        fxtag = ccs_config_cesm1.0.46
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-	fxtag = cime6.1.93
+	fxtag = cime6.1.102
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -66,7 +66,7 @@
         url = https://github.com/ESCOMP/CTSM
         fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
-        fxtag = ctsm5.3.029
+        fxtag = alpha-ctsm5.4.CMIP7.02.ctsm5.3.055
 
 [submodule "cice"]
         path = components/cice
@@ -80,7 +80,7 @@
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_250428
+        fxtag = mi_250519
 
 [submodule "cism"]
         path = components/cism
@@ -94,14 +94,14 @@
         url = https://github.com/ESCOMP/CDEPS
         fxDONOTUSEurl = https://github.com/ESCOMP/CDEPS
         fxrequired = ToplevelRequired
-        fxtag = cdeps1.0.73
+        fxtag = cdeps1.0.75
 
 [submodule "cmeps"]
         path = components/cmeps
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-        fxtag = cmeps1.0.47
+        fxtag = cmeps1.1.1
 
 [submodule "rtm"]
         path = components/rtm
@@ -136,7 +136,7 @@
         url = https://github.com/NCAR/ParallelIO
         fxDONOTUSEurl = https://github.com/NCAR/ParallelIO
         fxrequired = ToplevelRequired
-        fxtag = pio2_6_4
+        fxtag = pio2_6_6
 
 [submodule "mpi-serial"]
         path = libraries/mpi-serial
@@ -157,4 +157,4 @@
         url = https://github.com/NCAR/CUPiD.git
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
-        fxtag = v0.2.1
+        fxtag = v0.2.2
