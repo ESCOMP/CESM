@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "git-fleximod"
-version = "0.9.4"
+version = "1.0.1"
 description = "Extended support for git-submodule and git-sparse-checkout"
 authors = ["Jim Edwards <jedwards@ucar.edu>"]
 maintainers = ["Jim Edwards <jedwards@ucar.edu>"]
@@ -11,6 +11,7 @@ keywords = ["git", "submodule", "sparse-checkout"]
 packages = [
 { include = "git_fleximod"},
 { include = "doc"},
+{ include = "README.md"},
 ]
 
 [tool.poetry.scripts]
