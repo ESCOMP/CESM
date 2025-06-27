@@ -1,4 +1,116 @@
 ==============================================================
+Tag name: cesm3_0_alpha07b
+Originator(s): CSEG
+Date: 26th June 2025
+One-line Summary: CAM updates
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.48   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.105                        **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_100                              **
+components/clm          https://github.com/ESCOMP/ctsm/tree/alpha-ctsm5.4.CMIP7.02.ctsm5.3.055--
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_13           --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_250519                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_006          --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.77                      **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.2                       **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_86                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.n03_v2.3.0     --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_08                    --
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_6                      **
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.2.2                             --
+
+
+cam
+Cheryl Craig 2025-06-25 - cam6_4_100 - components/cam (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CAM/tags/cam6_4_100
+For Courtney Peverley
+
+Fix memory leaks which are mainly nvhpc-specific
+
+Brian Eaton 2025-06-24 - cam6_4_099 - components/cam (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CAM/tags/cam6_4_099
+New F compset for cam4; updates to CAM testing.
+
+Courtney Peverley 2025-06-23 - cam6_4_098 - components/cam (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CAM/tags/cam6_4_098
+RRTMGP LW module CCPPization
+
+Cheryl Craig 2025-06-12 - cam6_4_096 - components/cam (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CAM/tags/cam6_4_096
+Update CAM externals to match beta06
+
+Brian Eaton 2025-05-29 - cam6_4_095 - components/cam (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CAM/tags/cam6_4_095
+Add QPC7 tests on mpasa120 and mpasa480 grids.
+Fix #1315 - CAM_NML_USE_CASE bug.  
+
+Brian Eaton 2025-05-19 - cam6_4_093 - components/cam (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CAM/tags/cam6_4_093
+Add PORT functionality for cam7.  Add cam7-LT test for PORT.  Add cam7-LT test for radiation diagnostics.
+
+Fixes to allow CAM7 to run with NAG-7 on izumi.
+
+Cheryl Craig 2025-05-14 - cam6_4_092 - components/cam (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CAM/tags/cam6_4_092
+bug fixes in dp_coupling for MPAS
+
+answer changing for MPAS
+
+Cheryl Craig 2025-05-01 - cam6_4_090 - components/cam (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CAM/tags/cam6_4_090
+For Lizzie Lundgren
+
+Update to GEOS-Chem 14.5.3 chemistry and fix HEMCO tests
+
+Cheryl Craig 2025-05-14 - cam6_4_091 - components/cam (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CAM/tags/cam6_4_081
+For Kuan-Chih Wang
+
+Implement support for moving mountain gravity wave scheme in MPAS dycore
+
+ccs_config
+Chris Fischer 2025-06-23 - ccs_config_cesm1.0.48 - ccs_config (cesm3_0_alpha07b)
+https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.48
+ccs_config_cesm1.0.48: Add NATL 1/8˚ grid and F-case grid alias
+ccs_config_cesm1.0.47: Add MPAS-O and MPAS-SI from EarthWorksOrg/EarthWorks
+
+cdeps
+Chris Fischer 2025-06-27 - cdeps1.0.77 - components/cdeps (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.77
+Fix fox external
+
+Chris Fischer 2025-06-23 - cdeps1.0.76 - components/cdeps (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.76
+Update fox external
+
+cime
+Chris Fischer 2025-06-26 - cime6.1.105 - cime (cesm3_0_alpha07b)
+https://github.com/ESMCI/cime/tags/cime6.1.105
+cime6.1.105: Copy any additional xml files in case into clone
+cime6.1.104: update-gh-actions
+
+Chris Fischer 2025-06-23 - cime6.1.103 - cime (cesm3_0_alpha07b)
+https://github.com/ESMCI/cime/tags/cime6.1.103
+Add MPAS-O and MPAS-SI from EarthWorksOrg/EarthWorks
+
+cmeps
+Chris Fischer 2025-06-26 - cmeps1.1.2 - src/drivers/nuopc/ (cesm3_0_alpha07b)
+https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.2
+Add ATM_NCPL entry for new NATLx8 grid
+
+ParallelIO
+Chris Fischer 2025-06-23 - pio2_6_6 - libraries/parallelio (cesm3_0_alpha07b)
+https://github.com/NCAR/ParallelIO/tags/pio2_6_6
+pio2_6_6: Update version patch to 6
+pio2_6_5: Fillvalue fix.wif
+
+
+
+==============================================================
 Tag name: cesm3_0_alpha07a
 Originator(s): CSEG
 Date: 13th June 2025
