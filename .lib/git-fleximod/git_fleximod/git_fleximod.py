@@ -9,6 +9,7 @@ import os
 import shutil
 import logging
 import textwrap
+import asyncio
 from git_fleximod import utils
 from git_fleximod import cli
 from git_fleximod.gitinterface import GitInterface
@@ -218,10 +219,10 @@ def git_toplevelroot(root_dir, logger):
     _, superroot = rgit.git_operation("rev-parse", "--show-superproject-working-tree")
     return superroot
 
-def submodules_update(gitmodules, root_dir, requiredlist, force):
-    for name in gitmodules.sections():
+async def submodules_update(gitmodules, root_dir, requiredlist, force):
+    async def update_submodule(name, requiredlist, force):
         submod = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
-    
+
         _, needsupdate, localmods, testfails = submod.status()
         if not submod.fxrequired:
             submod.fxrequired = "AlwaysRequired"
@@ -239,11 +240,11 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
             if "Optional" in fxrequired and "Optional" not in requiredlist:
                 if fxrequired.startswith("Always"):
                     print(f"Skipping optional component {name:>20}")
-                continue
+                return # continue to next submodule
         optional = "AlwaysOptional" in requiredlist
 
         if fxrequired in requiredlist:
-            submod.update()
+            await submod.update()
             repodir = os.path.join(root_dir, submod.path)
             if os.path.exists(os.path.join(repodir, ".gitmodules")):
                 # recursively handle this checkout
@@ -252,7 +253,10 @@ def submodules_update(gitmodules, root_dir, requiredlist, force):
                 newrequiredlist = ["AlwaysRequired"]
                 if optional:
                     newrequiredlist.append("AlwaysOptional")
-                submodules_update(gitsubmodules, repodir, newrequiredlist, force=force)
+                await submodules_update(gitsubmodules, repodir, newrequiredlist, force=force)
+
+    tasks = [update_submodule(name, requiredlist, force) for name in gitmodules.sections()]
+    await asyncio.gather(*tasks)
 
 def local_mods_output():
     text = """\
@@ -346,7 +350,7 @@ def main():
         sys.exit(f"No submodule components found, root_dir={root_dir}")
     retval = 0
     if action == "update":
-        submodules_update(gitmodules, root_dir, fxrequired, force)
+        asyncio.run(submodules_update(gitmodules, root_dir, fxrequired, force))
     elif action == "status":
         tfails, lmods, updates = submodules_status(gitmodules, root_dir, toplevel=True)
         if tfails + lmods + updates > 0:
