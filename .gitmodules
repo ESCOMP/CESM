@@ -158,3 +158,24 @@
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
         fxtag = v0.2.2
+
+[submodule "mpas-ocean"]
+        path = components/mpas-ocean
+        url = https://github.com/EarthWorksOrg/mpas-ocean.git
+        fxDONOTUSEurl = https://github.com/EarthWorksOrg/mpas-ocean.git
+        fxrequired = AlwaysOptional
+        fxtag = mpaso-ew2.5.002
+
+[submodule "mpas-seaice"]
+        path = components/mpas-seaice
+        url = https://github.com/EarthWorksOrg/mpas-seaice.git
+        fxDONOTUSEurl = https://github.com/EarthWorksOrg/mpas-seaice.git
+        fxrequired = AlwaysOptional
+        fxtag = mpassi-ew2.5.001
+
+[submodule "mpas-framework"]
+        path = components/mpas-framework
+        url = https://github.com/EarthWorksOrg/mpas-framework.git
+        fxDONOTUSEurl = https://github.com/EarthWorksOrg/mpas-framework.git
+        fxrequired = AlwaysOptional
+        fxtag = mpasfrwk-ew2.5.000

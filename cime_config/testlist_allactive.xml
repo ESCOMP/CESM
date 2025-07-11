@@ -244,4 +244,23 @@
      <option name="comment">Include a short debug test using the atm grid for aoflux calculations rather than the default xgrid.</option>
    </options>
  </test>
+ <test name="SMS_Ln9_P4" compset="CMPASO" grid="T62_oQU120" testmods="mpaso/gpu_default">
+   <machines>
+     <machine name="derecho" compiler="nvhpc" category="prealpha"/>
+   </machines>
+   <options>
+     <option name="wallclock">00:30:00</option>
+     <option name="comment">Data-forced MPAS-Ocean running on GPUs. Also uses the 'split_implicit' integration option.</option>
+   </options>
+ </test>
+ <test name="ERS_P256_Vnuopc" grid="mpasa120_oQU120" compset="CHAOS2000dev" >
+   <machines>
+     <machine name="derecho" compiler="nvhpc" category="prealpha"/>
+     <machine name="derecho" compiler="intel" category="prealpha"/>
+   </machines>
+   <options>
+     <option name="wallclock"> 01:00:00 </option>
+     <option name="comment">EarthWorks model with active mpasa, mpaso, mpassi using cam_dev physics</option>
+   </options>
+ </test>
 </testlist>
