@@ -13,7 +13,7 @@ jobs:
         # Lots of python versions, pare down if we don't support a version
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
         config:
-          - {"compset": "BLT1850", "res": "ne30pg3_t232"} # fully coupled
+          - {"compset": "B1850CM", "res": "ne30pg3_t232"} # fully coupled
           - {"compset": "C_JRA", "res": "TL319_t232"}     # ocean only
           - {"compset": "C1850MARBL_JRA", "res": "TL319_t232"}     # ocean only, with BGC
           - {"compset": "DTEST", "res": "TL319_t232"}     # ice only
