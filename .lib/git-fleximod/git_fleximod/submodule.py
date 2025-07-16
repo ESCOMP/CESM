@@ -284,17 +284,18 @@ class Submodule():
                 if not os.path.isdir(infodir):
                     os.makedirs(infodir)
                 gitsparse = os.path.abspath(os.path.join(infodir, "sparse-checkout"))
-            if os.path.isfile(gitsparse):
-                self.logger.warning(
-                    "submodule {} is already initialized {}".format(self.name, rootdotgit)
-                )
-                return
-
-            with utils.pushd(sprep_repo):
-                if os.path.isfile(self.fxsparse):
-                    
-                    shutil.copy(self.fxsparse, gitsparse)
+                if os.path.isfile(gitsparse):
+                    self.logger.warning(
+                        "submodule {} is already initialized {}".format(self.name, rootdotgit)
+                    )
+                    os.remove(gitsparse)
                 
+                if os.path.isfile(self.fxsparse):
+                    shutil.copy(self.fxsparse, gitsparse)
+                else:
+                    self.logger.warning(
+                        "submodule {} could not find {}".format(self.name, self.fxsparse)
+                    )
 
         # Finally checkout the repo
         sprepo_git.git_operation("fetch", "origin", "--tags")
@@ -303,11 +304,19 @@ class Submodule():
             print(f"Error checking out {self.name:>20} at {self.fxtag}")
         else:
             print(f"Successfully checked out {self.name:>20} at {self.fxtag}")
+
+        status,f = sprepo_git.git_operation("status")
+        # Restore any files deleted from sandbox
+        for line in f.splitlines():
+            if "deleted:" in line:
+                deleted_file = line.split("deleted:")[1].strip()
+                sprepo_git.git_operation("checkout", deleted_file)
+
         rgit.config_set_value('submodule.' + self.name, "active", "true")
         rgit.config_set_value('submodule.' + self.name, "url", self.url)
         rgit.config_set_value('submodule.' + self.name, "path", self.path)
 
-    def update(self):
+    async def update(self):
         """
         Updates the submodule to the latest or specified version.
 
@@ -341,6 +350,9 @@ class Submodule():
         # Look for a .gitmodules file in the newly checkedout repo
         if self.fxsparse:
             print(f"Sparse checkout {self.name} fxsparse {self.fxsparse}")
+            if not os.path.isfile(self.fxsparse):
+                self.logger.info("Submodule {} fxsparse file not found".format(self.name))
+
             self.sparse_checkout()
         else:
             if not repo_exists and self.url:
@@ -378,7 +390,8 @@ class Submodule():
                 git.git_operation("submodule", "add", "--name", self.name, "--", self.url, self.path) 
 
             if not repo_exists:
-                git.git_operation("submodule", "update", "--init", "--", self.path)
+                git.git_operation("submodule", "init", "--", self.path)
+                await git.git_operation_async("submodule", "update", "--", self.path)
 
             if self.fxtag:        
                 smgit = GitInterface(repodir, self.logger)
@@ -408,6 +421,19 @@ class Submodule():
                 if fxtag and fxtag not in tags:
                     git.git_operation("fetch", newremote, "--tags")
                 status, atag = git.git_operation("describe", "--tags", "--always")
+                status, files = git.git_operation("diff", "--name-only", "-z")
+                modfiles = []
+                moddirs = []
+                if files:
+                    for f in files.split('\0'):
+                        if f:
+                            if os.path.exists(f):
+                                git.git_operation("checkout",f)
+                            elif os.path.isdir(f):
+                                moddirs.append(f)
+                            else:
+                                modfiles.append(f)
+
                 if fxtag and fxtag != atag:
                     try:
                         status, _ = git.git_operation("checkout", fxtag)
@@ -419,6 +445,10 @@ class Submodule():
 
                 elif not fxtag:
                     print(f"No fxtag found for submodule {self.name:>20}")
+                elif modfiles:
+                    print(f"{self.name:>20} has modified files: {modfiles}")
+                elif moddirs:
+                    print(f"{self.name:>20} has modified directories: {moddirs}")
                 else:
                     print(f"{self.name:>20} up to date.")
 
