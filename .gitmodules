@@ -40,13 +40,6 @@
 	fxtag = cime6.1.105
         fxrequired = ToplevelRequired
 
-[submodule "fms"]
-        path = libraries/FMS
-        url = https://github.com/ESCOMP/FMS_interface
-        fxDONOTUSEurl = https://github.com/ESCOMP/FMS_interface
-        fxrequired = ToplevelRequired
-        fxtag = fi_250428
-
 [submodule "share"]
         path = share
         url = https://github.com/ESCOMP/CESM_share
@@ -68,27 +61,6 @@
         fxrequired = ToplevelRequired
         fxtag = alpha-ctsm5.4.CMIP7.02.ctsm5.3.055
 
-[submodule "cice"]
-        path = components/cice
-        url = https://github.com/ESCOMP/CESM_CICE
-        fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
-        fxrequired = ToplevelRequired
-        fxtag = cesm3_cice6_6_0_13
-
-[submodule "mom"]
-        path = components/mom
-        url = https://github.com/ESCOMP/MOM_interface
-        fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
-        fxrequired = ToplevelRequired
-        fxtag = mi_250519
-
-[submodule "cism"]
-        path = components/cism
-        url = https://github.com/ESCOMP/cism-wrapper.git
-        fxDONOTUSEurl = https://github.com/ESCOMP/cism-wrapper.git
-        fxtag = cismwrap_2_2_006
-        fxrequired = ToplevelRequired
-
 [submodule "cdeps"]
         path = components/cdeps
         url = https://github.com/ESCOMP/CDEPS
@@ -102,27 +74,6 @@
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
         fxtag = cmeps1.1.2
-
-[submodule "rtm"]
-        path = components/rtm
-        url = https://github.com/ESCOMP/RTM
-        fxDONOTUSEurl = https://github.com/ESCOMP/RTM
-        fxrequired = ToplevelRequired
-        fxtag = rtm1_0_86
-
-[submodule "ww3"]
-        path = components/ww3
-        url = https://github.com/ESCOMP/WW3_interface
-        fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
-        fxtag = main_0.0.16
-        fxrequired = ToplevelRequired
-
-[submodule "mizuroute"]
-        path = components/mizuroute
-        url = https://github.com/ESCOMP/mizuRoute
-        fxDONOTUSEurl = https://github.com/ESCOMP/mizuRoute
-        fxrequired = ToplevelRequired
-        fxtag = cesm-coupling.n03_v2.2.0
 
 [submodule "mosart"]
         path = components/mosart
@@ -145,37 +96,23 @@
         fxtag = MPIserial_2.5.4
         fxrequired = ToplevelRequired
 
-[submodule "pysect"]
-        path = tools/statistical_ensemble_test/pyCECT
-        url = https://github.com/NCAR/PyCECT
-        fxDONOTUSEurl = https://github.com/NCAR/PyCECT
-        fxrequired = ToplevelRequired
-        fxtag = 3.2.2
-
-[submodule "tools/CUPiD"]
-        path = tools/CUPiD
-        url = https://github.com/NCAR/CUPiD.git
-        fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
-        fxrequired = ToplevelRequired
-        fxtag = v0.2.2
-
 [submodule "mpas-ocean"]
         path = components/mpas-ocean
         url = https://github.com/EarthWorksOrg/mpas-ocean.git
         fxDONOTUSEurl = https://github.com/EarthWorksOrg/mpas-ocean.git
-        fxrequired = AlwaysOptional
+        fxrequired = ToplevelRequired
         fxtag = mpaso-ew2.5.002
 
 [submodule "mpas-seaice"]
         path = components/mpas-seaice
         url = https://github.com/EarthWorksOrg/mpas-seaice.git
         fxDONOTUSEurl = https://github.com/EarthWorksOrg/mpas-seaice.git
-        fxrequired = AlwaysOptional
+        fxrequired = ToplevelRequired
         fxtag = mpassi-ew2.5.001
 
 [submodule "mpas-framework"]
         path = components/mpas-framework
         url = https://github.com/EarthWorksOrg/mpas-framework.git
         fxDONOTUSEurl = https://github.com/EarthWorksOrg/mpas-framework.git
-        fxrequired = AlwaysOptional
+        fxrequired = ToplevelRequired
         fxtag = mpasfrwk-ew2.5.000
