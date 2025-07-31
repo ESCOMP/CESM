@@ -250,7 +250,6 @@
   <test name="SMS_P1" grid="mpasa480_mpasa480" compset="FKESSLER" testmods="ew/gpu_default">
     <machines>
       <machine name="derecho" compiler="nvhpc" category="prealpha"/>
-      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
       <machine name="derecho" compiler="nvhpc" category="ew_pr_gpu"/>
     </machines>
     <options>
@@ -261,7 +260,6 @@
   <test name="ERS_Ln9" grid="ne30pg3_ne30pg3_mg17" compset="F2000dev" testmods="cam/outfrq9s_gpu_default">
     <machines>
       <!-- Similar tests are already in CAM's prealpha category -->
-      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
       <machine name="derecho" compiler="nvhpc" category="ew_pr_gpu"/>
     </machines>
     <options>
@@ -273,7 +271,6 @@
   <!-- <test name="SMS_Ln9_P4" compset="CMPASO" grid="mpasa120_oQU120" testmods="mpaso/gpu_default">
     <machines>
       <machine name="derecho" compiler="nvhpc" category="prealpha"/>
-      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
       <machine name="derecho" compiler="nvhpc" category="ew_pr_gpu"/>
     </machines>
     <options>
@@ -287,7 +284,6 @@
   <!-- <test name="ERS_Ln9" compset="B2000devEW" grid="mpasa120_oQU120" testmods="ew/outfrq9s_gpu_default">
     <machines>
       <machine name="derecho" compiler="nvhpc" category="prebeta"/>
-      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
       <machine name="derecho" compiler="nvhpc" category="ew_pr_gpu"/>
     </machines>
     <options>
