@@ -412,6 +412,192 @@
     </mach>
   </grid>
 
+  <grid name="a%mpasa480_l%mpasa480_oi%oQU480">
+    <mach name="derecho">
+      <pes pesize="any" compset="any">
+        <comment>Low resolution MPAS grids. Best for debugging or code tests. Can typically use much less than 1 node.</comment>
+        <ntasks>
+          <ntasks_atm>16</ntasks_atm>
+          <ntasks_lnd>16</ntasks_lnd>
+          <ntasks_rof>16</ntasks_rof>
+          <ntasks_ice>16</ntasks_ice>
+          <ntasks_ocn>16</ntasks_ocn>
+          <ntasks_glc>16</ntasks_glc>
+          <ntasks_wav>16</ntasks_wav>
+          <ntasks_cpl>16</ntasks_cpl>
+        </ntasks>
+        <nthrds>
+          <nthrds_atm>1</nthrds_atm>
+          <nthrds_lnd>1</nthrds_lnd>
+          <nthrds_rof>1</nthrds_rof>
+          <nthrds_ice>1</nthrds_ice>
+          <nthrds_ocn>1</nthrds_ocn>
+          <nthrds_glc>1</nthrds_glc>
+          <nthrds_wav>1</nthrds_wav>
+          <nthrds_cpl>1</nthrds_cpl>
+        </nthrds>
+        <rootpe>
+          <rootpe_atm>0</rootpe_atm>
+          <rootpe_lnd>0</rootpe_lnd>
+          <rootpe_rof>0</rootpe_rof>
+          <rootpe_ice>0</rootpe_ice>
+          <rootpe_ocn>0</rootpe_ocn>
+          <rootpe_glc>0</rootpe_glc>
+          <rootpe_wav>0</rootpe_wav>
+          <rootpe_cpl>0</rootpe_cpl>
+        </rootpe>
+      </pes>
+    </mach>
+  </grid>
+  <grid name="a%mpasa120_l%mpasa120_oi%oQU120">
+    <mach name="derecho">
+      <pes pesize="any" compset="any">
+        <comment>MPAS grids. About equal 1 deg x 1 deg resolution. Needs a bit more than 1 node.</comment>
+        <ntasks>
+          <ntasks_atm>-2</ntasks_atm>
+          <ntasks_lnd>-2</ntasks_lnd>
+          <ntasks_rof>-1</ntasks_rof>
+          <ntasks_ice>-2</ntasks_ice>
+          <ntasks_ocn>-2</ntasks_ocn>
+          <ntasks_glc>-1</ntasks_glc>
+          <ntasks_wav>-1</ntasks_wav>
+          <ntasks_cpl>-2</ntasks_cpl>
+        </ntasks>
+        <nthrds>
+          <nthrds_atm>1</nthrds_atm>
+          <nthrds_lnd>1</nthrds_lnd>
+          <nthrds_rof>1</nthrds_rof>
+          <nthrds_ice>1</nthrds_ice>
+          <nthrds_ocn>1</nthrds_ocn>
+          <nthrds_glc>1</nthrds_glc>
+          <nthrds_wav>1</nthrds_wav>
+          <nthrds_cpl>1</nthrds_cpl>
+        </nthrds>
+        <rootpe>
+          <rootpe_atm>0</rootpe_atm>
+          <rootpe_lnd>0</rootpe_lnd>
+          <rootpe_rof>0</rootpe_rof>
+          <rootpe_ice>0</rootpe_ice>
+          <rootpe_ocn>0</rootpe_ocn>
+          <rootpe_glc>0</rootpe_glc>
+          <rootpe_wav>0</rootpe_wav>
+          <rootpe_cpl>0</rootpe_cpl>
+        </rootpe>
+      </pes>
+    </mach>
+  </grid>
+  <grid name="a%mpasa60_l%mpasa60_oi%oQU060">
+    <mach name="derecho">
+      <pes pesize="any" compset="any">
+        <comment>MPAS grids. About equal to 0.5 deg x 0.5 deg.</comment>
+        <ntasks>
+          <ntasks_atm>-4</ntasks_atm>
+          <ntasks_lnd>-4</ntasks_lnd>
+          <ntasks_rof>-4</ntasks_rof>
+          <ntasks_ice>-4</ntasks_ice>
+          <ntasks_ocn>-4</ntasks_ocn>
+          <ntasks_glc>-4</ntasks_glc>
+          <ntasks_wav>-4</ntasks_wav>
+          <ntasks_cpl>-4</ntasks_cpl>
+        </ntasks>
+        <nthrds>
+          <nthrds_atm>1</nthrds_atm>
+          <nthrds_lnd>1</nthrds_lnd>
+          <nthrds_rof>1</nthrds_rof>
+          <nthrds_ice>1</nthrds_ice>
+          <nthrds_ocn>1</nthrds_ocn>
+          <nthrds_glc>1</nthrds_glc>
+          <nthrds_wav>1</nthrds_wav>
+          <nthrds_cpl>1</nthrds_cpl>
+        </nthrds>
+        <rootpe>
+          <rootpe_atm>0</rootpe_atm>
+          <rootpe_lnd>0</rootpe_lnd>
+          <rootpe_rof>0</rootpe_rof>
+          <rootpe_ice>0</rootpe_ice>
+          <rootpe_ocn>0</rootpe_ocn>
+          <rootpe_glc>0</rootpe_glc>
+          <rootpe_wav>0</rootpe_wav>
+          <rootpe_cpl>0</rootpe_cpl>
+        </rootpe>
+      </pes>
+    </mach>
+  </grid>
+  <grid name="a%mpasa30_l%mpasa30_oi%oQU030">
+    <mach name="derecho">
+      <pes pesize="any" compset="any">
+        <comment>MPAS grids. About 0.25 deg x 0.25 deg resolution.</comment>
+        <ntasks>
+          <ntasks_atm>-40</ntasks_atm>
+          <ntasks_lnd>-40</ntasks_lnd>
+          <ntasks_rof>-40</ntasks_rof>
+          <ntasks_ice>-40</ntasks_ice>
+          <ntasks_ocn>-40</ntasks_ocn>
+          <ntasks_glc>-40</ntasks_glc>
+          <ntasks_wav>-40</ntasks_wav>
+          <ntasks_cpl>-40</ntasks_cpl>
+        </ntasks>
+        <nthrds>
+          <nthrds_atm>1</nthrds_atm>
+          <nthrds_lnd>1</nthrds_lnd>
+          <nthrds_rof>1</nthrds_rof>
+          <nthrds_ice>1</nthrds_ice>
+          <nthrds_ocn>1</nthrds_ocn>
+          <nthrds_glc>1</nthrds_glc>
+          <nthrds_wav>1</nthrds_wav>
+          <nthrds_cpl>1</nthrds_cpl>
+        </nthrds>
+        <rootpe>
+          <rootpe_atm>0</rootpe_atm>
+          <rootpe_lnd>0</rootpe_lnd>
+          <rootpe_rof>0</rootpe_rof>
+          <rootpe_ice>0</rootpe_ice>
+          <rootpe_ocn>0</rootpe_ocn>
+          <rootpe_glc>0</rootpe_glc>
+          <rootpe_wav>0</rootpe_wav>
+          <rootpe_cpl>0</rootpe_cpl>
+        </rootpe>
+      </pes>
+    </mach>
+  </grid>
+  <grid name="a%mpasa15_l%mpasa15_oi%oQU015">
+    <mach name="derecho">
+      <pes pesize="any" compset="any">
+        <comment>MPAS grids. Nearing high resolution</comment>
+        <ntasks>
+          <ntasks_atm>-120</ntasks_atm>
+          <ntasks_lnd>-120</ntasks_lnd>
+          <ntasks_rof>-120</ntasks_rof>
+          <ntasks_ice>-120</ntasks_ice>
+          <ntasks_ocn>-120</ntasks_ocn>
+          <ntasks_glc>-120</ntasks_glc>
+          <ntasks_wav>-120</ntasks_wav>
+          <ntasks_cpl>-120</ntasks_cpl>
+        </ntasks>
+        <nthrds>
+          <nthrds_atm>1</nthrds_atm>
+          <nthrds_lnd>1</nthrds_lnd>
+          <nthrds_rof>1</nthrds_rof>
+          <nthrds_ice>1</nthrds_ice>
+          <nthrds_ocn>1</nthrds_ocn>
+          <nthrds_glc>1</nthrds_glc>
+          <nthrds_wav>1</nthrds_wav>
+          <nthrds_cpl>1</nthrds_cpl>
+        </nthrds>
+        <rootpe>
+          <rootpe_atm>0</rootpe_atm>
+          <rootpe_lnd>0</rootpe_lnd>
+          <rootpe_rof>0</rootpe_rof>
+          <rootpe_ice>0</rootpe_ice>
+          <rootpe_ocn>0</rootpe_ocn>
+          <rootpe_glc>0</rootpe_glc>
+          <rootpe_wav>0</rootpe_wav>
+          <rootpe_cpl>0</rootpe_cpl>
+        </rootpe>
+      </pes>
+    </mach>
+  </grid>
+
   <!-- J compset (all active except data atmosphere)
        Laid out as follows:
        |LND|ICE|ATM|OCN|

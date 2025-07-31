@@ -1,0 +1,12 @@
+./case.setup
+./preview_namelists
+# Have to run the previous two steps for next command to succeed
+./check_input_data
+# Since cime will continue even if the above commands fail
+#  output success or fail to a special file
+if [[ "0" == "$?" ]]; then
+  echo "EW INPUT DATA CHECK: SUCCESS" | tee ew_data_check.txt
+else
+  echo "EW INPUT DATA CHECK: FAIL" | tee ew_data_check.txt
+  echo "It may be necessary to run ./check_input_data --download" | tee -a ew_data_check.txt
+fi

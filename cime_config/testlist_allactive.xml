@@ -244,23 +244,138 @@
      <option name="comment">Include a short debug test using the atm grid for aoflux calculations rather than the default xgrid.</option>
    </options>
  </test>
- <test name="SMS_Ln9_P4" compset="CMPASO" grid="T62_oQU120" testmods="mpaso/gpu_default">
-   <machines>
-     <machine name="derecho" compiler="nvhpc" category="prealpha"/>
-   </machines>
-   <options>
-     <option name="wallclock">00:30:00</option>
-     <option name="comment">Data-forced MPAS-Ocean running on GPUs. Also uses the 'split_implicit' integration option.</option>
-   </options>
- </test>
- <test name="ERS_P256_Vnuopc" grid="mpasa120_oQU120" compset="CHAOS2000dev" >
-   <machines>
-     <machine name="derecho" compiler="nvhpc" category="prealpha"/>
-     <machine name="derecho" compiler="intel" category="prealpha"/>
-   </machines>
-   <options>
-     <option name="wallclock"> 01:00:00 </option>
-     <option name="comment">EarthWorks model with active mpasa, mpaso, mpassi using cam_dev physics</option>
-   </options>
- </test>
+
+  <!-- ew_pr Tests to run for the EW PR process -->
+  <!-- ew_pr_gpu to be run with the other ew_pr tests, CPU+GPU -->
+  <test name="SMS_P1" grid="mpasa480_mpasa480" compset="FKESSLER" testmods="ew/gpu_default">
+    <machines>
+      <machine name="derecho" compiler="nvhpc" category="prealpha"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr_gpu"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+      <option name="comment">Test GPU with (MPAS) dycore-only, simple physics</option>
+    </options>
+  </test>
+  <test name="ERS_Ln9" grid="ne30pg3_ne30pg3_mg17" compset="F2000dev" testmods="cam/outfrq9s_gpu_default">
+    <machines>
+      <!-- Similar tests are already in CAM's prealpha category -->
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr_gpu"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:30:00 </option>
+      <option name="comment">Test all GPU physics enabled with SE-dycore, no GPU dycore. Matches test in aux_cam</option>
+    </options>
+  </test>
+  <!-- Uncomment this test to add it back once the MPAS-O GPU port is solid -->
+  <!-- <test name="SMS_Ln9_P4" compset="CMPASO" grid="mpasa120_oQU120" testmods="mpaso/gpu_default">
+    <machines>
+      <machine name="derecho" compiler="nvhpc" category="prealpha"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr_gpu"/>
+    </machines>
+    <options>
+      <option name="wallclock">00:30:00</option>
+      <option name="comment">Data-forced MPAS-Ocean running on GPUs. Also uses the 'split_implicit' integration option.</option>
+    </options>
+  </test> -->
+  <!-- Uncomment the next test once the MPAS-O and MPAS-A GPU ports are both solid
+       2025 July 25: The MPAS-O port needs some help and has the NVIDIA version of the OpenACC port coming soon
+                     The MPAS-A port seemed to have issues with real-physics cases. -->
+  <!-- <test name="ERS_Ln9" compset="B2000devEW" grid="mpasa120_oQU120" testmods="ew/outfrq9s_gpu_default">
+    <machines>
+      <machine name="derecho" compiler="nvhpc" category="prebeta"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr_gpu"/>
+    </machines>
+    <options>
+      <option name="wallclock">00:30:00</option>
+      <option name="comment">EarthWorks compset on GPUs with active cam using cam7 physics and mpasa dycore, clm, mpaso, and mpassi.</option>
+    </options>
+  </test> -->
+
+  <!-- ew_pr CPU-only Tests -->
+  <test name="ERS2_Ln9" grid="mpasa120_oQU120" compset="B2000devEW" testmods="ew/outfrq9s" >
+    <machines>
+      <machine name="derecho" compiler="intel" category="prealpha"/>
+      <machine name="derecho" compiler="nvhpc" category="prealpha"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+      <machine name="derecho" compiler="intel" category="ew_pr"/>
+      <machine name="derecho" compiler="gnu"   category="ew_pr"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 02:00:00 </option>
+      <option name="comment">EarthWorks compset with active cam using cam7 physics and mpasa dycore, clm, mpaso, and mpassi.</option>
+    </options>
+  </test>
+  <test name="SMS" grid="mpasa480_oQU480" compset="F2000devEW" >
+    <machines>
+      <machine name="derecho" compiler="nvhpc" category="prealpha"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:20:00 </option>
+      <option name="comment">Use MPASSI%PRES instead of CICE%PRES in F2000dev (from CAM).</option>
+    </options>
+  </test>
+  <test name="ERS_Ln9" grid="mpasa120_mpasa120" compset="QPC7" testmods="cam/outfrq9s_mpasa120" >
+    <machines>
+      <!-- Similar tests are already in CAM's prealpha category -->
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:20:00 </option>
+      <option name="comment">Similar to test in CAM that uses Intel compiler and DEBUG. Helps check MPAS-A dycore.</option>
+    </options>
+  </test>
+  <test name="ERS2" grid="mpasa480_mpasa480" compset="FKESSLER" >
+    <machines>
+      <machine name="derecho" compiler="nvhpc" category="prealpha"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:20:00 </option>
+      <option name="comment">Check MPAS-A dycore with simple physics. Match a GPU test.</option>
+    </options>
+  </test>
+  <test name="ERP_Ln9_P128" grid="mpasa120z32_mpasa120" compset="FHS94" testmods="cam/outfrq9s_mpasa120" >
+    <machines>
+      <!-- Similar tests are already in CAM's prealpha category -->
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+      <machine name="derecho" compiler="intel" category="ew_pr"/>
+      <machine name="derecho" compiler="gnu"   category="ew_pr"/>
+    </machines>
+    <options>
+      <option name="wallclock"> 00:20:00 </option>
+      <option name="comment">Atmosphere-only test with Held Suarez simple physics.</option>
+    </options>
+  </test>
+  <test name="ERS2_D" compset="CMPASO" grid="mpasa480_oQU480" >
+    <machines>
+      <machine name="derecho" compiler="intel" category="prealpha"/>
+      <machine name="derecho" compiler="nvhpc" category="prealpha"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+      <machine name="derecho" compiler="intel" category="ew_pr"/>
+      <machine name="derecho" compiler="gnu" category="ew_pr"/>
+    </machines>
+    <options>
+      <option name="wallclock">00:20:00</option>
+      <option name="comment">Data-forced MPAS-Ocean. Check restarts and debug at low resolution.</option>
+    </options>
+  </test>
+  <test name="SMS_Ln9_P4" compset="CMPASO" grid="mpasa120_oQU120" testmods="mpaso/split_implicit" >
+    <machines>
+      <machine name="derecho" compiler="nvhpc" category="prealpha"/>
+      <machine name="derecho" compiler="intel" category="prealpha"/>
+      <machine name="derecho" compiler="nvhpc" category="ew_pr"/>
+      <machine name="derecho" compiler="intel" category="ew_pr"/>
+    </machines>
+    <options>
+      <option name="wallclock">00:20:00</option>
+      <option name="comment">Data-forced MPAS-Ocean. Matches a GPU test. Also uses the 'split_implicit' integration option.</option>
+    </options>
+  </test>
+
 </testlist>
