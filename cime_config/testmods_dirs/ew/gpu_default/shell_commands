@@ -1,0 +1,8 @@
+./xmlchange NTHRDS=1
+./xmlchange ROOTPE='0'
+./xmlchange TIMER_DETAIL='6'
+./xmlchange TIMER_LEVEL='999'
+./xmlchange GPU_TYPE=a100
+./xmlchange OPENACC_GPU_OFFLOAD=TRUE
+./xmlchange OVERSUBSCRIBE_GPU=TRUE
+./xmlchange NGPUS_PER_NODE=4

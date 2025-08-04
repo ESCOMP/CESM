@@ -1,4 +1,13 @@
 ==================================
+cesm_earthworks branch
+==================================
+
+**NOTE:**
+This cesm_earthworks branch has specific extensions from the 
+EarthWorks project. See the README_earthworks.md file in this
+directory for more.
+
+==================================
  The Community Earth System Model
 ==================================
 

@@ -123,34 +123,16 @@
   <!-- EarthWorks specific compsets
        MPAS-ocean and/or MPAS-seaice couplings -->
 
-  <!-- like F2000dev from CAM, with MPASSI and MPASO active -->
-  <compset>
-     <alias>CHAOS2000dev</alias>
-     <lname>2000_CAM70_CLM60%SP_MPASSI_MPASO_MOSART_SGLC_SWAV</lname>
-  </compset>
-
-  <!-- like F2000dev, with MPASSI prescribed mode -->
+  <!-- like F2000dev from CAM, with MPASSI prescribed mode -->
   <compset>
     <alias>F2000devEW</alias>
     <lname>2000_CAM70_CLM60%SP_MPASSI%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
 
-  <!-- like F2000climo from CAM, with MPASSI and MPASO -->
+  <!-- like F2000dev, with MPASSI and MPASO active -->
   <compset>
-      <alias>FullyCoupledEW</alias>
-      <lname>2000_CAM60_CLM50%SP_MPASSI_MPASO_SROF_SGLC_SWAV</lname>
-  </compset>
-
-  <!-- like F2000climo, with MPASSI prescribed mode -->
-  <compset>
-     <alias>F2000climoEW</alias>
-     <lname>2000_CAM60_CLM50%SP_MPASSI%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
-  </compset>
-
-  <!-- Like FullyCoupledEW, with MOSART river active too -->
-  <compset>
-     <alias>CHAOS2000</alias>
-     <lname>2000_CAM60_CLM50%SP_MPASSI_MPASO_MOSART_SGLC_SWAV</lname>
+     <alias>B2000devEW</alias>
+     <lname>2000_CAM70_CLM60%SP_MPASSI_MPASO_MOSART_SGLC_SWAV</lname>
   </compset>
   <!-- END EarthWorks specific compsets -->
 

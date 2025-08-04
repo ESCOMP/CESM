@@ -30,14 +30,14 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.48
+        fxtag = ccs_config_cesm1.0.54
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-	fxtag = cime6.1.105
+        fxtag = cime6.1.111
         fxrequired = ToplevelRequired
 
 [submodule "share"]
@@ -49,9 +49,10 @@
 
 [submodule "cam"]
         path = components/cam
-        url = https://www.github.com/ESCOMP/CAM
+        # EarthWorksOrg/CAM uses MPAS-A v7.x OpenACC
+        url = https://www.github.com/EarthWorksOrg/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_4_100
+        fxtag = cam-ew2.5.002
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
@@ -60,6 +61,13 @@
         fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
         fxtag = alpha-ctsm5.4.CMIP7.02.ctsm5.3.055
+
+[submodule "cice"]
+        path = components/cice
+        url = https://github.com/ESCOMP/CESM_CICE
+        fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
+        fxrequired = ToplevelRequired
+        fxtag = cesm3_cice6_6_0_13
 
 [submodule "cdeps"]
         path = components/cdeps
@@ -73,7 +81,7 @@
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-        fxtag = cmeps1.1.2
+        fxtag = cmeps1.1.4
 
 [submodule "mosart"]
         path = components/mosart
@@ -96,19 +104,26 @@
         fxtag = MPIserial_2.5.4
         fxrequired = ToplevelRequired
 
+[submodule "pysect"]
+        path = tools/statistical_ensemble_test/pyCECT
+        url = https://github.com/NCAR/PyCECT
+        fxDONOTUSEurl = https://github.com/NCAR/PyCECT
+        fxrequired = ToplevelRequired
+        fxtag = 3.2.2
+        
 [submodule "mpas-ocean"]
         path = components/mpas-ocean
         url = https://github.com/EarthWorksOrg/mpas-ocean.git
         fxDONOTUSEurl = https://github.com/EarthWorksOrg/mpas-ocean.git
         fxrequired = ToplevelRequired
-        fxtag = mpaso-ew2.5.002
+        fxtag = mpaso-ew2.5.005
 
 [submodule "mpas-seaice"]
         path = components/mpas-seaice
         url = https://github.com/EarthWorksOrg/mpas-seaice.git
         fxDONOTUSEurl = https://github.com/EarthWorksOrg/mpas-seaice.git
         fxrequired = ToplevelRequired
-        fxtag = mpassi-ew2.5.001
+        fxtag = mpassi-ew2.5.004
 
 [submodule "mpas-framework"]
         path = components/mpas-framework
