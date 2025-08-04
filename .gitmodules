@@ -40,14 +40,6 @@
         fxtag = cime6.1.111
         fxrequired = ToplevelRequired
 
-# EarthWorks is not using fms
-# [submodule "fms"]
-#         path = libraries/FMS
-#         url = https://github.com/ESCOMP/FMS_interface
-#         fxDONOTUSEurl = https://github.com/ESCOMP/FMS_interface
-#         fxrequired = ToplevelRequired
-#         fxtag = fi_250428
-
 [submodule "share"]
         path = share
         url = https://github.com/ESCOMP/CESM_share
@@ -77,22 +69,6 @@
         fxrequired = ToplevelRequired
         fxtag = cesm3_cice6_6_0_13
 
-# EarthWorks is not using mom
-# [submodule "mom"]
-#         path = components/mom
-#         url = https://github.com/ESCOMP/MOM_interface
-#         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
-#         fxrequired = ToplevelRequired
-#         fxtag = mi_250519
-
-# EarthWorks is not using cism
-# [submodule "cism"]
-#         path = components/cism
-#         url = https://github.com/ESCOMP/cism-wrapper.git
-#         fxDONOTUSEurl = https://github.com/ESCOMP/cism-wrapper.git
-#         fxtag = cismwrap_2_2_006
-#         fxrequired = ToplevelRequired
-
 [submodule "cdeps"]
         path = components/cdeps
         url = https://github.com/ESCOMP/CDEPS
@@ -106,30 +82,6 @@
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
         fxtag = cmeps1.1.4
-
-# EarthWorks is not using rtm
-# [submodule "rtm"]
-#         path = components/rtm
-#         url = https://github.com/ESCOMP/RTM
-#         fxDONOTUSEurl = https://github.com/ESCOMP/RTM
-#         fxrequired = ToplevelRequired
-#         fxtag = rtm1_0_86
-
-# EarthWorks is not using ww3
-# [submodule "ww3"]
-#         path = components/ww3
-#         url = https://github.com/ESCOMP/WW3_interface
-#         fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
-#         fxtag = main_0.0.16
-#         fxrequired = ToplevelRequired
-
-# EarthWorks is not using mizuroute
-# [submodule "mizuroute"]
-#         path = components/mizuroute
-#         url = https://github.com/ESCOMP/mizuRoute
-#         fxDONOTUSEurl = https://github.com/ESCOMP/mizuRoute
-#         fxrequired = ToplevelRequired
-#         fxtag = cesm-coupling.n03_v2.2.0
 
 [submodule "mosart"]
         path = components/mosart
@@ -158,16 +110,7 @@
         fxDONOTUSEurl = https://github.com/NCAR/PyCECT
         fxrequired = ToplevelRequired
         fxtag = 3.2.2
-
-# EarthWorks is not using CUPiD
-# [submodule "tools/CUPiD"]
-#         path = tools/CUPiD
-#         url = https://github.com/NCAR/CUPiD.git
-#         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
-#         fxrequired = ToplevelRequired
-#         fxtag = v0.2.2
-
-# EarthWorks-specific
+        
 [submodule "mpas-ocean"]
         path = components/mpas-ocean
         url = https://github.com/EarthWorksOrg/mpas-ocean.git
