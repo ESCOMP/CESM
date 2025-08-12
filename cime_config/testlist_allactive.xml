@@ -8,7 +8,7 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
-  <test name="ERS_Ld5" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/defaultio">
+  <test name="ERS_Ld5" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
     </machines>
@@ -16,7 +16,7 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
-  <test name="ERS_Ld5" grid="ne30pg3_t232" compset="BLTHIST" testmods="allactive/defaultio">
+  <test name="ERS_Ld5" grid="ne30pg3_t232" compset="BHISTC_LTso" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
     </machines>
@@ -24,7 +24,7 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
-  <test name="ERR_Ld5" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/defaultio">
+  <test name="ERR_Ld5" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="gnu" category="prealpha"/>
     </machines>
@@ -32,7 +32,7 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
-  <test name="ERS_Ld5" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/decstart">
+  <test name="ERS_Ld5" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/decstart">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
     </machines>
@@ -40,7 +40,7 @@
       <option name="wallclock"> 01:00:00 </option>
     </options>
   </test>
-  <test name="ERS_Ld5" grid="ne30pg3_t232" compset="BLTHIST" testmods="allactive/decstart">
+  <test name="ERS_Ld5" grid="ne30pg3_t232" compset="BHISTC_LTso" testmods="allactive/decstart">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
     </machines>
@@ -49,7 +49,7 @@
     </options>
   </test>
 
-  <test name="ERI" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/defaultio">
+  <test name="ERI" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
     </machines>
@@ -57,7 +57,7 @@
       <option name="wallclock"> 02:00:00 </option>
     </options>
   </test>
-  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/defaultio">
+  <test name="SMS_Ld2" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="intel" category="aux_cime_baselines"/>
       <machine name="derecho" compiler="gnu" category="prealpha"/>
@@ -176,7 +176,7 @@
     </options>
   </test>
   <!-- PET tests do not work because of issues with openmp in the se dycore -->
-  <test name="PET_PM" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/defaultiomi">
+  <test name="PET_PM" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/defaultiomi">
     <machines>
       <machine name="derecho" compiler="gnu" category="prealpha"/>
       <machine name="derecho" compiler="intel" category="prealpha"/>
@@ -185,7 +185,7 @@
       <option name="wallclock"> 01:30:00 </option>
     </options>
   </test>
-  <test name="PFS" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/defaultio">
+  <test name="PFS" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
       <machine name="derecho" compiler="gnu"   category="prealpha"/>
@@ -217,7 +217,7 @@
     </options>
   </test>
 
-  <test name="ERS_D_Ld3" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/defaultio">
+  <test name="ERS_D_Ld3" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/defaultio">
    <machines>
      <machine name="derecho" compiler="intel" category="prealpha"/>
    </machines>
@@ -226,7 +226,7 @@
      <option name="comment">Include a debug B compset exact restart test.</option>
    </options>
  </test>
- <test name="SMS_D_Ld1" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/aoflux_ogrid">
+ <test name="SMS_D_Ld1" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/aoflux_ogrid">
    <machines>
      <machine name="derecho" compiler="intel" category="prebeta"/>
    </machines>
@@ -235,7 +235,7 @@
      <option name="comment">Include a short debug test using the ocn grid for aoflux calculations rather than the default xgrid.</option>
    </options>
  </test>
- <test name="SMS_D_Ld1" grid="ne30pg3_t232" compset="BLT1850" testmods="allactive/aoflux_agrid">
+ <test name="SMS_D_Ld1" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/aoflux_agrid">
    <machines>
      <machine name="derecho" compiler="intel" category="prebeta"/>
    </machines>
