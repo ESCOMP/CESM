@@ -1,4 +1,226 @@
 ==============================================================
+Tag name: cesm3_0_alpha07c
+Originator(s): CSEG
+Date: 12th August 2025
+One-line Summary: CTSM updates
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.56   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.113                        **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_100                              --
+components/clm          https://github.com/ESCOMP/ctsm/tree/alpha-ctsm5.4.CMIP7.08.ctsm5.3.068**
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_13           --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_250519                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_006          --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.79                      **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.5                       **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_89                          **
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.0         **
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_12                    **
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_6                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.3.0                             **
+
+ccs_config
+Chris Fischer 2025-08-12 - ccs_config_cesm1.0.56 - ccs_config (cesm3_0_alpha07c)
+https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.56
+ccs_config_cesm1.0.56: Add CISL CIRRUS cloud machine configuration
+ccs_config_cesm1.0.55: Allow users to use a version of CUPiD that is different from what is in tools/CUPiD
+ccs_config_cesm1.0.54: Update default files for mpaso and mpassi
+ccs_config_cesm1.0.53: Miscellaneous bug fixes and performance improvements
+ccs_config_cesm1.0.52: Update to gnu 12.4.0
+ccs_config_cesm1.0.51: Increase default wallclock time for cupid
+ccs_config_cesm1.0.50: perlmutter update
+ccs_config_cesm1.0.49: Add tacc vista system and update stampede
+
+cdeps
+Chris Fischer 2025-08-12 - cdeps1.0.79 - components/cdeps (cesm3_0_alpha07c)
+https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.79
+cdeps1.0.79: fix st_archive of rpointer files
+cdeps1.0.78: Use 512-length filenames
+
+cime
+Chris Fischer 2025-08-12 - cime6.1.113 - cime (cesm3_0_alpha07c)
+https://github.com/ESMCI/cime/tags/cime6.1.113
+cime6.1.113: Implement dependency tracking support for Fortran submodules
+cime6.1.112: Move case.cmpgen_namelists call to _sharedlib_build_phase
+
+Erik Kluzek 2025-07-31 - cime6.1.111 - cime (cesm3_0_alpha07c)
+https://github.com/ESMCI/cime/tags/cime6.1.111
+Some changes for ERR tests
+
+Erik Kluzek 2025-07-28 - cime6.1.110 - cime (cesm3_0_alpha07c)
+https://github.com/ESMCI/cime/tags/cime6.1.110
+cime6.1.110 -- allow REST_N to be set in testmods
+cime6.1.109 -- create_clone fix
+cime6.1.108 -- cprnc update
+
+Erik Kluzek 2025-07-03 - cime6.1.107 - cime (cesm3_0_alpha07c)
+https://github.com/ESMCI/cime/tags/cime6.1.107
+Restore cprnc to latest version 
+
+Erik Kluzek 2025-07-03 - cime6.1.106 - cime (cesm3_0_alpha07c)
+https://github.com/ESMCI/cime/tags/cime6.1.106
+Update Makefile to add RTTOV libraries via CAM_CONFIG_OPTS.
+
+clm
+Erik Kluzek 2025-08-08 - ctsm5.3.068 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.068
+Turn off soil moisture sensitivity for MEGAN by default
+for all physics options
+
+Erik Kluzek 2025-07-28 - ctsm5.3.067 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.067
+Work on SAVE_INTERIM_RESTARTS
+
+	
+Bring back the rpointer fixes that Jim had brought in
+
+Depends on:
+cime6.1.111
+cmeps1.1.5
+mosart1.1.12
+rtm1_0_89
+
+Erik Kluzek 2025-07-28 - ctsm5.3.066 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.066
+Merge b4b-dev to main-dev
+
+New tool contrib
+
+Erik Kluzek 2025-07-28 - ctsm5.3.065 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.065
+Merge b4b-dev to main-dev
+
+Brings in namelist control for new MEGAN features
+Updates submodules to catch up to cesm3_0_alpha07b
+Fixes broadcast of mapalgo namelist items
+Fixes options of mapalgo namelist items to use the NUOPC list of options
+A few other miscellaneous updates
+
+Erik Kluzek 2025-07-28 - ctsm5.3.064 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.064
+Add time dimension to PFT weight fields in transient runs
+
+Erik Kluzek 2025-07-03 - ctsm5.3.063 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.063
+Merge b4b-dev to main-dev.
+
+This includes an important change for Urban needed with the new ctsm5.4 datasets.
+
+Erik Kluzek 2025-07-02 - ctsm5.3.062 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.062
+Separate average fields from instantaneous
+
+Erik Kluzek 2025-07-02 - ctsm5.3.061 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.061
+Merge b4b-dev to main-dev
+
+Erik Kluzek 2025-06-23 - ctsm5.3.060 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.060
+Updates to defaults
+
+New ctsm5.4 IC files
+New parameter files
+New default settings for clm6_0
+
+Erik Kluzek 2025-06-23 - ctsm5.3.059 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.059
+Fixes warm starts for PTS_MODE (and hence for SCAM)
+ne3np4 surface datasets
+Doesn't allow fire-emissions on with: FATES, SP, or nofire
+f19/f45 16 pft datasets
+Fix a few test fails
+
+
+Sam Rabin 2025-06-16 - ctsm5.3.058 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.058
+Fix clm6 ISSP compset aliases, which were returning CLM5 longnames
+
+Erik Kluzek 2025-06-12 - ctsm5.3.057 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.057
+Fix a FATES test
+
+Erik Kluzek 2025-06-05 - ctsm5.3.056 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.3.056
+Merge b4b-dev branch to master
+
+Erik Kluzek 2025-08-12 - alpha-ctsm5.4.CMIP7.08.ctsm5.3.068 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/alpha-ctsm5.4.CMIP7.08.ctsm5.3.068
+ctsm5.4 branch tag with ne30pg3/f09/f19 ctsm5.4 surface datasets
+
+cmeps
+Erik Kluzek 2025-08-08 - cmeps1.1.5 - src/drivers/nuopc/ (cesm3_0_alpha07c)
+https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.5
+cmeps1.1.5: Testmod for the interim restart feature
+cmeps1.1.4: units fix uv3d mapping
+cmeps1.1.3: NCPL_ATM setting for the NATLx8 grid
+
+CUPiD
+Michael Levy 2025-08-08 - v0.3.0 - tools/CUPiD (cesm3_0_alpha07c)
+https://github.com/NCAR/CUPiD/tags/v0.3.0
+- Reintroduce runoff notebooks
+- Add CDR sea uce time series
+- Update ADF version
+- Let user specify output directory for time series files
+- Let user specify CUPID_ROOT
+
+mizuRoute
+Erik Kluzek 2025-07-23 - v3.0.0 - components/mizuroute (cesm3_0_alpha07c)
+https://github.com/ESCOMP/mizuRoute/tags/v3.0.0
+License update to Apache2.0
+rename the cesm-coupling branch to main
+
+Erik Kluzek 2025-07-23 - cesm-coupling.n04_v2.3.0 - components/mizuroute (cesm3_0_alpha07c)
+https://github.com/ESCOMP/mizuRoute/tags/cesm-coupling.n04_v2.3.0
+History time-stamps are the midpoint now
+rpointer update
+
+Bugfixes for: lake type, diffusive wave, restarts
+Advection diffusion added to track solutes
+Complete direct insertion
+Initialize global water balance
+Some updates to input options, NetCDF input and control files
+Documentation updates including User's Guide
+
+
+
+
+mosart
+Erik Kluzek 2025-07-31 - mosart1.1.12 - components/mosart (cesm3_0_alpha07c)
+https://github.com/ESCOMP/mosart/tags/mosart1.1.12
+Writes restarts at end of run if directed to by driver
+
+Erik Kluzek 2025-07-28 - mosart1.1.11 - components/mosart (cesm3_0_alpha07c)
+https://github.com/ESCOMP/mosart/tags/mosart1.1.11
+rpointer update from Jim
+threading update from Jim
+
+Erik Kluzek 2025-07-14 - mosart1.1.10 - components/mosart (cesm3_0_alpha07c)
+https://github.com/ESCOMP/mosart/tags/mosart1.1.10
+A fix for a problem with metadata in the h?a and h?i files.
+
+Erik Kluzek 2025-07-03 - mosart1.1.09 - components/mosart (cesm3_0_alpha07c)
+https://github.com/ESCOMP/mosart/tags/mosart1.0.09
+Separate accumulated from instantaneous history files.
+
+rtm
+Erik Kluzek 2025-07-31 - rtm1_0_89 - components/rtm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/rtm/tags/rtm1_0_89
+Writes restarts at end of run if directed to by driver
+
+Erik Kluzek 2025-07-14 - rtm1_0_88 - components/rtm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/rtm/tags/rtm1_0_88
+A fix for a problem with metadata in the h?a and h?i files.
+
+Erik Kluzek 2025-07-03 - rtm1_0_87 - components/rtm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/rtm/tags/rtm1_0_87
+Separate accumulated from instantaneous history files.
+
+
+==============================================================
 Tag name: cesm3_0_alpha07b
 Originator(s): CSEG
 Date: 26th June 2025
