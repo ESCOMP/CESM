@@ -119,27 +119,25 @@ class Submodule():
                                 atag = atag[:-1]
                             if atag == self.fxtag:
                                 break
-
-                
-                #print(f"line is {line} ahash is {ahash} atag is {atag} {parts}")
-                #                atag = git.git_operation("describe", "--tags", "--always")
-                # ahash =  git.git_operation("rev-list", "HEAD").partition("\n")[0]
-                    
                 recurse = False
                 if rurl != self.url:
                     remote = self._add_remote(git)
                     git.git_operation("fetch", remote)
+                # Asked for a tag and found that tag
                 if self.fxtag and atag == self.fxtag:
                     result = f"  {self.name:>20} at tag {self.fxtag}"
                     recurse = True
                     testfails = False
+                # Asked for and found a hash
                 elif self.fxtag and (ahash[: len(self.fxtag)] == self.fxtag or (self.fxtag.find(ahash)==0)):
                     result = f"  {self.name:>20} at hash {ahash}"
                     recurse = True
                     testfails = False
+                # Asked for and found a hash
                 elif atag == ahash:
                     result = f"  {self.name:>20} at hash {ahash}"
                     recurse = True
+                # Did not find requested tag or hash
                 elif self.fxtag:
                     result = f"s {self.name:>20} {atag} {ahash} is out of sync with .gitmodules {self.fxtag}"
                     testfails = True
@@ -396,13 +394,19 @@ class Submodule():
                 smgit = GitInterface(repodir, self.logger)
                 newremote = self._add_remote(smgit)
                 # Trying to distingush a tag from a hash
-                allowed = set(string.digits + 'abcdef') 
+                allowed = set(string.digits + 'abcdef')
+                status = 0
                 if not set(self.fxtag) <= allowed:
                     # This is a tag
                     tag = f"refs/tags/{self.fxtag}:refs/tags/{self.fxtag}"
-                    smgit.git_operation("fetch", newremote, tag)
-                smgit.git_operation("checkout", self.fxtag)
-
+                    status,_ = smgit.git_operation("fetch", newremote, tag)
+                if status == 0:
+                    status,_ = smgit.git_operation("checkout", self.fxtag)
+                if status:
+                    utils.fatal_error(
+                        f"Failed to checkout {self.name} at tag or hash {self.fxtag} from {repodir}"
+                    )
+                    
             if not os.path.exists(os.path.join(repodir, ".git")):
                 utils.fatal_error(
                     f"Failed to checkout {self.name} {repo_exists} {repodir} {self.path}"
