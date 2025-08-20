@@ -157,7 +157,7 @@
         url = https://github.com/NCAR/CUPiD.git
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
-        fxtag = v0.3.0
+        fxtag = v0.3.1
 
 [submodule "FTorch"]
 	path = libraries/FTorch
