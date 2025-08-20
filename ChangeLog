@@ -4,17 +4,17 @@ Originator(s): CSEG
 Date: 12th August 2025
 One-line Summary: CTSM updates
 
-ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.56   **
-cime                    https://github.com/ESMCI/cime/tree/cime6.1.113                        **
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.57   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.116                        **
 components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                --
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
 components/cam          https://github.com/ESCOMP/CAM/cam6_4_100                              --
-components/clm          https://github.com/ESCOMP/ctsm/tree/alpha-ctsm5.4.CMIP7.08.ctsm5.3.068**
+components/clm          https://github.com/ESCOMP/ctsm/tree/alpha-ctsm5.4.CMIP7.09.ctsm5.3.068**
 components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_13           --
 components/mom          https://github.com/ESCOMP/MOM_interface/mi_250519                     --
 components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_006          --
-components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.79                      **
-components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.5                       **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.80                      **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.10                      **
 components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_89                          **
 components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.16                   --
 components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.0         **
@@ -24,6 +24,10 @@ libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_6        
 tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.3.0                             **
 
 ccs_config
+Chris Fischer 2025-08-19 - ccs_config_cesm1.0.57 - ccs_config (cesm3_0_alpha07c)
+https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.57
+Add support for mem_per_task
+
 Chris Fischer 2025-08-12 - ccs_config_cesm1.0.56 - ccs_config (cesm3_0_alpha07c)
 https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.56
 ccs_config_cesm1.0.56: Add CISL CIRRUS cloud machine configuration
@@ -36,12 +40,22 @@ ccs_config_cesm1.0.50: perlmutter update
 ccs_config_cesm1.0.49: Add tacc vista system and update stampede
 
 cdeps
+Chris Fischer 2025-08-19 - cdeps1.0.80 - components/cdeps (cesm3_0_alpha07c)
+https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.80
+Add log feature for restart_fh
+
 Chris Fischer 2025-08-12 - cdeps1.0.79 - components/cdeps (cesm3_0_alpha07c)
 https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.79
 cdeps1.0.79: fix st_archive of rpointer files
 cdeps1.0.78: Use 512-length filenames
 
 cime
+Chris Fischer 2025-08-19 - cime6.1.116 - cime (cesm3_0_alpha07c)
+https://github.com/ESMCI/cime/tags/cime6.1.116
+cime6.1.116: Py13 compatibility
+cime6.1.115: Add support for setting MEM_PER_TASK
+cime6.1.114: Update cprnc to 1.1.3
+
 Chris Fischer 2025-08-12 - cime6.1.113 - cime (cesm3_0_alpha07c)
 https://github.com/ESMCI/cime/tags/cime6.1.113
 cime6.1.113: Implement dependency tracking support for Fortran submodules
@@ -59,7 +73,7 @@ cime6.1.108 -- cprnc update
 
 Erik Kluzek 2025-07-03 - cime6.1.107 - cime (cesm3_0_alpha07c)
 https://github.com/ESMCI/cime/tags/cime6.1.107
-Restore cprnc to latest version 
+Restore cprnc to latest version
 
 Erik Kluzek 2025-07-03 - cime6.1.106 - cime (cesm3_0_alpha07c)
 https://github.com/ESMCI/cime/tags/cime6.1.106
@@ -75,7 +89,7 @@ Erik Kluzek 2025-07-28 - ctsm5.3.067 - components/clm (cesm3_0_alpha07c)
 https://github.com/ESCOMP/ctsm/tags/ctsm5.3.067
 Work on SAVE_INTERIM_RESTARTS
 
-	
+
 Bring back the rpointer fixes that Jim had brought in
 
 Depends on:
@@ -147,11 +161,23 @@ Erik Kluzek 2025-06-05 - ctsm5.3.056 - components/clm (cesm3_0_alpha07c)
 https://github.com/ESCOMP/ctsm/tags/ctsm5.3.056
 Merge b4b-dev branch to master
 
+Erik Kluzek 2025-08-15 - alpha-ctsm5.4.CMIP7.09.ctsm5.3.068 - components/clm (cesm3_0_alpha07c)
+https://github.com/ESCOMP/ctsm/tags/alpha-ctsm5.4.CMIP7.09.ctsm5.3.068
+Hot fix: Add a namelist change to get tests to work
+
 Erik Kluzek 2025-08-12 - alpha-ctsm5.4.CMIP7.08.ctsm5.3.068 - components/clm (cesm3_0_alpha07c)
 https://github.com/ESCOMP/ctsm/tags/alpha-ctsm5.4.CMIP7.08.ctsm5.3.068
 ctsm5.4 branch tag with ne30pg3/f09/f19 ctsm5.4 surface datasets
 
 cmeps
+Chris Fischer 2025-08-19 - cmeps1.1.10 - src/drivers/nuopc/ (cesm3_0_alpha07c)
+https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.10
+cmeps1.1.10: Bugfix for co2 fluxes coming from land to atmosphere.
+cmeps1.1.9 : Add the err test to those avoiding end of run restarts
+cmeps1.1.8 : Add CIRRUS and Casper GPU types
+cmeps1.1.7 : Update ATM_NCPL for MPAS Compsets
+cmeps1.1.6 : Sync EMC CMEPS
+
 Erik Kluzek 2025-08-08 - cmeps1.1.5 - src/drivers/nuopc/ (cesm3_0_alpha07c)
 https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.5
 cmeps1.1.5: Testmod for the interim restart feature
@@ -162,7 +188,7 @@ CUPiD
 Michael Levy 2025-08-08 - v0.3.0 - tools/CUPiD (cesm3_0_alpha07c)
 https://github.com/NCAR/CUPiD/tags/v0.3.0
 - Reintroduce runoff notebooks
-- Add CDR sea uce time series
+- Add CDR sea ice time series
 - Update ADF version
 - Let user specify output directory for time series files
 - Let user specify CUPID_ROOT
@@ -218,6 +244,7 @@ A fix for a problem with metadata in the h?a and h?i files.
 Erik Kluzek 2025-07-03 - rtm1_0_87 - components/rtm (cesm3_0_alpha07c)
 https://github.com/ESCOMP/rtm/tags/rtm1_0_87
 Separate accumulated from instantaneous history files.
+
 
 
 ==============================================================
