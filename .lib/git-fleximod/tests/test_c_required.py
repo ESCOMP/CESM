@@ -1,4 +1,5 @@
 import pytest
+import re
 from pathlib import Path
                 
 def test_required(git_fleximod, test_repo, shared_repos):
@@ -28,3 +29,15 @@ def test_required(git_fleximod, test_repo, shared_repos):
     assert result.returncode == 0
     status = git_fleximod(test_repo, f"status {repo_name}")
     assert shared_repos["status4"] in status.stdout
+
+    text = file_path.read_text()
+    new_value = "somethingelse"
+    pattern = r"(^\s*fxtag\s*=\s*).*$"
+    replacement = r"\1" + new_value
+    new_text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
+
+    # Write updated content back to file
+    file_path.write_text(new_text)
+
+    result = git_fleximod(test_repo, f"update {repo_name}")
+    assert f'fatal: couldn\'t find remote ref' in result.stderr or 'error: pathspec \'somethingelse\' did not match any file(s) known to git' in result.stderr
