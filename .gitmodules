@@ -30,7 +30,7 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.58
+        fxtag = ccs_config_cesm1.0.59
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -86,7 +86,7 @@
         path = components/cism
         url = https://github.com/ESCOMP/cism-wrapper.git
         fxDONOTUSEurl = https://github.com/ESCOMP/cism-wrapper.git
-        fxtag = cismwrap_2_2_008
+        fxtag = cismwrap_2_2_010
         fxrequired = ToplevelRequired
 
 [submodule "cdeps"]
