@@ -35,6 +35,7 @@ jobs:
           echo "ESMFMKFILE=$HOME/esmf.mk" >> ${GITHUB_ENV}
           echo "ESMF_VERSION_MAJOR=8" > ${HOME}/esmf.mk
           echo "ESMF_VERSION_MINOR=8" >> ${HOME}/esmf.mk
+          sudo apt-get update
           sudo apt-get install libxml2-utils
           sudo apt-get install subversion
 
