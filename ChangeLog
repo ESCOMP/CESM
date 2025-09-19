@@ -4,11 +4,11 @@ Originator(s): CSEG
 Date: 8th Sept. 2025
 One-line Summary: CAM updates
 
-ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.58   **
-cime                    https://github.com/ESMCI/cime/tree/cime6.1.122                        **
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.60   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.126                        **
 components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                --
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
-components/cam          https://github.com/ESCOMP/CAM/cam6_4_114                              **
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_116                              **
 components/clm          https://github.com/ESCOMP/ctsm/tree/alpha-ctsm5.4.CMIP7.09.ctsm5.3.068--
 components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_0_13           --
 components/mom          https://github.com/ESCOMP/MOM_interface/mi_250519                     --
@@ -24,6 +24,20 @@ libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_6        
 tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.3.1                             --
 
 cam
+    Cheryl Craig 2025-09-17 - cam6_4_116 - components/cam (cesm3_0_alpha07d)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_116
+
+    Mods for RRTMGP blending layer
+
+    Answer changing for MT runs
+
+
+    Cheryl Craig 2025-09-15 - cam6_4_115 - components/cam (cesm3_0_alpha07d)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_115
+
+    Update input emission files for CAM7
+
+
     Cheryl Craig 2025-09-02 - cam6_4_114 - components/cam (cesm3_0_alpha07d)
     https://github.com/ESCOMP/CAM/tags/cam6_4_114
 
@@ -111,6 +125,18 @@ cam
 
 
 ccs_config
+    Chris Fischer 2025-09-19 - ccs_config_cesm1.0.60 - ccs_config (cesm3_0_alpha07d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.60
+
+    Add MI300A support on Casper.
+
+
+    Chris Fischer 2025-09-11 - ccs_config_cesm1.0.59 - ccs_config (cesm3_0_alpha07d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.59
+
+    Add missing RRTMGP GPU code.
+
+
     Chris Fischer 2025-09-08 - ccs_config_cesm1.0.58 - ccs_config (cesm3_0_alpha07d)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.58
 
@@ -118,6 +144,15 @@ ccs_config
 
 
 cime
+    Chris Fischer 2025-09-17 - cime6.1.126 - cime (cesm3_0_alpha07d)
+    https://github.com/ESMCI/cime/tags/cime6.1.126
+
+    cime6.1.126: Nagfor link fix
+    cime6.1.125: Add shell resource commands to env_mach_specific.sh file.
+    cime6.1.124: Err test fix
+    cime6.1.123: Fixes reference validation in set_value
+
+
     Chris Fischer 2025-09-02 - cime6.1.122 - cime (cesm3_0_alpha07d)
     https://github.com/ESMCI/cime/tags/cime6.1.120
 
