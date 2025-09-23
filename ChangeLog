@@ -4,7 +4,7 @@ Originator(s): CSEG
 Date: 8th Sept. 2025
 One-line Summary: CAM updates
 
-ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.60   **
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.61   **
 cime                    https://github.com/ESMCI/cime/tree/cime6.1.126                        **
 components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                --
 share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
@@ -125,6 +125,12 @@ cam
 
 
 ccs_config
+    Chris Fischer 2025-09-22 - ccs_config_cesm1.0.61 - ccs_config (cesm3_0_alpha07d)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.61
+
+    Moves the primary inputdata server to CISL RDA
+
+
     Chris Fischer 2025-09-19 - ccs_config_cesm1.0.60 - ccs_config (cesm3_0_alpha07d)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.60
 
