@@ -1,4 +1,145 @@
 ==============================================================
+Tag name: cesm3_0_alpha07f
+Originator(s): CSEG
+Date: 20th Oct. 2025
+One-line Summary: Turn on one-way coupling of CICE to WW3 by default.
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.63   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.134                        **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.9                  --
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_126                              **
+components/clm          https://github.com/ESCOMP/ctsm/tree/alpha-ctsm5.4.CMIP7.09.ctsm5.3.068--
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_1_6            --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_250519                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_011          **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.82                      **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.20                      **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_89                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.18                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.0         --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_12                    --
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_6                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.3.1                             --
+
+
+cam
+    Cheryl Craig 2025-10-16 - cam6_4_126 - components/cam (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_126
+
+    Fix frontogenesis function bug and change CISM2 to SGLC in FCHIST_GC compset
+
+    - answer changing for CAM and WACCM SE dycore tests
+
+
+    Brian Eaton 2025-10-09 - cam6_4_125 - components/cam (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_125
+
+    remove unicon; remove -ocn option to configure
+
+
+    Courtney Peverley 2025-10-09 - cam6_4_124 - components/cam (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_124
+
+    Update atmospheric_physics and ccs_config externals to fix GPU test
+
+
+    Cheryl Craig 2025-09-30 - cam6_4_123 - components/cam (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_124
+
+    Various misc CAM fixes
+
+
+    Cheryl Craig 2025-09-30 - cam6_4_122 - components/cam (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_122
+
+    For Francis Vitt
+
+    Prescribed MAM5 volcanic forcings
+
+
+    Cheryl Craig 2025-09-30 - cam6_4_121 - components/cam (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_121
+
+    Fixes for input interpolation routines (aircraft runs only)
+
+
+    Courtney Peverley 2025-09-25 - cam6_4_120 - components/cam (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_120
+
+    for haipeng lin -
+    Complete CCPPization of HB PBL scheme and vertical diffusion solver (non-WACCM)
+
+
+    Courtney Peverley 2025-09-25 - cam6_4_119 - components/cam (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_119
+
+    RRTMGP SW CCPP interface integration into CAM
+
+
+    Cheryl Craig 2025-09-24 - cam6_4_118 - components/cam (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_118
+
+    Use relative path for emission files
+
+    Answer changing for tags which use the emission files
+
+
+ccs_config
+    Chris Fischer 2025-10-20 - ccs_config_cesm1.0.63 - ccs_config (cesm3_0_alpha07f)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.63
+
+    ccs_config_cesm1.0.63: Update Casper module version and add a missing PUMAS GPU code.
+    ccs_config_cesm1.0.62: Adding the necessary change to recognize the new Greenland 4 km grid.
+
+
+cdeps
+    Chris Fischer 2025-10-20 - cdeps1.0.82 - components/cdeps (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.82
+
+    DGLC grid updates for new gris4 mesh
+
+
+cime
+    Chris Fischer 2025-10-20 - cime6.1.134 - cime (cesm3_0_alpha07f)
+    https://github.com/ESMCI/cime/tags/cime6.1.134
+
+    cime6.1.34:
+    cime6.1.134: Fix for create_clone issue
+    cime6.1.133: Support for archiving directories
+    cime6.1.132: Fix wrong GPU test configuration on Casper
+    cime6.1.130: Fix check of resource_nodes
+    cime6.1.129: Fix log message and error check in _set_restart_interval
+
+
+    Erik Kluzek 2025-10-08 - cime6.1.128 - cime (cesm3_0_alpha07f)
+    https://github.com/ESMCI/cime/tags/cime6.1.128
+
+    Fix unresolved values in workflow
+
+
+cism
+    Kate Thayer-Calder 2025-10-10 - cismwrap_2_2_011 - components/cism (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_2_011
+
+    New files for the Greenland 4km grid (gris4) and some support to use DGLC in Cism-wrapper
+
+    Needs ccs_config_cesm1.0.62
+    Needs cdeps1.0.82
+
+
+
+cmeps
+    Erik Kluzek 2025-10-08 - cmeps1.1.20 - src/drivers/nuopc/ (cesm3_0_alpha07f)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.20
+
+    cmeps1.1.20: Wrap call of buildnml in readonly context
+    cmeps1.1.19: Change of CPL_ALBAV for MOM6 and other cleanup (changes answers for C and G compsets)
+    cmeps1.1.18: Fix gust factors (changes answers for CAMDEV)
+
+
+==============================================================
 Tag name: cesm3_0_alpha07e
 Originator(s): CSEG
 Date: 23th Sept. 2025
