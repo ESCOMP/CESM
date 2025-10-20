@@ -2,7 +2,7 @@
 Tag name: cesm3_0_alpha07f
 Originator(s): CSEG
 Date: 20th Oct. 2025
-One-line Summary: Turn on one-way coupling of CICE to WW3 by default.
+One-line Summary: CAM answer changes.
 
 ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.63   **
 cime                    https://github.com/ESMCI/cime/tree/cime6.1.134                        **
