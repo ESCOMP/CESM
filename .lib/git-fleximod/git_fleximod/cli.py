@@ -2,7 +2,7 @@ from pathlib import Path
 import argparse, os, sys
 from git_fleximod import utils
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 class CustomArgumentParser(argparse.ArgumentParser):
     def print_help(self, file=None):
