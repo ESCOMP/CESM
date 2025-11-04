@@ -80,7 +80,7 @@
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_251024b
+        fxtag = mi_251103
 
 [submodule "cism"]
         path = components/cism
@@ -94,7 +94,7 @@
         url = https://github.com/ESCOMP/CDEPS
         fxDONOTUSEurl = https://github.com/ESCOMP/CDEPS
         fxrequired = ToplevelRequired
-        fxtag = cdeps1.0.82
+        fxtag = cdeps1.0.83
 
 [submodule "cmeps"]
         path = components/cmeps
