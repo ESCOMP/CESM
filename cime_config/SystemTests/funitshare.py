@@ -19,6 +19,13 @@ class FUNITSHARE(FUNIT):
     def __init__(self, case):
         FUNIT.__init__(self, case)
 
+        # The CMake build for the share unit tests uses the MPISERIAL env var to find the
+        # mpi-serial library. On derecho, MPISERIAL is not set even if the mpi-serial
+        # module is loaded; instead, there is an NCAR_ROOT_MPI_SERIAL variable. Set the
+        # needed MPISERIAL env var for this test.
+        if "NCAR_ROOT_MPI_SERIAL" in os.environ:
+            os.environ["MPISERIAL"] = os.environ["NCAR_ROOT_MPI_SERIAL"]
+
     def get_test_spec_dir(self):
         return os.path.join(self._case.get_value("SRCROOT"), "share")
 
