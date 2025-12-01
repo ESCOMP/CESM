@@ -69,6 +69,7 @@ def commandline_arguments(args=None):
         options.components,
         options.exclude,
         options.force,
+        options.no_mods_details,
         action,
     )
 
@@ -189,29 +190,30 @@ def init_submodule_from_gitmodules(gitmodules, name, root_dir, logger):
     fxrequired = gitmodules.get(name, "fxrequired")
     return Submodule(root_dir, name, path, url, fxtag=tag, fxurl=fxurl, fxsparse=fxsparse, fxrequired=fxrequired, logger=logger)
 
-def submodules_status(gitmodules, root_dir, toplevel=False, depth=0):
+def submodules_status(gitmodules, root_dir, toplevel=False, depth=0, no_mods_details=False):
     testfails = 0
     localmods = 0
     needsupdate = 0
-    wrapper = textwrap.TextWrapper(initial_indent=' '*(depth*10), width=120,subsequent_indent=' '*(depth*20))
     for name in gitmodules.sections():
         submod = init_submodule_from_gitmodules(gitmodules, name, root_dir, logger)
-            
-        result,n,l,t = submod.status()
+
+        result,n,l,t = submod.status(depth=depth, no_mods_details=no_mods_details)
         if toplevel or not submod.toplevel():
-            print(wrapper.fill(result))
+            print(result)
             testfails += t
             localmods += l
             needsupdate += n
         subdir = os.path.join(root_dir, submod.path)
         if os.path.exists(os.path.join(subdir, ".gitmodules")):
             gsubmod = GitModules(logger, confpath=subdir)
-            t,l,n = submodules_status(gsubmod, subdir, depth=depth+1)
+            t, l, n = submodules_status(
+                gsubmod, subdir, depth=depth + 1, no_mods_details=no_mods_details
+            )
             if toplevel or not submod.toplevel():
                 testfails += t
                 localmods += l
                 needsupdate += n
-            
+
     return testfails, localmods, needsupdate
 
 def git_toplevelroot(root_dir, logger):
@@ -271,7 +273,7 @@ def local_mods_output():
 """
     print(text)
 
-def submodules_test(gitmodules, root_dir):
+def submodules_test(gitmodules, root_dir, no_mods_details=False):
     """
     This function tests the git submodules based on the provided parameters.
 
@@ -282,12 +284,15 @@ def submodules_test(gitmodules, root_dir):
     Parameters:
     gitmodules (ConfigParser): The gitmodules configuration.
     root_dir (str): The root directory for the git operation.
+    no_mods_details (bool, optional): If True, suppress details on local mods in status output
 
     Returns:
     int: The number of test failures.
     """
     # First check that fxtags are present and in sync with submodule hashes
-    testfails, localmods, needsupdate = submodules_status(gitmodules, root_dir)
+    testfails, localmods, needsupdate = submodules_status(
+        gitmodules, root_dir, no_mods_details=no_mods_details
+    )
     print("")
     # Then make sure that urls are consistant with fxurls (not forks and not ssh)
     # and that sparse checkout files exist
@@ -315,6 +320,7 @@ def main():
         includelist,
         excludelist,
         force,
+        no_mods_details,
         action,
     ) = commandline_arguments()
     # Get a logger for the package
@@ -322,7 +328,7 @@ def main():
     logger = logging.getLogger(__name__)
 
     logger.info("action is {} root_dir={} file_name={}".format(action, root_dir, file_name))
-    
+
     if not root_dir or not os.path.isfile(os.path.join(root_dir, file_name)):
         if root_dir:
             file_path = utils.find_upwards(root_dir, file_name)
@@ -352,7 +358,9 @@ def main():
     if action == "update":
         asyncio.run(submodules_update(gitmodules, root_dir, fxrequired, force))
     elif action == "status":
-        tfails, lmods, updates = submodules_status(gitmodules, root_dir, toplevel=True)
+        tfails, lmods, updates = submodules_status(
+            gitmodules, root_dir, toplevel=True, no_mods_details=no_mods_details
+        )
         if tfails + lmods + updates > 0:
             print(
                 f"    testfails = {tfails}, local mods = {lmods}, needs updates {updates}\n"
@@ -360,7 +368,7 @@ def main():
             if lmods > 0:
                 local_mods_output()
     elif action == "test":
-        retval = submodules_test(gitmodules, root_dir)
+        retval = submodules_test(gitmodules, root_dir, no_mods_details=no_mods_details)
     else:
         utils.fatal_error(f"unrecognized action request {action}")
     return retval
