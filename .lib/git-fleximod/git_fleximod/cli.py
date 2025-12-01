@@ -2,7 +2,7 @@ from pathlib import Path
 import argparse, os, sys
 from git_fleximod import utils
 
-__version__ = "1.0.3"
+__version__ = "1.1.0"
 
 class CustomArgumentParser(argparse.ArgumentParser):
     def print_help(self, file=None):
@@ -114,6 +114,13 @@ def get_parser():
         "the screen and log file. This flag can be "
         "used up to two times, increasing the "
         "verbosity level each time.",
+    )
+
+    parser.add_argument(
+        "--no-mods-details",
+        action="store_true",
+        default=False,
+        help="Suppress details on local mods in status output."
     )
 
     parser.add_argument(

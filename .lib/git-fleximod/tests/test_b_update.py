@@ -1,6 +1,7 @@
 import pytest
 from pathlib import Path
-                
+from tests.utils_for_tests import normalize_whitespace
+
 def test_basic_checkout(git_fleximod, test_repo, shared_repos):
     # Prepare a simple .gitmodules
     gm = shared_repos['gitmodules_content']
@@ -9,7 +10,7 @@ def test_basic_checkout(git_fleximod, test_repo, shared_repos):
     repo_path = shared_repos["subrepo_path"]
 
     file_path.write_text(gm)
-    
+
     # Run the command
     result = git_fleximod(test_repo, f"update {repo_name}")
 
@@ -19,8 +20,7 @@ def test_basic_checkout(git_fleximod, test_repo, shared_repos):
     if "sparse" in repo_name:
         assert Path(test_repo /  f"{repo_path}/m4").exists()   # Did the submodule sparse directory get created?
         assert not Path(test_repo /  f"{repo_path}/README").exists()   # Did only the submodule sparse directory get created?
-    
+
     status = git_fleximod(test_repo, f"status {repo_name}")
-        
-    assert shared_repos["status2"] in status.stdout
-        
+
+    assert shared_repos["status2"] in normalize_whitespace(status.stdout)
