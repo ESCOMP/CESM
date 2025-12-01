@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<!--
+This defines various CESM-specific system tests
+-->
+
+<config_test>
+
+  <test NAME="FUNITSHARE">
+    <DESC>Run the share code's Fortran unit tests. Grid and compset (and most case settings) are ignored.</DESC>
+    <INFO_DBUG>1</INFO_DBUG>
+    <STOP_OPTION>ndays</STOP_OPTION>
+    <STOP_N>11</STOP_N>
+    <CHECK_TIMING>FALSE</CHECK_TIMING>
+    <DOUT_S>FALSE</DOUT_S>
+  </test>
+
+</config_test>
