@@ -30,14 +30,14 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-        fxtag = ccs_config_cesm1.0.63
+        fxtag = ccs_config_cesm1.0.65
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-	fxtag = cime6.1.135
+	fxtag = cime6.1.144
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -51,14 +51,14 @@
         path = share
         url = https://github.com/ESCOMP/CESM_share
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
-        fxtag = share1.1.9
+        fxtag = share1.1.16
         fxrequired = ToplevelRequired
 
 [submodule "cam"]
         path = components/cam
         url = https://www.github.com/ESCOMP/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_4_126
+        fxtag = cam6_4_133
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
@@ -80,7 +80,7 @@
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_251112
+        fxtag = mi_251121
 
 [submodule "cism"]
         path = components/cism
@@ -94,14 +94,14 @@
         url = https://github.com/ESCOMP/CDEPS
         fxDONOTUSEurl = https://github.com/ESCOMP/CDEPS
         fxrequired = ToplevelRequired
-        fxtag = cdeps1.0.83
+        fxtag = cdeps1.0.84
 
 [submodule "cmeps"]
         path = components/cmeps
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-	fxtag = cmeps1.1.23
+	fxtag = cmeps1.1.24
 
 [submodule "rtm"]
         path = components/rtm
@@ -122,7 +122,7 @@
         url = https://github.com/ESCOMP/mizuRoute
         fxDONOTUSEurl = https://github.com/ESCOMP/mizuRoute
         fxrequired = ToplevelRequired
-        fxtag = v3.0.0
+        fxtag = v3.0.1
 
 [submodule "mosart"]
         path = components/mosart
@@ -157,7 +157,7 @@
         url = https://github.com/NCAR/CUPiD.git
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
-        fxtag = v0.3.1
+        fxtag = v0.4.0
 
 [submodule "FTorch"]
 	path = libraries/FTorch
