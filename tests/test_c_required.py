@@ -1,7 +1,8 @@
 import pytest
 import re
 from pathlib import Path
-                
+from tests.utils_for_tests import normalize_whitespace
+
 def test_required(git_fleximod, test_repo, shared_repos):
     file_path = (test_repo / ".gitmodules")
     gm = shared_repos["gitmodules_content"]
@@ -20,15 +21,15 @@ def test_required(git_fleximod, test_repo, shared_repos):
     result = git_fleximod(test_repo, "update")
     assert result.returncode == 0
     status = git_fleximod(test_repo, f"status {repo_name}")
-    assert shared_repos["status3"] in status.stdout
+    assert shared_repos["status3"] in normalize_whitespace(status.stdout)
     status = git_fleximod(test_repo, f"update --optional")
     assert result.returncode == 0
     status = git_fleximod(test_repo, f"status {repo_name}")
-    assert shared_repos["status4"] in status.stdout
+    assert shared_repos["status4"] in normalize_whitespace(status.stdout)
     status = git_fleximod(test_repo, f"update {repo_name}")
     assert result.returncode == 0
     status = git_fleximod(test_repo, f"status {repo_name}")
-    assert shared_repos["status4"] in status.stdout
+    assert shared_repos["status4"] in normalize_whitespace(status.stdout)
 
     text = file_path.read_text()
     new_value = "somethingelse"
