@@ -11,6 +11,7 @@ from git_fleximod import utils
 
 logger = None
 
+
 def find_root_dir(filename=".git"):
     d = Path.cwd()
     root = Path(d.root)
@@ -30,10 +31,13 @@ def get_parser():
         description=description, formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
-    parser.add_argument('-e', '--externals', nargs='?',
-                        default='Externals.cfg',
-                        help='The externals description filename. '
-                        'Default: %(default)s.')
+    parser.add_argument(
+        "-e",
+        "--externals",
+        nargs="?",
+        default="Externals.cfg",
+        help="The externals description filename. " "Default: %(default)s.",
+    )
 
     parser.add_argument(
         "-C",
@@ -70,6 +74,7 @@ def get_parser():
 
     return parser
 
+
 def commandline_arguments(args=None):
     parser = get_parser()
 
@@ -92,11 +97,8 @@ def commandline_arguments(args=None):
         level=level, format="%(name)s - %(levelname)s - %(message)s", handlers=handlers
     )
 
-    return(
-        options.path,
-        options.gitmodules,
-        options.externals
-        )
+    return (options.path, options.gitmodules, options.externals)
+
 
 class ExternalRepoTranslator:
     """
@@ -110,12 +112,13 @@ class ExternalRepoTranslator:
         self.externals = (rootpath / Path(externals)).resolve()
         print(f"Translating {self.externals}")
         self.git = GitInterface(rootpath, logger)
-        
-#    def __del__(self):
-#        if (self.rootpath / "save.gitignore"):
-            
 
-    def translate_single_repo(self, section, tag, url, path, efile, hash_, sparse, protocol):
+    #    def __del__(self):
+    #        if (self.rootpath / "save.gitignore"):
+
+    def translate_single_repo(
+        self, section, tag, url, path, efile, hash_, sparse, protocol
+    ):
         """
         Translates a single repository based on configuration details.
 
@@ -145,13 +148,13 @@ class ExternalRepoTranslator:
                 self.gitmodules.set(section, "fxtag", tag)
             if hash_:
                 self.gitmodules.set(section, "fxtag", hash_)
-            
+
             self.gitmodules.set(section, "fxDONOTUSEurl", url)
             if sparse:
                 self.gitmodules.set(section, "fxsparse", sparse)
             self.gitmodules.set(section, "fxrequired", "ToplevelRequired")
         else:
-            newpath = (self.rootpath / Path(path))
+            newpath = self.rootpath / Path(path)
             if newpath.exists():
                 shutil.rmtree(newpath)
                 logger.info("Creating directory {}".format(newpath))
@@ -159,7 +162,9 @@ class ExternalRepoTranslator:
             if tag:
                 logger.info("cloning {}".format(section))
                 try:
-                    self.git.git_operation("clone", "-b", tag, "--depth", "1", url, path)
+                    self.git.git_operation(
+                        "clone", "-b", tag, "--depth", "1", url, path
+                    )
                 except:
                     self.git.git_operation("clone", url, path)
                     with utils.pushd(newpath):
@@ -172,27 +177,28 @@ class ExternalRepoTranslator:
                 git.git_operation("checkout", hash_)
             if sparse:
                 print("setting as sparse submodule {}".format(section))
-                sparsefile = (newpath / Path(sparse))
-                newfile = (newpath / ".git" / "info" / "sparse-checkout")
+                sparsefile = newpath / Path(sparse)
+                newfile = newpath / ".git" / "info" / "sparse-checkout"
                 print(f"sparsefile {sparsefile} newfile {newfile}")
                 shutil.copy(sparsefile, newfile)
-        
-            logger.info("adding submodule {}".format(section))        
+
+            logger.info("adding submodule {}".format(section))
             self.gitmodules.save()
-            self.git.git_operation("submodule", "add", "-f", "--name", section, url, path)
-            self.git.git_operation("submodule","absorbgitdirs")
+            self.git.git_operation(
+                "submodule", "add", "-f", "--name", section, url, path
+            )
+            self.git.git_operation("submodule", "absorbgitdirs")
             self.gitmodules.reload()
             if tag:
                 self.gitmodules.set(section, "fxtag", tag)
             if hash_:
                 self.gitmodules.set(section, "fxtag", hash_)
-            
+
             self.gitmodules.set(section, "fxDONOTUSEurl", url)
             if sparse:
                 self.gitmodules.set(section, "fxsparse", sparse)
             self.gitmodules.set(section, "fxrequired", "ToplevelRequired")
-    
-        
+
     def translate_repo(self):
         """
         Translates external repositories defined within an external file.
@@ -218,8 +224,9 @@ class ExternalRepoTranslator:
             sparse = econfig.get(section, "sparse", raw=False, fallback=None)
             protocol = econfig.get(section, "protocol", raw=False, fallback=None)
 
-            self.translate_single_repo(section, tag, url, path, efile, hash_, sparse, protocol)
-
+            self.translate_single_repo(
+                section, tag, url, path, efile, hash_, sparse, protocol
+            )
 
 
 def _main():
@@ -231,6 +238,6 @@ def _main():
         logger.info("Translating {}".format(rootpath))
         t.translate_repo()
 
-        
+
 if __name__ == "__main__":
     sys.exit(_main())

@@ -2,6 +2,7 @@
 Helper functions that can be used in tests
 """
 
+
 def normalize_whitespace(text):
     """
     Normalize whitespace for flexible string comparisons in tests.
@@ -10,4 +11,3 @@ def normalize_whitespace(text):
     single space.
     """
     return " ".join(text.split())
-
