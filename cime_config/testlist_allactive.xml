@@ -251,4 +251,13 @@
      <option name="comment">Include a short debug test using the atm grid for aoflux calculations rather than the default xgrid.</option>
    </options>
  </test>
+  <test name="FUNITSHARE_P1x1_Mmpi-serial" grid="ne30pg3_t232" compset="B1850C_LTso">
+    <machines>
+      <machine name="derecho" compiler="intel" category="prealpha"/>
+    </machines>
+    <options>
+      <option name="wallclock">00:30:00</option>
+      <option name="comment">This test runs the CESM_share Fortran unit tests. We're abusing the system test infrastructure to run these, so that a run of the test suite results in the unit tests being run as well. These unit tests are run as a GitHub action for each share PR, so this system test is less about catching code problems and more about making sure the unit testing infrastructure continues to work in each CESM tag. Grid and compset are irrelevant here. Needs to be mpi-serial in order to load the necessary modules.</option>
+    </options>
+  </test>
 </testlist>
