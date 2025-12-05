@@ -1,4 +1,129 @@
 ==============================================================
+Tag name: cesm3_0_beta07
+Originator(s): CSEG
+Date: 5th December 2025
+One-line Summary: CESM updates
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.65   
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.144                        
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.16                 
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_133                              
+components/clm          https://github.com/ESCOMP/ctsm/tree/alpha-ctsm5.4.CMIP7.09.ctsm5.3.068
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_1_6            
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_251121                     
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_011          
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.84                      
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.24                      
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_89                          
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.18                   
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1         
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_12                    
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_6                      
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.4.0                             
+
+
+Answer Changes introduced with this tag when compared to cesm0_0_beta06:
+
+cam
+    Bug fixes in dp_coupling for MPAS
+    Update to GEOS-Chem 14.5.3 chemistry and fix HEMCO tests
+    Mods for RRTMGP blending layer
+    Update input emission files.
+    Tunings/ namelist settings from Cecile.
+    Fix minor bugs in cloud chemistry.
+    Making blending region consistent with p_top for radiation schemes.
+    RRTMGP mods for MT configurations.
+    Reorder tautms/taublj add terms for future vertical diffusion refactoring #1343.
+    Fix frontogenesis function bug.
+    Change CISM2 to SGLC in FCHIST_GC compset.
+    Fixes for input interpolation routines (aircraft runs only).
+    Performance improvements for CSLAM.
+    Fix bug where CAM height interfaces were incorrectly passed to COSP.
+    Bring in an updated default WACCM IC file for the ne30 grid.
+
+clm
+    Fix and improve anomaly forcings for ISSP cases. Only changes I cases.
+    Branch tag with ctsm5.4 datasets.
+    And default settings needed for coupled simulations.
+    Small update to MEGAN needed for coupled work with CAM.
+    Changes answers for I compsets with MEGAN turned on.
+    Update FATES and FATES parameter file.
+    FATES update to prevent a certain type of error.
+    Update FatesColdAllVars history output.
+    Create driver data structure for SP mode; fixes FATES bug.
+    Add calculations for GSSUN and GSSHA at night.
+    Fixes to enable passing FATES two-stream ERS and ERI restart tests.
+    Add new mimics_fi param = frac of litter inputs bypassing litter pools.
+        Changes answers when MIMICS is used.
+    A change to the share MEGAN code.
+    ctsm5.4 branch tag with ne30pg3/f09/f19 ctsm5.4 surface datasets.
+    Work on SAVE_INTERIM_RESTARTS.
+    Add time dimension to PFT weight fields in transient runs.
+    Separate average fields from instantaneous.
+    New ctsm5.4 IC files.
+    New parameter files.
+    New default settings for clm6_0.
+    Fix clm6 ISSP compset aliases, which were returning CLM5 longnames.
+
+cice
+    Turn on one-way coupling of CICE to WW3 by default.
+
+mom
+    Sync with latest consortium branch.
+
+cdeps
+    DGLC grid updates for new gris4 mesh.
+
+cmeps
+    Shr flux usage.  Make qsat calculation in shr_flux_mod.F90 consistent with what's used in CAM
+    Change of CPL_ALBAV for MOM6.
+    Fix gust factors (changes answers for CAMDEV).
+
+cism
+    Namelist updates to support cism source tag cism_main_2.02.002.
+    New cism source external. Changes answers for all active ice sheet compsets.
+    New files for the Greenland 4km grid (gris4) and some support to use DGLC in Cism-wrapper.
+
+ww3
+    Turn on ICNUMERICS in namelist
+
+mizuRoute
+    History time-stamps are the midpoint now.
+    Bugfixes for: lake type, diffusive wave, restarts.
+    Advection diffusion added to track solutes.
+    Complete direct insertion.
+    Initialize global water balance.
+
+
+Problems identified after tag creation:
+  FAIL ERS_Ld3.f19_f19_mg17.FXHIST.derecho_intel.cam-waccmx_weimer SETUP
+  FAIL ERP_D_Ln9.C48_C48_mg17.QPC6.derecho_intel.cam-outfrq9s SHAREDLIB_BUILD failed to initialize
+  FAIL PET_PM.ne30pg3_t232.BMT1850.derecho_gnu.allactive-defaultiomi RUN time=329
+  FAIL PET_PM.ne30pg3_t232.BMT1850.derecho_intel.allactive-defaultiomi RUN time=301
+  PEND SMS_D_Ln9_P1280x1.ne0CONUSne30x8_ne0CONUSne30x8_mt12.FCnudged.derecho_intel.cam-outfrq9s SHAREDLIB_BUILD
+  FAIL ERI.f19_g17_rx1.DTEST.izumi_intel.cice-default RUN time=37
+  ERS_Ld5.f19_g17.E1850TEST.izumi_nag.cice-default
+  MCC.ne30pg3_t232.B1850C_MTt4s.derecho_intel.allactive-defaultio
+  FAIL DIMCSL_Ld1.TL319_t232.G_JRA.derecho_intel.mom-cfc_mods RUN time=7259
+     Possible issue with slow derecho disk IO.
+  FAIL ERS.ne30pg3_t232.1850_CAM60_CLM50%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV.derecho_intel.allactive-defaultio RUN time=1659
+     Possible issue with a filename length exceeding it's allocated length.
+  FAIL MCC.ne30pg3_t232.B1850C_MTt4s.derecho_intel.allactive-defaultio COMPARE_base_single_instance
+  FAIL SMS_Ln9.ne30_ne30_mg17.FW2000climo.derecho_intel.cam-outfrq9s RUN time=118
+     Most likely needs a new ic file.
+  FAIL LILACSMOKE_D_Ld2.f10_f10_mg37.I2000Ctsm50NwpSpAsRs.derecho_intel.clm-lilac MODEL_BUILD time=0
+     Only works with ctsm stand alone clone.
+  FAIL ERP_D_Ln9.C48_C48_mg17.QPC6.derecho_intel.cam-outfrq9s SHAREDLIB_BUILD failed to initialize
+     Issue with FMS version support between cam and mom
+  FAIL PET_PM.ne30pg3_t232.BMT1850.derecho_gnu.allactive-defaultiomi RUN time=329
+  FAIL PET_PM.ne30pg3_t232.BMT1850.derecho_intel.allactive-defaultiomi RUN time=301
+     Issue with MOM openmp support
+  FAIL ERI.f19_g17_rx1.DTEST.izumi_intel.cice-default RUN time=37
+
+
+==============================================================
 Tag name: cesm3_0_alpha07h
 Originator(s): CSEG
 Date: 1st Dec 2025
