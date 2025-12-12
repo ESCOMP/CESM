@@ -1,4 +1,233 @@
 ==============================================================
+Tag name: cesm3_0_alpha08a
+Originator(s): CSEG
+Date: 12th Dec 2025
+One-line Summary: Updates to CTSM 
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.68   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.146                        **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.16                 --
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_133                              --
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.4.003                       **
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_1_6            --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_251121                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_011          --
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.84                      --
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.27                      **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_89                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.18                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1         --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_12                    --
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_6                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.4.0                             --
+
+ccs_config
+    Erik Kluzek 2025-12-10 - ccs_config_cesm1.0.68 - ccs_config (cesm3_0_alpha08a)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.43
+
+    ccs_config_cesm1.0.68 - Casper gputype fixes
+    ccs_config_cesm1.0.67 - Add kokkos debug
+    ccs_config_cesm1.0.66 - Add ne3pg2 grid
+
+    ccs_config_cesm1.0.66: Needed in ctsm5.3.000
+
+
+cime
+    Erik Kluzek 2025-12-10 - cime6.1.146 - cime (cesm3_0_alpha08a)
+    https://github.com/ESMCI/cime/tags/cime6.1.146
+
+    Updates to ERI tests
+
+    Changes answers for ERI tests
+
+    Needed for a CAM tag in alpha08b with the same change
+
+
+    Erik Kluzek 2025-12-10 - cime6.1.145 - cime (cesm3_0_alpha08a)
+    https://github.com/ESMCI/cime/tags/ciem6.1.145
+
+    Fix check_input_data wget option for the new server
+
+
+clm
+    Erik Kluzek 2025-09-11 - ctsm5.3.073 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/Update submodules to cesm3_0_alpha07c
+
+    Updates submodules cesm3_0_alpha07c
+
+    For CTSM this changed answers, because of changes in ccs_config, that have already come in for CESM.
+
+
+    Erik Kluzek 2025-12-08 - ctsm5.4.003 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.003
+
+    Post ctsm5.4 updates:
+
+    Tuning for Li fire model
+    Update crop calendar inputs
+    Change snow_thermal_cond_glc_method back to Jordan1991
+    Fix for RRTMGP
+    Updated parameter file
+    Update CISM
+
+
+    Erik Kluzek 2025-12-08 - ctsm5.4.002 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.002
+
+    Use CMIP7 Carbon Isotope datasets
+
+    Answer changing when Carbon Isotopes are on for C13/C14 fields
+
+
+    Sam Rabin 2025-12-08 - ctsm5.4.001 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.001
+
+    Fixes and improvements with bit-for-bit identical results to ctsm5.4.000.
+
+
+    Sam Rabin 2025-12-08 - ctsm5.4.000 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.000
+
+    Merge alpha-ctsm5.4.CMIP7 to master
+
+    Depends on ccs_config_cesm1.0.66
+
+
+    Erik Kluzek 2025-10-23 - ctsm5.4.000 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.0
+
+    Minor version update with new surface/landuse.timeseries datasets
+
+
+    Erik Kluzek 2025-10-31 - ctsm5.3.083 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3083
+
+    Update FATES and supplementation status
+
+
+    Erik Kluzek 2025-10-23 - ctsm5.3.082 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.XXX
+
+    CMIP7 population density
+
+
+    Erik Kluzek 2025-11-19 - ctsm5.3.085 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.085
+
+    Merge b4b-dev to master
+    Start bringing in CMIP7 Carbon Isotope files
+
+
+    Erik Kluzek 2025-10-31 - ctsm5.3.084 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.084
+
+    Merge b4b-dev to master
+
+
+    Erik Kluzek 2025-10-22 - ctsm5.3.081 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.080
+
+    Change defaults for C13/C14 and irrigate for clm6_0
+
+
+    Sam Rabin 2025-10-17 - ctsm5.3.080 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.080
+
+    Minor bit-for-bit changes.
+
+
+    Sam Rabin 2025-10-06 - ctsm5.3.079 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.079
+
+    Update submodules to match versions in cesm3_0_alpha07e (+ CMEPS). 
+    Diffs due to CISM update in cases without stub glacier model.  
+    ccs_config_cesm1.0.61, cdeps1.0.81, cime6.1.128, cismwrap_2_2_010, 
+    cmeps1.1.20, git-fleximod v1.0.2.
+
+
+
+
+
+
+    Sam Rabin 2025-10-06 - ctsm5.3.078 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.078
+
+    Merge some bit-for-bit changes
+
+
+    Sam Rabin 2025-10-02 - ctsm5.3.077 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.077
+
+    Adjustment of albedo timestep filtering with FATES. bfb except for FATES compsets. FATES submodule updated to tag sci.1.87.2_api.41.0.0.
+
+
+    Erik Kluzek 2025-09-24 - ctsm5.3.076 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.076
+
+    Merge b4b-dev to master
+
+    Updates to ctsm_pylib conda env. PE layouts for mpasa3p75
+
+
+    Erik Kluzek 2025-09-11 - ctsm5.3.075 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.075
+
+    Turn off LW downscaling for glaciers for clm6_0 physics
+
+    Changes answers for Clm60 compsets
+
+
+    Erik Kluzek 2025-09-11 - ctsm5.3.074 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.074
+
+    New parmfile and finidat files for clm6_0 physics
+
+    Changes answers for Clm60 compsets
+
+
+    Erik Kluzek 2025-09-11 - ctsm5.3.072 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.072
+
+    New vertical movement scheme for soil nitrate
+
+
+    Sam Rabin 2025-08-22 - ctsm5.3.071 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.071
+
+    Merge b4b-dev branch to master
+
+
+    Sam Rabin 2025-08-22 - ctsm5.3.070 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.070
+
+    FATES: Update default paramfile and add namelist option
+
+
+    Sam Rabin 2025-08-12 - ctsm5.3.069 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.3.069
+
+    Add SystemTests to run subset_data and then CTSM
+
+
+    Erik Kluzek 2025-11-26 - alpha-ctsm5.4.CMIP7.19.ctsm5.3.085 - components/clm (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/ctsm/tags/alpha-ctsm5.4.CMIP7.19.ctsm5.3.085
+
+    ctsm5.4 branch updated to the latest master
+
+
+cmeps
+    Erik Kluzek 2025-12-10 - cmeps1.1.27 - src/drivers/nuopc/ (cesm3_0_alpha08a)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.27
+
+    cmeps1.1.27 - Fix monthly averaged med history files
+    cmeps1.1.26 - Add CODEOWNERS file
+    cmeps1.1.25 - Allows ESMF of version 9.0.0 and higher
+
+
+
+==============================================================
 Tag name: cesm3_0_beta07
 Originator(s): CSEG
 Date: 5th December 2025
