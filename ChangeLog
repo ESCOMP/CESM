@@ -206,7 +206,7 @@ clm
 
     Tuning for Li fire model
     Update crop calendar inputs
-    Change snow_thermal_cond_glc_method back to Jordan1991
+    Change snow_thermal_cond_glc_method back to Sturm1997
     Fix for RRTMGP
     Updated parameter file
     Update CISM
