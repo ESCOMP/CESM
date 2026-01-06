@@ -1,4 +1,143 @@
 ==============================================================
+Tag name: cesm3_0_alpha08b
+Originator(s): CSEG
+Date: 31st Dec 2025
+One-line Summary: Updates for CAM 
+
+ccs_config              https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.69   **
+cime                    https://github.com/ESMCI/cime/tree/cime6.1.149                        **
+components/fms          https://github.com/ESCOMP/FMS_interface/tree/fi_250428                --
+share                   https://github.com/ESCOMP/CESM_share/tree/share1.1.17                 **
+components/cam          https://github.com/ESCOMP/CAM/cam6_4_142                              **
+components/clm          https://github.com/ESCOMP/ctsm/tree/ctsm5.4.003                       --
+components/cice         https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_1_6            --
+components/mom          https://github.com/ESCOMP/MOM_interface/mi_251121                     --
+components/cism         https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_013          **
+components/cdeps        https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.85                      **
+components/cmeps        https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.30                      **
+components/rtm          https://github.com/ESCOMP/rtm/tree/rtm1_0_89                          --
+components/ww3          https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.18                   --
+components/mizuroute    https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1         --
+components/mosart       https://github.com/ESCOMP/mosart/tree/mosart1_1_12                    --
+libraries/mpi-serial    https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0              --
+libraries/parallelio    https://github.com/NCAR/ParallilIO/tree/pio2_6_6                      --
+tools/CUPiD             https://github.com/NCAR/CUPiD/tree/v0.4.0                             --
+
+cam
+    Cheryl Craig 2025-12-30 - cam6_4_142 - components/cam (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_142
+
+    Add missing ChangeLog
+
+
+    Cheryl Craig 2025-12-29 - cam6_4_141 - components/cam (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_141
+
+    Aerosol hygroscopicity update
+
+
+    Cheryl Craig 2025-12-26 - cam6_4_140 - components/cam (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_140
+
+    Update LBC file for CAM7 runs
+
+    Answer changing for CAM7
+
+
+    Cheryl Craig 2025-12-26 - cam6_4_139 - components/cam (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_139
+
+    Misc tag for CESM3
+
+      - Move pressure variables to dry diagnostics: https://github.com/ESCOMP/CAM/pull/1427
+      - Long lines in cam_diagnostics.F90: https://github.com/ESCOMP/CAM/issues/1448
+      - Large domains require a change in data type for se dynamics restarts: https://github.com/ESCOMP/CAM/issues/1459
+      - Update little obsolete/incorrect items: https://github.com/ESCOMP/CAM/issues/1177
+
+
+    Cheryl Craig 2025-12-22 - cam6_4_138 - components/cam (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_138
+
+    Leung 2023 dust cycle updates
+
+
+    Cheryl Craig 2025-12-22 - cam6_4_137 - components/cam (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_1373
+
+    For Courtney
+
+    Incorporate final RRTMGP mods to complete CPU-ized ccppization
+
+
+    Cheryl Craig 2025-12-16 - cam6_4_136 - components/cam (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_136
+
+    Provide bug fix for moving mountains
+
+    Answer changing for all runs using the moving mountains (CAM7)
+
+
+    Francis Vitt 2025-12-08 - cam6_4_135 - components/cam (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_135
+
+    Aerosol optics interfaces for bulk and volcanic aerosols
+
+
+    Cheryl Craig 2025-12-04 - cam6_4_134 - components/cam (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_134
+
+    Update CAM externals to match alpha07h
+
+    Answer changing for CAM checkouts, but no impact on CESM checkouts
+
+
+ccs_config
+    Chris Fischer 2025-12-31 - ccs_config_cesm1.0.69 - ccs_config (cesm3_0_alpha08b)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.69
+
+    Change Kokkos lib to SLIBS so that we can build PIO correctly
+
+
+cdeps
+    Chris Fischer 2025-12-31 - cdeps1.0.85 - components/cdeps (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.85
+
+    Bring in recent changes from NorESM.  T1850G fill pattern differences, G_JRA_RYF answer changes
+
+
+cime
+    Chris Fischer 2025-12-31 - cime6.1.149 - cime (cesm3_0_alpha08b)
+    https://github.com/ESMCI/cime/tags/cime6.1.149
+
+    cime6.1.149: Fixes incomplete bless
+    cime6.1.148: Make sure that when a refcase is set the drv_restart_pointer filename is set correctly.
+    cime6.1.147: Add EXCL_STRIDE to XML PE configs
+
+
+cism
+    Kate Thayer-Calder 2025-12-16 - cismwrap_2_2_013 - components/cism (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_2_013
+
+    Update with a new CISM external with a wide range of changes. Will change answers for any compset that includes CISM, evolve or no-evolve. Will not change answers for SGLC or DGLC.
+
+
+cmeps
+    Chris Fischer 2025-12-31 - cmeps1.1.30 - src/drivers/nuopc/ (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.30
+
+    cmeps1.1.30: Remove a duplicate block from esmFldsExchange_cesm_mod.
+    cmeps1.1.29: Remove unneeded dependancy on shr_mpi_mod.
+    cmeps1.1.28: Copy shr_lnd2rof_tracers_mod from noresm branch
+
+
+share
+    Chris Fischer 2025-12-31 - share1.1.17 - share (cesm3_0_alpha08b)
+    https://github.com/ESCOMP/CESM_share/tags/share1.1.17
+
+    First iteration of adding water tracer infrastructure
+
+
+==============================================================
 Tag name: cesm3_0_alpha08a
 Originator(s): CSEG
 Date: 12th Dec 2025
@@ -67,7 +206,7 @@ clm
 
     Tuning for Li fire model
     Update crop calendar inputs
-    Change snow_thermal_cond_glc_method back to Jordan1991
+    Change snow_thermal_cond_glc_method back to Sturm1997
     Fix for RRTMGP
     Updated parameter file
     Update CISM
