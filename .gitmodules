@@ -51,7 +51,7 @@
         path = share
         url = https://github.com/ESCOMP/CESM_share
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
-        fxtag = share1.1.17
+        fxtag = share1.1.18
         fxrequired = ToplevelRequired
 
 [submodule "cam"]
@@ -73,14 +73,14 @@
         url = https://github.com/ESCOMP/CESM_CICE
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
         fxrequired = ToplevelRequired
-        fxtag = cesm3_cice6_6_1_6
+        fxtag = cesm3_cice6_6_1_10
 
 [submodule "mom"]
         path = components/mom
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_251121
+        fxtag = mi_260121
 
 [submodule "cism"]
         path = components/cism
@@ -101,7 +101,7 @@
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-	fxtag = cmeps1.1.30
+	fxtag = cmeps1.1.31
 
 [submodule "rtm"]
         path = components/rtm
@@ -136,7 +136,7 @@
         url = https://github.com/NCAR/ParallelIO
         fxDONOTUSEurl = https://github.com/NCAR/ParallelIO
         fxrequired = ToplevelRequired
-        fxtag = pio2_6_6
+        fxtag = pio2_6_8
 
 [submodule "mpi-serial"]
         path = libraries/mpi-serial
@@ -150,14 +150,14 @@
         url = https://github.com/NCAR/PyCECT
         fxDONOTUSEurl = https://github.com/NCAR/PyCECT
         fxrequired = ToplevelRequired
-        fxtag = 3.2.2
+        fxtag = 3.3.1
 
 [submodule "tools/CUPiD"]
         path = tools/CUPiD
         url = https://github.com/NCAR/CUPiD.git
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
-        fxtag = v0.4.0
+        fxtag = v0.5.1
 
 [submodule "FTorch"]
 	path = libraries/FTorch
