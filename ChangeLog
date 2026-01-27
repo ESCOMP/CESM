@@ -1,4 +1,116 @@
 ==============================================================
+Tag name: cesm3_0_alpha08c
+Originator(s): CSEG
+Date: 26th Jan 2026
+One-line Summary: Turn on CICE/FSD - wave interaction everywhere
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.69  --
+cime                                   https://github.com/ESMCI/cime/tree/cime6.1.149                       --
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.18                **
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_142                             --
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.003                      --
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_1_10          **
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260121                    **
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_013         --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.85                     --
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.31                     **
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.18                  --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_12                   --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     **
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            **
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            **
+
+cice
+    David Bailey 2025-12-15 - cesm3_cice6_6_1_10 - components/cice (cesm3_0_alpha08c)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_6_1_9
+
+    - Turns on FSD in CICE.
+    - Reduce default r_snw from 1.25 to 1.00
+    - Update CICE namelist for FSD and associated history variables.
+    - Fix aux_cice tests.
+    - Also make sure FSD is turned of with SWAV
+
+
+cmeps
+    Erik Kluzek 2026-01-07 - cmeps1.1.31 - src/drivers/nuopc/ (cesm3_0_alpha08c)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.31
+
+    Refactor med_methods_FB_init to allow handling of water tracer fields
+
+    Depends on: share1.1.18
+
+
+CUPiD
+    Michael Levy 2026-01-13 - v0.5.1 - tools/CUPiD (cesm3_0_alpha08c)
+    https://github.com/NCAR/CUPiD/tags/v0.5.1
+
+    Update python environments for running CUPiD
+    Make sure ILAMB is available in externals/
+    Add flags for controlling LDF climatology time period
+    Specify absolute paths for ADF and LDF input files when generating config files
+    Clean up how summary_tables.html is specified in config files
+
+
+    Michael Levy 2026-01-13 - v0.5.0 - tools/CUPiD (cesm3_0_alpha08c)
+    https://github.com/NCAR/CUPiD/tags/v0.5.0
+
+    More options in env_postprocessing.xml for CESM users
+
+
+    Michael Levy 2026-01-13 - v0.4.1 - tools/CUPiD (cesm3_0_alpha08c)
+    https://github.com/NCAR/CUPiD/tags/v0.4.1
+
+    * LDF updates for additional plots
+    * Better user control over ADF and LDF config
+    * Better ILAMB support
+    * Some code refactoring
+    * Landing page that can include some key statistics
+    * Pinned packages in infrastructure and analysis environments
+
+
+mom
+    Michael Levy 2026-01-06 - mi_260121 - components/mom (cesm3_0_alpha08c)
+    https://github.com/ESCOMP/MOM_interface/tags/mi_2601??
+
+    Updated PE layouts for following four DATM + MOM6 + CICE configurations on derecho:
+
+    1. With MARBL, WW3
+    2. Without MARBL, WW3
+    3. With MARBL, SWAV
+    4. Without MARBL, SWAV
+
+    For (1) and (2), we give CICE three nodes instead of one because FSD is more expensive.
+    For (3) and (4), we give CICE two nodes instead of one because CICE cost has crept up and it should not be the bottleneck in these simulations
+
+
+ParallelIO
+    Erik Kluzek 2026-01-07 - pio2_6_8 - libraries/parallelio (cesm3_0_alpha08c)
+    https://github.com/NCAR/ParallelIO/tags/pio6.6.8
+
+    pio2_6_8: CMake package, Collective access, bug fix,
+    pio2_6_7: CMake package config
+
+
+pyCECT
+    Erik Kluzek 2026-01-07 - 3.3.1 - tools/statistical_ensemble_test/pyCECT (cesm3_0_alpha08c)
+    https://github.com/NCAR/pyCECT/tags/3.3.1
+
+    3.3.1: pre-commit change
+    3.3.0: mpas ensemble
+    3.2.3:Extra info when ECT fails
+
+
+share
+    Erik Kluzek 2026-01-07 - share1.1.18 - share (cesm3_0_alpha08c)
+    https://github.com/ESCOMP/CESM_share/tags/share1.1.18
+
+    Add infrastructure that will be used for water tracers
+
+==============================================================
 Tag name: cesm3_0_alpha08b
 Originator(s): CSEG
 Date: 31st Dec 2025
