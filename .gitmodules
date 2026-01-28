@@ -37,7 +37,7 @@
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-	fxtag = cime6.1.149
+	fxtag = cime6.1.159
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -58,7 +58,7 @@
         path = components/cam
         url = https://www.github.com/ESCOMP/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_4_142
+        fxtag = cam6_4_147
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
