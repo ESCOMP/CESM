@@ -1,8 +1,8 @@
 ==============================================================
-Tag name: cesm3_0_alpha08d
+Tag name: cesm3_0_alpha08e
 Originator(s): CSEG
-Date: 26th Jan 2026
-One-line Summary: CAM updates.
+Date: 4th Feb 2026
+One-line Summary: CDEPS updates.
 
 ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.73  **
 cime                                   https://github.com/ESMCI/cime/tree/cime6.1.161                       **
