@@ -69,7 +69,7 @@ More details on porting CESM
 ----------------------------
 
 For more details on porting CESM to a new machine, see
-http://esmci.github.io/cime/versions/master/html/users_guide/porting-cime.html
+https://esmci.github.io/cime/versions/master/html/ccs/model-configuration/support-a-new-machine.html
 
 Obtaining the full model code and associated scripting infrastructure
 =====================================================================
