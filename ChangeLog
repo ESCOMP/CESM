@@ -1,4 +1,37 @@
 ==============================================================
+Tag name: cesm3_0_alpha08f
+Originator(s): CSEG
+Date: 11th Feb 2026
+One-line Summary: Derecho environment update.
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.75  **
+cime                                   https://github.com/ESMCI/cime/tree/cime6.1.161                       --
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.18                --
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_147                             --
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.003                      --
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_1_10          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260121                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_013         --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.89                     --
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.33                     --
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.19                  --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_12                   --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            --
+
+ccs_config
+    Chris Fischer 2026-02-11 - ccs_config_cesm1.0.75 - ccs_config (cesm3_0_alpha08f)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.75
+
+    ccs_config_cesm1.0.75: Update environment on derecho.  Changes all answers.
+    ccs_config_cesm1.0.74: Fix vectorization optimization options for HB PBL scheme in CAM.
+
+==============================================================
 Tag name: cesm3_0_alpha08e
 Originator(s): CSEG
 Date: 4th Feb 2026
