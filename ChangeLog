@@ -1,20 +1,20 @@
 ==============================================================
 Tag name: cesm3_0_alpha08f
 Originator(s): CSEG
-Date: 11th Feb 2026
-One-line Summary: Derecho environment update.
+Date: 25th Feb 2026
+One-line Summary: cmeps and share answer changes
 
-ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.75  **
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.75  -0
 cime                                   https://github.com/ESMCI/cime/tree/cime6.1.161                       --
 components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               --
-share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.18                --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.19                **
 components/cam                         https://github.com/ESCOMP/CAM/cam6_4_147                             --
 components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.003                      --
 components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_1_10          --
 components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260121                    --
 components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_013         --
 components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.89                     --
-components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.33                     --
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.37                     **
 components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
 components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.19                  --
 components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1        --
@@ -24,12 +24,50 @@ libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/p
 tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
 tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            --
 
-ccs_config
-    Chris Fischer 2026-02-11 - ccs_config_cesm1.0.75 - ccs_config (cesm3_0_alpha08f)
-    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.75
+cmeps
+    William Sacks 2026-02-25 - cmeps1.1.36 - src/drivers/nuopc/ (cesm3_0_alpha08f)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.??
 
-    ccs_config_cesm1.0.75: Update environment on derecho.  Changes all answers.
-    ccs_config_cesm1.0.74: Fix vectorization optimization options for HB PBL scheme in CAM.
+    Roundoff-level mods of prep_glc_map_lnd2glc
+
+    https://github.com/ESCOMP/CMEPS/pull/633
+
+    Changes answers for:
+    - Tests with active CISM
+    - Tests with DGLC that cross a year boundary (in prealpha that is ERS_Ld5.ne30pg3_t232.B1850C_LTso.derecho_intel.allactive-decstart and ERS_Ld5.ne30pg3_t232.BHISTC_LTso.derecho_intel.allactive-decstart)
+
+
+    William Sacks 2026-02-25 - cmeps1.1.37 - src/drivers/nuopc/ (cesm3_0_alpha08f)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.37
+
+    Convert count to r8 rather than r4 in prep_glc_avg
+
+    *Probably* bfb, but might change answers at the roundoff-level in cases with lnd2glc coupling.
+
+
+    William Sacks 2026-02-25 - cmeps1.1.35 - src/drivers/nuopc/ (cesm3_0_alpha08f)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.35
+
+    Fixes to some histaux atm2med xml values
+
+
+    William Sacks 2026-02-25 - cmeps1.1.34 - src/drivers/nuopc/ (cesm3_0_alpha08f)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.34
+
+    A few refactorings to handle fields with ungridded dimensions, particularly for prep_rof_mod
+
+
+share
+    William Sacks 2026-02-25 - share1.1.19 - share (cesm3_0_alpha08f)
+    https://github.com/ESCOMP/CESM_share/tags/share1.1.??
+
+    Bring in shr_reprosum fixes from E3SM
+
+    https://github.com/ESCOMP/CESM_share/pull/81
+
+    Changes answers for:
+    - CAM-FV cases
+    - Possibly other cases
 
 ==============================================================
 Tag name: cesm3_0_alpha08e
