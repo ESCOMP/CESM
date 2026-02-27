@@ -51,7 +51,7 @@
         path = share
         url = https://github.com/ESCOMP/CESM_share
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
-        fxtag = share1.1.18
+        fxtag = share1.1.19
         fxrequired = ToplevelRequired
 
 [submodule "cam"]
@@ -101,7 +101,7 @@
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-	fxtag = cmeps1.1.33
+	fxtag = cmeps1.1.37
 
 [submodule "rtm"]
         path = components/rtm
