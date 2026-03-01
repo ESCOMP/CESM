@@ -1,10 +1,117 @@
 ==============================================================
+Tag name: cesm3_0_alpha08g
+Originator(s): CSEG
+Date: 1st Mar 2026
+One-line Summary: CAM updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.75  --
+cime                                   https://github.com/ESMCI/cime/tree/cime6.1.162                       **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.19                --
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_155                             **
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.003                      --
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_1_10          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260121                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_013         --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.91                     **
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.37                     --
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.19                  --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_12                   --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            --
+
+cam
+    Haipeng Lin 2026-02-25 - cam6_4_155 - components/cam (cesm3_0_alpha08g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_155
+
+    Fixes to CAM for the ifx compiler
+
+
+    Cheryl Craig 2026-02-24 - cam6_4_154 - components/cam (cesm3_0_alpha08g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_154
+
+    Bring in a couple of misc changes:
+      - MT and LT ne16pg3 namelist defaults for dycore and inic
+      - remove unused routines
+
+    Answer changing for ne16 and WACCM-X configurations
+
+
+    Cheryl Craig 2026-02-24 - cam6_4_153 - components/cam (cesm3_0_alpha08g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_153
+
+    For Francis Vitt
+
+    Short lived halogen chemistry
+
+
+    Cheryl Craig 2026-02-24 - cam6_4_152 - components/cam (cesm3_0_alpha08g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_152
+
+    For Francis Vitt
+
+    TEM diagnostics update
+
+
+    Haipeng Lin 2026-02-11 - cam6_4_151 - components/cam (cesm3_0_alpha08g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_151
+
+    GEOS-Chem within CESM: fix MAM4 mapping for SO4 in default configuration
+
+    Answer changing for GEOS-Chem chemistry only
+
+
+    Cheryl Craig 2026-02-09 - cam6_4_150 - components/cam (cesm3_0_alpha08g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_150
+
+    fix FV frontogenesis bug and diagnostic PS/PSDRY bug in SE log file
+
+    Answer changing for FV
+
+
+    Cheryl Craig 2026-02-09 - cam6_4_149 - components/cam (cesm3_0_alpha08g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_149
+
+    For Francis Vitt
+
+    Include chemical heating in mid-top configurations
+
+    Answer changing for chemistry
+
+
+    Cheryl Craig 2026-02-09 - cam6_4_148 - components/cam (cesm3_0_alpha08g)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_148
+
+    For Courtney Peverley
+
+    Move GPU directives to atmospheric physics for RRTMGP
+
+
+cdeps
+    Erik Kluzek 2026-02-09 - cdeps1.0.91 - components/cdeps (cesm3_0_alpha08g)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.91
+
+    cdeps1.0.91: Add CRUJRA2024b option for CLM datm streams forcing
+    cdeps1.0.90: Add code to accept CPRGNU and CPRINTEL
+
+
+cime
+    Erik Kluzek 2026-02-09 - cime6.1.162 - cime (cesm3_0_alpha08g)
+    https://github.com/ESMCI/cime/tags/cime6.1.162
+
+    cime6.1.162: Fix rpointer archive
+
+==============================================================
 Tag name: cesm3_0_alpha08f
 Originator(s): CSEG
 Date: 25th Feb 2026
 One-line Summary: cmeps and share answer changes
 
-ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.75  -0
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.75  --
 cime                                   https://github.com/ESMCI/cime/tree/cime6.1.161                       --
 components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               --
 share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.19                **
