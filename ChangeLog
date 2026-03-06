@@ -1,4 +1,227 @@
 ==============================================================
+Tag name: cesm3_0_alpha08h
+Originator(s): CSEG
+Date: 4th Mar 2026
+One-line Summary: CTSM updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.75  --
+cime                                   https://github.com/ESMCI/cime/tree/cime6.1.166                       **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.19                --
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_155                             --
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.022                      **
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_1_10          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260121                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_013         --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.93                     **
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.41                     **
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.19                  --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   **
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            --
+
+cdeps
+    Chris Fischer 2026-03-04 - cdeps1.0.93 - components/cdeps (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.93
+
+    cdeps1.0.93: Fixes for ifx compiler 
+    cdeps1.0.92: Introduce separate cmip6 and cmip7 co2 stream files keeping cmip6 as default
+
+
+cime
+    Chris Fischer 2026-03-04 - cime6.1.166 - cime (cesm3_0_alpha08h)
+    https://github.com/ESMCI/cime/tags/cime6.1.166
+
+    cime6.1.166: Skip MOM6 .ic. history file comparison in multi-instance runs 
+    cime6.1.165: Add AGENTS.md for CIME. Also add a hidden CLAUDE.md
+    cime6.1.164: Change version warning output to not use logging
+    cime6.1.163: Fix rpointer archive
+
+
+clm
+    Erik Kluzek 2026-01-23 - ctsm5.4.014 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.XXX
+
+    Fix an excess ice issue for a few gridcells 
+
+
+    Erik Kluzek 2026-02-21 - ctsm5.4.022 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.022
+
+    Update to ccs_config1.0.75 with move to ifx
+    Update to mosart1.1.13 move to fix
+    Update to cdeps1.0.XX with ifx changes
+
+    Other ifx changes needed to remove _FillValue==NaN in input files
+
+    This resolves issues for the coupled model. There are a few outstanding issues
+    for CTSM lists that can come later.
+
+    Changes answers for ctsm to previous version because of ifx update
+    But b4b for cesm
+
+
+    Erik Kluzek 2026-02-20 - ctsm5.4.021 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.021
+
+    Merge b4b-dev to master
+
+    Includes some ifx compiler changes
+    Update python unit tests to pytest
+    DART st_archive update
+
+
+    Erik Kluzek 2026-02-12 - ctsm5.4.020 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.020
+
+    New clm6_0 parameter file
+    adjustments to some fire settings for coupled cases
+    Also new IC files
+
+
+    Erik Kluzek 2026-02-12 - ctsm5.4.019 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.019
+
+    Fix years used by generate_gdds
+
+
+    Erik Kluzek 2026-02-12 - ctsm5.4.018 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.018
+
+    Quick fix to CTSM so that Nitrogen-deposition
+    fluxes come from CAM whenever CTSM is coupled to CAM
+    CAM LndTuningMode tests change answers
+    as for those ndep is coming from DATM
+
+
+    Erik Kluzek 2026-02-09 - ctsm5.4.017 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.017
+
+    Change CRUJRA2024 compsets to CRUJRA2024b to fix 
+    the Greenland snow hole
+
+    Requires versions already in place in cesm3_0_alpha084/g:
+
+    cdeps1.0.91
+    cmeps1.1.29
+
+
+    Sam Rabin 2026-02-06 - ctsm5.4.016 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.016
+
+    Merge b4b-dev branch into master
+
+
+    Erik Kluzek 2026-02-04 - ctsm5.4.015 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.015
+
+    Update to cismwrap_2_2_013
+    with answer changes for compsets with CISM
+
+
+    Erik Kluzek 2026-01-23 - ctsm5.4.013 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.013
+
+    New Initial Conditions for ne30 that patch the Greeenland snow hole
+    Update to C14 Carbon isotope data that changes answers for some cases (f10)
+
+
+    Erik Kluzek 2026-01-23 - ctsm5.4.012 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.012
+
+    Fix for C-balance error that manifested in B-cases with pft 67
+
+    Changes answers for BGC and BGC-CROP cases
+
+
+    Erik Kluzek 2026-01-22 - ctsm5.4.011 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.011
+
+    Bring in b4b-dev to master
+    Adds some urban/rural history variables to default on
+    decompMod unittest
+    GDD baseline tool change
+
+
+    Erik Kluzek 2026-01-22 - ctsm5.4.010 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.010
+
+    Update to cime6.1.146 which changes answers for ERI tests
+
+    CESM is already updated to this tag, so it's b4b from CESM's perspective
+
+
+    Erik Kluzek 2026-01-13 - ctsm5.4.009 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.009
+
+    Change for baresoil so that dew doesn't form
+    if surface dewpoint temperature is above ATM lowest layer
+    This fixes a problem when running coupled to CAM with RRTMGP
+
+
+    Erik Kluzek 2026-01-13 - ctsm5.4.008 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.008
+
+    Account for soil being oversaturated and move water upward
+
+
+    Sam Rabin 2026-01-09 - ctsm5.4.007 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.007
+
+    Update rice parameters for Clm60 compsets.
+
+
+    Erik Kluzek 2026-01-05 - ctsm5.4.006 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.006
+
+    Merge b4b-dev to master
+
+    Includes a testmod for transient ERI tests
+
+
+    Erik Kluzek 2026-01-05 - ctsm5.4.005 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.005
+
+    FATES update to using JSON format for
+    FATES parameter files.
+
+    Changes answers in a small way for some
+    FATES tests because of a bug-fix
+
+
+    Sam Rabin 2025-12-12 - ctsm5.4.004 - components/clm (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.004
+
+    Update crop parameters and maturity requirements for Clm60BgcCrop compsets.
+
+
+cmeps
+    Chris Fischer 2026-03-04 - cmeps1.1.41 - src/drivers/nuopc/ (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.41
+
+    Turn this debug alarm off by default
+
+
+    Erik Kluzek 2026-03-03 - cmeps1.0.40 - src/drivers/nuopc/ (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.0.40
+
+    cmeps1.0.40: Add test components (X comps)
+    cmeps1.0.39: For water tracers: Add handling of rank-3 fields and refactor med_phases_prep_glc_map_lnd2glc
+    cmeps1.0.38: Generalize parts of post_rof_mod to handle fields with ungridded dims
+
+
+mosart
+    Erik Kluzek 2026-02-18 - mosart1.1.13 - components/mosart (cesm3_0_alpha08h)
+    https://github.com/ESCOMP/mosart/tags/ mosart1.1.13
+
+    Fix needed for IFX compiler to remove reliance
+    on short-circuiting if statements for DEBUG mode
+
+==============================================================
 Tag name: cesm3_0_alpha08g
 Originator(s): CSEG
 Date: 1st Mar 2026
