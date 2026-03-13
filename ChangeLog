@@ -4,7 +4,7 @@ Originator(s): CSEG
 Date: 13th Mar 2026
 One-line Summary: Derecho enviroment update
 
-ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.78  --
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.78  **
 cime                                   https://github.com/ESMCI/cime/tree/cime6.1.169                       --
 components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               --
 share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.19                --
