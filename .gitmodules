@@ -37,7 +37,7 @@
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-	fxtag = cime6.1.167
+	fxtag = cime6.1.168
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -73,7 +73,7 @@
         url = https://github.com/ESCOMP/CESM_CICE
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
         fxrequired = ToplevelRequired
-        fxtag = cesm3_cice6_6_1_10
+        fxtag = cesm3_cice6_6_3_5
 
 [submodule "mom"]
         path = components/mom
