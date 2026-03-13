@@ -1,4 +1,60 @@
 ==============================================================
+Tag name: cesm3_0_alpha08k
+Originator(s): CSEG
+Date: 13th Mar 2026
+One-line Summary: CTSM update
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.75  --
+cime                                   https://github.com/ESMCI/cime/tree/cime6.1.169                       **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.19                --
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_156                             --
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.024                      **
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_5           --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260121                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_013         --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.93                     --
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.41                     --
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.19                  --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            --
+
+cime
+    Chris Fischer 2026-03-13 - cime6.1.169 - cime (cesm3_0_alpha08k)
+    https://github.com/ESMCI/cime/tags/cime6.1.169
+
+    - Migrates from conda to spack
+    - Fix mixed perl environment (conda/system)
+    - Moves to UV to manage python
+    - Simplifies usage and testing workflow
+
+
+clm
+    Erik Kluzek 2026-03-05 - ctsm5.4.024 - components/clm (cesm3_0_alpha08k)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.024
+
+    Note
+    Changes needed for the latest
+    intel package update 2025.3.02
+
+    - Simple continuation line fix from Jim
+    - Fix for mpi-serial tests
+    - Fix for CN Matrix tests
+
+    Uses ccs_config1.0.77
+
+
+    Erik Kluzek 2026-03-03 - ctsm5.4.023 - components/clm (cesm3_0_alpha08k)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.023
+
+    More updates on NaN's and FillValue in datasets
+
+==============================================================
 Tag name: cesm3_0_alpha08j
 Originator(s): CSEG
 Date: 12th Mar 2026
