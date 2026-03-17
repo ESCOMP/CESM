@@ -4,7 +4,7 @@ Originator(s): CSEG
 Date: 13th Mar 2026
 One-line Summary: Derecho enviroment update
 
-ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.78  **
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.79  **
 cime                                   https://github.com/ESMCI/cime/tree/cime6.1.169                       --
 components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               --
 share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.19                --
@@ -25,6 +25,11 @@ tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1
 tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            --
 
 ccs_config
+    Chris Fischer 2026-03-17 - ccs_config_cesm1.0.79 - ccs_config (cesm3_0_alpha08l)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.79
+
+    Fix MPAS builds.
+
     Chris Fischer 2026-03-13 - ccs_config_cesm1.0.78 - ccs_config (cesm3_0_alpha08l)
     https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.78
 
