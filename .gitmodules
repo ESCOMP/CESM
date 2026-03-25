@@ -118,7 +118,7 @@
         fxrequired = ToplevelRequired
 
 [submodule "mizuroute"]
-        path = components/mizuroute
+        path = components/mizuRoute
         url = https://github.com/ESCOMP/mizuRoute
         fxDONOTUSEurl = https://github.com/ESCOMP/mizuRoute
         fxrequired = ToplevelRequired
