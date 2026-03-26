@@ -66,14 +66,14 @@
         url = https://github.com/ESCOMP/CTSM
         fxDONOTUSEurl = https://github.com/ESCOMP/CTSM
         fxrequired = ToplevelRequired
-        fxtag = ctsm5.4.024
+        fxtag = ctsm5.4.027
 
 [submodule "cice"]
         path = components/cice
         url = https://github.com/ESCOMP/CESM_CICE
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
         fxrequired = ToplevelRequired
-        fxtag = cesm3_cice6_6_3_5
+        fxtag = cesm3_cice6_6_3_6
 
 [submodule "mom"]
         path = components/mom
