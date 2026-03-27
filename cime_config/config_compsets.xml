@@ -92,6 +92,12 @@
     <lname>HISTC_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
+  <!-- BHIST_LTso, except: WW3 can't handle multi-instance (2026-3), 
+       CROP doesn't work in this context. -->
+  <compset>
+    <alias>BHISTC_LT_DART</alias>
+    <lname>HISTC_CAM70%LT_CLM60%BGC_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+  </compset>
 
   <!-- Emissions driven compsets for CESM3 -->
 
