@@ -57,6 +57,13 @@ cesm
 
     https://github.com/ESCOMP/CESM/pull/393
 
+
+cmeps
+    Chris Fischer 2026-03-26 - cmeps1.1.42 - src/drivers/nuopc/ (cesm3_0_alpha08o)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.42
+
+    Fix issue with gmake args
+
 ==============================================================
 Tag name: cesm3_0_alpha08n
 Originator(s): CSEG

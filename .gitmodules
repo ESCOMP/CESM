@@ -101,7 +101,7 @@
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-	fxtag = cmeps1.1.41
+	fxtag = cmeps1.1.42
 
 [submodule "rtm"]
         path = components/rtm
