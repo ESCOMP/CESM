@@ -58,7 +58,7 @@
         path = components/cam
         url = https://www.github.com/ESCOMP/CAM
         fxDONOTUSEurl = https://www.github.com/ESCOMP/CAM
-        fxtag = cam6_4_157
+        fxtag = cam6_4_161
         fxrequired = ToplevelRequired
 
 [submodule "clm"]
@@ -101,7 +101,7 @@
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-	fxtag = cmeps1.1.41
+	fxtag = cmeps1.1.42
 
 [submodule "rtm"]
         path = components/rtm
@@ -118,7 +118,7 @@
         fxrequired = ToplevelRequired
 
 [submodule "mizuroute"]
-        path = components/mizuroute
+        path = components/mizuRoute
         url = https://github.com/ESCOMP/mizuRoute
         fxDONOTUSEurl = https://github.com/ESCOMP/mizuRoute
         fxrequired = ToplevelRequired
@@ -144,6 +144,13 @@
         fxDONOTUSEurl = https://github.com/ESMCI/mpi-serial
         fxtag = MPIserial_2.5.4
         fxrequired = ToplevelRequired
+
+[submodule "tuv-x"]
+	path = libraries/tuv-x
+	url = https://github.com/NCAR/tuv-x.git
+	fxDONOTUSEurl = https://github.com/NCAR/tuv-x.git
+	fxrequired = ToplevelRequired
+	fxtag = v0.14.3
 
 [submodule "pysect"]
         path = tools/statistical_ensemble_test/pyCECT
