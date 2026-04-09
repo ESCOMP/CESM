@@ -57,7 +57,16 @@ def printlog(msg, **kwargs):
 
 
 def find_upwards(root_dir, filename):
-    """Find a file in root dir or any of it's parents"""
+    """
+    Find a file in root dir or any of its parents.
+
+    >>> import tempfile, os
+    >>> with tempfile.TemporaryDirectory() as tmp:
+    ...     f = os.path.join(tmp, 'testfile.txt')
+    ...     open(f, 'w').close()
+    ...     find_upwards(tmp, 'testfile.txt').name == 'testfile.txt'
+    True
+    """
     d = Path(root_dir)
     root = Path(d.root)
     while d != root:
@@ -69,18 +78,8 @@ def find_upwards(root_dir, filename):
 
 
 def last_n_lines(the_string, n_lines, truncation_message=None):
-    """Returns the last n lines of the given string
-
-    Args:
-        the_string: str
-        n_lines: int
-        truncation_message: str, optional
-
-    Returns a string containing the last n lines of the_string
-
-    If truncation_message is provided, the returned string begins with
-    the given message if and only if the string is greater than n lines
-    to begin with.
+    """
+    Returns the last n lines of the given string.
     """
 
     lines = the_string.splitlines(True)
@@ -97,18 +96,12 @@ def last_n_lines(the_string, n_lines, truncation_message=None):
 
 
 def indent_string(the_string, indent_level):
-    """Indents the given string by a given number of spaces
-
-    Args:
-       the_string: str
-       indent_level: int
-
-    Returns a new string that is the same as the_string, except that
-    each line is indented by 'indent_level' spaces.
-
-    In python3, this can be done with textwrap.indent.
     """
+    Indents the given string by a given number of spaces.
 
+    >>> indent_string('a\\nb', 2)
+    '  a\\n  b'
+    """
     lines = the_string.splitlines(True)
     padding = " " * indent_level
     lines_indented = [padding + line for line in lines]
@@ -307,9 +300,8 @@ def execute_subprocess(commands, status_to_caller=False, output_to_caller=False)
         # simple status check. If returning, it is the callers
         # responsibility determine if an error occurred and handle it
         # appropriately.
-        msg_context = (
-            "Process did not run successfully; "
-            "returned status {0}".format(error.returncode)
+        msg_context = "Process did not run successfully; " "returned status {0}".format(
+            error.returncode
         )
         msg = failed_command_msg(msg_context, commands, output=error.output)
         if not return_to_caller:

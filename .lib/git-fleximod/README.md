@@ -25,7 +25,7 @@ Git-fleximod is a Python-based tool that extends Git's submodule and sparse chec
 
 ## Supported .gitmodules Variables
 
-    fxtag: Specify a specific tag or branch to checkout for a submodule.
+    fxtag: Specify a specific tag or hash to checkout for a submodule.  Branches are not acceptable.
     fxrequired: Mark a submodule's checkout behavior, with allowed values:
       - ToplevelRequired: Top-level and required (checked out only when this is the Toplevel module).
       - ToplevelOptional: Top-level and optional (checked out with --optional flag if this is the Toplevel module).

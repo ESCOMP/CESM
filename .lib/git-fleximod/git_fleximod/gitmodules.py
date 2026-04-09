@@ -1,4 +1,4 @@
-import shutil, os
+# git_fleximod/gitmodules.py
 from pathlib import Path
 from configparser import RawConfigParser, ConfigParser
 from .lstripreader import LstripReader
@@ -26,19 +26,18 @@ class GitModules(RawConfigParser):
             )
         )
         super().__init__()
-        self.conf_file = (Path(confpath) / Path(conffile))
+        self.conf_file = Path(confpath) / Path(conffile)
         if self.conf_file.exists():
             self.read_file(LstripReader(str(self.conf_file)), source=conffile)
         self.includelist = includelist
         self.excludelist = excludelist
         self.isdirty = False
-        
+
     def reload(self):
         self.clear()
         if self.conf_file.exists():
             self.read_file(LstripReader(str(self.conf_file)), source=self.conf_file)
 
-        
     def set(self, name, option, value):
         """
         Sets a configuration value for a specific submodule:
@@ -74,7 +73,7 @@ class GitModules(RawConfigParser):
             with open(self.conf_file, "w") as fd:
                 self.write(fd)
         self.isdirty = False
-        
+
     def __del__(self):
         self.save()
 
