@@ -73,6 +73,25 @@
       <option name="wallclock"> 02:00:00 </option>
     </options>
   </test>
+  <!-- DART Low-res BHIST tests.  Needs additional testmods -->
+  <test name="ERI" grid="ne3pg3_ne3pg3_t232" compset="BHISTC_LT_DART" testmods="allactive/DART_lowres,
+    components/mom/cime_config/testdefs/testmods_dirs/mom/tx10deg">
+    <machines>
+      <machine name="derecho" compiler="intel" />
+    </machines>
+    <options>
+      <option name="wallclock"> 03:00:00 </option>
+    </options>
+  </test>
+  <test name="MCC" grid="ne3pg3_ne3pg3_t232" compset="BHISTC_LT_DART" testmods="allactive/DART_lowres,
+    components/mom/cime_config/testdefs/testmods_dirs/mom/tx10deg">
+    <machines>
+      <machine name="derecho" compiler="intel" />
+    </machines>
+    <options>
+      <option name="wallclock"> 02:00:00 </option>
+    </options>
+  </test>
   <test name="SMS_Ld2" grid="ne30pg3_t232" compset="B1850C_LTso" testmods="allactive/defaultio">
     <machines>
       <machine name="derecho" compiler="intel" category="aux_cime_baselines"/>
