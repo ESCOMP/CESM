@@ -1,4 +1,117 @@
 ==============================================================
+Tag name: cesm3_0_beta08
+Originator(s): CSEG
+Date: 2nd April 2026
+One-line Summary: CESM3 spin-up run updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.79  
+cime                                   https://github.com/ESMCI/cime/tree/cime6.1.169                       
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_250428               
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.19                
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_161                             
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.027                      
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_6           
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260121                   
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_013         
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.93                     
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.42                     
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.19                  
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.0.1        
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                           
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            
+
+Answer Changes introduced with this tag when compared to cesm0_0_beta07:
+CCS_CONFIG:
+    - Update environment on Derecho.
+
+CAM
+    - Aerosol hygroscopicity update.
+    - Update LBC file for CAM7 runs.
+    - Leung 2023 dust cycle updates.
+    - Provide bug fix for moving mountains.
+    - Aerosol optics interfaces for bulk and volcanic aerosols.
+    - Bring in shr_reprosum fixes from E3SM, CAM-FV cases.
+    - MT and LT ne16pg3 namelist defaults for dycore and inic.
+    - Fix MAM4 mapping for SO4 in default configuration, GEOS-Chem only.
+    - Fix FV frontogenesis bug.
+    - Include chemical heating in mid-top configurations.
+    - Tuning changes for the spin-up run.
+    - Fixes to prescribed volcanic aerosols.
+    - Namelist out of the box for the spin-up.
+
+CTSM:
+    - Tuning for Li fire model.
+    - Update crop calendar inputs.
+    - Change snow_thermal_cond_glc_method back to Sturm1997.
+    - Fix for RRTMGP.
+    - Updated parameter file.
+    - Use CMIP7 Carbon Isotope datasets.
+    - Minor version update with new surface/landuse.timeseries datasets.
+    - CMIP7 population density.
+    - Change defaults for C13/C14 and irrigate for clm6_0.
+    - Turn off LW downscaling for glaciers for clm6_0 physics.
+    - New parmfile and finidat files for clm6_0 physics.
+    - FATES: Update default paramfile and add namelist option.
+    - New clm6_0 parameter file.
+    - Adjustments to some fire settings for coupled cases.
+    - New IC files.
+    - Fix an excess ice issue for a few gridcells.
+    - New Initial Conditions for ne30 that patch the Greeenland snow hole.
+    - Update to C14 Carbon isotope data.
+    - Fix for C-balance error that manifested in B-cases with pft 67.
+    - Change for baresoil so that dew doesn't form.
+    - Account for soil being oversaturated and move water upward.
+    - Update rice parameters for Clm60 compsets.
+    - FATES parameter files.
+    - Update crop parameters and maturity requirements for Clm60BgcCrop compsets.
+    - Namelist default changes mainly for clm6_0.
+    - Correct parameter file for coupled.
+    - n_melt_glcmec is now 1. (rather than 10.).
+    - Some corrections to finidat file picking.
+
+CICE
+    - Turns on FSD in CICE.
+    - Reduce default r_snw from 1.25 to 1.00.
+    - This sets a minimum mass and area for the thermodynamics to remove tiny ice areas.
+    - This changes the initialization of tracers by default for hybrid runs.
+
+CISM
+    - Wide range of changes.
+
+CDEPS
+    - Bring in NorESM changes, G_JRA_RYF answer changes.
+    - Sa_o3 bug fix and when DATM_PRES_CO2 is used
+
+CMEPS
+    - Roundoff-level mods of prep_glc_map_lnd2glc for active CISM and DGLC that crosses a year boundary
+
+
+Problems identified after tag creation:
+Multiple gnu build issues on derecho.
+     https://github.com/ESCOMP/CAM/issues/1519
+     https://github.com/ESCOMP/CAM/issues/1512
+FAIL DIMCSL_Ld1.TL319_t232.G_JRA.derecho_intel.mom-cfc_mods RUN time=7259
+    Possible issue with slow derecho disk IO.
+FAIL ERP_Ln9.f09_f09_mg17.FCnudged_GC.derecho_intel.cam-outfrq9s COMPARE_base_rest
+FAIL ERS.TL319_t232_wg37.GW_JRA.derecho_intel COMPARE_base_rest
+FAIL SSPMATRIXCN_Ly5_Mmpi-serial.1x1_numaIA.I2000Clm60BgcCropQianRs.derecho_intel.clm-ciso_monthly RUN time=3682
+FAIL ERR_Ld5.ne30pg3_t232.BLT1850.derecho_gnu.allactive-defaultio TPUTCOMP Could not get default throughput
+     med.log not being saved to baselines
+FAIL LILACSMOKE_D_Ld2.f10_f10_mg37.I2000Ctsm50NwpSpAsRs.derecho_intel.clm-lilac MODEL_BUILD time=0
+     Only works with ctsm stand alone clone.
+FAIL ERP_D_Ln9.C48_C48_mg17.QPC6.derecho_intel.cam-outfrq9s SHAREDLIB_BUILD failed to initialize
+		Issue with FMS version support between cam and mom
+FAIL PET_PM.ne30pg3_t232.BMT1850.derecho_gnu.allactive-defaultiomi RUN time=329
+FAIL PET_PM.ne30pg3_t232.BMT1850.derecho_intel.allactive-defaultiomi RUN time=301
+		Issue with MOM openmp support
+PEND MKSURFDATAESMF_P128x1.f10_f10_mg37.I1850Clm50BgcCrop.derecho_intel SHAREDLIB_BUILD RERUN
+		Issue with special enviroment being needed
+
+==============================================================
 Tag name: cesm3_0_alpha08o
 Originator(s): CSEG
 Date: 27th Mar 2026
