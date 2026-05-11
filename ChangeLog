@@ -43,6 +43,13 @@ cdeps
 
 
 cice
+    Chris Fischer 2026-05-11 - cesm3_cice6_6_3_15 - components/cice (cesm3_0_alpha09a)
+    https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_6_3_15
+
+    cesm3_cice6_6_3_15: Turn off halo masking for prescribed cases
+    cesm3_cice6_6_3_14: Added CESM3 CICE users guide
+    cesm3_cice6_6_3_13: Fix snwredist option
+
     David Bailey 2026-04-28 - cesm3_cice6_6_3_12 - components/cice (cesm3_0_alpha09a)
     https://github.com/ESCOMP/CESM_CICE/tags/cesm3_cice6_6_3_13
 
