@@ -10,7 +10,7 @@ components/fms                         https://github.com/ESCOMP/FMS_interface/t
 share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.19                --
 components/cam                         https://github.com/ESCOMP/CAM/cam6_4_161                             --
 components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.027                      --
-components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_12          **
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_15          **
 components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260506                    **
 components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_013         --
 components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.94                     **
