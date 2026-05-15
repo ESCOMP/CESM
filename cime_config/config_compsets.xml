@@ -144,7 +144,9 @@
 <!--     <science_support grid="f09_g17"/> -->
 <!--   </compset> -->
   <compset>
-    <alias>BCSSPGENcmip6_slh</alias>
+<!-- CESM2-SLH: Original fully-coupled compset was called BCSSPGENcmip6_slh and renamed to BCHIST_slh for consistency with GMD (rpf) --> 
+<!--     <alias>BCSSPGENcmip6_slh</alias> -->
+    <alias>BCHIST_slh</alias>
 <!--     <lname>SSPGEN_CAM60_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname> -->
     <lname>SSPGEN_CAM60%CCTS1SLH_CLM50%BGC-CROP-CMIP6DECK_CICE%CMIP6_POP2%ECO%ABIO-DIC_MOSART_CISM2%NOEVOLVE_WW3_BGC%BDRD</lname>
     <science_support grid="f09_g17_gl4"/>
