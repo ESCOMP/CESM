@@ -87,7 +87,9 @@
 <!--     <lname>SSP245_CAM60%WCTSSLH_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname> -->
 <!--   </compset> -->
   <compset>
-    <alias>BWSSPGENcmip6_slh</alias>
+<!-- CESM2-SLH: Original fully-coupled compset was called BWSSPGENcmip6_slh and renamed to BWHIST_slh for consistency with GMD (rpf) --> 
+<!--     <alias>BWSSPGENcmip6_slh</alias> -->
+    <alias>BWHIST_slh</alias>
     <lname>SSPGEN_CAM60%WCTSSLH_CLM50%BGC-CROP-CMIP6WACCMDECK_CICE%CMIP6_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname>
 <!--     <lname>SSPGEN_CAM60%WCTSSLH_CLM50%BGC-CROP_CICE_POP2%ECO%NDEP_MOSART_CISM2%NOEVOLVE_WW3</lname> -->
   </compset>
