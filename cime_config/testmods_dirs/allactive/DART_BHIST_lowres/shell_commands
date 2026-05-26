@@ -1,0 +1,7 @@
+driver=`./xmlquery --value COMP_INTERFACE`
+if [ "$driver" = "nuopc" ]; then
+  ./xmlchange GLC_NCPL=4
+fi
+
+./xmlchange JOB_PRIORITY=premium
+./xmlchange MAX_TASKS_PER_NODE=120

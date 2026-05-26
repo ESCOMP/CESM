@@ -1,0 +1,62 @@
+If the coarse resolution (ne3pg3_ne3pg3_t232) is used in a BHIST MCC test,
+then the number of instances and MAX_TASKS_PER_NODE must be chosen 
+in a way that's consistent with how cime set the PE layout.
+
+1) MOM6 coarse resolution is limited (2026-3) to 6 tasks.
+   The SE dycore is limited to 6 x ne^2 tasks,
+   so the ne3 grid could be given up to 54 tasks.
+   drv-tx10deg/shell_commands:ROOTPE_OCN assumes that only 6 will be given
+   to the other components, and then 6 to ocn, so tasks_per_inst = 12.
+   If more tasks are given to the other components,
+   then ROOTPE_OCN must be changed to that number.
+2) If tasks_per_inst = 12, NINST <=10, and there are 128 PEs/node,
+   then the job will fit in 1 node and be run in derecho's develop queue.
+   The default PE layout will work.
+   You can stop here.
+   For NINST > 10 the job requires multiple nodes and the default layout 
+   does not work because at least one instance will be split onto 2 nodes.
+   During testing these jobs never finished, despite trying their best.
+3) The minimum number of nodes required 
+   min_nodes = int[(NINST * tasks_per_inst) / PEs_per_node] +1.
+   For NINST = 14 on derecho (128 PEs/node), 
+   min_nodes = 2
+4) Cime calculates PEs/instance from 
+   PEs_per_inst = (PEs_per_node * min_nodes) / NINST 
+                = 17
+5) Whole instances must be assigned to each node.
+   That is, no instance can be split between 2 nodes.
+   In this example, put 
+   NINST_per_node = int(NINST / min_nodes)
+                  = 7 instances 
+   on each node by setting 
+   MAX_TASKS_PER_NODE = NINST_per_node * PEs_per_inst 
+                      = 7 * 17 = 119.
+   in ./shell_commands.
+6) If your chosen NINST doesn't divide evenly by min_nodes,
+   then there will be "left over" instances after NINST_per_node * min_nodes
+   instances have been distributed.
+   They might fit into the last node.
+   If they don't, you'll need to add a node to the job request.
+   Alternatively, change NINST by a small number to make it divisible and try again, 
+   starting at 3).
+7) Use NINST in the test modifier _C{NINST} of the test name
+
+Assuming each instance gets 6 tasks for ocn and 6 for the other components:
+NINST = 15; 
+  min_nodes = [15 * 12 / 128] + 1 = 2
+  PEs_per_inst = 128 * 2 / 15 = 17
+  NINST_per_node = int(15 / 2) = 7   with 1 instance left over
+> MAX_TASKS_PER_NODE = 7 * 17 = 119  
+  128 - 119 = 9 PEs are available in the last node, 
+  which is not enough for the leftover instance, so an additional node is needed.
+NINST = 40; 
+  min_nodes = 40 * 12 / 128 = 4
+  PEs_per_inst = 128 * 4 / 40 = 12
+  NINST_per_node = 40 / 4 = 10
+> MAX_TASKS_PER_NODE = 10 * 12 = 120
+NINST = 80;
+  min_nodes = 80 * 12 / 128 = 8
+  PEs_per_inst = 128 * 8 / 80 = 12
+  NINST_per_node = 80 / 8 = 10
+> MAX_TASKS_PER_NODE = 10 * 12 = 120
+  
