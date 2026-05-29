@@ -1,3 +1,181 @@
+--============================================================
+Tag name: cesm3_0_alpha09c
+Originator(s): CSEG
+Date: 29th May 2026
+One-line Summary: CTSM updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.83  --
+cime                                   https://github.com/ESMCI/cime/tree/cime6.2.2                         **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.20                --
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_173                             --
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.042                      **
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_15          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260506                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_015         **
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.96                     **
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.48                     --
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.19                  --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.1.1        **
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_7_0                     **
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            --
+
+cdeps
+    Erik Kluzek 2026-05-28 - cdeps1.0.96 - components/cdeps (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.96
+
+    cdeps1.0.96: Temporarily remove datm cplhist test
+    cdeps1.0.95: Fix problems from cdeps1.0.94 (move files from scratch)
+
+
+cime
+    Erik Kluzek 2026-05-28 - cime6.2.2 - cime (cesm3_0_alpha09c)
+    https://github.com/ESMCI/cime/tags/cime6.2.2
+
+    cime6.2.2: Improve cdash description
+    cime6.2.1: Fix safe_copy
+
+
+cism
+    Kate Thayer-Calder 2026-05-22 - cismwrap_2_2_015 - components/cism (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_2_2_015
+
+    Add support for the ERP (exact restart with changing processor counts) test in CISM.
+    Causes answer changes in any compset that includes active CISM
+    (not for DGLC, SGLC or CISM-noevolve)
+
+
+clm
+    Samuel Levis 2026-05-23 - ctsm5.4.042 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.042
+
+    hillslope_fsat_equals_zero was intended to be .true. for use_hillslope = .true.
+    but was coming back false:
+    - First because of the lack of this line in CLMBuildNamelist.pm:
+      $nl_flags->{'use_hillslope'} = $nl->get_value('use_hillslope');
+    - And since ctsm5.4.040 due to the placement of said line in
+    sub setup_logic_params_file, which is called after sub setup_logic_hillslope
+
+    Here I moved that line into sub setup_logic_hillslope,
+    which fixes the problem without breaking anything else.
+    Answers change more than roundoff for hillslope hydrology cases.
+
+
+    Sam Rabin 2026-05-22 - ctsm5.4.041 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.041
+
+    Mostly docs updates; some tools cleanup.
+
+
+    Samuel Levis 2026-05-20 - ctsm5.4.040 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.040
+
+    Update CLM6 paramfiles for uncoupled and coupled cases, plus add new paramfile for hillslope hydrology cases.
+
+    Answers change in CLM6 cases.
+
+
+    Samuel Levis 2026-05-14 - ctsm5.4.039 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.039
+
+    Add FATES namelist option to initialize cohorts with diameter at breast height (DBH).
+    The new option is default off, so answers are b4b relative to the baseline.
+
+
+    Samuel Levis 2026-05-14 - ctsm5.4.038 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.038
+
+    Documentation updates.
+
+
+    Sam Rabin 2026-05-06 - ctsm5.4.037 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.037
+
+    Fix for FATES year-boundary restart issue
+
+
+    Sam Rabin 2026-05-06 - ctsm5.4.036 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.036
+
+    Fates CN capability
+
+
+    Erik Kluzek 2026-04-26 - ctsm5.4.035 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.035
+
+    Merge b4b-dev to master
+
+    Update submodules
+    Documentation updates
+    Don't allow irrigate to be on with FATES
+
+
+    Adrianna Foster 2026-04-22 - ctsm5.4.034 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.034
+
+    bug fix to the FATES land use driver input code
+    only changes answers for FATES land use runs
+
+
+    Erik Kluzek 2026-04-17 - ctsm5.4.033 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.033
+
+    FATES update fixing some failing LUH2 tests
+
+    Changes answers only for FATES tests
+
+
+    Sam Rabin 2026-04-10 - ctsm5.4.032 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.032
+
+    Simplify messaging during docs build
+
+
+    Sam Rabin 2026-04-10 - ctsm5.4.031 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.031
+
+    Merge various bit-for-bit identical changes
+
+
+    Sam Rabin 2026-04-07 - ctsm5.4.030 - components/clm (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/ctsm/tags/ctsm5.4.030
+
+    Add a FATES namelist option for land use transition logic
+
+
+mizuRoute
+    Erik Kluzek 2026-04-15 - v3.1.1 - components/mizuroute (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/mizuRoute/tags/v3.1.1
+
+    Fix some nag compiler issues
+    Flood volume correction
+    Turn flood mode off by default
+
+
+    Erik Kluzek 2026-03-16 - v3.1.0 - components/mizuroute (cesm3_0_alpha09c)
+    https://github.com/ESCOMP/mizuRoute/tags/v3.1.0
+
+    Important updates for running correctly for fully coupled cases
+    Documentation updates
+    Some changes to answers with science bug-fixes
+    Refactoring for tracers
+    Several bug fixes
+
+
+ParallelIO
+    Erik Kluzek 2026-05-29 - pio2_7_0 - libraries/parallelio (cesm3_0_alpha09c)
+    https://github.com/NCAR/ParallelIO/tags/pio2_7_0
+
+    pio2_7_0: Update to new release
+    pio2_6_10: Add parallel GDAL read, update build
+    pio2_6_9: Build updates
+
+
 ==============================================================
 Tag name: cesm3_0_alpha09b
 Originator(s): CSEG
