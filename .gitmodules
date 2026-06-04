@@ -136,7 +136,7 @@
         url = https://github.com/NCAR/ParallelIO
         fxDONOTUSEurl = https://github.com/NCAR/ParallelIO
         fxrequired = ToplevelRequired
-        fxtag = pio2_7_0
+        fxtag = pio2_6_8
 
 [submodule "mpi-serial"]
         path = libraries/mpi-serial

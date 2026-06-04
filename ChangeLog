@@ -19,7 +19,7 @@ components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0
 components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.0.19                  --
 components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.1.1        **
 components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
-libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_7_0                     **
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
 libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
 libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
 tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
@@ -165,15 +165,6 @@ mizuRoute
     Some changes to answers with science bug-fixes
     Refactoring for tracers
     Several bug fixes
-
-
-ParallelIO
-    Erik Kluzek 2026-05-29 - pio2_7_0 - libraries/parallelio (cesm3_0_alpha09c)
-    https://github.com/NCAR/ParallelIO/tags/pio2_7_0
-
-    pio2_7_0: Update to new release
-    pio2_6_10: Add parallel GDAL read, update build
-    pio2_6_9: Build updates
 
 
 ==============================================================
