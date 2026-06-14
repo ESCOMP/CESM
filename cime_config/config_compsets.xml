@@ -40,41 +40,41 @@
 
   <compset>
     <alias>B1850C_MTt4s</alias>
-    <lname>1850C_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
   <compset>
     <alias>B1850CM</alias>
-    <lname>1850C_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>B1850C_MTso</alias>
-    <lname>1850C_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>BHISTC_MTso</alias>
-    <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HIST_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>BHISTC_MTt4s</alias>
-    <lname>HISTC_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HIST_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>BHISTCM</alias>
-    <lname>HISTC_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HIST_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>BHISTC_MTso</alias>
-    <lname>HISTC_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HIST_CAM70%MT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 <!--  Not yet available in cam component
   <compset>
     <alias>B1850C_WAt4ma</alias>
-    <lname>1850C_CAM70%HT%CT4MA_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM70%HT%CT4MA_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
@@ -84,39 +84,39 @@
 -->
   <compset>
     <alias>B1850C_LTso</alias>
-    <lname>1850C_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <compset>
     <alias>BHISTC_LTso</alias>
-    <lname>HISTC_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HIST_CAM70%LT_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
   </compset>
 
   <!-- BHIST_LTso, except: WW3 can't handle multi-instance (2026-3), 
        CROP doesn't work in this context. -->
   <compset>
     <alias>BHISTC_LT_DART</alias>
-    <lname>HISTC_CAM70%LT_CLM60%BGC_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
+    <lname>HIST_CAM70%LT_CLM60%BGC_CICE_MOM6_MOSART_DGLC%NOEVOLVE_SWAV</lname>
   </compset>
 
   <!-- Emissions driven compsets for CESM3 -->
 
   <compset>
     <alias>B1850E_MTt4s</alias>
-    <lname>1850E_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3_BGC%BPRP</lname>
   </compset>
   <compset>
     <alias>B1850EM</alias>
-    <lname>1850E_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>1850_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3_BGC%BPRP</lname>
   </compset>
   
   <compset>
     <alias>BHISTE_MTt4s</alias>
-    <lname>HISTE_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HIST_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3_BGC%BPRP</lname>
   </compset>
   <compset>
     <alias>BHISTEM</alias>
-    <lname>HISTE_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3</lname>
+    <lname>HIST_CAM70%MT%CT4S2_CLM60%BGC-CROP_CICE_MOM6_MOSART_DGLC%NOEVOLVE_WW3_BGC%BPRP</lname>
   </compset>
 
   <!-- SOM compsets -->
@@ -134,12 +134,12 @@
   <entries>
     <entry id="RUN_STARTDATE">
       <values>
-	<value compset="1850[CE]?_"     >0001-01-01</value>
-	<value compset="2000[CE]?_"     >0001-01-01</value>
-	<value compset="HIST[CE]?_"     >1850-01-01</value>
-	<value compset="5505[CE]?_"     >1955-01-01</value>
-	<value compset="RCP[2468][CE]?_">2005-01-01</value>
-	<value compset="2013[CE]?_"     >2013-01-01</value>
+	<value compset="1850_"     >0001-01-01</value>
+	<value compset="2000_"     >0001-01-01</value>
+	<value compset="HIST_"     >1850-01-01</value>
+	<value compset="5505_"     >1955-01-01</value>
+	<value compset="RCP[2468]_">2005-01-01</value>
+	<value compset="2013_"     >2013-01-01</value>
       </values>
     </entry>
     <entry id="LND_SETS_DUST_EMIS_DRV_FLDS">
