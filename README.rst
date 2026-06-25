@@ -16,6 +16,7 @@ be coordinated through CSEG at NCAR.
 
 This repository is also connected to slack at http://cesm2.slack.com
 
+
 **Current CESM releases**
 
 ``CESM2.1.5``: Current CESM production release. 
@@ -25,6 +26,7 @@ This repository is also connected to slack at http://cesm2.slack.com
 The ``CESM2.2.z`` release is not a scientifically supported version; that is, we do not have any long simulations with this model version yet. In most cases, users should continue to use the ``CESM2.1.z`` series for their science and especially for CMIP6-related simulations.
 
 Visit the `CESM Models Website <https://www.cesm.ucar.edu/models>`__ for more information.
+
 
 .. sectnum::
 
