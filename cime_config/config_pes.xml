@@ -346,6 +346,45 @@
       </pes>
     </mach>
   </grid>
+  <grid name="a%ne16np4.pg3_l%ne16np4.pg3_oi%tx2_0v1">
+    <mach name="derecho">
+      <pes pesize="M" compset="CAM.*%LT.*MOM6(?!.*%MARBL-BIO)">
+	<comment></comment>
+	<ntasks>
+	  <ntasks_atm>896</ntasks_atm>
+	  <ntasks_lnd>128</ntasks_lnd>
+	  <ntasks_rof>128</ntasks_rof>
+	  <ntasks_ice>256</ntasks_ice>
+	  <ntasks_ocn>640</ntasks_ocn>
+	  <ntasks_glc>64</ntasks_glc>
+	  <ntasks_wav>64</ntasks_wav>
+	  <ntasks_cpl>896</ntasks_cpl>
+	</ntasks>
+	<nthrds>
+	  <nthrds_atm>1</nthrds_atm>
+	  <nthrds_lnd>1</nthrds_lnd>
+	  <nthrds_rof>1</nthrds_rof>
+	  <nthrds_ice>1</nthrds_ice>
+	  <nthrds_ocn>1</nthrds_ocn>
+	  <nthrds_glc>1</nthrds_glc>
+	  <nthrds_wav>1</nthrds_wav>
+	  <nthrds_cpl>1</nthrds_cpl>
+	</nthrds>
+	<rootpe>
+	  <rootpe_atm>0</rootpe_atm>
+	  <rootpe_lnd>0</rootpe_lnd>
+	  <rootpe_rof>128</rootpe_rof>
+	  <rootpe_ice>256</rootpe_ice>
+	  <rootpe_ocn>896</rootpe_ocn>
+	  <rootpe_glc>576</rootpe_glc>
+	  <rootpe_wav>512</rootpe_wav>
+	  <rootpe_cpl>0</rootpe_cpl>
+	</rootpe>
+      </pes>
+    </mach>
+  </grid>
+
+
 
   <!-- J compset (all active except data atmosphere)
        Laid out as follows:
