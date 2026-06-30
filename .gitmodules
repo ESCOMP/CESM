@@ -30,7 +30,7 @@
         path = ccs_config
         url = https://github.com/ESMCI/ccs_config_cesm.git
         fxDONOTUSEurl = https://github.com/ESMCI/ccs_config_cesm.git
-	fxtag = ccs_config_cesm1.0.83
+	fxtag = ccs_config_cesm1.0.85
         fxrequired = ToplevelRequired
 
 [submodule "cime"]
@@ -73,14 +73,14 @@
         url = https://github.com/ESCOMP/CESM_CICE
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_CICE
         fxrequired = ToplevelRequired
-        fxtag = cesm3_cice6_6_3_15
+        fxtag = cesm3_cice6_6_3_16
 
 [submodule "mom"]
         path = components/mom
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_260506
+        fxtag = mi_260625
 
 [submodule "cism"]
         path = components/cism
@@ -114,7 +114,7 @@
         path = components/ww3
         url = https://github.com/ESCOMP/WW3_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/WW3_interface
-        fxtag = main_0.0.19
+        fxtag = main_0.1.0
         fxrequired = ToplevelRequired
 
 [submodule "mizuroute"]
