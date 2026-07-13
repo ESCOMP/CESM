@@ -1,4 +1,184 @@
 --============================================================
+Tag name: cesm3_0_alpha09e
+Originator(s): CSEG
+Date: 13th July 2026
+One-line Summary: CAM updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.87  **
+cime                                   https://github.com/ESMCI/cime/tree/cime6.4.0                         **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.21                **
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_186                             **
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.042                      --
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_16          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260626                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_015         --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.100                    **
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.53                     **
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.1.0                   --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.1.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            --
+
+cam
+    Cheryl Craig 2026-07-06 - cam6_4_186 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_186
+
+    Steve Goldhaber's PR
+
+    Do not create two CO2 tracers
+
+
+    Francis Vitt 2026-06-29 - cam6_4_185 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_185
+
+    Fix wator vapor upper boundary bug
+
+
+    Haipeng Lin 2026-06-23 - cam6_4_184 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_184
+
+    Complete CCPPization of Beljaars orographic form drag scheme; cleanup
+
+
+    Haipeng Lin 2026-06-22 - cam6_4_183 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_183
+
+    Complete CCPPization of cloud fraction for two-moment microphys (cldfrc2m) and extend Derecho CARMA test
+
+
+    Haipeng Lin 2026-06-22 - cam6_4_182 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_182
+
+    For Francis Vitt
+
+    Updates to CAM build of TUV-X lib
+
+
+    Cheryl Craig 2026-06-11 - cam6_4_181 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_181
+
+    Modified config_archive.xml to archive CAM+DART files
+
+
+    Cheryl Craig 2026-06-11 - cam6_4_180 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_180
+
+    For Francis Vitt
+
+    Analytic initial conditions water species
+
+
+    Haipeng Lin 2026-06-02 - cam6_4_179 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_179
+
+    Update atmos_phys to atmos_phys0_22_003
+
+    Allow moving mountain gravity wave parameterization to run with deep convection disabled
+
+
+    Haipeng Lin 2026-06-01 - cam6_4_178 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_178
+
+    Update atmos_phys to atmos_phys0_22_001
+
+
+    Haipeng Lin 2026-06-01 - cam6_4_177 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_177
+
+    For Francis Vitt:
+
+    Generalize cloud chemistry
+
+
+    Cheryl Craig 2026-05-28 - cam6_4_176 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_176
+
+    COSP-RTTOV integration with CAM
+
+
+    Haipeng Lin 2026-05-22 - cam6_4_175 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_175
+
+    Complete CCPPization of CAM5 UW (diag_TKE) PBL scheme; cleanup to vertical_diffusion_tend
+
+
+    Haipeng Lin 2026-05-22 - cam6_4_174 - components/cam (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CAM/tags/cam6_4_174
+
+    For Kuan-Chih Wang:
+
+    Update MPAS dynamical core to version 8.4.0
+
+
+ccs_config
+    Chris Fischer 2026-07-13 - ccs_config_cesm1.0.87 - ccs_config (cesm3_0_alpha09e)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.87
+
+    Remove tutorial queue.
+
+
+    Chris Fischer 2026-07-13 - ccs_config_cesm1.0.86 - ccs_config (cesm3_0_alpha09e)
+    https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.86
+
+    Add support for the GloFAS runoff grid
+
+
+cdeps
+    Chris Fischer 2026-07-13 - cdeps1.0.100 - components/cdeps (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.100
+
+    cdeps1.0.100: Reduce the memory usage that is important for ne1024 simulation
+    cdeps1.0.99 : Fix cplhist test
+    cdeps1.0.98 : Add glofas
+    cdeps1.0.97 : Support JRA55do in datm
+
+
+cime
+    Chris Fischer 2026-07-13 - cime6.3.3 - cime (cesm3_0_alpha09e)
+    https://github.com/ESMCI/cime/tags/cime6.3.3
+
+    cime6.4.0 : Refactor core foundation
+    cime6.3.12: Add wait_for_tests to the list of linked Tools
+    cime6.3.11: docs: remove model-specific references from documentation
+    cime6.3.10: Much better support for ninja cmake backend
+    cime6.3.9 : Do NOT auto-pass first job
+    cime6.3.8 : For batched builds, use the whole node 
+    cime6.3.7 : Fix get_ts_synopsis catch-all triggered by bless trailer after PASS
+    cime6.3.6 : Fuse the build phase for batched builds.
+    cime6.3.5 : For share-exe test suites, allow specification of which case to use 
+    cime6.3.4 : Add ability to offload CIME builds to batch system
+    cime6.3.3 : A couple minor fixes.
+    cime6.3.2 : CIME DART testing
+    cime6.3.1 : Remove Perl XML dependency (replacing with Lite)
+    cime6.3.0 : add --driver option to jenkins_generic_job
+     
+
+
+cmeps
+    Chris Fischer 2026-07-13 - cmeps1.1.53 - src/drivers/nuopc/ (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.53
+
+    cmeps1.1.53: Improve error message for problematic multi-instance PE layouts
+    cmeps1.1.52: Reduce the memory usage that is important for ne1024 simulation
+                 Answer changes for lnd2rof mapping file.  Not used in typical cases.
+    cmeps1.1.51: Fix two unitialized variables found w/ valgrind
+    cmeps1.1.50: Fix for DGLC with SLND
+    cmeps1.1.49: Sync w/ latest UFS changes
+
+
+share
+    Chris Fischer 2026-07-13 - share1.1.21 - share (cesm3_0_alpha09e)
+    https://github.com/ESCOMP/CESM_share/tags/share1.1.21
+
+    Allow skipping checks of certain tracer variables
+
+--============================================================
 Tag name: cesm3_0_alpha09d
 Originator(s): CSEG
 Date: 26th June 2026
