@@ -1,4 +1,4 @@
---============================================================
+============================================================
 Tag name: cesm3_0_alpha09e
 Originator(s): CSEG
 Date: 13th July 2026
@@ -7,7 +7,7 @@ One-line Summary: CAM updates
 ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.87  **
 cime                                   https://github.com/ESMCI/cime/tree/cime6.4.0                         **
 components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
-share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.21                **
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.20                --
 components/cam                         https://github.com/ESCOMP/CAM/cam6_4_186                             **
 components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.042                      --
 components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_16          --
@@ -172,13 +172,7 @@ cmeps
     cmeps1.1.49: Sync w/ latest UFS changes
 
 
-share
-    Chris Fischer 2026-07-13 - share1.1.21 - share (cesm3_0_alpha09e)
-    https://github.com/ESCOMP/CESM_share/tags/share1.1.21
-
-    Allow skipping checks of certain tracer variables
-
---============================================================
+============================================================
 Tag name: cesm3_0_alpha09d
 Originator(s): CSEG
 Date: 26th June 2026
