@@ -37,7 +37,7 @@
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-	fxtag = cime6.4.0
+	fxtag = cime6.4.1
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -51,7 +51,7 @@
         path = share
         url = https://github.com/ESCOMP/CESM_share
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
-        fxtag = share1.1.20
+        fxtag = share1.1.21
         fxrequired = ToplevelRequired
 
 [submodule "cam"]
@@ -80,7 +80,7 @@
         url = https://github.com/ESCOMP/MOM_interface
         fxDONOTUSEurl = https://github.com/ESCOMP/MOM_interface
         fxrequired = ToplevelRequired
-        fxtag = mi_260625
+        fxtag = mi_260715
 
 [submodule "cism"]
         path = components/cism
@@ -101,7 +101,7 @@
         url = https://github.com/ESCOMP/CMEPS.git
         fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
         fxrequired = ToplevelRequired
-	fxtag = cmeps1.1.53
+	fxtag = cmeps1.1.54
 
 [submodule "rtm"]
         path = components/rtm
