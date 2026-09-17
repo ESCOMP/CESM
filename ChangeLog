@@ -1,4 +1,112 @@
 ============================================================
+Tag name: cesm3_0_alpha10b
+Originator(s): CSEG
+Date: 17th September 2026
+One-line Summary: CTSM updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.91  --
+cime                                   https://github.com/ESMCI/cime/tree/cime6.5.18                        **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.21                --
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_187                             --
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.057                      **
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_22          **
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260909                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_015         --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.109                    **
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.70                     **
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.1.1                   --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.1.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.6.0                            --
+
+cdeps
+Erik Kluzek 2026-02-12 - cdeps1.0.109 - components/cdeps (cesm3_0_alpha10b)
+https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.XXX
+cdeps1.0.109: Update data for DATM%CPLHIST mode
+Also fix some things with ndep, and include new 1850 ndep dataset
+Fix 1850 CO2 dataset to use for CESM for cmip7
+Changes answers: 1850 for NDEP updated to clim_1850_cesm3
+ceps1.0.108: Fix DGLC broadcast issues
+cdeps1.0.107:DROF CPLHIST filename pattern consistent with CMEPS names
+
+
+Depends on: cmeps, ctsm
+
+ctsm5.4.057: applies the changes to CLM compsets
+cmeps1.1.69: that sets CCSM_BGC to CO2A for DATM%CPLHIST
+
+cice
+Michael Levy 2026-09-15 - cesm3_cice6_6_3_22 - components/cice (cesm3_0_alpha10b)
+https://github.com/ESCOMP/CESM_CICE/tags/????
+- bug fixes for wave fracturing
+- includes updated from Consortium main with regional
+boundary conditions
+
+cime
+Chris Fischer 2026-09-17 - cime6.5.18 - cime (cesm3_0_alpha10b)
+https://github.com/ESMCI/cime/tags/cime6.5.18
+cime6.5.18: Fix for ESMF-aware threading ompthread option for threaded CESM runs
+cime6.5.17: Fix GPTL to support 7-digit PIDs and fix some error handling
+cime6.5.16: Fix incorrect finalization of aborted cam_standalone runs
+cime6.5.15: Address PIO build issue.
+cime6.5.14: Add noresm as a model in its own right.
+cime6.5.13: Users should be able to include other macros
+
+
+clm
+Erik Kluzek 2026-09-11 - ctsm5.4.057 - components/clm (cesm3_0_alpha10b)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.057
+Bring in CDEPS and CMEPS updates for CPLHIST
+
+Changes answers for 1850 Clm60 BGC cases and CPLHIST
+cases
+
+Depends on:
+- cdeps1.0.109: Setup DATM_CPLHIST mode for a preliminary case, and ndep for 1850
+- cmeps1.1.69: Set CCSM_BGC for CPLHIST
+
+Erik Kluzek 2026-09-10 - ctsm5.4.056 - components/clm (cesm3_0_alpha10b)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.056
+Bring wetlands branch to master
+
+Changes answers for BGC and FATES compsets
+
+Erik Kluzek 2026-09-02 - ctsm5.4.055 - components/clm (cesm3_0_alpha10b)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.056
+Change dyn_bal for transient cases
+From Bill S.
+Changes answers for transient cases, some 1850 cases, FATES cases
+
+Erik Kluzek 2026-08-25 - ctsm5.4.054 - components/clm (cesm3_0_alpha10b)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.055
+Update submodules to versions in cesm3_0_alpha10a (here)
+
+Uses those tags, but not strictly dependent on them
+
+
+Samuel Levis 2026-08-19 - ctsm5.4.053 - components/clm (cesm3_0_alpha10b)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.053
+Same-climate answer changes (larger than roundoff likely) for PLUMBER2 sites
+that ran previously; sites that didn't run previously, now run.
+
+All else is b4b.
+
+Samuel Levis 2026-08-18 - ctsm5.4.052 - components/clm (cesm3_0_alpha10b)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.052
+Bring b4b-dev to master:
+- Documentation updates
+- Reduce the memory usage that is important for ne1024 simulation PR #4102
+
+Erik Kluzek 2026-08-17 - ctsm5.4.051 - components/clm (cesm3_0_alpha10b)
+
+
+============================================================
 Tag name: cesm3_0_alpha10a
 Originator(s): CSEG
 Date: 10th September 2026
@@ -23,7 +131,7 @@ libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/p
 libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
 libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
 tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
-tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.5.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.6.0                            **
 
 ccs_config
 Chris Fischer 2026-09-10 - ccs_config_cesm1.0.91 - ccs_config (cesm3_0_alpha10a)
