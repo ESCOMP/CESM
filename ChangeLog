@@ -49,6 +49,10 @@ https://github.com/ESCOMP/CESM_CICE/tags/????
 boundary conditions
 
 cime
+Chris Fischer 2026-09-18 - cime6.5.19 - cime (cesm3_0_alpha10b)
+https://github.com/ESMCI/cime/tags/cime6.5.19
+Back out cime5.1.16: Fix incorrect finalization of aborted cam_standalone runs
+
 Chris Fischer 2026-09-17 - cime6.5.18 - cime (cesm3_0_alpha10b)
 https://github.com/ESMCI/cime/tags/cime6.5.18
 cime6.5.18: Fix for ESMF-aware threading ompthread option for threaded CESM runs
