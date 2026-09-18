@@ -5,7 +5,7 @@ Date: 17th September 2026
 One-line Summary: CTSM updates
 
 ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.91  --
-cime                                   https://github.com/ESMCI/cime/tree/cime6.5.18                        **
+cime                                   https://github.com/ESMCI/cime/tree/cime6.5.19                        **
 components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
 share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.21                --
 components/cam                         https://github.com/ESCOMP/CAM/cam6_4_187                             --
