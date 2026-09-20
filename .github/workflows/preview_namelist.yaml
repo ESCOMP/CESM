@@ -17,7 +17,7 @@ jobs:
           - {"compset": "C_JRA", "res": "TL319_t232"}     # ocean only
           - {"compset": "C1850MARBL_JRA", "res": "TL319_t232"}     # ocean only, with BGC
           - {"compset": "DTEST", "res": "TL319_t232"}     # ice only
-          - {"compset": "I1850Clm60SpCru", "res": "f10_f10_mg37"} # land only
+          - {"compset": "I1850Clm60SpCrujra", "res": "f10_f10_mg37"} # land only
           - {"compset": "QPC6HIST", "res": "f09_f09_mg17"} # atm only
           - {"compset": "T1850Gg", "res": "f09_g17_gris4"} # glc only
     steps:
