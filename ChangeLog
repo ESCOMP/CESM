@@ -1,4 +1,139 @@
 ============================================================
+Tag name: cesm3_0_alpha10c
+Originator(s): CSEG
+Date: 21st September 2026
+One-line Summary: CAM updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.91  --
+cime                                   https://github.com/ESMCI/cime/tree/cime6.5.20                        **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.21                --
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_203                             **
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.057                      --
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_22          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260909                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_015         --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.110                    **
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.71                     **
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.1.1                   --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.1.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.6.0                            --
+
+
+cam
+Cheryl Craig 2026-09-01 - cam6_4_201 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_xxx
+For Francis Vitt
+
+AOA1 (Age Of Air Tracers) IC
+
+Cheryl Craig 2026-09-01 - cam6_4_202 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_xxx
+Threading for SE dycore
+
+Cheryl Craig 2026-09-21 - cam6_4_203 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_203
+
+
+New namelist settings for CMIP7  - include new forcing files?
+
+Cheryl Craig 2026-08-31 - cam6_4_200 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_200
+Remove PS noise in SE-CSLAM, WACCM stability and other stuff
+
+Courtney Peverley 2026-08-28 - cam6_4_199 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_199
+Automatic dynamics-splitting defaults to the SE dycore + clean-up
+
+Cheryl Craig 2026-08-26 - cam6_4_198 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_198
+Fix constants that were missing . in _r8 declarations
+
+Haipeng Lin 2026-08-24 - cam6_4_197 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_197
+BAM bugfix (answer-changing BAM only); fix history unit; sync some files to CAM-SIMA abstract interface
+
+Updates CMEPS for nvhpc test to pass again
+
+cmeps1.1.58+ required
+
+Cheryl Craig 2026-08-17 - cam6_4_196 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_196
+Modifications for bringing in PUMAS round3 ccpp'ization
+
+Cheryl Craig 2026-08-17 - cam6_4_195 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_195
+For Francis Vitt
+
+Refactor aerosol surface area densities
+
+Haipeng Lin 2026-08-07 - cam6_4_194 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_194
+Fix crash in ERP_D_Ln9.ne30pg3_ne30pg3_mt232.F1850C_MTso.derecho_intel.cam-outfrq9s after CESM alpha09b
+
+Answer changing for CAM checkout of the F1850C_MTso test.
+
+This test was already failing in CESM alpha09b and alpha09c. This update will make the test run again.
+
+Cheryl Craig 2026-08-06 - cam6_4_193 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_193
+Update externals to match cesm3_0_beta09
+
+Answer changing for CAM checkouts, but not for CESM
+
+Cheryl Craig 2026-08-05 - cam6_4_192 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_192
+Next round of CAM misc updates
+
+Answer changing for GEOS-Chem
+
+Cheryl Craig 2026-08-05 - cam6_4_191 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_191
+For John Truesdale
+
+Add Spectral Nudging Option and Fix Nudging Behavior When FIles Are Missing
+
+Answer changing for Nudging
+
+Cheryl Craig 2026-08-05 - cam6_4_190 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_190
+Misc changes
+
+Answer changing just for GEOS-Chem
+
+Francis Vitt 2026-07-21 - cam6_4_189 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_189
+Fix TUVx bug; Use CLM50 in FMOZ compset
+
+Haipeng Lin 2026-07-20 - cam6_4_188 - components/cam (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_188
+cam6_4_188: Move microp_aero (BAM: ndrop_bam, nucleate_ice, interstitials) to atmos_phys
+
+cdeps
+Chris Fischer 2026-09-21 - cdeps1.0.110 - components/cdeps (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.110
+Use reproducible global sums in DGLC when bfbflag is set.
+
+cime
+Chris Fischer 2026-09-21 - cime6.5.20 - cime (cesm3_0_alpha10c)
+https://github.com/ESMCI/cime/tags/cime6.5.20
+Remove references of ufs from CIME
+
+cmeps
+Chris Fischer 2026-09-21 - cmeps1.1.71 - src/drivers/nuopc/ (cesm3_0_alpha10c)
+https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.71
+Use reproducible global sums when BFBFLAG is set
+
+
+
+
+============================================================
 Tag name: cesm3_0_alpha10b
 Originator(s): CSEG
 Date: 17th September 2026
