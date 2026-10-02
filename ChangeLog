@@ -1,3 +1,65 @@
+============================================================
+Tag name: cesm3_0_alpha11a
+Originator(s): CSEG
+Date: 2nd Oct 2026
+One-line Summary: CMEPS answer changes
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.92  **
+cime                                   https://github.com/ESMCI/cime/tree/cime6.6.2                         **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.22                **
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_203                             --
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.057                      --
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_22          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260909                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_2_2_015         --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.111                    **
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.73                     **
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.1.1                   --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.1.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.6.0                            --
+
+ccs_config
+Chris Fischer 2026-10-02 - ccs_config_cesm1.0.92 - ccs_config (cesm3_0_alpha11a)
+https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.92
+Add t233 grid aliases
+
+cdeps
+Chris Fischer 2026-10-02 - cdeps1.0.111 - components/cdeps (cesm3_0_alpha11a)
+https://github.com/ESCOMP/CDEPS/tags/cdeps1.0.111
+No longer need to allow for C/E at end of time period - changes for DOCN
+
+cime
+Chris Fischer 2026-10-02 - cime6.6.2 - cime (cesm3_0_alpha11a)
+https://github.com/ESMCI/cime/tags/cime6.6.2
+cime6.6.2 :Fix logic for is_comp_standalone
+cime6.6.1 :Update system test baseline path
+cime6.6.0 :Convert walltime to minutes/FSD for batch_system="flux"
+cime6.5.21:Harden Docker and system-testing CI infrastructure for E3SM and CESM.
+
+cmeps
+Chris Fischer 2026-10-02 - cmeps1.1.73 - src/drivers/nuopc/ (cesm3_0_alpha11a)
+https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.73
+cmeps1.1.73: Connect ATM's u/v to WAV's u10m/v10m if ATM doesn't produce u10m/v10m.  Changes answers for B compsets.
+cmeps1.1.72: Merge changes from noresm cmeps1.1.57_noresm_v0 back to ESCOMP.
+
+CUPiD
+Michael Levy 2026-08-13 - v0.6.1 - tools/CUPiD (cesm3_0_alpha11a)
+https://github.com/NCAR/CUPiD/tags/v0.6.1
+Support comparing across a list of cases instead of comparing a single case to a baseline
+
+share
+Chris Fischer 2026-10-02 - share1.1.22 - share (cesm3_0_alpha11a)
+https://github.com/ESCOMP/CESM_share/tags/share1.1.22
+Add module and functions for water isotope fractionation calculations.
+
+
 ==============================================================
 Tag name: cesm3_0_beta10
 Originator(s): CSEG
