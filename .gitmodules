@@ -37,7 +37,7 @@
         path = cime
         url = https://github.com/ESMCI/cime
         fxDONOTUSEurl = https://github.com/ESMCI/cime
-	fxtag = cime6.6.2
+	fxtag = cime6.6.9
         fxrequired = ToplevelRequired
 
 [submodule "fms"]
@@ -51,7 +51,7 @@
         path = share
         url = https://github.com/ESCOMP/CESM_share
         fxDONOTUSEurl = https://github.com/ESCOMP/CESM_share
-        fxtag = share1.1.21
+        fxtag = share1.1.22
         fxrequired = ToplevelRequired
 
 [submodule "cam"]
@@ -86,7 +86,7 @@
         path = components/cism
         url = https://github.com/ESCOMP/cism-wrapper.git
         fxDONOTUSEurl = https://github.com/ESCOMP/cism-wrapper.git
-        fxtag = cismwrap_2_2_015
+        fxtag = cismwrap_3_00_002
         fxrequired = ToplevelRequired
 
 [submodule "cdeps"]
@@ -94,7 +94,7 @@
         url = https://github.com/ESCOMP/CDEPS
         fxDONOTUSEurl = https://github.com/ESCOMP/CDEPS
         fxrequired = ToplevelRequired
-        fxtag = cdeps1.0.111
+        fxtag = cdeps1.0.112
 
 [submodule "cmeps"]
         path = components/cmeps
@@ -164,7 +164,7 @@
         url = https://github.com/NCAR/CUPiD.git
         fxDONOTUSEurl = https://github.com/NCAR/CUPiD.git
         fxrequired = ToplevelRequired
-        fxtag = v0.6.0
+        fxtag = v0.7.0
 
 [submodule "FTorch"]
 	path = libraries/FTorch
