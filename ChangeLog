@@ -1,4 +1,91 @@
 ============================================================
+Tag name: cesm3_0_alpha11c
+Originator(s): CSEG
+Date: 13th Oct 2026
+One-line Summary: CAM updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.92  --
+cime                                   https://github.com/ESMCI/cime/tree/cime6.6.11                         **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.22                --
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_212                             **
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.057                      --
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_22          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260909                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_3_00_002        --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.112                    --
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.73                     --
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.1.1                   --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.1.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.7.0                            --
+
+cam
+Cheryl Craig 2026-10-02 - cam6_4_206 - components/cam (cesm3_0_alpha11c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_xxx
+For Haipeng
+
+GW changes
+
+Cheryl Craig 2026-10-13 - cam6_4_212 - components/cam (cesm3_0_alpha11c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_212
+LBC bug fix for GHG_MAM4 and WACCM
+
+Answer changing for LTso, MTso and FWsc
+
+Haipeng Lin 2026-10-13 - cam6_4_211 - components/cam (cesm3_0_alpha11c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_211
+Refactor Modal Aerosol Model (MAM) and aerosol deposition science code and move to atmos_phys
+
+Cheryl Craig 2026-10-12 - cam6_4_210 - components/cam (cesm3_0_alpha11c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_209
+COSP bug fixes
+
+Cheryl Craig 2026-10-12 - cam6_4_209 - components/cam (cesm3_0_alpha11c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_209
+For Courtney Peverley
+
+Dust bins of large (> 10 micron) particles not being sent to coupler
+
+Courtney Peverley 2026-10-11 - cam6_4_208 - components/cam (cesm3_0_alpha11c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_208
+Update externals to match beta10
+
+Courtney Peverley 2026-10-11 - cam6_4_207 - components/cam (cesm3_0_alpha11c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_207
+For John
+
+new clubb_mf
+
+Courtney Peverley 2026-10-02 - cam6_4_205 - components/cam (cesm3_0_alpha11c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_205
+(for Francis)
+
+Add conductances to restart files for WACCMX-MAGE; other misc fixes
+
+Cheryl Craig 2026-10-01 - cam6_4_204 - components/cam (cesm3_0_alpha11c)
+https://github.com/ESCOMP/CAM/tags/cam6_4_204
+CAM misc PRs
+- Add COSP's EarthCARE lidar simulator to CAM output
+  - Remove incorrect use of CASEROOT in bld/configure
+  - Initial removal of leapfrogging pbuf dimensions
+  - Remove use of deprecated perl smartmatch
+  - refactor(utils): allow optional errmsg in handle_allocate_error
+  - Add clubb_a_const into the namelist
+  - Recreate config_cache.xml when in a cloned case
+
+cime
+Chris Fischer 2026-10-13 - cime6.6.11 - cime (cesm3_0_alpha11c)
+https://github.com/ESMCI/cime/tags/cime6.6.11
+cime6.6.11: jenkins_generic_job: Add ability to process pre-existing results
+cime6.6.10: fix: report human-readable, calendar-aware elapsed time in memleak message
+
+============================================================
 Tag name: cesm3_0_alpha11b
 Originator(s): CSEG
 Date: 9th Oct 2026
