@@ -1,4 +1,112 @@
 ============================================================
+Tag name: cesm3_0_alpha11d
+Originator(s): CSEG
+Date: 16th Oct 2026
+One-line Summary: CTSM updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.92  --
+cime                                   https://github.com/ESMCI/cime/tree/cime6.7.1                         **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
+share                                  https://github.com/ESCOMP/CESM_share/tree/share1.1.22                --
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_212                             --
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.063                      **
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_22          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_260909                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_3_00_002        --
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.112                    --
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.73                     --
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.1.1                   --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.1.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.7.0                            --
+
+cime
+Chris Fischer 2026-10-16 - cime6.7.1 - cime (cesm3_0_alpha11d)
+https://github.com/ESMCI/cime/tags/cime6.7.1
+cime6.7.1 :docs: add AI usage and human review policy
+cime6.7.0 :Support Depends.OS.COMPILER (e.g. Depends.Darwin.gnu) in configure and Makefile
+cime6.6.17:A change to BUILD_STATUS should not result in a locked file issue
+cime6.6.16:Update CIME machine configuration documentation for Darwin OS-level support
+cime6.6.15:Fix rebuild
+cime6.6.14:Allow comparing multiple namelist groups with same name
+cime6.6.13:Improve error message when PROJECT isn't set
+cime6.6.12:Skip PIO types incompatible with NetCDF format
+
+clm
+Samuel Levis 2026-10-06 - ctsm5.4.063 - components/clm (cesm3_0_alpha11d)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.063
+Changes answers relative to the baseline, only in cases with grids that
+changed to the t233 grid, and only due to the grid update.
+
+(So all tests that are the same compare identical to baseline)
+(but there are several new tests that don't have a baseline to compare to)
+
+Samuel Levis 2026-10-02 - ctsm5.4.062 - components/clm (cesm3_0_alpha11d)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.062
+Includes these CTSM PRs
+#4199 Make additional history fields active in prep. for CMIP7
+#4236 Make the Python unit-test job fail when a test fails
+#4231 test(subset_data): make unit test work outside NCAR cluster, like its siblings do
+#4229 Specify q10 for HR and MR
+#4185 refactor(biogeophys): Rename frac_sno and frac_sno_eff to clarify albedo vs flux roles
+(This is the one required by the coupled model to use the new land spinup IC files made with this tag)
+#4225 Fix test_unit_neon_site error
+#4222 Fix test_sys_plumber2_surf_wrapper.py failures
+#4220 Change GLC_NCPL to 4 for DAE test to pass
+
+Erik Kluzek 2026-09-30 - ctsm5.4.061 - components/clm (cesm3_0_alpha11d)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.061
+Update cime and ccs_config
+
+Bring in more grid aliases with mt201 and mt233 ocean masks
+Bring in ability for cime to have MODEL==noresm
+
+Erik Kluzek 2026-09-25 - ctsm5.4.060 - components/clm (cesm3_0_alpha11d)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.060
+Update cmeps/cdeps so that DGLC/CISM can be tested
+with reprodcible sums to give exact answers on
+PE layout changes.
+
+(This only changes answers for standalone, CESM already has these changes)
+
+Samuel Levis 2026-09-21 - ctsm5.4.059 - components/clm (cesm3_0_alpha11d)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.059
+This PR adds indoor humidity and air-conditioning dehumidification to the CLMU BEM 
+(Building Energy Model). It prognoses indoor specific humidity, calculates 
+sensible cooling and latent dehumidification loads, and diagnoses condensate 
+production and routes the condensate into urban runoff. The behavior is controlled
+by an integer CLM namelist variable, building_humidity_mode:
+
+0: use the existing CLMU formulation without indoor humidity or AC dehumidification (default);
+1: enable indoor humidity and latent heat exchange, but no AC dehumidification 
+(requires prognostic building temperature, building_temp_method=1); and
+2: enable indoor humidity, latent heat exchange, dehumidification load, and 
+condensate production (requires prognostic building temperature, urban_hac to be 
+ON or ON_WASTEHEAT and urban_explicit_ac=.true.).
+
+The default is set to 0 to ensure bit-for-bit reproducibility with the original scheme:
+- Results remain bit-for-bit under building_humidity_mode=0 (default).
+- Comparing building_humidity_mode=1 with 0, two new variables are added (QBUILD, RHBUILD),
+and VENTILATION and EFLXBUILD changes because they now include latent heat exchanges between
+indoors and outdoors, and URBAN_AC and URBAN_HEAT changes slightly because of the changes
+in ventilation and higher heat capacity of moist air.
+- Comparing building_humidity_mode=2 with 1, three more new variables (URBAN_AC_SEN, 
+QCOND_FROM_AC, QCOND_FROM_AC_LUN) are added, and URBAN_AC increases because it now includes
+sensible (for cooling) and latent (for dehumidification) heat components of urban AC demand.
+URBAN_HEAT, VENTILATION, EFLXBUILD, WASTEHEAT changes slightly as an indirect results of the
+changes in AC.
+
+Erik Kluzek 2026-09-18 - ctsm5.4.058 - components/clm (cesm3_0_alpha11d)
+https://github.com/ESCOMP/ctsm/tags/ctsm5.4.058
+Merge b4b-dev to master
+
+
+============================================================
 Tag name: cesm3_0_alpha11c
 Originator(s): CSEG
 Date: 13th Oct 2026
