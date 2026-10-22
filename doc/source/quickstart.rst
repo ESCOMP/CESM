@@ -85,6 +85,17 @@ set to your cheyenne login name:
     ./create_newcase --case /glade/scratch/$USER/cases/b.e20.B1850.f19_g17.test --compset B1850 --res f19_g17 
 
 
+.. warning::
+
+   Creating a case does not make an independent copy of the CESM source
+   code. The case continues to use the source code and scripts in
+   ``my_cesm_sandbox``. Do not change the code checked out in this sandbox
+   (for example, by switching CESM or component versions) until you are
+   finished with all cases created from it. Use a separate checkout for
+   experiments that need a different version. Case-local changes to XML
+   settings, namelists, and ``SourceMods`` can still be made as needed.
+
+
 Setting up the case run script
 ==============================
 
