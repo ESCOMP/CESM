@@ -394,7 +394,7 @@ def single_case(opts_dict, case_flags, stat_dir):
 
         # pop
         if os.path.isfile("user_nl_pop") == True:
-            text = ["'\nn_tavg_streams = 1"]
+            text = ["\nn_tavg_streams = 1"]
             text.append("\nldiag_bsf = .false.")
             text.append("\nldiag_global_tracer_budgets = .false.")
             text.append("\nldiag_velocity = .false.")
@@ -403,7 +403,7 @@ def single_case(opts_dict, case_flags, stat_dir):
             text.append("\nmoc_requested = .false.")
             text.append("\nn_heat_trans_requested = .false.")
             text.append("\nn_salt_trans_requested = .false.")
-            test.append("\ntavg_freq_opt = 'once', 'never', 'never'")
+            text.append("\ntavg_freq_opt = 'once', 'never', 'never'")
             text.append("\ntavg_file_freq_opt = 'once', 'never', 'never'")
             text.append("\ndiag_cfl_freq_opt = 'never'")
             text.append("\ndiag_global_freq_opt = 'never'")
