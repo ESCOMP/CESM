@@ -25,6 +25,92 @@ libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.
 tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
 tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.7.0                            --
 
+cam
+Cheryl Craig 2026-11-12 - cam6_4_221 - components/cam (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CAM/tags/cam6_4_221
+For John Truesdale
+
+Revert PR #1643 (cam6_4_220): remove node-shared memory code- #1754⁠
+
+Cheryl Craig 2026-11-10 - cam6_4_220 - components/cam (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CAM/tags/cam6_4_220
+For John Truesdale
+
+Reduce CAM initialization memory footprint that is important for ne1024 simulation
+
+Cheryl Craig 2026-11-05 - cam6_4_219 - components/cam (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CAM/tags/cam6_4_219
+Upated atmos_phys to get PUMAS bug fixes
+
+Answer changing for all PUMAS runs
+
+Cheryl Craig 2026-11-02 - cam6_4_218 - components/cam (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CAM/tags/cam6_4_218
+Fix missing cpair factor in idealized Mesosphere/Lower Thermosphere shortwave heating (radheat)
+
+Haipeng Lin 2026-10-28 - cam6_4_217 - components/cam (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CAM/tags/cam6_4_217
+Implement CCPPized MCSP parameterization
+
+Haipeng Lin 2026-10-28 - cam6_4_216 - components/cam (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CAM/tags/cam6_4_216
+For John Truesdale:
+
+Move the CLUBB portable layer and CLUBB-MF to atmospheric_physics (atmos_phys0_32_000)
+
+Courtney Peverley 2026-10-22 - cam6_4_215 - components/cam (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CAM/tags/cam6_4_215
+miscellaneous tag
+- remove unused pbuf fields
+- cleanup in chemistry & dynamics code to not remove files via system() calls
+- add TEM diagnostic capability for simple models
+- bugfix for CSLAM in SE dycore
+- bugfix for non-interpolated vector history fields
+- move ndep files to cam directory in inputdata
+
+NLFAIL for HIST configurations without full chemistry (ndep file)
+
+Cheryl Craig 2026-10-22 - cam6_4_214 - components/cam (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CAM/tags/cam6_4_214
+Sponge layer, WACCM and other misc changes
+
+Answer changing for WACCM and SE runs
+
+Courtney Peverley 2026-10-16 - cam6_4_213 - components/cam (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CAM/tags/cam6_4_213
+Testing misc tag
+
+Answer changing to all coupled compsets (updated ocean mask; using data glacier instead of stub glacier).
+
+Possibly answer changing for SCAM.
+
+ccs_config
+Chris Fischer 2026-11-12 - ccs_config_cesm1.0.99 - ccs_config (cesm3_0_alpha11f)
+https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.99
+Fix illegal xml in a comment
+
+cime
+Chris Fischer 2026-11-12 - cime6.9.1 - cime (cesm3_0_alpha11f)
+https://github.com/ESMCI/cime/tags/cime6.9.1
+cime6.9.1: Rename buildlib.csm_share to buildlib.share
+cime6.9.0: feat(build): pass CASE_SUPPORT_LIBRARIES to cmake
+cime6.8.5: E3SM should copy all customize scripts to case
+
+
+
+
+cmeps
+Chris Fischer 2026-11-12 - cmeps1.1.77 - src/drivers/nuopc/ (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.77
+cmeps1.1.77: Move share code out of CMEPS
+cmeps1.1.76: Allow fractional ice_covered values in the lnd2glc downscaling
+cmeps1.1.75: Enable NVHPC support
+
+share
+Chris Fischer 2026-11-12 - share1.1.23 - share (cesm3_0_alpha11f)
+https://github.com/ESCOMP/CESM_share/tags/share1.1.23
+Bring CMEPS share code into this repository, and organize share code into subdirectories
+
 ============================================================
 Tag name: cesm3_0_alpha11e
 Originator(s): CSEG
