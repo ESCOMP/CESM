@@ -1,4 +1,75 @@
 ============================================================
+Tag name: cesm3_0_alpha11g
+Originator(s): CSEG
+Date: 23th Nov 2026
+One-line Summary: CISM updates
+
+ccs_config                             https://github.com/ESMCI/ccs_config_cesm/tree/ccs_config_cesm1.0.101 **
+cime                                   https://github.com/ESMCI/cime/tree/cime6.10.0                        **
+components/fms                         https://github.com/ESCOMP/FMS_interface/tree/fi_260310               --
+share                                  https://github.com/ESCOMP/EDS_Share/tree/share1.1.24                 **
+components/cam                         https://github.com/ESCOMP/CAM/cam6_4_221                             --
+components/clm                         https://github.com/ESCOMP/ctsm/tree/ctsm5.4.063                      --
+components/cice                        https://github.com/ESCOMP/CESM_CICE/tree/cesm3_cice6_6_3_22          --
+components/mom                         https://github.com/ESCOMP/MOM_interface/mi_261105                    --
+components/cism                        https://github.com/ESCOMP/cism-wrapper/tree/cismwrap_3_00_003        **
+components/cdeps                       https://github.com/ESCOMP/CDEPS/tree/cdeps1.0.113                    --
+components/cmeps                       https://github.com/ESCOMP/CMEPS/tree/cmeps1.1.79                     **
+components/rtm                         https://github.com/ESCOMP/rtm/tree/rtm1_0_89                         --
+components/ww3                         https://github.com/ESCOMP/WW3-CESM/tree/main_0.1.2                   --
+components/mizuroute                   https://github.com/ESCOMP/mizuRoute/tree/cesm-coupling.v3.1.1        --
+components/mosart                      https://github.com/ESCOMP/mosart/tree/mosart1_1_13                   --
+libraries/parallelio                   https://github.com/NCAR/ParallilIO/tree/pio2_6_8                     --
+libraries/mpi-serial                   https://github.com/ESMCI/mpi-serial/tree/MPIserial_2.5.0             --
+libraries/tuv-x                        https://github.com/NCAR/tuv-x/tree/v0.14.3                           --
+tools/statistical_ensemble_test/pyCECT https://github.com/NCAR/PyCECT/tree/3.2.1                            --
+tools/CUPiD                            https://github.com/NCAR/CUPiD/tree/v0.7.1                            **
+
+ccs_config
+Chris Fischer 2026-11-23 - ccs_config_cesm1.0.101 - ccs_config (cesm3_0_alpha11g)
+https://github.com/ESMCI/ccs_config_cesm/tags/ccs_config_cesm1.0.101
+ccs_config_cesm1.0.101: Rename homebrew machine to macos and make its behavior customizable from environment variables
+ccs_config_cesm1.0.100: add ne30_ne30_mt233 alias
+
+cime
+Chris Fischer 2026-11-23 - cime6.10.0 - cime (cesm3_0_alpha11g)
+https://github.com/ESMCI/cime/tags/cime6.10.0
+cime6.10.0:feat(testing): add portable CIME pytest runner and agent guidance
+cime6.9.9: refactor: remove star imports of standard_module_setup and test_status
+cime6.9.8: Add much more logging info about timeouts
+cime6.9.7: Allow for post-setup scripts in test mods
+cime6.9.6: feat(homme): support HOMME_CMAKE_OPTIONS in HommeBase system test
+cime6.9.5: wait_for_tests: Do not resubmit cdash xmls that already were submitted
+cime6.9.4: cime_bisect: simplify since git now supports what we need
+cime6.9.3: Conditionally skip `git add` in get_timing
+cime6.9.2: Update cprnc to v1.1.7
+
+
+
+cism
+Kate Thayer-Calder 2026-11-12 - cismwrap_3_00_003 - components/cism (cesm3_0_alpha11g)
+https://github.com/ESCOMP/cism-wrapper/tags/cismwrap_3_00_003
+Should change answers for most compsets with cism, even non-active ones.
+
+cmeps
+Chris Fischer 2026-11-23 - cmeps1.1.79 - src/drivers/nuopc/ (cesm3_0_alpha11g)
+https://github.com/ESCOMP/CMEPS/tags/cmeps1.1.79
+cmeps1.1.79: In workflows, use esmf 8.9.0 instead of 8.8.0
+cmeps1.1.78: Add CESM atm/ocn flux unit-testing framework
+
+CUPiD
+Michael Levy 2026-11-13 - v0.7.1 - tools/CUPiD (cesm3_0_alpha11g)
+https://github.com/NCAR/CUPiD/tags/v0.7.1
+New seaice diagnostics (planned for alpha11e but missed in both 11e and 11f)
+
+share
+Chris Fischer 2026-11-23 - share1.1.24 - share (cesm3_0_alpha11g)
+https://github.com/ESCOMP/CESM_share/tags/share1.1.24
+Rename CESM_share to EPS_Share and some other small updates to the README file.
+
+
+
+============================================================
 Tag name: cesm3_0_alpha11f
 Originator(s): CSEG
 Date: 12th Nov 2026
